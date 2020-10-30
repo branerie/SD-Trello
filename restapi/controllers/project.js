@@ -18,16 +18,15 @@ module.exports = {
         session.startTransaction();
 
         try {
-            await models.Project.create([{ name, author: _id }], { session })
-
-            const createdProject = await models.Project.findOne({ name }).session(session);
+            const projectCreationResult = await models.Project.create([{ name, author: _id }], { session });
+            const createdProject = projectCreationResult[0];
         
-            await models.ProjectUserRole.create([{ admin: true, projectId: createdProject.$session(), memberId: _id }], { session })
+            await models.ProjectUserRole.create([{ admin: true, projectId: createdProject, memberId: _id }], { session })
 
-            const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject.$session(), memberId: _id }).session(session);
+            const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session);
             
-            models.Project.updateOne({ _id: projectUserRole.$session().projectId }, { $push: { membersRoles: projectUserRole.$session() } }, { session }),
-            models.User.updateOne({ _id }, { $push: { projects: projectUserRole.$session() } }, { session })
+            models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { session }),
+            models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
 
             await session.commitTransaction();
 
