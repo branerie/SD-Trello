@@ -1,5 +1,7 @@
 const config = require('./config/config');
 const dbConnection = require('./config/database');
+const dotEnv = require("dotenv");
+dotEnv.config();
 
 const app = require('express')();
 

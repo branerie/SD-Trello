@@ -1,7 +1,6 @@
 const mongoose = require('mongoose');
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-
 const Schema = mongoose.Schema;
 const Model = mongoose.model;
 const { String, ObjectId } = Schema.Types;
@@ -19,7 +18,7 @@ const userSchema = new Schema({
         require: true
     },
 
-    posts: [{ type: ObjectId, ref: "Origami" }]
+    projects: [{ type: ObjectId , ref: "ProjectUserRole"}]
 
 });
 

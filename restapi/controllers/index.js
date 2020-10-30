@@ -1,7 +1,7 @@
 const user = require('./user');
-const origami = require('./origami');
+const project = require('./project');
 
 module.exports = {
     user,
-    origami
+    project
 };

@@ -1,7 +1,8 @@
 const express = require('express');
 const cookieParser = require('cookie-parser');
 const cors = require('cors');
-const secret = 'secret';
+const config = require("./config");
+const secret = config.cookieSecret;
 
 module.exports = (app) => {
     app.use(cors({
