@@ -5,8 +5,8 @@ module.exports = {
     get: async (req, res, next) => {
         const { _id } = req.user;
         const projects = await models.ProjectUserRole.find({ memberId: _id })
-                                                        .populate('projectId')
-                                                        .select('projectId -_id');
+            .populate('projectId')
+            .select('projectId -_id');
         res.send(projects);
     },
 
@@ -25,14 +25,14 @@ module.exports = {
 
             const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session);
             
-            models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { session }),
-            models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
+            await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { session });
+            await models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
 
             await session.commitTransaction();
 
             session.endSession();
-
-            res.send(createdProject);  
+            
+            res.send(createdProject);
         } catch (error) {
             await session.abortTransaction();
             session.endSession();

@@ -9,7 +9,13 @@ const listSchema = new Schema({
     name: {
         type: String,    
         required: true
-    },   
+    },
+
+    author: {
+        type: ObjectId,
+        ref: "User",
+        required: true
+    },
 
     cards: [{
         type: ObjectId,

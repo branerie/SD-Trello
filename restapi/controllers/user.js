@@ -1,13 +1,29 @@
 const models = require('../models');
 const config = require('../config/config');
 const utils = require('../utils');
+const router = require('express').Router();
 
-module.exports = {
-    get: (req, res, next) => {
-        models.User.findById(req.query.id)
+router.get('/', getUsers);
+
+router.post('/register', controllers.user.post.register);
+
+router.post('/login', controllers.user.post.login);
+
+// router.get('/verify', controllers.user.post.verifyLogin);
+
+router.post('/logout', controllers.user.post.logout);
+
+router.put('/:id', controllers.user.put);
+
+router.delete('/:id', controllers.user.delete);
+
+module.exports = router;
+
+    const getUser = (req, res, next) => {
+        models.User.findById(req.params.id)
             .then((user) => res.send(user))
             .catch((err) => res.status(500).send("Error"))
-    },
+    }
 
     post: {
         register: (req, res, next) => {
