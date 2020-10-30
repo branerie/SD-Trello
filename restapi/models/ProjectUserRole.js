@@ -21,6 +21,7 @@ const projectUserRoleSchema = new Schema({
     }
 })
 
+projectUserRoleSchema.index({ projectId: 1, memberId: 1 }, { unique: true });
 
 module.exports = new Model('ProjectUserRole', projectUserRoleSchema);
 

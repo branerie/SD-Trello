@@ -20,18 +20,18 @@ module.exports = {
         try {
             const projectCreationResult = await models.Project.create([{ name, author: _id }], { session });
             const createdProject = projectCreationResult[0];
-        
+
             await models.ProjectUserRole.create([{ admin: true, projectId: createdProject, memberId: _id }], { session })
 
             const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session);
-            
+
             await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { session });
             await models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
 
             await session.commitTransaction();
 
             session.endSession();
-            
+
             res.send(createdProject);
         } catch (error) {
             await session.abortTransaction();
@@ -53,5 +53,36 @@ module.exports = {
         models.Origami.deleteOne({ _id: id })
             .then((removedOrigami) => res.send(removedOrigami))
             .catch(next)
+    },
+
+    add: async (req, res, next) => {
+        const { newMemberUsername } = req.body;
+        const projectId = req.params.id;
+        const { _id } = req.user;
+
+        const session = await mongoose.startSession();
+        session.startTransaction();
+
+        try {
+            const member = await models.User.findOne({ username: newMemberUsername }).select('');
+            const projectUserRoleCreation = await models.ProjectUserRole.create([{ admin: false, projectId, memberId: member._id }], { session });
+            const projectUserRole = projectUserRoleCreation[0];
+
+            await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { session });
+            await models.User.updateOne({ _id: member._id }, { $push: { projects: projectUserRole } }, { session })
+
+            await session.commitTransaction();
+
+            session.endSession();
+
+            res.send(projectUserRole);
+        } catch (error) {
+            await session.abortTransaction();
+            session.endSession();
+            res.send({
+                errorMessage: error.message,
+                error
+             });
+        }
     }
-};
+}

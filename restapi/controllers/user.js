@@ -1,111 +1,121 @@
+const mongoose = require('mongoose');
 const models = require('../models');
 const config = require('../config/config');
 const utils = require('../utils');
 const router = require('express').Router();
 
-router.get('/', getUsers);
+router.get('/', getUser);
 
-router.post('/register', controllers.user.post.register);
+router.post('/register', registerUser);
 
-router.post('/login', controllers.user.post.login);
+router.post('/login', loginUser);
 
 // router.get('/verify', controllers.user.post.verifyLogin);
 
-router.post('/logout', controllers.user.post.logout);
+router.post('/logout', logoutUser);
 
-router.put('/:id', controllers.user.put);
+router.put('/:id', updateUser);
 
-router.delete('/:id', controllers.user.delete);
+router.delete('/:id', deleteUser);
+
+async function getUser(req, res, next) {
+    const user = await models.User.findById(req.params.id)
+    res.send(user);
+}
+
+async function registerUser(req, res, next) {
+    const { username, password } = req.body;
+    const createdUser = await models.User.create({ username, password })
+    const token = utils.jwt.createToken({ id: createdUser._id });
+    res.header("Authorization", token).send(createdUser);
+
+}
+
+// verifyLogin: (req, res, next) => {
+//   const token = req.headers.authorization || '';
+
+//   Promise.all([
+//       utils.jwt.verifyToken(token),
+//       models.TokenBlacklist.findOne({ token })
+//   ])
+//       .then(([data, blacklistToken]) => {
+//           if (blacklistToken) { return Promise.reject(new Error('blacklisted token')) }
+
+//           models.User.findById(data.id)
+//               .then((user) => {
+//                   return res.send({
+//                     status: true,
+//                     user
+//                   })
+//               });
+//       })
+//       .catch(err => {
+//           if (['token expired', 'blacklisted token', 'jwt must be provided'].includes(err.message)) {
+//               res.status(401).send('UNAUTHORIZED!');
+//               return;
+//           }
+
+//           res.send({
+//             status: false
+//           })
+//       })
+// },
+
+async function loginUser(req, res, next) {
+    const { username, password } = req.body;
+    const user = await models.User.findOne({ username });
+    const match = await user.matchPassword(password);
+
+    if (!match) {
+        res.status(401).send('Invalid password');
+        return;
+    }
+
+    const token = utils.jwt.createToken({ id: user._id });
+    res.header("Authorization", token).send(user);
+}
+
+
+async function logoutUser(req, res, next) {
+    const token = req.cookies[config.authCookieName];
+    await models.TokenBlacklist.create({ token });
+    res.clearCookie(config.authCookieName).send('Logout successfully!');
+}
+
+
+async function updateUser(req, res, next) {
+    const id = req.params.id;
+    const { username, password } = req.body;
+    const updatedUser = await models.User.update({ _id: id }, { username, password })
+    res.send(updatedUser)
+}
+
+
+async function deleteUser(req, res, next) {
+    const id = req.params.id;
+    
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    
+    try {
+        const removedUser = await models.User.deleteOne({ _id: id }).session(session);
+        const userProjectsRoles = await models.ProjectUserRole.find({ memberId: id }).session(session);
+        const removedProjectMember = await models.Project.updateMany({ _id: { $in: userProjectsRoles.projectId } }, { $pull: { membersRoles: userProjectsRoles._id }}).session(session);
+        const removedProject = await models.Project.deleteMany({ author: id }).session(session);
+        const removedUserRole = await models.ProjectUserRole.deleteMany({ memberId: id }).session(session);
+            
+        await session.commitTransaction();
+
+        session.endSession();
+        
+        res.send(removedUser);
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        res.send(error);
+    }
+
+}
+
 
 module.exports = router;
-
-    const getUser = (req, res, next) => {
-        models.User.findById(req.params.id)
-            .then((user) => res.send(user))
-            .catch((err) => res.status(500).send("Error"))
-    }
-
-    post: {
-        register: (req, res, next) => {
-            const { username, password } = req.body;
-            models.User.create({ username, password })
-                .then((createdUser) => {
-                  const token = utils.jwt.createToken({ id: createdUser._id });
-                  res.header("Authorization", token).send(createdUser);
-                })
-                .catch((err) => {
-                  console.log(err)
-                })
-        },
-
-        // verifyLogin: (req, res, next) => {
-        //   const token = req.headers.authorization || '';
-
-        //   Promise.all([
-        //       utils.jwt.verifyToken(token),
-        //       models.TokenBlacklist.findOne({ token })
-        //   ])
-        //       .then(([data, blacklistToken]) => {
-        //           if (blacklistToken) { return Promise.reject(new Error('blacklisted token')) }
-
-        //           models.User.findById(data.id)
-        //               .then((user) => {
-        //                   return res.send({
-        //                     status: true,
-        //                     user
-        //                   })
-        //               });
-        //       })
-        //       .catch(err => {
-        //           if (['token expired', 'blacklisted token', 'jwt must be provided'].includes(err.message)) {
-        //               res.status(401).send('UNAUTHORIZED!');
-        //               return;
-        //           }
-
-        //           res.send({
-        //             status: false
-        //           })
-        //       })
-        // },
-
-        login: (req, res, next) => {
-            const { username, password } = req.body;
-            models.User.findOne({ username })
-                .then((user) => Promise.all([user, user.matchPassword(password)]))
-                .then(([user, match]) => {
-                    if (!match) {
-                        res.status(401).send('Invalid password');
-                        return;
-                    }
-
-                    const token = utils.jwt.createToken({ id: user._id });
-                    res.header("Authorization", token).send(user);
-                })
-                .catch(next);
-        },
-
-        logout: (req, res, next) => {
-            const token = req.cookies[config.authCookieName];
-            models.TokenBlacklist.create({ token })
-                .then(() => {
-                    res.clearCookie(config.authCookieName).send('Logout successfully!');
-                })
-                .catch(next);
-        }
-    },
-
-    put: (req, res, next) => {
-        const id = req.params.id;
-        const { username, password } = req.body;
-        models.User.update({ _id: id }, { username, password })
-            .then((updatedUser) => res.send(updatedUser))
-            .catch(next)
-    },
-
-    delete: (req, res, next) => {
-        const id = req.params.id;
-        models.User.deleteOne({ _id: id })
-            .then((removedUser) => res.send(removedUser))
-            .catch(next)
-    }
-};

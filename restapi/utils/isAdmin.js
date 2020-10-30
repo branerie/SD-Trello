@@ -2,20 +2,17 @@ const models = require('../models');
 
 
 
-module.exports = () => {
-
-    return async (req, res, next) => {
+module.exports = async (req, res, next) => {
         const userId = req.user._id;
         const projectId = req.params.id;
        
-        const isAdmin = await models.ProjectUserRole.findOne({ projectId, memberId: userId }).select('admin -_id');
+        const userAdminField = await models.ProjectUserRole.findOne({ projectId, memberId: userId }).select('admin -_id');
         
-        req.isAdmin = isAdmin;
+        // req.isAdmin = admin.admin;
         
-        if (!isAdmin) {
+        if (!userAdminField.admin) {
             return res.send('is not admin');
         };
 
         next();
-    }
 };
