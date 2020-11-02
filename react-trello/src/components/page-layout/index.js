@@ -3,7 +3,7 @@ import Header from "../header";
 import styles from "./index.module.css";
 // import Footer from '../footer';
 
-function PageLayout(props) {
+const PageLayout = (props) => {
   return (
     <div className={styles.app}>
         <Header />

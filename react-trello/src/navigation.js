@@ -13,7 +13,6 @@ import LoginPage from "./pages/login";
 import ProfilePage from "./pages/profile";
 import ErrorPage from "./pages/error";
 import UserContext from "./Context";
-import LogoutPage from "./pages/logout";
 
 const Navigation = () => {
 
