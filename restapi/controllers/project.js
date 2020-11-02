@@ -56,7 +56,7 @@ module.exports = {
     },
 
     add: async (req, res, next) => {
-        const { newMemberUsername } = req.body;
+        const { newMemberUsername, admin } = req.body;
         const projectId = req.params.id;
         const { _id } = req.user;
 
@@ -65,7 +65,7 @@ module.exports = {
 
         try {
             const member = await models.User.findOne({ username: newMemberUsername }).select('');
-            const projectUserRoleCreation = await models.ProjectUserRole.create([{ admin: false, projectId, memberId: member._id }], { session });
+            const projectUserRoleCreation = await models.ProjectUserRole.create([{ admin, projectId, memberId: member._id }], { session });
             const projectUserRole = projectUserRoleCreation[0];
 
             await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { session });
@@ -82,7 +82,7 @@ module.exports = {
             res.send({
                 errorMessage: error.message,
                 error
-             });
+            });
         }
     }
 }
