@@ -6,11 +6,9 @@ import {
 
 const LinkComponent = ({ title, href }) => {
     return (
-        <div className={styles["list-item"]}>
             <Link to={href} className={styles.link}>
                 {title}
             </Link>
-        </div>
     )
 }
 

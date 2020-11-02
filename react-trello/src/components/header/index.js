@@ -16,12 +16,21 @@ class Header extends Component {
         } = this.context
 
         const links = getNavigation(user);
+        const otherLinks = links.filter(a => {
+            return (a.title !== 'Login' && a.title !== 'Logout' && a.title !== 'Sign-up')
+        })
 
+        const userLinks = links.filter(a => {
+            return (a.title === 'Login' || a.title === 'Logout' || a.title === 'Sign-up')
+        })
+
+        
         return (
             <header className={styles.navigation}>
                 {/* <img alt="logo" className={styles.logo} src={logo} /> */}
+                <div className={styles.links}>
                 {
-                    links.map(navElement => {
+                    otherLinks.map(navElement => {
                         return (
                             <Link
                                 key={navElement.title}
@@ -31,6 +40,20 @@ class Header extends Component {
                         )
                     })
                 }
+                </div>
+                <div className={styles.links}>
+                {
+                    userLinks.map(navElement => {
+                        return (
+                            <Link
+                                key={navElement.title}
+                                href={navElement.link}
+                                title={navElement.title}
+                            />
+                        )
+                    })
+                }
+                </div>
             </header>
         )
     }

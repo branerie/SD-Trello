@@ -1,7 +1,9 @@
 
 .navigation {
+  display: flex;
+  justify-content: space-between;
   width: 100%;
-  height: 14vh;
+  height: 7vh;
   background-color: #234465;
   color: white;
   position: fixed;
@@ -13,4 +15,9 @@
 .logo {
   width: 60px;
   margin: 20px;
+}
+
+.links {
+  display: flex;
+
 }

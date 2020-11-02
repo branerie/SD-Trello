@@ -22,13 +22,13 @@ const getNavigation = (user) => {
             link: "/"
         },
         {
-            title: "Sign up",
-            link: "/sign-up"
-        },
-        {
             title: "Login",
             link: "/login"
         },
+        {
+            title: "Sign-up",
+            link: "/sign-up"
+        }
     
     ];
 
