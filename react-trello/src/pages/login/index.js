@@ -17,7 +17,7 @@ const LoginPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        await authenticate("http://localhost:9999/api/user/login", {
+        await authenticate("http://localhost:4000/api/user/login", {
             username,
             password
         }, (user) => {
@@ -30,24 +30,24 @@ const LoginPage = () => {
 
     return (
         <PageLayout>
-        <form className={styles.container} onSubmit={handleSubmit}>
-            <Title title="Login" />
-            <Input
-                value={username}
-                onChange={e => setUsername(e.target.value)}
-                label="Username"
-                id="username"
-            />
-            <Input
-                type="password"
-                value={password}
-                onChange={e => setPassword(e.target.value)}
-                label="Password"
-                id="password"
-            />
-            <SubmitButton title="Login" />
-        </form>
-    </PageLayout>
+            <form className={styles.container} onSubmit={handleSubmit}>
+                <Title title="Login" />
+                <Input
+                    value={username}
+                    onChange={e => setUsername(e.target.value)}
+                    label="Username"
+                    id="username"
+                />
+                <Input
+                    type="password"
+                    value={password}
+                    onChange={e => setPassword(e.target.value)}
+                    label="Password"
+                    id="password"
+                />
+                <SubmitButton title="Login" />
+            </form>
+        </PageLayout>
     )
 }
 

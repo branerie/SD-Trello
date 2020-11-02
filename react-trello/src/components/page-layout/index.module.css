@@ -9,10 +9,10 @@
 }
 
 .container {
-  margin-top: 8.5%;
+  margin-top: 100px;
   padding: 0.5%;
   display: inline-block;
-  width: 83%;
+  width: 100%;
   height: auto;
   margin-bottom: 5%;
 }

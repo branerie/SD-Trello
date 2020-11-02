@@ -12,6 +12,10 @@ const getNavigation = (user) => {
         {
             title: "Profile",
             link: `/profile/${user && user.id}`
+        },
+        {
+            title: "Log Out",
+            link: '/'
         }
     
     ];
@@ -22,11 +26,11 @@ const getNavigation = (user) => {
             link: "/"
         },
         {
-            title: "Login",
+            title: "Log In",
             link: "/login"
         },
         {
-            title: "Sign-up",
+            title: "Sign Up",
             link: "/sign-up"
         }
     

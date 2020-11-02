@@ -7,14 +7,15 @@ import styles from "./index.module.css";
 import authenticate from "../../utils/authenticate";
 import UserContext from "../../Context";
 
-class RegisterPage extends Component {
+class SignupPage extends Component {
     constructor(props) {
         super(props)
 
-        this.state= {
+        this.state = {
             username: "",
             password: "",
-            rePassword: ""
+            rePassword: "",
+            alert: false
         }
     }
 
@@ -31,10 +32,18 @@ class RegisterPage extends Component {
         event.preventDefault();
         const {
             username,
-            password
+            password,
+            rePassword
         } = this.state;
 
-        await authenticate("http://localhost:9999/api/user/register", {
+        if (password !== rePassword) {
+            const newState = {}
+            newState.alert = true
+            this.setState(newState)
+            return
+        }
+
+        await authenticate("http://localhost:4000/api/user/register", {
             username,
             password
         }, (user) => {
@@ -51,11 +60,15 @@ class RegisterPage extends Component {
         const {
             username,
             password,
-            rePassword
+            rePassword,
+            alert
         } = this.state;
-        
-        return(
+
+        return (
             <PageLayout>
+                {alert ? (<div className={styles.alert}>
+                    Passwords do not match
+                </div>) : null}
                 <form className={styles.container} onSubmit={this.handleSubmit}>
                     <Title title="Register" />
                     <Input
@@ -78,7 +91,7 @@ class RegisterPage extends Component {
                         label="Re-Password"
                         id="re-password"
                     />
-                    
+
                     <SubmitButton title="Register" />
                 </form>
             </PageLayout>
@@ -86,4 +99,4 @@ class RegisterPage extends Component {
     }
 }
 
-export default RegisterPage;
+export default SignupPage;
