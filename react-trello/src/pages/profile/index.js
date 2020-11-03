@@ -1,34 +1,41 @@
 import React, { useContext, useState, useEffect, useCallback } from "react";
 import { useParams, useHistory } from "react-router-dom";
-import Origamis from "../../components/origamis";
+import EditProfile from "../../components/edit-profile";
 import PageLayout from "../../components/page-layout";
+import Transparent from "../../components/transparent";
 import UserContext from "../../Context";
+import styles from './index.module.css'
 
 const ProfilePage = () => {
     const [username, setUsername] = useState(null);
-    const [posts, setPosts] = useState(null);
+    const [projects, setProjects] = useState(null);
+    const [isVisible, setIsVisible] = useState(false);
     const context = useContext(UserContext);
     const params = useParams();
     const history = useHistory();
 
-    const logOut = () => {
-        context.logOut();
-        history.push("/");
-    }
 
     const getData = useCallback(async () => {
         const id = params.userid;
-        const response = await fetch(`http://localhost:9999/api/user?id=${id}`);
 
+        const response = await fetch(`http://localhost:4000/api/user/${id}`);
         if (!response.ok) {
             history.push("/error");
         } else {
             const user = await response.json();
-    
+
             setUsername(user.username);
-            setPosts(user.posts && user.posts.length);
+            setProjects(user.projects && user.projects.length);
         }
     }, [params.userid, history])
+
+    const showForm = () => {
+        setIsVisible(true)
+    }
+
+    const hideForm = () => {
+        setIsVisible(false)
+    }
 
     useEffect(() => {
         getData();
@@ -46,11 +53,15 @@ const ProfilePage = () => {
         <PageLayout>
             <div>
                 <p>User: {username}</p>
-                <p>Posts: {posts}</p>
-
-                <button onClick={logOut}>Logout</button>
+                <p>Projects: {projects}</p>
+                <button onClick={showForm}>Edit Profile</button>
+                {
+                    isVisible ?
+                        <div>
+                            <Transparent hideForm={hideForm}><EditProfile hideForm={hideForm}/></Transparent>
+                        </div> : null
+                }
             </div>
-            <Origamis length={3}/>
         </PageLayout>
     )
 }

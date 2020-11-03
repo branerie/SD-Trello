@@ -33,9 +33,9 @@ const Navigation = () => {
                     {loggedIn ? (<Redirect to="/" />): (<LoginPage />)}
                 </Route>
                 
-                {/* <Route path="/profile/:userid">
+                <Route path="/profile/:userid">
                     {loggedIn ? (<ProfilePage />): (<Redirect to="/login"/>)}
-                </Route> */}
+                </Route>
                 <Route component={ErrorPage} />
             </Switch>
         </BrowserRouter>

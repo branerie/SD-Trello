@@ -1,20 +1,21 @@
-const authenticate = async (url, method, body, onSuccess, onFailure) => {
+import getCookie from "./cookie";
+
+const authenticateUpdate = async (url, method, body, onSuccess, onFailure) => {
     try {
+        const cookie = getCookie('x-auth-token')
 
         const promise = await fetch(url, {
             method,
             body: JSON.stringify(body),
             headers: {
-                "Content-Type": "application/json"
+                "Content-Type": "application/json",
+                "Authorization": cookie
             }
         })
-
-        const authToken = promise.headers.get("Authorization");
-        document.cookie = `x-auth-token=${authToken}`;
-
+        
         const response = await promise.json();
 
-        if (response.username && authToken) {
+        if (response.username) {
             onSuccess({
                 username: response.username,
                 id: response._id
@@ -28,4 +29,4 @@ const authenticate = async (url, method, body, onSuccess, onFailure) => {
     }
 }
 
-export default authenticate;
+export default authenticateUpdate;

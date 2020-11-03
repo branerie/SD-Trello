@@ -1,22 +1,23 @@
-const mongoose = require('mongoose');
-const models = require('../models');
-const config = require('../config/config');
-const utils = require('../utils');
-const router = require('express').Router();
+const mongoose = require('mongoose')
+const models = require('../models')
+const config = require('../config/config')
+const utils = require('../utils')
+const router = require('express').Router()
+const bcrypt = require('bcrypt')
 
-router.get('/', getUser);
+router.get('/:id', getUser)
 
-router.post('/register', registerUser);
+router.post('/register', registerUser)
 
-router.post('/login', loginUser);
+router.post('/login', loginUser)
 
 // router.get('/verify', controllers.user.post.verifyLogin);
 
-router.post('/logout', logoutUser);
+router.post('/logout', logoutUser)
 
-router.put('/:id', updateUser);
+router.put('/:id', updateUser)
 
-router.delete('/:id', deleteUser);
+router.delete('/:id', deleteUser)
 
 async function getUser(req, res, next) {
     const user = await models.User.findById(req.params.id)
@@ -26,8 +27,8 @@ async function getUser(req, res, next) {
 async function registerUser(req, res, next) {
     const { username, password } = req.body;
     const createdUser = await models.User.create({ username, password })
-    const token = utils.jwt.createToken({ id: createdUser._id });
-    res.header("Authorization", token).send(createdUser);
+    const token = utils.jwt.createToken({ id: createdUser._id })
+    res.header("Authorization", token).send(createdUser)
 
 }
 
@@ -62,39 +63,47 @@ async function registerUser(req, res, next) {
 // },
 
 async function loginUser(req, res, next) {
-    const { username, password } = req.body;
-    const user = await models.User.findOne({ username });
-    const match = await user.matchPassword(password);
+    const { username, password } = req.body
+    const user = await models.User.findOne({ username })
+    const match = await user.matchPassword(password)
 
     if (!match) {
-        res.status(401).send('Invalid password');
+        res.status(401).send('Invalid password')
         return;
     }
 
-    const token = utils.jwt.createToken({ id: user._id });
-    res.header("Authorization", token).send(user);
+    const token = utils.jwt.createToken({ id: user._id })
+    res.header("Authorization", token).send(user)
 }
 
 
 async function logoutUser(req, res, next) {
-    const token = req.cookies[config.authCookieName];
-    await models.TokenBlacklist.create({ token });
-    res.clearCookie(config.authCookieName).send('Logout successfully!');
+    const token = req.cookies[config.authCookieName]
+    await models.TokenBlacklist.create({ token })
+    res.clearCookie(config.authCookieName).send('Logout successfully!')
 }
 
 
 async function updateUser(req, res, next) {
-    const id = req.params.id;
-    const { username, password } = req.body;
-    const updatedUser = await models.User.update({ _id: id }, { username, password })
-    res.send(updatedUser)
+    const id = req.params.id
+    let { username, password } = req.body
+
+    await bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, async (err, hash) => {
+            if (err) { next(err); return }
+            console.log(hash, 'hash');
+            console.log(password, 'password');
+            const updatedUser = await models.User.updateOne({ _id: id }, { username, password: hash })
+            res.send(updatedUser)
+        })
+    })
 }
 
 
 async function deleteUser(req, res, next) {
     const id = req.params.id;
     
-    const session = await mongoose.startSession();
+    const session = await mongoose.startSession()
     session.startTransaction();
     
     try {

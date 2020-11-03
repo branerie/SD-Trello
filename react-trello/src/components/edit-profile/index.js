@@ -1,54 +1,53 @@
-import React, { useState, useContext } from "react";
-import { useHistory } from "react-router-dom";
-import SubmitButton from "../../components/button/submit-button";
-import Input from "../../components/input";
-import PageLayout from "../../components/page-layout";
-import Title from "../../components/title";
-import styles from "./index.module.css";
-import authenticate from "../../utils/authenticate";
-import UserContext from "../../Context";
+import React, { useContext, useState } from 'react'
+import { useHistory, useParams } from 'react-router-dom';
+import UserContext from '../../Context';
+import authenticateUpdate from '../../utils/authenticate-update';
+import SubmitButton from '../button/submit-button';
+import Input from '../input';
+import Title from '../title';
+import styles from './index.module.css'
 
-const LoginPage = () => {
+export default function EditProfile(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const context = useContext(UserContext);
     const history = useHistory()
+    const params = useParams()
+    const id = params.userid
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        await authenticate("http://localhost:4000/api/user/login", 'POST', {
+        await authenticateUpdate(`http://localhost:4000/api/user/${id}`, 'PUT', {
             username,
             password
         }, (user) => {
             context.logIn(user)
-            history.push("/");
         }, (e) => {
             console.log("Error", e);
         })
+        props.hideForm()
     };
 
     return (
-        <PageLayout>
+        <div className={styles.form}>
             <form className={styles.container} onSubmit={handleSubmit}>
-                <Title title="Login" />
+                <Title title="Edit Profile" />
                 <Input
                     value={username}
                     onChange={e => setUsername(e.target.value)}
-                    label="Username"
+                    label="New Username"
                     id="username"
                 />
                 <Input
                     type="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
-                    label="Password"
+                    label="New Password"
                     id="password"
                 />
-                <SubmitButton title="Login" />
+                <SubmitButton title="Update" />
             </form>
-        </PageLayout>
+        </div>
     )
 }
-
-export default LoginPage;
