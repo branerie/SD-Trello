@@ -3,24 +3,25 @@ const models = require('../models')
 const { auth, isAdmin } = require('../utils')
 const router = require('express').Router()
 
-// router.get('/:id', auth, getList)
+router.get('/:id', auth, getLists)
 
 router.post('/:id', auth, isAdmin, createList)
 
 router.put('/:id/:idlist', auth, updateList)
 
-// router.delete('projects/:id/list/:id-list', auth, isAdmin, deleteList)
+router.delete('/:id/:idlist', auth, isAdmin, deleteList)
 
 
 
-// async function getList(req, res, next) {
-//     const id = req.params.id;
-//     const lists = await models.Project.findOne({ _id: id }).select('lists -_id');
+async function getLists(req, res, next) {
+    const projectId = req.params.id;
+    const lists = await models.Project.findOne({ _id: projectId }).select('lists -_id');
+    console.log(lists);
 
-//     const populatedLists = await models.List.find({ _id: { $in: lists } }).populate('cards');
+    const populatedLists = await models.List.find({ _id: { $in: lists.lists } }).populate('cards');
 
-//     res.send(populatedLists);
-// }
+    res.send(populatedLists);
+}
 
 async function createList(req, res, next) {
     const userId = req.user._id;
@@ -55,11 +56,35 @@ async function updateList(req, res, next) {
 
 }
 
-// async function deleteList(req, res, next) {
-//     const id = req.params.id;
-//     models.Origami.deleteOne({ _id: id })
-//         .then((removedOrigami) => res.send(removedOrigami))
-//         .catch(next)
-// }
+async function deleteList(req, res, next) {
+    const idList = req.params.idlist
+    const idProject = req.params.id
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        const searchedCards = await models.List.findOne({ _id: idList }).select('cards -_id').session(session)
+
+        await models.Card.deleteMany({ _id: { $in: searchedCards.cards } }).session(session)
+
+        const removedListResult = await models.List.deleteOne({ _id: idList }).session(session)
+
+        removedList = removedListResult
+
+        await models.Project.updateOne({ _id: idProject }, { $pull: { lists: idList } }).session(session)
+
+        await session.commitTransaction();
+
+        session.endSession();
+
+        res.send(removedList)
+    } catch (error) {
+        await session.abortTransaction();
+        session.endSession();
+        res.send(error);
+    }
+
+}
+
 
 module.exports = router
