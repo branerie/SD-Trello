@@ -1,11 +1,11 @@
-import React, { useContext } from "react";
+import React, { useContext, useState } from "react";
 import Link from "../link";
 import styles from "./index.module.css";
 // import logo from "../../images/white-origami-bird.png";
 import getNavigation from "../../utils/navigation";
 import UserContext from "../../Context";
 
-const Header = () => {
+const Header = (props) => {
     const context = useContext(UserContext);
 
     const links = getNavigation(context.user);
@@ -51,6 +51,7 @@ const Header = () => {
                     }
                 </div>
                 {logoutLink[0] ? <div className={styles.links}>
+                <span className={styles.username}>{props.username}</span>
                     {
                         <div className={styles.logout} onClick={context.logOut}>Logout</div>
                     }

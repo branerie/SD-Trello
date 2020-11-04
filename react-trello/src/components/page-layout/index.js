@@ -6,7 +6,7 @@ import styles from "./index.module.css";
 const PageLayout = (props) => {
   return (
     <div className={styles.app}>
-        <Header />
+        <Header username={props.username}/>
         <div className={styles.container}>
           {props.children}
         </div>

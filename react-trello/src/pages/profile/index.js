@@ -1,31 +1,31 @@
-import React, { useContext, useState, useEffect, useCallback } from "react";
-import { useParams, useHistory } from "react-router-dom";
-import EditProfile from "../../components/edit-profile";
-import PageLayout from "../../components/page-layout";
-import Transparent from "../../components/transparent";
-import UserContext from "../../Context";
+import React, { useContext, useState, useEffect, useCallback } from "react"
+import { useParams, useHistory } from "react-router-dom"
+import EditProfile from "../../components/edit-profile"
+import PageLayout from "../../components/page-layout"
+import Transparent from "../../components/transparent"
+import UserContext from "../../Context"
 import styles from './index.module.css'
 
 const ProfilePage = () => {
-    const [username, setUsername] = useState(null);
-    const [projects, setProjects] = useState(null);
-    const [isVisible, setIsVisible] = useState(false);
-    const context = useContext(UserContext);
-    const params = useParams();
-    const history = useHistory();
+    const [username, setUsername] = useState(null)
+    const [projects, setProjects] = useState(null)
+    const [isVisible, setIsVisible] = useState(false)
+    const context = useContext(UserContext)
+    const params = useParams()
+    const history = useHistory()
 
 
     const getData = useCallback(async () => {
         const id = params.userid;
 
-        const response = await fetch(`http://localhost:4000/api/user/${id}`);
+        const response = await fetch(`http://localhost:4000/api/user/${id}`)
         if (!response.ok) {
-            history.push("/error");
+            history.push("/error")
         } else {
-            const user = await response.json();
+            const user = await response.json()
 
-            setUsername(user.username);
-            setProjects(user.projects && user.projects.length);
+            setUsername(user.username)
+            setProjects(user.projects && user.projects.length)
         }
     }, [params.userid, history])
 
@@ -34,11 +34,12 @@ const ProfilePage = () => {
     }
 
     const hideForm = () => {
+        getData()
         setIsVisible(false)
     }
 
     useEffect(() => {
-        getData();
+        getData()
     }, [getData])
 
     if (!username) {
@@ -50,7 +51,7 @@ const ProfilePage = () => {
     }
 
     return (
-        <PageLayout>
+        <PageLayout username={username}>
             <div>
                 <p>User: {username}</p>
                 <p>Projects: {projects}</p>
@@ -58,7 +59,9 @@ const ProfilePage = () => {
                 {
                     isVisible ?
                         <div>
-                            <Transparent hideForm={hideForm}><EditProfile hideForm={hideForm}/></Transparent>
+                            <Transparent hideForm={hideForm}>
+                                <EditProfile hideForm={hideForm}/>
+                            </Transparent>
                         </div> : null
                 }
             </div>
