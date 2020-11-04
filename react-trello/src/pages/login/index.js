@@ -1,4 +1,6 @@
 import React, { useState, useContext } from "react";
+import ReactDOM from 'react-dom';
+import GoogleLogin from 'react-google-login';
 import { useHistory } from "react-router-dom";
 import SubmitButton from "../../components/button/submit-button";
 import Input from "../../components/input";
@@ -46,6 +48,13 @@ const LoginPage = () => {
                     id="password"
                 />
                 <SubmitButton title="Login" />
+            <GoogleLogin
+                clientId=""
+                buttonText="Login"
+                // onSuccess={responseGoogle}
+                // onFailure={responseGoogle}
+                cookiePolicy={'single_host_origin'}
+            />
             </form>
         </PageLayout>
     )
