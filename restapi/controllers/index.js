@@ -1,7 +1,12 @@
-const user = require('./user');
-const project = require('./project');
+const user = require('./user')
+const project = require('./project')
+const list = require('./list')
+const card = require('./card')
+
 
 module.exports = {
     user,
-    project
-};
+    project,
+    list,
+    card
+}

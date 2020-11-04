@@ -1,16 +1,27 @@
-const mongoose = require('mongoose');
-const models = require('../models');
+const mongoose = require('mongoose')
+const models = require('../models')
+const { auth, isAdmin } = require('../utils')
+const router = require('express').Router()
 
-module.exports = {
-    get: async (req, res, next) => {
+router.get('/', auth, getProject);
+
+router.post('/', auth, createProject);
+
+router.post('/:id/user', auth, isAdmin, addMember);
+
+// router.delete('/:id/list/:id-list', auth,isAdmin, deleteProject);
+
+
+
+   async function getProject(req, res, next) {
         const { _id } = req.user;
         const projects = await models.ProjectUserRole.find({ memberId: _id })
             .populate('projectId')
             .select('projectId -_id');
         res.send(projects);
-    },
+    }
 
-    post: async (req, res, next) => {
+    async function createProject(req, res, next) {
         const { name } = req.body;
         const { _id } = req.user;
 
@@ -38,24 +49,24 @@ module.exports = {
             session.endSession();
             res.send(error);
         }
-    },
+    }
 
-    put: (req, res, next) => {
-        const id = req.params.id;
-        const { description } = req.body;
-        models.Origami.updateOne({ _id: id }, { description })
-            .then((updatedOrigami) => res.send(updatedOrigami))
-            .catch(next)
-    },
+    // async function updateProject(req, res, next){
+    //     const id = req.params.id;
+    //     const { description } = req.body;
+    //     models.Origami.updateOne({ _id: id }, { description })
+    //         .then((updatedOrigami) => res.send(updatedOrigami))
+    //         .catch(next)
+    // }
 
-    delete: (req, res, next) => {
-        const id = req.params.id;
-        models.Origami.deleteOne({ _id: id })
-            .then((removedOrigami) => res.send(removedOrigami))
-            .catch(next)
-    },
+    // async function deleteProject(req, res, next){
+    //     const id = req.params.id;
+    //     models.Origami.deleteOne({ _id: id })
+    //         .then((removedOrigami) => res.send(removedOrigami))
+    //         .catch(next)
+    // }
 
-    add: async (req, res, next) => {
+  async function addMember(req, res, next) {
         const { newMemberUsername, admin } = req.body;
         const projectId = req.params.id;
         const { _id } = req.user;
@@ -85,4 +96,6 @@ module.exports = {
             });
         }
     }
-}
+
+
+    module.exports = router;

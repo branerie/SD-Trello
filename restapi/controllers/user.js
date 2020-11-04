@@ -5,13 +5,13 @@ const utils = require('../utils')
 const router = require('express').Router()
 const bcrypt = require('bcrypt')
 
+router.get('/verify', verifyLogin);
+
 router.get('/:id', getUser)
 
 router.post('/register', registerUser)
 
 router.post('/login', loginUser)
-
-// router.get('/verify', controllers.user.post.verifyLogin);
 
 router.post('/logout', logoutUser)
 
@@ -32,35 +32,35 @@ async function registerUser(req, res, next) {
 
 }
 
-// verifyLogin: (req, res, next) => {
-//   const token = req.headers.authorization || '';
+function verifyLogin(req, res, next) {
 
-//   Promise.all([
-//       utils.jwt.verifyToken(token),
-//       models.TokenBlacklist.findOne({ token })
-//   ])
-//       .then(([data, blacklistToken]) => {
-//           if (blacklistToken) { return Promise.reject(new Error('blacklisted token')) }
+    const token = req.headers.authorization || '';
+ 
+  Promise.all([
+      utils.jwt.verifyToken(token),
+      models.TokenBlacklist.findOne({ token })
+  ])
+      .then(([data, blacklistToken]) => {
+          if (blacklistToken) { return Promise.reject(new Error('blacklisted token')) }
+          models.User.findById(data.id)
+              .then((user) => {
+                  return res.send({
+                    status: true,
+                    user
+                  })
+              });
+      })
+      .catch(err => {
+          if (['token expired', 'blacklisted token', 'jwt must be provided'].includes(err.message)) {
+              res.status(401).send('UNAUTHORIZED!');
+              return;
+          }
 
-//           models.User.findById(data.id)
-//               .then((user) => {
-//                   return res.send({
-//                     status: true,
-//                     user
-//                   })
-//               });
-//       })
-//       .catch(err => {
-//           if (['token expired', 'blacklisted token', 'jwt must be provided'].includes(err.message)) {
-//               res.status(401).send('UNAUTHORIZED!');
-//               return;
-//           }
-
-//           res.send({
-//             status: false
-//           })
-//       })
-// },
+          res.send({
+            status: false
+          })
+      })
+}
 
 async function loginUser(req, res, next) {
     const { username, password } = req.body
@@ -90,9 +90,7 @@ async function updateUser(req, res, next) {
 
     await bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(password, salt, async (err, hash) => {
-            if (err) { next(err); return }
-            console.log(hash, 'hash');
-            console.log(password, 'password');
+            if (err) { next(err); return }            
             const updatedUser = await models.User.updateOne({ _id: id }, { username, password: hash })
             res.send(updatedUser)
         })

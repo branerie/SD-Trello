@@ -17,7 +17,8 @@ const cardSchema = new Schema({
 
     author: {
         type: ObjectId,
-        ref: "User"
+        ref: "User",
+        required: true
     },
 
 })
