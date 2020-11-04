@@ -41,3 +41,8 @@
   border-bottom: 2px solid #ffa000;
   font-weight: bold;
 }
+
+.username {
+  padding-top: 25px;
+  padding-right: 20px;
+}
