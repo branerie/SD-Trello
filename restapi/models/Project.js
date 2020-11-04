@@ -19,6 +19,10 @@ const projectSchema = new Schema({
         required: true
     },
 
+    description: {
+        type: String
+    },
+
     membersRoles: [{
         type: ObjectId,
         ref: "ProjectUserRole"
