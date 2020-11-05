@@ -11,26 +11,11 @@ import { useHistory } from "react-router-dom";
 const SignupPage = () => {
     const [username, setUsername] = useState(null);
     const [password, setPassword] = useState(null);
+    const [email, setEmail] = useState(null);
     const [rePassword, setRePassword] = useState(null);
     const [alert, setAlert] = useState(false);
     const context = useContext(UserContext);
     const history = useHistory();
-
-    const onChange = (event, type) => {
-        switch (type) {
-            case 'username':
-                setUsername(event.target.value);
-                break;
-            case 'password':
-                setPassword(event.target.value);
-                break;
-            case 'rePassword':
-                setRePassword(event.target.value);
-                break;
-            default:
-                break;
-        }
-    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -41,6 +26,7 @@ const SignupPage = () => {
         }
 
         await authenticate("http://localhost:4000/api/user/register", 'POST', {
+            email,
             username,
             password
         }, (user) => {
@@ -61,21 +47,27 @@ const SignupPage = () => {
                 <Title title="Register" />
                 <Input
                     value={username}
-                    onChange={(e) => onChange(e, "username")}
+                    onChange={(e) => setUsername(e.target.value)}
                     label="Username"
                     id="username"
                 />
                 <Input
+                    value={email}
+                    onChange={(e) => setEmail(e.target.value)}
+                    label="Email"
+                    id="email"
+                />
+                <Input
                     type="password"
                     value={password}
-                    onChange={(e) => onChange(e, "password")}
+                    onChange={(e) => setPassword(e.target.value)}
                     label="Password"
                     id="password"
                 />
                 <Input
                     type="password"
                     value={rePassword}
-                    onChange={(e) => onChange(e, "rePassword")}
+                    onChange={(e) => setRePassword(e.target.value)}
                     label="Re-Password"
                     id="re-password"
                 />
