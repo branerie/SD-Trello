@@ -16,9 +16,20 @@ const LoginPage = () => {
     const context = useContext(UserContext)
     const history = useHistory()
 
-    const responseGoogle = (response) => {
+    const responseGoogle = async (response) => {
         const { email, name, imageUrl, googleId } = response.profileObj
 
+        await authenticate("http://localhost:4000/api/user/login", 'POST', {
+            email,
+            username: name,
+            imageUrl,
+            googlePassword: googleId
+        }, (user) => {
+            context.logIn(user)
+            history.push("/")
+        }, (e) => {
+            console.log("Error", e)
+        })
     }
 
     const handleSubmit = async (event) => {

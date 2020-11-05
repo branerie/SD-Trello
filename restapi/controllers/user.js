@@ -63,17 +63,24 @@ function verifyLogin(req, res, next) {
 }
 
 async function loginUser(req, res, next) {
-    const { email, username, password } = req.body
-    const user = await models.User.findOne({ email })
-    const match = await user.matchPassword(password)
+    const { email, username, password, googlePassword, imageUrl } = req.body
 
-    if (!match) {
-        res.status(401).send('Invalid password')
-        return;
+    const user = await models.User.findOne({ email })
+    
+    if (password) {
+        const match = await user.matchPassword(password)
+    
+        if (!match) {
+            res.status(401).send('Invalid password')
+            return;
+        }
+    
+        const token = utils.jwt.createToken({ id: user._id })
+        res.header("Authorization", token).send(user)
+    } else {
+
     }
 
-    const token = utils.jwt.createToken({ id: user._id })
-    res.header("Authorization", token).send(user)
 }
 
 
