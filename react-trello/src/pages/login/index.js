@@ -1,32 +1,37 @@
-import React, { useState, useContext } from "react";
-import ReactDOM from 'react-dom';
-import GoogleLogin from 'react-google-login';
-import { useHistory } from "react-router-dom";
-import SubmitButton from "../../components/button/submit-button";
-import Input from "../../components/input";
-import PageLayout from "../../components/page-layout";
-import Title from "../../components/title";
-import styles from "./index.module.css";
-import authenticate from "../../utils/authenticate";
-import UserContext from "../../Context";
+import React, { useState, useContext } from "react"
+import GoogleLogin from 'react-google-login'
+import { useHistory } from "react-router-dom"
+import SubmitButton from "../../components/button/submit-button"
+import Input from "../../components/input"
+import PageLayout from "../../components/page-layout"
+import Title from "../../components/title"
+import styles from "./index.module.css"
+import authenticate from "../../utils/authenticate"
+import UserContext from "../../Context"
 
 const LoginPage = () => {
-    const [username, setUsername] = useState("");
-    const [password, setPassword] = useState("");
-    const context = useContext(UserContext);
+    const [username, setUsername] = useState("")
+    const [password, setPassword] = useState("")
+    const [email, setEmail] = useState("")
+    const context = useContext(UserContext)
     const history = useHistory()
+
+    const responseGoogle = (response) => {
+        const { email, name, imageUrl, googleId } = response.profileObj
+
+    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
 
         await authenticate("http://localhost:4000/api/user/login", 'POST', {
-            username,
+            email,
             password
         }, (user) => {
             context.logIn(user)
-            history.push("/");
+            history.push("/")
         }, (e) => {
-            console.log("Error", e);
+            console.log("Error", e)
         })
     };
 
@@ -41,6 +46,12 @@ const LoginPage = () => {
                     id="username"
                 />
                 <Input
+                    value={email}
+                    onChange={e => setEmail(e.target.value)}
+                    label="Email"
+                    id="email"
+                />
+                <Input
                     type="password"
                     value={password}
                     onChange={e => setPassword(e.target.value)}
@@ -48,14 +59,14 @@ const LoginPage = () => {
                     id="password"
                 />
                 <SubmitButton title="Login" />
-            <GoogleLogin
-                clientId=""
-                buttonText="Login"
-                // onSuccess={responseGoogle}
-                // onFailure={responseGoogle}
-                cookiePolicy={'single_host_origin'}
-            />
             </form>
+                <GoogleLogin
+                    clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
+                    buttonText="Login"
+                    onSuccess={responseGoogle}
+                    // onFailure={errorGoogle}
+                    cookiePolicy={'single_host_origin'}
+                />
         </PageLayout>
     )
 }
