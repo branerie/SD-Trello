@@ -61,7 +61,7 @@ const LoginPage = () => {
                 <SubmitButton title="Login" />
             </form>
                 <GoogleLogin
-                    clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
+                    clientId=''
                     buttonText="Login"
                     onSuccess={responseGoogle}
                     // onFailure={errorGoogle}
