@@ -13,6 +13,7 @@ import LoginPage from "./pages/login";
 import ProfilePage from "./pages/profile";
 import ErrorPage from "./pages/error";
 import UserContext from "./Context";
+import ProjectsPage from "./pages/project";
 
 const Navigation = () => {
 
@@ -35,6 +36,9 @@ const Navigation = () => {
                 
                 <Route path="/profile/:userid">
                     {loggedIn ? (<ProfilePage />): (<Redirect to="/login"/>)}
+                </Route>
+                <Route path="/projects">
+                    {loggedIn ? (<ProjectsPage />): (<Redirect to="/login"/>)}
                 </Route>
                 <Route component={ErrorPage} />
             </Switch>

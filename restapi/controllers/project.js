@@ -22,15 +22,12 @@ async function getUserProjects(req, res, next) {
     const { _id } = req.user;
     const projects = await models.ProjectUserRole.find({ memberId: _id })
         .populate('projectId')
-        .select('projectId -_id');
     res.send(projects);
 }
 
 async function getAllProjects(req, res, next) {
 
-    const projects = await models.ProjectUserRole.find({})
-        .populate('projectId')
-        .select('projectId -_id');
+    const projects = await models.Project.find({})
     res.send(projects);
 }
 
