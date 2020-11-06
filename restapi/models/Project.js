@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Model = mongoose.model
-const { String, ObjectId } = Schema.Types
+const { String, ObjectId, Boolean } = Schema.Types
 const projectUserRole = require('./ProjectUserRole')
 
 
@@ -21,6 +21,10 @@ const projectSchema = new Schema({
 
     description: {
         type: String
+    },
+
+    isFinished: {
+       type: Boolean
     },
 
     membersRoles: [{

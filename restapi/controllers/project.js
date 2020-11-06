@@ -3,7 +3,9 @@ const models = require('../models')
 const { auth, isAdmin } = require('../utils')
 const router = require('express').Router()
 
-router.get('/', auth, getProject)
+router.get('/', auth, getUserProjects)
+
+router.get('/all', auth, getAllProjects)
 
 router.post('/', auth, createProject)
 
@@ -16,9 +18,17 @@ router.post('/:id/user', auth, isAdmin, addMember)
 
 
 
-async function getProject(req, res, next) {
+async function getUserProjects(req, res, next) {
     const { _id } = req.user;
     const projects = await models.ProjectUserRole.find({ memberId: _id })
+        .populate('projectId')
+        .select('projectId -_id');
+    res.send(projects);
+}
+
+async function getAllProjects(req, res, next) {
+
+    const projects = await models.ProjectUserRole.find({})
         .populate('projectId')
         .select('projectId -_id');
     res.send(projects);
@@ -74,7 +84,7 @@ async function deleteProject(req, res, next) {
         let cardsArray = [];
         searchedLists.lists.map(a => cardsArray = cardsArray.concat(a.cards))
 
-        await models.Card.deleteMany({ _id: { $in: cardsArray } }).session(session)     
+        await models.Card.deleteMany({ _id: { $in: cardsArray } }).session(session)
 
         let listsArray = [];
         searchedLists.lists.map(a => listsArray.push(a._id))

@@ -23,11 +23,7 @@ const userSchema = new Schema({
 
     password: {
         type: String       
-    },
-
-    googlePassword: {
-        type: String
-    },
+    },  
 
     imageUrl: {
         type: String
@@ -41,10 +37,6 @@ userSchema.methods = {
 
     matchPassword: function (password) {
         return bcrypt.compare(password, this.password)
-    },
-
-    matchGooglePassword: function (googlePassword) {
-        return bcrypt.compare(googlePassword, this.googlePassword)
     }
 
 }
@@ -63,18 +55,6 @@ userSchema.pre('save', function (next) {
     next();
 });
 
-userSchema.pre('save', function (next) {
-    if (this.isModified('googlePassword') && this.googlePassword) {
-        bcrypt.genSalt(saltRounds, (err, salt) => {
-            bcrypt.hash(this.googlePassword, salt, (err, hash) => {
-                if (err) { next(err); return }
-                this.googlePassword = hash;
-                next();
-            });
-        });
-        return;
-    }
-    next();
-});
+
 
 module.exports = new Model('User', userSchema);
