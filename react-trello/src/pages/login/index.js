@@ -8,45 +8,16 @@ import Title from "../../components/title"
 import styles from "./index.module.css"
 import authenticate from "../../utils/authenticate"
 import UserContext from "../../Context"
+import responseGoogle from "../../utils/responseGoogle"
+import Transparent from "../../components/transparent"
+import AddPassword from "../../components/form-add-password"
 
 const LoginPage = () => {
-    const [username, setUsername] = useState("")
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
+    const [showForm, setShowForm] = useState(false)
     const context = useContext(UserContext)
     const history = useHistory()
-
-    const responseGoogle = async (response) => {
-        const { email, name, imageUrl, googleId } = response.profileObj
-
-        console.log(response.profileObj);
-
-        // await authenticate("http://localhost:4000/api/user/login", 'POST', {
-        //     email,
-        //     username: name,
-        //     imageUrl,
-        //     googlePassword: googleId
-        // }, (user) => {
-        //     context.logIn(user)
-        //     history.push("/")
-        // }, async(response) => {
-        //     if (response.needPassword) {
-        //         await authenticate(`http://localhost:4000/api/user/${response._id}`, 'PUT', {
-        //             email,
-        //             username: name,
-        //             imageUrl,
-        //             googlePassword: googleId
-        //         }, (user) => {
-        //             context.logIn(user)
-        //             history.push("/")
-        //         }, async(response) => {
-        //             if (response.needPassword) {
-        
-        //             }
-        //         })
-        //     }
-        // })
-    }
 
     const handleSubmit = async (event) => {
         event.preventDefault();
@@ -57,16 +28,40 @@ const LoginPage = () => {
         }, (user) => {
             context.logIn(user)
             history.push("/")
-        }, (e) => {
-            console.log("Error", e)
+        }, (response) => {
+            if (response.needPassword) {
+                setShowForm(true)
+            }
+            console.log("Error", response)
         })
-    };
+    }
 
+    const handleGoogle = (googleResponse) => {
+        responseGoogle(googleResponse, (user) => {
+            context.logIn(user)
+            history.push("/")
+        }, (response) => {
+
+            console.log("Error", response)
+        })
+    }
+
+    const hideForm = () => {
+        setShowForm(false)
+    }
+    
     return (
         <PageLayout>
-            {/* <Alert alert={userExist} message={'User with this email already exists'}/> */}
+            {
+                showForm ?
+                    <div>
+                        <Transparent hideForm={hideForm}>
+                            <AddPassword hideForm={hideForm} />
+                        </Transparent>
+                    </div> : null
+            }
             <form className={styles.container} onSubmit={handleSubmit}>
-                <Title title="Login" />                
+                <Title title="Login" />
                 <Input
                     value={email}
                     onChange={e => setEmail(e.target.value)}
@@ -82,13 +77,13 @@ const LoginPage = () => {
                 />
                 <SubmitButton title="Login" />
             </form>
-                <GoogleLogin
-                    clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
-                    buttonText="Login"
-                    onSuccess={responseGoogle}
-                    // onFailure={errorGoogle}
-                    cookiePolicy={'single_host_origin'}
-                />
+            <GoogleLogin
+                clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
+                buttonText="Login"
+                onSuccess={handleGoogle}
+                // onFailure={errorGoogle}
+                cookiePolicy={'single_host_origin'}
+            />
         </PageLayout>
     )
 }

@@ -1,25 +1,18 @@
-const authenticate = async (url, method, body, onSuccess, onFailure) => {
-    try {
+const responseGoogle = async (googleResponse, onSuccess, onFailure) => {
 
-        const promise = await fetch(url, {
-            method,
-            body: JSON.stringify(body),
+    try {
+        const tokenId = googleResponse.tokenId
+        const promise = await fetch("http://localhost:4000/api/user/google-login", {
+            method: 'POST',
+            body: JSON.stringify({tokenId}),
             headers: {
                 "Content-Type": "application/json"
             }
         })
-
-        
         const authToken = promise.headers.get("Authorization")
-        const response = await promise.json()
-
-        if (response.needPassword) {
-            onFailure(response)
-            return
-        }
-
         document.cookie = `x-auth-token=${authToken}`
 
+        const response = await promise.json()
 
         if (response.username && authToken) {
             onSuccess({
@@ -29,10 +22,10 @@ const authenticate = async (url, method, body, onSuccess, onFailure) => {
         } else {
             onFailure(response)
         }
-
-    } catch (e) {
-        onFailure(e)
+        
+    } catch (error) {
+        onFailure(error)
     }
 }
 
-export default authenticate
+export default responseGoogle

@@ -38,9 +38,9 @@ const App = (props) => {
                 "Authorization": token
             }
         }).then(promise => {
-            console.log(promise);
             return promise.json();
         }).then(response => {
+            console.log(response);
             if (response.status) {
                 logIn({
                     username: response.user.username,
