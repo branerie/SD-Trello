@@ -6,14 +6,15 @@ const googleAuth = async (token) => {
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID
     })
+    console.log('ticket - ', ticket);
 
     const payload = ticket.getPayload()
-
+    console.log('payload - ', payload);
     console.log(`User ${payload.name} verified`)
 
-    const { sub, email, name, picture } = payload
+    const { email, name, picture, email_verified } = payload
 
-    return { userId: sub, email, fullName: name, photoUrl: picture }
+    return { email, username: name, imageUrl: picture, email_verified }
 
 }
 

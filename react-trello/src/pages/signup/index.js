@@ -9,6 +9,7 @@ import authenticate from "../../utils/authenticate"
 import UserContext from "../../Context"
 import { useHistory } from "react-router-dom"
 import Alert from "../../components/alert"
+import responseGoogle from "../../utils/responseGoogle"
 
 const SignupPage = () => {
     const [username, setUsername] = useState(null)
@@ -16,18 +17,29 @@ const SignupPage = () => {
     const [email, setEmail] = useState(null)
     const [rePassword, setRePassword] = useState(null)
     const [alert, setAlert] = useState(false)
+    const [fillAlert, setFillAlert] = useState(false)
     const [userExist, setUserExist] = useState(false)
     const context = useContext(UserContext)
     const history = useHistory()
 
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault()
+
+        setAlert(false)
+        setFillAlert(false)
+        setUserExist(false)
 
         if (password !== rePassword) {
             setAlert(true)
             return
         }
 
+        
+        if (!username || !password || !rePassword || !email) {
+            setFillAlert(true)
+            return
+        }
+        
         await authenticate("http://localhost:4000/api/user/register", 'POST', {
             email,
             username,
@@ -40,27 +52,15 @@ const SignupPage = () => {
                 setUserExist(true)
             }
         })
-
     }
 
-    const responseGoogle = async (response) => {
-        const { email, name, imageUrl, googleId } = response.profileObj
-
-        await authenticate("http://localhost:4000/api/user/register", 'POST', {
-            email,
-            username: name,
-            imageUrl,
-            googlePassword: googleId
-        }, (user) => {
-            console.log(user);
+    const handleGoogle = (googleResponse) => {
+        responseGoogle(googleResponse, (user) => {
             context.logIn(user)
             history.push("/")
         }, (response) => {
-            if (response.exist) {
-                setUserExist(true)
-                return
-            }
-            // console.log(response)
+
+            console.log("Error", response)
         })
     }
 
@@ -68,6 +68,7 @@ const SignupPage = () => {
         <PageLayout>
             <Alert alert={alert} message={'Passwords do not match'}/>
             <Alert alert={userExist} message={'User with this email already exists'}/>
+            <Alert alert={fillAlert} message={'Please fill all fileds'}/>
             <form className={styles.container} onSubmit={handleSubmit}>
                 <Title title="Register" />
                 <Input
@@ -102,7 +103,7 @@ const SignupPage = () => {
             <GoogleLogin
                     clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
                     buttonText="Sign up with Google"
-                    onSuccess={responseGoogle}
+                    onSuccess={handleGoogle}
                     // onFailure={errorGoogle}
                     cookiePolicy={'single_host_origin'}
                 />

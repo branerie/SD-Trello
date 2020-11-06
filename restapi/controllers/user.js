@@ -14,6 +14,8 @@ router.post('/register', registerUser)
 
 router.post('/login', loginUser)
 
+router.post('/google-login', googleLoginUser)
+
 router.post('/logout', logoutUser)
 
 router.put('/:id', updateUser)
@@ -27,15 +29,16 @@ async function getUser(req, res, next) {
 }
 
 async function registerUser(req, res, next) {
-    const { email, username, password, googlePassword, imageUrl } = req.body;
-    if (!password && !googlePassword) {
+    const { email, username, password } = req.body;
+    if (!password) {
         res.send("Missing password")
+        return
     }
 
     models.User.findOne({ email }, async function (err, user) {
 
         if (user === null) {
-            const createdUser = await models.User.create({ email, username, password, googlePassword, imageUrl })
+            const createdUser = await models.User.create({ email, username, password })
             const token = utils.jwt.createToken({ id: createdUser._id })
             res.header("Authorization", token).send(createdUser)
             return
@@ -84,52 +87,55 @@ function verifyLogin(req, res, next) {
 }
 
 async function loginUser(req, res, next) {
-    const { email, username, password, googlePassword, imageUrl } = req.body
+    const { email, password } = req.body
 
     try {
         const user = await models.User.findOne({ email })
 
-        if (password) {
-            if (!user.password) {
-                let response = {}
-                response.error = true
-                response.needPassword = true
-                res.send(response)
-            }
-            const match = await user.matchPassword(password)
-
-            if (!match) {
-                res.status(401).send('Invalid password')
-                return;
-            }
-
-            const token = utils.jwt.createToken({ id: user._id })
-            res.header("Authorization", token).send(user)
-        } else if (googlePassword) {
-            if (!user.googlePassword) {
-                user.error = true
-                user.needGooglePassword = true
-                res.send(user)
-            }
-            const match = await user.matchGooglePassword(googlePassword)
-
-            if (!match) {
-                res.status(401).send('Invalid password')
-                return;
-            }
-
-            const token = utils.jwt.createToken({ id: user._id })
-            res.header("Authorization", token).send(user)
+        if (!user.password) {
+            let response = {}
+            response.needPassword = true
+            res.send(response)
         }
+        const match = await user.matchPassword(password)
+
+        if (!match) {
+            res.status(401).send('Invalid password')
+            return;
+        }
+
+        const token = utils.jwt.createToken({ id: user._id })
+        res.header("Authorization", token).send(user)
+
     } catch (error) {
-        if (googlePassword) {
-            registerUser(req, res, next)
-        } else {
-            console.log(error);
-        }
+        console.log(error)
     }
 }
 
+async function googleLoginUser(req, res, next) {
+    const { tokenId } = req.body
+    const { email, username, imageUrl, email_verified } = await googleAuth(tokenId)
+    if (!email_verified) {
+        res.send('Google verification failed')
+        return
+    }
+
+    try {
+        const user = await models.User.findOne({ email })
+        if (user === null) {
+            const createdUser = await models.User.create({ email, username, imageUrl })
+            const token = utils.jwt.createToken({ id: createdUser._id })
+            res.header("Authorization", token).send(createdUser)
+            return
+        }
+
+        const token = utils.jwt.createToken({ id: user._id })
+        res.header("Authorization", token).send(user)
+
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 async function logoutUser(req, res, next) {
     const token = req.cookies[config.authCookieName]
@@ -140,15 +146,30 @@ async function logoutUser(req, res, next) {
 
 async function updateUser(req, res, next) {
     const id = req.params.id
-    let { username, password, email, imageUrl, googlePassword } = req.body
+    let user = { username, password, email, imageUrl } = req.body
+    const obj = {}
+    console.log(username);
+    for (let key in user) {
+        if (user[key] && key !== 'password') {
+            obj[key] = user[key]
+        }
+    }
+    console.log(obj);
 
-    await bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, async (err, hash) => {
-            if (err) { next(err); return }
-            const updatedUser = await models.User.updateOne({ _id: id }, { username, password: hash })
-            res.send(updatedUser)
-        })
-    })
+    if (password) {
+        await bcrypt.genSalt(10, (err, salt) => {
+            bcrypt.hash(password, salt, async (err, hash) => {
+                if (err) { next(err); return }
+                
+                const updatedUser = await models.User.updateOne({ _id: id }, { ...obj, password: hash })
+                res.send(updatedUser)
+                return
+            })
+        }) 
+    } else {
+        const updatedUser = await models.User.updateOne({ _id: id }, obj)
+        res.send(updatedUser)
+    }
 }
 
 

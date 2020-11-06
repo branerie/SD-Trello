@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom';
+import { useParams } from 'react-router-dom';
 import UserContext from '../../Context';
 import authenticateUpdate from '../../utils/authenticate-update';
 import SubmitButton from '../button/submit-button';
@@ -11,7 +11,6 @@ export default function EditProfile(props) {
     const [username, setUsername] = useState("");
     const [password, setPassword] = useState("");
     const context = useContext(UserContext);
-    const history = useHistory()
     const params = useParams()
     const id = params.userid
 

@@ -1,6 +1,7 @@
 import getCookie from "./cookie";
 
 const authenticateUpdate = async (url, method, body, onSuccess, onFailure) => {
+    console.log('123');
     try {
         const cookie = getCookie('x-auth-token')
 
