@@ -28,6 +28,13 @@ async function getUserProjects(req, res, next) {
 async function getAllProjects(req, res, next) {
 
     const projects = await models.Project.find({})
+        .populate('author')
+        .populate({
+            path: 'membersRoles',
+            populate: {
+                path: 'memberId',
+            }
+        })
     res.send(projects);
 }
 

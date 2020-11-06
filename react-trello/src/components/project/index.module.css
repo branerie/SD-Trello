@@ -1,0 +1,15 @@
+.projectname {
+    padding: 5px;
+}
+
+.projectother {
+    padding: 5px;
+}
+
+.container {
+    display: flex;
+    width: 60%;
+    background-color: aqua;
+    margin: 10px;
+    justify-content: space-between;
+}
