@@ -1,15 +1,16 @@
 const controllers = require('../controllers/');
+const router = require('express').Router()
 
-module.exports = (app) => {
 
-    app.use('/api/user', controllers.user)
+router.use('/api/user', controllers.user)
 
-    app.use('/api/projects', controllers.project)
+router.use('/api/projects', controllers.project)
 
-    app.use('/api/projects/lists', controllers.list)
+router.use('/api/projects/lists', controllers.list)
 
-    app.use('/api/projects/lists/cards', controllers.card)
+router.use('/api/projects/lists/cards', controllers.card)
 
-    app.use('*', (req, res, next) => res.send('<h1> Something went wrong. Try again. :thumbsup: </h1>'))
-}
+router.use('*', (req, res, next) => res.send('<h1> Something went wrong. Try again. :thumbsup: </h1>'))
+
+module.exports = router
 

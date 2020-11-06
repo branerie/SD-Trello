@@ -4,6 +4,7 @@ const config = require('../config/config')
 const utils = require('../utils')
 const router = require('express').Router()
 const bcrypt = require('bcrypt')
+const googleAuth = require('../utils/googleAuth')
 
 router.get('/verify', verifyLogin);
 
@@ -19,16 +20,36 @@ router.put('/:id', updateUser)
 
 router.delete('/:id', deleteUser)
 
+
 async function getUser(req, res, next) {
     const user = await models.User.findById(req.params.id)
     res.send(user);
 }
 
 async function registerUser(req, res, next) {
-    const { email, username, password } = req.body;
-    const createdUser = await models.User.create({ email, username, password })
-    const token = utils.jwt.createToken({ id: createdUser._id })
-    res.header("Authorization", token).send(createdUser)
+    const { email, username, password, googlePassword, imageUrl } = req.body;
+    if (!password && !googlePassword) {
+        res.send("Missing password")
+    }
+
+    models.User.findOne({ email }, async function (err, user) {
+
+        if (user === null) {
+            const createdUser = await models.User.create({ email, username, password, googlePassword, imageUrl })
+            const token = utils.jwt.createToken({ id: createdUser._id })
+            res.header("Authorization", token).send(createdUser)
+            return
+        }
+        let userExist = {}
+        userExist.error = true
+        userExist.exist = true
+        res.send(userExist)
+
+        if (err) {
+            console.log(err);
+        }
+    })
+
 
 }
 
@@ -65,22 +86,48 @@ function verifyLogin(req, res, next) {
 async function loginUser(req, res, next) {
     const { email, username, password, googlePassword, imageUrl } = req.body
 
-    const user = await models.User.findOne({ email })
-    
-    if (password) {
-        const match = await user.matchPassword(password)
-    
-        if (!match) {
-            res.status(401).send('Invalid password')
-            return;
+    try {
+        const user = await models.User.findOne({ email })
+
+        if (password) {
+            if (!user.password) {
+                let response = {}
+                response.error = true
+                response.needPassword = true
+                res.send(response)
+            }
+            const match = await user.matchPassword(password)
+
+            if (!match) {
+                res.status(401).send('Invalid password')
+                return;
+            }
+
+            const token = utils.jwt.createToken({ id: user._id })
+            res.header("Authorization", token).send(user)
+        } else if (googlePassword) {
+            if (!user.googlePassword) {
+                user.error = true
+                user.needGooglePassword = true
+                res.send(user)
+            }
+            const match = await user.matchGooglePassword(googlePassword)
+
+            if (!match) {
+                res.status(401).send('Invalid password')
+                return;
+            }
+
+            const token = utils.jwt.createToken({ id: user._id })
+            res.header("Authorization", token).send(user)
         }
-    
-        const token = utils.jwt.createToken({ id: user._id })
-        res.header("Authorization", token).send(user)
-    } else {
-
+    } catch (error) {
+        if (googlePassword) {
+            registerUser(req, res, next)
+        } else {
+            console.log(error);
+        }
     }
-
 }
 
 
@@ -93,7 +140,7 @@ async function logoutUser(req, res, next) {
 
 async function updateUser(req, res, next) {
     const id = req.params.id
-    let { username, password } = req.body
+    let { username, password, email, imageUrl, googlePassword } = req.body
 
     await bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(password, salt, async (err, hash) => {

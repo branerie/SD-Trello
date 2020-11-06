@@ -12,38 +12,63 @@ const userSchema = new Schema({
         trim: true,
         lowercase: true,
         unique: true,
-        required: 'Email address is required',       
+        required: 'Email address is required',
         match: [/^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/, 'Please fill a valid email address']
-    },   
-   
+    },
+
     username: {
-        type: String,      
+        type: String,
         required: true
     },
 
     password: {
-        type: String,
-        require: true
+        type: String       
     },
 
-    projects: [{ type: ObjectId , ref: "ProjectUserRole"}]
+    googlePassword: {
+        type: String
+    },
+
+    imageUrl: {
+        type: String
+    },
+
+    projects: [{ type: ObjectId, ref: "ProjectUserRole" }]
 
 });
 
 userSchema.methods = {
 
     matchPassword: function (password) {
-        return bcrypt.compare(password, this.password);
+        return bcrypt.compare(password, this.password)
+    },
+
+    matchGooglePassword: function (googlePassword) {
+        return bcrypt.compare(googlePassword, this.googlePassword)
     }
 
-};
+}
 
 userSchema.pre('save', function (next) {
-    if (this.isModified('password')) {
+    if (this.isModified('password') && this.password) {
         bcrypt.genSalt(saltRounds, (err, salt) => {
             bcrypt.hash(this.password, salt, (err, hash) => {
                 if (err) { next(err); return }
                 this.password = hash;
+                next();
+            });
+        });
+        return;
+    }
+    next();
+});
+
+userSchema.pre('save', function (next) {
+    if (this.isModified('googlePassword') && this.googlePassword) {
+        bcrypt.genSalt(saltRounds, (err, salt) => {
+            bcrypt.hash(this.googlePassword, salt, (err, hash) => {
+                if (err) { next(err); return }
+                this.googlePassword = hash;
                 next();
             });
         });

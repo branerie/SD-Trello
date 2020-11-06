@@ -19,17 +19,33 @@ const LoginPage = () => {
     const responseGoogle = async (response) => {
         const { email, name, imageUrl, googleId } = response.profileObj
 
-        await authenticate("http://localhost:4000/api/user/login", 'POST', {
-            email,
-            username: name,
-            imageUrl,
-            googlePassword: googleId
-        }, (user) => {
-            context.logIn(user)
-            history.push("/")
-        }, (e) => {
-            console.log("Error", e)
-        })
+        console.log(response.profileObj);
+
+        // await authenticate("http://localhost:4000/api/user/login", 'POST', {
+        //     email,
+        //     username: name,
+        //     imageUrl,
+        //     googlePassword: googleId
+        // }, (user) => {
+        //     context.logIn(user)
+        //     history.push("/")
+        // }, async(response) => {
+        //     if (response.needPassword) {
+        //         await authenticate(`http://localhost:4000/api/user/${response._id}`, 'PUT', {
+        //             email,
+        //             username: name,
+        //             imageUrl,
+        //             googlePassword: googleId
+        //         }, (user) => {
+        //             context.logIn(user)
+        //             history.push("/")
+        //         }, async(response) => {
+        //             if (response.needPassword) {
+        
+        //             }
+        //         })
+        //     }
+        // })
     }
 
     const handleSubmit = async (event) => {
@@ -48,14 +64,9 @@ const LoginPage = () => {
 
     return (
         <PageLayout>
+            {/* <Alert alert={userExist} message={'User with this email already exists'}/> */}
             <form className={styles.container} onSubmit={handleSubmit}>
-                <Title title="Login" />
-                <Input
-                    value={username}
-                    onChange={e => setUsername(e.target.value)}
-                    label="Username"
-                    id="username"
-                />
+                <Title title="Login" />                
                 <Input
                     value={email}
                     onChange={e => setEmail(e.target.value)}
@@ -72,7 +83,7 @@ const LoginPage = () => {
                 <SubmitButton title="Login" />
             </form>
                 <GoogleLogin
-                    clientId=''
+                    clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
                     buttonText="Login"
                     onSuccess={responseGoogle}
                     // onFailure={errorGoogle}

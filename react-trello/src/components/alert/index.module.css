@@ -1,0 +1,9 @@
+.alert {
+    background-color: rgb(219, 88, 88);
+    margin-left: 35%;
+    margin-right: 35%;
+    text-align: center;
+    padding: 10px;
+    border-radius: 5px;
+    margin-bottom: 2%;
+}

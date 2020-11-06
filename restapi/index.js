@@ -3,18 +3,19 @@ const dbConnection = require('./config/database');
 const dotEnv = require("dotenv");
 dotEnv.config();
 
+require('express-async-errors')
 const app = require('express')();
 
 dbConnection().then(() => {
 
     require('./config/express')(app);
 
-    require('./config/routes')(app);
+    // require('./config/routes')(app);
 
-    app.use(function (err, req, res, next) {
-        console.error(err);
-        res.status(500).send(err.message);
-    });
+    // app.use(function (err, req, res, next) {
+    //     console.error(err);
+    //     res.status(500).send(err.message);
+    // });
 
     app.listen(config.port, console.log(`Listening on port ${config.port}!`))
 
