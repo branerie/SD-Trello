@@ -1,10 +1,10 @@
-import React, { useState, useEffect } from "react";
-import UserContext from "./Context";
-import getCookie from "./utils/cookie";
+import React, { useState, useEffect } from "react"
+import UserContext from "./Context"
+import getCookie from "./utils/cookie"
 
 const App = (props) => {
-    const [user, setUser] = useState(null);
-    const [loading, setLoading] = useState(true);
+    const [user, setUser] = useState(null)
+    const [loading, setLoading] = useState(true)
 
     const logIn = (user) => {
         setUser({
@@ -14,7 +14,7 @@ const App = (props) => {
     }
 
     const logOut = () => {
-        document.cookie = "x-auth-token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT";
+        document.cookie = "x-auth-token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT"
 
         setUser({
             loggedIn: false
@@ -23,11 +23,11 @@ const App = (props) => {
 
     useEffect(() => {
 
-        const token = getCookie("x-auth-token");
+        const token = getCookie("x-auth-token")
 
         if (!token) {
             logOut();
-            setLoading(false);
+            setLoading(false)
             return;
         }
 
@@ -38,7 +38,7 @@ const App = (props) => {
                 "Authorization": token
             }
         }).then(promise => {
-            return promise.json();
+            return promise.json()
         }).then(response => {
             if (response.status) {
                 logIn({
@@ -49,7 +49,7 @@ const App = (props) => {
                 logOut()
             }
 
-            setLoading(false);
+            setLoading(false)
         })
     }, [])
 
@@ -70,4 +70,4 @@ const App = (props) => {
     )
 }
 
-export default App;
+export default App

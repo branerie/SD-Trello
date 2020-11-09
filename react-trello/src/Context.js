@@ -1,4 +1,4 @@
-import React from "react";
+import React from "react"
 
 const UserContext = React.createContext({
     user: null,
@@ -6,4 +6,4 @@ const UserContext = React.createContext({
     logOut: () => {}
 });
 
-export default UserContext;
+export default UserContext

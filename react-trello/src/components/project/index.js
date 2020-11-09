@@ -1,14 +1,16 @@
 import React from 'react'
+import { Link } from 'react-router-dom';
 import styles from './index.module.css'
 
 export default function Project(props) {
-    console.log(props.projects);
     return (
         <div className={styles.container}>
-            <div className={styles.name}>Name : {props.projects.name}</div>
-            <div className={styles.author}>Creator: {props.projects.author}</div>
-            <div className={styles.description}>Description: {props.projects.description}</div>
-            {/* <div className={styles.members}>Members: {props.members}</div> */}
+            <div className={styles.top}>
+                <Link to={`/projects/${props.project._id}`} className={styles.projectname}>{props.project.name}</Link>
+                <div className={styles.username}>Creator: {props.project.author.username}</div>
+                {/* <div className={styles.members}>Members: {props.members}</div> */}
+            </div>
+            <div className={styles.description}>Description: {props.project.description}</div>
         </div>
     )
 }

@@ -1,0 +1,28 @@
+.projectname {
+    padding: 5px;
+    text-decoration: none;
+    font-size: 30px;
+}
+
+.username {
+    padding: 5px;
+}
+
+.description {
+    padding: 5px;
+    width: 100%;
+
+}
+
+.container {
+    width: 60%;
+    background-color: aqua;
+    margin: 10px;
+}
+
+.top {
+    display: flex;
+    margin: 10px;
+    justify-content: space-between;
+
+}
