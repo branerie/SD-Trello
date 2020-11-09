@@ -3,25 +3,12 @@ const models = require('../models')
 const { auth, isAdmin } = require('../utils')
 const router = require('express').Router()
 
-router.get('/:id', auth, getLists)
 
 router.post('/:id', auth, isAdmin, createList)
 
 router.put('/:id/:idlist', auth, updateList)
 
 router.delete('/:id/:idlist', auth, isAdmin, deleteList)
-
-
-
-async function getLists(req, res, next) {
-    const projectId = req.params.id;
-    const lists = await models.Project.findOne({ _id: projectId }).select('lists -_id');
-    console.log(lists);
-
-    const populatedLists = await models.List.find({ _id: { $in: lists.lists } }).populate('cards');
-
-    res.send(populatedLists);
-}
 
 async function createList(req, res, next) {
     const userId = req.user._id;
@@ -50,7 +37,6 @@ async function createList(req, res, next) {
 async function updateList(req, res, next) {
     const id = req.params.idlist;
     const { name } = req.body;
-    console.log(id, name);
     const updatedList = await models.List.updateOne({ _id: id }, { name })
     res.send(updatedList)
 

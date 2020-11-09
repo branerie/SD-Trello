@@ -21,6 +21,17 @@ const cardSchema = new Schema({
         required: true
     },
 
+    members: [{
+        type: ObjectId,
+        ref: "User"
+    }],
+
+    dueDate: Date,
+
+    progress:{
+        type: Number
+    }
+
 })
 
 

@@ -12,7 +12,9 @@ import LoginPage from "./pages/login"
 import ProfilePage from "./pages/profile"
 import ErrorPage from "./pages/error"
 import UserContext from "./Context"
-import ProjectsPage from "./pages/project"
+import AllProjectsPage from "./pages/all-project"
+import ProjectPage from "./pages/project-page"
+
 
 const Navigation = () => {
 
@@ -32,12 +34,12 @@ const Navigation = () => {
                 <Route path="/profile/:userid">
                     {loggedIn ? (<ProfilePage />): (<Redirect to="/login"/>)}
                 </Route>
-                <Route path="/projects">
-                    {loggedIn ? (<ProjectsPage />): (<Redirect to="/login"/>)}
-                </Route>
-                {/* <Route path="/projects/:projectid">
+                <Route path="/projects/:projectid">
                     {loggedIn ? (<ProjectPage />): (<Redirect to="/login"/>)}
-                </Route> */}
+                </Route>
+                <Route path="/projects">
+                    {loggedIn ? (<AllProjectsPage />): (<Redirect to="/login"/>)}
+                </Route>
                 <Route component={ErrorPage} />
             </Switch>
         </BrowserRouter>

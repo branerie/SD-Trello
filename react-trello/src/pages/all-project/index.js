@@ -4,7 +4,7 @@ import PageLayout from "../../components/page-layout"
 import getCookie from "../../utils/cookie"
 import Project from '../../components/project'
 
-const ProjectsPage = () => {
+const AllProjectsPage = () => {
 
     const [projects, setProjects] = useState(null)
     const history = useHistory()
@@ -27,7 +27,7 @@ const ProjectsPage = () => {
             const data = await response.json() 
             setProjects(data)
         }
-    }, [])
+    }, [history])
    
     
     useEffect(() => {
@@ -55,4 +55,4 @@ const ProjectsPage = () => {
     )
 }
 
-export default ProjectsPage;
+export default AllProjectsPage;

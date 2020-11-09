@@ -8,7 +8,6 @@ export default function Project(props) {
             <div className={styles.top}>
                 <Link to={`/projects/${props.project._id}`} className={styles.projectname}>{props.project.name}</Link>
                 <div className={styles.username}>Creator: {props.project.author.username}</div>
-                {/* <div className={styles.members}>Members: {props.members}</div> */}
             </div>
             <div className={styles.description}>Description: {props.project.description}</div>
         </div>

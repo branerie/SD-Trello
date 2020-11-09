@@ -1,10 +1,9 @@
 import React, { useContext, useState, useEffect } from 'react'
 import GoogleLogin from 'react-google-login'
-import { useHistory, useParams } from 'react-router-dom'
+import { useHistory } from 'react-router-dom'
 import UserContext from '../../Context'
 import authenticateUpdate from '../../utils/authenticate-update'
 import responseGoogle from '../../utils/responseGoogle'
-import Alert from '../alert'
 import Input from '../input'
 import Title from '../title'
 import styles from './index.module.css'
@@ -18,7 +17,7 @@ export default function AddPassword(props) {
 
     const handleGoogle = async (googleResponse) => {
         let userId
-        const asd = await responseGoogle(googleResponse, (user) => {
+        await responseGoogle(googleResponse, (user) => {
             userId = user.id            
             context.logIn(user)
             history.push("/")
@@ -41,7 +40,7 @@ export default function AddPassword(props) {
         } else {
             setDisabled(true)
         }
-    }, [rePassword])
+    }, [password, rePassword])
 
     return (
         <div className={styles.form}>

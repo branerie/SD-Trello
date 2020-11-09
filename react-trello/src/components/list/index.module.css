@@ -1,0 +1,26 @@
+.list{
+border: solid 1px blue;
+width: 50%;        
+}
+
+.card{
+    border: solid 1px red; 
+    margin: 10px;   
+    display: flex;   
+    justify-content: space-between; 
+    padding: 5%;
+}
+
+.users {   
+    margin: 20px;
+    border: solid 1px black;  
+    flex-wrap: wrap; 
+}
+
+.addCard{
+    border: solid 1px rgb(104, 95, 95); 
+    margin: 5px;   
+    display: flex;   
+    justify-content: space-between; 
+    padding: 5%;
+}

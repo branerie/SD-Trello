@@ -1,7 +1,6 @@
-import React, { useContext, useState } from "react";
+import React, { useContext } from "react";
 import Link from "../link";
 import styles from "./index.module.css";
-// import logo from "../../images/white-origami-bird.png";
 import getNavigation from "../../utils/navigation";
 import UserContext from "../../Context";
 
@@ -22,8 +21,7 @@ const Header = (props) => {
     })
 
     return (
-        <header className={styles.navigation}>
-                {/* <img alt="logo" className={styles.logo} src={logo} /> */}
+        <header className={styles.navigation}>              
                 <div className={styles.links}>
                     {
                         otherLinks.map(navElement => {

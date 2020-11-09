@@ -1,16 +1,13 @@
-import React, { useContext, useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { useParams, useHistory } from "react-router-dom"
 import EditProfile from "../../components/edit-profile"
 import PageLayout from "../../components/page-layout"
 import Transparent from "../../components/transparent"
-import UserContext from "../../Context"
-import styles from './index.module.css'
 
 const ProfilePage = () => {
     const [username, setUsername] = useState(null)
     const [projects, setProjects] = useState(null)
     const [isVisible, setIsVisible] = useState(false)
-    const context = useContext(UserContext)
     const params = useParams()
     const history = useHistory()
 

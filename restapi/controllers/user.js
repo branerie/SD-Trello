@@ -148,13 +148,11 @@ async function updateUser(req, res, next) {
     const id = req.params.id
     let user = { username, password, email, imageUrl } = req.body
     const obj = {}
-    console.log(username);
     for (let key in user) {
         if (user[key] && key !== 'password') {
             obj[key] = user[key]
         }
     }
-    console.log(obj);
 
     if (password) {
         await bcrypt.genSalt(10, (err, salt) => {

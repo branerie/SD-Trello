@@ -7,6 +7,8 @@ router.get('/', auth, getUserProjects)
 
 router.get('/all', auth, getAllProjects)
 
+router.get('/info/:id', auth, getProjectInfo)
+
 router.post('/', auth, createProject)
 
 router.put('/:id', auth, isAdmin, updateProject)
@@ -36,6 +38,27 @@ async function getAllProjects(req, res, next) {
             }
         })
     res.send(projects);
+}
+
+async function getProjectInfo(req, res, next) {
+    const projectId = req.params.id;
+    const project = await models.Project.findOne({ _id: projectId })
+        .populate({
+            path: 'lists',
+            populate: {
+                path: 'cards',
+                populate: {
+                    path: 'members'
+                }
+            }
+        })
+        .populate({
+            path: 'membersRoles',
+            populate: {
+                path: 'memberId',
+            }
+        })
+    res.send(project);
 }
 
 async function createProject(req, res, next) {
@@ -70,8 +93,15 @@ async function createProject(req, res, next) {
 
 async function updateProject(req, res, next) {
     const id = req.params.id;
-    const { name, description } = req.body;
-    const updatedProject = await models.Project.updateOne({ _id: id }, { name, description })
+    const project = { name, description } = req.body;
+
+    const obj = {}
+    for (let key in project) {
+        if (project[key]) {
+            obj[key] = project[key]
+        }
+    }
+    const updatedProject = await models.Project.updateOne({ _id: id }, { ...obj })
     res.send(updatedProject)
 
 }
