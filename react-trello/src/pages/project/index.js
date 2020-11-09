@@ -1,19 +1,12 @@
-import React, { useContext, useState, useEffect, useCallback } from "react"
-import { useParams, useHistory } from "react-router-dom"
-import EditProfile from "../../components/edit-profile"
+import React, { useState, useEffect, useCallback } from "react"
+import { useHistory } from "react-router-dom"
 import PageLayout from "../../components/page-layout"
-import Transparent from "../../components/transparent"
-import UserContext from "../../Context"
 import getCookie from "../../utils/cookie"
-import styles from './index.module.css'
 import Project from '../../components/project'
 
 const ProjectsPage = () => {
-    const [username, setUsername] = useState(null)
+
     const [projects, setProjects] = useState(null)
-    const [isVisible, setIsVisible] = useState(false)
-    const context = useContext(UserContext)
-    const params = useParams()
     const history = useHistory()
 
 
@@ -54,7 +47,7 @@ const ProjectsPage = () => {
             <div>            
                 {projects.map((project, index) => {
                     return (
-                        <Project key={project._id} index={index} projects={project} />
+                        <Project key={project._id} index={index} project={project} />
                     )
                     })}
             </div>
