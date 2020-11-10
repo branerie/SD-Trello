@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useParams, useHistory } from "react-router-dom"
 import List from '../../components/list'
 import PageLayout from '../../components/page-layout'
+
 import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
 
@@ -10,6 +11,8 @@ export default function ProjectPage() {
     const history = useHistory()
     const [project, setProject] = useState(null)
     const [members, setMembers] = useState([])
+
+    const [loadClient, setLoadClient] = useState(true)
 
     const getData = useCallback(async () => {
         const id = params.projectid
@@ -71,7 +74,7 @@ export default function ProjectPage() {
             {
                 project.lists.map(element => {
                     return (
-                        <List key={element._id} list={element}/>
+                        <List key={element._id} list={element} />
                     )
                 })
             }
