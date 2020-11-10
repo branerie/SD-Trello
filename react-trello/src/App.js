@@ -3,7 +3,7 @@ import UserContext from "./Context"
 import getCookie from "./utils/cookie"
 
 import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:4000";
+const ENDPOINT = "http://localhost:4001/";
 
 const App = (props) => {
     const [user, setUser] = useState(null)
@@ -14,15 +14,8 @@ const App = (props) => {
     useEffect(() => {
 
         console.log('use effect');
-        const socket = socketIOClient(ENDPOINT, {
-            transportOptions: {
-              polling: {
-                extraHeaders: {
-                  'x-clientid': 'abc'
-                }
-              }
-            }
-          });
+        const socket = socketIOClient(ENDPOINT)
+        console.log('use effect2');
         socket.on("FromAPI", data => {
             setResponse(data);
             console.log(data);
