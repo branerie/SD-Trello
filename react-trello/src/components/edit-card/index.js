@@ -6,20 +6,43 @@ import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 
-export default function CreateCard(props) {
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
-    const [dueDate, setDueDate] = useState("")
-    const [progress, setProgress] = useState("")
+export default function EditCard(props) {
+    const [name, setName] = useState(props.card.name)
+    const [description, setDescription] = useState(props.card.description)
+    const [dueDate, setDueDate] = useState(props.card.dueDate)
+    const [progress, setProgress] = useState(props.card.progress)
     const history = useHistory()
+ 
+    const cardId = props.card._id
+    const listId = props.listId
 
-    const id = props.listId
+    const cancelSubmit = () => {
+        props.hideFormEdit()
+    }
+    const deleteCard = useCallback(async (event) => {
+        event.preventDefault()
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            }           
+        })
+        if (!response.ok) {
+            history.push("/error")
+        } else {
+            props.hideFormEdit()
+        }
+
+    }, [history, props, cardId, listId])
+
 
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault()
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${id}`, {
-            method: "POST",
+        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
+            method: "PUT",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
@@ -35,15 +58,15 @@ export default function CreateCard(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
-            props.hideForm()
+            props.hideFormEdit()
         }
 
-    }, [history, name, description, dueDate, progress, id, props])
+    }, [history, name, description, dueDate, progress, listId, cardId, props])
 
     return (
         <div className={styles.form}>
-            <form className={styles.container} onSubmit={handleSubmit}>
-                <Title title="Create Card" />
+            <form className={styles.container} >
+                <Title title="Edit Card" />
                 <Input
                     value={name}
                     onChange={e => setName(e.target.value)}
@@ -57,20 +80,20 @@ export default function CreateCard(props) {
                     id="description"
                 />
                 <Input
-                    type={Number}
                     value={dueDate}
                     onChange={e => setDueDate(e.target.value)}
                     label="Due Date"
                     id="dueDate"
                 />
                 <Input
-                    type={Number}
                     value={progress}
                     onChange={e => setProgress(e.target.value)}
                     label="Progress"
                     id="progress"
                 />
-                <SubmitButton title="Create" />
+                <SubmitButton onClick={handleSubmit} title="Edit" />
+                <SubmitButton onClick={cancelSubmit} title="Cancel" />
+                <SubmitButton onClick={deleteCard} title="Delete" />
             </form>
         </div>
     )
