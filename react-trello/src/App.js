@@ -1,11 +1,12 @@
-import React, { useState, useEffect } from "react"
+import React, { useState, useEffect, useContext } from "react"
 import UserContext from "./Context"
+import { SocketProvider } from "./contexts/SocketProvider"
 import getCookie from "./utils/cookie"
-
 
 const App = (props) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
+    const context = useContext(UserContext)
 
 
     const logIn = (user) => {
@@ -66,8 +67,10 @@ const App = (props) => {
             user,
             logIn,
             logOut
-        }}>
-            {props.children}            
+        }}>         
+            <SocketProvider user={'context.user.username'}>
+                {props.children}
+            </SocketProvider>
         </UserContext.Provider>
     )
 }

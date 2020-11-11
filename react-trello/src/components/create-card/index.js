@@ -35,6 +35,7 @@ export default function CreateCard(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
+            props.updateProjectSocket()
             props.hideForm()
         }
 
