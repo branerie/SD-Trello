@@ -12,8 +12,6 @@ export default function ProjectPage() {
     const [project, setProject] = useState(null)
     const [members, setMembers] = useState([])
 
-    const [loadClient, setLoadClient] = useState(true)
-
     const getData = useCallback(async () => {
         const id = params.projectid
         const token = getCookie("x-auth-token");
@@ -37,7 +35,6 @@ export default function ProjectPage() {
 
             })
             setMembers(memberArr)
-
         }
 
     }, [params.projectid, history])
@@ -59,14 +56,14 @@ export default function ProjectPage() {
             <div>{project.name}</div>
             <div>Admins :{members.filter(a => a.admin === true).map(element => {
                 return (
-                    <div>
+                    <div key={element._id}>
                         {element.username}
                     </div>
                 )
             })}</div>
             <div>Members :{members.filter(a => a.admin === false).map(element => {
                 return (
-                    <div>
+                    <div key={element._id}>
                         {element.username}
                     </div>
                 )

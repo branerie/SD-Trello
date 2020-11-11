@@ -2,26 +2,11 @@ import React, { useState, useEffect } from "react"
 import UserContext from "./Context"
 import getCookie from "./utils/cookie"
 
-import socketIOClient from "socket.io-client";
-const ENDPOINT = "http://localhost:4001/";
 
 const App = (props) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
 
-    const [response, setResponse] = useState("");
-
-    useEffect(() => {
-
-        console.log('use effect');
-        const socket = socketIOClient(ENDPOINT)
-        console.log('use effect2');
-        socket.on("FromAPI", data => {
-            setResponse(data);
-            console.log(data);
-        });
-        return () => socket.disconnect();
-    }, []);
 
     const logIn = (user) => {
         setUser({
@@ -82,10 +67,7 @@ const App = (props) => {
             logIn,
             logOut
         }}>
-            {props.children}
-            <p>
-                It's <time dateTime={response}>{response}</time>
-            </p>
+            {props.children}            
         </UserContext.Provider>
     )
 }

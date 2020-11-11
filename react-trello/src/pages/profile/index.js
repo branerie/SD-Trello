@@ -20,7 +20,6 @@ const ProfilePage = () => {
             history.push("/error")
         } else {
             const user = await response.json()
-
             setUsername(user.username)
             setProjects(user.projects && user.projects.length)
         }
