@@ -9,6 +9,7 @@ import AddMember from '../add-member'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import Transparent from '../transparent'
+import { useSocket } from '../../contexts/SocketProvider'
 
 
 export default function EditCard(props) {
@@ -18,11 +19,14 @@ export default function EditCard(props) {
     const [progress, setProgress] = useState(props.card.progress)
     const [IsVisibleAdd, setIsVisibleAdd] = useState(false)
     const history = useHistory()
-
-    console.log(props.card);
+    const socket = useSocket()
 
     const cardId = props.card._id
     const listId = props.listId
+
+    const updateProjectSocket = useCallback(() => {
+        socket.emit('project-update', props.project)
+    }, [socket, props.project])
 
     const cancelSubmit = () => {
         props.hideFormEdit()
@@ -41,11 +45,11 @@ export default function EditCard(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
+            updateProjectSocket()
             props.hideFormEdit()
         }
 
-    }, [history, props, cardId, listId])
-
+    }, [history, props, cardId, listId, updateProjectSocket])
 
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault()
@@ -67,10 +71,11 @@ export default function EditCard(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
+            updateProjectSocket()
             props.hideFormEdit()
         }
 
-    }, [history, name, description, dueDate, progress, listId, cardId, props])
+    }, [history, name, description, dueDate, progress, listId, cardId, props, updateProjectSocket])
 
     const showFormAdd = () => {
         setIsVisibleAdd(true)

@@ -30,7 +30,8 @@ dbConnection().then(() => {
             const updatedProject = await sockets.projectUpdate(project._id)
             project.membersRoles.forEach(member => {
 
-                socket.broadcast.to(member.memberId.username).emit('project-updated', updatedProject)
+                socket.broadcast.emit('project-updated', updatedProject)
+                socket.emit('project-updated', updatedProject)
             })
         })
     })

@@ -3,7 +3,7 @@ import EditCard from '../edit-card'
 import Transparent from '../transparent'
 import styles from './index.module.css'
 
-export default function Card({ card, listId }) {
+export default function Card({ project, card, listId }) {
 
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
 
@@ -41,7 +41,7 @@ export default function Card({ card, listId }) {
             { IsVisibleEdit ?
                 < div >
                     <Transparent hideFormEdit={hideFormEdit} >
-                        <EditCard hideFormEdit={hideFormEdit} card={card} listId={listId} />
+                        <EditCard hideFormEdit={hideFormEdit} card={card} listId={listId} project={project}/>
                     </Transparent >
                 </div > : null
             }                   
