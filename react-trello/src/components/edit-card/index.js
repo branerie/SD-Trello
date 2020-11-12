@@ -5,14 +5,17 @@ import Input from '../input'
 import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
+
 
 export default function EditCard(props) {
     const [name, setName] = useState(props.card.name)
     const [description, setDescription] = useState(props.card.description)
-    const [dueDate, setDueDate] = useState(props.card.dueDate)
+    const [dueDate, setDueDate] = useState(new Date(props.card.dueDate))
     const [progress, setProgress] = useState(props.card.progress)
     const history = useHistory()
- 
+
     const cardId = props.card._id
     const listId = props.listId
 
@@ -27,7 +30,7 @@ export default function EditCard(props) {
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
-            }           
+            }
         })
         if (!response.ok) {
             history.push("/error")
@@ -79,12 +82,7 @@ export default function EditCard(props) {
                     label="Description"
                     id="description"
                 />
-                <Input
-                    value={dueDate}
-                    onChange={e => setDueDate(e.target.value)}
-                    label="Due Date"
-                    id="dueDate"
-                />
+                <DatePicker selected={dueDate} onChange={date => setDueDate(date)}  label="Due Date"/>
                 <Input
                     value={progress}
                     onChange={e => setProgress(e.target.value)}

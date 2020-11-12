@@ -10,7 +10,7 @@ export default function List(props) {
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
     const [currentCard, setCurrentCard] = useState("")
 
-
+    
     const mapCards = (element) => {
         const date = new Date(element.dueDate)
 
@@ -51,7 +51,7 @@ export default function List(props) {
                 { IsVisibleEdit ?
                     < div >
                         <Transparent hideFormEdit={hideFormEdit} >
-                            <EditCard hideFormEdit={hideFormEdit} card={currentCard} listiD={props.list._id} />
+                            <EditCard hideFormEdit={hideFormEdit} card={currentCard} listId={props.list._id} />
                         </Transparent >
                     </div > : null
                 }
