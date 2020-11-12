@@ -1,4 +1,5 @@
 import React, { useState } from 'react'
+import Button from '../button'
 import EditCard from '../edit-card'
 import Transparent from '../transparent'
 import styles from './index.module.css'
@@ -37,7 +38,7 @@ export default function Card({ project, card, listId }) {
                 return (<span className={styles.users} key={element._id}>{element.username}</span>)
             })}</div>
     
-            <button title='Edit' onClick={() => showFormEdit()} className={styles.editButton}>Edit</button>
+            <Button title='Edit' onClick={() => showFormEdit()} className={styles.editButton} />
             { IsVisibleEdit ?
                 < div >
                     <Transparent hideFormEdit={hideFormEdit} >

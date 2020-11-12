@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from "react-router-dom"
-import SubmitButton from '../button/submit-button'
+import Button from '../button'
 import Input from '../input'
 import Title from '../title'
 import styles from './index.module.css'
@@ -109,13 +109,13 @@ export default function EditCard(props) {
                         label="Progress"
                         id="progress"
                     />
-                    <SubmitButton onClick={handleSubmit} title="Edit" />
-                    <SubmitButton onClick={cancelSubmit} title="Cancel" />
-                    <SubmitButton onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete" />
+                    <Button onClick={handleSubmit} title="Edit" />
+                    <Button onClick={cancelSubmit} title="Cancel" />
+                    <Button onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete" />
                 </form>
             </div>
             <div>
-                <SubmitButton onClick={showFormAdd} title="Edit members" />
+                <Button onClick={showFormAdd} title="Edit members" />
                 {IsVisibleAdd ?
                     < div >
                         <Transparent hideFormAdd={hideFormAdd} >

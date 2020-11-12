@@ -2,7 +2,7 @@ import React, { useContext, useState } from 'react'
 import { useParams } from 'react-router-dom';
 import UserContext from '../../Context';
 import authenticateUpdate from '../../utils/authenticate-update';
-import SubmitButton from '../button/submit-button';
+import Button from '../button';
 import Input from '../input';
 import Title from '../title';
 import styles from './index.module.css'
@@ -45,7 +45,7 @@ export default function EditProfile(props) {
                     label="New Password"
                     id="password"
                 />
-                <SubmitButton title="Update" />
+                <Button title="Update" />
             </form>
         </div>
     )

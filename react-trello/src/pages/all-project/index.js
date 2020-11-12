@@ -3,12 +3,23 @@ import { useHistory } from "react-router-dom"
 import PageLayout from "../../components/page-layout"
 import getCookie from "../../utils/cookie"
 import Project from '../../components/project'
+import Button from "../../components/button"
+import Transparent from "../../components/transparent"
+import CreateProject from '../../components/create-project'
 
 const AllProjectsPage = () => {
 
     const [projects, setProjects] = useState(null)
     const history = useHistory()
+    const [isVisible, setIsVisible] = useState(false)
 
+    const showForm = () => {
+        setIsVisible(true)
+    }
+
+    const hideForm = () => {
+        setIsVisible(false)
+    }
 
     const getData = useCallback(async () => {
 
@@ -51,6 +62,15 @@ const AllProjectsPage = () => {
                     )
                     })}
             </div>
+            <Button title='New Project' onClick={showForm} />
+            {
+                isVisible ?
+                    <div>
+                        <Transparent hideForm={hideForm}>
+                            <CreateProject hideForm={hideForm} />
+                        </Transparent>
+                    </div> : null
+            }
         </PageLayout>
     )
 }

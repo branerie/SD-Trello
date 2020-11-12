@@ -1,0 +1,15 @@
+.container {
+    text-align: center;
+    background-color: blueviolet;
+    height: 100%;
+
+}
+
+.form {
+    position: fixed;
+    left: 25%;
+    top: 25%;
+    z-index: 20;
+    width: 50%;
+    height: 25%;
+}
