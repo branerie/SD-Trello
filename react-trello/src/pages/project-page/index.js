@@ -18,13 +18,18 @@ export default function ProjectPage() {
 
     // const [loadClient, setLoadClient] = useState(true)
 
-    function projectUpdate(user) {
-        console.log(user);
-    }
+    const projectUpdate = useCallback((project) => {
+        console.log('project-updated');
+        console.log(project);
+        setProject(project)
 
-    function updateProjectSocket() {
-        socket.emit('project-update', members)
-    }
+        const memberArr = []
+        project.membersRoles.map(element => {
+            return memberArr.push({ admin: element.admin, username: element.memberId.username })
+
+        })
+        setMembers(memberArr)
+    }, [])
 
     useEffect(() => {
         if (socket == null) return
@@ -64,7 +69,7 @@ export default function ProjectPage() {
 
     useEffect(() => {
         getData()
-    }, [getData, projectUpdate])
+    }, [getData])
 
     if (!project) {
         return (
@@ -94,7 +99,7 @@ export default function ProjectPage() {
             {
                 project.lists.map(element => {
                     return (
-                        <List key={element._id} list={element} updateProjectSocket={updateProjectSocket} />
+                        <List key={element._id} list={element} project={project}/>
                     )
                 })
             }
