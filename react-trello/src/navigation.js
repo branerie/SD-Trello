@@ -14,7 +14,7 @@ import ErrorPage from "./pages/error"
 import UserContext from "./Context"
 import AllProjectsPage from "./pages/all-project"
 import ProjectPage from "./pages/project-page"
-
+import { SocketProvider } from "./contexts/SocketProvider"
 
 const Navigation = () => {
 
@@ -22,27 +22,29 @@ const Navigation = () => {
     const loggedIn = context.user.loggedIn;
 
     return (
-        <BrowserRouter>
-            <Switch>
-                <Route path="/" exact component={Home} />
-                <Route path="/sign-up">
-                    {loggedIn ? (<Redirect to="/" />): (<SignupPage />)}
-                </Route>
-                <Route path="/login">
-                    {loggedIn ? (<Redirect to="/" />): (<LoginPage />)}
-                </Route>
-                <Route path="/profile/:userid">
-                    {loggedIn ? (<ProfilePage />): (<Redirect to="/login"/>)}
-                </Route>
-                <Route path="/projects/:projectid">
-                    {loggedIn ? (<ProjectPage />): (<Redirect to="/login"/>)}
-                </Route>
-                <Route path="/projects">
-                    {loggedIn ? (<AllProjectsPage />): (<Redirect to="/login"/>)}
-                </Route>
-                <Route component={ErrorPage} />
-            </Switch>
-        </BrowserRouter>
+        <SocketProvider user={context.user.username}>
+            <BrowserRouter>
+                <Switch>
+                    <Route path="/" exact component={Home} />
+                    <Route path="/sign-up">
+                        {loggedIn ? (<Redirect to="/" />) : (<SignupPage />)}
+                    </Route>
+                    <Route path="/login">
+                        {loggedIn ? (<Redirect to="/" />) : (<LoginPage />)}
+                    </Route>
+                    <Route path="/profile/:userid">
+                        {loggedIn ? (<ProfilePage />) : (<Redirect to="/login" />)}
+                    </Route>
+                    <Route path="/projects/:projectid">
+                        {loggedIn ? (<ProjectPage />) : (<Redirect to="/login" />)}
+                    </Route>
+                    <Route path="/projects">
+                        {loggedIn ? (<AllProjectsPage />) : (<Redirect to="/login" />)}
+                    </Route>
+                    <Route component={ErrorPage} />
+                </Switch>
+            </BrowserRouter>
+        </SocketProvider>
     )
 }
 

@@ -16,7 +16,7 @@ export default function ProjectPage() {
 
     const socket = useSocket()
 
-    const [loadClient, setLoadClient] = useState(true)
+    // const [loadClient, setLoadClient] = useState(true)
 
     function projectUpdate(user) {
         console.log(user);
