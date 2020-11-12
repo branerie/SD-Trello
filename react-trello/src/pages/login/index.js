@@ -1,7 +1,7 @@
 import React, { useState, useContext } from "react"
 import GoogleLogin from 'react-google-login'
 import { useHistory } from "react-router-dom"
-import SubmitButton from "../../components/button/submit-button"
+import Button from "../../components/button"
 import Input from "../../components/input"
 import PageLayout from "../../components/page-layout"
 import Title from "../../components/title"
@@ -75,7 +75,7 @@ const LoginPage = () => {
                     label="Password"
                     id="password"
                 />
-                <SubmitButton title="Login" />
+                <Button title="Login" />
             </form>
             <GoogleLogin
                 clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'

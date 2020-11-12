@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import SubmitButton from '../button/submit-button'
+import Button from '../button'
 import Card from '../card'
 import CreateCard from '../create-card'
 import Transparent from '../transparent'
@@ -26,7 +26,7 @@ export default function List(props) {
                     return <Card key={index} card={element} listId={props.list._id} project={props.project}/>
                 })
             }
-            <SubmitButton title='Add card' onClick={showForm} />
+            <Button title='Add card' onClick={showForm} />
             {
                 isVisible ?
                     <div>

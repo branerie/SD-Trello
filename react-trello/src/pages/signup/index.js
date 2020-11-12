@@ -1,6 +1,6 @@
 import React, { useContext, useState } from "react"
 import GoogleLogin from 'react-google-login'
-import SubmitButton from "../../components/button/submit-button"
+import Button from "../../components/button"
 import Input from "../../components/input"
 import PageLayout from "../../components/page-layout"
 import Title from "../../components/title"
@@ -98,7 +98,7 @@ const SignupPage = () => {
                     id="re-password"
                 />
 
-                <SubmitButton title="Register" />
+                <Button title="Register" />
             </form>
             <GoogleLogin
                     clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'

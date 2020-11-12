@@ -1,7 +1,10 @@
 import React, { useCallback, useEffect, useState } from 'react'
 import { useParams, useHistory } from "react-router-dom"
+import Button from '../../components/button'
+import CreateList from '../../components/create-list'
 import List from '../../components/list'
 import PageLayout from '../../components/page-layout'
+import Transparent from '../../components/transparent'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
@@ -13,13 +16,19 @@ export default function ProjectPage() {
     const history = useHistory()
     const [project, setProject] = useState(null)
     const [members, setMembers] = useState([])
-
+    const [isVisible, setIsVisible] = useState(false)
     const socket = useSocket()
 
-    // const [loadClient, setLoadClient] = useState(true)
+    const showForm = () => {
+        setIsVisible(true)
+    }
+
+    const hideForm = () => {
+        setIsVisible(false)
+    }
 
     const projectUpdate = useCallback((project) => {
-       
+
         setProject(project)
 
         const memberArr = []
@@ -98,9 +107,18 @@ export default function ProjectPage() {
             {
                 project.lists.map((element, index) => {
                     return (
-                        <List key={index} list={element} project={project}/>
+                        <List key={index} list={element} project={project} />
                     )
                 })
+            }
+            <Button title='Add List' onClick={showForm} />
+            {
+                isVisible ?
+                    <div>
+                        <Transparent hideForm={hideForm}>
+                            <CreateList hideForm={hideForm} project={project} />
+                        </Transparent>
+                    </div> : null
             }
         </PageLayout>
     )

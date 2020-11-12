@@ -1,6 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from "react-router-dom"
-import SubmitButton from '../button/submit-button'
+import Button from '../button'
 import Input from '../input'
 import Title from '../title'
 import styles from './index.module.css'
@@ -79,7 +79,7 @@ export default function AddMember(props) {
                 <Title title={"Select member"} />
                 {
                     members.map((element, index) => {
-                        return <SubmitButton key={index} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e._id) }} title={element.username} />
+                        return <Button key={index} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e._id) }} title={element.username} />
                     })
                 }
                 <Input
@@ -88,8 +88,8 @@ export default function AddMember(props) {
                     label="Enter User email"
                     id="email"
                 />
-                <SubmitButton onClick={handleAdd} title="+" />
-                <SubmitButton onClick={cancelAdd} title="Cancel" />
+                <Button onClick={handleAdd} title="+" />
+                <Button onClick={cancelAdd} title="Cancel" />
             </form>
         </div>
     )
