@@ -54,7 +54,7 @@ async function updateCard(req, res, next) {
 
 async function deleteCard(req, res, next) {
     const idCard = req.params.idcard
-    const idList = req.params.id
+    const idList = req.params.id   
     const session = await mongoose.startSession();
     session.startTransaction();
 

@@ -56,7 +56,7 @@ const ProfilePage = () => {
                     isVisible ?
                         <div>
                             <Transparent hideForm={hideForm}>
-                                <EditProfile hideForm={hideForm}/>
+                                <EditProfile hideForm={hideForm} />
                             </Transparent>
                         </div> : null
                 }
