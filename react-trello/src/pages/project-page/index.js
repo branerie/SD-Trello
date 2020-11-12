@@ -19,8 +19,7 @@ export default function ProjectPage() {
     // const [loadClient, setLoadClient] = useState(true)
 
     const projectUpdate = useCallback((project) => {
-        console.log('project-updated');
-        console.log(project);
+       
         setProject(project)
 
         const memberArr = []

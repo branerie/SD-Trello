@@ -87,28 +87,35 @@ export default function EditCard(props) {
 
     return (
         <div className={styles.form}>
-            <form className={styles.container} >
-                <Title title="Edit Card" />
-                <Input
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    label="Name"
-                    id="name"
-                />
-                <Input
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                    label="Description"
-                    id="description"
-                />
-                <DatePicker selected={dueDate} onChange={date => setDueDate(date)} label="Due Date" />
-                <Input
-                    value={progress}
-                    onChange={e => setProgress(e.target.value)}
-                    label="Progress"
-                    id="progress"
-                />
-                 <SubmitButton onClick={showFormAdd} title="Edit members" />               
+            <div>
+                <form className={styles.container} >
+                    <Title title="Edit Card" />
+                    <Input
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        label="Name"
+                        id="name"
+                    />
+                    <Input
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                        label="Description"
+                        id="description"
+                    />
+                    <DatePicker selected={dueDate} onChange={date => setDueDate(date)} label="Due Date" />
+                    <Input
+                        value={progress}
+                        onChange={e => setProgress(e.target.value)}
+                        label="Progress"
+                        id="progress"
+                    />
+                    <SubmitButton onClick={handleSubmit} title="Edit" />
+                    <SubmitButton onClick={cancelSubmit} title="Cancel" />
+                    <SubmitButton onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete" />
+                </form>
+            </div>
+            <div>
+                <SubmitButton onClick={showFormAdd} title="Edit members" />
                 {IsVisibleAdd ?
                     < div >
                         <Transparent hideFormAdd={hideFormAdd} >
@@ -116,10 +123,8 @@ export default function EditCard(props) {
                         </Transparent >
                     </div > : null
                 }
-                <SubmitButton onClick={handleSubmit} title="Edit" />
-                <SubmitButton onClick={cancelSubmit} title="Cancel" />
-                <SubmitButton onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete" />
-            </form>
+            </div>
         </div>
+
     )
 }
