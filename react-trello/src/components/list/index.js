@@ -31,7 +31,7 @@ export default function List(props) {
                 isVisible ?
                     <div>
                         <Transparent hideForm={hideForm}>
-                            <CreateCard hideForm={hideForm} listId={props.list._id} updateProjectSocket={props.updateProjectSocket}/>
+                            <CreateCard hideForm={hideForm} listId={props.list._id} project={props.project}/>
                         </Transparent>
                     </div> : null
             }

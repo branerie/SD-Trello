@@ -16,6 +16,8 @@ export default function EditCard(props) {
     const [progress, setProgress] = useState(props.card.progress)
     const history = useHistory()
 
+    console.log(props.card);
+
     const cardId = props.card._id
     const listId = props.listId
 

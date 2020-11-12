@@ -12,8 +12,10 @@ export function SocketProvider({ user, children }) {
 
   useEffect(() => {
     const newSocket = io(
-      'http://localhost:5000',
-      { query: { user } }
+      'http://localhost:4000', {
+        query: { user },
+        transports: ['websocket']
+      }
     )
     setSocket(newSocket)
 

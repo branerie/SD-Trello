@@ -5,6 +5,7 @@ import Input from '../input'
 import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
+import { useSocket } from '../../contexts/SocketProvider'
 
 export default function CreateCard(props) {
     const [name, setName] = useState("")
@@ -12,8 +13,13 @@ export default function CreateCard(props) {
     const [dueDate, setDueDate] = useState("")
     const [progress, setProgress] = useState("")
     const history = useHistory()
+    const socket = useSocket()
 
     const id = props.listId
+
+    const updateProjectSocket = useCallback(() => {
+        socket.emit('project-update', props.project)
+    }, [socket, props.project])
 
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault()
@@ -36,11 +42,11 @@ export default function CreateCard(props) {
             history.push("/error")
             return
         } else {
-            props.updateProjectSocket()
+            updateProjectSocket()
             props.hideForm()
         }
 
-    }, [history, name, description, dueDate, progress, id, props])
+    }, [history, name, description, dueDate, progress, id, props, updateProjectSocket])
 
     return (
         <div className={styles.form}>
