@@ -6,6 +6,8 @@ import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useSocket } from '../../contexts/SocketProvider'
+import DatePicker from "react-datepicker"
+import "react-datepicker/dist/react-datepicker.css"
 
 export default function CreateCard(props) {
     const [name, setName] = useState("")
@@ -64,13 +66,7 @@ export default function CreateCard(props) {
                     label="Description"
                     id="description"
                 />
-                <Input
-                    type={Number}
-                    value={dueDate}
-                    onChange={e => setDueDate(e.target.value)}
-                    label="Due Date"
-                    id="dueDate"
-                />
+                <DatePicker selected={dueDate} onChange={date => setDueDate(date)} label="Due Date" />
                 <Input
                     type={Number}
                     value={progress}
