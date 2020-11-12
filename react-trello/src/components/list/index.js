@@ -23,7 +23,7 @@ export default function List(props) {
             </div>
             {
                 props.list.cards.map((element, index) => {
-                    return <Card key={index} card={element} listId={props.list._id}/>
+                    return <Card key={index} card={element} listId={props.list._id} project={props.project}/>
                 })
             }
             <SubmitButton title='Add card' onClick={showForm} />
