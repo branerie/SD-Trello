@@ -82,24 +82,24 @@ export default function ProjectPage() {
     return (
         <PageLayout className={styles.conteiner}>
             <div>{project.name}</div>
-            <div>Admins :{members.filter(a => a.admin === true).map(element => {
+            <div>Admins :{members.filter(a => a.admin === true).map((element, index) => {
                 return (
-                    <div key={element._id}>
+                    <div key={index}>
                         {element.username}
                     </div>
                 )
             })}</div>
-            <div>Members :{members.filter(a => a.admin === false).map(element => {
+            <div>Members :{members.filter(a => a.admin === false).map((element, index) => {
                 return (
-                    <div key={element._id}>
+                    <div key={index}>
                         {element.username}
                     </div>
                 )
             })}</div>
             {
-                project.lists.map(element => {
+                project.lists.map((element, index) => {
                     return (
-                        <List key={element._id} list={element} project={project}/>
+                        <List key={index} list={element} project={project}/>
                     )
                 })
             }

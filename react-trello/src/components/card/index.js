@@ -7,6 +7,8 @@ export default function Card({ card, listId }) {
 
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
 
+
+
     const date = new Date(card.dueDate)
     const day = date.getDate()
     const month = date.getMonth() + 1
@@ -19,6 +21,7 @@ export default function Card({ card, listId }) {
     const hideFormEdit = () => {
         setIsVisibleEdit(false)
     }
+
 
     return (
         <div className={styles.card} >
@@ -41,7 +44,7 @@ export default function Card({ card, listId }) {
                         <EditCard hideFormEdit={hideFormEdit} card={card} listId={listId} />
                     </Transparent >
                 </div > : null
-            }
+            }                   
         </div >
     )
 }

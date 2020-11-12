@@ -5,8 +5,10 @@ import Input from '../input'
 import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
+import AddMember from '../add-member'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
+import Transparent from '../transparent'
 
 
 export default function EditCard(props) {
@@ -14,6 +16,7 @@ export default function EditCard(props) {
     const [description, setDescription] = useState(props.card.description)
     const [dueDate, setDueDate] = useState(new Date(props.card.dueDate))
     const [progress, setProgress] = useState(props.card.progress)
+    const [IsVisibleAdd, setIsVisibleAdd] = useState(false)
     const history = useHistory()
 
     console.log(props.card);
@@ -24,6 +27,7 @@ export default function EditCard(props) {
     const cancelSubmit = () => {
         props.hideFormEdit()
     }
+
     const deleteCard = useCallback(async (event) => {
         event.preventDefault()
         const token = getCookie("x-auth-token")
@@ -68,6 +72,14 @@ export default function EditCard(props) {
 
     }, [history, name, description, dueDate, progress, listId, cardId, props])
 
+    const showFormAdd = () => {
+        setIsVisibleAdd(true)
+    }
+
+    const hideFormAdd = () => {
+        setIsVisibleAdd(false)
+    }
+
     return (
         <div className={styles.form}>
             <form className={styles.container} >
@@ -84,16 +96,24 @@ export default function EditCard(props) {
                     label="Description"
                     id="description"
                 />
-                <DatePicker selected={dueDate} onChange={date => setDueDate(date)}  label="Due Date"/>
+                <DatePicker selected={dueDate} onChange={date => setDueDate(date)} label="Due Date" />
                 <Input
                     value={progress}
                     onChange={e => setProgress(e.target.value)}
                     label="Progress"
                     id="progress"
                 />
+                 <SubmitButton onClick={showFormAdd} title="Edit members" />               
+                {IsVisibleAdd ?
+                    < div >
+                        <Transparent hideFormAdd={hideFormAdd} >
+                            <AddMember hideFormAdd={hideFormAdd} card={props.card} listId={listId} />
+                        </Transparent >
+                    </div > : null
+                }
                 <SubmitButton onClick={handleSubmit} title="Edit" />
                 <SubmitButton onClick={cancelSubmit} title="Cancel" />
-                <SubmitButton onClick={deleteCard} title="Delete" />
+                <SubmitButton onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete" />
             </form>
         </div>
     )
