@@ -15,6 +15,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 export default function EditCard(props) {
     const [name, setName] = useState(props.card.name)
     const [description, setDescription] = useState(props.card.description)
+    const members = props.card.members
     const [dueDate, setDueDate] = useState(new Date(props.card.dueDate))
     const [progress, setProgress] = useState(props.card.progress)
     const [IsVisibleAdd, setIsVisibleAdd] = useState(false)
