@@ -38,7 +38,7 @@ export default function Card({ project, card, listId }) {
                 return (<span className={styles.users} key={element._id}>{element.username}</span>)
             })}</div>
     
-            <Button title='Edit' onClick={() => showFormEdit()} className={styles.editButton} />
+            <Button title='Edit' onClick={() => showFormEdit()} />
             { IsVisibleEdit ?
                 < div >
                     <Transparent hideFormEdit={hideFormEdit} >

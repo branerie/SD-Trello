@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState } from 'react'
 import { useParams, useHistory } from "react-router-dom"
 import Button from '../../components/button'
 import CreateList from '../../components/create-list'
+import EditProject from '../../components/edit-project'
 import List from '../../components/list'
 import PageLayout from '../../components/page-layout'
 import Transparent from '../../components/transparent'
@@ -17,6 +18,7 @@ export default function ProjectPage() {
     const [project, setProject] = useState(null)
     const [members, setMembers] = useState([])
     const [isVisible, setIsVisible] = useState(false)
+    const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
     const socket = useSocket()
 
     const showForm = () => {
@@ -25,6 +27,14 @@ export default function ProjectPage() {
 
     const hideForm = () => {
         setIsVisible(false)
+    }
+
+    const showFormEdit = () => {
+        setIsVisibleEdit(true)
+    }
+
+    const hideFormEdit = () => {
+        setIsVisibleEdit(false)
     }
 
     const projectUpdate = useCallback((project) => {
@@ -87,6 +97,22 @@ export default function ProjectPage() {
         )
     }
 
+    async function deleteProject() {
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`http://localhost:4000/api/projects/${project._id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            }
+        })
+        if (!response.ok) {
+            history.push("/error")
+        } else {
+            history.push('/projects')
+        }
+    }
+
     return (
         <PageLayout className={styles.conteiner}>
             <div>{project.name}</div>
@@ -120,6 +146,16 @@ export default function ProjectPage() {
                         </Transparent>
                     </div> : null
             }
+            <Button title='Edit Project' onClick={showFormEdit} />
+            {
+                IsVisibleEdit ?
+                    < div >
+                        <Transparent hideForm={hideFormEdit} >
+                            <EditProject hideForm={hideFormEdit} project={project} />
+                        </Transparent >
+                    </div > : null
+            }
+            <Button title='Delete Project' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteProject() }} />
         </PageLayout>
     )
 }

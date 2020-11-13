@@ -13,7 +13,7 @@ router.post('/', auth, createProject)
 
 router.put('/:id', auth, isAdmin, updateProject)
 
-router.delete('/:id', auth, isAdmin, deleteProject);
+router.delete('/:id', auth, isAdmin, deleteProject)
 
 router.post('/:id/user', auth, isAdmin, addMember)
 
@@ -21,10 +21,10 @@ router.post('/:id/user', auth, isAdmin, addMember)
 
 
 async function getUserProjects(req, res, next) {
-    const { _id } = req.user;
+    const { _id } = req.user
     const projects = await models.ProjectUserRole.find({ memberId: _id })
         .populate('projectId')
-    res.send(projects);
+    res.send(projects)
 }
 
 async function getAllProjects(req, res, next) {
@@ -37,11 +37,11 @@ async function getAllProjects(req, res, next) {
                 path: 'memberId',
             }
         })
-    res.send(projects);
+    res.send(projects)
 }
 
 async function getProjectInfo(req, res, next) {
-    const projectId = req.params.id;
+    const projectId = req.params.id
     const project = await models.Project.findOne({ _id: projectId })
         .populate({
             path: 'lists',
@@ -58,36 +58,36 @@ async function getProjectInfo(req, res, next) {
                 path: 'memberId',
             }
         })
-    res.send(project);
+    res.send(project)
 }
 
 async function createProject(req, res, next) {
-    const { name, description } = req.body;
-    const { _id } = req.user;
+    const { name, description } = req.body
+    const { _id } = req.user
 
-    const session = await mongoose.startSession();
-    session.startTransaction();
+    const session = await mongoose.startSession()
+    session.startTransaction()
 
     try {
-        const projectCreationResult = await models.Project.create([{ name, description, author: _id }], { session });
-        const createdProject = projectCreationResult[0];
+        const projectCreationResult = await models.Project.create([{ name, description, author: _id }], { session })
+        const createdProject = projectCreationResult[0]
 
         await models.ProjectUserRole.create([{ admin: true, projectId: createdProject, memberId: _id }], { session })
 
-        const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session);
+        const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session)
 
-        await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { session });
+        await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { session })
         await models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
 
-        await session.commitTransaction();
+        await session.commitTransaction()
 
-        session.endSession();
+        session.endSession()
 
-        res.send(createdProject);
+        res.send(createdProject)
     } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
-        res.send(error);
+        await session.abortTransaction()
+        session.endSession()
+        res.send(error)
     }
 }
 
@@ -108,19 +108,18 @@ async function updateProject(req, res, next) {
 
 async function deleteProject(req, res, next) {
     const idProject = req.params.id
-    const { _id } = req.user
     const session = await mongoose.startSession()
-    session.startTransaction();
+    session.startTransaction()
 
     try {
         const searchedLists = await models.Project.findOne({ _id: idProject }).select('lists -_id').populate('lists')
 
-        let cardsArray = [];
+        let cardsArray = []
         searchedLists.lists.map(a => cardsArray = cardsArray.concat(a.cards))
 
         await models.Card.deleteMany({ _id: { $in: cardsArray } }).session(session)
 
-        let listsArray = [];
+        let listsArray = []
         searchedLists.lists.map(a => listsArray.push(a._id))
 
         await models.List.deleteMany({ _id: { $in: listsArray } }).session(session)
@@ -136,51 +135,50 @@ async function deleteProject(req, res, next) {
 
         const removedProjectResult = await models.Project.deleteOne({ _id: idProject }).session(session)
 
+        await session.commitTransaction()
 
-        await session.commitTransaction();
-
-        session.endSession();
+        session.endSession()
 
         res.send(removedProjectResult)
     } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
-        res.send(error);
+        await session.abortTransaction()
+        session.endSession()
+        res.send(error)
     }
 
 }
 
 async function addMember(req, res, next) {
-    const { newMemberEmail, admin } = req.body;
-    const projectId = req.params.id;
-    const { _id } = req.user;
+    const { newMemberEmail, admin } = req.body
+    const projectId = req.params.id
+    const { _id } = req.user
 
-    const session = await mongoose.startSession();
-    session.startTransaction();
+    const session = await mongoose.startSession()
+    session.startTransaction()
 
     try {
         const member = await models.User.findOne({ email: newMemberEmail })
 
-        const projectUserRoleCreation = await models.ProjectUserRole.create([{ admin, projectId, memberId: member._id }], { session });
-        const projectUserRole = projectUserRoleCreation[0];
+        const projectUserRoleCreation = await models.ProjectUserRole.create([{ admin, projectId, memberId: member._id }], { session })
+        const projectUserRole = projectUserRoleCreation[0]
 
-        await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } });
+        await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } })
         await models.User.updateOne({ _id: member._id }, { $push: { projects: projectUserRole } }, { session })
 
-        await session.commitTransaction();
+        await session.commitTransaction()
 
-        session.endSession();
+        session.endSession()
 
-        res.send(projectUserRole);
+        res.send(projectUserRole)
     } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
+        await session.abortTransaction()
+        session.endSession()
         res.send({
             errorMessage: error.message,
             error
-        });
+        })
     }
 }
 
 
-module.exports = router;
+module.exports = router

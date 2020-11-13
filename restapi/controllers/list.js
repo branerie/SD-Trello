@@ -6,7 +6,7 @@ const router = require('express').Router()
 
 router.post('/:id', auth, isAdmin, createList)
 
-router.put('/:id/:idlist', auth, updateList)
+router.put('/:id/:idlist', auth, isAdmin, updateList)
 
 router.delete('/:id/:idlist', auth, isAdmin, deleteList)
 
