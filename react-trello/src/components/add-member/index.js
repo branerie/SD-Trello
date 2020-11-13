@@ -1,7 +1,6 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from "react-router-dom"
 import Button from '../button'
-import Input from '../input'
 import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
@@ -10,9 +9,9 @@ import getCookie from '../../utils/cookie'
 
 export default function AddMember(props) {
 
-    const [email, setEmail] = useState("")
-    const [userId, setuserID] = useState(props.card.description)
-    const [members, setMembers] = useState(props.card.members)
+    const members = props.card.members
+    const [users, setUsers] = useState([])
+    const [selectedUser, setSelectedUser] = useState({})
 
     const history = useHistory()
 
@@ -22,6 +21,32 @@ export default function AddMember(props) {
 
     const cancelAdd = () => {
         props.hideFormAdd()
+    }
+
+
+    const getAllUser = async () => {
+        const token = getCookie("x-auth-token")
+        const response = await fetch('http://localhost:4000/api/user/get-all', {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            }
+        })
+
+        if (!response.ok) {
+            history.push("/error")
+        }
+        setUsers(await response.json())
+
+    }
+
+
+    const handleSelect = (id) => {
+        const result = users.filter(obj => {
+            return obj._id === id
+        })[0]
+        setSelectedUser(result)
     }
 
     const deleteMember = useCallback(async (event, member) => {
@@ -49,26 +74,16 @@ export default function AddMember(props) {
             props.hideFormAdd()
         }
 
-    }, [history, props, cardId, listId])
+    }, [history, props, members, cardId, listId])
 
 
-    const handleAdd = useCallback(async (event, email) => {
+    const handleAdd = useCallback(async (event) => {
         event.preventDefault()
 
         const token = getCookie("x-auth-token")
-        const user = await fetch(`http://localhost:4000/api/user/${email}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            }
-        })
-        if (!user.ok) {
-            history.push("/error")
-        }
-        console.log(user);
-        members.push(user)
-        console.log(members);
+
+        members.push(selectedUser)
+
         const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
             headers: {
@@ -85,7 +100,7 @@ export default function AddMember(props) {
             props.hideFormAdd()
         }
 
-    }, [history, listId, cardId, props])
+    }, [history, listId, cardId, members, props, selectedUser])
 
     return (
         <div className={styles.form}>
@@ -98,17 +113,21 @@ export default function AddMember(props) {
                 }
             </div>
             <div>
-                <form className={styles.container} >
-                    <Title title={"Add new member"} />
-                    <Input
-                        value={email}
-                        onChange={e => setEmail(e.target.value)}
-                        label="Enter User email"
-                        id="email"
-                    />
+                <div className={styles.container} >
+                    <div className="select-container">
+                        <select onClick={getAllUser}
+                            onChange={(e) => { handleSelect(e.target.value) }}>
+                            <option >Select user</option>
+                            {
+                                users.map((element, index) => (
+                                    <option key={index} value={element._id}>{element.username}</option>
+                                ))
+                            }
+                        </select>
+                    </div>
                     <Button onClick={handleAdd} title="Add" />
                     <Button onClick={cancelAdd} title="Cancel" />
-                </form>
+                </div>
             </div>
         </div>
     )

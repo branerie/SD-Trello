@@ -10,7 +10,7 @@ const { auth, isAdmin } = require('../utils')
 
 router.get('/verify', verifyLogin);
 
-router.get('/get-all', auth, isAdmin, getAllUsers);
+router.get('/get-all', auth, getAllUsers);
 
 router.get('/:id', getUser)
 
