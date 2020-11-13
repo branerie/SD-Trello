@@ -9,13 +9,14 @@ import Transparent from '../../components/transparent'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
-
+import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 
 
 export default function ProjectPage() {
     const params = useParams()
     const history = useHistory()
     const [project, setProject] = useState(null)
+    const [lists, setLists] = useState([])
     const [members, setMembers] = useState([])
     const [isVisible, setIsVisible] = useState(false)
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
@@ -47,6 +48,7 @@ export default function ProjectPage() {
 
         })
         setMembers(memberArr)
+        setLists(project.lists)
     }, [])
 
     useEffect(() => {
@@ -81,6 +83,8 @@ export default function ProjectPage() {
 
             })
             setMembers(memberArr)
+
+            setLists(data.lists)
         }
 
     }, [params.projectid, history])
@@ -113,30 +117,75 @@ export default function ProjectPage() {
         }
     }
 
+    async function handleOnDragEnd(result) {
+        if(!result.destination) return
+
+        const position = result.destination.index
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`http://localhost:4000/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify({ position })
+        })
+        if (!response.ok) {
+            history.push("/error")
+        } else {
+            const newListsArr = [...lists]
+            const [reorderedList] = newListsArr.splice(result.source.index, 1)
+            newListsArr.splice(result.destination.index, 0, reorderedList)
+
+            setLists(newListsArr)
+        }
+    }
+
     return (
         <PageLayout className={styles.conteiner}>
             <div>{project.name}</div>
-            <div>Admins :{members.filter(a => a.admin === true).map((element, index) => {
+            <div>
+                Admins :{members.filter(a => a.admin === true).map((element, index) => {
                 return (
                     <div key={index}>
                         {element.username}
                     </div>
                 )
-            })}</div>
-            <div>Members :{members.filter(a => a.admin === false).map((element, index) => {
-                return (
-                    <div key={index}>
-                        {element.username}
-                    </div>
-                )
-            })}</div>
-            {
-                project.lists.map((element, index) => {
-                    return (
-                        <List key={index} list={element} project={project} />
-                    )
-                })
             }
+            )}
+            </div>
+            <div>
+                Members :{members.filter(a => a.admin === false).map((element, index) => {
+                return (
+                    <div key={index}>
+                        {element.username}
+                    </div>
+                )
+            }
+            )}
+            </div>
+            <DragDropContext onDragEnd={handleOnDragEnd}>
+                <Droppable droppableId='lists'>
+                    {(provided) => (
+                        <ul {...provided.droppableProps} ref={provided.innerRef}>
+                            {
+                                lists.map((element, index) => {
+                                    return (
+                                        <Draggable key={element._id} draggableId={element._id} index={index}>
+                                            {(provided) => (
+                                                <li {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+                                                    <List list={element} project={project} />
+                                                </li>
+                                            )}
+                                        </Draggable>
+                                    )
+                                })
+                            }
+                            {provided.placeholder}
+                        </ul>
+                    )}
+                </Droppable>
+            </DragDropContext>
             <Button title='Add List' onClick={showForm} />
             {
                 isVisible ?
