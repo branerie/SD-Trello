@@ -13,3 +13,9 @@
     width: 50%;
     height: 25%;
 }
+
+.currentMembers{
+    text-align: center;
+    background-color: rgb(166, 167, 221);
+    height: 100%; 
+}

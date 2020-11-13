@@ -41,20 +41,20 @@ async function updateCard(req, res, next) {
     const card = { name, description, members, dueDate, progress } = req.body;
     const obj = {}
     for (let key in card) {
-        if (card[key] && key !== 'members') {
+        if (card[key]) {
             obj[key] = card[key]
         }
     }
 
 
-    const updatedCard = await models.Card.updateOne({ _id: id }, { ...obj, $push: { members: { $each: members } } })
+    const updatedCard = await models.Card.updateOne({ _id: id }, { ...obj })
     res.send(updatedCard)
 
 }
 
 async function deleteCard(req, res, next) {
     const idCard = req.params.idcard
-    const idList = req.params.id   
+    const idList = req.params.id
     const session = await mongoose.startSession();
     session.startTransaction();
 

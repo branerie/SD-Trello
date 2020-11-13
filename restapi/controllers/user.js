@@ -5,8 +5,12 @@ const utils = require('../utils')
 const router = require('express').Router()
 const bcrypt = require('bcrypt')
 const googleAuth = require('../utils/googleAuth')
+const { auth, isAdmin } = require('../utils')
+
 
 router.get('/verify', verifyLogin);
+
+router.get('/get-all', auth, isAdmin, getAllUsers);
 
 router.get('/:id', getUser)
 
@@ -26,6 +30,11 @@ router.delete('/:id', deleteUser)
 async function getUser(req, res, next) {
     const user = await models.User.findById(req.params.id)
     res.send(user);
+}
+
+async function getAllUsers(req, res, next) {
+    const users = await models.User.find({})
+    res.send(users);
 }
 
 async function registerUser(req, res, next) {
@@ -158,12 +167,12 @@ async function updateUser(req, res, next) {
         await bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, async (err, hash) => {
                 if (err) { next(err); return }
-                
+
                 const updatedUser = await models.User.updateOne({ _id: id }, { ...obj, password: hash })
                 res.send(updatedUser)
                 return
             })
-        }) 
+        })
     } else {
         const updatedUser = await models.User.updateOne({ _id: id }, obj)
         res.send(updatedUser)
