@@ -13,3 +13,40 @@
     width: 50%;
     height: 25%;
 }
+
+.editMembers {
+    background-color: rgb(43, 226, 89);
+    padding: 3%;
+}
+.membersList {
+    display: flex;
+    justify-content: space-between;
+}
+.editMembersButton {
+    background: #70133a;
+    color: #fff;
+    padding: 10px;
+    width: 110px;
+    border-radius: 5px;
+    display: block;
+    margin: 0 auto;
+    margin: 10px;
+    cursor: pointer;
+    border: 2px solid #234465;
+}
+
+.editMembersButton:hover{
+    background-color: #fff;
+    border: 2px solid #234465;
+    color: #234465;
+    font-style: italic;
+  }
+  .membersNames{
+      border: rgb(0, 102, 255) solid 1px;
+      padding: 1%;
+      border-radius: 1%;
+      margin: 2%;
+  }
+  .editCardButtons{
+      margin: 2%;
+  }

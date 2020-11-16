@@ -240,7 +240,7 @@ export default function ProjectPage() {
                 IsVisibleEdit ?
                     < div >
                         <Transparent hideForm={hideFormEdit} >
-                            <EditProject hideForm={hideFormEdit} project={project} />
+                            <EditProject hideForm={hideFormEdit} project={project} members={members} />
                         </Transparent >
                     </div > : null
             }
