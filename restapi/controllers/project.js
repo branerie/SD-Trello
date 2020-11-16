@@ -92,8 +92,9 @@ async function createProject(req, res, next) {
 }
 
 async function updateProject(req, res, next) {
-    const id = req.params.id;
-    const project = { name, description } = req.body;
+    const projectId = req.params.id;
+    const project = { name, description, member, admin } = req.body;
+
 
     const obj = {}
     for (let key in project) {
@@ -101,8 +102,27 @@ async function updateProject(req, res, next) {
             obj[key] = project[key]
         }
     }
-    const updatedProject = await models.Project.updateOne({ _id: id }, { ...obj })
-    res.send(updatedProject)
+    const session = await mongoose.startSession()
+    session.startTransaction()
+    try {
+
+        const projectRoleCreationResult = await models.ProjectUserRole.create([{ admin: project.admin, projectId: projectId, memberId: project.member }], { session })
+        const createdRole = projectRoleCreationResult[0]
+
+        const projectUserRole = await models.ProjectUserRole.findOne({ _id: createdRole._id }).session(session)
+
+        const updatedProject = await models.Project.updateOne({ _id: projectId }, { ...obj, $push: { membersRoles: projectUserRole } }, { session })
+        await models.User.updateOne({ _id: project.member }, { $push: { projects: projectUserRole } }, { session })
+
+        await session.commitTransaction()
+
+        session.endSession()
+        res.send(updatedProject)
+    } catch (error) {
+        await session.abortTransaction()
+        session.endSession()
+        res.send(error)
+    }
 
 }
 

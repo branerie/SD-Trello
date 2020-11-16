@@ -7,11 +7,15 @@ import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import "react-datepicker/dist/react-datepicker.css"
 import { useSocket } from '../../contexts/SocketProvider'
+import Transparent from '../transparent'
+import AddProjectMember from '../add-project-member'
 
 
 export default function EditProject(props) {
     const [name, setName] = useState(props.project.name)
     const [description, setDescription] = useState(props.project.description)
+    const members = props.members
+    const [IsVisibleAdd, setIsVisibleAdd] = useState(false)
     const history = useHistory()
     const socket = useSocket()
 
@@ -43,6 +47,14 @@ export default function EditProject(props) {
         }
     }
 
+    const showFormAdd = () => {
+        setIsVisibleAdd(true)
+    }
+
+    const hideFormAdd = () => {
+        setIsVisibleAdd(false)
+    }
+
     return (
         <div className={styles.form}>
             <form className={styles.container} >
@@ -59,8 +71,38 @@ export default function EditProject(props) {
                     label="Description"
                     id="description"
                 />
-                <Button onClick={handleSubmit} title="Edit" />
+                <div className={styles.editMembers}>
+                    <div>Team: </div>
+
+                        Admins :{members.filter(a => a.admin === true).map((element, index) => {
+                        return (
+                            <span className={styles.membersList} key={index}>
+                                {element.username}
+                            </span>
+                        )
+                    }
+                    )}
+                    <div>
+                        Members :{members.filter(a => a.admin === false).map((element, index) => {
+                        return (
+                            <span className={styles.membersList} key={index}>
+                                {element.username}
+                            </span>
+                        )
+                    }
+                    )}
+                    </div>
+                </div>
             </form>
+            <button onClick={showFormAdd} title="Edit members" className={styles.editMembersButton}>Edit members</button>
+            {IsVisibleAdd ?
+                < div >
+                    <Transparent hideFormAdd={hideFormAdd} >
+                        <AddProjectMember hideFormAdd={hideFormAdd} project={props.project} members={props.members} />
+                    </Transparent >
+                </div > : null
+            }
+            <Button onClick={handleSubmit} title="Edit" />
         </div>
 
     )

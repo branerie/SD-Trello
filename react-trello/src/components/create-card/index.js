@@ -66,7 +66,7 @@ export default function CreateCard(props) {
                     label="Description"
                     id="description"
                 />
-                <DatePicker selected={dueDate} onChange={date => setDueDate(date)} label="Due Date" />
+                <DatePicker selected={dueDate} onChange={date => setDueDate(date)}  placeholderText="Due Date"/>
                 <Input
                     type={Number}
                     value={progress}
