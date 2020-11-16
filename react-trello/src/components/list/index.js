@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
@@ -59,28 +59,29 @@ export default function List(props) {
             <div>
                 {props.list.name}
             </div>
-            <DragDropContext >
-                <Droppable droppableId='lists'>
-                    {(provided) => (
-                        <ul {...provided.droppableProps} ref={provided.innerRef}>
-                            {
-                                props.list.cards.map((element, index) => {
-                                    return (
-                                        <Draggable key={element._id} draggableId={element._id} index={index}>
-                                            {(provided) => (
-                                                <li {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+            <Droppable droppableId={props.list._id} type='droppableSubItem'>
+                {(provided) => (
+                    <div ref={provided.innerRef}>
+                        {
+                            props.list.cards.map((element, index) => {
+                                return (
+                                    <Draggable key={element._id} draggableId={element._id} index={index}>
+                                        {(provided) => (
+                                            <div>
+                                                <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
                                                     <Card key={index} card={element} listId={props.list._id} project={props.project} />
-                                                </li>
-                                            )}
-                                        </Draggable>
-                                    )
-                                })
-                            }
-                            {provided.placeholder}
-                        </ul>
-                    )}
-                </Droppable>
-            </DragDropContext>
+                                                </div>
+                                                {provided.placeholder}
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                )
+                            })
+                        }
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
             <Button title='Add card' onClick={showForm} />
             {
                 isVisible ?
