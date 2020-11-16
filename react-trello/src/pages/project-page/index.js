@@ -139,11 +139,11 @@ export default function ProjectPage() {
             if (!response.ok) {
                 history.push("/error")
             } else {
-                const newListsArr = [...lists]
-                const [reorderedList] = newListsArr.splice(result.source.index, 1)
-                newListsArr.splice(result.destination.index, 0, reorderedList)
+                // const newListsArr = [...lists]
+                // const [reorderedList] = newListsArr.splice(result.source.index, 1)
+                // newListsArr.splice(result.destination.index, 0, reorderedList)
 
-                await setLists(newListsArr)
+                // await setLists(newListsArr)
             }
         }
 
@@ -175,7 +175,7 @@ export default function ProjectPage() {
                 // setLists(newListsArr)
             }
         }
-        // getData()
+        getData()
     }
 
     return (

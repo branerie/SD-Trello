@@ -1,5 +1,8 @@
 .list{
-border: solid 1px blue;
+background-color: #A6A48E;
+border: 1px #363338;
+border-radius: 25px;
+margin: 30px;
 width: 50%;        
 }
 
