@@ -118,27 +118,64 @@ export default function ProjectPage() {
     }
 
     async function handleOnDragEnd(result) {
-        if(!result.destination) return
+        if (!result.destination) return
 
-        const position = result.destination.index
-        const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
-            method: "PUT",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            },
-            body: JSON.stringify({ position })
-        })
-        if (!response.ok) {
-            history.push("/error")
-        } else {
-            const newListsArr = [...lists]
-            const [reorderedList] = newListsArr.splice(result.source.index, 1)
-            newListsArr.splice(result.destination.index, 0, reorderedList)
+        console.log(result);
 
-            setLists(newListsArr)
+        if (result.type === 'droppableItem') {
+            const position = result.destination.index
+            const token = getCookie("x-auth-token")
+            const response = await fetch(`http://localhost:4000/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": token
+                },
+                body: JSON.stringify({
+                    position,
+                    element: 'list'
+                })
+            })
+            if (!response.ok) {
+                history.push("/error")
+            } else {
+                const newListsArr = [...lists]
+                const [reorderedList] = newListsArr.splice(result.source.index, 1)
+                newListsArr.splice(result.destination.index, 0, reorderedList)
+
+                await setLists(newListsArr)
+            }
         }
+
+        if (result.type === 'droppableSubItem') {
+            const position = result.destination.index
+            const source = result.source.droppableId
+            const destination = result.destination.droppableId
+            const token = getCookie("x-auth-token")
+            const response = await fetch(`http://localhost:4000/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
+                method: "PUT",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": token
+                },
+                body: JSON.stringify({
+                    position,
+                    element: 'card',
+                    source,
+                    destination
+                })
+            })
+            if (!response.ok) {
+                history.push("/error")
+            } else {
+                // const newListsArr = [...lists]
+                // const [reorderedList] = newListsArr.splice(result.source.index, 1)
+                // newListsArr.splice(result.destination.index, 0, reorderedList)
+
+                // setLists(newListsArr)
+            }
+        }
+        // getData()
     }
 
     return (
@@ -165,24 +202,27 @@ export default function ProjectPage() {
             )}
             </div>
             <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId='lists'>
+                <Droppable droppableId='project' type='droppableItem'>
                     {(provided) => (
-                        <ul {...provided.droppableProps} ref={provided.innerRef}>
+                        <div ref={provided.innerRef}>
                             {
                                 lists.map((element, index) => {
                                     return (
                                         <Draggable key={element._id} draggableId={element._id} index={index}>
                                             {(provided) => (
-                                                <li {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                    <List list={element} project={project} />
-                                                </li>
+                                                <div>
+                                                    <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+                                                        <List list={element} project={project} />
+                                                    </div>
+                                                    {provided.placeholder}
+                                                </div>
                                             )}
                                         </Draggable>
                                     )
                                 })
                             }
                             {provided.placeholder}
-                        </ul>
+                        </div>
                     )}
                 </Droppable>
             </DragDropContext>

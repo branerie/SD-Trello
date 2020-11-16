@@ -8,7 +8,7 @@ router.post('/:id', auth, isAdmin, createList)
 
 router.put('/:id/:idlist', auth, isAdmin, updateList)
 
-router.put('/:id/:idlist/dnd-update', auth, isAdmin, updateListDnD)
+router.put('/:id/:idelement/dnd-update', auth, isAdmin, updateListDnD)
 
 router.delete('/:id/:idlist', auth, isAdmin, deleteList)
 
@@ -45,24 +45,47 @@ async function updateList(req, res, next) {
 
 async function updateListDnD(req, res, next) {
     const projectId = req.params.id
-    const listId = req.params.idlist
-    const { position } = req.body
-    const session = await mongoose.startSession()
-    session.startTransaction()
+    const elementId = req.params.idelement
+    const { position, element, source, destination } = req.body
 
-    try {
-        await models.Project.updateOne({ _id: projectId }, { $pull: { lists: listId } }).session(session)
-        await models.Project.updateOne({ _id: projectId }, { $push: { lists: { $each: [ listId ], $position: position } } }).session(session)
+    if (element === 'list') {
+        const session = await mongoose.startSession()
+        session.startTransaction()
+    
+        try {
+            await models.Project.updateOne({ _id: projectId }, { $pull: { lists: elementId } }).session(session)
+            await models.Project.updateOne({ _id: projectId }, { $push: { lists: { $each: [ elementId ], $position: position } } }).session(session)
+    
+            await session.commitTransaction()
+    
+            session.endSession()
+    
+            res.send('Success')
+        } catch (error) {
+            await session.abortTransaction()
+            session.endSession()
+            res.send(error)
+        }
+    }
 
-        await session.commitTransaction()
-
-        session.endSession()
-
-        res.send('Success')
-    } catch (error) {
-        await session.abortTransaction()
-        session.endSession()
-        res.send(error)
+    if (element === 'card') {
+        const session = await mongoose.startSession()
+        session.startTransaction()
+    
+        try {
+            await models.List.updateOne({ _id: source }, { $pull: { cards: elementId } }).session(session)
+            await models.List.updateOne({ _id: destination }, { $push: { cards: { $each: [ elementId ], $position: position } } }).session(session)
+    
+            await session.commitTransaction()
+    
+            session.endSession()
+    
+            res.send('Success')
+        } catch (error) {
+            await session.abortTransaction()
+            session.endSession()
+            res.send(error)
+        }
     }
 
 }
