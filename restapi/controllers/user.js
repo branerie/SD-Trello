@@ -6,6 +6,7 @@ const router = require('express').Router()
 const bcrypt = require('bcrypt')
 const googleAuth = require('../utils/googleAuth')
 const { auth, isAdmin } = require('../utils')
+const { decode } = require('jsonwebtoken')
 
 
 router.get('/verify', verifyLogin);
@@ -147,8 +148,10 @@ async function googleLoginUser(req, res, next) {
 }
 
 async function logoutUser(req, res, next) {
-    const token = req.cookies[config.authCookieName]
-    await models.TokenBlacklist.create({ token })
+    const token = req.headers.authorization
+    const { exp } = decode(token)
+    console.log(exp, '123');
+    await models.TokenBlacklist.create({ token, expirationDate: exp * 1000 })
     res.clearCookie(config.authCookieName).send('Logout successfully!')
 }
 

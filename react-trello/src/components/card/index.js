@@ -27,18 +27,22 @@ export default function Card({ project, card, listId }) {
     return (
         <div className={styles.card} >
             <div>{card.name}</div>
-            {
+
+            {/* {
                 card.dueDate ? <div>{`${day}-${month}-${year}`}</div> : null
             }
             {
                 card.progress ? <div>{card.progress}%</div> : null
             }
     
-            <div>{card.members.map(element => {
-                return (<span className={styles.users} key={element._id}>{element.username}</span>)
-            })}</div>
+            <div>
+                {card.members.map(element => {
+                    return (<span className={styles.users} key={element._id}>{element.username}</span>)
+                })}
+            </div> */}
     
-            <Button title='Edit' onClick={() => showFormEdit()} />
+            {/* <Button title='Edit' onClick={showFormEdit} /> */}
+            <button className={styles.button} onClick={showFormEdit}>pen</button>
             { IsVisibleEdit ?
                 < div >
                     <Transparent hideFormEdit={hideFormEdit} >

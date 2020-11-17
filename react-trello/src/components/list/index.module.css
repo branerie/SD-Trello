@@ -3,10 +3,12 @@
     background-color: #A6A48E;
     border-radius: 25px;
     margin: 30px;
-    width: 50%;
+    width: 20%;
     box-shadow: 10px 10px 10px rgba(0,0,0,0.16);
-    font-size: 15px;
+    font-size: 18px;
     font-weight: bold;
+    display: flex;
+    flex-wrap: wrap;
 }
 
 .row {
@@ -15,6 +17,7 @@
     margin-left: 30px;
     margin-right: 30px;
     justify-content: space-between;
+    width: 100%;
 }
 
 .addCard{
@@ -38,6 +41,7 @@ button {
     background-color: lemonchiffon;
 }
 
+
 .menu {
     background: #e0dbdb;
     position: absolute;
@@ -49,26 +53,37 @@ button {
     visibility: hidden;
     transform: translateY(-20px);
     transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
-  }
-  
-  .menu.active {
+}
+
+.menu.active {
     opacity: 1;
     visibility: visible;
     transform: translateY(0);
-  }
+}
 
-  .menu > div {
-      padding: 5px;
-  }
+.menu > div {
+    padding: 5px;
+}
 
-  .menu > div:hover {
+.menu > div:hover {
     background-color: khaki;
-  }
+}
 
-  .relative {
-      position: relative;
-  }
+.relative {
+    position: relative;
+}
 
-  .addnote {
-      font-size: 19px;
-  }
+.addnote {
+    width: 90%;
+    font-size: 19px;
+    margin: 5px;
+    padding: 5px;
+}
+
+.addnote:hover {
+    background-color: lemonchiffon;
+}
+
+.droppable {
+    width: 100%;
+}
