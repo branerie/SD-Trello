@@ -161,7 +161,6 @@ async function deleteProject(req, res, next) {
 async function addMember(req, res, next) {
     const { member, admin } = req.body
     const projectId = req.params.id
-    const { _id } = req.user
 
     const session = await mongoose.startSession()
     session.startTransaction()

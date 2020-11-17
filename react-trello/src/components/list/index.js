@@ -1,8 +1,9 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Button from '../button'
 import Card from '../card'
 import CreateCard from '../create-card'
@@ -13,24 +14,18 @@ import styles from './index.module.css'
 export default function List(props) {
     const [isVisible, setIsVisible] = useState(false)
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
+    const dropdownRef = useRef(null);
+    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
     const history = useHistory()
     const socket = useSocket()
 
-    const showForm = () => {
-        setIsVisible(true)
-    }
+    const showForm = () => setIsVisible(true)
 
-    const hideForm = () => {
-        setIsVisible(false)
-    }
+    const hideForm = () => setIsVisible(false)
 
-    const showFormEdit = () => {
-        setIsVisibleEdit(true)
-    }
+    const showFormEdit = () => setIsVisibleEdit(true)
 
-    const hideFormEdit = () => {
-        setIsVisibleEdit(false)
-    }
+    const hideFormEdit = () => setIsVisibleEdit(false)
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
@@ -49,15 +44,33 @@ export default function List(props) {
             history.push("/error")
         } else {
             updateProjectSocket()
-
         }
-
     }
+
+    const onClick = () => setIsActive(!isActive)
 
     return (
         <div className={styles.list} key={props.list._id}>
-            <div>
-                {props.list.name}
+            <div className={styles.row}>
+                <div>
+                    {props.list.name}
+                </div>
+                <button className={styles.button} onClick={onClick}>
+                    ...
+                </button>
+            </div>
+            <div className={styles.relative}>
+                <div
+                    ref={dropdownRef}
+                    className={`${styles.menu} ${isActive ? styles.active : ''}`}
+                >
+                    <div>
+                        <button onClick={showFormEdit} >Edit</button>
+                    </div>
+                    <div>
+                        <button onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteList() }} >Delete</button>
+                    </div>
+                </div>
             </div>
             <Droppable droppableId={props.list._id} type='droppableSubItem'>
                 {(provided) => (
@@ -82,7 +95,7 @@ export default function List(props) {
                     </div>
                 )}
             </Droppable>
-            <Button title='Add card' onClick={showForm} />
+            <button className={styles.addnote} onClick={showForm} >+ Add Note</button>
             {
                 isVisible ?
                     <div>
@@ -91,7 +104,6 @@ export default function List(props) {
                         </Transparent>
                     </div> : null
             }
-            <Button title='Edit List' onClick={showFormEdit} />
             {
                 IsVisibleEdit ?
                     < div >
@@ -100,7 +112,6 @@ export default function List(props) {
                         </Transparent >
                     </div > : null
             }
-            <Button title='Delete List' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteList() }} />
         </div>
     )
 }

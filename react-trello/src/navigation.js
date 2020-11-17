@@ -19,7 +19,7 @@ import { SocketProvider } from "./contexts/SocketProvider"
 const Navigation = () => {
 
     const context = useContext(UserContext)
-    const loggedIn = context.user.loggedIn;
+    const loggedIn = context.user.loggedIn
 
     return (
         <SocketProvider user={context.user.username}>
