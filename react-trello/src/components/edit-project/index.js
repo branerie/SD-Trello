@@ -94,7 +94,8 @@ export default function EditProject(props) {
                     </div>
                 </div>
             </form>
-            <button onClick={showFormAdd} title="Edit members" className={styles.editMembersButton}>Edit members</button>
+            <div className={styles.editMembers}>
+            <Button onClick={showFormAdd} title="Edit members" className={styles.editMembersButton}/>
             {IsVisibleAdd ?
                 < div >
                     <Transparent hideFormAdd={hideFormAdd} >
@@ -103,6 +104,7 @@ export default function EditProject(props) {
                 </div > : null
             }
             <Button onClick={handleSubmit} title="Edit" />
+            </div>
         </div>
 
     )

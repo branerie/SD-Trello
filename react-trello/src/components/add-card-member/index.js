@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import Button from '../button'
 import Title from '../title'
 import styles from './index.module.css'
@@ -8,7 +8,7 @@ import getCookie from '../../utils/cookie'
 
 
 export default function AddMember(props) {
-
+    const params = useParams()
     const members = props.card.members
     const [users, setUsers] = useState([])
     const [selectedUser, setSelectedUser] = useState({})
@@ -25,8 +25,9 @@ export default function AddMember(props) {
 
 
     const getAllUser = async () => {
+        const id = params.projectid
         const token = getCookie("x-auth-token")
-        const response = await fetch('http://localhost:4000/api/user/get-all', {
+        const response = await fetch(`http://localhost:4000/api/projects/info/${id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -37,16 +38,18 @@ export default function AddMember(props) {
         if (!response.ok) {
             history.push("/error")
         }
-        setUsers(await response.json())
-
+      const data = await response.json()      
+      setUsers(data.membersRoles)
+       
     }
 
 
     const handleSelect = (id) => {
         const result = users.filter(obj => {
-            return obj._id === id
+            return obj.memberId._id === id
         })[0]
-        setSelectedUser(result)
+       const selected = result.memberId
+        setSelectedUser(selected)
     }
 
     const deleteMember = useCallback(async (event, member) => {
@@ -120,7 +123,7 @@ export default function AddMember(props) {
                             <option >Select user</option>
                             {
                                 users.map((element, index) => (
-                                    <option key={index} value={element._id}>{element.username}</option>
+                                    <option key={index} value={element.memberId._id}>{element.memberId.username}</option>
                                 ))
                             }
                         </select>

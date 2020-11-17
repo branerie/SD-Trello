@@ -5,7 +5,7 @@ import Input from '../input'
 import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-import AddMember from '../add-member'
+import AddMember from '../add-card-member'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import Transparent from '../transparent'
