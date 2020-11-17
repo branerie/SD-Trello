@@ -17,6 +17,9 @@ router.delete('/:id', auth, isAdmin, deleteProject)
 
 router.post('/:id/user', auth, isAdmin, addMember)
 
+router.post('/:id/user-remove', auth, isAdmin, removeMember)
+
+
 
 
 
@@ -92,8 +95,9 @@ async function createProject(req, res, next) {
 }
 
 async function updateProject(req, res, next) {
-    const id = req.params.id;
+    const projectId = req.params.id;
     const project = { name, description } = req.body;
+
 
     const obj = {}
     for (let key in project) {
@@ -101,8 +105,14 @@ async function updateProject(req, res, next) {
             obj[key] = project[key]
         }
     }
-    const updatedProject = await models.Project.updateOne({ _id: id }, { ...obj })
-    res.send(updatedProject)
+
+    try {
+        const updatedProject = await models.Project.updateOne({ _id: projectId }, { ...obj })
+
+        res.send(updatedProject)
+    } catch (error) {
+        res.send(error)
+    }
 
 }
 
@@ -149,14 +159,13 @@ async function deleteProject(req, res, next) {
 }
 
 async function addMember(req, res, next) {
-    const { newMemberEmail, admin } = req.body
+    const { member, admin } = req.body
     const projectId = req.params.id
 
     const session = await mongoose.startSession()
     session.startTransaction()
 
     try {
-        const member = await models.User.findOne({ email: newMemberEmail })
 
         const projectUserRoleCreation = await models.ProjectUserRole.create([{ admin, projectId, memberId: member._id }], { session })
         const projectUserRole = projectUserRoleCreation[0]
@@ -169,6 +178,39 @@ async function addMember(req, res, next) {
         session.endSession()
 
         res.send(projectUserRole)
+    } catch (error) {
+        await session.abortTransaction()
+        session.endSession()
+        res.send({
+            errorMessage: error.message,
+            error
+        })
+    }
+}
+
+async function removeMember(req, res, next) {
+    const { memberId } = req.body
+    const projectId = req.params.id
+    const { _id } = req.user
+
+
+    const session = await mongoose.startSession()
+    session.startTransaction()
+
+    try {
+        const member = await models.User.findOne({ _id: memberId })
+        const projectUserRoleForRemove = await models.ProjectUserRole.findOne({ projectId, memberId: member._id })
+
+        await models.User.updateOne({ _id: member._id }, { $pull: { projects: projectUserRoleForRemove._id } }).session(session)
+
+        await models.Project.updateOne({ _id: projectId }, { $pull: { membersRoles: projectUserRoleForRemove._id } }).session(session)
+        const deletedProjectUserRole = await models.ProjectUserRole.deleteOne({ _id: projectUserRoleForRemove._id }).session(session)
+
+        await session.commitTransaction()
+
+        session.endSession()
+
+        res.send(deletedProjectUserRole)
     } catch (error) {
         await session.abortTransaction()
         session.endSession()

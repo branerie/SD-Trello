@@ -22,13 +22,10 @@ const projectSchema = new Schema({
     },
 
     isFinished: {
-       type: Boolean
+        type: Boolean
     },
 
-    membersRoles: [{
-        type: ObjectId,
-        ref: "ProjectUserRole"
-    }],
+    membersRoles: [{ type: ObjectId, ref: "ProjectUserRole" }],
 
     lists: [{ type: ObjectId, ref: "List" }]
 

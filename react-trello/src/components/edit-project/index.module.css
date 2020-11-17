@@ -13,3 +13,10 @@
     width: 50%;
     height: 25%;
 }
+
+.membersList{
+    margin: 2%;
+}
+.editMembers {
+    background-color: rgb(43, 226, 89);
+}

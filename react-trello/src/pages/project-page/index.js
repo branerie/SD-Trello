@@ -76,14 +76,12 @@ export default function ProjectPage() {
         } else {
             const data = await response.json()
             setProject(data)
-
             const memberArr = []
             data.membersRoles.map(element => {
-                return memberArr.push({ admin: element.admin, username: element.memberId.username })
+                return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
 
             })
             setMembers(memberArr)
-
             setLists(data.lists)
         }
 
@@ -240,7 +238,7 @@ export default function ProjectPage() {
                 IsVisibleEdit ?
                     < div >
                         <Transparent hideForm={hideFormEdit} >
-                            <EditProject hideForm={hideFormEdit} project={project} />
+                            <EditProject hideForm={hideFormEdit} project={project} members={members} />
                         </Transparent >
                     </div > : null
             }

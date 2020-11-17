@@ -5,7 +5,7 @@ import Input from '../input'
 import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-import AddMember from '../add-member'
+import AddMember from '../add-card-member'
 import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import Transparent from '../transparent'
@@ -66,7 +66,6 @@ export default function EditCard(props) {
                 description,
                 dueDate,
                 progress,
-                members: []
             })
         })
         if (!response.ok) {
@@ -110,13 +109,18 @@ export default function EditCard(props) {
                         label="Progress"
                         id="progress"
                     />
-                    <Button onClick={handleSubmit} title="Edit" />
-                    <Button onClick={cancelSubmit} title="Cancel" />
-                    <Button onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete" />
+
+
                 </form>
             </div>
-            <div>
-                <Button onClick={showFormAdd} title="Edit members" />
+            <div className={styles.editMembers}>
+                <span>Card members: </span>
+                {
+                    members.map((element, index) => {
+                        return <span key={index} className={styles.membersNames}>{element.username}</span>
+                    })
+                }
+                <button onClick={showFormAdd} title="Edit members" className={styles.editMembersButton}>Edit members</button>
                 {IsVisibleAdd ?
                     < div >
                         <Transparent hideFormAdd={hideFormAdd} >
@@ -124,6 +128,11 @@ export default function EditCard(props) {
                         </Transparent >
                     </div > : null
                 }
+                <div className={styles.editCardButtons}>
+                    <Button onClick={handleSubmit} title="Edit Card" />
+                    <Button onClick={cancelSubmit} title="Cancel" />
+                    <Button onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete Card" />
+                </div>
             </div>
         </div>
 
