@@ -78,7 +78,7 @@ export default function List(props) {
                         {
                             props.list.cards.map((element, index) => {
                                 return (
-                                    <Draggable key={element._id} draggableId={element._id} index={index}>
+                                    <Draggable className={styles.droppable} key={element._id} draggableId={element._id} index={index}>
                                         {(provided) => (
                                             <div>
                                                 <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >

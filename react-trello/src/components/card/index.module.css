@@ -5,22 +5,8 @@
     margin: 10px;   
     display: flex;   
     justify-content: space-between; 
-    padding: 5%;
+    padding: 20px;
     font-weight: normal;
+    width: 90%;
+    flex-grow: 1;
 }
-
-.users {   
-    margin: 20px;
-    border: solid 1px black;  
-    flex-wrap: wrap; 
-    display: inline-block
-}
-
-.editButton{
-    display: block;
-    margin-top: 5px;
-    margin-right: 5px;
-    flex-flow: wrap;
-    width: 20%;
-    
- }
