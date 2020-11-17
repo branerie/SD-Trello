@@ -37,8 +37,19 @@ export default function AddMember(props) {
         if (!response.ok) {
             history.push("/error")
         }
-        setUsers(await response.json())
+        const allUsers = await response.json()
 
+
+        const filtered = allUsers.filter((e) => {
+            const found = members.find(element => element.username === e.username)
+            if (found) {
+                return false
+            } else {
+                return true
+            }
+        })
+
+        setUsers(filtered)
     }
 
 
@@ -49,43 +60,40 @@ export default function AddMember(props) {
         setSelectedUser(result)
     }
 
-    // const deleteMember = useCallback(async (event, member) => {
-    //     event.preventDefault()
+    const deleteMember = useCallback(async (event, member) => {
+        event.preventDefault()
+        const projectId = props.project._id
+        const memberId = member.id
 
-    //     var index = members.indexOf(member)
-    //     if (index !== -1) {
-    //         members.splice(index, 1)
-    //     }
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`http://localhost:4000/api/projects/${projectId}/user-remove`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify({
+                memberId
+            })
+        })
+        if (!response.ok) {
+            history.push("/error")
+        } else {
+            props.hideFormAdd()
+        }
 
-    //     const token = getCookie("x-auth-token")
-    //     const response = await fetch(`http://localhost:4000/api/projects/${projectId}`, {
-    //         method: "PUT",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Authorization": token
-    //         },
-    //         body: JSON.stringify({
-    //             members
-    //         })
-    //     })
-    //     if (!response.ok) {
-    //         history.push("/error")
-    //     } else {
-    //         props.hideFormAdd()
-    //     }
-
-    // }, [history, props, members, projectId])
+    }, [history, props])
 
 
     const handleAdd = useCallback(async (event) => {
         event.preventDefault()
-
+        const projectId = props.project._id
         const token = getCookie("x-auth-token")
 
         const member = selectedUser
 
-        const response = await fetch(`http://localhost:4000/api/projects/${projectId}`, {
-            method: "PUT",
+        const response = await fetch(`http://localhost:4000/api/projects/${projectId}/user`, {
+            method: "POST",
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
@@ -109,7 +117,7 @@ export default function AddMember(props) {
                 <Title title={"Team members"} />
                 {
                     members.map((element, index) => {
-                        return <Button key={index} title={element.username} />
+                        return <Button key={index} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, element) }} title={element.username} />
                     })
                 }
             </div>
@@ -125,8 +133,6 @@ export default function AddMember(props) {
                                 ))
                             }
                         </select>
-                        
-
                     </div>
                     <Button onClick={handleAdd} title="Add" />
                     <Button onClick={cancelAdd} title="Cancel" />
