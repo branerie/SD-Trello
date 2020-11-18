@@ -1,5 +1,5 @@
-import React from "react";
-import styles from "./index.module.css";
+import React from "react"
+import styles from "./index.module.css"
 
 const Title = ( {title} ) => {
     return (
@@ -7,4 +7,4 @@ const Title = ( {title} ) => {
     )
 }
 
-export default Title;
+export default Title

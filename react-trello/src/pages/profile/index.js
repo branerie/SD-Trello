@@ -47,7 +47,7 @@ const ProfilePage = () => {
     }
 
     return (
-        <PageLayout username={username}>
+        <PageLayout>
             <div>
                 <p>User: {username}</p>
                 <p>Projects: {projects}</p>

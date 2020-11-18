@@ -150,7 +150,6 @@ async function googleLoginUser(req, res, next) {
 async function logoutUser(req, res, next) {
     const token = req.headers.authorization
     const { exp } = decode(token)
-    console.log(exp, '123');
     await models.TokenBlacklist.create({ token, expirationDate: exp * 1000 })
     res.clearCookie(config.authCookieName).send('Logout successfully!')
 }
