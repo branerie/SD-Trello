@@ -7,59 +7,10 @@
   margin: 0.1%;
   margin-top: 7px;
   vertical-align: center;
-  border-top: 2px solid #ffa000;
   padding: 10px;
   flex-grow: 1;
 }
 
 .link:hover {
-  border-top: none;
-  border-bottom: 2px solid #ffa000;
   font-weight: bold;
 }
-
-/* .list-item {
-  display: inline-block;
-  height: auto;
-  margin-right: 2%;
-  cursor: pointer;
-  margin: 0.1%;
-  margin-top: 7px;
-  vertical-align: top;
-  border-top: 2px solid #ffa000;
-  padding: 10px;
-} */
-
-/* .list-item:hover {
-  border-top: none;
-  border-bottom: 2px solid #ffa000;
-  font-weight: bold;
-} */
-/* .aside-list-item {
-  display: block;
-  width: 98%;
-  border-left: 2px solid #234465;
-  border-right: 2px solid #234465;
-  margin-bottom: 11%;
-  height: 5vh;
-  text-align: center;
-}
-
-.aside-link {
-  color: #234465;
-  text-align: center;
-  text-decoration: none;
-  padding-top: 5px;
-  height: 60%;
-  display: block;
-}
-
-.aside-list-item:hover {
-  border-left: none;
-  border-right: none;
-  font-weight: bold;
-  border-top: 2px solid #234465;
-  border-bottom: 2px solid #234465;
-  color: #ffa000;
-} */
-  

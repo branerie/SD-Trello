@@ -2,8 +2,8 @@
     border: 2px solid #363338;
     background-color: #A6A48E;
     border-radius: 25px;
-    margin: 30px;
-    width: 20%;
+    margin: 10px;
+    width: 350px;
     box-shadow: 10px 10px 10px rgba(0,0,0,0.16);
     font-size: 18px;
     font-weight: bold;
@@ -46,7 +46,7 @@ button {
     background: #e0dbdb;
     position: absolute;
     top: 0px;
-    right: 0px;
+    left: 350px;
     width: 100px;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
     opacity: 0;
@@ -74,16 +74,28 @@ button {
 }
 
 .addnote {
-    width: 90%;
     font-size: 19px;
     margin: 5px;
     padding: 5px;
+    border-radius: 5px;
 }
 
 .addnote:hover {
     background-color: lemonchiffon;
 }
 
+.draggable {
+    width: 100%;
+}
+
 .droppable {
     width: 100%;
+    flex-grow: 1;
+}
+
+.flexend {
+    display: flex;
+    margin-right: 10px;
+    justify-content: flex-end;
+    flex-grow: 1;
 }

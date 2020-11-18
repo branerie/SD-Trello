@@ -177,7 +177,7 @@ export default function ProjectPage() {
     }
 
     return (
-        <PageLayout className={styles.conteiner}>
+        <PageLayout>
             <div>{project.name}</div>
             <div>
                 Admins :{members.filter(a => a.admin === true).map((element, index) => {
@@ -202,7 +202,7 @@ export default function ProjectPage() {
             <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId='project' type='droppableItem'>
                     {(provided) => (
-                        <div ref={provided.innerRef}>
+                        <div className={styles.container} ref={provided.innerRef}>
                             {
                                 lists.map((element, index) => {
                                     return (

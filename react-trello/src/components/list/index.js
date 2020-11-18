@@ -56,7 +56,7 @@ export default function List(props) {
                     {props.list.name}
                 </div>
                 <button className={styles.button} onClick={onClick}>
-                    ...
+                    img
                 </button>
             </div>
             <div className={styles.relative}>
@@ -74,11 +74,11 @@ export default function List(props) {
             </div>
             <Droppable droppableId={props.list._id} type='droppableSubItem'>
                 {(provided) => (
-                    <div ref={provided.innerRef}>
+                    <div className={styles.droppable} ref={provided.innerRef}>
                         {
                             props.list.cards.map((element, index) => {
                                 return (
-                                    <Draggable className={styles.droppable} key={element._id} draggableId={element._id} index={index}>
+                                    <Draggable key={element._id} draggableId={element._id} index={index}>
                                         {(provided) => (
                                             <div>
                                                 <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
@@ -95,7 +95,9 @@ export default function List(props) {
                     </div>
                 )}
             </Droppable>
-            <button className={styles.addnote} onClick={showForm} >+ Add Note</button>
+            <div className={styles.flexend}>
+                <button className={styles.addnote} onClick={showForm} >+ Add Note</button>
+            </div>
             {
                 isVisible ?
                     <div>
