@@ -1,60 +1,29 @@
 import React, { useContext } from "react";
-import Link from "../link";
 import styles from "./index.module.css";
-import getNavigation from "../../utils/navigation";
 import UserContext from "../../Context";
+import { Link } from "react-router-dom";
 
-const Header = (props) => {
+const Header = ({ asideOn }) => {
     const context = useContext(UserContext);
 
-    const links = getNavigation(context.user);
-    const otherLinks = links.filter(a => {
-        return (a.title !== 'Log In' && a.title !== 'Log Out' && a.title !== 'Sign Up')
-    })
-
-    const userLinks = links.filter(a => {
-        return (a.title === 'Log In' || a.title === 'Sign Up')
-    })
-
-    const logoutLink = links.filter(a => {
-        return (a.title === 'Log Out')
-    })
-
     return (
-        <header className={styles.navigation}>              
+        <header className={`${styles.navigation} ${asideOn ? styles.small : ''}`} >
+            <div className={styles.container}>
                 <div className={styles.links}>
-                    {
-                        otherLinks.map(navElement => {
-                            return (
-                                <Link
-                                    key={navElement.title}
-                                    href={navElement.link}
-                                    title={navElement.title}
-                                />
-                            )
-                        })
-                    }
+                    <div className={styles.margin}>
+                        Change View
+                </div>
+                    <div className={styles.margin}>
+                        Teams:
+                </div>
                 </div>
                 <div className={styles.links}>
-                    {
-                        userLinks.map(navElement => {
-                            return (
-                                <Link
-                                    key={navElement.title}
-                                    href={navElement.link}
-                                    title={navElement.title}
-                                />
-                            )
-                        })
-                    }
+                    <input className={styles.input} type='text' placeholder='Search...' />
+                    <span className={styles.margin}>{context.user.username}</span>
+                    <Link className={styles.logout} onClick={context.logOut}>Log Out</Link>
                 </div>
-                {logoutLink[0] ? <div className={styles.links}>
-                <span className={styles.username}>{props.username}</span>
-                    {
-                        <div className={styles.logout} onClick={context.logOut}>Logout</div>
-                    }
-                </div> : null}
-            </header>
+            </div>
+        </header>
     )
 }
 

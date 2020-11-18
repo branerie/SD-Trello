@@ -51,7 +51,7 @@ const LoginPage = () => {
     }
     
     return (
-        <PageLayout>
+        <div>
             {
                 showForm ?
                     <div>
@@ -84,7 +84,7 @@ const LoginPage = () => {
                 // onFailure={errorGoogle}
                 cookiePolicy={'single_host_origin'}
             />
-        </PageLayout>
+        </div>
     )
 }
 
