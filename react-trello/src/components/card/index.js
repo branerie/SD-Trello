@@ -41,8 +41,7 @@ export default function Card({ project, card, listId }) {
                 })}
             </div> */}
     
-            {/* <Button title='Edit' onClick={showFormEdit} /> */}
-            <button className={styles.button} onClick={showFormEdit}>pen</button>
+            <button className={styles.button} onClick={showFormEdit}>img</button>
             { IsVisibleEdit ?
                 < div >
                     <Transparent hideFormEdit={hideFormEdit} >
