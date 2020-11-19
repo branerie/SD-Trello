@@ -23,7 +23,6 @@ export default function AddMember(props) {
         props.hideFormAdd()
     }
 
-
     const getAllUser = async () => {
         const id = params.projectid
         const token = getCookie("x-auth-token")
@@ -42,7 +41,6 @@ export default function AddMember(props) {
       setUsers(data.membersRoles)
        
     }
-
 
     const handleSelect = (id) => {
         const result = users.filter(obj => {
