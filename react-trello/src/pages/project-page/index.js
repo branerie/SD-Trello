@@ -182,6 +182,7 @@ export default function ProjectPage() {
 
     return (
         <PageLayout>
+            <div>{project.name}</div>
         
              <Button onClick={calendarView} title='Calendar View'/>
             <div>{project.name}</div>

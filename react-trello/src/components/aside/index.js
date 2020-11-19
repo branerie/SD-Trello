@@ -13,9 +13,11 @@ export default function Aside({ asideOn, setAsideOn }) {
     return (
         <div>
             <aside className={styles.container}>
-                <button className={styles.button} onClick={onClick}>
-                    Menu
-                </button>
+                <div className={styles.top}>
+                    <button onClick={onClick}>
+                        Menu
+                    </button>
+                </div>
                 <LinkComponent
                     href='/'
                     title='Home'
@@ -32,7 +34,7 @@ export default function Aside({ asideOn, setAsideOn }) {
             {
                 asideOn ?
                     <div className={styles.menu}>
-                        <div className={styles.logo}>
+                        <div className={styles.top}>
                             Logo
                         </div>
                         <LinkComponent
@@ -43,10 +45,12 @@ export default function Aside({ asideOn, setAsideOn }) {
                             href='/'
                             title='My Tasks'
                         />
-                        <LinkComponent
-                            href='/'
-                            title='Inbox'
-                        />
+                        <div className={styles.bottom}>
+                            <LinkComponent
+                                href='/'
+                                title='Inbox'
+                            />
+                        </div>
                     </div> : null
             }
 

@@ -20,7 +20,7 @@ const Header = ({ asideOn }) => {
                 <div className={styles.links}>
                     <input className={styles.input} type='text' placeholder='Search...' />
                     <span className={styles.margin}>{context.user.username}</span>
-                    <Link className={styles.logout} onClick={context.logOut}>Log Out</Link>
+                    <button className={styles.logout} onClick={context.logOut}>Log Out</button>
                 </div>
             </div>
         </header>

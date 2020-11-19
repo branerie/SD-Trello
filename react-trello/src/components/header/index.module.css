@@ -3,16 +3,18 @@
   top: 0;
   left: 0px;
   display: flex;
-  height: 50px;
-  background-color: #4c4750;
+  height: 80px;
+  background-color:  #363338;
   margin-left: 50px;
   color: #F7F7F2;
   width: calc(100% - 50px);
+  border: 1px solid #363338;
+  font-size: 20px;
 }
 
 .small {
-  left: 120px;
-  width: calc(100% - 170px);
+  left: 121px;
+  width: calc(100% - 171px);
 }
 
 .container {
