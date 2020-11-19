@@ -5,12 +5,12 @@
 }
 
 .content {
-  margin: 50px;
+  margin: 80px;
   flex-grow: 1;
   flex-wrap: wrap;
   justify-content: flex-start;
   min-width: 60%;
-  padding: 0.5%;
+  padding: 1%;
 }
 
 .small {
