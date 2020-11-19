@@ -88,6 +88,7 @@ export default function CalendarView() {
 
     }, [params.projectid, history])
 
+    
 
     useEffect(() => {
         getData()
@@ -183,16 +184,16 @@ export default function CalendarView() {
     }
 
 
-    const today = new Date(),
-        date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
-    const weekDay = today.getDay()
+    // const today = new Date(),
+    //     date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+    // const weekDay = today.getDay()
 
 
     return (
         <PageLayout className={styles.conteiner}>
             <Button onClick={defaultView} title='Default View' />
             <div className={styles.calendarPageContainer}>
-                <span className={styles.projectInfoContainer}>
+                {/* <span className={styles.projectInfoContainer}>
                     <div>{project.name}</div >
                     <div>
                         Admins :{members.filter(a => a.admin === true).map((element, index) => {
@@ -260,8 +261,9 @@ export default function CalendarView() {
                     }
                     <Button title='Delete Project' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteProject() }} />
                 </span>
+            */}
             <span className={styles.calendarContainer}>
-                <TableDndApp />
+                <TableDndApp project={project}/>
             </span>
             </div>
         </PageLayout >

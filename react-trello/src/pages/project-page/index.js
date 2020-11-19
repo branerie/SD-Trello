@@ -179,7 +179,7 @@ export default function ProjectPage() {
         const id = params.projectid
         history.push(`/calendarView/${id}`)
     }
-
+    
     return (
         <PageLayout>
             {/* <div>{project.name}</div>
