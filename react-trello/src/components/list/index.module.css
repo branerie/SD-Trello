@@ -11,6 +11,10 @@
     flex-wrap: wrap;
 }
 
+.asd {
+    display: inline-flex;
+}
+
 .row {
     display: flex;
     margin: 10px;

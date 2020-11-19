@@ -182,10 +182,7 @@ export default function ProjectPage() {
 
     return (
         <PageLayout>
-            <div>{project.name}</div>
-        
-             <Button onClick={calendarView} title='Calendar View'/>
-            <div>{project.name}</div>
+            {/* <div>{project.name}</div>
             <div>
                 Admins :{members.filter(a => a.admin === true).map((element, index) => {
                 return (
@@ -205,17 +202,17 @@ export default function ProjectPage() {
                 )
             }
             )}
-            </div>
+            </div> */}
             <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId='project' type='droppableItem'>
+                <Droppable droppableId='project' direction='horizontal' type='droppableItem'>
                     {(provided) => (
-                        <div className={styles.container} ref={provided.innerRef}>
+                        <div ref={provided.innerRef}>
                             {
                                 lists.map((element, index) => {
                                     return (
                                         <Draggable key={element._id} draggableId={element._id} index={index}>
                                             {(provided) => (
-                                                <div>
+                                                <div className={styles.list}>
                                                     <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
                                                         <List list={element} project={project} />
                                                     </div>
@@ -250,6 +247,7 @@ export default function ProjectPage() {
                     </div > : null
             }
             <Button title='Delete Project' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteProject() }} />
+            <Button onClick={calendarView} title='Calendar View'/>
         </PageLayout>
     )
 }
