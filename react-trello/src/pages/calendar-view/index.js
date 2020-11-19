@@ -10,9 +10,9 @@ import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import TableDndApp from '../../components/calendar-table'
 
-
-export default function ProjectPage() {
+export default function CalendarView() {
     const params = useParams()
     const history = useHistory()
     const [project, setProject] = useState(null)
@@ -85,7 +85,9 @@ export default function ProjectPage() {
             setLists(data.lists)
         }
 
+
     }, [params.projectid, history])
+
 
     useEffect(() => {
         getData()
@@ -175,80 +177,93 @@ export default function ProjectPage() {
         getData()
     }
 
-    async function calendarView() {
+    async function defaultView() {
         const id = params.projectid
-        history.push(`/calendarView/${id}`)
+        history.push(`/projects/${id}`)
     }
 
+
+    const today = new Date(),
+        date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear();
+    const weekDay = today.getDay()
+
+
     return (
-        <PageLayout>
-        
-             <Button onClick={calendarView} title='Calendar View'/>
-            <div>{project.name}</div>
-            <div>
-                Admins :{members.filter(a => a.admin === true).map((element, index) => {
-                return (
-                    <div key={index}>
-                        {element.username}
-                    </div>
-                )
-            }
-            )}
-            </div>
-            <div>
-                Members :{members.filter(a => a.admin === false).map((element, index) => {
-                return (
-                    <div key={index}>
-                        {element.username}
-                    </div>
-                )
-            }
-            )}
-            </div>
-            <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId='project' type='droppableItem'>
-                    {(provided) => (
-                        <div className={styles.container} ref={provided.innerRef}>
-                            {
-                                lists.map((element, index) => {
-                                    return (
-                                        <Draggable key={element._id} draggableId={element._id} index={index}>
-                                            {(provided) => (
-                                                <div>
-                                                    <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                        <List list={element} project={project} />
-                                                    </div>
-                                                    {provided.placeholder}
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    )
-                                })
-                            }
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-            </DragDropContext>
-            <Button title='Add List' onClick={showForm} />
-            {
-                isVisible ?
+        <PageLayout className={styles.conteiner}>
+            <Button onClick={defaultView} title='Default View' />
+            <div className={styles.calendarPageContainer}>
+                <span className={styles.projectInfoContainer}>
+                    <div>{project.name}</div >
                     <div>
-                        <Transparent hideForm={hideForm}>
-                            <CreateList hideForm={hideForm} project={project} />
-                        </Transparent>
-                    </div> : null
-            }
-            <Button title='Edit Project' onClick={showFormEdit} />
-            {
-                IsVisibleEdit ?
-                    < div >
-                        <Transparent hideForm={hideFormEdit} >
-                            <EditProject hideForm={hideFormEdit} project={project} members={members} />
-                        </Transparent >
-                    </div > : null
-            }
-            <Button title='Delete Project' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteProject() }} />
-        </PageLayout>
+                        Admins :{members.filter(a => a.admin === true).map((element, index) => {
+                        return (
+                            <div key={index}>
+                                {element.username}
+                            </div>
+                        )
+                    }
+                    )}
+                    </div>
+                    <div>
+                        Members :{members.filter(a => a.admin === false).map((element, index) => {
+                        return (
+                            <div key={index}>
+                                {element.username}
+                            </div>
+                        )
+                    }
+                    )}
+                    </div>
+
+                    <DragDropContext onDragEnd={handleOnDragEnd}>
+                        <Droppable droppableId='project' type='droppableItem'>
+                            {(provided) => (
+                                <div ref={provided.innerRef}>
+                                    {
+                                        lists.map((element, index) => {
+                                            return (
+                                                <Draggable key={element._id} draggableId={element._id} index={index}>
+                                                    {(provided) => (
+                                                        <div>
+                                                            <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+                                                                <List list={element} project={project} />
+                                                            </div>
+                                                            {provided.placeholder}
+                                                        </div>
+                                                    )}
+                                                </Draggable>
+                                            )
+                                        })
+                                    }
+                                    {provided.placeholder}
+                                </div>
+                            )}
+                        </Droppable>
+                    </DragDropContext>
+                    <Button title='Add List' onClick={showForm} />
+                    {
+                        isVisible ?
+                            <div>
+                                <Transparent hideForm={hideForm}>
+                                    <CreateList hideForm={hideForm} project={project} />
+                                </Transparent>
+                            </div> : null
+                    }
+                    <Button title='Edit Project' onClick={showFormEdit} />
+                    {
+                        IsVisibleEdit ?
+                            < div >
+                                <Transparent hideForm={hideFormEdit} >
+                                    <EditProject hideForm={hideFormEdit} project={project} members={members} />
+                                </Transparent >
+                            </div > : null
+                    }
+                    <Button title='Delete Project' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteProject() }} />
+                </span>
+            <span className={styles.calendarContainer}>
+                <TableDndApp />
+            </span>
+            </div>
+        </PageLayout >
     )
 }
