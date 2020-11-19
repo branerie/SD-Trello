@@ -2,7 +2,6 @@ import React, { useContext, useState } from "react"
 import GoogleLogin from 'react-google-login'
 import Button from "../../components/button"
 import Input from "../../components/input"
-import PageLayout from "../../components/page-layout"
 import Title from "../../components/title"
 import styles from "./index.module.css"
 import authenticate from "../../utils/authenticate"
@@ -65,7 +64,7 @@ const SignupPage = () => {
     }
 
     return (
-        <PageLayout>
+        <div>
             <Alert alert={alert} message={'Passwords do not match'}/>
             <Alert alert={userExist} message={'User with this email already exists'}/>
             <Alert alert={fillAlert} message={'Please fill all fileds'}/>
@@ -107,7 +106,7 @@ const SignupPage = () => {
                     // onFailure={errorGoogle}
                     cookiePolicy={'single_host_origin'}
                 />
-        </PageLayout>
+        </div>
     )
 
 }
