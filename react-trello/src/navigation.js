@@ -14,6 +14,8 @@ import ErrorPage from "./pages/error"
 import UserContext from "./Context"
 import AllProjectsPage from "./pages/all-project"
 import ProjectPage from "./pages/project-page"
+import CalendarView from "./pages/calendar-view"
+
 import { SocketProvider } from "./contexts/SocketProvider"
 
 const Navigation = () => {
@@ -37,6 +39,9 @@ const Navigation = () => {
                     </Route>
                     <Route path="/projects/:projectid">
                         {loggedIn ? (<ProjectPage />) : (<Redirect to="/login" />)}
+                    </Route>
+                    <Route path="/calendarView/:projectid">
+                        {loggedIn ? (<CalendarView />) : (<Redirect to="/login" />)}
                     </Route>
                     <Route path="/projects">
                         {loggedIn ? (<AllProjectsPage />) : (<Redirect to="/login" />)}

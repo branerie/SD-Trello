@@ -1,5 +1,4 @@
 import React, { useState } from 'react'
-import Button from '../button'
 import EditCard from '../edit-card'
 import Transparent from '../transparent'
 import styles from './index.module.css'
@@ -10,10 +9,10 @@ export default function Card({ project, card, listId }) {
 
 
 
-    const date = new Date(card.dueDate)
-    const day = date.getDate()
-    const month = date.getMonth() + 1
-    const year = date.getFullYear()
+    // const date = new Date(card.dueDate)
+    // const day = date.getDate()
+    // const month = date.getMonth() + 1
+    // const year = date.getFullYear()
 
     const showFormEdit = () => {
         setIsVisibleEdit(true)
