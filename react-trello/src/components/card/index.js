@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import EditCard from '../edit-card'
 import Transparent from '../transparent'
 import styles from './index.module.css'
+import pen from '../../images/pen.svg'
 
 export default function Card({ project, card, listId }) {
 
@@ -40,7 +41,6 @@ export default function Card({ project, card, listId }) {
                 })}
             </div> */}
     
-            <button className={styles.button} onClick={showFormEdit}>img</button>
             { IsVisibleEdit ?
                 < div >
                     <Transparent hideFormEdit={hideFormEdit} >
@@ -48,6 +48,9 @@ export default function Card({ project, card, listId }) {
                     </Transparent >
                 </div > : null
             }                   
+            <button className={styles.button} onClick={showFormEdit}>
+                <img src={pen} alt="..." width="11.5" height="11.5"/>
+            </button>
         </div >
     )
 }

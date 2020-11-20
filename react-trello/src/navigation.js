@@ -17,6 +17,7 @@ import ProjectPage from "./pages/project-page"
 import CalendarView from "./pages/calendar-view"
 
 import { SocketProvider } from "./contexts/SocketProvider"
+import ListProvider from "./contexts/ListProvider"
 
 const Navigation = () => {
 
@@ -25,30 +26,33 @@ const Navigation = () => {
 
     return (
         <SocketProvider user={context.user.username}>
-            <BrowserRouter>
-                <Switch>
-                    <Route path="/" exact component={Home} />
-                    <Route path="/sign-up">
-                        {loggedIn ? (<Redirect to="/" />) : (<SignupPage />)}
-                    </Route>
-                    <Route path="/login">
-                        {loggedIn ? (<Redirect to="/" />) : (<LoginPage />)}
-                    </Route>
-                    <Route path="/profile/:userid">
-                        {loggedIn ? (<ProfilePage />) : (<Redirect to="/login" />)}
-                    </Route>
-                    <Route path="/projects/:projectid">
-                        {loggedIn ? (<ProjectPage />) : (<Redirect to="/login" />)}
-                    </Route>
-                    <Route path="/calendarView/:projectid">
-                        {loggedIn ? (<CalendarView />) : (<Redirect to="/login" />)}
-                    </Route>
-                    <Route path="/projects">
-                        {loggedIn ? (<AllProjectsPage />) : (<Redirect to="/login" />)}
-                    </Route>
-                    <Route component={ErrorPage} />
-                </Switch>
-            </BrowserRouter>
+            <ListProvider>
+
+                <BrowserRouter>
+                    <Switch>
+                        <Route path="/" exact component={Home} />
+                        <Route path="/sign-up">
+                            {loggedIn ? (<Redirect to="/" />) : (<SignupPage />)}
+                        </Route>
+                        <Route path="/login">
+                            {loggedIn ? (<Redirect to="/" />) : (<LoginPage />)}
+                        </Route>
+                        <Route path="/profile/:userid">
+                            {loggedIn ? (<ProfilePage />) : (<Redirect to="/login" />)}
+                        </Route>
+                        <Route path="/projects/:projectid">
+                            {loggedIn ? (<ProjectPage />) : (<Redirect to="/login" />)}
+                        </Route>
+                        <Route path="/calendarView/:projectid">
+                            {loggedIn ? (<CalendarView />) : (<Redirect to="/login" />)}
+                        </Route>
+                        <Route path="/projects">
+                            {loggedIn ? (<AllProjectsPage />) : (<Redirect to="/login" />)}
+                        </Route>
+                        <Route component={ErrorPage} />
+                    </Switch>
+                </BrowserRouter>
+            </ListProvider>
         </SocketProvider>
     )
 }
