@@ -5,7 +5,7 @@
     margin: 10px;
     width: 350px;
     box-shadow: 10px 10px 10px rgba(0,0,0,0.16);
-    font-size: 18px;
+    font-size: 15px;
     font-weight: bold;
     display: flex;
     flex-wrap: wrap;
@@ -50,7 +50,7 @@ button {
     background: #e0dbdb;
     position: absolute;
     top: 0px;
-    left: 350px;
+    left: 230px;
     width: 100px;
     box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
     opacity: 0;
@@ -78,7 +78,7 @@ button {
 }
 
 .addnote {
-    font-size: 19px;
+    font-size: 15px;
     margin: 5px;
     padding: 5px;
     border-radius: 5px;

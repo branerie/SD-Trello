@@ -5,7 +5,12 @@
   height: auto;
   cursor: pointer;
   margin: 0.1%;
-  margin-top: 7px;
+  margin-top: 10px;
   vertical-align: center;
   padding: 10px;
+  margin-bottom: 5px;
+}
+
+.link:hover {
+  font-weight: bold;
 }

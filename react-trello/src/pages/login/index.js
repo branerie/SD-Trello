@@ -3,7 +3,6 @@ import GoogleLogin from 'react-google-login'
 import { useHistory } from "react-router-dom"
 import Button from "../../components/button"
 import Input from "../../components/input"
-import PageLayout from "../../components/page-layout"
 import Title from "../../components/title"
 import styles from "./index.module.css"
 import authenticate from "../../utils/authenticate"

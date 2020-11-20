@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useParams, useHistory } from "react-router-dom"
 import Button from '../../components/button'
 import CreateList from '../../components/create-list'
@@ -10,17 +10,19 @@ import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import pic from '../../images/pic.svg'
+import ListContext from '../../contexts/ListContext'
 
 
 export default function ProjectPage() {
     const params = useParams()
     const history = useHistory()
     const [project, setProject] = useState(null)
-    const [lists, setLists] = useState([])
     const [members, setMembers] = useState([])
     const [isVisible, setIsVisible] = useState(false)
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
     const socket = useSocket()
+    const listContext = useContext(ListContext)
 
     const showForm = () => {
         setIsVisible(true)
@@ -48,8 +50,8 @@ export default function ProjectPage() {
 
         })
         setMembers(memberArr)
-        setLists(project.lists)
-    }, [])
+        listContext.setLists(project.lists)
+    }, [listContext])
 
     useEffect(() => {
         if (socket == null) return
@@ -82,10 +84,10 @@ export default function ProjectPage() {
 
             })
             setMembers(memberArr)
-            setLists(data.lists)
+            listContext.setLists(data.lists)
         }
 
-    }, [params.projectid, history])
+    }, [params.projectid, history, listContext])
 
     useEffect(() => {
         getData()
@@ -183,47 +185,48 @@ export default function ProjectPage() {
     return (
         <PageLayout>
             {/* <div>{project.name}</div>
-            <div>
-                Admins :{members.filter(a => a.admin === true).map((element, index) => {
-                return (
-                    <div key={index}>
-                        {element.username}
-                    </div>
-                )
-            }
-            )}
-            </div>
-            <div>
-                Members :{members.filter(a => a.admin === false).map((element, index) => {
-                return (
-                    <div key={index}>
-                        {element.username}
-                    </div>
-                )
-            }
-            )}
-            </div> */}
+                <div>
+                    Admins :{members.filter(a => a.admin === true).map((element, index) => {
+                    return (
+                        <div key={index}>
+                            {element.username}
+                        </div>
+                    )
+                }
+                )}
+                </div>
+                <div>
+                    Members :{members.filter(a => a.admin === false).map((element, index) => {
+                    return (
+                        <div key={index}>
+                            {element.username}
+                        </div>
+                    )
+                }
+                )}
+                </div> */}
             <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId='project' direction='horizontal' type='droppableItem'>
+                <Droppable droppableId='droppable' direction='horizontal' type='droppableItem'>
                     {(provided) => (
-                        <div ref={provided.innerRef}>
+                        <div className={styles.flex} ref={provided.innerRef} >
                             {
-                                lists.map((element, index) => {
-                                    return (
-                                        <Draggable key={element._id} draggableId={element._id} index={index}>
-                                            {(provided) => (
-                                                <div className={styles.list}>
-                                                    <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                        <List list={element} project={project} />
+                                listContext.lists
+                                    .filter(element => !(listContext.hiddenLists.includes(element._id)))
+                                    .map((element, index) => {
+                                        return (
+                                            <Draggable key={element._id} draggableId={element._id} index={index}>
+                                                {(provided) => (
+                                                    <div className={styles.list}>
+                                                        <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+                                                            <List list={element} project={project} />
+                                                        </div>
+                                                        {provided.placeholder}
                                                     </div>
-                                                    {provided.placeholder}
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    )
-                                })
+                                                )}
+                                            </Draggable>
+                                        )
+                                    })
                             }
-                            {provided.placeholder}
                         </div>
                     )}
                 </Droppable>
@@ -247,7 +250,8 @@ export default function ProjectPage() {
                     </div > : null
             }
             <Button title='Delete Project' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteProject() }} />
-            <Button onClick={calendarView} title='Calendar View'/>
+            <Button onClick={calendarView} title='Calendar View' />
+            <img className={styles.pic} src={pic} alt="" width="373" height="312" />
         </PageLayout>
     )
 }

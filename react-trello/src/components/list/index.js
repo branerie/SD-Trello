@@ -9,6 +9,7 @@ import CreateCard from '../create-card'
 import EditList from '../edit-list'
 import Transparent from '../transparent'
 import styles from './index.module.css'
+import dots from '../../images/dots.svg'
 
 export default function List(props) {
     const [isVisible, setIsVisible] = useState(false)
@@ -56,8 +57,8 @@ export default function List(props) {
                         {props.list.name}
                     </div>
                     <button className={styles.button} onClick={onClick}>
-                        img
-                </button>
+                        <img src={dots} alt="..." width="20" height="6"/>
+                    </button>
                 </div>
                 <div className={styles.relative}>
                     <div

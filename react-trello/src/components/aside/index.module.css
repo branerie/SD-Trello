@@ -7,6 +7,7 @@
     background-color: #363338;
     display: flex;
     flex-direction: column;
+    align-items: center;
     color: #F7F7F2;
     border: 1px solid #363338;
     font-size: 20px;
@@ -20,28 +21,47 @@
     padding: 10px;
 }
 
-.top {
-    margin-top: 20px;
+.logo {
     border-bottom: 1px solid #707070;
     height: 40px;
-    padding: 10px;
+    padding: 20px;
+}
+
+.topleft {
+    border-bottom: 1px solid #707070;
+    height: 40px;
+    padding: 8px;
+    padding-top: 32px;
 }
 
 .menu {
     position: fixed;
     left: 50px;
-    display: block;
     width: 120px;
     height: 100vh;
     background-color: #A6A48E;
     display: flex;
     flex-direction: column;
+    justify-content: space-between;
     color: #F7F7F2;
     border: 1px solid #363338;
+}
+
+.inbox {
+    border-bottom: 1px solid #363338;
+}
+
+.topright {
+    display: flex;
+    flex-direction: column;
     font-size: 20px;
     font-weight: bold;
 }
 
-.bottom {
-    border-bottom: 1px solid #363338;
+.bottomright {
+    display: flex;
+    flex-direction: column;
+    font-size: 15px;
+    font-weight: bold;
+    margin-bottom: 20px;
 }
