@@ -301,9 +301,10 @@
 // export default TableDndApp
 
 
-import React, { useCallback, useEffect, useState } from "react";
+import React, { cloneElement, useCallback, useEffect, useState } from "react";
 // import { makeData, Logo, Tips } from "../calendar-data";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
+import styles from './index.module.css'
 
 
 // Import React Table
@@ -313,7 +314,8 @@ import "react-table/react-table.css";
 const TableDndApp = (props) => {
 
 
-    var today = new Date()
+    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
+
     const date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
     const [startDay, setStartDay] = useState(today)
     const [e, setE] = useState(0)
@@ -327,7 +329,6 @@ const TableDndApp = (props) => {
     const month = today.getMonth()
 
     const shownDay = (e) => {
-
 
         return (startDay.getDate() + e) + ' ' + (startDay.toLocaleString('default', { month: 'short' }))
     }
@@ -358,7 +359,6 @@ const TableDndApp = (props) => {
         cardArray.push(newCard)
     })
 
-    // console.log(cardArray);
 
 
     const cardData = useCallback(async () => {
@@ -373,32 +373,37 @@ const TableDndApp = (props) => {
                 thursday: shownDay(e + 3),
                 friday: shownDay(e + 4),
                 saturday: shownDay(e + 5),
-                sunday: shownDay(e + 6)
+                sunday: shownDay(e + 6),
+                dueDate: ''
             }
         ]
         cardArray.forEach(element => {
             setPageSize(pageSize + element.length)
-            element.map((e) => {
 
+            element.map((e) => {
+                let cardDate = new Date(e.dueDate)
+                console.log(cardDate.getTime());
                 data.push({
                     task: e.name,
-                    progress: e.progress + ' ' + '%',
+                    progress: e.progress,
                     assigned: e.members.map((member) => {
                         let members = ''
                         members = members + member.username + ' '
                         return members
                     }),
-                    monday: '',
-                    tuesday: '',
-                    wednesday: '',
-                    thursday: '',
-                    friday: '',
-                    saturday: '',
-                    sunday: ''
-                })
+                    monday: cardDate.getTime(),
+                    tuesday: cardDate.getTime(),
+                    wednesday: cardDate.getTime(),
+                    thursday: cardDate.getTime(),
+                    friday: cardDate.getTime(),
+                    saturday: cardDate.getTime(),
+                    sunday: cardDate.getTime(),
+                    dueDate: cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear()
 
+                })
             })
         })
+
 
         setTableData(data)
     }, [])
@@ -406,90 +411,13 @@ const TableDndApp = (props) => {
         cardData()
     }, [cardData])
 
-    // const tableData = 
-    //     [
-
-    //         {
-    //             task: '',
-    //             progress: '',
-    //             assigned: '',
-    //             monday: shownDay(e),
-    //             tuesday: shownDay(e + 1),
-    //             wednesday: shownDay(e + 2),
-    //             thursday: shownDay(e + 3),
-    //             friday: shownDay(e + 4),
-    //             saturday: shownDay(e + 5),
-    //             sunday: shownDay(e + 6)
-    //         },
-    //         {
-    //             task: '',
-    //             progress: '',
-    //             assigned: '',
-    //             monday: 'Kim Parrish',
-    //             tuesday: '4420 Valley Street, Garnerville, NY 10923',
-    //             wednesday: '07/11/2020',
-    //             thursday: '87349585892118',
-    //             friday: '87349585892118',
-    //             saturday: '87349585892118',
-    //             sunday: '87349585892118'
-    //         },
-    //         {
-    //             task: '',
-    //             progress: '',
-    //             assigned: '',
-    //             monday: 'Kim Parrish',
-    //             tuesday: '4420 Valley Street, Garnerville, NY 10923',
-    //             wednesday: '07/11/2020',
-    //             thursday: '87349585892118',
-    //             friday: '87349585892118',
-    //             saturday: '87349585892118',
-    //             sunday: '87349585892118'
-    //         },
-    //         {
-    //             task: '',
-    //             progress: '',
-    //             assigned: '',
-    //             monday: 'Kim Parrish',
-    //             tuesday: '4420 Valley Street, Garnerville, NY 10923',
-    //             wednesday: '07/11/2020',
-    //             thursday: '87349585892118',
-    //             friday: '87349585892118',
-    //             saturday: '87349585892118',
-    //             sunday: '87349585892118'
-    //         },
-    //         {
-    //             task: '',
-    //             progress: '',
-    //             assigned: '',
-    //             monday: 'Kim Parrish',
-    //             tuesday: '4420 Valley Street, Garnerville, NY 10923',
-    //             wednesday: '07/11/2020',
-    //             thursday: '87349585892118',
-    //             friday: '87349585892118',
-    //             saturday: '87349585892118',
-    //             sunday: '87349585892118'
-    //         },
-    //         {
-    //             task: '',
-    //             progress: '',
-    //             assigned: '',
-    //             monday: 'Kim Parrish',
-    //             tuesday: '4420 Valley Street, Garnerville, NY 10923',
-    //             wednesday: '07/11/2020',
-    //             thursday: '87349585892118',
-    //             friday: '87349585892118',
-    //             saturday: '87349585892118',
-    //             sunday: '87349585892118'
-    //         }
-    //     ]
-
 
 
     const DragTrComponent = (props) => {
 
         const { children = null, rowInfo } = props;
         if (rowInfo) {
-            debugger;
+            // debugger;
             const { original, index } = rowInfo;
             const { firstName } = original;
             return (
@@ -550,9 +478,15 @@ const TableDndApp = (props) => {
 
     };
 
+
+
     const getTrProps = (props, rowInfo) => {
-        //  console.log(rowInfo);
-        return { rowInfo };
+
+
+        // console.log(rowInfo);
+
+        return { rowInfo }
+
     };
 
     const reorder = (list, startIndex, endIndex) => {
@@ -576,47 +510,235 @@ const TableDndApp = (props) => {
                     columns={[
                         {
                             Header: 'Task',
-                            accessor: "task"
+                            accessor: "task",
+                            width: 250,
+                            // className: styles.task
                         },
                         {
                             Header: 'Progress',
-                            accessor: "progress"
+                            accessor: "progress",
+                            width: 100,
+                            Cell: ({ data, value }) => {
+                                if (value) {
+                                    let color = ''
+                                    switch (true) {
+                                        case (value < 20):
+                                            color = 'red'
+                                            break;
+                                        case (value < 100):
+                                            color = 'blue'
+                                            break;
+                                        case (value === 100):
+                                            color = 'green';
+                                            break;
+                                    }
+                                    return (
+                                        <div style={{ background: color }} > { value} %</div>
+                                    )
+
+                                }
+                                return value
+                            }
                         },
                         {
                             Header: 'Assigned to',
-                            accessor: "assigned"
+                            accessor: "assigned",
+                            width: 200
                         },
                         {
                             Header: weekDay(e),
-                            accessor: "monday"
+                            accessor: "monday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                if (!isNaN(value)) {
+                                    let checked = startDay.setDate(new Date().getDate());
+
+                                    let color = ''
+                                    let message = ''
+                                    switch (true) {
+                                        case (value === checked):
+                                            color = 'red';
+                                            message = 'Due Date'
+                                            break;
+                                        case (value > checked):
+                                            color = 'blue';
+                                            message = 'In Progress'
+                                            break;
+                                        case (value < checked):
+                                            color = 'red';
+                                            message = 'Delayed'
+                                            break;
+                                    }
+                                    return <div style={{ background: color }} >{message}</div>
+
+                                } else {
+                                    return value
+                                }
+                            }
                         },
                         {
-
                             Header: weekDay(e + 1),
-                            accessor: "tuesday"
+                            accessor: "tuesday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                if (!isNaN(value)) {
+                                    let checked = startDay.setDate(new Date().getDate() + 1)
+                                    let color = ''
+                                    let message = ''
+                                    switch (true) {
+                                        case (value === checked):
+                                            color = 'red';
+                                            message = 'Due Date'
+                                            break;
+                                        case (value > checked):
+                                            color = 'blue';
+                                            message = 'In Progress'
+                                            break;
+                                    }
+                                    return <div style={{ background: color }} >{message}</div>
+
+                                } else {
+                                    return value
+                                }
+                            }
                         },
                         {
                             Header: weekDay(e + 2),
-                            accessor: "wednesday"
+                            accessor: "wednesday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                if (!isNaN(value)) {
+                                    let checked = startDay.setDate(new Date().getDate() + 2)
+                                    let color = ''
+                                    let message = ''
+                                    switch (true) {
+                                        case (value === checked):
+                                            color = 'red';
+                                            message = 'Due Date'
+                                            break;
+                                        case (value > checked):
+                                            color = 'blue';
+                                            message = 'In Progress'
+                                            break;
+                                    }
+                                    return <div style={{ background: color }} >{message}</div>
+
+                                } else {
+                                    return value
+                                }
+                            }
                         },
                         {
                             Header: weekDay(e + 3),
-                            accessor: "thursday"
+                            accessor: "thursday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                if (!isNaN(value)) {
+                                    let checked = startDay.setDate(new Date().getDate() + 3)
+                                    let color = ''
+                                    let message = ''
+                                    switch (true) {
+                                        case (value === checked):
+                                            color = 'red';
+                                            message = 'Due Date'
+                                            break;
+                                        case (value > checked):
+                                            color = 'blue';
+                                            message = 'In Progress'
+                                            break;
+                                    }
+                                    return <div style={{ background: color }} >{message}</div>
+
+                                } else {
+                                    return value
+                                }
+                            }
                         },
                         {
                             Header: weekDay(e + 4),
-                            accessor: "friday"
+                            accessor: "friday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                if (!isNaN(value)) {
+                                    let checked = startDay.setDate(new Date().getDate() + 4)
+                                    let color = ''
+                                    let message = ''
+                                    switch (true) {
+                                        case (value === checked):
+                                            color = 'red';
+                                            message = 'Due Date'
+                                            break;
+                                        case (value > checked):
+                                            color = 'blue';
+                                            message = 'In Progress'
+                                            break;
+                                    }
+                                    return <div style={{ background: color }} >{message}</div>
+
+                                } else {
+                                    return value
+                                }
+                            }
                         },
                         {
                             Header: weekDay(e + 5),
-                            accessor: "saturday"
+                            accessor: "saturday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                if (!isNaN(value)) {
+                                    let checked = startDay.setDate(new Date().getDate() + 5)
+                                    let color = ''
+                                    let message = ''
+                                    switch (true) {
+                                        case (value === checked):
+                                            color = 'red';
+                                            message = 'Due Date'
+                                            break;
+                                        case (value > checked):
+                                            color = 'blue';
+                                            message = 'In Progress'
+                                            break;
+                                    }
+                                    return <div style={{ background: color }} >{message}</div>
+
+                                } else {
+                                    return value
+                                }
+                            }
                         },
                         {
                             Header: weekDay(e + 6),
-                            accessor: "sunday"
+                            accessor: "sunday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                if (!isNaN(value)) {
+                                    let checked = startDay.setDate(new Date().getDate() + 6)
+                                    let color = ''
+                                    let message = ''
+                                    switch (true) {
+                                        case (value === checked):
+                                            color = 'red';
+                                            message = 'Due Date'
+                                            break;
+                                        case (value > checked):
+                                            color = 'blue';
+                                            message = 'In Progress'
+                                            break;
+                                    }
+                                    return <div style={{ background: color }} >{message}</div>
+
+                                } else {
+                                    return value
+                                }
+                            }
+                        },
+                        {
+                            Header: 'Due Date',
+                            accessor: "dueDate",
+                            width: 200
                         }
                     ]}
-                    defaultPageSize={pageSize}
+                    defaultPageSize={10}
                     className="-striped -highlight"
                 />
             </DragDropContext>
