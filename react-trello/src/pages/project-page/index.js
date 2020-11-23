@@ -199,6 +199,7 @@ export default function ProjectPage() {
 
     }
 
+    
     return (
         <PageLayout>
             {/* <div>{project.name}</div>
