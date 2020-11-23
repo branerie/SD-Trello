@@ -23,8 +23,8 @@
 
 .logo {
     border-bottom: 1px solid #707070;
-    height: 40px;
-    padding: 20px;
+    height: 50px;
+    padding: 15px;
 }
 
 .topleft {
@@ -63,5 +63,5 @@
     flex-direction: column;
     font-size: 15px;
     font-weight: bold;
-    margin-bottom: 20px;
+    margin-bottom: 50px;
 }

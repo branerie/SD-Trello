@@ -50,72 +50,70 @@ export default function List(props) {
     const onClick = () => setIsActive(!isActive)
 
     return (
-        <div className={styles.asd} key={props.list._id}>
-            <div className={styles.list}>
-                <div className={styles.row}>
-                    <div>
-                        {props.list.name}
-                    </div>
-                    <button className={styles.button} onClick={onClick}>
-                        <img src={dots} alt="..." width="20" height="6"/>
-                    </button>
+        <div key={props.list._id} className={styles.list}>
+            <div className={styles.row}>
+                <div>
+                    {props.list.name}
                 </div>
-                <div className={styles.relative}>
-                    <div
-                        ref={dropdownRef}
-                        className={`${styles.menu} ${isActive ? styles.active : ''}`}
-                    >
-                        <div>
-                            <button onClick={showFormEdit} >Edit</button>
-                        </div>
-                        <div>
-                            <button onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteList() }} >Delete</button>
-                        </div>
-                    </div>
-                </div>
-                <Droppable droppableId={props.list._id} type='droppableSubItem'>
-                    {(provided) => (
-                        <div className={styles.droppable} ref={provided.innerRef}>
-                            {
-                                props.list.cards.map((element, index) => {
-                                    return (
-                                        <Draggable key={element._id} draggableId={element._id} index={index}>
-                                            {(provided) => (
-                                                <div>
-                                                    <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                        <Card key={index} card={element} listId={props.list._id} project={props.project} />
-                                                    </div>
-                                                    {provided.placeholder}
-                                                </div>
-                                            )}
-                                        </Draggable>
-                                    )
-                                })
-                            }
-                            {provided.placeholder}
-                        </div>
-                    )}
-                </Droppable>
-                <div className={styles.flexend}>
-                    <button className={styles.addnote} onClick={showForm} >+ Add Note</button>
-                </div>
-                {
-                    isVisible ?
-                        <div>
-                            <Transparent hideForm={hideForm}>
-                                <CreateCard hideForm={hideForm} listId={props.list._id} project={props.project} />
-                            </Transparent>
-                        </div> : null
-                }
-                {
-                    IsVisibleEdit ?
-                        < div >
-                            <Transparent hideForm={hideFormEdit} >
-                                <EditList hideForm={hideFormEdit} list={props.list} project={props.project} />
-                            </Transparent >
-                        </div > : null
-                }
+                <button className={styles.button} onClick={onClick}>
+                    <img src={dots} alt="..." width="20" height="6" />
+                </button>
             </div>
+            <div className={styles.relative}>
+                <div
+                    ref={dropdownRef}
+                    className={`${styles.menu} ${isActive ? styles.active : ''}`}
+                >
+                    <div>
+                        <button onClick={showFormEdit} >Edit</button>
+                    </div>
+                    <div>
+                        <button onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteList() }} >Delete</button>
+                    </div>
+                </div>
+            </div>
+            <Droppable droppableId={props.list._id} type='droppableSubItem'>
+                {(provided) => (
+                    <div className={styles.droppable} ref={provided.innerRef}>
+                        {
+                            props.list.cards.map((element, index) => {
+                                return (
+                                    <Draggable key={element._id} draggableId={element._id} index={index}>
+                                        {(provided) => (
+                                            <div>
+                                                <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+                                                    <Card key={index} card={element} listId={props.list._id} project={props.project} />
+                                                </div>
+                                                {provided.placeholder}
+                                            </div>
+                                        )}
+                                    </Draggable>
+                                )
+                            })
+                        }
+                        {provided.placeholder}
+                    </div>
+                )}
+            </Droppable>
+            <div className={styles.flexend}>
+                <button className={styles.addnote} onClick={showForm} >+ Add Note</button>
+            </div>
+            {
+                isVisible ?
+                    <div>
+                        <Transparent hideForm={hideForm}>
+                            <CreateCard hideForm={hideForm} listId={props.list._id} project={props.project} />
+                        </Transparent>
+                    </div> : null
+            }
+            {
+                IsVisibleEdit ?
+                    < div >
+                        <Transparent hideForm={hideFormEdit} >
+                            <EditList hideForm={hideFormEdit} list={props.list} project={props.project} />
+                        </Transparent >
+                    </div > : null
+            }
         </div>
     )
 }
