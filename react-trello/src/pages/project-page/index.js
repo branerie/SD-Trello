@@ -1,7 +1,6 @@
-import React, { useCallback, useContext, useEffect, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState, useRef } from 'react'
 import { useParams, useHistory } from "react-router-dom"
 import Button from '../../components/button'
-import CreateList from '../../components/create-list'
 import EditProject from '../../components/edit-project'
 import List from '../../components/list'
 import PageLayout from '../../components/page-layout'
@@ -12,7 +11,7 @@ import styles from './index.module.css'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import pic from '../../images/pic.svg'
 import ListContext from '../../contexts/ListContext'
-
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 export default function ProjectPage() {
     const params = useParams()
@@ -21,24 +20,11 @@ export default function ProjectPage() {
     const [members, setMembers] = useState([])
     const [isVisible, setIsVisible] = useState(false)
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
+    const [listName, setListName] = useState('')
+    const dropdownRef = useRef(null);
+    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
     const socket = useSocket()
     const listContext = useContext(ListContext)
-
-    const showForm = () => {
-        setIsVisible(true)
-    }
-
-    const hideForm = () => {
-        setIsVisible(false)
-    }
-
-    const showFormEdit = () => {
-        setIsVisibleEdit(true)
-    }
-
-    const hideFormEdit = () => {
-        setIsVisibleEdit(false)
-    }
 
     const projectUpdate = useCallback((project) => {
 
@@ -122,7 +108,12 @@ export default function ProjectPage() {
 
 
         if (result.type === 'droppableItem') {
-            const position = result.destination.index
+            let position = result.destination.index
+
+            const filteredList = listContext.lists.filter(element => !(listContext.hiddenLists.includes(element._id)))
+            const previousId = filteredList[position - 1]
+            position = listContext.lists.indexOf(previousId) + 1
+
             const token = getCookie("x-auth-token")
             const response = await fetch(`http://localhost:4000/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
                 method: "PUT",
@@ -132,7 +123,7 @@ export default function ProjectPage() {
                 },
                 body: JSON.stringify({
                     position,
-                    element: 'list'
+                    element: 'list',
                 })
             })
             if (!response.ok) {
@@ -182,6 +173,32 @@ export default function ProjectPage() {
         history.push(`/calendarView/${id}`)
     }
 
+    const addList = async (e) => {
+        e.preventDefault()
+
+        if (listName === "") {
+            console.log('return');
+            return
+        }
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`http://localhost:4000/api/projects/lists/${project._id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify({ name: listName })
+        })
+        if (!response.ok) {
+            history.push("/error")
+            return
+        } else {
+            setIsVisible(!isVisible)
+            setListName('')
+        }
+
+    }
+
     return (
         <PageLayout>
             {/* <div>{project.name}</div>
@@ -216,36 +233,37 @@ export default function ProjectPage() {
                                         return (
                                             <Draggable key={element._id} draggableId={element._id} index={index}>
                                                 {(provided) => (
-                                                    <div className={styles.list}>
+                                                    <div>
                                                         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
                                                             <List list={element} project={project} />
                                                         </div>
-                                                        {provided.placeholder}
                                                     </div>
                                                 )}
                                             </Draggable>
                                         )
                                     })
                             }
+                            <div className={styles.list} >
+                                {
+                                    isActive ?
+                                        <form ref={dropdownRef} className={styles.container} >
+                                            <input className={styles.input} type={'text'} value={listName} onChange={e => setListName(e.target.value)} />
+                                            <button type='submit' className={styles.addlist} onClick={addList} >+ Add List</button>
+                                        </form> : <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >+ Add List</button>
+                                }
+
+                            </div>
+                            {provided.placeholder}
                         </div>
                     )}
                 </Droppable>
             </DragDropContext>
-            <Button title='Add List' onClick={showForm} />
-            {
-                isVisible ?
-                    <div>
-                        <Transparent hideForm={hideForm}>
-                            <CreateList hideForm={hideForm} project={project} />
-                        </Transparent>
-                    </div> : null
-            }
-            <Button title='Edit Project' onClick={showFormEdit} />
+            <Button title='Edit Project' onClick={() => setIsVisibleEdit(!IsVisibleEdit)} />
             {
                 IsVisibleEdit ?
                     < div >
-                        <Transparent hideForm={hideFormEdit} >
-                            <EditProject hideForm={hideFormEdit} project={project} members={members} />
+                        <Transparent hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} >
+                            <EditProject hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} project={project} members={members} />
                         </Transparent >
                     </div > : null
             }

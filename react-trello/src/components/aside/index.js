@@ -44,7 +44,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                     <div className={styles.menu}>
                         <div className={styles.topright}>
                             <div className={styles.logo}>
-                                <img src={logo} alt="logo" width="85" height="56" />
+                                <img src={logo} alt="logo" width="87" height="65" />
                             </div>
                             <LinkAside
                                 href='/'

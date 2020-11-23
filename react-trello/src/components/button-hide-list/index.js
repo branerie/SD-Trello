@@ -1,5 +1,6 @@
 import React, { useContext } from "react";
 import ListContext from "../../contexts/ListContext";
+import ListColor from '../list-color'
 import styles from "./index.module.css";
 
 const ButtonHideList = ( { list } ) => {
@@ -18,7 +19,10 @@ const ButtonHideList = ( { list } ) => {
     }
 
     return (
-        <button onClick={onClick} className={styles.submit}>{list.name}</button>
+    <button onClick={onClick} className={styles.submit}>
+        <ListColor />
+        {list.name}
+    </button>
     )
 }
 
