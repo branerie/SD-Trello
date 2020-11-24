@@ -310,33 +310,32 @@ import styles from './index.module.css'
 // Import React Table
 import ReactTable from "react-table";
 import "react-table/react-table.css";
+import Button from "../button";
 
 const TableDndApp = (props) => {
 
 
     var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
-
-    const date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
+    // const date = today.getDate() + '-' + (today.getMonth() + 1) + '-' + today.getFullYear()
     const [startDay, setStartDay] = useState(today)
-    const [e, setE] = useState(0)
+    // const [e, setE] = useState(startDay.getDay())
     const [tableData, setTableData] = useState([])
     const [pageSize, setPageSize] = useState(5)
 
 
     // const [calendarDate, setCalendarDate] = useState(today)
-    const monthName = today.toLocaleString('default', { month: 'long' });
-    const year = today.getFullYear()
-    const month = today.getMonth()
+    // const monthName = today.toLocaleString('default', { month: 'long' });
+    // const year = today.getFullYear()
+    // const month = today.getMonth()
 
-    const shownDay = (e) => {
-
-        return (startDay.getDate() + e) + ' ' + (startDay.toLocaleString('default', { month: 'short' }))
+    const shownDay = (value) => {
+        let date = ''
+        date = (startDay.getDate() + value) + ' ' + (startDay.toLocaleString('default', { month: 'short' }))
+        return date
     }
 
-    const weekDay = (e) => {
-
+    const weekDay = (num) => {
         const weekArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        let num = startDay.getDay() + e
         if (num > 6) {
             num = num - 7
         }
@@ -346,12 +345,7 @@ const TableDndApp = (props) => {
 
 
 
-    // var newdate = new Date(Date.UTC(year, month, 1))
-    // var daysOfMonth = [];
-    // while (newdate.getUTCMonth() === month) {
-    //     daysOfMonth.push(new Date(newdate));
-    //     newdate.setUTCDate(newdate.getUTCDate() + 1)
-    // }
+
     let cardArray = []
     const lists = props.project.lists
     lists.map((e) => {
@@ -362,27 +356,13 @@ const TableDndApp = (props) => {
 
 
     const cardData = useCallback(async () => {
-        let data = [
-            {
-                task: '',
-                progress: '',
-                assigned: '',
-                monday: shownDay(e),
-                tuesday: shownDay(e + 1),
-                wednesday: shownDay(e + 2),
-                thursday: shownDay(e + 3),
-                friday: shownDay(e + 4),
-                saturday: shownDay(e + 5),
-                sunday: shownDay(e + 6),
-                dueDate: ''
-            }
-        ]
+        let data = []
         cardArray.forEach(element => {
             setPageSize(pageSize + element.length)
 
             element.map((e) => {
                 let cardDate = new Date(e.dueDate)
-                console.log(cardDate.getTime());
+                // console.log(cardDate.getTime());
                 data.push({
                     task: e.name,
                     progress: e.progress,
@@ -404,9 +384,12 @@ const TableDndApp = (props) => {
             })
         })
 
-
         setTableData(data)
+
+
     }, [])
+
+
     useEffect(() => {
         cardData()
     }, [cardData])
@@ -479,7 +462,6 @@ const TableDndApp = (props) => {
     };
 
 
-
     const getTrProps = (props, rowInfo) => {
 
 
@@ -497,10 +479,203 @@ const TableDndApp = (props) => {
         return result;
     }
 
+    const getHeaderDate = (num) => {
+        let dayNumber = startDay.getDay() + num
+        let dayOfWeek = weekDay(dayNumber)
+        let day = shownDay(num)
+        return (
+            <div>
+                <div>{dayOfWeek}</div>
+                <div>{day}</div>
+            </div>
+        )
+    }
+
+    const cellData = (value, num) => {
+        if (num === 0) {
+            if (!isNaN(value)) {
+                let checked = startDay.setDate(startDay.getDate());
+                let color = ''
+                let message = ''
+                switch (true) {
+                    case (value === checked):
+                        color = 'red';
+                        message = 'Due Date'
+                        break;
+                    case (value > checked):
+                        color = 'blue';
+                        message = 'In Progress'
+                        break;
+                    case (value < checked):
+                        color = 'red';
+                        message = 'Delayed'
+                        break;
+                }
+                return <div style={{ background: color }} >{message}</div>
+
+            } else {
+                return value
+            }
+        } else if (!isNaN(value)) {
+
+            var checkedDate = new Date(startDay);
+            let checked = checkedDate.setDate(checkedDate.getDate() + num);
+
+            let color = ''
+            let message = ''
+            switch (true) {
+                case (value === checked):
+                    color = 'red';
+                    message = 'Due Date'
+                    break;
+                case (value > checked):
+                    color = 'blue';
+                    message = 'In Progress'
+                    break;
+            }
+            return <div style={{ background: color, color: color }} >{message}</div>
+
+        } else {
+            return value
+        }
+    }
+
+    const getNextWeek = async () => {
+        var nextDay = startDay
+        console.log(nextDay)
+        await nextDay.setDate(nextDay.getDate() + 7)           
+        await cardData()
+        setStartDay(nextDay)
+        console.log(startDay);
+
+
+    }
+
+
+    const getLastWeek = async () => {
+
+        var nextDay = startDay
+        nextDay.setDate(nextDay.getDate() - 7)
+        await cardData()
+        setStartDay(nextDay)
+        await cardData()
+        console.log(startDay);
+
+    }
+
+    // const columns = () => {
+    //     return (
+    //         [
+    //             {
+    //                 Header: 'Task',
+    //                 accessor: "task",
+    //                 width: 250,
+    //                 // className: styles.task
+    //             },
+    //             {
+    //                 Header: 'Progress',
+    //                 accessor: "progress",
+    //                 width: 100,
+    //                 Cell: ({ data, value }) => {
+    //                     if (value) {
+    //                         let color = ''
+    //                         switch (true) {
+    //                             case (value < 20):
+    //                                 color = 'red'
+    //                                 break;
+    //                             case (value < 100):
+    //                                 color = 'blue'
+    //                                 break;
+    //                             case (value === 100):
+    //                                 color = 'green';
+    //                                 break;
+    //                         }
+    //                         return (
+    //                             <div style={{ background: color }} > { value} %</div>
+    //                         )
+
+    //                     }
+    //                     return value
+    //                 }
+    //             },
+    //             {
+    //                 Header: 'Assigned to',
+    //                 accessor: "assigned",
+    //                 width: 200
+    //             },
+    //             {
+    //                 Header: getHeaderDate(0),
+    //                 accessor: "monday",
+    //                 width: 100,
+    //                 Cell: ({ value }) => {
+    //                     return cellData(value, 0)
+    //                 }
+    //             },
+    //             {
+    //                 Header: getHeaderDate(1),
+    //                 accessor: "tuesday",
+    //                 width: 100,
+    //                 Cell: ({ value }) => {
+    //                     return cellData(value, 1)
+    //                 }
+    //             },
+    //             {
+    //                 Header: getHeaderDate(2),
+    //                 accessor: "wednesday",
+    //                 width: 100,
+    //                 Cell: ({ value }) => {
+    //                     return cellData(value, 2)
+    //                 }
+    //             },
+    //             {
+    //                 Header: getHeaderDate(3),
+    //                 accessor: "thursday",
+    //                 width: 100,
+    //                 Cell: ({ value }) => {
+    //                     return cellData(value, 3)
+    //                 }
+    //             },
+    //             {
+    //                 Header: getHeaderDate(4),
+    //                 accessor: "friday",
+    //                 width: 100,
+    //                 Cell: ({ value }) => {
+    //                     return cellData(value, 4)
+    //                 }
+    //             },
+    //             {
+    //                 Header: getHeaderDate(5),
+    //                 accessor: "saturday",
+    //                 width: 100,
+    //                 Cell: ({ value }) => {
+    //                     return cellData(value, 5)
+    //                 }
+    //             },
+    //             {
+    //                 Header: getHeaderDate(6),
+    //                 accessor: "sunday",
+    //                 width: 100,
+    //                 Cell: ({ value }) => {
+    //                     return cellData(value, 6)
+    //                 }
+    //             },
+    //             {
+    //                 Header: 'Due Date',
+    //                 accessor: "dueDate",
+    //                 width: 200
+    //             }
+    //         ]
+    //     )
+    // }
+
 
 
     return (
         <div>
+            <div>
+                <Button onClick={getLastWeek} title='Last Week' />
+                <Button onClick={getNextWeek} title='Next Week' />
+            </div>
             <DragDropContext onDragEnd={handleDragEnd}>
                 <ReactTable
                     TrComponent={DragTrComponent}
@@ -546,190 +721,59 @@ const TableDndApp = (props) => {
                             width: 200
                         },
                         {
-                            Header: weekDay(e),
+                            Header: getHeaderDate(0),
                             accessor: "monday",
                             width: 100,
                             Cell: ({ value }) => {
-                                if (!isNaN(value)) {
-                                    let checked = startDay.setDate(new Date().getDate());
-
-                                    let color = ''
-                                    let message = ''
-                                    switch (true) {
-                                        case (value === checked):
-                                            color = 'red';
-                                            message = 'Due Date'
-                                            break;
-                                        case (value > checked):
-                                            color = 'blue';
-                                            message = 'In Progress'
-                                            break;
-                                        case (value < checked):
-                                            color = 'red';
-                                            message = 'Delayed'
-                                            break;
-                                    }
-                                    return <div style={{ background: color }} >{message}</div>
-
-                                } else {
-                                    return value
-                                }
+                                return cellData(value, 0)
                             }
                         },
                         {
-                            Header: weekDay(e + 1),
+                            Header: getHeaderDate(1),
                             accessor: "tuesday",
                             width: 100,
                             Cell: ({ value }) => {
-                                if (!isNaN(value)) {
-                                    let checked = startDay.setDate(new Date().getDate() + 1)
-                                    let color = ''
-                                    let message = ''
-                                    switch (true) {
-                                        case (value === checked):
-                                            color = 'red';
-                                            message = 'Due Date'
-                                            break;
-                                        case (value > checked):
-                                            color = 'blue';
-                                            message = 'In Progress'
-                                            break;
-                                    }
-                                    return <div style={{ background: color }} >{message}</div>
-
-                                } else {
-                                    return value
-                                }
+                                return cellData(value, 1)
                             }
                         },
                         {
-                            Header: weekDay(e + 2),
+                            Header: getHeaderDate(2),
                             accessor: "wednesday",
                             width: 100,
                             Cell: ({ value }) => {
-                                if (!isNaN(value)) {
-                                    let checked = startDay.setDate(new Date().getDate() + 2)
-                                    let color = ''
-                                    let message = ''
-                                    switch (true) {
-                                        case (value === checked):
-                                            color = 'red';
-                                            message = 'Due Date'
-                                            break;
-                                        case (value > checked):
-                                            color = 'blue';
-                                            message = 'In Progress'
-                                            break;
-                                    }
-                                    return <div style={{ background: color }} >{message}</div>
-
-                                } else {
-                                    return value
-                                }
+                                return cellData(value, 2)
                             }
                         },
                         {
-                            Header: weekDay(e + 3),
+                            Header: getHeaderDate(3),
                             accessor: "thursday",
                             width: 100,
                             Cell: ({ value }) => {
-                                if (!isNaN(value)) {
-                                    let checked = startDay.setDate(new Date().getDate() + 3)
-                                    let color = ''
-                                    let message = ''
-                                    switch (true) {
-                                        case (value === checked):
-                                            color = 'red';
-                                            message = 'Due Date'
-                                            break;
-                                        case (value > checked):
-                                            color = 'blue';
-                                            message = 'In Progress'
-                                            break;
-                                    }
-                                    return <div style={{ background: color }} >{message}</div>
-
-                                } else {
-                                    return value
-                                }
+                                return cellData(value, 3)
                             }
                         },
                         {
-                            Header: weekDay(e + 4),
+                            Header: getHeaderDate(4),
                             accessor: "friday",
                             width: 100,
                             Cell: ({ value }) => {
-                                if (!isNaN(value)) {
-                                    let checked = startDay.setDate(new Date().getDate() + 4)
-                                    let color = ''
-                                    let message = ''
-                                    switch (true) {
-                                        case (value === checked):
-                                            color = 'red';
-                                            message = 'Due Date'
-                                            break;
-                                        case (value > checked):
-                                            color = 'blue';
-                                            message = 'In Progress'
-                                            break;
-                                    }
-                                    return <div style={{ background: color }} >{message}</div>
-
-                                } else {
-                                    return value
-                                }
+                                return cellData(value, 4)
                             }
                         },
                         {
-                            Header: weekDay(e + 5),
+                            Header: getHeaderDate(5),
                             accessor: "saturday",
                             width: 100,
                             Cell: ({ value }) => {
-                                if (!isNaN(value)) {
-                                    let checked = startDay.setDate(new Date().getDate() + 5)
-                                    let color = ''
-                                    let message = ''
-                                    switch (true) {
-                                        case (value === checked):
-                                            color = 'red';
-                                            message = 'Due Date'
-                                            break;
-                                        case (value > checked):
-                                            color = 'blue';
-                                            message = 'In Progress'
-                                            break;
-                                    }
-                                    return <div style={{ background: color }} >{message}</div>
-
-                                } else {
-                                    return value
-                                }
+                                return cellData(value, 5)
                             }
                         },
                         {
-                            Header: weekDay(e + 6),
+                            Header: getHeaderDate(6),
                             accessor: "sunday",
                             width: 100,
                             Cell: ({ value }) => {
-                                if (!isNaN(value)) {
-                                    let checked = startDay.setDate(new Date().getDate() + 6)
-                                    let color = ''
-                                    let message = ''
-                                    switch (true) {
-                                        case (value === checked):
-                                            color = 'red';
-                                            message = 'Due Date'
-                                            break;
-                                        case (value > checked):
-                                            color = 'blue';
-                                            message = 'In Progress'
-                                            break;
-                                    }
-                                    return <div style={{ background: color }} >{message}</div>
-
-                                } else {
-                                    return value
-                                }
+                                return cellData(value, 6)
                             }
                         },
                         {
