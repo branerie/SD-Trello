@@ -10,22 +10,15 @@ import EditList from '../edit-list'
 import Transparent from '../transparent'
 import styles from './index.module.css'
 import dots from '../../images/dots.svg'
+import ButtonClean from '../button-clean'
 
 export default function List(props) {
     const [isVisible, setIsVisible] = useState(false)
-    const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
+    const [isVisibleEdit, setIsVisibleEdit] = useState(false)
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
     const history = useHistory()
     const socket = useSocket()
-
-    const showForm = () => setIsVisible(true)
-
-    const hideForm = () => setIsVisible(false)
-
-    const showFormEdit = () => setIsVisibleEdit(true)
-
-    const hideFormEdit = () => setIsVisibleEdit(false)
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
@@ -55,9 +48,11 @@ export default function List(props) {
                 <div>
                     {props.list.name}
                 </div>
-                <button className={styles.button} onClick={onClick}>
-                    <img src={dots} alt="..." width="20" height="6" />
-                </button>
+                <ButtonClean 
+                    className={styles.button}
+                    onClick={onClick}
+                    title={<img src={dots} alt="..." width="20" height="6" />}
+                />
             </div>
             <div className={styles.relative}>
                 <div
@@ -65,10 +60,16 @@ export default function List(props) {
                     className={`${styles.menu} ${isActive ? styles.active : ''}`}
                 >
                     <div>
-                        <button onClick={showFormEdit} >Edit</button>
+                        <ButtonClean 
+                            onClick={() => setIsVisibleEdit(!isVisibleEdit)}
+                            title='Edit'
+                        />
                     </div>
                     <div>
-                        <button onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteList() }} >Delete</button>
+                        <ButtonClean
+                            onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteList() }}
+                            title='Delete'
+                        />
                     </div>
                 </div>
             </div>
@@ -96,21 +97,25 @@ export default function List(props) {
                 )}
             </Droppable>
             <div className={styles.flexend}>
-                <button className={styles.addnote} onClick={showForm} >+ Add Note</button>
+                <ButtonClean 
+                    className={styles.addnote}
+                    onClick={() => setIsVisible(!isVisible)}
+                    title='+ Add Note'
+                />
             </div>
             {
                 isVisible ?
                     <div>
-                        <Transparent hideForm={hideForm}>
-                            <CreateCard hideForm={hideForm} listId={props.list._id} project={props.project} />
+                        <Transparent hideForm={() => setIsVisible(!isVisible)}>
+                            <CreateCard hideForm={() => setIsVisible(!isVisible)} listId={props.list._id} project={props.project} />
                         </Transparent>
                     </div> : null
             }
             {
-                IsVisibleEdit ?
+                isVisibleEdit ?
                     < div >
-                        <Transparent hideForm={hideFormEdit} >
-                            <EditList hideForm={hideFormEdit} list={props.list} project={props.project} />
+                        <Transparent hideForm={() => setIsVisibleEdit(!isVisibleEdit)} >
+                            <EditList hideForm={() => setIsVisibleEdit(!isVisibleEdit)} list={props.list} project={props.project} />
                         </Transparent >
                     </div > : null
             }

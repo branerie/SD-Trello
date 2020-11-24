@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react"
+import Loader from "react-loader-spinner"
 import { useHistory } from "react-router-dom"
 import UserContext from "./Context"
 import getCookie from "./utils/cookie"
@@ -71,10 +72,16 @@ const App = (props) => {
             setLoading(false)
         })
     }, [logOut])
-
+    
     if (loading) {
         return (
-            <div>Loading...</div>
+            <Loader
+            type="TailSpin"
+            color="#363338"
+            height={100}
+            width={100}
+            timeout={3000} //3 secs
+            />
         )
     }
 

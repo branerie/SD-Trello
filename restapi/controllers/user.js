@@ -62,8 +62,6 @@ async function registerUser(req, res, next) {
             console.log(err);
         }
     })
-
-
 }
 
 function verifyLogin(req, res, next) {

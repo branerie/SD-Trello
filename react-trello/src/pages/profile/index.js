@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useCallback } from "react"
+import Loader from "react-loader-spinner"
 import { useParams, useHistory } from "react-router-dom"
 import EditProfile from "../../components/edit-profile"
 import PageLayout from "../../components/page-layout"
@@ -41,7 +42,13 @@ const ProfilePage = () => {
     if (!username) {
         return (
             <PageLayout>
-                <div>Loading...</div>
+                <Loader
+                    type="TailSpin"
+                    color="#363338"
+                    height={100}
+                    width={100}
+                    timeout={3000} //3 secs
+                />
             </PageLayout>
         )
     }

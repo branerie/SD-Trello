@@ -4,6 +4,7 @@ const TokenBlacklist = require('./TokenBlacklist');
 const ProjectUserRole = require('./ProjectUserRole');
 const List = require('./List');
 const Card = require('./Card');
+const Team = require('./Team');
 
 module.exports = {
     User,
@@ -11,5 +12,6 @@ module.exports = {
     TokenBlacklist,
     List,
     Card,
+    Team,
     ProjectUserRole
 };

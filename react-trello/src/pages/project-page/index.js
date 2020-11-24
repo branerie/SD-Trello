@@ -12,6 +12,8 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import pic from '../../images/pic.svg'
 import ListContext from '../../contexts/ListContext'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import Loader from 'react-loader-spinner'
+import ButtonClean from '../../components/button-clean'
 
 export default function ProjectPage() {
     const params = useParams()
@@ -21,8 +23,8 @@ export default function ProjectPage() {
     const [isVisible, setIsVisible] = useState(false)
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
     const [listName, setListName] = useState('')
-    const dropdownRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+    const listRef = useRef(null);
+    const [isActive, setIsActive] = useDetectOutsideClick(listRef, false)
     const socket = useSocket()
     const listContext = useContext(ListContext)
 
@@ -82,7 +84,13 @@ export default function ProjectPage() {
     if (!project) {
         return (
             <PageLayout>
-                <div>Loading...</div>
+                <Loader
+                    type="TailSpin"
+                    color="#363338"
+                    height={100}
+                    width={100}
+                    timeout={3000} //3 secs
+                />
             </PageLayout>
         )
     }
@@ -199,7 +207,7 @@ export default function ProjectPage() {
 
     }
 
-    
+
     return (
         <PageLayout>
             {/* <div>{project.name}</div>
@@ -247,10 +255,10 @@ export default function ProjectPage() {
                             <div className={styles.list} >
                                 {
                                     isActive ?
-                                        <form ref={dropdownRef} className={styles.container} >
+                                        <form ref={listRef} className={styles.container} >
                                             <input className={styles.input} type={'text'} value={listName} onChange={e => setListName(e.target.value)} />
-                                            <button type='submit' className={styles.addlist} onClick={addList} >+ Add List</button>
-                                        </form> : <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >+ Add List</button>
+                                            <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
+                                        </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
                                 }
 
                             </div>
