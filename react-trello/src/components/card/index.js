@@ -3,6 +3,7 @@ import EditCard from '../edit-card'
 import Transparent from '../transparent'
 import styles from './index.module.css'
 import pen from '../../images/pen.svg'
+import ButtonClean from '../button-clean'
 
 export default function Card({ project, card, listId }) {
 
@@ -48,9 +49,10 @@ export default function Card({ project, card, listId }) {
                     </Transparent >
                 </div > : null
             }                   
-            <button className={styles.button} onClick={showFormEdit}>
-                <img src={pen} alt="..." width="11.5" height="11.5"/>
-            </button>
+            <ButtonClean
+                onClick={showFormEdit}
+                title={<img src={pen} alt="..." width="11.5" height="11.5"/>}
+            />
         </div >
     )
 }

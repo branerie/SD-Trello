@@ -136,8 +136,8 @@ export default function AddMember(props) {
                             onChange={(e) => { handleSelect(e.target.value) }}>
                             <option >Select user</option>
                             {
-                                users.map((element, index) => (
-                                    <option key={index} value={element._id}>{element.username}</option>
+                                users.map((element) => (
+                                    <option key={element._id} value={element._id}>{element.username}</option>
                                 ))
                             }
                         </select>

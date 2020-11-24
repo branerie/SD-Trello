@@ -6,6 +6,7 @@ import Project from '../../components/project'
 import Button from "../../components/button"
 import Transparent from "../../components/transparent"
 import CreateProject from '../../components/create-project'
+import Loader from "react-loader-spinner"
 
 const AllProjectsPage = () => {
 
@@ -35,12 +36,12 @@ const AllProjectsPage = () => {
         if (!response.ok) {
             history.push("/error")
         } else {
-            const data = await response.json() 
+            const data = await response.json()
             setProjects(data)
         }
     }, [history])
-   
-    
+
+
     useEffect(() => {
         getData()
     }, [getData])
@@ -48,19 +49,25 @@ const AllProjectsPage = () => {
     if (!projects) {
         return (
             <PageLayout>
-                <div>Loading...</div>
+                <Loader
+                    type="TailSpin"
+                    color="#363338"
+                    height={100}
+                    width={100}
+                    timeout={3000} //3 secs
+                />
             </PageLayout>
         )
     }
 
     return (
         <PageLayout>
-            <div>            
+            <div>
                 {projects.map((project, index) => {
                     return (
                         <Project key={project._id} index={index} project={project} />
                     )
-                    })}
+                })}
             </div>
             <Button title='New Project' onClick={showForm} />
             {
