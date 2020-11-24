@@ -5,3 +5,7 @@
 .task{
     background-color: blue;
 }
+.buttoDiv{
+    display: flex;
+    justify-content: space-between;
+}
