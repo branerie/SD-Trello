@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, useContext } from "react"
 import { useHistory } from "react-router-dom"
 import PageLayout from "../../components/page-layout"
 import getCookie from "../../utils/cookie"
@@ -7,20 +7,13 @@ import Button from "../../components/button"
 import Transparent from "../../components/transparent"
 import CreateProject from '../../components/create-project'
 import Loader from "react-loader-spinner"
+import TeamContext from "../../contexts/TeamContext"
 
-const AllProjectsPage = () => {
+const TeamPage = () => {
 
     const [projects, setProjects] = useState(null)
-    const history = useHistory()
     const [isVisible, setIsVisible] = useState(false)
-
-    const showForm = () => {
-        setIsVisible(true)
-    }
-
-    const hideForm = () => {
-        setIsVisible(false)
-    }
+    const history = useHistory()
 
     const getData = useCallback(async () => {
 
@@ -69,12 +62,12 @@ const AllProjectsPage = () => {
                     )
                 })}
             </div>
-            <Button title='New Project' onClick={showForm} />
+            <Button title='New Project' onClick={() => setIsVisible(true)} />
             {
                 isVisible ?
                     <div>
-                        <Transparent hideForm={hideForm}>
-                            <CreateProject hideForm={hideForm} />
+                        <Transparent hideForm={() => setIsVisible(false)}>
+                            <CreateProject hideForm={() => setIsVisible(false)} />
                         </Transparent>
                     </div> : null
             }
@@ -82,4 +75,4 @@ const AllProjectsPage = () => {
     )
 }
 
-export default AllProjectsPage;
+export default TeamPage;

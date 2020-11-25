@@ -21,8 +21,6 @@ router.post('/:id/user-remove', auth, isAdmin, removeMember)
 
 
 
-
-
 async function getUserProjects(req, res, next) {
     const { _id } = req.user
     const projects = await models.ProjectUserRole.find({ memberId: _id })

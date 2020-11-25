@@ -9,6 +9,7 @@ import inbox from '../../images/inbox.svg'
 import LinkAside from '../link-aside'
 import ListContext from '../../contexts/ListContext'
 import ButtonHideList from '../button-hide-list'
+import ButtonClean from '../button-clean'
 
 export default function Aside({ asideOn, setAsideOn }) {
     const listContext = useContext(ListContext)
@@ -22,16 +23,17 @@ export default function Aside({ asideOn, setAsideOn }) {
         <div>
             <aside className={styles.container}>
                 <div className={styles.topleft}>
-                    <button onClick={onClick}>
-                        <img className={styles.options} src={menu} alt="menu" width="32" height="24" />
-                    </button>
+                    <ButtonClean
+                        onClick={onClick}
+                        title={<img className={styles.options} src={menu} alt="menu" width="32" height="24" />}
+                    />
                 </div>
                 <LinkComponent
                     href='/'
                     title={<img src={home} alt="home" width="34" height="32" />}
                 />
                 <LinkComponent
-                    href='/projects'
+                    href='/'
                     title={<img src={tasks} alt="my-tasks" width="30" height="25" />}
                 />
                 <LinkComponent

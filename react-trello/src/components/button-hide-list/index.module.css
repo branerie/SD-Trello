@@ -5,6 +5,7 @@
   padding: 1px;
   background-color: inherit;
   font-weight: inherit;
+  outline: none;
 }
   
 .submit:hover{
