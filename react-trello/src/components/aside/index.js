@@ -33,7 +33,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                     title={<img src={home} alt="home" width="34" height="32" />}
                 />
                 <LinkComponent
-                    href='/projects'
+                    href='/'
                     title={<img src={tasks} alt="my-tasks" width="30" height="25" />}
                 />
                 <LinkComponent
