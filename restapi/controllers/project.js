@@ -63,7 +63,7 @@ async function getProjectInfo(req, res, next) {
 }
 
 async function createProject(req, res, next) {
-    const { name, description } = req.body
+    const { name, description, teamId } = req.body
     const { _id } = req.user
 
     const session = await mongoose.startSession()
@@ -79,6 +79,7 @@ async function createProject(req, res, next) {
 
         await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { session })
         await models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
+        await models.Team.updateOne({ _id: teamId }, { $push: { projects: createdProject } }, { session })
 
         await session.commitTransaction()
 

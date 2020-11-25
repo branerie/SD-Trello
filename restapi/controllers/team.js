@@ -5,6 +5,8 @@ const router = require('express').Router()
 
 router.post('/', auth, createTeam)
 
+// router.get('/:id', auth, getProjects)
+
 router.get('/', auth, getTeams)
 
 router.put('/:id', auth, updateTeam)
@@ -25,23 +27,44 @@ async function createTeam(req, res, next) {
 async function getTeams(req, res, next) {
     const { _id } = req.user
     const teams = await models.Team.find({ members: _id })
-        // .populate({
-        //     path: 'projects',
-        //     populate: {
-        //         path: 'membersRoles',
-        //         populate: {
-        //             path: 'memberId'
-        //         }
-        //     }
-        // })
-        // .populate({
-        //     path: 'projects',
-        //     populate: {
-        //         path: 'author'
-        //     }
-        // })
+        .populate({
+            path: 'projects',
+            populate: {
+                path: 'membersRoles',
+                populate: {
+                    path: 'memberId'
+                }
+            }
+        })
+        .populate({
+            path: 'projects',
+            populate: {
+                path: 'author'
+            }
+        })
     res.send(teams)
 }
+
+// async function getProjects(req, res, next) {
+//     const teamId = req.params.id
+//     const teams = await models.Team.findOne({ _id: teamId })
+//         .populate({
+//             path: 'projects',
+//             populate: {
+//                 path: 'membersRoles',
+//                 populate: {
+//                     path: 'memberId'
+//                 }
+//             }
+//         })
+//         .populate({
+//             path: 'projects',
+//             populate: {
+//                 path: 'author'
+//             }
+//         })
+//     res.send(teams.projects)
+// }
 
 async function updateTeam(req, res, next) {
     const teamId = req.params.id
