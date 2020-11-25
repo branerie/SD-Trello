@@ -5,15 +5,17 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
 import { useHistory } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider';
 import pen from '../../images/pen.svg'
+import DatePicker from "react-datepicker"
 
 
 
-export default function TaskProgress(props) {
+
+export default function TaskDueDate(props) {
 
 
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
-    const [cardProgress, setCardProgress] = useState('')
+    const [cardDueDate, setCardDueDate] = useState(props.cardDueDate)
     const history = useHistory()
     const socket = useSocket()
 
@@ -24,17 +26,17 @@ export default function TaskProgress(props) {
 
 
 
-    const editCardProgress = useCallback(async (event) => {
-        event.preventDefault()
+    const editCardDueDate = useCallback(async (date) => {
+        // event.preventDefault()
 
-        console.log(cardProgress);
+        console.log(cardDueDate);
 
-        let data = props.value.split('/')
-        let cardId = data[1]
-        let listId = data[2]
+        // let data = props.value.split('/')
+        let cardId = props.cardId
+        let listId = props.listId
 
 
-        if (cardProgress === "") {
+        if (cardDueDate === "") {
             console.log('return');
             return
         }
@@ -46,20 +48,18 @@ export default function TaskProgress(props) {
                 "Authorization": token
             },
             body: JSON.stringify({
-                progress: cardProgress
+                dueDate: date
             })
         })
         if (!response.ok) {
             history.push("/error")
             return
         } else {
-            setCardProgress('')
             setIsActive(!isActive)
             updateProjectSocket()
         }
 
-    }, [history, cardProgress, updateProjectSocket])
-
+    }, [history, cardDueDate, setCardDueDate, updateProjectSocket])
 
 
 
@@ -67,32 +67,27 @@ export default function TaskProgress(props) {
     let value = props.value
 
     if (value) {
-        let token = value.split('/')
-        if (token.length === 1) {
-            return (
-                <div className={styles.listName}>{value}</div>
-            )
-        }
-        let taskprogress = token[0]
-        let cardId = token[1]
-        let listId = token[2]
 
+        let taskDueDate = value
+        let cardId = props.cardId
+        let listId = props.listId
 
 
         return (
             <span>
                 {
                     isActive ?
-                        < form ref={dropdownRef} className={styles.container} onSubmit={editCardProgress} >
-                            <input className={styles.progressInput} type={'text'} placeholder={taskprogress} onChange={e => setCardProgress(e.target.value)} />
-                            <button type='submit' className={styles.addlist} cardId={cardId} listId={listId} cardName>Edit</button>
-                        </form> :
-                        <div className={styles.buttoDiv} >
+                        // < form ref={dropdownRef} className={styles.container} onSubmit={editCardDueDate} >
+                        <DatePicker  selected={cardDueDate} onChange={async(date) => { await setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
+                        // <button type='submit' className={styles.addlist} cardId={cardId} listId={listId} cardName>Edit</button>
+                        // </form>
+                        :
+                        <div>
+                            <span>{taskDueDate}</span>
                             <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >
-                            <span>{taskprogress} %</span>
-                                {/* <img src={pen} alt="..." width="11.5" height="11.5" /> */}
+                                <img src={pen} alt="..." width="11.5" height="11.5" />
                             </button>
-                        </div >
+                        </div>
                 }
             </span>
         )
