@@ -77,15 +77,15 @@ export default function TaskDueDate(props) {
             <span>
                 {
                     isActive ?
-                        // < form ref={dropdownRef} className={styles.container} onSubmit={editCardDueDate} >
-                        <DatePicker  selected={cardDueDate} onChange={async(date) => { await setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
-                        // <button type='submit' className={styles.addlist} cardId={cardId} listId={listId} cardName>Edit</button>
-                        // </form>
+                        // < form ref={dropdownRef} className={styles.container} onSubmit={editCardDueDate} > 
+                        <DatePicker selected={cardDueDate} onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
+                        //  <button type='submit' className={styles.addlist}>Edit</button>
+                        // </form> 
                         :
                         <div>
-                            <span>{taskDueDate}</span>
                             <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >
-                                <img src={pen} alt="..." width="11.5" height="11.5" />
+                                <span>{taskDueDate}</span>
+                                {/* <img src={pen} alt="..." width="11.5" height="11.5" /> */}
                             </button>
                         </div>
                 }
