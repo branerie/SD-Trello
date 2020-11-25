@@ -15,6 +15,7 @@ import { useHistory } from "react-router-dom";
 import { useSocket } from "../../contexts/SocketProvider";
 import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress";
+import TaskDueDate from "../calendar-data/task-dueDate";
 
 
 
@@ -154,25 +155,8 @@ const TableDndApp = (props) => {
                     saturday: cardDate.getTime() + "/" + card.progress,
                     sunday: cardDate.getTime() + "/" + card.progress,
                     dueDate: (
-                        <div className={styles.buttoDiv}>
-                            <span>
-                                {cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear()}
-                            </span>
-                            <span>
-                                {IsVisibleEdit ?
-                                    < div >
-                                        <Transparent hideFormEdit={hideFormEdit} >
-                                            <EditCard hideFormEdit={hideFormEdit} card={card} listId={list._id} project={props.project} />
-                                        </Transparent >
-                                    </div > : null
-                                }
-                                <button className={styles.button} onClick={showFormEdit}>
-                                    <img src={pen} alt="..." width="11.5" height="11.5" />
-                                </button>
-                            </span>
-                        </div>
+                        <TaskDueDate value={cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear()} props={props} project={props.project} cardDueDate={cardDate} cardId={card._id} listId={list._id}/>
                     )
-                    // })
                 })
             })
         })

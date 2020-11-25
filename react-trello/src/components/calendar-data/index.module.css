@@ -17,7 +17,7 @@
 .container {
   width: 100%;
   display: flex;
-  flex-wrap: wrap;
+  /* flex-wrap: wrap; */
 }
 .input {
   border: 1px solid #000000; 
@@ -37,4 +37,7 @@
 }
 .addlist:hover {
   background-color: lemonchiffon;
+}
+.progressInput{
+  width: 100%;  
 }
