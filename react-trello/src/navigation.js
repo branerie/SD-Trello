@@ -51,9 +51,9 @@ const Navigation = () => {
                             <Route path="/calendarView/:projectid">
                                 {loggedIn ? (<CalendarView />) : (<Redirect to="/login" />)}
                             </Route>
-                            <Route path="/projects">
+                            {/* <Route path="/projects">
                                 {loggedIn ? (<AllProjectsPage />) : (<Redirect to="/login" />)}
-                            </Route>
+                            </Route> */}
                             <Route path="/team/:teamid">
                                 {loggedIn ? (<TeamPage />) : (<Redirect to="/login" />)}
                             </Route>
