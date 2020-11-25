@@ -1,6 +1,4 @@
-
-
-import React, { cloneElement, useCallback, useEffect, useState } from "react";
+import React, { cloneElement, useCallback, useEffect, useRef, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import styles from './index.module.css'
 import ReactTable from "react-table";
@@ -9,27 +7,51 @@ import Button from "../button";
 import DatePicker from "react-datepicker"
 import Avatar from "react-avatar";
 import pen from '../../images/pen.svg'
+import Transparent from "../transparent";
+import EditCard from "../edit-card";
+import { useDetectOutsideClick } from "../../utils/useDetectOutsideClick";
+import getCookie from "../../utils/cookie";
+import { useHistory } from "react-router-dom";
+import { useSocket } from "../../contexts/SocketProvider";
+import TaskName from '../calendar-data/task-name'
+import TaskProgress from "../calendar-data/task-progress";
 
 
 
 const TableDndApp = (props) => {
 
+    const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
 
-    var today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
     const [startDay, setStartDay] = useState(today)
     const [tableData, setTableData] = useState([])
     const [pageSize, setPageSize] = useState(5)
+    const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
+    const dropdownRef = useRef(null);
+    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+    const [cardName, setCardName] = useState('')
+    const history = useHistory()
+    const socket = useSocket()
 
 
+
+
+    const showFormEdit = () => {
+        setIsVisibleEdit(true)
+    }
+
+    const hideFormEdit = () => {
+        setIsVisibleEdit(false)
+    }
 
 
     const shownDay = (value) => {
         let date = ''
-        date = (startDay.getDate() + value) + ' ' + (startDay.toLocaleString('default', { month: 'short' }))
+        date = (value.getDate()) + ' ' + (value.toLocaleString('default', { month: 'short' }))
         return date
     }
 
-    const weekDay = (num) => {
+    const weekDay = (value) => {
+        let num = value.getDay()
         const weekArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
         if (num > 6) {
             num = num - 7
@@ -38,16 +60,53 @@ const TableDndApp = (props) => {
         return weekDay
     }
 
+    // const editCardName = async (props) => {
+    //     // e.preventDefault()
+    //     const listId = props.listId
+    //     const cardId = props.cardId
+    //     console.log(props);
+    //     if (cardName === "") {
+    //         console.log('return');
+    //         return
+    //     }
+    //     const token = getCookie("x-auth-token")
+    //     const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
+    //         method: "PUT",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "Authorization": token
+    //         },
+    //         body: JSON.stringify({
+    //             name: cardName
+    //         })
+    //     })
+    //     if (!response.ok) {
+    //         history.push("/error")
+    //         return
+    //     } else {
+    //         setCardName('')
+    //         setIsActive(false)
+    //     }
 
+    // }
+
+    // useEffect(() => {
+    //     if (socket == null) return
+
+    //     socket.on('project-updated', editCardName)
+
+    //     return () => socket.off('project-updated')
+    // }, [socket, editCardName])
 
     const cardData = useCallback(async () => {
 
         let data = []
+        // let numberOfRows = 0
         const lists = props.project.lists
-        lists.map((e) => {
-            let newCard = e.cards
+        lists.map((list) => {
+            let listCards = list.cards
             data.push({
-                task: e.name,
+                task: list.name,
                 progress: '',
                 assigned: '',
                 monday: "",
@@ -60,22 +119,24 @@ const TableDndApp = (props) => {
                 dueDate: ""
             })
 
+            listCards.forEach(card => {
+                // numberOfRows = numberOfRows + 1
 
-            newCard.forEach(element => {
-                setPageSize(pageSize + element.length)
+                let cardDate = new Date(card.dueDate)
 
-                let e = element
-                let cardDate = new Date(e.dueDate)
-
-                console.log(e.members);
                 data.push({
-                    task: e.name,
-                    progress: e.progress,
+
+                    task: (
+                        <TaskName value={card.name + '/' + card._id + '/' + list._id} props={props} project={props.project} />
+                    ),
+                    progress: (
+                        <TaskProgress value={card.progress + '/' + card._id + '/' + list._id} props={props} project={props.project} />
+                    ),
                     assigned:
                         (
                             <div>
                                 {
-                                    e.members.map((member, index) => {
+                                    card.members.map((member, index) => {
                                         return (
                                             <span key={index}>
                                                 <Avatar name={member.username} size={30} round={true} maxInitials={2} onMouseEnter={<div>{member.username}</div>} />
@@ -85,26 +146,29 @@ const TableDndApp = (props) => {
                                 }
                             </div >
                         ),
-                    monday: cardDate.getTime(),
-                    tuesday: cardDate.getTime(),
-                    wednesday: cardDate.getTime(),
-                    thursday: cardDate.getTime(),
-                    friday: cardDate.getTime(),
-                    saturday: cardDate.getTime(),
-                    sunday: cardDate.getTime(),
+                    monday: cardDate.getTime() + "/" + card.progress,
+                    tuesday: cardDate.getTime() + "/" + card.progress,
+                    wednesday: cardDate.getTime() + "/" + card.progress,
+                    thursday: cardDate.getTime() + "/" + card.progress,
+                    friday: cardDate.getTime() + "/" + card.progress,
+                    saturday: cardDate.getTime() + "/" + card.progress,
+                    sunday: cardDate.getTime() + "/" + card.progress,
                     dueDate: (
                         <div className={styles.buttoDiv}>
                             <span>
                                 {cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear()}
                             </span>
                             <span>
-                                {
-                                    <button className={styles.button} onClick={
-                                        <DatePicker selected={cardDate}  label="Go to date" />
-                                    }>
-                                        <img src={pen} alt="..." width="11.5" height="11.5" />
-                                    </button>
+                                {IsVisibleEdit ?
+                                    < div >
+                                        <Transparent hideFormEdit={hideFormEdit} >
+                                            <EditCard hideFormEdit={hideFormEdit} card={card} listId={list._id} project={props.project} />
+                                        </Transparent >
+                                    </div > : null
                                 }
+                                <button className={styles.button} onClick={showFormEdit}>
+                                    <img src={pen} alt="..." width="11.5" height="11.5" />
+                                </button>
                             </span>
                         </div>
                     )
@@ -112,10 +176,12 @@ const TableDndApp = (props) => {
                 })
             })
         })
+        // setPageSize(numberOfRows)
+
         setTableData(data)
 
 
-    }, [])
+    }, [props.project.lists, props.project, IsVisibleEdit])
 
 
     useEffect(() => {
@@ -185,7 +251,7 @@ const TableDndApp = (props) => {
             result.destination.index
         );
 
-        tableData = newData
+        // tableData = newData
 
     };
 
@@ -208,11 +274,16 @@ const TableDndApp = (props) => {
     }
 
     const getHeaderDate = (num) => {
-        let dayNumber = startDay.getDay() + num
-        let dayOfWeek = weekDay(dayNumber)
-        let day = shownDay(num)
+        var nextDay = new Date(startDay);
+        nextDay.setDate(nextDay.getDate() + num)
+        let dayOfWeek = weekDay(nextDay)
+        let day = shownDay(nextDay)
+        let color = 'rgb(39, 190, 201)'
+        if (dayOfWeek === 'Sunday' || dayOfWeek === 'Saturday') {
+            color = 'rgb(206, 134, 134)'
+        }
         return (
-            <div>
+            <div style={{ background: color, color: 'white' }}>
                 <div>{dayOfWeek}</div>
                 <div>{day}</div>
             </div>
@@ -220,21 +291,29 @@ const TableDndApp = (props) => {
     }
 
     const cellData = (value, num) => {
+
         if (num === 0) {
-            if (value && !isNaN(value)) {
+            if (value) {
+                let token = value.split('/')
+                let date = Number(token[0])
+                let progress = Number(token[1])
                 let checked = startDay.setDate(startDay.getDate());
                 let color = ''
                 let message = ''
                 switch (true) {
-                    case (value === checked):
+                    case (date === checked):
                         color = 'red';
                         message = 'Due Date'
                         break;
-                    case (value > checked):
+                    case (progress === 100):
+                        color = 'green';
+                        message = 'Finished'
+                        break;
+                    case (date > checked):
                         color = 'blue';
                         message = 'In Progress'
                         break;
-                    case (value < checked):
+                    case (date < checked && progress < 100):
                         color = 'red';
                         message = 'Delayed'
                         break;
@@ -244,28 +323,34 @@ const TableDndApp = (props) => {
             } else {
                 return value
             }
-        } else if (!isNaN(value)) {
+        } else if (num !== 0) {
+            if (value) {
+                let token = value.split('/')
+                let date = Number(token[0])
+                let progress = Number(token[1])
+                var checkedDate = new Date(startDay);
+                let checked = checkedDate.setDate(checkedDate.getDate() + num);
 
-            var checkedDate = new Date(startDay);
-            let checked = checkedDate.setDate(checkedDate.getDate() + num);
-
-            let color = ''
-            let message = ''
-            switch (true) {
-                case (value === checked):
-                    color = 'red';
-                    message = 'Due Date'
-                    break;
-                case (value > checked):
-                    color = 'blue';
-                    message = 'In Progress'
-                    break;
+                let color = ''
+                let message = ''
+                switch (true) {
+                    case (date === checked):
+                        color = 'red';
+                        message = 'Due Date'
+                        break;
+                    case (date > checked && progress < 100):
+                        color = 'blue';
+                        message = 'In Progress'
+                        break;
+                }
+                return <div style={{ background: color, color: color }} >{message}</div>
+            } else {
+                return value
             }
-            return <div style={{ background: color, color: color }} >{message}</div>
-
         } else {
             return value
         }
+
     }
 
     const getNextWeek = async () => {
@@ -305,6 +390,44 @@ const TableDndApp = (props) => {
 
     }
 
+    // const taskName = (value) => {
+    // const taskName = (value) => {
+    //     if (value) {
+    //         let token = value.split('/')
+    //         if (token.length === 1) {
+    //             return (
+    //                 <div className={styles.listName}>{value}</div>
+    //             )
+    //         }
+    //         let cardname = token[0]
+    //         let cardId = token[1]
+    //         let listId = token[2]
+
+
+
+    //         return (
+    //             <div className={styles.buttoDiv} >
+    //                 <span>{cardname}</span>
+    //                 <span>
+    //                     {
+    //                         isActive ?
+    //                             < form ref={dropdownRef} className={styles.container} >
+    //                                 <input className={styles.input} type={'text'} />
+    //                                 <button type='submit' className={styles.addlist} onClick={(e) => { editCardName(props); setCardName(e.target.value) }} cardId={cardId} listId={listId} cardName>Edit Name</button>
+    //                             </form> :
+    //                             <button className={styles.addlist} onClick={() => {setIsActive(!isActive); taskName()}} > edit</button>
+    //                     }
+    //                 </span>
+    //             </div >
+    //         )
+    //     }
+    //     else {
+    //         return value
+    //     }
+
+    // }
+    // , [editCardName, isActive, setIsActive, props])
+
 
 
 
@@ -314,8 +437,9 @@ const TableDndApp = (props) => {
                 <Button onClick={getLastWeek} title='Last week' />
                 <Button onClick={getLastDay} title='Previous day' />
 
+                <div>Choose week...
                 <DatePicker selected={startDay} onChange={date => setStartDay(date)} label="Go to date" />
-
+                </div>
                 <Button onClick={getNextDay} title='Next day' />
                 <Button onClick={getNextWeek} title='Next week' />
 
@@ -331,7 +455,11 @@ const TableDndApp = (props) => {
                             Header: 'Task',
                             accessor: "task",
                             width: 250,
-                            // className: styles.task
+                            // Cell: ({ value }) => {
+                            //     return (
+                            //         <TaskName value={value} props={props} cardData={cardData}/>
+                            //     )
+                            // }
                         },
                         {
                             Header: 'Progress',
@@ -352,7 +480,7 @@ const TableDndApp = (props) => {
                                             break;
                                     }
                                     return (
-                                        <div style={{ background: color }} > { value} %</div>
+                                        <div style={{ background: color }} > {value}</div>
                                     )
 
                                 }
