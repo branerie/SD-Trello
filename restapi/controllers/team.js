@@ -25,6 +25,21 @@ async function createTeam(req, res, next) {
 async function getTeams(req, res, next) {
     const { _id } = req.user
     const teams = await models.Team.find({ members: _id })
+        // .populate({
+        //     path: 'projects',
+        //     populate: {
+        //         path: 'membersRoles',
+        //         populate: {
+        //             path: 'memberId'
+        //         }
+        //     }
+        // })
+        // .populate({
+        //     path: 'projects',
+        //     populate: {
+        //         path: 'author'
+        //     }
+        // })
     res.send(teams)
 }
 

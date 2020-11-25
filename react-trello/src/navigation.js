@@ -20,6 +20,7 @@ import CalendarView from "./pages/calendar-view"
 import { SocketProvider } from "./contexts/SocketProvider"
 import ListProvider from "./contexts/ListProvider"
 import TeamProvider from "./contexts/TeamProvider"
+import TeamPage from "./pages/team"
 
 const Navigation = () => {
 
@@ -29,7 +30,7 @@ const Navigation = () => {
     return (
         <SocketProvider user={context.user.username}>
             <ListProvider>
-                {/* <TeamProvider> */}
+                <TeamProvider>
                     <BrowserRouter>
                         <Switch>
                             <Route exact path="/" >
@@ -53,10 +54,13 @@ const Navigation = () => {
                             <Route path="/projects">
                                 {loggedIn ? (<AllProjectsPage />) : (<Redirect to="/login" />)}
                             </Route>
+                            <Route path="/team/:teamid">
+                                {loggedIn ? (<TeamPage />) : (<Redirect to="/login" />)}
+                            </Route>
                             <Route component={ErrorPage} />
                         </Switch>
                     </BrowserRouter>
-                {/* </TeamProvider> */}
+                </TeamProvider>
             </ListProvider>
         </SocketProvider>
     )
