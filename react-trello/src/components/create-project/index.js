@@ -1,5 +1,5 @@
 import React, { useCallback, useState } from 'react'
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import Button from '../button'
 import Input from '../input'
 import Title from '../title'
@@ -11,9 +11,11 @@ export default function CreateProject(props) {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const history = useHistory()
+    const params = useParams()
 
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault()
+        const teamId = params.teamid
         const token = getCookie("x-auth-token")
         const response = await fetch('http://localhost:4000/api/projects', {
             method: "POST",
@@ -23,7 +25,8 @@ export default function CreateProject(props) {
             },
             body: JSON.stringify({
                 name,
-                description
+                description,
+                teamId
             })
         })
         if (!response.ok) {

@@ -28,6 +28,10 @@ export default function ProjectPage() {
     const socket = useSocket()
     const listContext = useContext(ListContext)
 
+    const updateProjectSocket = useCallback(() => {
+        socket.emit('project-update', project)
+    }, [socket, project])
+
     const projectUpdate = useCallback((project) => {
 
         setProject(project)
@@ -79,7 +83,7 @@ export default function ProjectPage() {
 
     useEffect(() => {
         getData()
-    }, [getData])
+    }, [])
 
     if (!project) {
         return (
@@ -201,8 +205,9 @@ export default function ProjectPage() {
             history.push("/error")
             return
         } else {
-            setIsVisible(!isVisible)
+            setIsActive(!isActive)
             setListName('')
+            updateProjectSocket()
         }
 
     }

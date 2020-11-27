@@ -7,7 +7,7 @@ const ButtonHideList = ( { list } ) => {
     const listContext = useContext(ListContext)
 
     function onClick() {
-        const newHiddenLists = listContext.hiddenLists
+        const newHiddenLists = [...listContext.hiddenLists]
         
         if (newHiddenLists.includes(list._id)) {
             const index = newHiddenLists.indexOf(list._id)

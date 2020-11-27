@@ -22,30 +22,6 @@ const AllProjectsPage = () => {
         setIsVisible(false)
     }
 
-    const getData = useCallback(async () => {
-
-        const token = getCookie("x-auth-token");
-
-        const response = await fetch(`http://localhost:4000/api/projects/all`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            }
-        })
-        if (!response.ok) {
-            history.push("/error")
-        } else {
-            const data = await response.json()
-            setProjects(data)
-        }
-    }, [history])
-
-
-    useEffect(() => {
-        getData()
-    }, [getData])
-
     if (!projects) {
         return (
             <PageLayout>

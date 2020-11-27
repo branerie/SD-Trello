@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState, useEffect } from "react"
+import React, { useContext, useRef, useState } from "react"
 import styles from "./index.module.css"
 import UserContext from "../../Context"
 import Avatar from "react-avatar"
@@ -14,7 +14,6 @@ const Header = ({ asideOn }) => {
     const dropdownRef = useRef(null)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
     const [showForm, setShowForm] = useState(false)
-    const [option, setOption] = useState('select')
     const context = useContext(UserContext)
     const teamContext = useContext(TeamContext)
     const history = useHistory()
@@ -29,7 +28,9 @@ const Header = ({ asideOn }) => {
             return
         }
 
-        setOption(teamId)
+        const current = teamContext.teams.find(t => t._id === teamId)
+        teamContext.setCurrentTeam(current)
+        teamContext.setOption(teamId)
         history.push(`/team/${teamId}`)
     }
 
@@ -43,7 +44,7 @@ const Header = ({ asideOn }) => {
                     <div className={styles.margin}>
                         Teams:
                     </div>
-                    <select value={option} className={styles.select} onChange={(e) => { handleSelect(e.target.value) }}>
+                    <select value={teamContext.option} className={styles.select} onChange={(e) => { handleSelect(e.target.value) }}>
                         <option value='select'>Select</option>
                         {
                             teamContext.teams.map(t => (
@@ -55,7 +56,7 @@ const Header = ({ asideOn }) => {
                 </div>
                 {
                     showForm ? (<Transparent hideForm={() => setShowForm(false)}>
-                        <CreateTeam setOption={setOption} hideForm={() => {setShowForm(false)}} ></CreateTeam>
+                        <CreateTeam setOption={teamContext.setOption} hideForm={() => {setShowForm(false)}} ></CreateTeam>
                     </Transparent>) : null
                 }
                 <div className={`${styles.links} ${styles.font}`}>

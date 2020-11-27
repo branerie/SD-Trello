@@ -42,7 +42,7 @@ export default function CreateTeam(props) {
             props.hideForm()
         }
 
-    }, [history, name, description, props])
+    }, [history, name, description, props, teamContext])
 
     return (
         <div className={styles.form}>
