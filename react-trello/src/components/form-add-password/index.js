@@ -1,7 +1,7 @@
 import React, { useContext, useState, useEffect } from 'react'
 import GoogleLogin from 'react-google-login'
 import { useHistory } from 'react-router-dom'
-import UserContext from '../../Context'
+import UserContext from '../../contexts/UserContext'
 import authenticateUpdate from '../../utils/authenticate-update'
 import responseGoogle from '../../utils/responseGoogle'
 import Input from '../input'

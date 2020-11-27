@@ -20,7 +20,6 @@ export default function ProjectPage() {
     const history = useHistory()
     const [project, setProject] = useState(null)
     const [members, setMembers] = useState([])
-    const [isVisible, setIsVisible] = useState(false)
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
     const [listName, setListName] = useState('')
     const listRef = useRef(null);

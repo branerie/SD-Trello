@@ -14,10 +14,11 @@ const responseGoogle = async (googleResponse, onSuccess, onFailure) => {
 
         const response = await promise.json()
 
-        if (response.username && authToken) {
+        if (response.user.username && authToken) {
             onSuccess({
-                username: response.username,
-                id: response._id
+                username: response.user.username,
+                id: response.user._id,
+                teams: response.teams
             });
         } else {
             onFailure(response)

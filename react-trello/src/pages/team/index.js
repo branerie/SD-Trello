@@ -5,20 +5,39 @@ import Button from "../../components/button"
 import Transparent from "../../components/transparent"
 import CreateProject from '../../components/create-project'
 import TeamContext from "../../contexts/TeamContext"
+import { useParams } from "react-router-dom"
 
 const TeamPage = () => {
 
     const [isVisible, setIsVisible] = useState(false)
+    const [isRefresh, setIsRefresh] = useState(false)
     const teamContext = useContext(TeamContext)
+    const params = useParams()
+
+    console.log('team page');
 
     useEffect(() => {
-        return () => teamContext.setOption('select')
+        const teamId = params.teamid
+
+        if (isRefresh) {
+            teamContext.getCurrentProjects(teamId)
+        }
+
+        console.log('teampage useEffect', teamId, teamContext.option);
+        
+        if (teamId !== teamContext.option) {
+            setIsRefresh(true)
+        }
+        teamContext.setOption(teamId)
+        return () => {
+            teamContext.setOption('select')
+        }
     })
 
     return (
         <PageLayout>
             <div>
-                {teamContext.currentTeam.projects.map((project, index) => {
+                {teamContext.currentProjects.map((project, index) => {
                     return (
                         <Project key={project._id} index={index} project={project} />
                     )

@@ -1,4 +1,4 @@
-import React, { cloneElement, useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import styles from './index.module.css'
 import ReactTable from "react-table";
@@ -6,13 +6,6 @@ import "react-table/react-table.css";
 import Button from "../button";
 import DatePicker from "react-datepicker"
 import Avatar from "react-avatar";
-import pen from '../../images/pen.svg'
-import Transparent from "../transparent";
-import EditCard from "../edit-card";
-import { useDetectOutsideClick } from "../../utils/useDetectOutsideClick";
-import getCookie from "../../utils/cookie";
-import { useHistory } from "react-router-dom";
-import { useSocket } from "../../contexts/SocketProvider";
 import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress";
 import TaskDueDate from "../calendar-data/task-dueDate";
@@ -25,25 +18,7 @@ const TableDndApp = (props) => {
 
     const [startDay, setStartDay] = useState(today)
     const [tableData, setTableData] = useState([])
-    const [pageSize, setPageSize] = useState(5)
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
-    const dropdownRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
-    const [cardName, setCardName] = useState('')
-    const history = useHistory()
-    const socket = useSocket()
-
-
-
-
-    const showFormEdit = () => {
-        setIsVisibleEdit(true)
-    }
-
-    const hideFormEdit = () => {
-        setIsVisibleEdit(false)
-    }
-
 
     const shownDay = (value) => {
         let date = ''
@@ -60,44 +35,6 @@ const TableDndApp = (props) => {
         var weekDay = weekArray[num]
         return weekDay
     }
-
-    // const editCardName = async (props) => {
-    //     // e.preventDefault()
-    //     const listId = props.listId
-    //     const cardId = props.cardId
-    //     console.log(props);
-    //     if (cardName === "") {
-    //         console.log('return');
-    //         return
-    //     }
-    //     const token = getCookie("x-auth-token")
-    //     const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
-    //         method: "PUT",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Authorization": token
-    //         },
-    //         body: JSON.stringify({
-    //             name: cardName
-    //         })
-    //     })
-    //     if (!response.ok) {
-    //         history.push("/error")
-    //         return
-    //     } else {
-    //         setCardName('')
-    //         setIsActive(false)
-    //     }
-
-    // }
-
-    // useEffect(() => {
-    //     if (socket == null) return
-
-    //     socket.on('project-updated', editCardName)
-
-    //     return () => socket.off('project-updated')
-    // }, [socket, editCardName])
 
     const cardData = useCallback(async () => {
 
@@ -241,12 +178,7 @@ const TableDndApp = (props) => {
 
 
     const getTrProps = (props, rowInfo) => {
-
-
-        // console.log(rowInfo);
-
         return { rowInfo }
-
     };
 
     const reorder = (list, startIndex, endIndex) => {
@@ -373,47 +305,6 @@ const TableDndApp = (props) => {
         await cardData()
 
     }
-
-    // const taskName = (value) => {
-    // const taskName = (value) => {
-    //     if (value) {
-    //         let token = value.split('/')
-    //         if (token.length === 1) {
-    //             return (
-    //                 <div className={styles.listName}>{value}</div>
-    //             )
-    //         }
-    //         let cardname = token[0]
-    //         let cardId = token[1]
-    //         let listId = token[2]
-
-
-
-    //         return (
-    //             <div className={styles.buttoDiv} >
-    //                 <span>{cardname}</span>
-    //                 <span>
-    //                     {
-    //                         isActive ?
-    //                             < form ref={dropdownRef} className={styles.container} >
-    //                                 <input className={styles.input} type={'text'} />
-    //                                 <button type='submit' className={styles.addlist} onClick={(e) => { editCardName(props); setCardName(e.target.value) }} cardId={cardId} listId={listId} cardName>Edit Name</button>
-    //                             </form> :
-    //                             <button className={styles.addlist} onClick={() => {setIsActive(!isActive); taskName()}} > edit</button>
-    //                     }
-    //                 </span>
-    //             </div >
-    //         )
-    //     }
-    //     else {
-    //         return value
-    //     }
-
-    // }
-    // , [editCardName, isActive, setIsActive, props])
-
-
-
 
     return (
         <div>
