@@ -1,6 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { useParams } from 'react-router-dom';
-import UserContext from '../../Context';
+import UserContext from '../../contexts/UserContext';
 import authenticateUpdate from '../../utils/authenticate-update';
 import Button from '../button';
 import Input from '../input';

@@ -3,10 +3,12 @@ import React from 'react'
 const TeamContext = React.createContext({
   teams: [] ,
   setTeams: () => {},
-  option: [] ,
+  option: 'select' ,
   setOption: () => {},
-  currentTeam: [] ,
-  setCurrentTeam: () => {}
+  getCurrentTeam: () => {},
+  currentTeam: '',
+  setCurrentTeam: () => {},
+  getTeams: () => {}
 })
 
 export default TeamContext

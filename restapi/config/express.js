@@ -16,7 +16,7 @@ module.exports = (app) => {
   }));
 
   app.use(cookieParser(secret))
-
+  
   app.use('/', router)
 
   app.use(function (err, req, res, next) {
