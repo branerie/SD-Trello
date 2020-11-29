@@ -16,6 +16,8 @@ import { useSocket } from "../../contexts/SocketProvider";
 import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress";
 import TaskDueDate from "../calendar-data/task-dueDate";
+import CreateCard from '../create-card'
+
 
 
 
@@ -25,10 +27,12 @@ const TableDndApp = (props) => {
 
     const [startDay, setStartDay] = useState(today)
     const [tableData, setTableData] = useState([])
-    const [pageSize, setPageSize] = useState(5)
+    const [tableSize, setTableSize] = useState(10)
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+    const [isVisible, setIsVisible] = useState(false)
+
     const [cardName, setCardName] = useState('')
     const history = useHistory()
     const socket = useSocket()
@@ -61,53 +65,36 @@ const TableDndApp = (props) => {
         return weekDay
     }
 
-    // const editCardName = async (props) => {
-    //     // e.preventDefault()
-    //     const listId = props.listId
-    //     const cardId = props.cardId
-    //     console.log(props);
-    //     if (cardName === "") {
-    //         console.log('return');
-    //         return
-    //     }
-    //     const token = getCookie("x-auth-token")
-    //     const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
-    //         method: "PUT",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Authorization": token
-    //         },
-    //         body: JSON.stringify({
-    //             name: cardName
-    //         })
-    //     })
-    //     if (!response.ok) {
-    //         history.push("/error")
-    //         return
-    //     } else {
-    //         setCardName('')
-    //         setIsActive(false)
-    //     }
 
-    // }
-
-    // useEffect(() => {
-    //     if (socket == null) return
-
-    //     socket.on('project-updated', editCardName)
-
-    //     return () => socket.off('project-updated')
-    // }, [socket, editCardName])
+    let numberOfRows = 0
 
     const cardData = useCallback(async () => {
 
         let data = []
-        // let numberOfRows = 0
         const lists = props.project.lists
         lists.map((list) => {
+            numberOfRows++
             let listCards = list.cards
             data.push({
-                task: list.name,
+                // task: list.name,
+                task: (
+                    <div className={styles.listName} >
+                        <span> {list.name} </span>
+                        <button
+                            className={styles.addnote}
+                            onClick={() => setIsVisible(!isVisible)}
+                            title='+ Add Note'
+                        >Add Task</button>
+                        {
+                            isVisible ?
+                                <div>
+                                    < Transparent hideForm={() => setIsVisible(!isVisible)}>
+                                        <CreateCard hideForm={() => setIsVisible(!isVisible)} listId={props.list._id} project={props.project} />
+                                    </Transparent >
+                                </div > : null
+                        }
+                    </div >
+                ),
                 progress: '',
                 assigned: '',
                 monday: "",
@@ -121,10 +108,15 @@ const TableDndApp = (props) => {
             })
 
             listCards.forEach(card => {
-                // numberOfRows = numberOfRows + 1
 
-                let cardDate = new Date(card.dueDate)
+                numberOfRows++
 
+                let cardDate = ''
+                let thisCardDate = ''
+                if (card.dueDate) {
+                    cardDate = new Date(card.dueDate)
+                    thisCardDate = cardDate.getTime()
+                }
                 data.push({
 
                     task: (
@@ -147,22 +139,27 @@ const TableDndApp = (props) => {
                                 }
                             </div >
                         ),
-                    monday: cardDate.getTime() + "/" + card.progress,
-                    tuesday: cardDate.getTime() + "/" + card.progress,
-                    wednesday: cardDate.getTime() + "/" + card.progress,
-                    thursday: cardDate.getTime() + "/" + card.progress,
-                    friday: cardDate.getTime() + "/" + card.progress,
-                    saturday: cardDate.getTime() + "/" + card.progress,
-                    sunday: cardDate.getTime() + "/" + card.progress,
+                    monday: thisCardDate + "/" + card.progress,
+                    tuesday: thisCardDate + "/" + card.progress,
+                    wednesday: thisCardDate + "/" + card.progress,
+                    thursday: thisCardDate + "/" + card.progress,
+                    friday: thisCardDate + "/" + card.progress,
+                    saturday: thisCardDate + "/" + card.progress,
+                    sunday: thisCardDate + "/" + card.progress,
                     dueDate: (
-                        <TaskDueDate value={cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear()} props={props} project={props.project} cardDueDate={cardDate} cardId={card._id} listId={list._id}/>
+                        <TaskDueDate value={(thisCardDate !== '') ? cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''} props={props} project={props.project} cardDueDate={cardDate} cardId={card._id} listId={list._id} />
                     )
                 })
             })
+            
+            
         })
-        // setPageSize(numberOfRows)
+
+        setTableSize(numberOfRows)
+
 
         setTableData(data)
+        return numberOfRows
 
 
     }, [props.project.lists, props.project, IsVisibleEdit])
@@ -282,28 +279,32 @@ const TableDndApp = (props) => {
                 let date = Number(token[0])
                 let progress = Number(token[1])
                 let checked = startDay.setDate(startDay.getDate());
+
                 let color = ''
                 let message = ''
-                switch (true) {
-                    case (date === checked):
-                        color = 'red';
-                        message = 'Due Date'
-                        break;
-                    case (progress === 100):
-                        color = 'green';
-                        message = 'Finished'
-                        break;
-                    case (date > checked):
-                        color = 'blue';
-                        message = 'In Progress'
-                        break;
-                    case (date < checked && progress < 100):
-                        color = 'red';
-                        message = 'Delayed'
-                        break;
+                if (date) {
+                    switch (true) {
+                        case (date === checked):
+                            color = 'red';
+                            message = 'Due Date'
+                            break;
+                        case ((progress === 100) || (date === 100)):
+                            color = 'green';
+                            message = 'Finished'
+                            break;
+                        case (date > checked):
+                            color = 'blue';
+                            message = 'In Progress'
+                            break;
+                        case (date < checked && progress < 100):
+                            color = 'red';
+                            message = 'Delayed'
+                            break;
+                    }
+                    return <div style={{ background: color }} >{message}</div>
+                } else {
+                    return ''
                 }
-                return <div style={{ background: color }} >{message}</div>
-
             } else {
                 return value
             }
@@ -322,7 +323,7 @@ const TableDndApp = (props) => {
                         color = 'red';
                         message = 'Due Date'
                         break;
-                    case (date > checked && progress < 100):
+                    case (date > checked && progress !== 100):
                         color = 'blue';
                         message = 'In Progress'
                         break;
@@ -374,44 +375,45 @@ const TableDndApp = (props) => {
 
     }
 
-    // const taskName = (value) => {
-    // const taskName = (value) => {
-    //     if (value) {
-    //         let token = value.split('/')
-    //         if (token.length === 1) {
-    //             return (
-    //                 <div className={styles.listName}>{value}</div>
-    //             )
-    //         }
-    //         let cardname = token[0]
-    //         let cardId = token[1]
-    //         let listId = token[2]
+    const addList = async () => {
+       
+       let data = await tableData      
+       
+        data.push({
+            // task: list.name,
+            task: (
+                <div className={styles.listName} >
+                    <input />
+                    <button
+                        className={styles.addnote}
+                        onClick={() => setIsVisible(!isVisible)}
+                        title='+ Add Note'
+                    >Add List</button>
+                    {
+                        isVisible ?
+                            <div>
+                                < Transparent hideForm={() => setIsVisible(!isVisible)}>
+                                    <CreateCard hideForm={() => setIsVisible(!isVisible)} listId={props.list._id} project={props.project} />
+                                </Transparent >
+                            </div > : null
+                    }
+                </div >
+            ),
+            progress: '',
+            assigned: '',
+            monday: "",
+            tuesday: "",
+            wednesday: "",
+            thursday: "",
+            friday: "",
+            saturday: "",
+            sunday: "",
+            dueDate: ""
+        })
 
-
-
-    //         return (
-    //             <div className={styles.buttoDiv} >
-    //                 <span>{cardname}</span>
-    //                 <span>
-    //                     {
-    //                         isActive ?
-    //                             < form ref={dropdownRef} className={styles.container} >
-    //                                 <input className={styles.input} type={'text'} />
-    //                                 <button type='submit' className={styles.addlist} onClick={(e) => { editCardName(props); setCardName(e.target.value) }} cardId={cardId} listId={listId} cardName>Edit Name</button>
-    //                             </form> :
-    //                             <button className={styles.addlist} onClick={() => {setIsActive(!isActive); taskName()}} > edit</button>
-    //                     }
-    //                 </span>
-    //             </div >
-    //         )
-    //     }
-    //     else {
-    //         return value
-    //     }
-
-    // }
-    // , [editCardName, isActive, setIsActive, props])
-
+        setTableSize(tableSize + 1)
+        setTableData(data)
+    }
 
 
 
@@ -420,14 +422,13 @@ const TableDndApp = (props) => {
             <div className={styles.buttoDiv}>
                 <Button onClick={getLastWeek} title='Last week' />
                 <Button onClick={getLastDay} title='Previous day' />
-
                 <div>Choose week...
                 <DatePicker selected={startDay} onChange={date => setStartDay(date)} label="Go to date" />
                 </div>
                 <Button onClick={getNextDay} title='Next day' />
                 <Button onClick={getNextWeek} title='Next week' />
-
             </div>
+
             <DragDropContext onDragEnd={handleDragEnd}>
                 <ReactTable
                     TrComponent={DragTrComponent}
@@ -448,28 +449,7 @@ const TableDndApp = (props) => {
                         {
                             Header: 'Progress',
                             accessor: "progress",
-                            width: 100,
-                            Cell: ({ data, value }) => {
-                                if (value) {
-                                    let color = ''
-                                    switch (true) {
-                                        case (value < 20):
-                                            color = 'red'
-                                            break;
-                                        case (value < 100):
-                                            color = 'blue'
-                                            break;
-                                        case (value === 100):
-                                            color = 'green';
-                                            break;
-                                    }
-                                    return (
-                                        <div style={{ background: color }} > {value}</div>
-                                    )
-
-                                }
-                                return value
-                            }
+                            width: 100
                         },
                         {
                             Header: 'Assigned to',
@@ -539,9 +519,14 @@ const TableDndApp = (props) => {
                         }
                     ]}
                     defaultPageSize={10}
+                    pageSize={tableSize}
                     className="-striped -highlight"
                 />
             </DragDropContext>
+            <div className={styles.buttoDiv}>
+                <Button onClick={addList} title=' + Add List' />               
+            </div>
+
         </div>
     )
 
