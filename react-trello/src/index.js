@@ -9,6 +9,7 @@ ReactDOM.render(
   <React.StrictMode>
     <App>
       <Navigation />
+      
     </App>
   </React.StrictMode>,
   document.getElementById('root')

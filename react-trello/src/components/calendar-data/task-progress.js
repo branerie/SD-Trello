@@ -54,6 +54,33 @@ export default function TaskProgress(props) {
     }, [history, cardProgress, updateProjectSocket])
 
 
+
+    function showTaskProgress(value) {
+        if (value !== "null") {
+            let color = ''
+            switch (true) {
+                case (value === "100"):
+                    color = 'green';
+                    break;
+                case (value < 20):
+                    color = 'red'
+                    break;
+                case (value < 100):
+                    color = 'blue'
+                    break;
+            }
+            return (
+                <div style={{ backgroundColor: color }} > {value} %</div>
+            )
+
+        }
+        return (
+            <img src={pen} alt="..." width="11.5" height="11.5" />
+        )
+    }
+
+
+
     let value = props.value
 
     if (value) {
@@ -79,7 +106,9 @@ export default function TaskProgress(props) {
                         </form> :
                         <div className={styles.buttoDiv} >
                             <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >
-                                <span>{taskprogress} %</span>
+                                <span>{showTaskProgress(taskprogress)}</span>
+                                {/* <img src={pen} alt="..." width="11.5" height="11.5" /> */}
+
                             </button>
                         </div >
                 }
@@ -87,7 +116,7 @@ export default function TaskProgress(props) {
         )
     }
     else {
-        return value
+        return showTaskProgress('')
     }
 
 }
