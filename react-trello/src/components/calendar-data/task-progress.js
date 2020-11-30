@@ -4,6 +4,7 @@ import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
 import { useHistory } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider';
+import pen from '../../images/pen.svg'
 
 
 export default function TaskProgress(props) {
