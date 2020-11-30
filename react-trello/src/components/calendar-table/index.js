@@ -17,6 +17,9 @@ import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress";
 import TaskDueDate from "../calendar-data/task-dueDate";
 import CreateCard from '../create-card'
+import AddList from "../calendar-data/add-list";
+import ButtonClean from "../button-clean";
+import AddTask from "../calendar-data/add-task";
 
 
 
@@ -65,6 +68,41 @@ const TableDndApp = (props) => {
         return weekDay
     }
 
+    const updateProjectSocket = useCallback(() => {
+        socket.emit('project-update', props.project)
+    }, [socket, props.project])
+
+    const createCard = useCallback(async (event) => {
+        event.preventDefault()
+
+        const listId = props.listId
+
+        if (cardName === "") {
+            console.log('return');
+            return
+        }
+
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify({
+                name: cardName
+            })
+        })
+        if (!response.ok) {
+            history.push("/error")
+            return
+        } else {
+            updateProjectSocket()
+            props.hideForm()
+        }
+
+    }, [history, cardName, props, updateProjectSocket])
+
 
     let numberOfRows = 0
 
@@ -76,36 +114,26 @@ const TableDndApp = (props) => {
             numberOfRows++
             let listCards = list.cards
             data.push({
-                // task: list.name,
                 task: (
                     <div className={styles.listName} >
                         <span> {list.name} </span>
-                        <button
-                            className={styles.addnote}
-                            onClick={() => setIsVisible(!isVisible)}
-                            title='+ Add Note'
-                        >Add Task</button>
-                        {
-                            isVisible ?
-                                <div>
-                                    < Transparent hideForm={() => setIsVisible(!isVisible)}>
-                                        <CreateCard hideForm={() => setIsVisible(!isVisible)} listId={props.list._id} project={props.project} />
-                                    </Transparent >
-                                </div > : null
-                        }
                     </div >
                 ),
                 progress: '',
                 assigned: '',
-                monday: "",
-                tuesday: "",
-                wednesday: "",
-                thursday: "",
-                friday: "",
-                saturday: "",
-                sunday: "",
-                dueDate: ""
+                monday: '',
+                tuesday: '',
+                wednesday: '',
+                thursday: '',
+                friday: '',
+                saturday: '',
+                sunday: '',
+                dueDate: (
+                    <AddTask props={props} listId={list._id}/>
+                )
             })
+
+
 
             listCards.forEach(card => {
 
@@ -147,12 +175,30 @@ const TableDndApp = (props) => {
                     saturday: thisCardDate + "/" + card.progress,
                     sunday: thisCardDate + "/" + card.progress,
                     dueDate: (
-                        <TaskDueDate value={(thisCardDate !== '') ? cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''} props={props} project={props.project} cardDueDate={cardDate} cardId={card._id} listId={list._id} />
+                        <TaskDueDate value={(thisCardDate !== '' && thisCardDate !== 0) ? cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''} props={props} project={props.project} cardDueDate={cardDate} cardId={card._id} listId={list._id} />
                     )
                 })
+
             })
-            
-            
+
+
+        })
+
+        numberOfRows++
+        data.push({
+            task: (
+                <AddList props={props} project={props.project} />
+            ),
+            progress: '',
+            assigned: '',
+            monday: "",
+            tuesday: "",
+            wednesday: "",
+            thursday: "",
+            friday: "",
+            saturday: "",
+            sunday: "",
+            dueDate: ''
         })
 
         setTableSize(numberOfRows)
@@ -375,45 +421,6 @@ const TableDndApp = (props) => {
 
     }
 
-    const addList = async () => {
-       
-       let data = await tableData      
-       
-        data.push({
-            // task: list.name,
-            task: (
-                <div className={styles.listName} >
-                    <input />
-                    <button
-                        className={styles.addnote}
-                        onClick={() => setIsVisible(!isVisible)}
-                        title='+ Add Note'
-                    >Add List</button>
-                    {
-                        isVisible ?
-                            <div>
-                                < Transparent hideForm={() => setIsVisible(!isVisible)}>
-                                    <CreateCard hideForm={() => setIsVisible(!isVisible)} listId={props.list._id} project={props.project} />
-                                </Transparent >
-                            </div > : null
-                    }
-                </div >
-            ),
-            progress: '',
-            assigned: '',
-            monday: "",
-            tuesday: "",
-            wednesday: "",
-            thursday: "",
-            friday: "",
-            saturday: "",
-            sunday: "",
-            dueDate: ""
-        })
-
-        setTableSize(tableSize + 1)
-        setTableData(data)
-    }
 
 
 
@@ -520,12 +527,11 @@ const TableDndApp = (props) => {
                     ]}
                     defaultPageSize={10}
                     pageSize={tableSize}
+                    showPagination={false}
                     className="-striped -highlight"
                 />
             </DragDropContext>
-            <div className={styles.buttoDiv}>
-                <Button onClick={addList} title=' + Add List' />               
-            </div>
+
 
         </div>
     )

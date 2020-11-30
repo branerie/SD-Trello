@@ -16,6 +16,15 @@
     display: flex;
     justify-content: space-between;
 }
+
+.addTaskField{
+    background-color: rgb(201, 39, 39);
+    color: white;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
 .container {
     width: 100%;
     display: flex;
