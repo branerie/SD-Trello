@@ -1,11 +1,16 @@
 .link {
-  color: rgb(14, 11, 11);
+  color:#363338;
   text-decoration: none;
   display: inline-block;
   height: auto;
   cursor: pointer;
   margin: 0.1%;
-  margin-top: 7px;
   vertical-align: center;
+  width: 100%;
   padding: 10px;
+  border-radius: 10px;
+}
+
+.link:hover {
+  background-color: #C1CBCF;
 }

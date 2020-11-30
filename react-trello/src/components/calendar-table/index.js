@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState, useRef } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import styles from './index.module.css'
 import ReactTable from "react-table";
@@ -10,6 +10,10 @@ import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress";
 import TaskDueDate from "../calendar-data/task-dueDate";
 import CreateCard from '../create-card'
+import { useDetectOutsideClick } from "../../utils/useDetectOutsideClick";
+import { useHistory } from "react-router-dom";
+import { useSocket } from "../../contexts/SocketProvider";
+import Transparent from "../transparent";
 
 
 

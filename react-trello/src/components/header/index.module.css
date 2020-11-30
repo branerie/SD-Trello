@@ -35,31 +35,34 @@
 }
 
 .options {
-  background: #e0dbdb;
+  background: #DFE9EE;
   position: absolute;
-  top: 100px;
-  right: 0px;
+  top: 65px;
+  right: 10px;
   width: 100px;
-  box-shadow: 0 1px 8px rgba(0, 0, 0, 0.3);
-  transform: translateY(-20px);
-  transition: opacity 0.4s ease, transform 0.4s ease, visibility 0.4s;
+  border-radius: 10px;
+  border: 1px solid #707070;
 }
 
-.options > div:hover {
-  background-color: khaki;
-
-}
+/* .options > div:hover {
+  background-color: #C1CBCF;
+} */
 
 .logout {
-  color: rgb(14, 11, 11);
+  color:#363338;
   text-decoration: none;
   display: inline-block;
   height: auto;
   cursor: pointer;
   margin: 0.1%;
-  margin-top: 7px;
   vertical-align: center;
+  width: 100%;
   padding: 10px;
+  border-radius: 10px;
+}
+
+.logout:hover {
+  background-color: #C1CBCF;
 }
 
 .input {
@@ -101,5 +104,16 @@
   font-size: 20px;
   font-family: 'Lato';
   font-weight: bold;
+  color: #363338;
+}
+
+.view {
+  display: block;
+  padding: .2em .5em;
+  margin: 0;
+  width: 70px;
+  border: 1px solid #707070;
+  border-radius: 1.5em;
+  background-color: #EDF5F9;
   color: #363338;
 }
