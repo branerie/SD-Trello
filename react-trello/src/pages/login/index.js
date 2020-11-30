@@ -6,7 +6,7 @@ import Input from "../../components/input"
 import Title from "../../components/title"
 import styles from "./index.module.css"
 import authenticate from "../../utils/authenticate"
-import UserContext from "../../Context"
+import UserContext from "../../contexts/UserContext"
 import responseGoogle from "../../utils/responseGoogle"
 import Transparent from "../../components/transparent"
 import AddPassword from "../../components/form-add-password"
@@ -37,6 +37,7 @@ const LoginPage = () => {
 
     const handleGoogle = (googleResponse) => {
         responseGoogle(googleResponse, (user) => {
+            console.log(user);
             context.logIn(user)
             history.push("/")
         }, (response) => {

@@ -21,10 +21,11 @@ const authenticate = async (url, method, body, onSuccess, onFailure) => {
         document.cookie = `x-auth-token=${authToken}`
 
 
-        if (response.username && authToken) {
+        if (response.user.username && authToken) {
             onSuccess({
-                username: response.username,
-                id: response._id
+                username: response.user.username,
+                id: response.user._id,
+                teams: response.teams
             });
         } else {
             onFailure(response)

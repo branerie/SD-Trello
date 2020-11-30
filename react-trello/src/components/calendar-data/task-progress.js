@@ -1,16 +1,12 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
 import { useHistory } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider';
-import pen from '../../images/pen.svg'
-
 
 
 export default function TaskProgress(props) {
-
-
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
     const [cardProgress, setCardProgress] = useState('')
@@ -23,11 +19,8 @@ export default function TaskProgress(props) {
     }, [socket, props.project])
 
 
-
     const editCardProgress = useCallback(async (event) => {
         event.preventDefault()
-
-        console.log(cardProgress);
 
         let data = props.value.split('/')
         let cardId = data[1]
@@ -115,6 +108,7 @@ export default function TaskProgress(props) {
                             <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >
                                 <span>{showTaskProgress(taskprogress)}</span>
                                 {/* <img src={pen} alt="..." width="11.5" height="11.5" /> */}
+
                             </button>
                         </div >
                 }

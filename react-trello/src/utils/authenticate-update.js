@@ -15,10 +15,11 @@ const authenticateUpdate = async (url, method, body, onSuccess, onFailure) => {
         
         const response = await promise.json();
 
-        if (response.username) {
+        if (response.user.username) {
             onSuccess({
-                username: response.username,
-                id: response._id
+                username: response.user.username,
+                id: response.user._id,
+                teams: response.teams
             });
         } else {
             onFailure();

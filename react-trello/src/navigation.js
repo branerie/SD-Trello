@@ -12,11 +12,9 @@ import SignupPage from "./pages/signup"
 import LoginPage from "./pages/login"
 import ProfilePage from "./pages/profile"
 import ErrorPage from "./pages/error"
-import UserContext from "./Context"
-import AllProjectsPage from "./pages/all-project"
+import UserContext from "./contexts/UserContext"
 import ProjectPage from "./pages/project-page"
 import CalendarView from "./pages/calendar-view"
-
 import { SocketProvider } from "./contexts/SocketProvider"
 import ListProvider from "./contexts/ListProvider"
 import TeamProvider from "./contexts/TeamProvider"
@@ -51,11 +49,10 @@ const Navigation = () => {
                             <Route path="/calendarView/:projectid">
                                 {loggedIn ? (<CalendarView />) : (<Redirect to="/login" />)}
                             </Route>
-                            {/* <Route path="/projects">
-                                {loggedIn ? (<AllProjectsPage />) : (<Redirect to="/login" />)}
-                            </Route> */}
                             <Route path="/team/:teamid">
-                                {loggedIn ? (<TeamPage />) : (<Redirect to="/login" />)}
+                                {/* <CurrentTeamProvider> */}
+                                    {loggedIn ? (<TeamPage />) : (<Redirect to="/login" />)}
+                                {/* </CurrentTeamProvider> */}
                             </Route>
                             <Route component={ErrorPage} />
                         </Switch>

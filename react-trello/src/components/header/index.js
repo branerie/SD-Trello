@@ -1,6 +1,6 @@
 import React, { useContext, useRef, useState } from "react"
 import styles from "./index.module.css"
-import UserContext from "../../Context"
+import UserContext from "../../contexts/UserContext"
 import Avatar from "react-avatar"
 import { useDetectOutsideClick } from "../../utils/useDetectOutsideClick"
 import LinkComponent from "../link"
@@ -28,9 +28,10 @@ const Header = ({ asideOn }) => {
             return
         }
 
-        const current = teamContext.teams.find(t => t._id === teamId)
-        teamContext.setCurrentTeam(current)
+        console.log('handle select header', teamId);
+
         teamContext.setOption(teamId)
+        teamContext.getCurrentProjects(teamId)
         history.push(`/team/${teamId}`)
     }
 
