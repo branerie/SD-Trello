@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
 const googleAuth = require('../utils/googleAuth')
 const { auth, isAdmin } = require('../utils')
 const { decode } = require('jsonwebtoken')
+const getTeams = require('../utils/getTeams')
 
 
 router.get('/verify', verifyLogin);
@@ -50,7 +51,13 @@ async function registerUser(req, res, next) {
         if (user === null) {
             const createdUser = await models.User.create({ email, username, password })
             const token = utils.jwt.createToken({ id: createdUser._id })
-            res.header("Authorization", token).send(createdUser)
+
+            const teams = await getTeams(createdUser._id)
+            const response = {
+                user: createdUser,
+                teams
+            }
+            res.header("Authorization", token).send(response)
             return
         }
         let userExist = {}
@@ -75,10 +82,13 @@ function verifyLogin(req, res, next) {
         .then(([data, blacklistToken]) => {
             if (blacklistToken) { return Promise.reject(new Error('blacklisted token')) }
             models.User.findById(data.id)
-                .then((user) => {
+                .then(async (user) => {
+                    const teams = await getTeams(user._id)
+
                     return res.send({
                         status: true,
-                        user
+                        user,
+                        teams
                     })
                 });
         })
@@ -113,7 +123,14 @@ async function loginUser(req, res, next) {
         }
 
         const token = utils.jwt.createToken({ id: user._id })
-        res.header("Authorization", token).send(user)
+
+        const teams = await getTeams(user._id)
+        console.log(teams);
+        const response = {
+            user,
+            teams
+        }
+        res.header("Authorization", token).send(response)
 
     } catch (error) {
         console.log(error)
@@ -129,16 +146,19 @@ async function googleLoginUser(req, res, next) {
     }
 
     try {
-        const user = await models.User.findOne({ email })
+        let user = await models.User.findOne({ email })
         if (user === null) {
-            const createdUser = await models.User.create({ email, username, imageUrl })
-            const token = utils.jwt.createToken({ id: createdUser._id })
-            res.header("Authorization", token).send(createdUser)
-            return
+            user = await models.User.create({ email, username, imageUrl })
         }
 
         const token = utils.jwt.createToken({ id: user._id })
-        res.header("Authorization", token).send(user)
+
+        const teams = await getTeams(user._id)
+        const response = {
+            user,
+            teams
+        }
+        res.header("Authorization", token).send(response)
 
     } catch (error) {
         console.log(error)
@@ -169,13 +189,25 @@ async function updateUser(req, res, next) {
                 if (err) { next(err); return }
 
                 const updatedUser = await models.User.updateOne({ _id: id }, { ...obj, password: hash })
-                res.send(updatedUser)
+
+                const teams = await getTeams(updatedUser._id)
+                const response = {
+                    user: updatedUser,
+                    teams
+                }
+                res.send(response)
                 return
             })
         })
     } else {
         const updatedUser = await models.User.updateOne({ _id: id }, obj)
-        res.send(updatedUser)
+
+        const teams = await getTeams(updatedUser._id)
+        const response = {
+            user: updatedUser,
+            teams
+        }
+        res.send(response)
     }
 }
 

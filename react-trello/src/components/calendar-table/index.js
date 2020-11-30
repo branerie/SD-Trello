@@ -1,4 +1,4 @@
-import React, { cloneElement, useCallback, useEffect, useRef, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import styles from './index.module.css'
 import ReactTable from "react-table";
@@ -6,13 +6,6 @@ import "react-table/react-table.css";
 import Button from "../button";
 import DatePicker from "react-datepicker"
 import Avatar from "react-avatar";
-import pen from '../../images/pen.svg'
-import Transparent from "../transparent";
-import EditCard from "../edit-card";
-import { useDetectOutsideClick } from "../../utils/useDetectOutsideClick";
-import getCookie from "../../utils/cookie";
-import { useHistory } from "react-router-dom";
-import { useSocket } from "../../contexts/SocketProvider";
 import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress";
 import TaskDueDate from "../calendar-data/task-dueDate";
@@ -284,12 +277,7 @@ const TableDndApp = (props) => {
 
 
     const getTrProps = (props, rowInfo) => {
-
-
-        // console.log(rowInfo);
-
         return { rowInfo }
-
     };
 
     const reorder = (list, startIndex, endIndex) => {
