@@ -12,7 +12,8 @@ import { useHistory } from "react-router-dom"
 
 const Header = ({ asideOn }) => {
     const dropdownRef = useRef(null)
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+    const [isProfileActive, setIsProfileActive] = useDetectOutsideClick(dropdownRef, false)
+    const [isViewActive, setIsViewActive] = useDetectOutsideClick(dropdownRef, false)
     const [showForm, setShowForm] = useState(false)
     const context = useContext(UserContext)
     const teamContext = useContext(TeamContext)
@@ -40,7 +41,33 @@ const Header = ({ asideOn }) => {
             <div className={styles.container}>
                 <div className={styles.links}>
                     <div className={styles.margin}>
-                        Change View
+                        Change
+                    </div>
+                    <div>
+                        <ButtonClean
+                            className={styles.view}
+                            onClick={() => setIsViewActive(!isViewActive)}
+                            title='View'
+                        />
+                        {
+                            isViewActive ? <div
+                                ref={dropdownRef}
+                                className={styles.options}
+                            >
+                                <div>
+                                    <LinkComponent
+                                        href={`/profile/${context.user && context.user.id}`}
+                                        title='Profile'
+                                    />
+                                </div>
+                                <div>
+                                    <LinkComponent
+                                        href={`/profile/${context.user && context.user.id}`}
+                                        title='Profile'
+                                    />
+                                </div>
+                            </div> : null
+                        }
                     </div>
                     <div className={styles.margin}>
                         Teams:
@@ -57,18 +84,18 @@ const Header = ({ asideOn }) => {
                 </div>
                 {
                     showForm ? (<Transparent hideForm={() => setShowForm(false)}>
-                        <CreateTeam setOption={teamContext.setOption} hideForm={() => {setShowForm(false)}} ></CreateTeam>
+                        <CreateTeam setOption={teamContext.setOption} hideForm={() => { setShowForm(false) }} ></CreateTeam>
                     </Transparent>) : null
                 }
                 <div className={`${styles.links} ${styles.font}`}>
                     <input className={styles.input} type='text' placeholder='Search...' />
                     <ButtonClean
                         className={styles.avatar}
-                        onClick={() => setIsActive(!isActive)}
+                        onClick={() => setIsProfileActive(!isProfileActive)}
                         title={<Avatar name={context.user.username} size={40} round={true} maxInitials={2} />}
                     />
                     {
-                        isActive ? <div
+                        isProfileActive ? <div
                             ref={dropdownRef}
                             className={styles.options}
                         >
