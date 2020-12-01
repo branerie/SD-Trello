@@ -17,6 +17,8 @@ function TeamProvider({ children }) {
     }
   }
 
+
+
   async function getTeams() {
     if (userContext.user.teams) {
       setTeams(userContext.user.teams)

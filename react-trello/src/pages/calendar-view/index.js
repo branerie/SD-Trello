@@ -93,9 +93,11 @@ export default function CalendarView() {
     return (
         <PageLayout className={styles.conteiner}>
             <div className={styles.calendarPageContainer}>
-                <span className={styles.calendarContainer}>
-                    <TableDndApp project={project} />
-                </span>
+                <div>
+                    <div className={styles.calendarContainer}>
+                        <TableDndApp project={project} />
+                    </div>
+                </div>
             </div>
         </PageLayout >
     )

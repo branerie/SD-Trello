@@ -7,6 +7,8 @@ router.post('/', auth, createTeam)
 
 // router.get('/:id', auth, getProjects)
 
+router.get('/get-users/:id', auth, getTeamUsers)
+
 router.get('/', auth, getTeams)
 
 router.put('/:id', auth, updateTeam)
@@ -47,7 +49,23 @@ async function getTeams(req, res, next) {
                 }
             })
         res.send(teams)
-        
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+async function getTeamUsers(req, res, next) {
+    const teamId = req.params.id
+
+    try {
+        const team = await models.Team.findOne({ _id: teamId })
+            .populate({
+                path: 'members'
+            })
+            
+        res.send(team.members)
+
     } catch (error) {
         console.log(error);
     }
