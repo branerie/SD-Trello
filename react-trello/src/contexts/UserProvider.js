@@ -10,7 +10,6 @@ const UserProvider = (props) => {
     const history = useHistory()
 
     const logIn = (user) => {
-        console.log(user);
         setUser({
             ...user,
             loggedIn: true

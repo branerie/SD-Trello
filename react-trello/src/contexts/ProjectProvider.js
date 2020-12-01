@@ -1,14 +1,15 @@
 import React, { useState } from 'react'
-import ListContext from './ListContext'
+import ProjectContext from './ProjectContext'
 
 function ListProvider({ children }) {
   const [lists, setLists] = useState([])
   const [hiddenLists, setHiddenLists] = useState([])
+  const [project, setProject] = useState(null)
   
   return (
-    <ListContext.Provider value={ { lists, setLists, hiddenLists, setHiddenLists } }>
+    <ProjectContext.Provider value={ { lists, setLists, hiddenLists, setHiddenLists, project, setProject } }>
       {children}
-    </ListContext.Provider>
+    </ProjectContext.Provider>
   )
 }
 

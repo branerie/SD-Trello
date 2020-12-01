@@ -10,7 +10,7 @@ import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import pic from '../../images/pic.svg'
-import ListContext from '../../contexts/ListContext'
+import ProjectContext from '../../contexts/ProjectContext'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Loader from 'react-loader-spinner'
 import ButtonClean from '../../components/button-clean'
@@ -25,7 +25,7 @@ export default function ProjectPage() {
     const listRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(listRef, false)
     const socket = useSocket()
-    const listContext = useContext(ListContext)
+    const projectContext = useContext(ProjectContext)
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', project)
@@ -41,8 +41,8 @@ export default function ProjectPage() {
 
         })
         setMembers(memberArr)
-        listContext.setLists(project.lists)
-    }, [listContext])
+        projectContext.setLists(project.lists)
+    }, [projectContext])
 
     useEffect(() => {
         if (socket == null) return
@@ -75,13 +75,17 @@ export default function ProjectPage() {
 
             })
             setMembers(memberArr)
-            listContext.setLists(data.lists)
+            projectContext.setLists(data.lists)
         }
 
-    }, [params.projectid, history, listContext])
+    }, [params.projectid, history, projectContext])
 
     useEffect(() => {
         getData()
+        const pid = getCookie('pid')
+        if (pid && pid !== projectContext.project) {
+            projectContext.setProject(pid)
+        }
     }, [])
 
     if (!project) {
@@ -121,9 +125,9 @@ export default function ProjectPage() {
         if (result.type === 'droppableItem') {
             let position = result.destination.index
 
-            const filteredList = listContext.lists.filter(element => !(listContext.hiddenLists.includes(element._id)))
+            const filteredList = projectContext.lists.filter(element => !(projectContext.hiddenLists.includes(element._id)))
             const previousId = filteredList[position - 1]
-            position = listContext.lists.indexOf(previousId) + 1
+            position = projectContext.lists.indexOf(previousId) + 1
 
             const token = getCookie("x-auth-token")
             const response = await fetch(`http://localhost:4000/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
@@ -177,11 +181,6 @@ export default function ProjectPage() {
             }
         }
         getData()
-    }
-
-    async function calendarView() {
-        const id = params.projectid
-        history.push(`/calendarView/${id}`)
     }
 
     const addList = async (e) => {
@@ -240,8 +239,8 @@ export default function ProjectPage() {
                     {(provided) => (
                         <div className={styles.flex} ref={provided.innerRef} >
                             {
-                                listContext.lists
-                                    .filter(element => !(listContext.hiddenLists.includes(element._id)))
+                                projectContext.lists
+                                    .filter(element => !(projectContext.hiddenLists.includes(element._id)))
                                     .map((element, index) => {
                                         return (
                                             <Draggable key={element._id} draggableId={element._id} index={index}>
@@ -281,7 +280,6 @@ export default function ProjectPage() {
                     </div > : null
             }
             <Button title='Delete Project' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteProject() }} />
-            <Button onClick={calendarView} title='Calendar View' />
             <img className={styles.pic} src={pic} alt="" width="373" height="312" />
         </PageLayout>
     )

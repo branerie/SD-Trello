@@ -16,7 +16,7 @@ import UserContext from "./contexts/UserContext"
 import ProjectPage from "./pages/project-page"
 import CalendarView from "./pages/calendar-view"
 import { SocketProvider } from "./contexts/SocketProvider"
-import ListProvider from "./contexts/ListProvider"
+import ProjectProvider from "./contexts/ProjectProvider"
 import TeamProvider from "./contexts/TeamProvider"
 import TeamPage from "./pages/team"
 
@@ -27,7 +27,7 @@ const Navigation = () => {
 
     return (
         <SocketProvider user={context.user.username}>
-            <ListProvider>
+            <ProjectProvider>
                 <TeamProvider>
                     <BrowserRouter>
                         <Switch>
@@ -46,19 +46,17 @@ const Navigation = () => {
                             <Route path="/projects/:projectid">
                                 {loggedIn ? (<ProjectPage />) : (<Redirect to="/login" />)}
                             </Route>
-                            <Route path="/calendarView/:projectid">
+                            <Route path="/calendar-view/:projectid">
                                 {loggedIn ? (<CalendarView />) : (<Redirect to="/login" />)}
                             </Route>
                             <Route path="/team/:teamid">
-                                {/* <CurrentTeamProvider> */}
                                     {loggedIn ? (<TeamPage />) : (<Redirect to="/login" />)}
-                                {/* </CurrentTeamProvider> */}
                             </Route>
                             <Route component={ErrorPage} />
                         </Switch>
                     </BrowserRouter>
                 </TeamProvider>
-            </ListProvider>
+            </ProjectProvider>
         </SocketProvider>
     )
 }

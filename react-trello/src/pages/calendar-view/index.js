@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState } from 'react'
+import React, { useCallback, useEffect, useState, useContext } from 'react'
 import { useParams, useHistory } from "react-router-dom"
 import Button from '../../components/button'
 import PageLayout from '../../components/page-layout'
@@ -8,6 +8,7 @@ import styles from './index.module.css'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import TableDndApp from '../../components/calendar-table'
 import Loader from 'react-loader-spinner'
+import ProjectContext from '../../contexts/ProjectContext'
 
 export default function CalendarView() {
     const params = useParams()
@@ -16,6 +17,7 @@ export default function CalendarView() {
     const [lists, setLists] = useState([])
     const [members, setMembers] = useState([])
     const socket = useSocket()
+    const projectContext = useContext(ProjectContext)
 
     const projectUpdate = useCallback((project) => {
 
@@ -37,7 +39,6 @@ export default function CalendarView() {
 
         return () => socket.off('project-updated')
     }, [socket, projectUpdate])
-
 
     const getData = useCallback(async () => {
         const id = params.projectid
@@ -69,6 +70,10 @@ export default function CalendarView() {
 
     useEffect(() => {
         getData()
+        const pid = getCookie('pid')
+        if (pid && pid !== projectContext.project) {
+            projectContext.setProject(pid)
+        }
     }, [getData])
 
     if (!project) {
@@ -85,14 +90,8 @@ export default function CalendarView() {
         )
     }
 
-    async function defaultView() {
-        const id = params.projectid
-        history.push(`/projects/${id}`)
-    }
-
     return (
         <PageLayout className={styles.conteiner}>
-            <Button onClick={defaultView} title='Default View' />
             <div className={styles.calendarPageContainer}>
                 <span className={styles.calendarContainer}>
                     <TableDndApp project={project} />

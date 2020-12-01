@@ -6,11 +6,8 @@
   cursor: pointer;
   margin: 0.1%;
   vertical-align: center;
-  width: 100%;
+  width: 80%;
   padding: 10px;
-  border-radius: 10px;
-}
-
-.link:hover {
-  background-color: #C1CBCF;
+  border-radius: inherit;
+  text-align: center;
 }

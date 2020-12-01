@@ -37,11 +37,9 @@ const LoginPage = () => {
 
     const handleGoogle = (googleResponse) => {
         responseGoogle(googleResponse, (user) => {
-            console.log(user);
             context.logIn(user)
             history.push("/")
         }, (response) => {
-
             console.log("Error", response)
         })
     }

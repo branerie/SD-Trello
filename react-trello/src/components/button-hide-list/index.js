@@ -1,13 +1,13 @@
 import React, { useContext } from "react";
-import ListContext from "../../contexts/ListContext";
+import ProjectContext from "../../contexts/ProjectContext";
 import ListColor from '../list-color'
 import styles from "./index.module.css";
 
 const ButtonHideList = ( { list } ) => {
-    const listContext = useContext(ListContext)
+    const projectContext = useContext(ProjectContext)
 
     function onClick() {
-        const newHiddenLists = [...listContext.hiddenLists]
+        const newHiddenLists = [...projectContext.hiddenLists]
         
         if (newHiddenLists.includes(list._id)) {
             const index = newHiddenLists.indexOf(list._id)
@@ -15,7 +15,7 @@ const ButtonHideList = ( { list } ) => {
         } else {
             newHiddenLists.push(list._id)
         }
-        listContext.setHiddenLists(newHiddenLists)
+        projectContext.setHiddenLists(newHiddenLists)
     }
 
     return (
