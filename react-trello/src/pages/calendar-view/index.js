@@ -1,11 +1,11 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react'
 import { useParams, useHistory } from "react-router-dom"
-import Button from '../../components/button'
+// import Button from '../../components/button'
 import PageLayout from '../../components/page-layout'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
-import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+// import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import TableDndApp from '../../components/calendar-table'
 import Loader from 'react-loader-spinner'
 import ProjectContext from '../../contexts/ProjectContext'
@@ -74,7 +74,7 @@ export default function CalendarView() {
         if (pid && pid !== projectContext.project) {
             projectContext.setProject(pid)
         }
-    }, [getData])
+    }, [getData,projectContext])
 
     if (!project) {
         return (

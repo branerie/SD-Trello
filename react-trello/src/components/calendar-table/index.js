@@ -1,24 +1,17 @@
-import React, { useCallback, useEffect, useState, useRef } from "react";
-import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
+import React, { useCallback, useEffect, useState, useContext } from "react";
+// import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import styles from './index.module.css'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
 import Button from "../button";
 import DatePicker from "react-datepicker"
-import Avatar from "react-avatar";
 import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress";
 import TaskDueDate from "../calendar-data/task-dueDate";
-import CreateCard from '../create-card'
 import AddList from "../calendar-data/add-list";
-import ButtonClean from "../button-clean";
 import AddTask from "../calendar-data/add-task";
-import { useDetectOutsideClick } from "../../utils/useDetectOutsideClick";
-import { useHistory } from "react-router-dom";
-import { useSocket } from "../../contexts/SocketProvider";
-import Transparent from "../transparent";
-import getCookie from "../../utils/cookie";
 import TaskMembers from "../calendar-data/task-members";
+import ProjectContext from "../../contexts/ProjectContext";
 
 
 
@@ -30,25 +23,8 @@ const TableDndApp = (props) => {
     const [startDay, setStartDay] = useState(today)
     const [tableData, setTableData] = useState([])
     const [tableSize, setTableSize] = useState(10)
-    const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
-    const dropdownRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
-    const [isVisible, setIsVisible] = useState(false)
+    const projectContext = useContext(ProjectContext)
 
-    const [cardName, setCardName] = useState('')
-    const history = useHistory()
-    const socket = useSocket()
-
-
-
-
-    const showFormEdit = () => {
-        setIsVisibleEdit(true)
-    }
-
-    const hideFormEdit = () => {
-        setIsVisibleEdit(false)
-    }
 
 
     const shownDay = (value) => {
@@ -69,75 +45,84 @@ const TableDndApp = (props) => {
 
 
 
-    let numberOfRows = 0
 
     const cardData = useCallback(async () => {
+        let numberOfRows = 0
 
         let data = []
-        const lists = props.project.lists
-        lists.map((list) => {
-            numberOfRows++
-            let listCards = list.cards
-            data.push({
-                task: (
-                    <div className={styles.listName} >
-                        <span> {list.name} </span>
-                    </div >
-                ),
-                progress: '',
-                assigned: '',
-                monday: '',
-                tuesday: '',
-                wednesday: '',
-                thursday: '',
-                friday: '',
-                saturday: '',
-                sunday: '',
-                dueDate: (
-                    <AddTask listId={list._id} project={props.project} />
-                )
-            })
+        const lists = await props.project.lists
 
+        await projectContext.setLists(lists)
 
+        // console.log(projectContext.lists);
 
-            listCards.forEach(card => {
+        projectContext.lists
+            .filter(element => !(projectContext.hiddenLists.includes(element._id)))
+            .map((list) => {
 
+                // lists.map((list) => {
                 numberOfRows++
-
-                let cardDate = ''
-                let thisCardDate = ''
-                if (card.dueDate) {
-                    cardDate = new Date(card.dueDate)
-                    thisCardDate = cardDate.getTime()
-                }
+                let listCards = list.cards
                 data.push({
-
                     task: (
-                        <TaskName value={card.name + '/' + card._id + '/' + list._id} props={props} project={props.project} />
+                        <div className={styles.listName} >
+                            <span> {list.name} </span>
+                        </div >
                     ),
-                    progress: (
-                        <TaskProgress value={card.progress + '/' + card._id + '/' + list._id} props={props} project={props.project} />
-                    ),
-                    assigned:
-                        (
-                            <TaskMembers cardMembers={card.members} cardId={card._id} listId={list._id} project={props.project} />
-                        ),
-                    monday: thisCardDate + "/" + card.progress,
-                    tuesday: thisCardDate + "/" + card.progress,
-                    wednesday: thisCardDate + "/" + card.progress,
-                    thursday: thisCardDate + "/" + card.progress,
-                    friday: thisCardDate + "/" + card.progress,
-                    saturday: thisCardDate + "/" + card.progress,
-                    sunday: thisCardDate + "/" + card.progress,
+                    progress: '',
+                    assigned: '',
+                    monday: '',
+                    tuesday: '',
+                    wednesday: '',
+                    thursday: '',
+                    friday: '',
+                    saturday: '',
+                    sunday: '',
                     dueDate: (
-                        <TaskDueDate value={(thisCardDate !== '' && thisCardDate !== 0) ? cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''} props={props} project={props.project} cardDueDate={cardDate} cardId={card._id} listId={list._id} />
+                        <AddTask listId={list._id} project={props.project} />
                     )
                 })
 
+
+
+                listCards.forEach(card => {
+
+                    numberOfRows++
+
+                    let cardDate = ''
+                    let thisCardDate = ''
+                    if (card.dueDate) {
+                        cardDate = new Date(card.dueDate)
+                        thisCardDate = cardDate.getTime()
+                    }
+                    data.push({
+
+                        task: (
+                            <TaskName value={card.name + '/' + card._id + '/' + list._id} props={props} project={props.project} />
+                        ),
+                        progress: (
+                            <TaskProgress value={card.progress + '/' + card._id + '/' + list._id} props={props} project={props.project} />
+                        ),
+                        assigned:
+                            (
+                                <TaskMembers cardMembers={card.members} cardId={card._id} listId={list._id} project={props.project} />
+                            ),
+                        monday: thisCardDate + "/" + card.progress,
+                        tuesday: thisCardDate + "/" + card.progress,
+                        wednesday: thisCardDate + "/" + card.progress,
+                        thursday: thisCardDate + "/" + card.progress,
+                        friday: thisCardDate + "/" + card.progress,
+                        saturday: thisCardDate + "/" + card.progress,
+                        sunday: thisCardDate + "/" + card.progress,
+                        dueDate: (
+                            <TaskDueDate value={(thisCardDate !== '' && thisCardDate !== 0) ? cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''} props={props} project={props.project} cardDueDate={cardDate} cardId={card._id} listId={list._id} />
+                        )
+                    })
+
+                })
+
+                return data
             })
-
-
-        })
 
         numberOfRows++
         data.push({
@@ -163,7 +148,7 @@ const TableDndApp = (props) => {
         return numberOfRows
 
 
-    }, [props.project.lists, props.project, IsVisibleEdit])
+    }, [projectContext, props])
 
 
     useEffect(() => {
@@ -172,84 +157,84 @@ const TableDndApp = (props) => {
 
 
 
-    const DragTrComponent = (props) => {
+    // const DragTrComponent = (props) => {
 
-        const { children = null, rowInfo } = props;
-        if (rowInfo) {
-            // debugger;
-            const { original, index } = rowInfo;
-            const { firstName } = original;
-            return (
-                <Draggable key={firstName} index={index} draggableId={firstName}>
-                    {(draggableProvided, draggableSnapshot) => (
-                        <div
-                            ref={draggableProvided.innerRef}
-                            {...draggableProvided.draggableProps}
-                            {...draggableProvided.dragHandleProps}
-                        >
-                            <ReactTable.defaultProps.TrComponent>
-                                {children}
-                            </ReactTable.defaultProps.TrComponent>
-                        </div>
-                    )}
-                </Draggable>
-            )
-        } else
-            return (
-                <ReactTable.defaultProps.TrComponent>
-                    {children}
-                </ReactTable.defaultProps.TrComponent>
-            )
+    //     const { children = null, rowInfo } = props;
+    //     if (rowInfo) {
+    //         // debugger;
+    //         const { original, index } = rowInfo;
+    //         const { firstName } = original;
+    //         return (
+    //             <Draggable key={firstName} index={index} draggableId={firstName}>
+    //                 {(draggableProvided, draggableSnapshot) => (
+    //                     <div
+    //                         ref={draggableProvided.innerRef}
+    //                         {...draggableProvided.draggableProps}
+    //                         {...draggableProvided.dragHandleProps}
+    //                     >
+    //                         <ReactTable.defaultProps.TrComponent>
+    //                             {children}
+    //                         </ReactTable.defaultProps.TrComponent>
+    //                     </div>
+    //                 )}
+    //             </Draggable>
+    //         )
+    //     } else
+    //         return (
+    //             <ReactTable.defaultProps.TrComponent>
+    //                 {children}
+    //             </ReactTable.defaultProps.TrComponent>
+    //         )
 
-    }
+    // }
 
-    const DropTbodyComponent = (props) => {
+    // const DropTbodyComponent = (props) => {
 
-        const { children = null } = props
+    //     const { children = null } = props
 
-        return (
-            <Droppable droppableId="droppable">
-                {(droppableProvided, droppableSnapshot) => (
-                    <div ref={droppableProvided.innerRef}>
-                        <ReactTable.defaultProps.TbodyComponent>
-                            {children}
-                        </ReactTable.defaultProps.TbodyComponent>
-                    </div>
-                )}
-            </Droppable>
-        )
+    //     return (
+    //         <Droppable droppableId="droppable">
+    //             {(droppableProvided, droppableSnapshot) => (
+    //                 <div ref={droppableProvided.innerRef}>
+    //                     <ReactTable.defaultProps.TbodyComponent>
+    //                         {children}
+    //                     </ReactTable.defaultProps.TbodyComponent>
+    //                 </div>
+    //             )}
+    //         </Droppable>
+    //     )
 
-    }
-
-
-    const handleDragEnd = result => {
-        if (!result.destination) {
-            return
-        }
-
-        const newData = reorder(
-            tableData,
-            result.source.index,
-            result.destination.index
-        );
-
-        // tableData = newData
-
-    };
+    // }
 
 
-    const getTrProps = (props, rowInfo) => {
+    // const handleDragEnd = result => {
+    //     if (!result.destination) {
+    //         return
+    //     }
 
-        return { rowInfo }
-    };
+    //     const newData = reorder(
+    //         tableData,
+    //         result.source.index,
+    //         result.destination.index
+    //     );
 
-    const reorder = (list, startIndex, endIndex) => {
-        const result = Array.from(list);
-        const [removed] = result.splice(startIndex, 1);
-        result.splice(endIndex, 0, removed);
+    //     // tableData = newData
 
-        return result;
-    }
+    // };
+
+
+    // const getTrProps = (props, rowInfo) => {
+
+    //     return { rowInfo }
+    // };
+
+    // const reorder = (list, startIndex, endIndex) => {
+    //     const result = Array.from(list);
+    //     const [removed] = result.splice(startIndex, 1);
+    //     result.splice(endIndex, 0, removed);
+
+    //     return result;
+    // }
 
     const getHeaderDate = (num) => {
         var nextDay = new Date(startDay);
@@ -277,6 +262,10 @@ const TableDndApp = (props) => {
                 let progress = Number(token[1])
                 let checked = startDay.setDate(startDay.getDate());
 
+
+                // let cardDate = new Date(date)
+                // let currDate = cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() % 100
+
                 let color = ''
                 let message = ''
                 if (date) {
@@ -293,9 +282,11 @@ const TableDndApp = (props) => {
                             color = 'blue';
                             message = 'In Progress'
                             break;
-                        case (date < checked && progress < 100):
+                        case (date < checked && (progress < 100 || !progress)):
                             color = 'red';
                             message = 'Delayed'
+                            break;
+                        default:
                             break;
                     }
                     return <div style={{ background: color }} >{message}</div>
@@ -314,7 +305,6 @@ const TableDndApp = (props) => {
                 let checked = checkedDate.setDate(checkedDate.getDate() + num);
 
 
-
                 let color = ''
                 let message = ''
                 switch (true) {
@@ -325,6 +315,8 @@ const TableDndApp = (props) => {
                     case (date > checked && progress !== 100):
                         color = 'blue';
                         message = 'In Progress'
+                        break;
+                    default:
                         break;
                 }
                 return <div style={{ background: color, color: color }} >{message}</div>
@@ -391,100 +383,99 @@ const TableDndApp = (props) => {
                 <Button onClick={getNextWeek} title='Next week' />
             </div>
             <div>
-                <DragDropContext onDragEnd={handleDragEnd} >
-                    <ReactTable
-                        TrComponent={DragTrComponent}
-                        TbodyComponent={DropTbodyComponent}
-                        getTrProps={getTrProps}
-                        data={tableData}
-                        columns={[
-                            {
-                                Header: 'Task',
-                                accessor: "task",
-                                width: 250,
-                                style: {
-                                    position: 'static'
-                                }
-                            },
-                            {
-                                Header: 'Progress',
-                                accessor: "progress",
-                                width: 100
-                            },
-                            {
-                                Header: 'Assigned to',
-                                accessor: "assigned",
-                                width: 200
-                            },
-                            {
-                                Header: getHeaderDate(0),
-                                accessor: "monday",
-                                width: 100,
-                                Cell: ({ value }) => {
-                                    return cellData(value, 0)
-                                }
-                            },
-                            {
-                                Header: getHeaderDate(1),
-                                accessor: "tuesday",
-                                width: 100,
-                                Cell: ({ value }) => {
-                                    return cellData(value, 1)
-                                }
-                            },
-                            {
-                                Header: getHeaderDate(2),
-                                accessor: "wednesday",
-                                width: 100,
-                                Cell: ({ value }) => {
-                                    return cellData(value, 2)
-                                }
-                            },
-                            {
-                                Header: getHeaderDate(3),
-                                accessor: "thursday",
-                                width: 100,
-                                Cell: ({ value }) => {
-                                    return cellData(value, 3)
-                                }
-                            },
-                            {
-                                Header: getHeaderDate(4),
-                                accessor: "friday",
-                                width: 100,
-                                Cell: ({ value }) => {
-                                    return cellData(value, 4)
-                                }
-                            },
-                            {
-                                Header: getHeaderDate(5),
-                                accessor: "saturday",
-                                width: 100,
-                                Cell: ({ value }) => {
-                                    return cellData(value, 5)
-                                }
-                            },
-                            {
-                                Header: getHeaderDate(6),
-                                accessor: "sunday",
-                                width: 100,
-                                Cell: ({ value }) => {
-                                    return cellData(value, 6)
-                                }
-                            },
-                            {
-                                Header: 'Due Date',
-                                accessor: "dueDate",
-                                width: 200
+                {/* <DragDropContext onDragEnd={handleDragEnd} > */}
+                <ReactTable
+                    // TrComponent={DragTrComponent}
+                    // TbodyComponent={DropTbodyComponent}
+                    // getTrProps={getTrProps}
+                    data={tableData}
+                    columns={[
+                        {
+                            Header: 'Task',
+                            accessor: "task",
+                            width: 250,
+                            style: {
+                                position: 'static'
                             }
-                        ]}
-                        defaultPageSize={10}
-                        pageSize={tableSize}
-                        showPagination={false}
-                        className={styles.table, "-striped -highlight"}
-                        position={'static'}
-                    />
-                </DragDropContext>
+                        },
+                        {
+                            Header: 'Progress',
+                            accessor: "progress",
+                            width: 100
+                        },
+                        {
+                            Header: 'Assigned to',
+                            accessor: "assigned",
+                            width: 200
+                        },
+                        {
+                            Header: getHeaderDate(0),
+                            accessor: "monday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                return cellData(value, 0)
+                            }
+                        },
+                        {
+                            Header: getHeaderDate(1),
+                            accessor: "tuesday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                return cellData(value, 1)
+                            }
+                        },
+                        {
+                            Header: getHeaderDate(2),
+                            accessor: "wednesday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                return cellData(value, 2)
+                            }
+                        },
+                        {
+                            Header: getHeaderDate(3),
+                            accessor: "thursday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                return cellData(value, 3)
+                            }
+                        },
+                        {
+                            Header: getHeaderDate(4),
+                            accessor: "friday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                return cellData(value, 4)
+                            }
+                        },
+                        {
+                            Header: getHeaderDate(5),
+                            accessor: "saturday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                return cellData(value, 5)
+                            }
+                        },
+                        {
+                            Header: getHeaderDate(6),
+                            accessor: "sunday",
+                            width: 100,
+                            Cell: ({ value }) => {
+                                return cellData(value, 6)
+                            }
+                        },
+                        {
+                            Header: 'Due Date',
+                            accessor: "dueDate",
+                            width: 200
+                        }
+                    ]}
+                    defaultPageSize={10}
+                    pageSize={tableSize}
+                    showPagination={false}
+                    className={"-striped cardMembers"}
+                />
+                {/* </DragDropContext> */}
             </div>
 
         </div>

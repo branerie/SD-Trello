@@ -1,9 +1,5 @@
-import React, { useCallback, useContext, useRef, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
-import { useSocket } from '../../contexts/SocketProvider'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import React, { useState } from 'react'
 import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
 import ButtonClean from '../button-clean'
 import Transparent from '../transparent'
 import CreateCard from '../create-card'
@@ -15,10 +11,7 @@ export default function AddTask(props) {
    
     const [isVisible, setIsVisible] = useState(false)
     
-    const listRef = useRef(null);
-   
-
-
+ 
     return (
 
 

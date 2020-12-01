@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useRef, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import React, { useCallback, useRef, useState } from 'react'
+import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import styles from './index.module.css'
@@ -10,12 +10,7 @@ import ButtonClean from '../button-clean'
 
 export default function AddList(props) {
 
-    const params = useParams()
-    const history = useHistory()
-    const [project, setProject] = useState(null)
-    const [members, setMembers] = useState([])
-    const [isVisible, setIsVisible] = useState(false)
-    const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
+    const history = useHistory()     
     const [listName, setListName] = useState('')
     const listRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(listRef, false)
@@ -54,7 +49,7 @@ export default function AddList(props) {
             updateProjectSocket()
         }
 
-    }, [history, listName, updateProjectSocket])
+    }, [history, listName, updateProjectSocket, setIsActive, isActive,props.project._id])
 
 
 

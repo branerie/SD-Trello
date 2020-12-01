@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useContext, useRef, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
@@ -24,17 +24,22 @@ export default function TaskMembers(props) {
 
     const projectId = props.project._id
 
-
+    const cardMembers = props.cardMembers
+    const cardId = props.cardId
+    const listId = props.listId
 
     const getTeamUsers = async () => {
         let currentTeamId = ''
 
         await teamContext.teams.map(t => {
-            t.projects.map(p => {
-                if (p._id === projectId) {
-                    currentTeamId = t._id
-                }
-            })
+            return (
+                t.projects.map(p => {
+                    if (p._id === projectId) {
+                        currentTeamId = t._id
+                    }
+                    return currentTeamId
+                })
+            )
         })
 
         const token = getCookie("x-auth-token")
@@ -95,7 +100,7 @@ export default function TaskMembers(props) {
             updateProjectSocket()
         }
 
-    }, [history, props, users,])
+    }, [history, props, cardId, listId, updateProjectSocket])
 
 
     const handleAdd = useCallback(async (event) => {
@@ -123,19 +128,7 @@ export default function TaskMembers(props) {
             updateProjectSocket()
         }
 
-    }, [history, users, props, selectedUser])
-
-
-
-
-
-
-    let cardMembers = props.cardMembers
-    let cardId = props.cardId
-    let listId = props.listId
-
-
-
+    }, [history, props, cardId, listId, isActive, setIsActive, selectedUser, updateProjectSocket])
 
 
 
