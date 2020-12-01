@@ -1,11 +1,8 @@
-const mongoose = require('mongoose')
 const models = require('../models')
 const { auth } = require('../utils')
 const router = require('express').Router()
 
 router.post('/', auth, createTeam)
-
-// router.get('/:id', auth, getProjects)
 
 router.get('/get-users/:id', auth, getTeamUsers)
 
@@ -27,9 +24,7 @@ async function createTeam(req, res, next) {
 }
 
 async function getTeams(req, res, next) {
-    console.log('teams');
     const { _id } = req.user
-
 
     try {
         const teams = await models.Team.find({ members: _id })
@@ -70,27 +65,6 @@ async function getTeamUsers(req, res, next) {
         console.log(error);
     }
 }
-
-// async function getProjects(req, res, next) {
-//     const teamId = req.params.id
-//     const teams = await models.Team.findOne({ _id: teamId })
-//         .populate({
-//             path: 'projects',
-//             populate: {
-//                 path: 'membersRoles',
-//                 populate: {
-//                     path: 'memberId'
-//                 }
-//             }
-//         })
-//         .populate({
-//             path: 'projects',
-//             populate: {
-//                 path: 'author'
-//             }
-//         })
-//     res.send(teams.projects)
-// }
 
 async function updateTeam(req, res, next) {
     const teamId = req.params.id

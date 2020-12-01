@@ -44,7 +44,7 @@ const TeamPage = () => {
                 isVisible ?
                     <div>
                         <Transparent hideForm={() => setIsVisible(false)}>
-                            <CreateProject hideForm={() => setIsVisible(false)} />
+                            <CreateProject/>
                         </Transparent>
                     </div> : null
             }

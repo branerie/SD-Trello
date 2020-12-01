@@ -13,3 +13,15 @@
     width: 50%;
     height: 25%;
 }
+
+.members {
+    background-color: #DFE9EE;
+}
+
+.user {
+    width: 100%;
+}
+
+.email {
+    font-size: 13px;
+}

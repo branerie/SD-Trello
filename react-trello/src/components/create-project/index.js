@@ -7,11 +7,19 @@ import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import "react-datepicker/dist/react-datepicker.css"
 import ProjectContext from '../../contexts/ProjectContext'
+import ButtonClean from '../button-clean'
+import Avatar from 'react-avatar'
+import UserContext from '../../contexts/UserContext'
 
-export default function CreateProject(props) {
+export default function CreateProject() {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
+    const [member, setMember] = useState('')
+    const [members, setMembers] = useState([])
+    const [showMembers, setShowMembers] = useState(false)
+    const [allUsers, setAllUsers] = useState([])
     const projectContext = useContext(ProjectContext)
+    const userContext = useContext(UserContext)
     const history = useHistory()
     const params = useParams()
 
@@ -42,6 +50,41 @@ export default function CreateProject(props) {
         }
     }, [history, name, description])
 
+    const onFocus = async () => {
+        setShowMembers(true)
+
+        const teamId = params.teamid
+
+        if (allUsers.length === 0) {
+            const token = getCookie("x-auth-token")
+            const response = await fetch(`http://localhost:4000/api/teams/get-users/${teamId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": token
+                }
+            })
+
+            if (!response.ok) {
+                history.push("/error")
+            }
+            const users = await response.json()
+            setAllUsers(users)
+        }
+    }
+
+    const onBlur = () => {
+        setTimeout(() => setShowMembers(false), 120)
+    }
+
+    const addMember = (input) => {
+        const arr = [...members]
+        arr.push(input)
+        setMembers(arr)
+        setShowMembers(false)
+        setMember('')
+    }
+
     return (
         <div className={styles.form}>
             <form className={styles.container} onSubmit={handleSubmit}>
@@ -58,8 +101,46 @@ export default function CreateProject(props) {
                     label="Description"
                     id="description"
                 />
+                <Input
+                    value={member}
+                    onFocus={onFocus}
+                    onBlur={onBlur}
+                    onChange={(e) => setMember(e.target.value)}
+                    label="Invite members"
+                    id="members"
+                    placeholder='username'
+                />
                 <Button title="Create" />
+                <div>
+                    {
+                        members.map(m => {
+                            return (
+                                <Avatar key={m._id} name={m.username} size={40} round={true} maxInitials={2} />
+                            )
+                        })
+                    }
+                </div>
             </form>
+            {
+                showMembers ? <div className={styles.members}>
+                    {
+                        allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
+                                .sort((a,b) => a.username.localeCompare(b.username))
+                                .map(u => {
+                                    return (
+                                    <ButtonClean
+                                        key={u._id}
+                                        className={styles.user}
+                                        onClick={() => addMember(u)}
+                                        title={<div>
+                                            <div>{u.username}</div>
+                                            <div className={styles.email}>{u.email}</div>
+                                        </div>}
+                                    />)
+                                })
+                    }
+                </div> : null
+            }
         </div>
     )
 }

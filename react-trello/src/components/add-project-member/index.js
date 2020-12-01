@@ -121,7 +121,7 @@ export default function AddMember(props) {
 
     return (
         <div className={styles.form}>
-            <div className={styles.currentMembers}>
+            <div className={styles['current-members']}>
                 <Title title={"Team members"} />
                 {
                     members.map((element, index) => {
