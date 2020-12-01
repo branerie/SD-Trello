@@ -17,6 +17,8 @@ import { useDetectOutsideClick } from "../../utils/useDetectOutsideClick";
 import { useHistory } from "react-router-dom";
 import { useSocket } from "../../contexts/SocketProvider";
 import Transparent from "../transparent";
+import getCookie from "../../utils/cookie";
+import TaskMembers from "../calendar-data/task-members";
 
 
 
@@ -65,40 +67,6 @@ const TableDndApp = (props) => {
         return weekDay
     }
 
-    const updateProjectSocket = useCallback(() => {
-        socket.emit('project-update', props.project)
-    }, [socket, props.project])
-
-    const createCard = useCallback(async (event) => {
-        event.preventDefault()
-
-        const listId = props.listId
-
-        if (cardName === "") {
-            console.log('return');
-            return
-        }
-
-        const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}`, {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            },
-            body: JSON.stringify({
-                name: cardName
-            })
-        })
-        if (!response.ok) {
-            history.push("/error")
-            return
-        } else {
-            updateProjectSocket()
-            props.hideForm()
-        }
-
-    }, [history, cardName, props, updateProjectSocket])
 
 
     let numberOfRows = 0
@@ -126,7 +94,7 @@ const TableDndApp = (props) => {
                 saturday: '',
                 sunday: '',
                 dueDate: (
-                    <AddTask props={props} listId={list._id}/>
+                    <AddTask listId={list._id} project={props.project} />
                 )
             })
 
@@ -152,17 +120,7 @@ const TableDndApp = (props) => {
                     ),
                     assigned:
                         (
-                            <div>
-                                {
-                                    card.members.map((member, index) => {
-                                        return (
-                                            <span key={index}>
-                                                <Avatar name={member.username} size={30} round={true} maxInitials={2} onMouseEnter={<div>{member.username}</div>} />
-                                            </span>
-                                        )
-                                    })
-                                }
-                            </div >
+                            <TaskMembers cardMembers={card.members} cardId={card._id} listId={list._id} project={props.project} />
                         ),
                     monday: thisCardDate + "/" + card.progress,
                     tuesday: thisCardDate + "/" + card.progress,
@@ -281,6 +239,7 @@ const TableDndApp = (props) => {
 
 
     const getTrProps = (props, rowInfo) => {
+
         return { rowInfo }
     };
 
@@ -354,6 +313,8 @@ const TableDndApp = (props) => {
                 var checkedDate = new Date(startDay);
                 let checked = checkedDate.setDate(checkedDate.getDate() + num);
 
+
+
                 let color = ''
                 let message = ''
                 switch (true) {
@@ -417,113 +378,114 @@ const TableDndApp = (props) => {
 
 
     return (
-        <div>
+        <div className={styles.reactTable}>
             <div className={styles.buttoDiv}>
                 <Button onClick={getLastWeek} title='Last week' />
                 <Button onClick={getLastDay} title='Previous day' />
                 <div>Choose week...
-                <DatePicker selected={startDay} onChange={date => setStartDay(date)} label="Go to date" />
+                    <span>
+                        <DatePicker selected={startDay} onChange={date => setStartDay(date)} label="Go to date" />
+                    </span>
                 </div>
                 <Button onClick={getNextDay} title='Next day' />
                 <Button onClick={getNextWeek} title='Next week' />
             </div>
-
-            <DragDropContext onDragEnd={handleDragEnd}>
-                <ReactTable
-                    TrComponent={DragTrComponent}
-                    TbodyComponent={DropTbodyComponent}
-                    getTrProps={getTrProps}
-                    data={tableData}
-                    columns={[
-                        {
-                            Header: 'Task',
-                            accessor: "task",
-                            width: 250,
-                            // Cell: ({ value }) => {
-                            //     return (
-                            //         <TaskName value={value} props={props} cardData={cardData}/>
-                            //     )
-                            // }
-                        },
-                        {
-                            Header: 'Progress',
-                            accessor: "progress",
-                            width: 100
-                        },
-                        {
-                            Header: 'Assigned to',
-                            accessor: "assigned",
-                            width: 200
-                        },
-                        {
-                            Header: getHeaderDate(0),
-                            accessor: "monday",
-                            width: 100,
-                            Cell: ({ value }) => {
-                                return cellData(value, 0)
+            <div>
+                <DragDropContext onDragEnd={handleDragEnd} >
+                    <ReactTable
+                        TrComponent={DragTrComponent}
+                        TbodyComponent={DropTbodyComponent}
+                        getTrProps={getTrProps}
+                        data={tableData}
+                        columns={[
+                            {
+                                Header: 'Task',
+                                accessor: "task",
+                                width: 250,
+                                style: {
+                                    position: 'static'
+                                }
+                            },
+                            {
+                                Header: 'Progress',
+                                accessor: "progress",
+                                width: 100
+                            },
+                            {
+                                Header: 'Assigned to',
+                                accessor: "assigned",
+                                width: 200
+                            },
+                            {
+                                Header: getHeaderDate(0),
+                                accessor: "monday",
+                                width: 100,
+                                Cell: ({ value }) => {
+                                    return cellData(value, 0)
+                                }
+                            },
+                            {
+                                Header: getHeaderDate(1),
+                                accessor: "tuesday",
+                                width: 100,
+                                Cell: ({ value }) => {
+                                    return cellData(value, 1)
+                                }
+                            },
+                            {
+                                Header: getHeaderDate(2),
+                                accessor: "wednesday",
+                                width: 100,
+                                Cell: ({ value }) => {
+                                    return cellData(value, 2)
+                                }
+                            },
+                            {
+                                Header: getHeaderDate(3),
+                                accessor: "thursday",
+                                width: 100,
+                                Cell: ({ value }) => {
+                                    return cellData(value, 3)
+                                }
+                            },
+                            {
+                                Header: getHeaderDate(4),
+                                accessor: "friday",
+                                width: 100,
+                                Cell: ({ value }) => {
+                                    return cellData(value, 4)
+                                }
+                            },
+                            {
+                                Header: getHeaderDate(5),
+                                accessor: "saturday",
+                                width: 100,
+                                Cell: ({ value }) => {
+                                    return cellData(value, 5)
+                                }
+                            },
+                            {
+                                Header: getHeaderDate(6),
+                                accessor: "sunday",
+                                width: 100,
+                                Cell: ({ value }) => {
+                                    return cellData(value, 6)
+                                }
+                            },
+                            {
+                                Header: 'Due Date',
+                                accessor: "dueDate",
+                                width: 200
                             }
-                        },
-                        {
-                            Header: getHeaderDate(1),
-                            accessor: "tuesday",
-                            width: 100,
-                            Cell: ({ value }) => {
-                                return cellData(value, 1)
-                            }
-                        },
-                        {
-                            Header: getHeaderDate(2),
-                            accessor: "wednesday",
-                            width: 100,
-                            Cell: ({ value }) => {
-                                return cellData(value, 2)
-                            }
-                        },
-                        {
-                            Header: getHeaderDate(3),
-                            accessor: "thursday",
-                            width: 100,
-                            Cell: ({ value }) => {
-                                return cellData(value, 3)
-                            }
-                        },
-                        {
-                            Header: getHeaderDate(4),
-                            accessor: "friday",
-                            width: 100,
-                            Cell: ({ value }) => {
-                                return cellData(value, 4)
-                            }
-                        },
-                        {
-                            Header: getHeaderDate(5),
-                            accessor: "saturday",
-                            width: 100,
-                            Cell: ({ value }) => {
-                                return cellData(value, 5)
-                            }
-                        },
-                        {
-                            Header: getHeaderDate(6),
-                            accessor: "sunday",
-                            width: 100,
-                            Cell: ({ value }) => {
-                                return cellData(value, 6)
-                            }
-                        },
-                        {
-                            Header: 'Due Date',
-                            accessor: "dueDate",
-                            width: 200
-                        }
-                    ]}
-                    defaultPageSize={10}
-                    pageSize={tableSize}
-                    showPagination={false}
-                    className="-striped -highlight"
-                />
-            </DragDropContext>
-
+                        ]}
+                        defaultPageSize={10}
+                        pageSize={tableSize}
+                        showPagination={false}
+                        className={styles.table, "-striped -highlight"}
+                        position={'static'}
+                    />
+                </DragDropContext>
+            </div>
 
         </div>
     )

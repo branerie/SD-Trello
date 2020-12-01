@@ -29,16 +29,12 @@ export default function TaskDueDate(props) {
 
 
     const editCardDueDate = useCallback(async (date) => {
-        // event.preventDefault()
 
-        console.log(cardDueDate);
-
-        // let data = props.value.split('/')
         let cardId = props.cardId
         let listId = props.listId
 
 
-        if (cardDueDate === "") {
+        if (cardDueDate === "" && date === '') {
             console.log('return');
             return
         }
@@ -99,7 +95,7 @@ export default function TaskDueDate(props) {
                         <DatePicker selected={today} onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
                         :
                         <div className={styles.dueDateField}>
-                            <span>{value}</span>
+                            <span></span>
                             <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >
                                 <img src={pen} alt="..." width="11.5" height="11.5" />
                             </button>

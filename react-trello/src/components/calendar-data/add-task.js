@@ -12,53 +12,11 @@ import CreateCard from '../create-card'
 
 export default function AddTask(props) {
 
-    const params = useParams()
-    const history = useHistory()
-    const [project, setProject] = useState(null)
-    const [members, setMembers] = useState([])
+   
     const [isVisible, setIsVisible] = useState(false)
-    const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
-    const [cardName, setCardName] = useState('')
-    const listRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(listRef, false)
-    const socket = useSocket()
-
-
-
-    const updateProjectSocket = useCallback(() => {
-        socket.emit('project-update', props.project)
-    }, [socket, props.project])
-
-
-    // const addTask = useCallback(async (event) => {
-    //     event.preventDefault()
-    //     const projectId = props.project._id
-
-    //     if (cardName === "") {
-    //         console.log('return');
-    //         return
-    //     }
-    //     const token = getCookie("x-auth-token")
-    //     const response = await fetch(`http://localhost:4000/api/projects/lists/${projectId}`, {
-    //         method: "POST",
-    //         headers: {
-    //             "Content-Type": "application/json",
-    //             "Authorization": token
-    //         },
-    //         body: JSON.stringify({ name: listName })
-    //     })
-    //     if (!response.ok) {
-    //         history.push("/error")
-    //         return
-    //     } else {
-    //         setIsActive(!isActive)
-    //         setListName('')
-    //         updateProjectSocket()
-    //     }
-
-    // }, [history, listName, updateProjectSocket])
-
     
+    const listRef = useRef(null);
+   
 
 
     return (
