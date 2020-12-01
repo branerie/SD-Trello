@@ -16,6 +16,15 @@
     display: flex;
     justify-content: space-between;
 }
+
+.addTaskField{
+    background-color: rgb(201, 39, 39);
+    color: white;
+    display: flex;
+    justify-content: flex-end;
+}
+
+
 .container {
     width: 100%;
     display: flex;
@@ -40,3 +49,10 @@
 .addlist:hover {
     background-color: lemonchiffon;
 }
+
+/* .reactTable {
+    position: unset;
+    display: flex;
+    flex-direction: column;
+    border: 1px solid rgba(0,0,0,0.1);
+} */

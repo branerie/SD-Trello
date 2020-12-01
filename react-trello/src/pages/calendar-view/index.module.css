@@ -1,7 +1,5 @@
-.calendarPageContainer{
-    display:flex;  
-    
-}
+
+
 .projectInfoContainer{
     flex-grow: 1;
     width: 30%;

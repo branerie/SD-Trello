@@ -9,6 +9,7 @@ function TeamProvider({ children }) {
   const [teams, setTeams] = useState([])
   const [option, setOption] = useState('select')
   const [currentProjects, setCurrentProjects] = useState([])
+
   const history = useHistory()
   const userContext = useContext(UserContext)
 
@@ -23,6 +24,8 @@ function TeamProvider({ children }) {
     }
     console.log(current);
   }
+
+
 
   async function getTeams() {
     console.log('getTeams from provider');
@@ -49,7 +52,7 @@ function TeamProvider({ children }) {
 
     if (userContext.user.teams) {
       console.log(userContext.user.teams);
-  
+
       setTeams(userContext.user.teams)
 
     }

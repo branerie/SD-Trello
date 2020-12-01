@@ -11,6 +11,7 @@
   border: 1px solid #363338;
   font-size: 20px;
   font-weight: bold;
+  z-index: 10;
 }
 
 .small {

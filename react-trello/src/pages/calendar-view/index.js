@@ -94,9 +94,11 @@ export default function CalendarView() {
         <PageLayout className={styles.conteiner}>
             <Button onClick={defaultView} title='Default View' />
             <div className={styles.calendarPageContainer}>
-                <span className={styles.calendarContainer}>
-                    <TableDndApp project={project} />
-                </span>
+                <div>
+                    <div className={styles.calendarContainer}>
+                        <TableDndApp project={project} />
+                    </div>
+                </div>
             </div>
         </PageLayout >
     )

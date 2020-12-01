@@ -102,5 +102,4 @@ export default function TaskName(props) {
   }
 
 }
-// , [editCardName, isActive, setIsActive, props])
 
