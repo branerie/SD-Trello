@@ -6,10 +6,8 @@ const googleAuth = async (token) => {
         idToken: token,
         audience: process.env.GOOGLE_CLIENT_ID
     })
-    console.log('ticket - ', ticket);
 
     const payload = ticket.getPayload()
-    console.log('payload - ', payload);
     console.log(`User ${payload.name} verified`)
 
     const { email, name, picture, email_verified } = payload

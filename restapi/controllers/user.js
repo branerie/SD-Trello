@@ -125,7 +125,6 @@ async function loginUser(req, res, next) {
         const token = utils.jwt.createToken({ id: user._id })
 
         const teams = await getTeams(user._id)
-        console.log(teams);
         const response = {
             user,
             teams

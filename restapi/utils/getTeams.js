@@ -1,7 +1,6 @@
 const models = require("../models");
 
 async function getTeams(id) {
-    console.log(id);
 
     try {
         const teams = await models.Team.find({ members: id })
