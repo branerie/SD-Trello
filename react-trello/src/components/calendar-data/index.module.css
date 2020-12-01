@@ -67,3 +67,12 @@
  justify-content: space-between;
 }
 
+.inputTaskName {
+  border: 1px solid #000000; 
+  background-color: #FFFFFF;
+  border-radius: 10px;
+  margin: 3px;   
+  padding: 6px;
+  font-weight: normal;
+  flex-grow: 1;
+}

@@ -52,7 +52,7 @@ export default function TaskProgress(props) {
             updateProjectSocket()
         }
 
-    }, [history, cardProgress, updateProjectSocket])
+    }, [history, cardProgress, updateProjectSocket, isActive, setIsActive, props.value])
 
 
 
@@ -68,6 +68,8 @@ export default function TaskProgress(props) {
                     break;
                 case (value < 100):
                     color = 'blue'
+                    break;
+                default:
                     break;
             }
             return (

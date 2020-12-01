@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
@@ -57,7 +57,8 @@ export default function TaskDueDate(props) {
             updateProjectSocket()
         }
 
-    }, [history, cardDueDate, setCardDueDate, updateProjectSocket])
+    }, [history, cardDueDate, updateProjectSocket, setIsActive, isActive, props.cardId, props.listId
+    ])
 
 
 
@@ -66,16 +67,13 @@ export default function TaskDueDate(props) {
 
     if (value) {
 
-        let taskDueDate = value
-        let cardId = props.cardId
-        let listId = props.listId
-
+        let taskDueDate = value  
 
         return (
             <span>
                 {
                     isActive ?
-                        <DatePicker selected={cardDueDate} onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
+                        <DatePicker selected={cardDueDate} onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }} label="Go to date" onBlur={() => setIsActive(!isActive)} />
                         :
                         <div className={styles.dueDateField}>
                             <span>{taskDueDate}</span>

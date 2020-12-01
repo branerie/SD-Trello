@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
@@ -58,7 +58,7 @@ export default function TaskName(props) {
       updateProjectSocket()
     }
 
-  }, [history, cardName, updateProjectSocket])
+  }, [history, cardName, updateProjectSocket, isActive, setIsActive, props.value])
 
 
 
@@ -84,8 +84,8 @@ export default function TaskName(props) {
         {
           isActive ?
             < form ref={dropdownRef} className={styles.container} onSubmit={editCardName} >
-              <input className={styles.input} type={'text'} placeholder={cardname} onChange={e => setCardName(e.target.value)} />
-              <button type='submit' className={styles.addlist} cardId={cardId} listId={listId} cardName>Edit Name</button>
+              <input className={styles.inputTaskName} type={'text'} placeholder={cardname} onChange={e => setCardName(e.target.value)} />
+              <button type='submit' className={styles.addlist} cardId={cardId} listId={listId} cardName>Edit</button>
             </form> :
             <div className={styles.buttoDiv} >
               <span>{cardname}</span>
