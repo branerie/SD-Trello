@@ -1,7 +1,7 @@
 .pageContainer {
   /* width: 1920px; */
   width: 100%;
-  height: 3763px;
+  height: auto;
   overflow: hidden;
   position: relative;
   min-height: 100vh;
@@ -16,6 +16,7 @@
 }
 
 .topDivtopContainer{
+  width: 100%;
   height: 26%;
   background-color:#EDF5F9;
   position: relative;
@@ -24,6 +25,7 @@
 .logo{  
   position: absolute;
   margin: 2%;
+  
 }
 
 .topright{
@@ -67,16 +69,23 @@
   position: absolute;
   right: -90px;
   top: -58px;
+  width: 914px;
+  height: auto;
+  max-width:120%;
+  /* max-height: 120%; */
 }
 .pic2 {  
   z-index: 1;  
   position: absolute;
   right: 65px; 
   top: 140px;
+  width: 532px;
+  height: auto;
+  max-width:70%;
 }
 
 .lowerDivtopContainer{
-  height: 74%;
+  height: auto;
   background: rgb(237,245,249);
   background: linear-gradient(180deg, rgba(237,245,249,1) 1%, rgba(166,164,142,1) 100%);
 }
@@ -225,6 +234,9 @@
 
 }
 
+.pic6{
+  margin-bottom: 15%;
+}
 
 .contentWrap{
   padding-bottom: 2.5rem
@@ -234,7 +246,7 @@
   position: absolute;
   bottom: 0;
   width: 100%;
-  height: 200px;
+  height: auto;
   /* height: 2.5rem; */
   background: #363338;
   color: white;

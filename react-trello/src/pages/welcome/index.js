@@ -37,7 +37,7 @@ const WelcomePage = () => {
         <div className={styles.topContainer}>
           <div className={styles.topDivtopContainer}>
             <span className={styles.logo}>
-              <img src={logo} alt="logo" width="150,09" height="120,44" />
+              <img src={logo} alt="logo" width="190%" height="150%"/>
             </span>
             <span className={styles.topright}>
               <div className={styles.pic1}>

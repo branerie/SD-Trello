@@ -59,8 +59,6 @@ export default function TaskMembers(props) {
 
     }
 
-
-
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
     }, [socket, props.project])
@@ -158,7 +156,7 @@ export default function TaskMembers(props) {
                                         ))
                                     }
                                 </select>
-                                <button onClick={handleAdd}>Add</button>
+                                <button className={styles.taskProgressButton} onClick={handleAdd}>Add</button>
                             </form>
                         </span> :
                         <ButtonClean className={styles.addListButton} onClick={() => { getTeamUsers(); setIsActive(!isActive) }} title='+' />

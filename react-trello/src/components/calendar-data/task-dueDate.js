@@ -77,7 +77,7 @@ export default function TaskDueDate(props) {
                         :
                         <div className={styles.dueDateField}>
                             <span>{taskDueDate}</span>
-                            <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >
+                            <button className={styles.clean} onClick={() => setIsActive(!isActive)} >
                                 <img src={pen} alt="..." width="11.5" height="11.5" />
                             </button>
                         </div>
@@ -94,7 +94,7 @@ export default function TaskDueDate(props) {
                         :
                         <div className={styles.dueDateField}>
                             <span></span>
-                            <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >
+                            <button className={styles.clean} onClick={() => setIsActive(!isActive)} >
                                 <img src={pen} alt="..." width="11.5" height="11.5" />
                             </button>
                         </div>
