@@ -5,6 +5,7 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
 import { useHistory } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider';
 import pen from '../../images/pen.svg'
+import ButtonClean from '../button-clean';
 
 
 
@@ -85,13 +86,16 @@ export default function TaskName(props) {
           isActive ?
             < form ref={dropdownRef} className={styles.container} onSubmit={editCardName} >
               <input className={styles.inputTaskName} type={'text'} placeholder={cardname} onChange={e => setCardName(e.target.value)} />
-              <button type='submit' className={styles.addlist} cardId={cardId} listId={listId} cardName>Edit</button>
+              <button type='submit' className={styles.taskProgressButton} cardId={cardId} listId={listId} cardName>Edit</button>
             </form> :
             <div className={styles.buttoDiv} >
               <span>{cardname}</span>
-              <button className={styles.addlist} onClick={() => setIsActive(!isActive)} > 
-              <img src={pen} alt="..." width="11.5" height="11.5" />
+
+              <button type='submit' className={styles.clean} onClick={() => setIsActive(!isActive)} >
+                <img src={pen} alt="..." width="11.5" height="11.5" />
               </button>
+
+
             </div >
         }
       </span>

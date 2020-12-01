@@ -115,7 +115,7 @@ const TableDndApp = (props) => {
                         saturday: thisCardDate + "/" + card.progress,
                         sunday: thisCardDate + "/" + card.progress,
                         dueDate: (
-                            <TaskDueDate value={(thisCardDate !== '' && thisCardDate !== 0) ? cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''} props={props} project={props.project} cardDueDate={cardDate} cardId={card._id} listId={list._id} />
+                            <TaskDueDate value={(thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''} props={props} project={props.project} cardDueDate={cardDate} cardId={card._id} listId={list._id} />
                         )
                     })
 
@@ -241,13 +241,14 @@ const TableDndApp = (props) => {
         nextDay.setDate(nextDay.getDate() + num)
         let dayOfWeek = weekDay(nextDay)
         let day = shownDay(nextDay)
-        let color = 'rgb(39, 190, 201)'
-        if (dayOfWeek === 'Sunday' || dayOfWeek === 'Saturday') {
-            color = 'rgb(206, 134, 134)'
-        }
+        let color = ''
+        // let color = 'rgb(39, 190, 201)'
+        // if (dayOfWeek === 'Sunday' || dayOfWeek === 'Saturday') {
+        //     color = 'rgb(206, 134, 134)'
+        // }
         return (
-            <div style={{ background: color, color: 'white' }}>
-                <div>{dayOfWeek}</div>
+            <div style={{ background: color, color: 'black' }}>
+                <div style={{ fontWeight: 'bold' }}>{dayOfWeek}</div>
                 <div>{day}</div>
             </div>
         )
@@ -261,8 +262,6 @@ const TableDndApp = (props) => {
                 let date = Number(token[0])
                 let progress = Number(token[1])
                 let checked = startDay.setDate(startDay.getDate());
-
-
                 // let cardDate = new Date(date)
                 // let currDate = cardDate.getDate() + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() % 100
 
@@ -271,25 +270,30 @@ const TableDndApp = (props) => {
                 if (date) {
                     switch (true) {
                         case (date === checked):
-                            color = 'red';
+                            color = '#EB4863';
                             message = 'Due Date'
                             break;
                         case ((progress === 100) || (date === 100)):
-                            color = 'green';
+                            color = '#0E8D27';
                             message = 'Finished'
                             break;
                         case (date > checked):
-                            color = 'blue';
+                            color = '#5E9DDC';
                             message = 'In Progress'
                             break;
                         case (date < checked && (progress < 100 || !progress)):
-                            color = 'red';
+                            color = '#EB4863';
                             message = 'Delayed'
                             break;
                         default:
                             break;
                     }
-                    return <div style={{ background: color }} >{message}</div>
+                    return (
+                        <div className={styles.daylyProgress}>
+                            <div style={{ background: color, width: "100%", textAlign: "center", padding: "5px", fontSize: "14px", border: '#363338 solid 1px', borderRadius: '5px' }} >
+                                {message}</div>
+                        </div>
+                    )
                 } else {
                     return ''
                 }
@@ -309,17 +313,23 @@ const TableDndApp = (props) => {
                 let message = ''
                 switch (true) {
                     case (date === checked):
-                        color = 'red';
+                        color = '#EB4863';
                         message = 'Due Date'
                         break;
                     case (date > checked && progress !== 100):
-                        color = 'blue';
+                        color = '#5E9DDC';
                         message = 'In Progress'
                         break;
                     default:
+                        return null
                         break;
                 }
-                return <div style={{ background: color, color: color }} >{message}</div>
+                return (
+                    <div className={styles.daylyProgress}>
+                        <div style={{ background: color, color: color, width: "100%", textAlign: "center", padding: "5px", fontSize: "14px", border: '#363338 solid 1px', borderRadius: '5px' }} >
+                            {message}</div>
+                    </div>
+                )
             } else {
                 return value
             }
@@ -372,15 +382,15 @@ const TableDndApp = (props) => {
     return (
         <div className={styles.reactTable}>
             <div className={styles.buttoDiv}>
-                <Button onClick={getLastWeek} title='Last week' />
-                <Button onClick={getLastDay} title='Previous day' />
+                <button className={styles.navigateButtons} onClick={getLastWeek} >Last week</button>
+                <button className={styles.navigateButtons} onClick={getLastDay} >Previous day</button>
                 <div>Choose week...
                     <span>
                         <DatePicker selected={startDay} onChange={date => setStartDay(date)} label="Go to date" />
                     </span>
                 </div>
-                <Button onClick={getNextDay} title='Next day' />
-                <Button onClick={getNextWeek} title='Next week' />
+                <button className={styles.navigateButtons} onClick={getNextDay}>Next day</button>
+                <button className={styles.navigateButtons} onClick={getNextWeek}>Next week</button>
             </div>
             <div>
                 {/* <DragDropContext onDragEnd={handleDragEnd} > */}
@@ -391,20 +401,24 @@ const TableDndApp = (props) => {
                     data={tableData}
                     columns={[
                         {
-                            Header: 'Task',
+                            Header: ({ value }) => {
+                                return <div className={styles.header}>Task</div>
+                            },
                             accessor: "task",
                             width: 250,
-                            style: {
-                                position: 'static'
-                            }
+
                         },
                         {
-                            Header: 'Progress',
+                            Header: ({ value }) => {
+                                return <div className={styles.header}>Progress</div>
+                            },
                             accessor: "progress",
                             width: 100
                         },
                         {
-                            Header: 'Assigned to',
+                            Header: ({ value }) => {
+                                return <div className={styles.header}>Teammates</div>
+                            },
                             accessor: "assigned",
                             width: 200
                         },
@@ -465,7 +479,9 @@ const TableDndApp = (props) => {
                             }
                         },
                         {
-                            Header: 'Due Date',
+                            Header: ({ value }) => {
+                                return <div className={styles.header}>Due Date</div>
+                            },
                             accessor: "dueDate",
                             width: 200
                         }
@@ -473,7 +489,9 @@ const TableDndApp = (props) => {
                     defaultPageSize={10}
                     pageSize={tableSize}
                     showPagination={false}
-                    className={"-striped cardMembers"}
+                    background={
+                        'white'
+                    }
                 />
                 {/* </DragDropContext> */}
             </div>

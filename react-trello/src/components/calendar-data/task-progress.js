@@ -61,24 +61,27 @@ export default function TaskProgress(props) {
             let color = ''
             switch (true) {
                 case (value === "100"):
-                    color = 'green';
+                    color = '#0E8D27';
                     break;
                 case (value < 20):
-                    color = 'red'
+                    color = '#EB4863'
                     break;
                 case (value < 100):
-                    color = 'blue'
+                    color = '#5E9DDC'
                     break;
                 default:
                     break;
             }
             return (
-                <div style={{ backgroundColor: color }} > {value} %</div>
+                <div style={{ backgroundColor: color,  padding: '5px',fontSize:"14px",border: 'solid black 1px',
+                borderRadius: '5px'}} > {value} %</div>
             )
 
         }
         return (
+            <div>
             <img src={pen} alt="..." width="11.5" height="11.5" />
+            </div>
         )
     }
 
@@ -105,13 +108,11 @@ export default function TaskProgress(props) {
                     isActive ?
                         < form ref={dropdownRef} className={styles.container} onSubmit={editCardProgress} >
                             <input className={styles.progressInput} type={'text'} placeholder={taskprogress} onChange={e => setCardProgress(e.target.value)} />
-                            <button type='submit' className={styles.addlist} cardId={cardId} listId={listId} cardName>Edit</button>
+                            <button type='submit' className={styles.taskProgressButton} cardId={cardId} listId={listId} cardName>Edit</button>
                         </form> :
-                        <div className={styles.buttoDiv} >
-                            <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >
+                        <div className={styles.taskProgress} >
+                            <button className={styles.taskProgressButton} onClick={() => setIsActive(!isActive)} >
                                 <span>{showTaskProgress(taskprogress)}</span>
-                                {/* <img src={pen} alt="..." width="11.5" height="11.5" /> */}
-
                             </button>
                         </div >
                 }
