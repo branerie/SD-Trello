@@ -7,6 +7,7 @@ function TeamProvider({ children }) {
   const [teams, setTeams] = useState([])
   const [option, setOption] = useState('select')
   const [currentProjects, setCurrentProjects] = useState([])
+
   const userContext = useContext(UserContext)
 
   function getCurrentProjects(teamId) {
@@ -17,8 +18,11 @@ function TeamProvider({ children }) {
     }
   }
 
+
+
   async function getTeams() {
     if (userContext.user.teams) {
+
       setTeams(userContext.user.teams)
     }
   }

@@ -19,6 +19,8 @@ export default function TaskDueDate(props) {
     const history = useHistory()
     const socket = useSocket()
 
+    const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
+
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
@@ -27,16 +29,12 @@ export default function TaskDueDate(props) {
 
 
     const editCardDueDate = useCallback(async (date) => {
-        // event.preventDefault()
 
-        console.log(cardDueDate);
-
-        // let data = props.value.split('/')
         let cardId = props.cardId
         let listId = props.listId
 
 
-        if (cardDueDate === "") {
+        if (cardDueDate === "" && date === '') {
             console.log('return');
             return
         }
@@ -79,7 +77,7 @@ export default function TaskDueDate(props) {
                     isActive ?
                         <DatePicker selected={cardDueDate} onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
                         :
-                        <div>
+                        <div className={styles.dueDateField}>
                             <span>{taskDueDate}</span>
                             <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >
                                 <img src={pen} alt="..." width="11.5" height="11.5" />
@@ -94,10 +92,10 @@ export default function TaskDueDate(props) {
             <span>
                 {
                     isActive ?
-                        <DatePicker selected={cardDueDate} onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
+                        <DatePicker selected={today} onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
                         :
-                        <div>
-                            <span>{value}</span>
+                        <div className={styles.dueDateField}>
+                            <span></span>
                             <button className={styles.addlist} onClick={() => setIsActive(!isActive)} >
                                 <img src={pen} alt="..." width="11.5" height="11.5" />
                             </button>
