@@ -14,16 +14,12 @@ const TeamPage = () => {
     const teamContext = useContext(TeamContext)
     const params = useParams()
 
-    console.log('team page');
-
     useEffect(() => {
         const teamId = params.teamid
 
         if (isRefresh) {
             teamContext.getCurrentProjects(teamId)
         }
-
-        console.log('teampage useEffect', teamId, teamContext.option);
         
         if (teamId !== teamContext.option) {
             setIsRefresh(true)

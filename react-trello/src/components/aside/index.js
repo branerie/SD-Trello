@@ -7,12 +7,12 @@ import home from '../../images/home.svg'
 import tasks from '../../images/tasks.svg'
 import inbox from '../../images/inbox.svg'
 import LinkAside from '../link-aside'
-import ListContext from '../../contexts/ListContext'
+import ProjectContext from '../../contexts/ProjectContext'
 import ButtonHideList from '../button-hide-list'
 import ButtonClean from '../button-clean'
 
 export default function Aside({ asideOn, setAsideOn }) {
-    const listContext = useContext(ListContext)
+    const projectContext = useContext(ProjectContext)
 
 
     function onClick() {
@@ -65,7 +65,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                         </div>
                         <div className={styles.bottomright}>
                             {
-                                listContext.lists.map((element, index) => {
+                                projectContext.lists.map((element, index) => {
                                     return (
                                         <div key={element._id}>
                                             <ButtonHideList list={element} />

@@ -8,32 +8,22 @@ import ButtonClean from "../button-clean"
 import TeamContext from "../../contexts/TeamContext"
 import Transparent from "../transparent"
 import CreateTeam from "../create-team"
-import { useHistory } from "react-router-dom"
+import ProjectContext from "../../contexts/ProjectContext"
 
 const Header = ({ asideOn }) => {
     const dropdownRef = useRef(null)
     const [isProfileActive, setIsProfileActive] = useDetectOutsideClick(dropdownRef, false)
     const [isViewActive, setIsViewActive] = useDetectOutsideClick(dropdownRef, false)
+    const [isTeamActive, setIsTeamActive] = useDetectOutsideClick(dropdownRef, false)
     const [showForm, setShowForm] = useState(false)
+    const [title, setTitle] = useState('Select')
     const context = useContext(UserContext)
+    const projectContext = useContext(ProjectContext)
     const teamContext = useContext(TeamContext)
-    const history = useHistory()
 
-    function handleSelect(teamId) {
-        if (teamId === 'select') {
-            return
-        }
-
-        if (teamId === 'create') {
-            setShowForm(true)
-            return
-        }
-
-        console.log('handle select header', teamId);
-
+    function selectTeam(teamId) {
         teamContext.setOption(teamId)
         teamContext.getCurrentProjects(teamId)
-        history.push(`/team/${teamId}`)
     }
 
     return (
@@ -52,18 +42,20 @@ const Header = ({ asideOn }) => {
                         {
                             isViewActive ? <div
                                 ref={dropdownRef}
-                                className={styles.options}
+                                className={`${styles.options} ${styles.font} ${styles['view-position']}`}
                             >
-                                <div>
+                                <div className={styles['first-option']}>
                                     <LinkComponent
-                                        href={`/profile/${context.user && context.user.id}`}
-                                        title='Profile'
+                                        href={`/projects/${projectContext.project}`}
+                                        title='Board'
+                                        className={styles.hover}
                                     />
                                 </div>
-                                <div>
+                                <div className={styles['last-option']}>
                                     <LinkComponent
-                                        href={`/profile/${context.user && context.user.id}`}
-                                        title='Profile'
+                                        href={`/calendar-view/${projectContext.project}`}
+                                        title='List'
+                                        className={styles.hover}
                                     />
                                 </div>
                             </div> : null
@@ -72,15 +64,47 @@ const Header = ({ asideOn }) => {
                     <div className={styles.margin}>
                         Teams:
                     </div>
-                    <select value={teamContext.option} className={styles.select} onChange={(e) => { handleSelect(e.target.value) }}>
-                        <option value='select'>Select</option>
+                    <div>
+                        <ButtonClean
+                            className={styles.teams}
+                            onClick={() => setIsTeamActive(!isTeamActive)}
+                            title={title}
+                        />
                         {
-                            teamContext.teams.map(t => (
-                                <option key={t._id} value={t._id}>{t.name}</option>
-                            ))
+                            isTeamActive ? <div
+                                ref={dropdownRef}
+                                className={`${styles.options} ${styles.font} ${styles['teams-position']}`}
+                            >
+                                <div className={styles['first-option']}>
+                                    <LinkComponent
+                                        title='Select'
+                                        onClick={() => setTitle('Select')}
+                                        className={`${styles.overflow} ${styles.hover}`}
+                                    />
+                                </div>
+                                {
+                                    teamContext.teams.map(t => (
+                                        <div className={styles['team-options']}>
+                                            <LinkComponent
+                                                key={t._id}
+                                                href={`/team/${t._id}`}
+                                                title={t.name} onClick={() => { selectTeam(t._id) }}
+                                                onClick={() => setTitle(t.name)}
+                                                className={`${styles.overflow} ${styles.hover}`}
+                                            />
+                                        </div>
+                                    ))
+                                }
+                                <div className={styles['last-option']}>
+                                    <ButtonClean
+                                        onClick={() => setShowForm(true)}
+                                        title='Create New Team'
+                                        className={styles.logout}
+                                    />
+                                </div>
+                            </div> : null
                         }
-                        <option value='create'>Create New Team</option>
-                    </select>
+                    </div>
                 </div>
                 {
                     showForm ? (<Transparent hideForm={() => setShowForm(false)}>
@@ -97,15 +121,16 @@ const Header = ({ asideOn }) => {
                     {
                         isProfileActive ? <div
                             ref={dropdownRef}
-                            className={styles.options}
+                            className={`${styles.options} ${styles['logout-position']}`}
                         >
-                            <div>
+                            <div className={styles['first-option']}>
                                 <LinkComponent
                                     href={`/profile/${context.user && context.user.id}`}
                                     title='Profile'
+                                    className={styles.hover}
                                 />
                             </div>
-                            <div>
+                            <div className={styles['last-option']}>
                                 <ButtonClean
                                     onClick={context.logOut}
                                     title='Log Out'
