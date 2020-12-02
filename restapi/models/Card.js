@@ -28,7 +28,7 @@ const cardSchema = new Schema({
 
     dueDate: Date,
 
-    progress:{
+    progress: {
         type: Number
     }
 

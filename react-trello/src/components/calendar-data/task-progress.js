@@ -9,7 +9,7 @@ import pen from '../../images/pen.svg'
 
 export default function TaskProgress(props) {
     const dropdownRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [cardProgress, setCardProgress] = useState('')
     const history = useHistory()
     const socket = useSocket()

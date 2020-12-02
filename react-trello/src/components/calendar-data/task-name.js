@@ -12,7 +12,7 @@ export default function TaskName(props) {
 
 
   const dropdownRef = useRef(null);
-  const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+  const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
   const [cardName, setCardName] = useState('')
   const history = useHistory()
   const socket = useSocket()

@@ -142,6 +142,8 @@ async function deleteProject(req, res, next) {
             await models.ProjectUserRole.deleteOne({ _id: element._id }).session(session)
         })
 
+        await models.Team.updateOne({ projects: idProject }, { $pull: { projects: idProject } }).session(session)
+
         const removedProjectResult = await models.Project.deleteOne({ _id: idProject }).session(session)
 
         await session.commitTransaction()

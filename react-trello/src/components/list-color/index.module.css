@@ -1,9 +1,11 @@
-/* .path {
-    fill: lawngreen;
-} */
-
-.position {
+.aside {
     position: relative;
     top: 25px;
     z-index: -1;
+}
+
+.list {
+    position: relative;
+    top: -22px;
+    right: 20px;
 }

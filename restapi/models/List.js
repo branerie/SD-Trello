@@ -21,6 +21,10 @@ const listSchema = new Schema({
         type: ObjectId,
         ref: "Card"
     }],
+
+    color: {
+        type: String
+    }
    
 })
 

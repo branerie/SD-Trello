@@ -13,7 +13,7 @@ export default function AddList(props) {
     const history = useHistory()     
     const [listName, setListName] = useState('')
     const listRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(listRef, false)
+    const [isActive, setIsActive] = useDetectOutsideClick(listRef)
     const socket = useSocket()
 
 

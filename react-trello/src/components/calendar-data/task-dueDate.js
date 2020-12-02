@@ -14,7 +14,7 @@ export default function TaskDueDate(props) {
 
 
     const dropdownRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [cardDueDate, setCardDueDate] = useState(props.cardDueDate)
     const history = useHistory()
     const socket = useSocket()

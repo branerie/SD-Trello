@@ -3,7 +3,7 @@ import ProjectContext from "../../contexts/ProjectContext";
 import ListColor from '../list-color'
 import styles from "./index.module.css";
 
-const ButtonHideList = ( { list } ) => {
+const ButtonHideList = ( { list, type } ) => {
     const projectContext = useContext(ProjectContext)
 
     function onClick() {
@@ -20,7 +20,7 @@ const ButtonHideList = ( { list } ) => {
 
     return (
     <button onClick={onClick} className={styles.submit}>
-        <ListColor />
+        <ListColor color={list.color || '#A6A48E'} type={type} />
         {list.name}
     </button>
     )

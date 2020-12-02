@@ -38,8 +38,8 @@ async function createList(req, res, next) {
 
 async function updateList(req, res, next) {
     const id = req.params.idlist
-    const { name } = req.body
-    const updatedList = await models.List.updateOne({ _id: id }, { name })
+    const { name, color } = req.body
+    const updatedList = await models.List.updateOne({ _id: id }, { name, color })
     res.send(updatedList)
 }
 

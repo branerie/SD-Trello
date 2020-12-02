@@ -23,7 +23,7 @@ export default function ProjectPage() {
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
     const [listName, setListName] = useState('')
     const listRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(listRef, false)
+    const [isActive, setIsActive] = useDetectOutsideClick(listRef)
     const socket = useSocket()
     const projectContext = useContext(ProjectContext)
 
@@ -114,7 +114,7 @@ export default function ProjectPage() {
         if (!response.ok) {
             history.push("/error")
         } else {
-            history.push('/projects')
+            history.push('/')
         }
     }
 

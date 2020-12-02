@@ -10,24 +10,12 @@ import { useParams } from "react-router-dom"
 const TeamPage = () => {
 
     const [isVisible, setIsVisible] = useState(false)
-    const [isRefresh, setIsRefresh] = useState(false)
     const teamContext = useContext(TeamContext)
     const params = useParams()
 
     useEffect(() => {
         const teamId = params.teamid
-
-        if (isRefresh) {
-            teamContext.getCurrentProjects(teamId)
-        }
-        
-        if (teamId !== teamContext.option) {
-            setIsRefresh(true)
-        }
-        teamContext.setOption(teamId)
-        return () => {
-            teamContext.setOption('select')
-        }
+        teamContext.getCurrentProjects(teamId)
     })
 
     return (
