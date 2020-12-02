@@ -14,17 +14,12 @@ import ButtonClean from '../button-clean'
 export default function Aside({ asideOn, setAsideOn }) {
     const projectContext = useContext(ProjectContext)
 
-
-    function onClick() {
-        setAsideOn(!asideOn)
-    }
-
     return (
         <div>
             <aside className={styles.container}>
                 <div className={styles.topleft}>
                     <ButtonClean
-                        onClick={onClick}
+                        onClick={() => setAsideOn(!asideOn)}
                         title={<img className={styles.options} src={menu} alt="menu" width="32" height="24" />}
                     />
                 </div>
@@ -67,9 +62,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                             {
                                 projectContext.lists.map((element, index) => {
                                     return (
-                                        <div key={element._id}>
-                                            <ButtonHideList list={element} />
-                                        </div>
+                                            <ButtonHideList key={element._id} list={element} type={'aside'} />
                                     )
                                 })
                             }

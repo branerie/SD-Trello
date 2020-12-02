@@ -15,7 +15,7 @@ export default function TaskMembers(props) {
 
 
     const dropdownRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [selectedUser, setSelectedUser] = useState({})
     const [users, setUsers] = useState([])
     const history = useHistory()

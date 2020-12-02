@@ -1,4 +1,4 @@
-import React, { useCallback, useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { useHistory } from "react-router-dom"
 import Button from '../button'
 import Input from '../input'
@@ -87,8 +87,7 @@ export default function CreateTeam(props) {
             const arr = [...teamContext.teams]
             arr.push(team)
             teamContext.setTeams(arr)
-
-            props.setOption(team._id)
+            teamContext.setSelectedTeam(team.name)
             props.hideForm()
         }
 

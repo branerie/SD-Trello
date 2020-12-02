@@ -1,11 +1,10 @@
 import React, { useState, useEffect, useContext } from 'react'
-import Loader from 'react-loader-spinner'
 import TeamContext from './TeamContext'
 import UserContext from './UserContext'
 
 function TeamProvider({ children }) {
   const [teams, setTeams] = useState([])
-  const [option, setOption] = useState('select')
+  const [selectedTeam, setSelectedTeam] = useState('Select')
   const [currentProjects, setCurrentProjects] = useState([])
   const userContext = useContext(UserContext)
 
@@ -13,11 +12,15 @@ function TeamProvider({ children }) {
     const current = teams.find(t => t._id === teamId)
     if (current) {
       setCurrentProjects(current.projects)
-
     }
   }
 
-
+  function updateSelectedTeam(teamId) {
+    const current = teams.find(t => t._id === teamId)
+    if (current) {
+      setSelectedTeam(current.name)
+    }
+  }
 
   async function getTeams() {
     if (userContext.user.teams) {
@@ -27,22 +30,10 @@ function TeamProvider({ children }) {
 
   useEffect(() => {
     getTeams()
-  }, [userContext.logIn])
-
-  if (!teams) {
-    return (
-      <Loader
-        type="TailSpin"
-        color="#363338"
-        height={100}
-        width={100}
-        timeout={3000} //3 secs
-      />
-    )
-  }
+  })
 
   return (
-    <TeamContext.Provider value={{ teams, setTeams, option, setOption, currentProjects, setCurrentProjects, getCurrentProjects, getTeams }}>
+    <TeamContext.Provider value={{ teams, setTeams, selectedTeam, setSelectedTeam, currentProjects, setCurrentProjects, getCurrentProjects, getTeams, updateSelectedTeam }}>
       {children}
     </TeamContext.Provider>
   )

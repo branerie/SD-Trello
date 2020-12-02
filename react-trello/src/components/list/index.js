@@ -11,12 +11,13 @@ import Transparent from '../transparent'
 import styles from './index.module.css'
 import dots from '../../images/dots.svg'
 import ButtonClean from '../button-clean'
+import ListColor from '../list-color'
 
 export default function List(props) {
     const [isVisible, setIsVisible] = useState(false)
     const [isVisibleEdit, setIsVisibleEdit] = useState(false)
     const dropdownRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef, false)
+    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const history = useHistory()
     const socket = useSocket()
 
@@ -46,7 +47,8 @@ export default function List(props) {
         <div key={props.list._id} className={styles.list}>
             <div className={styles.row}>
                 <div>
-                    {props.list.name}
+                    <div className={styles.name}>{props.list.name}</div>
+                    <ListColor color={props.list.color || '#A6A48E'} type={'list'} />
                 </div>
                 <ButtonClean 
                     className={styles.button}

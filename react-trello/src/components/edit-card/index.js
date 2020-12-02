@@ -67,7 +67,7 @@ export default function EditCard(props) {
                 name,
                 description,
                 dueDate,
-                progress,
+                progress
             })
         })
         if (!response.ok) {
@@ -115,7 +115,6 @@ export default function EditCard(props) {
                     label="Progress"
                     id="progress"
                 />
-
 
 
                 <span>Card members: </span>

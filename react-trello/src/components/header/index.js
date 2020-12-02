@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from "react"
+import React, { useContext, useRef, useState, useEffect } from "react"
 import styles from "./index.module.css"
 import UserContext from "../../contexts/UserContext"
 import Avatar from "react-avatar"
@@ -9,22 +9,35 @@ import TeamContext from "../../contexts/TeamContext"
 import Transparent from "../transparent"
 import CreateTeam from "../create-team"
 import ProjectContext from "../../contexts/ProjectContext"
+import { useParams } from "react-router-dom"
 
 const Header = ({ asideOn }) => {
-    const dropdownRef = useRef(null)
-    const [isProfileActive, setIsProfileActive] = useDetectOutsideClick(dropdownRef, false)
-    const [isViewActive, setIsViewActive] = useDetectOutsideClick(dropdownRef, false)
-    const [isTeamActive, setIsTeamActive] = useDetectOutsideClick(dropdownRef, false)
+    const dropdownRefProfile = useRef(null)
+    const dropdownRefView = useRef(null)
+    const dropdownRefTeam = useRef(null)
+    const [isProfileActive, setIsProfileActive] = useDetectOutsideClick(dropdownRefProfile)
+    const [isViewActive, setIsViewActive] = useDetectOutsideClick(dropdownRefView)
+    const [isTeamActive, setIsTeamActive] = useDetectOutsideClick(dropdownRefTeam)
     const [showForm, setShowForm] = useState(false)
-    const [title, setTitle] = useState('Select')
     const context = useContext(UserContext)
     const projectContext = useContext(ProjectContext)
     const teamContext = useContext(TeamContext)
+    const params = useParams()
 
-    function selectTeam(teamId) {
-        teamContext.setOption(teamId)
+    function selectTeam(teamId, teamName) {
         teamContext.getCurrentProjects(teamId)
+        teamContext.setSelectedTeam(teamName)
+        setIsTeamActive(false)
     }
+
+    useEffect(() => {
+        if (!(window.location.href.includes('team') || window.location.href.includes('projects') || window.location.href.includes('calendar-view'))) {
+            teamContext.setSelectedTeam('Select')
+        } else if (teamContext.selectedTeam === 'Select') {
+            const teamId = params.teamid
+            teamContext.updateSelectedTeam(teamId)
+        }
+    })
 
     return (
         <header className={`${styles.navigation} ${asideOn ? styles.small : ''}`} >
@@ -41,7 +54,7 @@ const Header = ({ asideOn }) => {
                         />
                         {
                             isViewActive ? <div
-                                ref={dropdownRef}
+                                ref={dropdownRefView}
                                 className={`${styles.options} ${styles.font} ${styles['view-position']}`}
                             >
                                 <div className={styles['first-option']}>
@@ -68,28 +81,20 @@ const Header = ({ asideOn }) => {
                         <ButtonClean
                             className={styles.teams}
                             onClick={() => setIsTeamActive(!isTeamActive)}
-                            title={title}
+                            title={teamContext.selectedTeam}
                         />
                         {
                             isTeamActive ? <div
-                                ref={dropdownRef}
+                                ref={dropdownRefTeam}
                                 className={`${styles.options} ${styles.font} ${styles['teams-position']}`}
                             >
-                                <div className={styles['first-option']}>
-                                    <LinkComponent
-                                        title='Select'
-                                        onClick={() => setTitle('Select')}
-                                        className={`${styles.overflow} ${styles.hover}`}
-                                    />
-                                </div>
                                 {
                                     teamContext.teams.map(t => (
-                                        <div className={styles['team-options']}>
+                                        <div key={t._id} className={styles['team-options']}>
                                             <LinkComponent
-                                                key={t._id}
                                                 href={`/team/${t._id}`}
-                                                title={t.name} onClick={() => { selectTeam(t._id) }}
-                                                onClick={() => setTitle(t.name)}
+                                                title={t.name}
+                                                onClick={() => { selectTeam(t._id, t.name) }}
                                                 className={`${styles.overflow} ${styles.hover}`}
                                             />
                                         </div>
@@ -108,7 +113,7 @@ const Header = ({ asideOn }) => {
                 </div>
                 {
                     showForm ? (<Transparent hideForm={() => setShowForm(false)}>
-                        <CreateTeam setOption={teamContext.setOption} hideForm={() => { setShowForm(false) }} ></CreateTeam>
+                        <CreateTeam hideForm={() => { setShowForm(false) }} ></CreateTeam>
                     </Transparent>) : null
                 }
                 <div className={`${styles.links} ${styles.font}`}>
@@ -120,7 +125,7 @@ const Header = ({ asideOn }) => {
                     />
                     {
                         isProfileActive ? <div
-                            ref={dropdownRef}
+                            ref={dropdownRefProfile}
                             className={`${styles.options} ${styles['logout-position']}`}
                         >
                             <div className={styles['first-option']}>
