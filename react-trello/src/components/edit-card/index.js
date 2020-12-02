@@ -10,6 +10,8 @@ import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
 import Transparent from '../transparent'
 import { useSocket } from '../../contexts/SocketProvider'
+import pic1 from '../../images/edit-card/pic1.svg'
+
 
 
 export default function EditCard(props) {
@@ -86,34 +88,36 @@ export default function EditCard(props) {
     }
 
     return (
-        <div className={styles.form}>
-            <div>
-                <form className={styles.container} >
-                    <Title title="Edit Card" />
-                    <Input
+        <div className={styles.container}>
+            <form className={styles.form} >
+                <div className={styles.nameContainer}>
+                    <div className={styles.inputTitles}>
+                <img src={pic1} alt="pic1" />
+                <span>Name</span>
+                    </div>
+                    <input className={styles.nameInput}
                         value={name}
                         onChange={e => setName(e.target.value)}
-                        label="Name"
+                        // label="Name"
                         id="name"
                     />
-                    <Input
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        label="Description"
-                        id="description"
-                    />
-                    <DatePicker selected={dueDate} onChange={date => setDueDate(date)} label="Due Date" />
-                    <Input
-                        value={progress}
-                        onChange={e => setProgress(e.target.value)}
-                        label="Progress"
-                        id="progress"
-                    />
+                </div>
+                <Input
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                    label="Description"
+                    id="description"
+                />
+                <DatePicker selected={dueDate} onChange={date => setDueDate(date)} label="Due Date" />
+                <Input
+                    value={progress}
+                    onChange={e => setProgress(e.target.value)}
+                    label="Progress"
+                    id="progress"
+                />
 
 
-                </form>
-            </div>
-            <div className={styles.editMembers}>
+
                 <span>Card members: </span>
                 {
                     members.map((element, index) => {
@@ -122,18 +126,20 @@ export default function EditCard(props) {
                 }
                 <button onClick={showFormAdd} title="Edit members" className={styles.editMembersButton}>Edit members</button>
                 {IsVisibleAdd ?
-                    < div >
-                        <Transparent hideFormAdd={hideFormAdd} >
-                            <AddMember hideFormAdd={hideFormAdd} card={props.card} listId={listId} />
-                        </Transparent >
-                    </div > : null
+                    // < div >
+                    <Transparent hideFormAdd={hideFormAdd} >
+                        <AddMember hideFormAdd={hideFormAdd} card={props.card} listId={listId} />
+                    </Transparent >
+                    /* </div > */
+                    : null
                 }
-                <div className={styles.editCardButtons}>
-                    <Button onClick={handleSubmit} title="Edit Card" />
-                    <Button onClick={cancelSubmit} title="Cancel" />
-                    <Button onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete Card" />
-                </div>
-            </div>
+                {/* <div className={styles.editCardButtons}> */}
+                <Button onClick={handleSubmit} title="Edit Card" />
+                <Button onClick={cancelSubmit} title="Cancel" />
+                <Button onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete Card" />
+                {/* </div> */}
+                {/* </div> */}
+            </form>
         </div>
 
     )
