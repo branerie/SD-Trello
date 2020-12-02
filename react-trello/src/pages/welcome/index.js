@@ -36,10 +36,16 @@ const WelcomePage = () => {
 
         <div className={styles.topContainer}>
           <div className={styles.topDivtopContainer}>
-            <span className={styles.logo}>
-              <img src={logo} alt="logo" width="190%" height="150%"/>
-            </span>
-            <span className={styles.topright}>
+            <div className={styles.headerNav}>
+              <span className={styles.logo}>
+                <img src={logo} alt="logo" width='194' height='142' />
+              </span>
+              <span className={styles.firstButtons}>
+                <button className={styles.loginButton} onClick={goToLogin} >Log In</button>
+                <button className={styles.signUpButton} onClick={goToSignUp} >Sign Up</button>
+              </span>
+            </div>
+            <div className={styles.topright}>
               <div className={styles.pic1}>
                 <img src={pic1} alt="" />
                 {/* width="800" height="630" */}
@@ -48,10 +54,7 @@ const WelcomePage = () => {
                 <img src={pic2} alt="" />
                 {/* width="450" height="350" */}
               </div>
-              <button className={styles.loginButton} onClick={goToLogin} >Log In</button>
-
-              <button className={styles.signUpButton} onClick={goToSignUp} >Sign Up</button>
-            </span>
+            </div>
           </div>
 
 
@@ -81,11 +84,15 @@ const WelcomePage = () => {
                 <button className={styles.thirdSignUpButton} onClick={goToSignUp} >Try It Now</button>
               </div>
             </div>
-            <img className={styles.pic3} src={pic3} alt="" />
+            <div className={styles.pic3Container}>
+              <img className={styles.pic3} src={pic3} alt="" />
+            </div>
           </div>
 
           <div className={styles.secondRow}>
-            <img className={styles.pic4} src={pic4} alt="" />
+            <div className={styles.pic4Container}>
+              <img className={styles.pic4} src={pic4} alt="" />
+            </div>
             <div className={styles.thirdText}>
               <p className={styles.headers}>Еаsy to manage all the information</p>
               <div className={styles.paragraph}>
@@ -100,12 +107,14 @@ const WelcomePage = () => {
           <div className={styles.thirdRow}>
             <div className={styles.lastText}>
               <p className={styles.lastHeaders}>Start your <span className={styles.lucida}>Smart Manager</span> Now </p>
-              <div className={styles.paragraph}>
+              <div className={styles.lastParagraph}>
                 <p >Connect with other teams from <span className={styles.lucida}>The Smart Family</span>,</p>
                 <p > save time with more work done.</p>
                 <button className={styles.lastSignUpButton} onClick={goToSignUp} >Get Started</button>
-                <img className={styles.pic6} src={pic6} alt="" />
               </div>
+            </div>
+            <div className={styles.pi6Container}>
+              <img className={styles.pic6} src={pic6} alt="" />
             </div>
           </div>
 
@@ -152,9 +161,15 @@ const WelcomePage = () => {
 
         <div className={styles.lastColumn}>
           <div className={styles.socialMediaContainer}>
+            <span>
             <img className={styles.socialMedia} src={instagram} alt="" />
+            </span>
+            <span>
             <img className={styles.socialMedia} src={twitter} alt="" />
+            </span>
+            <span>
             <img className={styles.socialMedia} src={facebook} alt="" />
+            </span>
           </div>
           <div className={styles.sd2006}>&#169 SD2006</div>
 
