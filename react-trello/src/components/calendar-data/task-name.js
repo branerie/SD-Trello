@@ -5,7 +5,6 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
 import { useHistory } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider';
 import pen from '../../images/pen.svg'
-import ButtonClean from '../button-clean';
 
 
 

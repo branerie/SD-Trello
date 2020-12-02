@@ -3,7 +3,6 @@ import React, { useCallback, useEffect, useState, useContext } from "react";
 import styles from './index.module.css'
 import ReactTable from "react-table";
 import "react-table/react-table.css";
-import Button from "../button";
 import DatePicker from "react-datepicker"
 import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress";
@@ -322,7 +321,6 @@ const TableDndApp = (props) => {
                         break;
                     default:
                         return null
-                        break;
                 }
                 return (
                     <div className={styles.daylyProgress}>

@@ -74,7 +74,7 @@ export default function CalendarView() {
         if (pid && pid !== projectContext.project) {
             projectContext.setProject(pid)
         }
-    }, [getData,projectContext])
+    }, [])
 
     if (!project) {
         return (
