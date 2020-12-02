@@ -1,21 +1,58 @@
+
 .container {
-    text-align: center;
-    background-color: rgb(43, 226, 89);
-    height: 100%;
-
-}
-
-.form {
     position: fixed;
-    left: 25%;
-    top: 25%;
+    left: 30%;
+    top: 15%;
     z-index: 20;
-    width: 50%;
-    height: 25%;
+    width: 40%;
+    height: 70%;
+    background-color:#E6E6E6;
+    border: solid 1px #707070;
+    border-radius: 27px;
 }
+
+.inputTitles{
+    width: 20%;
+    display: flex;
+    justify-content: space-around;
+}
+
+.nameContainer{
+ margin: 20px;
+}
+
+.nameInput{
+    margin: 15%;
+    border: 1px solid #000000; 
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    margin: 10px;   
+    display: flex;   
+    justify-content: space-between; 
+    padding: 4px;
+    font-weight: normal;
+}
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 .editMembers {
-    background-color: rgb(43, 226, 89);
     padding: 3%;
 }
 .membersList {
