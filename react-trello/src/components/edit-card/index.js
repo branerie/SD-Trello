@@ -87,55 +87,99 @@ export default function EditCard(props) {
         setIsVisibleAdd(false)
     }
 
+    let thisCardDate = ''
+    if (dueDate && dueDate !== 0) {
+        thisCardDate = dueDate.getTime()
+    }
+
     return (
         <div className={styles.container}>
             <form className={styles.form} >
-                <div className={styles.nameContainer}>
-                    <div className={styles.inputTitles}>
-                <img src={pic1} alt="pic1" />
-                <span>Name</span>
+                <div className={styles.leftSide}>
+
+                    <div className={styles.firstRow}>
+                        <div className={styles.inputTitles}>
+                            <span className={styles.pic1}>
+                                <img src={pic1} alt="pic1" />
+                            </span>
+                            <span>
+                                <p className={styles.text}>Name</p>
+                            </span>
+                        </div>
+                        <input className={styles.nameInput}
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                            // label="Name"
+                            id="name"
+                        />
                     </div>
-                    <input className={styles.nameInput}
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        // label="Name"
-                        id="name"
-                    />
+
+                    <div className={styles.secondRow}>
+                        <div className={styles.inputTitles}>
+                            <span className={styles.pic2}>
+                                <img src={pic2} alt="pic2" />
+                            </span>
+                            <span>
+                                <p className={styles.text}>Progress</p>
+                            </span>
+                        </div>
+                        <input className={styles.nameInput}
+                            value={progress}
+                            onChange={e => setProgress(e.target.value)}
+                            // label="Progress"
+                            id="progress"
+                        />
+                    </div>
+
+
+                    <div className={styles.thirdRow}>
+                        <div className={styles.descriptinTitle}>
+                            <p className={styles.text}>Description</p>
+                        </div>
+                        <textarea className={styles.descriptionInput}
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
+                            // label="Description"
+                            id="description"
+                        />
+                    </div>
+
+
+                    <div className={styles.lasRow}>
+                        <Button onClick={handleSubmit} title="Edit Task" />
+                        <Button onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete Task" />
+                        <Button onClick={cancelSubmit} title="Cancel" />
+                    </div>
                 </div>
-                <Input
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                    label="Description"
-                    id="description"
-                />
-                <DatePicker selected={dueDate} onChange={date => setDueDate(date)} label="Due Date" />
-                <Input
-                    value={progress}
-                    onChange={e => setProgress(e.target.value)}
-                    label="Progress"
-                    id="progress"
-                />
 
 
-                <span>Card members: </span>
-                {
-                    members.map((element, index) => {
-                        return <span key={index} className={styles.membersNames}>{element.username}</span>
-                    })
-                }
-                <button onClick={showFormAdd} title="Edit members" className={styles.editMembersButton}>Edit members</button>
-                {IsVisibleAdd ?
-                    // < div >
-                    <Transparent hideFormAdd={hideFormAdd} >
-                        <AddMember hideFormAdd={hideFormAdd} card={props.card} listId={listId} />
-                    </Transparent >
-                    /* </div > */
-                    : null
-                }
-                {/* <div className={styles.editCardButtons}> */}
-                <Button onClick={handleSubmit} title="Edit Card" />
-                <Button onClick={cancelSubmit} title="Cancel" />
-                <Button onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete Card" />
+
+                <div className={styles.rightSide}>
+                    <div className={styles.membersContainer}>
+                        <div className={styles.inputTitles}>
+                            <p className={styles.text}>Members</p>
+                        </div>
+                        <TaskMembers cardMembers={members} size={40} cardId={cardId} listId={listId} project={props.project} title={'Add'} />
+                    </div>
+
+
+                    <div className={styles.secondRow}>
+                        <div className={styles.inputTitles}>
+                            <p className={styles.text}>Due Date</p>
+                        </div>
+                        <TaskDueDate cardDueDate={dueDate} cardId={cardId} listId={listId} />
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
                 {/* </div> */}
                 {/* </div> */}
             </form>

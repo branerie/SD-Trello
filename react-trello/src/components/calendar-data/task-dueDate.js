@@ -33,6 +33,7 @@ export default function TaskDueDate(props) {
         let cardId = props.cardId
         let listId = props.listId
 
+        
 
         if (cardDueDate === "" && date === '') {
             console.log('return');
@@ -54,16 +55,22 @@ export default function TaskDueDate(props) {
             return
         } else {
             setIsActive(!isActive)
-            updateProjectSocket()
+            updateProjectSocket()            
         }
 
     }, [history, cardDueDate, updateProjectSocket, setIsActive, isActive, props.cardId, props.listId
     ])
 
 
+    let cardDate = ''
+    let thisCardDate = ''
+    if (cardDueDate) {
+        cardDate = new Date(cardDueDate)
+        thisCardDate = cardDate.getTime()
+    }
 
 
-    let value = props.value
+   let value= (thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''
 
     if (value) {
 

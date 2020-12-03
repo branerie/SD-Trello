@@ -138,7 +138,7 @@ export default function TaskMembers(props) {
                         cardMembers.map((member, index) => {
                             return (
                                 <span key={index}>
-                                    <Avatar name={member.username} size={30} round={true} maxInitials={2} onMouseEnter={<div>{member.username}</div>} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, member) }} />
+                                    <Avatar name={member.username} size={props.size} round={true} maxInitials={2} onMouseEnter={<div>{member.username}</div>} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, member) }} />
                                 </span>
                             )
                         })
@@ -159,7 +159,7 @@ export default function TaskMembers(props) {
                                 <button className={styles.taskProgressButton} onClick={handleAdd}>Add</button>
                             </form>
                         </span> :
-                        <ButtonClean className={styles.addListButton} onClick={() => { getTeamUsers(); setIsActive(!isActive) }} title='+' />
+                        <ButtonClean className={styles.addListButton} onClick={() => { getTeamUsers(); setIsActive(!isActive) }} title={props.title} />
                 }
             </div >
         </div>

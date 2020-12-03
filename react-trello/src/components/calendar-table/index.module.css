@@ -10,12 +10,7 @@
     justify-content: space-between;
 }
 
-.listName{
-    background-color: rgb(201, 39, 39);
-    color: white;
-    display: flex;
-    justify-content: space-between;
-}
+
 
 .addTaskField{
     background-color: rgb(201, 39, 39);
@@ -85,3 +80,37 @@
   .header{
       font-weight: bold;
   }
+
+  .listNameContainer{ 
+    display: flex;
+    flex-wrap: wrap;
+    font-size: 100%;
+    font-family: inherit;
+    border: 0;
+    padding: 5px;
+    text-align: center;
+    /* justify-content: center; */
+    align-items: center;
+    background-color: inherit;
+    font-weight: inherit;
+    outline: none;
+    position: relative;
+    margin: 0.5em;
+}
+
+.listNameColor{   
+    position: absolute;
+    left: 0;
+    z-index: -1;
+    text-align: center;
+    margin-top: 0.5em;
+    margin-bottom: 0.5em;
+}
+
+.listNameText{
+    width: 40%;    
+    text-align: center;
+    margin-bottom: 2%;   
+}
+ 
+ 
