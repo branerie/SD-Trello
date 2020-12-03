@@ -18,7 +18,7 @@ export default function EditList(props) {
     const socket = useSocket()
     const dropdownRef = useRef(null)
     const [isColorActive, setIsColorActive] = useDetectOutsideClick(dropdownRef)
-    const [color, setColor] = useState('#A6A48E')
+    const [color, setColor] = useState(props.list.color || '#A6A48E')
 
     const projectId = props.project._id
     const listId = props.list._id
@@ -70,7 +70,9 @@ export default function EditList(props) {
                         onClick={() => setIsColorActive(!isColorActive)}
                     />
                 </div>
-                {isColorActive && <div ref={dropdownRef}><SketchPicker className={styles['color-pick']} color={color} onChangeComplete={onColorChange} /></div>}
+                {isColorActive && <div ref={dropdownRef}>
+                    <SketchPicker className={styles['color-pick']} color={color} onChangeComplete={onColorChange} />
+                </div>}
                 <Button onClick={handleSubmit} title="Edit List" />
             </form>
         </div>

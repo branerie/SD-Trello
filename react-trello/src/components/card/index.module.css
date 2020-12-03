@@ -7,4 +7,32 @@
     justify-content: space-between; 
     padding: 6px;
     font-weight: normal;
+    height: 35px;
+}
+
+.bar {
+    height: 8px;
+    width: 120px;
+    border-radius: 4px;
+    background-color: #E6E6E6;
+    margin-top: 5px;
+}
+
+.progress {
+    height: 8px;
+    border-radius: 4px;
+}
+
+.flex {
+    display: flex;
+}
+
+.pen {
+    width: 30px;
+    border-radius: 5px;
+    margin-left: 5px;
+}
+
+.pen:hover {
+    background-color: #C1CBCF;
 }
