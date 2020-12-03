@@ -1,16 +1,17 @@
 import React, { useCallback, useEffect, useState, useContext } from "react";
 // import { DragDropContext, Droppable, Draggable } from "react-beautiful-dnd"
 import styles from './index.module.css'
-import ReactTable from "react-table";
-import "react-table/react-table.css";
+import ReactTable from "react-table"
+import "react-table/react-table.css"
 import DatePicker from "react-datepicker"
 import TaskName from '../calendar-data/task-name'
-import TaskProgress from "../calendar-data/task-progress";
-import TaskDueDate from "../calendar-data/task-dueDate";
-import AddList from "../calendar-data/add-list";
-import AddTask from "../calendar-data/add-task";
-import TaskMembers from "../calendar-data/task-members";
-import ProjectContext from "../../contexts/ProjectContext";
+import TaskProgress from "../calendar-data/task-progress"
+import TaskDueDate from "../calendar-data/task-dueDate"
+import AddList from "../calendar-data/add-list"
+import AddTask from "../calendar-data/add-task"
+import TaskMembers from "../calendar-data/task-members"
+import ProjectContext from "../../contexts/ProjectContext"
+import ListColor from "../list-color"
 
 
 
@@ -58,15 +59,21 @@ const TableDndApp = (props) => {
         projectContext.lists
             .filter(element => !(projectContext.hiddenLists.includes(element._id)))
             .map((list) => {
-
-                // lists.map((list) => {
                 numberOfRows++
                 let listCards = list.cards
                 data.push({
                     task: (
-                        <div className={styles.listName} >
-                            <span> {list.name} </span>
-                        </div >
+                        // <div className={styles.listName} color={list.color} >
+                        //     <span> {list.name} </span>
+                        // </div >
+                        <div className={styles.listNameContainer} >
+                            <span className={styles.listNameColor}>
+                                <ListColor color={list.color || '#A6A48E'} />                              
+                            </span>
+                            <span className={styles.listNameText}>
+                                {list.name}
+                            </span>
+                        </div>
                     ),
                     progress: '',
                     assigned: '',
@@ -104,7 +111,7 @@ const TableDndApp = (props) => {
                         ),
                         assigned:
                             (
-                                <TaskMembers cardMembers={card.members} cardId={card._id} listId={list._id} project={props.project} />
+                                <TaskMembers cardMembers={card.members} cardId={card._id} listId={list._id} project={props.project} size={30} title='+'/>
                             ),
                         monday: thisCardDate + "/" + card.progress,
                         tuesday: thisCardDate + "/" + card.progress,
@@ -114,7 +121,7 @@ const TableDndApp = (props) => {
                         saturday: thisCardDate + "/" + card.progress,
                         sunday: thisCardDate + "/" + card.progress,
                         dueDate: (
-                            <TaskDueDate value={(thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''} props={props} project={props.project} cardDueDate={cardDate} cardId={card._id} listId={list._id} />
+                            <TaskDueDate cardDueDate={cardDate} cardId={card._id} listId={list._id} />
                         )
                     })
 
@@ -158,11 +165,11 @@ const TableDndApp = (props) => {
 
     // const DragTrComponent = (props) => {
 
-    //     const { children = null, rowInfo } = props;
+    //     const {children = null, rowInfo} = props;
     //     if (rowInfo) {
     //         // debugger;
-    //         const { original, index } = rowInfo;
-    //         const { firstName } = original;
+    //         const {original, index} = rowInfo;
+    //         const {firstName} = original;
     //         return (
     //             <Draggable key={firstName} index={index} draggableId={firstName}>
     //                 {(draggableProvided, draggableSnapshot) => (

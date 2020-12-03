@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useHistory } from "react-router-dom"
 import Button from '../button'
 import Input from '../input'
@@ -11,10 +11,19 @@ import "react-datepicker/dist/react-datepicker.css"
 import Transparent from '../transparent'
 import { useSocket } from '../../contexts/SocketProvider'
 import pic1 from '../../images/edit-card/pic1.svg'
+import pic2 from '../../images/edit-card/pic2.svg'
+
+import Avatar from 'react-avatar'
+import ButtonClean from '../button-clean'
+import pen from '../../images/pen.svg'
+import TaskMembers from '../calendar-data/task-members'
+import TaskDueDate from "../calendar-data/task-dueDate"
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 
 
 export default function EditCard(props) {
+    const dropdownRef = useRef(null);
     const [name, setName] = useState(props.card.name)
     const [description, setDescription] = useState(props.card.description)
     const members = props.card.members
@@ -23,6 +32,7 @@ export default function EditCard(props) {
     const [IsVisibleAdd, setIsVisibleAdd] = useState(false)
     const history = useHistory()
     const socket = useSocket()
+    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
 
     const cardId = props.card._id
     const listId = props.listId
@@ -87,59 +97,122 @@ export default function EditCard(props) {
         setIsVisibleAdd(false)
     }
 
+    let thisCardDate = ''
+    if (dueDate && dueDate !== 0) {
+        thisCardDate = dueDate.getTime()
+    }
+
     return (
         <div className={styles.container}>
             <form className={styles.form} >
-                <div className={styles.nameContainer}>
-                    <div className={styles.inputTitles}>
-                <img src={pic1} alt="pic1" />
-                <span>Name</span>
+                <div className={styles.leftSide}>
+
+                    <div className={styles.firstRow}>
+
+
+
+
+                        {/* <input className={styles.nameInput}
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                            // label="Name"
+                            id="name"
+                        /> */}
+
+
+                        <div className={styles.inputTitles}>
+                            <span className={styles.pic1}>
+                                <img src={pic1} alt="pic1" />
+                            </span>
+                            {
+                                isActive ?
+                                <div className={styles.inputTitles}>
+                                    {/* < form ref={dropdownRef} className={styles.inputTitles} onSubmit={handleSubmit} > */}
+                                        <input className={styles.nameInput} placeholder={name} onChange={e => setName(e.target.value)} />
+                                    
+                                        <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
+                                    </div>:
+                                    <div className={styles.inputTitles}>
+                                        <p className={styles.text}>{name}</p>
+                                        <button type='submit' className={styles.clean} onClick={() => setIsActive(!isActive)} >
+                                            <img src={pen} alt="..." width="11.5" height="11.5" />
+                                        </button>
+
+                                    </div>
+                            }
+                        </div >
                     </div>
-                    <input className={styles.nameInput}
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        // label="Name"
-                        id="name"
-                    />
+
+                    <div className={styles.secondRow}>
+                        <div className={styles.inputTitles}>
+                            <span className={styles.pic2}>
+                                <img src={pic2} alt="pic2" />
+                            </span>
+                            <span>
+                                <p className={styles.text}>Progress</p>
+                            </span>
+                        </div>
+                        <input className={styles.nameInput}
+                            value={progress}
+                            onChange={e => setProgress(e.target.value)}
+                            // label="Progress"
+                            id="progress"
+                        />
+                    </div>
+
+
+                    <div className={styles.thirdRow}>
+                        <div className={styles.descriptinTitle}>
+                            <p className={styles.text}>Description</p>
+                        </div>
+                        <textarea className={styles.descriptionInput}
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
+                            // label="Description"
+                            id="description"
+                        />
+                    </div>
+
+
+                    <div className={styles.lasRow}>
+                        <Button onClick={handleSubmit} title="Edit Task" />
+                        <Button onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete Task" />
+                        <Button onClick={cancelSubmit} title="Cancel" />
+                    </div>
                 </div>
-                <Input
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                    label="Description"
-                    id="description"
-                />
-                <DatePicker selected={dueDate} onChange={date => setDueDate(date)} label="Due Date" />
-                <Input
-                    value={progress}
-                    onChange={e => setProgress(e.target.value)}
-                    label="Progress"
-                    id="progress"
-                />
 
 
-                <span>Card members: </span>
-                {
-                    members.map((element, index) => {
-                        return <span key={index} className={styles.membersNames}>{element.username}</span>
-                    })
-                }
-                <button onClick={showFormAdd} title="Edit members" className={styles.editMembersButton}>Edit members</button>
-                {IsVisibleAdd ?
-                    // < div >
-                    <Transparent hideFormAdd={hideFormAdd} >
-                        <AddMember hideFormAdd={hideFormAdd} card={props.card} listId={listId} />
-                    </Transparent >
-                    /* </div > */
-                    : null
-                }
-                {/* <div className={styles.editCardButtons}> */}
-                <Button onClick={handleSubmit} title="Edit Card" />
-                <Button onClick={cancelSubmit} title="Cancel" />
-                <Button onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete Card" />
+
+                <div className={styles.rightSide}>
+                    <div className={styles.membersContainer}>
+                        <div className={styles.inputTitles}>
+                            <p className={styles.text}>Members</p>
+                        </div>
+                        <TaskMembers cardMembers={members} size={40} cardId={cardId} listId={listId} project={props.project} title={'Add'} />
+                    </div>
+
+
+                    <div className={styles.secondRow}>
+                        <div className={styles.inputTitles}>
+                            <p className={styles.text}>Due Date</p>
+                        </div>
+                        <TaskDueDate cardDueDate={dueDate} cardId={cardId} listId={listId} />
+                    </div>
+
+                </div>
+
+
+
+
+
+
+
+
+
                 {/* </div> */}
                 {/* </div> */}
             </form>
-        </div>
+        </div >
 
     )
 }

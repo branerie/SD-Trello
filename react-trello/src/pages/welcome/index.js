@@ -113,7 +113,7 @@ const WelcomePage = () => {
                 <button className={styles.lastSignUpButton} onClick={goToSignUp} >Get Started</button>
               </div>
             </div>
-            <div className={styles.pi6Container}>
+            <div className={styles.pic6Container}>
               <img className={styles.pic6} src={pic6} alt="" />
             </div>
           </div>

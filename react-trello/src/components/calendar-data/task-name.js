@@ -94,7 +94,6 @@ export default function TaskName(props) {
                 <img src={pen} alt="..." width="11.5" height="11.5" />
               </button>
 
-
             </div >
         }
       </span>

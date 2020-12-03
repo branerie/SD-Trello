@@ -1,15 +1,21 @@
+@font-face {
+  font-family: 'myLucida' ;
+  src: url('../../fonts/LCALLIG.TTF') format('truetype');
+}
+
+
+
 .pageContainer {
-  /* width: 1920px; */
   width: 100%;
   height: auto;
   overflow: hidden;
   position: relative;
-  min-height: 100vh;
+  min-height: 100%;
 }
 
 .topContainer {
   width: 100%;
-  /* height: 21%; */
+  min-height: 100vh;
   height: auto;
   background: rgb(166,164,142);
   z-index: -10;
@@ -124,20 +130,20 @@
 .headers{
   z-index: 5;
   font-weight: 600;
-  font-style: italic;
+  /* font-style: italic; */
   font-size: 2.5em;
   font-family: 'Lato', sans-serif;
   text-align: center;
 }
 
 .lucida{
-  font-size: 2em;
-  font-family: 'Tangerine', cursive;
+  font-weight: lighter;
+  font-size: 1.1em;
+  font-family: 'myLucida', cursive;
 }
 
 .paragraph{
   font-weight: lighter;
-  /* /* margin-left: 10%; */
   margin-top: 3%; 
   font-family: 'Merriweather Sans', sans-serif;
   font-size: 1.5em;
@@ -198,13 +204,10 @@
 .pic3Container {  
   width: auto;
   margin: 2%;
-  max-width: 40%;
+  max-width: 90%;
   flex-grow: 1;
   display: flex;
-  justify-content: center;
-  /* height: 593,1px; */
-  /* margin-top: 5%;
-  margin-left: 6%; */
+  justify-content: center;  
 }
 
 .pic3 {  
@@ -274,7 +277,7 @@
   text-align: center;
   z-index: 5;
   font-weight: 600;
-  font-style: italic;
+  /* font-style: italic; */
   font-size: 2.5em;
   font-family: 'Lato', sans-serif;
 }
@@ -305,7 +308,7 @@
 
 }
 
-.pi6Container{
+.pic6Container{
   width: 100%;
   display: flex;
   justify-content: center;  
