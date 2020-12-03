@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useHistory } from "react-router-dom"
 import Button from '../button'
 import Input from '../input'
@@ -11,10 +11,19 @@ import "react-datepicker/dist/react-datepicker.css"
 import Transparent from '../transparent'
 import { useSocket } from '../../contexts/SocketProvider'
 import pic1 from '../../images/edit-card/pic1.svg'
+import pic2 from '../../images/edit-card/pic2.svg'
+
+import Avatar from 'react-avatar'
+import ButtonClean from '../button-clean'
+import pen from '../../images/pen.svg'
+import TaskMembers from '../calendar-data/task-members'
+import TaskDueDate from "../calendar-data/task-dueDate"
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 
 
 export default function EditCard(props) {
+    const dropdownRef = useRef(null);
     const [name, setName] = useState(props.card.name)
     const [description, setDescription] = useState(props.card.description)
     const members = props.card.members
@@ -23,6 +32,7 @@ export default function EditCard(props) {
     const [IsVisibleAdd, setIsVisibleAdd] = useState(false)
     const history = useHistory()
     const socket = useSocket()
+    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
 
     const cardId = props.card._id
     const listId = props.listId
@@ -98,20 +108,39 @@ export default function EditCard(props) {
                 <div className={styles.leftSide}>
 
                     <div className={styles.firstRow}>
-                        <div className={styles.inputTitles}>
-                            <span className={styles.pic1}>
-                                <img src={pic1} alt="pic1" />
-                            </span>
-                            <span>
-                                <p className={styles.text}>Name</p>
-                            </span>
-                        </div>
-                        <input className={styles.nameInput}
+
+
+
+
+                        {/* <input className={styles.nameInput}
                             value={name}
                             onChange={e => setName(e.target.value)}
                             // label="Name"
                             id="name"
-                        />
+                        /> */}
+
+
+                        <div className={styles.inputTitles}>
+                            <span className={styles.pic1}>
+                                <img src={pic1} alt="pic1" />
+                            </span>
+                            {
+                                isActive ?
+                                <div className={styles.inputTitles}>
+                                    {/* < form ref={dropdownRef} className={styles.inputTitles} onSubmit={handleSubmit} > */}
+                                        <input className={styles.nameInput} placeholder={name} onChange={e => setName(e.target.value)} />
+                                    
+                                        <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
+                                    </div>:
+                                    <div className={styles.inputTitles}>
+                                        <p className={styles.text}>{name}</p>
+                                        <button type='submit' className={styles.clean} onClick={() => setIsActive(!isActive)} >
+                                            <img src={pen} alt="..." width="11.5" height="11.5" />
+                                        </button>
+
+                                    </div>
+                            }
+                        </div >
                     </div>
 
                     <div className={styles.secondRow}>
@@ -183,7 +212,7 @@ export default function EditCard(props) {
                 {/* </div> */}
                 {/* </div> */}
             </form>
-        </div>
+        </div >
 
     )
 }
