@@ -15,7 +15,7 @@ export default function Aside({ asideOn, setAsideOn }) {
     const projectContext = useContext(ProjectContext)
 
     return (
-        <div>
+        <div className={styles.aside}>
             <aside className={styles.container}>
                 <div className={styles.topleft}>
                     <ButtonClean

@@ -10,7 +10,7 @@ import TableDndApp from '../../components/calendar-table'
 import Loader from 'react-loader-spinner'
 import ProjectContext from '../../contexts/ProjectContext'
 
-export default function CalendarView() {
+export default function ProjectList() {
     const params = useParams()
     const history = useHistory()
     const [project, setProject] = useState(null)

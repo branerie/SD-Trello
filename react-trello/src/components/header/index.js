@@ -18,6 +18,7 @@ const Header = ({ asideOn }) => {
     const [isProfileActive, setIsProfileActive] = useDetectOutsideClick(dropdownRefProfile)
     const [isViewActive, setIsViewActive] = useDetectOutsideClick(dropdownRefView)
     const [isTeamActive, setIsTeamActive] = useDetectOutsideClick(dropdownRefTeam)
+    const [isViewVisibble, setIsViewVisibble] = useState(false)
     const [showForm, setShowForm] = useState(false)
     const context = useContext(UserContext)
     const projectContext = useContext(ProjectContext)
@@ -31,11 +32,16 @@ const Header = ({ asideOn }) => {
     }
 
     useEffect(() => {
-        if (!(window.location.href.includes('team') || window.location.href.includes('projects') || window.location.href.includes('calendar-view'))) {
+        if (!(window.location.href.includes('team') || window.location.href.includes('project'))) {
             teamContext.setSelectedTeam('Select')
         } else if (teamContext.selectedTeam === 'Select') {
             const teamId = params.teamid
             teamContext.updateSelectedTeam(teamId)
+        }
+
+        if (window.location.href.includes('project')) {
+            setIsViewVisibble(true)
+        
         }
     })
 
@@ -43,37 +49,7 @@ const Header = ({ asideOn }) => {
         <header className={`${styles.navigation} ${asideOn ? styles.small : ''}`} >
             <div className={styles.container}>
                 <div className={styles.links}>
-                    <div className={styles.margin}>
-                        Change
-                    </div>
-                    <div>
-                        <ButtonClean
-                            className={styles.view}
-                            onClick={() => setIsViewActive(!isViewActive)}
-                            title='View'
-                        />
-                        {
-                            isViewActive ? <div
-                                ref={dropdownRefView}
-                                className={`${styles.options} ${styles.font} ${styles['view-position']}`}
-                            >
-                                <div className={styles['first-option']}>
-                                    <LinkComponent
-                                        href={`/projects/${projectContext.project}`}
-                                        title='Board'
-                                        className={styles.hover}
-                                    />
-                                </div>
-                                <div className={styles['last-option']}>
-                                    <LinkComponent
-                                        href={`/calendar-view/${projectContext.project}`}
-                                        title='List'
-                                        className={styles.hover}
-                                    />
-                                </div>
-                            </div> : null
-                        }
-                    </div>
+
                     <div className={styles.margin}>
                         Teams:
                     </div>
@@ -110,12 +86,46 @@ const Header = ({ asideOn }) => {
                             </div> : null
                         }
                     </div>
+                    {isViewVisibble && <div className={styles.flex}>
+                        <div className={styles.margin}>
+                            Change
+                        </div>
+                        <div>
+                            <ButtonClean
+                                className={styles.view}
+                                onClick={() => setIsViewActive(!isViewActive)}
+                                title='View'
+                            />
+                            {
+                                isViewActive ? <div
+                                    ref={dropdownRefView}
+                                    className={`${styles.options} ${styles.font} ${styles['view-position']}`}
+                                >
+                                    <div className={styles['first-option']}>
+                                        <LinkComponent
+                                            href={`/project-board/${params.teamid}/${projectContext.project}`}
+                                            title='Board'
+                                            className={styles.hover}
+                                        />
+                                    </div>
+                                    <div className={styles['last-option']}>
+                                        <LinkComponent
+                                            href={`/project-list/${params.teamid}/${projectContext.project}`}
+                                            title='List'
+                                            className={styles.hover}
+                                        />
+                                    </div>
+                                </div> : null
+                            }
+                        </div>
+                    </div>}
                 </div>
                 {
                     showForm ? (<Transparent hideForm={() => setShowForm(false)}>
                         <CreateTeam hideForm={() => { setShowForm(false) }} ></CreateTeam>
                     </Transparent>) : null
                 }
+
                 <div className={`${styles.links} ${styles.font}`}>
                     <input className={styles.input} type='text' placeholder='Search...' />
                     <ButtonClean

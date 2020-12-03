@@ -102,7 +102,7 @@ export default function List(props) {
                 <ButtonClean 
                     className={styles.addnote}
                     onClick={() => setIsVisible(!isVisible)}
-                    title='+ Add Note'
+                    title='+ Add Task'
                 />
             </div>
             {

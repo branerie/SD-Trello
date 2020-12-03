@@ -128,7 +128,7 @@
 .view-position {
   width: 100px;
   top: 65px;
-  left: 110px;
+  left: 350px;
 }
 
 .teams {
@@ -144,7 +144,7 @@
 .teams-position {
   width: 150px;
   top: 65px;
-  left: 280px;
+  left: 100px;
 }
 
 .team-options {
@@ -165,4 +165,9 @@
 
 .hover:hover {
   background-color: #C1CBCF;
+}
+
+.flex {
+  display: flex;
+  align-items: center;
 }

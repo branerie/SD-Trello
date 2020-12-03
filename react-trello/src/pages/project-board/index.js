@@ -15,7 +15,7 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Loader from 'react-loader-spinner'
 import ButtonClean from '../../components/button-clean'
 
-export default function ProjectPage() {
+export default function ProjectBoard() {
     const params = useParams()
     const history = useHistory()
     const [project, setProject] = useState(null)

@@ -46,7 +46,7 @@ export default function CreateProject() {
             const project = await response.json()
             projectContext.setProject(project._id)
             document.cookie = `pid=${project._id}`
-            history.push(`/projects/${project._id}`)
+            history.push(`/project-board/${teamId}/${project._id}`)
         }
     }, [history, name, description])
 
