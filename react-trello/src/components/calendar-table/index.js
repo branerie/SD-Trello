@@ -68,7 +68,7 @@ const TableDndApp = (props) => {
                         // </div >
                         <div className={styles.listNameContainer} >
                             <span className={styles.listNameColor}>
-                                <ListColor color={list.color || '#A6A48E'} />                              
+                                <ListColor color={list.color || '#A6A48E'} />
                             </span>
                             <span className={styles.listNameText}>
                                 {list.name}
@@ -111,7 +111,7 @@ const TableDndApp = (props) => {
                         ),
                         assigned:
                             (
-                                <TaskMembers cardMembers={card.members} cardId={card._id} listId={list._id} project={props.project} size={30} title='+'/>
+                                <TaskMembers cardMembers={card.members} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
                             ),
                         monday: thisCardDate + "/" + card.progress,
                         tuesday: thisCardDate + "/" + card.progress,

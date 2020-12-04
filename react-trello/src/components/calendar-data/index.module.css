@@ -6,6 +6,7 @@
   background-color: blue;
 }
 .buttoDiv{
+  margin: 3%;
   display: flex;
   justify-content: space-between;
 }
@@ -17,7 +18,8 @@
 .container {
   width: 100%;
   display: flex;
-  /* flex-wrap: wrap; */
+  align-items: center;
+  justify-content: space-between;
 }
 .input {
   border: 1px solid #000000; 
@@ -50,7 +52,8 @@
   background-color: lemonchiffon;
 }
 .progressInput{
-  width: 100%;  
+  width: 100%;
+  padding: 5%;  
 }
 
 .addListButton{
@@ -105,4 +108,15 @@
   background-color: inherit;
   font-weight: inherit;
   outline: none;
+}
+
+.tableText{
+  display: flex;
+  margin: 2%;
+}
+
+.select{
+  height: 100%;
+  padding: 2%;
+  margin: 4%;
 }
