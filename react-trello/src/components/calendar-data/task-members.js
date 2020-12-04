@@ -7,6 +7,7 @@ import { useSocket } from '../../contexts/SocketProvider';
 import Avatar from 'react-avatar';
 import ButtonClean from '../button-clean';
 import TeamContext from "../../contexts/TeamContext"
+import pen from '../../images/pen.svg'
 
 
 
@@ -55,7 +56,19 @@ export default function TaskMembers(props) {
             history.push("/error")
         }
         const data = await response.json()
-        setUsers(data)
+
+        let filtered = data
+
+        for (var arr in data) {
+            for (var filter in cardMembers) {
+                if (data[arr]._id === cardMembers[filter]._id) {
+                    filtered = filtered.filter(function (obj) {
+                        return obj._id !== cardMembers[filter]._id
+                    })
+                }
+            }
+        }
+        setUsers(filtered)
 
     }
 
@@ -132,36 +145,38 @@ export default function TaskMembers(props) {
 
     return (
         <div>
-            <div className={styles.buttoDiv}>
-                <span>
-                    {
-                        cardMembers.map((member, index) => {
-                            return (
-                                <span key={index}>
-                                    <Avatar name={member.username} size={props.size} round={true} maxInitials={2} onMouseEnter={<div>{member.username}</div>} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, member) }} />
-                                </span>
-                            )
-                        })
-                    }
-                </span>
-                {
-                    isActive ?
-                        <span>
-                            < form ref={dropdownRef} className={styles.container}  >
-                                <select className={styles.select} onChange={(e) => { handleSelect(e.target.value) }}>
-                                    <option>Select</option>
-                                    {
-                                        users.map(m => (
-                                            <option key={m._id} value={m._id}>{m.username}</option>
-                                        ))
-                                    }
-                                </select>
-                                <button className={styles.taskProgressButton} onClick={handleAdd}>Add</button>
-                            </form>
-                        </span> :
-                        <ButtonClean className={styles.addListButton} onClick={() => { getTeamUsers(); setIsActive(!isActive) }} title={props.title} />
-                }
-            </div >
+            {
+                isActive ?
+                    <span>
+                        < form ref={dropdownRef} className={styles.container}  >
+                            <select className={styles.select} onChange={(e) => { handleSelect(e.target.value) }}>
+                                <option>Select</option>
+                                {
+                                    users.map((m, index) => (
+                                        <option key={index} value={m._id}>{m.username}</option>
+                                    ))
+                                }
+                            </select>
+                            <button className={styles.taskProgressButton} onClick={handleAdd}>Add</button>
+                        </form>
+                    </span> 
+                    :
+                    <div className={styles.container}>
+                        <span className={styles.buttoDiv}>
+                            {
+                                cardMembers.map((member, index) => {
+                                    return (
+                                        <span key={index}>
+                                            <Avatar name={member.username} size={props.size} round={true} maxInitials={2} onMouseEnter={<div>{member.username}</div>} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, member) }} />
+                                        </span>
+                                    )
+                                })
+                            }
+                        </span>
+                        <img src={pen} alt="..." width="13" height="13"onClick={() => { getTeamUsers(); setIsActive(!isActive) }} />
+                        {/* <Avatar name={'+ 1'} size={20} round={true} onClick={() => { getTeamUsers(); setIsActive(!isActive) }} title={props.title} /> */}
+                    </div >
+            }
         </div>
     )
 }

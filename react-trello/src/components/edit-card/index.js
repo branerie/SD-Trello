@@ -23,23 +23,32 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 
 export default function EditCard(props) {
+
+
+    const card = props.card
+
     const dropdownRef = useRef(null);
-    const [name, setName] = useState(props.card.name)
-    const [description, setDescription] = useState(props.card.description)
+    const [name, setName] = useState(card.name)
+    const [description, setDescription] = useState(card.description)
     const members = props.card.members
-    const [dueDate, setDueDate] = useState(new Date(props.card.dueDate))
-    const [progress, setProgress] = useState(props.card.progress)
-    const [IsVisibleAdd, setIsVisibleAdd] = useState(false)
+    const [dueDate, setDueDate] = useState(new Date(card.dueDate))
+    const [progress, setProgress] = useState(card.progress)
     const history = useHistory()
     const socket = useSocket()
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
+    const [isProgressActive, setIsProgressActive] = useDetectOutsideClick(dropdownRef)
+    const [isDescriptionActive, setIsDescriptionActive] = useState(false)
 
-    const cardId = props.card._id
+
+    const cardId = card._id
     const listId = props.listId
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
     }, [socket, props.project])
+
+
+
 
     const cancelSubmit = () => {
         props.hideFormEdit()
@@ -64,8 +73,19 @@ export default function EditCard(props) {
 
     }, [history, props, cardId, listId, updateProjectSocket])
 
+
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault()
+
+        if (Number(progress) > 100) {
+            setProgress(100)
+            return
+        } else if (Number(progress) < 0) {
+            setProgress(0)
+            return
+        }
+
+
         const token = getCookie("x-auth-token")
         const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
@@ -84,17 +104,26 @@ export default function EditCard(props) {
             history.push("/error")
         } else {
             updateProjectSocket()
-            props.hideFormEdit()
+            setIsActive(false)
+            setIsProgressActive(false)
+            setIsDescriptionActive(false)
         }
 
-    }, [history, name, description, dueDate, progress, listId, cardId, props, updateProjectSocket])
+    }, [history, name, description, dueDate, progress, listId, cardId, updateProjectSocket])
 
-    const showFormAdd = () => {
-        setIsVisibleAdd(true)
-    }
-
-    const hideFormAdd = () => {
-        setIsVisibleAdd(false)
+    const progressColor = (progress) => {
+        if (Number(progress) <= 20) {
+            return 'red'
+        }
+        if (Number(progress) <= 40) {
+            return 'orange'
+        }
+        if (Number(progress) <= 80) {
+            return 'blue'
+        }
+        if (Number(progress) > 80) {
+            return 'green'
+        }
     }
 
     let thisCardDate = ''
@@ -108,37 +137,21 @@ export default function EditCard(props) {
                 <div className={styles.leftSide}>
 
                     <div className={styles.firstRow}>
-
-
-
-
-                        {/* <input className={styles.nameInput}
-                            value={name}
-                            onChange={e => setName(e.target.value)}
-                            // label="Name"
-                            id="name"
-                        /> */}
-
-
                         <div className={styles.inputTitles}>
                             <span className={styles.pic1}>
                                 <img src={pic1} alt="pic1" />
                             </span>
                             {
                                 isActive ?
-                                <div className={styles.inputTitles}>
-                                    {/* < form ref={dropdownRef} className={styles.inputTitles} onSubmit={handleSubmit} > */}
-                                        <input className={styles.nameInput} placeholder={name} onChange={e => setName(e.target.value)} />
-                                    
-                                        <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
-                                    </div>:
-                                    <div className={styles.inputTitles}>
-                                        <p className={styles.text}>{name}</p>
-                                        <button type='submit' className={styles.clean} onClick={() => setIsActive(!isActive)} >
-                                            <img src={pen} alt="..." width="11.5" height="11.5" />
-                                        </button>
-
-                                    </div>
+                                    <div ref={dropdownRef}>
+                                        <span className={styles.nameContainer}>
+                                            <input className={styles.nameInput} value={name} onChange={e => setName(e.target.value)} />
+                                            <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
+                                        </span>
+                                    </div> :
+                                    <span className={styles.nameContainer}>
+                                        <p className={styles.textName} onClick={() => setIsActive(!isActive)}>{card.name}</p>
+                                    </span>
                             }
                         </div >
                     </div>
@@ -148,29 +161,68 @@ export default function EditCard(props) {
                             <span className={styles.pic2}>
                                 <img src={pic2} alt="pic2" />
                             </span>
-                            <span>
-                                <p className={styles.text}>Progress</p>
-                            </span>
+                            {
+                                isProgressActive ?
+                                    <div ref={dropdownRef}>
+                                        <span className={styles.progressInputContainer}>
+                                            <input type='number' className={styles.nameInput} value={progress} onChange={e => setProgress(e.target.value)} />
+                                            <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
+                                        </span></div>
+                                    :
+                                    <span className={styles.nameContainer}>
+                                        <p className={styles.textName} onClick={() => setIsProgressActive(true)} >Progress</p>
+                                    </span>
+                            }
                         </div>
-                        <input className={styles.nameInput}
-                            value={progress}
-                            onChange={e => setProgress(e.target.value)}
-                            // label="Progress"
-                            id="progress"
-                        />
+
+                        <div className={styles.progressDiv}>
+                            {
+                                card.progress ?
+                                    <div className={styles.bar} >
+                                        <div
+                                            style={{
+                                                width: `${card.progress}%`,
+                                                ['backgroundColor']: progressColor(card.progress)
+                                            }}
+                                            className={styles.progress}
+                                        />
+                                    </div> : null
+                            }
+                            <span>{card.progress} %</span>
+                        </div>
+
                     </div>
 
 
+
                     <div className={styles.thirdRow}>
+
                         <div className={styles.descriptinTitle}>
                             <p className={styles.text}>Description</p>
                         </div>
                         <textarea className={styles.descriptionInput}
+                            ref={dropdownRef}
                             value={description}
-                            onChange={e => setDescription(e.target.value)}
-                            // label="Description"
-                            id="description"
+                            onChange={(e) => { setDescription(e.target.value); setIsDescriptionActive(true) }}
                         />
+                        {
+                            isDescriptionActive ?
+
+                                <div className={styles.descriptionButtons}>
+                                    <span>
+                                        <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
+                                    </span>
+                                    <span>
+                                        <button onClick={(e) => { setDescription(card.description); setIsDescriptionActive(false) }} className={styles.editButton} >Cancel</button>
+                                    </span>
+
+                                </div>
+                                : null
+                        }
+
+
+
+
                     </div>
 
 
@@ -179,16 +231,15 @@ export default function EditCard(props) {
                         <Button onClick={(e) => { if (window.confirm('Are you sure you wish to delete this item?')) deleteCard(e) }} title="Delete Task" />
                         <Button onClick={cancelSubmit} title="Cancel" />
                     </div>
+
                 </div>
-
-
 
                 <div className={styles.rightSide}>
                     <div className={styles.membersContainer}>
                         <div className={styles.inputTitles}>
                             <p className={styles.text}>Members</p>
                         </div>
-                        <TaskMembers cardMembers={members} size={40} cardId={cardId} listId={listId} project={props.project} title={'Add'} />
+                        <TaskMembers cardMembers={members} size={30} cardId={cardId} listId={listId} project={props.project} title={'Add'} />
                     </div>
 
 
@@ -202,17 +253,8 @@ export default function EditCard(props) {
                 </div>
 
 
-
-
-
-
-
-
-
-                {/* </div> */}
-                {/* </div> */}
             </form>
-        </div >
+        </div>
 
     )
 }

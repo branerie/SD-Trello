@@ -31,7 +31,16 @@ export default function TaskProgress(props) {
         if (cardProgress === "") {
             console.log('return');
             return
+        } else if(Number(cardProgress)>100){
+            setCardProgress(100)
+            return
+        }else if(Number(cardProgress)<0){
+            setCardProgress(0)
+            return
         }
+
+
+
         const token = getCookie("x-auth-token")
         const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
@@ -107,7 +116,7 @@ export default function TaskProgress(props) {
                 {
                     isActive ?
                         < form ref={dropdownRef} className={styles.container} onSubmit={editCardProgress} >
-                            <input className={styles.progressInput} type={'text'} placeholder={taskprogress} onChange={e => setCardProgress(e.target.value)} />
+                            <input className={styles.progressInput} type={'number'} placeholder={taskprogress} onChange={e => setCardProgress(e.target.value)} />
                             <button type='submit' className={styles.taskProgressButton} cardId={cardId} listId={listId} cardName>Edit</button>
                         </form> :
                         <div className={styles.taskProgress} >

@@ -83,10 +83,7 @@ export default function TaskDueDate(props) {
                         <DatePicker selected={cardDueDate} onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }} label="Go to date" onBlur={() => setIsActive(!isActive)} />
                         :
                         <div className={styles.dueDateField}>
-                            <span>{taskDueDate}</span>
-                            <button className={styles.clean} onClick={() => setIsActive(!isActive)} >
-                                <img src={pen} alt="..." width="11.5" height="11.5" />
-                            </button>
+                            <span onClick={() => setIsActive(!isActive)}>{taskDueDate}</span>                            
                         </div>
                 }
             </span>

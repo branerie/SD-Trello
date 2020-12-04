@@ -87,12 +87,12 @@ export default function TaskName(props) {
               <input className={styles.inputTaskName} type={'text'} placeholder={cardname} onChange={e => setCardName(e.target.value)} />
               <button type='submit' className={styles.taskProgressButton} cardId={cardId} listId={listId} cardName>Edit</button>
             </form> :
-            <div className={styles.buttoDiv} >
-              <span>{cardname}</span>
+            <div className={styles.tableText} >
+              <span onClick={() => setIsActive(!isActive)}>{cardname}</span>
 
-              <button type='submit' className={styles.clean} onClick={() => setIsActive(!isActive)} >
+              {/* <button type='submit' className={styles.clean} onClick={() => setIsActive(!isActive)} >
                 <img src={pen} alt="..." width="11.5" height="11.5" />
-              </button>
+              </button> */}
 
             </div >
         }
