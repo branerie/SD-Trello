@@ -20,4 +20,29 @@ async function projectUpdate(id) {
     return project
 }
 
-module.exports = { projectUpdate }
+async function teamUpdate(id) {
+    try {
+        const team = await models.Team.findOne({ _id: id })
+            .populate({
+                path: 'projects',
+                populate: {
+                    path: 'membersRoles',
+                    populate: {
+                        path: 'memberId'
+                    }
+                }
+            })
+            .populate({
+                path: 'projects',
+                populate: {
+                    path: 'author'
+                }
+            })
+        return team
+
+    } catch (error) {
+        console.log(error);
+    }
+}
+
+module.exports = { projectUpdate, teamUpdate }

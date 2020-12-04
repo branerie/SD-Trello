@@ -15,10 +15,11 @@ const Header = ({ asideOn }) => {
     const dropdownRefProfile = useRef(null)
     const dropdownRefView = useRef(null)
     const dropdownRefTeam = useRef(null)
-    const [isProfileActive, setIsProfileActive] = useDetectOutsideClick(dropdownRefProfile)
-    const [isViewActive, setIsViewActive] = useDetectOutsideClick(dropdownRefView)
     const [isTeamActive, setIsTeamActive] = useDetectOutsideClick(dropdownRefTeam)
     const [isViewVisibble, setIsViewVisibble] = useState(false)
+    const [isViewActive, setIsViewActive] = useDetectOutsideClick(dropdownRefView)
+    const [viewState, setViewState] = useState(null)
+    const [isProfileActive, setIsProfileActive] = useDetectOutsideClick(dropdownRefProfile)
     const [showForm, setShowForm] = useState(false)
     const context = useContext(UserContext)
     const projectContext = useContext(ProjectContext)
@@ -41,7 +42,13 @@ const Header = ({ asideOn }) => {
 
         if (window.location.href.includes('project')) {
             setIsViewVisibble(true)
-        
+
+            if (window.location.href.includes('board')) {
+                setViewState('Board')
+            }
+            if (window.location.href.includes('list')) {
+                setViewState('List')
+            }
         }
     })
 
@@ -86,15 +93,20 @@ const Header = ({ asideOn }) => {
                             </div> : null
                         }
                     </div>
+                    {
+                        showForm ? (<Transparent hideForm={() => setShowForm(false)}>
+                            <CreateTeam hideForm={() => { setShowForm(false) }} ></CreateTeam>
+                        </Transparent>) : null
+                    }
                     {isViewVisibble && <div className={styles.flex}>
                         <div className={styles.margin}>
-                            Change
+                            View:
                         </div>
                         <div>
                             <ButtonClean
                                 className={styles.view}
                                 onClick={() => setIsViewActive(!isViewActive)}
-                                title='View'
+                                title={viewState}
                             />
                             {
                                 isViewActive ? <div
@@ -120,11 +132,6 @@ const Header = ({ asideOn }) => {
                         </div>
                     </div>}
                 </div>
-                {
-                    showForm ? (<Transparent hideForm={() => setShowForm(false)}>
-                        <CreateTeam hideForm={() => { setShowForm(false) }} ></CreateTeam>
-                    </Transparent>) : null
-                }
 
                 <div className={`${styles.links} ${styles.font}`}>
                     <input className={styles.input} type='text' placeholder='Search...' />

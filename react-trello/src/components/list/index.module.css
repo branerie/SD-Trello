@@ -21,10 +21,19 @@
     height: 15px;
 }
 
-.button:hover {
-    background-color: lemonchiffon;
+.button {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
 }
 
+.button:hover {
+    background-color: #C1CBCF;
+}
+
+.dots {
+    margin: auto;
+}
 
 .menu {
     background: #e0dbdb;
@@ -57,15 +66,15 @@
     position: relative;
 }
 
-.addnote {
+.add-task {
     font-size: 15px;
     margin: 5px;
     padding: 5px;
     border-radius: 5px;
 }
 
-.addnote:hover {
-    background-color: lemonchiffon;
+.add-task:hover {
+    background-color: #C1CBCF;
 }
 
 .draggable {

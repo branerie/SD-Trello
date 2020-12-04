@@ -10,6 +10,7 @@ import TeamContext from '../../contexts/TeamContext'
 import Avatar from 'react-avatar'
 import ButtonClean from '../button-clean'
 import UserContext from '../../contexts/UserContext'
+import { useSocket } from '../../contexts/SocketProvider'
 
 export default function CreateTeam(props) {
     const [name, setName] = useState("")
@@ -21,6 +22,7 @@ export default function CreateTeam(props) {
     const history = useHistory()
     const teamContext = useContext(TeamContext)
     const userContext = useContext(UserContext)
+    const socket = useSocket()
 
     const inputMembers = async (event) => {
         setMember(event.target.value)
@@ -66,7 +68,6 @@ export default function CreateTeam(props) {
     const handleSubmit = async (event) => {
         event.preventDefault()
         const token = getCookie("x-auth-token")
-        console.log(members);
         const response = await fetch('http://localhost:4000/api/teams', {
             method: "POST",
             headers: {
@@ -89,6 +90,8 @@ export default function CreateTeam(props) {
             teamContext.setTeams(arr)
             teamContext.setSelectedTeam(team.name)
             props.hideForm()
+            socket.emit('team-update', team._id)
+            history.push(`/team/${team._id}`)
         }
 
     }
