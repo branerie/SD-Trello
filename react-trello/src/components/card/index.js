@@ -12,10 +12,10 @@ export default function Card({ project, card, listId }) {
 
 
 
-    const date = new Date(card.dueDate)
-    const day = date.getDate()
-    const month = date.getMonth() + 1
-    const year = date.getFullYear()
+    // const date = new Date(card.dueDate)
+    // const day = date.getDate()
+    // const month = date.getMonth() + 1
+    // const year = date.getFullYear()
 
     const showFormEdit = () => {
         setIsVisibleEdit(true)

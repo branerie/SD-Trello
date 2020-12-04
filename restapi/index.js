@@ -1,4 +1,3 @@
-const config = require('./config/config')
 const sockets = require('./sockets')
 const dbConnection = require('./config/database')
 const dotEnv = require("dotenv")
@@ -20,19 +19,24 @@ dbConnection().then(() => {
 
     io.on('connection', socket => {
 
-        console.log('connected');
-        const user = socket.handshake.query.user
-        socket.join(user)
-        console.log(user);
+        const username = socket.handshake.query.username
+        socket.join(username)
+        console.log(username, 'connected')
+        const teams = JSON.parse(socket.handshake.query.teamsStr)
+        teams.map( t => socket.join(t))
 
         socket.on('project-update', async (project) => {
-            console.log('project-update');
+            console.log(username, 'project-update');
             const updatedProject = await sockets.projectUpdate(project._id)
-            project.membersRoles.forEach(member => {
+            socket.broadcast.emit('project-updated', updatedProject)
+            socket.emit('project-updated', updatedProject)
+        })
 
-                socket.broadcast.emit('project-updated', updatedProject)
-                socket.emit('project-updated', updatedProject)
-            })
+        socket.on('team-update', async (teamId) => {
+            console.log(username, 'team-update');
+            const updatedTeam = await sockets.teamUpdate(teamId)
+            socket.to(teamId).emit('team-updated', updatedTeam)
+            socket.emit('team-updated', updatedTeam)
         })
     })
 

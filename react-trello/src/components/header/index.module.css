@@ -113,7 +113,7 @@
   display: block;
   padding: .2em .5em;
   margin: 0;
-  width: 70px;
+  width: 100px;
   border-radius: 1.5em;
   background-color: #EDF5F9;
   color: #363338;
@@ -128,7 +128,7 @@
 .view-position {
   width: 100px;
   top: 65px;
-  left: 350px;
+  left: 342px;
 }
 
 .teams {

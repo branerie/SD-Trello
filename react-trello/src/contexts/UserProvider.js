@@ -92,6 +92,7 @@ const UserProvider = (props) => {
     return (
         <UserContext.Provider value={{
             user,
+            setUser,
             logIn,
             logOut
         }}>

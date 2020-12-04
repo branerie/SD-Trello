@@ -26,7 +26,7 @@ const Navigation = () => {
     const loggedIn = context.user.loggedIn
 
     return (
-        <SocketProvider user={context.user.username}>
+        <SocketProvider user={context.user}>
             <ProjectProvider>
                 <TeamProvider>
                     <BrowserRouter>

@@ -1,4 +1,6 @@
-import React, { useState, useEffect, useContext } from 'react'
+import React, { useState, useEffect, useContext, useCallback } from 'react'
+import getCookie from '../utils/cookie'
+import { useSocket } from './SocketProvider'
 import TeamContext from './TeamContext'
 import UserContext from './UserContext'
 
@@ -7,6 +9,7 @@ function TeamProvider({ children }) {
   const [selectedTeam, setSelectedTeam] = useState('Select')
   const [currentProjects, setCurrentProjects] = useState([])
   const userContext = useContext(UserContext)
+  const socket = useSocket()
 
   function getCurrentProjects(teamId) {
     const current = teams.find(t => t._id === teamId)
@@ -31,6 +34,35 @@ function TeamProvider({ children }) {
   useEffect(() => {
     getTeams()
   })
+
+  const teamUpdate = useCallback((team) => {
+    console.log('teamUpdateFunc', team);
+    const token = getCookie("x-auth-token")
+
+    fetch("http://localhost:4000/api/teams", {
+      method: "GET",
+      headers: {
+        "Content-Type": "application/json",
+        "Authorization": token
+      }
+    }).then(promise => {
+      return promise.json()
+    }).then(response => {
+      console.log(response);
+      setTeams(response)
+      const user = {...userContext.user}
+      user.teams = response
+      userContext.setUser(user)
+    })
+  }, [userContext])
+
+  useEffect(() => {
+    if (socket == null) return
+    console.log('socket-effect');
+    socket.on('team-updated', teamUpdate)
+
+    return () => socket.off('team-updated')
+  }, [socket, teamUpdate])
 
   return (
     <TeamContext.Provider value={{ teams, setTeams, selectedTeam, setSelectedTeam, currentProjects, setCurrentProjects, getCurrentProjects, getTeams, updateSelectedTeam }}>

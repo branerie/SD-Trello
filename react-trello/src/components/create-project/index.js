@@ -10,6 +10,8 @@ import ProjectContext from '../../contexts/ProjectContext'
 import ButtonClean from '../button-clean'
 import Avatar from 'react-avatar'
 import UserContext from '../../contexts/UserContext'
+import { useSocket } from '../../contexts/SocketProvider'
+import TeamContext from '../../contexts/TeamContext'
 
 export default function CreateProject() {
     const [name, setName] = useState("")
@@ -20,8 +22,10 @@ export default function CreateProject() {
     const [allUsers, setAllUsers] = useState([])
     const projectContext = useContext(ProjectContext)
     const userContext = useContext(UserContext)
+    const teamContext = useContext(TeamContext)
     const history = useHistory()
     const params = useParams()
+    const socket = useSocket()
 
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault()
@@ -46,6 +50,7 @@ export default function CreateProject() {
             const project = await response.json()
             projectContext.setProject(project._id)
             document.cookie = `pid=${project._id}`
+            socket.emit('team-update', teamContext.currentTeam)
             history.push(`/project-board/${teamId}/${project._id}`)
         }
     }, [history, name, description])

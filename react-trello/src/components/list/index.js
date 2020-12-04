@@ -53,7 +53,7 @@ export default function List(props) {
                 <ButtonClean 
                     className={styles.button}
                     onClick={onClick}
-                    title={<img src={dots} alt="..." width="20" height="6" />}
+                    title={<img className={styles.dots} src={dots} alt="..." width="20" height="6" />}
                 />
             </div>
             <div className={styles.relative}>
@@ -100,7 +100,7 @@ export default function List(props) {
             </Droppable>
             <div className={styles.flexend}>
                 <ButtonClean 
-                    className={styles.addnote}
+                    className={styles['add-task']}
                     onClick={() => setIsVisible(!isVisible)}
                     title='+ Add Task'
                 />

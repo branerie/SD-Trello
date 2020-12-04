@@ -1,18 +1,25 @@
-import React, { useContext } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import LinkComponent from '../link'
 import styles from './index.module.css'
 import logo from '../../images/logo.svg'
-import menu from '../../images/menu.svg'
-import home from '../../images/home.svg'
-import tasks from '../../images/tasks.svg'
-import inbox from '../../images/inbox.svg'
-import LinkAside from '../link-aside'
+import menu from '../../images/aside/menu.svg'
+import home from '../../images/aside/home.svg'
+import tasks from '../../images/aside/tasks.svg'
+import inbox from '../../images/aside/inbox.svg'
+import settings from '../../images/aside/settings.svg'
 import ProjectContext from '../../contexts/ProjectContext'
 import ButtonHideList from '../button-hide-list'
 import ButtonClean from '../button-clean'
 
 export default function Aside({ asideOn, setAsideOn }) {
+    const [listVisibility, setListVisibility] = useState(false)
     const projectContext = useContext(ProjectContext)
+
+    useEffect(() => {
+        if (window.location.href.includes('project')) {
+            setListVisibility(true)
+        }
+    })
 
     return (
         <div className={styles.aside}>
@@ -35,6 +42,10 @@ export default function Aside({ asideOn, setAsideOn }) {
                     href='/'
                     title={<img src={inbox} alt="inbox" width="33" height="34" />}
                 />
+                <LinkComponent
+                    href='/'
+                    title={<img src={settings} alt="settings" width="25" height="25" />}
+                />
             </aside>
             {
                 asideOn ?
@@ -43,30 +54,36 @@ export default function Aside({ asideOn, setAsideOn }) {
                             <div className={styles.logo}>
                                 <img src={logo} alt="logo" width="87" height="65" />
                             </div>
-                            <LinkAside
+                            <LinkComponent
                                 href='/'
                                 title='Home'
+                                className={styles.link}
                             />
-                            <LinkAside
+                            <LinkComponent
                                 href='/'
-                                title='My Tasks'
+                                title='Projects'
+                                className={styles.link}
                             />
-                            <div className={styles.inbox}>
-                                <LinkAside
-                                    href='/'
-                                    title='Inbox'
-                                />
-                            </div>
+                            <LinkComponent
+                                href='/'
+                                title='Inbox'
+                                className={styles.link}
+                            />
+                            <LinkComponent
+                                href='/'
+                                title='Settings'
+                                className={styles.link}
+                            />
                         </div>
-                        <div className={styles.bottomright}>
+                        {listVisibility && <div className={styles.bottomright}>
                             {
                                 projectContext.lists.map((element, index) => {
                                     return (
-                                            <ButtonHideList key={element._id} list={element} type={'aside'} />
+                                        <ButtonHideList key={element._id} list={element} type={'aside'} />
                                     )
                                 })
                             }
-                        </div>
+                        </div>}
                     </div> : null
             }
 

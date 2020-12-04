@@ -9,11 +9,15 @@ export function useSocket() {
 
 export function SocketProvider({ user, children }) {
   const [socket, setSocket] = useState()
+  const username = user.username
+  const teams = [...user.teams]
+  const teamsId = teams.map( t => t._id)
+  const teamsStr = JSON.stringify(teamsId)
 
   useEffect(() => {
     const newSocket = io(
       'http://localhost:4000', {
-        query: { user },
+        query: { teamsStr, username },
         transports: ['websocket']
       }
     )
