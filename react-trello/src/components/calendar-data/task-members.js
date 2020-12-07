@@ -173,7 +173,7 @@ export default function TaskMembers(props) {
                                 })
                             }
                         </span>
-                        <img src={pen} alt="..." width="13" height="13"onClick={() => { getTeamUsers(); setIsActive(!isActive) }} />
+                        <img className={styles.pen} src={pen} alt="..." width="13" height="13"onClick={() => { getTeamUsers(); setIsActive(!isActive) }} />
                         {/* <Avatar name={'+ 1'} size={20} round={true} onClick={() => { getTeamUsers(); setIsActive(!isActive) }} title={props.title} /> */}
                     </div >
             }

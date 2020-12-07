@@ -8,7 +8,8 @@ import Avatar from 'react-avatar'
 
 export default function Card({ project, card, listId }) {
 
-    const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
+    const [isVisible, setIsVisible] = useState(false)
+
 
 
 
@@ -17,13 +18,13 @@ export default function Card({ project, card, listId }) {
     // const month = date.getMonth() + 1
     // const year = date.getFullYear()
 
-    const showFormEdit = () => {
-        setIsVisibleEdit(true)
-    }
+    // const showFormEdit = () => {
+    //     setIsVisibleEdit(true)
+    // }
 
-    const hideFormEdit = () => {
-        setIsVisibleEdit(false)
-    }
+    // const hideFormEdit = () => {
+    //     setIsVisibleEdit(false)
+    // }
 
     const progressColor = (progress) => {
         if (Number(progress) <= 20) {
@@ -66,16 +67,16 @@ export default function Card({ project, card, listId }) {
                         return (<Avatar key={element._id} name={element.username} size={30} round={true} maxInitials={2} />)
                     })}
                 </div>
-                {IsVisibleEdit ?
+                {isVisible ?
                     < div >
-                        <Transparent hideFormEdit={hideFormEdit} >
-                            <EditCard hideFormEdit={hideFormEdit} card={card} listId={listId} project={project} />
+                        <Transparent hideForm={() => setIsVisible(!isVisible)} >
+                            <EditCard hideForm={() => setIsVisible(!isVisible)} card={card} listId={listId} project={project} />
                         </Transparent >
                     </div > : null
                 }
                 <ButtonClean
                     className={styles.pen}
-                    onClick={showFormEdit}
+                    onClick={() => setIsVisible(!isVisible)}
                     title={<img src={pen} alt="..." width="11.5" height="11.5" />}
                 />
             </div>
