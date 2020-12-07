@@ -11,7 +11,11 @@ export function SocketProvider({ user, children }) {
   const [socket, setSocket] = useState()
   
   useEffect(() => {
-    if (!user.loggedIn) {
+    if (!user) {
+      return
+    }
+
+    if (!user.teams) {
       return
     }
     const username = user.username
