@@ -16,6 +16,7 @@ import ListColor from "../list-color"
 
 
 
+
 const TableDndApp = (props) => {
 
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
@@ -23,6 +24,7 @@ const TableDndApp = (props) => {
     const [startDay, setStartDay] = useState(today)
     const [tableData, setTableData] = useState([])
     const [tableSize, setTableSize] = useState(10)
+
     const projectContext = useContext(ProjectContext)
 
 
@@ -42,6 +44,10 @@ const TableDndApp = (props) => {
         var weekDay = weekArray[num]
         return weekDay
     }
+
+    
+
+
 
 
 
@@ -498,6 +504,7 @@ const TableDndApp = (props) => {
                         'white'
                     }
                 />
+
                 {/* </DragDropContext> */}
             </div>
 

@@ -68,6 +68,7 @@
 .dueDateField{
  display: flex;
  justify-content: space-between;
+ cursor: pointer;
 }
 
 .inputTaskName {
@@ -119,4 +120,7 @@
   height: 100%;
   padding: 2%;
   margin: 4%;
+}
+.pen{
+  cursor: pointer;
 }
