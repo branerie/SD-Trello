@@ -21,7 +21,18 @@ const TableDndApp = (props) => {
 
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
 
-    const [startDay, setStartDay] = useState(today)
+
+    function getMonday() {
+        let d = new Date()
+        var day = d.getDay(),
+            diff = d.getDate() - day + (day == 0 ? -6 : 1)
+        let thisMonday = new Date(d.setDate(diff))
+        let monday = new Date(thisMonday.getFullYear(), thisMonday.getMonth(), thisMonday.getDate())
+
+        return monday
+    }
+
+    const [startDay, setStartDay] = useState(getMonday)
     const [tableData, setTableData] = useState([])
     const [tableSize, setTableSize] = useState(10)
 
@@ -31,7 +42,8 @@ const TableDndApp = (props) => {
 
     const shownDay = (value) => {
         let date = ''
-        date = (value.getDate()) + ' ' + (value.toLocaleString('default', { month: 'short' }))
+        // date = (value.getDate()) + ' ' + (value.toLocaleString('default', { month: 'short' }))
+        date = (('0' + value.getDate())).slice(-2) + '.' + ('0' + (value.getMonth() + 1)).slice(-2)
         return date
     }
 
@@ -45,7 +57,7 @@ const TableDndApp = (props) => {
         return weekDay
     }
 
-    
+
 
 
 
@@ -127,7 +139,7 @@ const TableDndApp = (props) => {
                         saturday: thisCardDate + "/" + card.progress,
                         sunday: thisCardDate + "/" + card.progress,
                         dueDate: (
-                            <TaskDueDate cardDueDate={cardDate} cardId={card._id} listId={list._id} />
+                            <TaskDueDate cardDueDate={cardDate} cardId={card._id} listId={list._id} project={props.project} />
                         )
                     })
 
@@ -249,19 +261,26 @@ const TableDndApp = (props) => {
     // }
 
     const getHeaderDate = (num) => {
-        var nextDay = new Date(startDay);
-        nextDay.setDate(nextDay.getDate() + num)
-        let dayOfWeek = weekDay(nextDay)
-        let day = shownDay(nextDay)
+        var currDay = new Date(startDay);
+        currDay.setDate(currDay.getDate() + num)
+        let dayOfWeek = weekDay(currDay)
+        let day = shownDay(currDay)
         let color = ''
-        // let color = 'rgb(39, 190, 201)'
-        // if (dayOfWeek === 'Sunday' || dayOfWeek === 'Saturday') {
-        //     color = 'rgb(206, 134, 134)'
-        // }
+
+        let thisDay = new Date(today)
+        let thisDate = thisDay.getTime()
+
+        var checkedDate = new Date(startDay);
+        let checked = checkedDate.setDate(checkedDate.getDate() + num);
+
+        if (checked === thisDate) {
+            color = "#CFE2EC"
+        }
+
         return (
             <div style={{ background: color, color: 'black' }}>
-                <div style={{ fontWeight: 'bold' }}>{dayOfWeek}</div>
-                <div>{day}</div>
+                <div style={{ fontWeight: '600' }}>{dayOfWeek}</div>
+                <div style={{ fontSize: '80%' }}>{day}</div>
             </div>
         )
     }
@@ -395,9 +414,17 @@ const TableDndApp = (props) => {
             <div className={styles.buttoDiv}>
                 <button className={styles.navigateButtons} onClick={getLastWeek} >Last week</button>
                 <button className={styles.navigateButtons} onClick={getLastDay} >Previous day</button>
-                <div>Choose week...
+                <div>
                     <span>
-                        <DatePicker selected={startDay} onChange={date => setStartDay(date)} label="Go to date" />
+                        <DatePicker
+                            selected={startDay}
+                            customInput={
+                                <div className={styles.navigateButtons}>
+                                    Choose Week
+                                </div>
+                            }
+                            showWeekNumbers
+                            onChange={date => setStartDay(date)} />
                     </span>
                 </div>
                 <button className={styles.navigateButtons} onClick={getNextDay}>Next day</button>

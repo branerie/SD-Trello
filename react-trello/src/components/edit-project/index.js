@@ -1,4 +1,4 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory } from "react-router-dom"
 import Button from '../button'
 import Input from '../input'
@@ -9,13 +9,17 @@ import "react-datepicker/dist/react-datepicker.css"
 import { useSocket } from '../../contexts/SocketProvider'
 import Transparent from '../transparent'
 import AddProjectMember from '../add-project-member'
+import Avatar from 'react-avatar'
+import UserContext from '../../contexts/UserContext'
 
 
 export default function EditProject(props) {
     const [name, setName] = useState(props.project.name)
+    const [isAdmin, setIsAdmin] = useState(false)
     const [description, setDescription] = useState(props.project.description)
-    const members = props.members
+    const members = props.project.membersRoles
     const [IsVisibleAdd, setIsVisibleAdd] = useState(false)
+    const context = useContext(UserContext)
     const history = useHistory()
     const socket = useSocket()
 
@@ -24,6 +28,16 @@ export default function EditProject(props) {
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
     }, [socket, props.project])
+
+
+    useEffect(() => {
+        const admins = members.filter(a => a.admin === true)
+        if (admins.some(item => item.memberId._id === context.user.id)) {
+            setIsAdmin(true)
+        }
+    })
+
+
 
     async function handleSubmit(event) {
         event.preventDefault()
@@ -77,7 +91,7 @@ export default function EditProject(props) {
                         Admins :{members.filter(a => a.admin === true).map((element, index) => {
                         return (
                             <span className={styles.membersList} key={index}>
-                                {element.username}
+                                <Avatar name={element.memberId.username} size={30} round={true} maxInitials={2} />
                             </span>
                         )
                     }
@@ -86,7 +100,7 @@ export default function EditProject(props) {
                         Members :{members.filter(a => a.admin === false).map((element, index) => {
                         return (
                             <span className={styles.membersList} key={index}>
-                                {element.username}
+                                <Avatar name={element.memberId.username} size={30} round={true} maxInitials={2} />
                             </span>
                         )
                     }
@@ -95,15 +109,20 @@ export default function EditProject(props) {
                 </div>
             </form>
             <div className={styles.editMembers}>
-            <Button onClick={showFormAdd} title="Edit members" className={styles.editMembersButton}/>
-            {IsVisibleAdd ?
-                < div >
-                    <Transparent hideFormAdd={hideFormAdd} >
-                        <AddProjectMember hideFormAdd={hideFormAdd} project={props.project} members={props.members} />
-                    </Transparent >
-                </div > : null
-            }
-            <Button onClick={handleSubmit} title="Edit" />
+                {isAdmin ?
+                    <div>
+                        <Button onClick={showFormAdd} title="Edit members" className={styles.editMembersButton} />
+                        {IsVisibleAdd ?
+                            < div >
+                                <Transparent hideFormAdd={hideFormAdd} >
+                                    <AddProjectMember hideFormAdd={hideFormAdd} project={props.project} members={props.project.membersRoles} />
+                                </Transparent >
+                            </div > : null
+                        }
+                        <Button onClick={handleSubmit} title="Edit" />
+                    </div>
+                    : null
+                }
             </div>
         </div>
 

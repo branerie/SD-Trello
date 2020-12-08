@@ -1,4 +1,5 @@
 import React, { useState, useEffect, useContext } from "react"
+import styles from './index.module.css'
 import PageLayout from "../../components/page-layout"
 import Project from '../../components/project'
 import Button from "../../components/button"
@@ -6,6 +7,7 @@ import Transparent from "../../components/transparent"
 import CreateProject from '../../components/create-project'
 import TeamContext from "../../contexts/TeamContext"
 import { useParams } from "react-router-dom"
+import ButtonClean from "../../components/button-clean"
 
 const TeamPage = () => {
 
@@ -27,7 +29,7 @@ const TeamPage = () => {
                     )
                 })}
             </div>
-            <Button title='New Project' onClick={() => setIsVisible(true)} />
+            <button className={styles.newProjectButton} onClick={() => setIsVisible(true)} >New Project</button>
             {
                 isVisible ?
                     <div>

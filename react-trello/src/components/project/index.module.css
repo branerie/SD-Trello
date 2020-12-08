@@ -1,23 +1,41 @@
 .projectname {
-    padding: 5px;
+    padding: 15px;
     text-decoration: none;
     font-size: 30px;
+    color: black;
 }
 
 .username {
+    font-size: 30px;
     padding: 5px;
 }
 
-.description {
-    padding: 5px;
-    width: 100%;
+.info {
+    cursor: pointer;
+    margin: 3px;
+    margin-left: 70%;
+    padding: 2px;
 
+    border-radius: 5px;
+    text-align: center;
+    width: 20%;
 }
+
+.info:hover{
+    background-color: #EDF5F9;
+    /* border: 1px solid #707070; */
+    border-radius: 2px;
+    color:black;
+    font-style: italic;
+  }
 
 .container {
-    width: 60%;
-    background-color: aqua;
-    margin: 10px;
+    width: 50%;
+    background-color: #DFE9EE;
+    margin: 20px;
+    border-radius: 19px;
+    border: solid 2px #707070;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
 }
 
 .top {
