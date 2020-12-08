@@ -1,11 +1,11 @@
 {
-  "name": "smanager-test",
+  "name": "sd-trello",
   "version": "1.0.0",
   "description": "",
   "main": "index.js",
   "scripts": {
     "test": "echo \"Error: no test specified\" && exit 1",
-    "start": "node index.js",
+    "start": "nodemon",
     "heroku-postbuild": "NPM_CONFIG_PRODUCTION=false npm install && npm run build"
   },
   "repository": {
@@ -32,8 +32,5 @@
   },
   "devDependencies": {
     "nodemon": "^2.0.6"
-  },
-  "engines": {
-    "node": "12.x"
   }
 }

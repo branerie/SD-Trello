@@ -40,6 +40,6 @@ dbConnection().then(() => {
         })
     })
 
-    server.listen(process.env.PORT || 4000, console.log(`Server started`))
+    server.listen(process.env.PORT, console.log(`Listening on port ${process.env.PORT}!`))
 
 }).catch(console.error)

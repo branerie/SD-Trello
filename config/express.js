@@ -1,10 +1,9 @@
 const express = require('express')
 const cookieParser = require('cookie-parser')
 const cors = require('cors')
-const config = require("./config")
 const router = require('./routes')
 const path = require('path')
-const secret = config.cookieSecret;
+const secret = process.env.COOKIE_SECRET
 
 module.exports = (app) => {
   app.use(cors({
