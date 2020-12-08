@@ -44,7 +44,7 @@ export default function TaskMembers(props) {
         })
 
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/teams/get-users/${currentTeamId}`, {
+        const response = await fetch(`/api/teams/get-users/${currentTeamId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -95,7 +95,7 @@ export default function TaskMembers(props) {
         }
 
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
+        const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -122,7 +122,7 @@ export default function TaskMembers(props) {
         let cardMembers = props.cardMembers
         cardMembers.push(selectedUser)
 
-        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
+        const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

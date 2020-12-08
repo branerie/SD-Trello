@@ -31,7 +31,7 @@ export default function CreateProject() {
         event.preventDefault()
         const teamId = params.teamid
         const token = getCookie("x-auth-token")
-        const response = await fetch('http://localhost:4000/api/projects', {
+        const response = await fetch('/api/projects', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -62,7 +62,7 @@ export default function CreateProject() {
 
         if (allUsers.length === 0) {
             const token = getCookie("x-auth-token")
-            const response = await fetch(`http://localhost:4000/api/teams/get-users/${teamId}`, {
+            const response = await fetch(`/api/teams/get-users/${teamId}`, {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",

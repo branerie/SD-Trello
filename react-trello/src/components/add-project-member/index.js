@@ -33,7 +33,7 @@ export default function AddMember(props) {
 
     const getAllUser = async () => {
         const token = getCookie("x-auth-token")
-        const response = await fetch('http://localhost:4000/api/user/get-all', {
+        const response = await fetch('/api/user/get-all', {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -72,7 +72,7 @@ export default function AddMember(props) {
         const memberId = member.id
 
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/${projectId}/user-remove`, {
+        const response = await fetch(`/api/projects/${projectId}/user-remove`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -99,7 +99,7 @@ export default function AddMember(props) {
 
         const member = selectedUser
 
-        const response = await fetch(`http://localhost:4000/api/projects/${projectId}/user`, {
+        const response = await fetch(`/api/projects/${projectId}/user`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

@@ -42,7 +42,7 @@ export default function TaskProgress(props) {
 
 
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
+        const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

@@ -57,7 +57,7 @@ export default function EditCard(props) {
     const deleteCard = useCallback(async (event) => {
         event.preventDefault()
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
+        const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -87,7 +87,7 @@ export default function EditCard(props) {
 
 
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
+        const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

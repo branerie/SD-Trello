@@ -24,7 +24,7 @@ export default function AddPassword(props) {
         }, (response) => {
             console.log("Error", response)
         })
-        await authenticateUpdate(`http://localhost:4000/api/user/${userId}`, 'PUT', {
+        await authenticateUpdate(`/api/user/${userId}`, 'PUT', {
             password
         }, (user) => {
             context.logIn(user)

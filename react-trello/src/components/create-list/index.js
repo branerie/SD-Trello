@@ -22,7 +22,7 @@ export default function CreateList(props) {
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault()
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/${id}`, {
+        const response = await fetch(`/api/projects/lists/${id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

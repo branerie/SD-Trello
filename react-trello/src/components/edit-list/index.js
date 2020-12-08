@@ -30,7 +30,7 @@ export default function EditList(props) {
     async function handleSubmit(event) {
         event.preventDefault()
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/${projectId}/${listId}`, {
+        const response = await fetch(`/api/projects/lists/${projectId}/${listId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

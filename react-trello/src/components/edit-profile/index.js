@@ -17,7 +17,7 @@ export default function EditProfile(props) {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        await authenticateUpdate(`http://localhost:4000/api/user/${id}`, 'PUT', {
+        await authenticateUpdate(`/api/user/${id}`, 'PUT', {
             username,
             password
         }, (user) => {

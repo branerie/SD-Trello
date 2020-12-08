@@ -16,7 +16,7 @@ const ProfilePage = () => {
     const getData = useCallback(async () => {
         const id = params.userid;
 
-        const response = await fetch(`http://localhost:4000/api/user/${id}`)
+        const response = await fetch(`/api/user/${id}`)
         if (!response.ok) {
             history.push("/error")
         } else {

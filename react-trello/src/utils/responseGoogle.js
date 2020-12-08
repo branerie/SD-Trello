@@ -2,7 +2,7 @@ const responseGoogle = async (googleResponse, onSuccess, onFailure) => {
 
     try {
         const tokenId = googleResponse.tokenId
-        const promise = await fetch("http://localhost:4000/api/user/google-login", {
+        const promise = await fetch("/api/user/google-login", {
             method: 'POST',
             body: JSON.stringify({tokenId}),
             headers: {

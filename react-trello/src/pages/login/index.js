@@ -21,7 +21,7 @@ const LoginPage = () => {
     const handleSubmit = async (event) => {
         event.preventDefault();
 
-        await authenticate("http://localhost:4000/api/user/login", 'POST', {
+        await authenticate("/api/user/login", 'POST', {
             email,
             password
         }, (user) => {
@@ -38,10 +38,15 @@ const LoginPage = () => {
     const handleGoogle = (googleResponse) => {
         responseGoogle(googleResponse, (user) => {
             context.logIn(user)
+            console.log(googleResponse, '');
             history.push("/")
         }, (response) => {
             console.log("Error", response)
         })
+    }
+
+    const errorGoogle = (googleResponse) => {
+        console.log(googleResponse, 'Error');
     }
 
     const hideForm = () => {
@@ -79,7 +84,7 @@ const LoginPage = () => {
                 clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
                 buttonText="Login"
                 onSuccess={handleGoogle}
-                // onFailure={errorGoogle}
+                onFailure={errorGoogle}
                 cookiePolicy={'single_host_origin'}
             />
         </div>

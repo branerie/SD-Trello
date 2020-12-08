@@ -27,7 +27,7 @@ export default function List(props) {
 
     async function deleteList() {
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/${props.project._id}/${props.list._id}`, {
+        const response = await fetch(`/api/projects/lists/${props.project._id}/${props.list._id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",

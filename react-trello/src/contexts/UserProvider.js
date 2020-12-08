@@ -18,7 +18,7 @@ const UserProvider = (props) => {
 
     const logOut = useCallback(() => {
         const token = getCookie("x-auth-token")
-        fetch('http://localhost:4000/api/user/logout', {
+        fetch('/api/user/logout', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -50,7 +50,7 @@ const UserProvider = (props) => {
             return;
         }
 
-        fetch("http://localhost:4000/api/user/verify", {
+        fetch("/api/user/verify", {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

@@ -57,7 +57,7 @@ export default function ProjectBoard() {
         const id = params.projectid
         const token = getCookie("x-auth-token");
 
-        const response = await fetch(`http://localhost:4000/api/projects/info/${id}`, {
+        const response = await fetch(`/api/projects/info/${id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -104,7 +104,7 @@ export default function ProjectBoard() {
 
     async function deleteProject() {
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/${project._id}`, {
+        const response = await fetch(`/api/projects/${project._id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -130,7 +130,7 @@ export default function ProjectBoard() {
             position = projectContext.lists.indexOf(previousId) + 1
 
             const token = getCookie("x-auth-token")
-            const response = await fetch(`http://localhost:4000/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
+            const response = await fetch(`/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -157,7 +157,7 @@ export default function ProjectBoard() {
             const source = result.source.droppableId
             const destination = result.destination.droppableId
             const token = getCookie("x-auth-token")
-            const response = await fetch(`http://localhost:4000/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
+            const response = await fetch(`/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -191,7 +191,7 @@ export default function ProjectBoard() {
             return
         }
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/${project._id}`, {
+        const response = await fetch(`/api/projects/lists/${project._id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

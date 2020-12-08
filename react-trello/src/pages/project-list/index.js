@@ -44,7 +44,7 @@ export default function ProjectList() {
         const id = params.projectid
         const token = getCookie("x-auth-token");
 
-        const response = await fetch(`http://localhost:4000/api/projects/info/${id}`, {
+        const response = await fetch(`/api/projects/info/${id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",

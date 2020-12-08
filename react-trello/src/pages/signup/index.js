@@ -39,7 +39,7 @@ const SignupPage = () => {
             return
         }
         
-        await authenticate("http://localhost:4000/api/user/register", 'POST', {
+        await authenticate("/api/user/register", 'POST', {
             email,
             username,
             password

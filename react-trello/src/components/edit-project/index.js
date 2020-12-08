@@ -28,7 +28,7 @@ export default function EditProject(props) {
     async function handleSubmit(event) {
         event.preventDefault()
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/${projectId}`, {
+        const response = await fetch(`/api/projects/${projectId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

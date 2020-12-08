@@ -26,7 +26,7 @@ export default function AddMember(props) {
     const getAllUser = async () => {
         const id = params.projectid
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/info/${id}`, {
+        const response = await fetch(`/api/projects/info/${id}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -59,7 +59,7 @@ export default function AddMember(props) {
         }
 
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
+        const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -85,7 +85,7 @@ export default function AddMember(props) {
 
         members.push(selectedUser)
 
-        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${listId}/${cardId}`, {
+        const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",

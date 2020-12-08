@@ -30,7 +30,7 @@ export default function CreateTeam(props) {
 
         if (allUsers.length === 0) {
             const token = getCookie("x-auth-token")
-            const response = await fetch('http://localhost:4000/api/user/get-all', {
+            const response = await fetch('/api/user/get-all', {
                 method: "GET",
                 headers: {
                     "Content-Type": "application/json",
@@ -68,7 +68,7 @@ export default function CreateTeam(props) {
     const handleSubmit = async (event) => {
         event.preventDefault()
         const token = getCookie("x-auth-token")
-        const response = await fetch('http://localhost:4000/api/teams', {
+        const response = await fetch('/api/teams', {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",

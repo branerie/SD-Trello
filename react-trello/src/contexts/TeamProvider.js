@@ -39,7 +39,7 @@ function TeamProvider({ children }) {
     console.log('teamUpdateFunc', team);
     const token = getCookie("x-auth-token")
 
-    fetch("http://localhost:4000/api/teams", {
+    fetch("/api/teams", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",

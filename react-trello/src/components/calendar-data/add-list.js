@@ -32,7 +32,7 @@ export default function AddList(props) {
             return
         }
         const token = getCookie("x-auth-token")
-        const response = await fetch(`http://localhost:4000/api/projects/lists/${projectId}`, {
+        const response = await fetch(`/api/projects/lists/${projectId}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
