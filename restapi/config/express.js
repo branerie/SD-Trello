@@ -1,9 +1,9 @@
-const express = require('express');
-const cookieParser = require('cookie-parser');
-const cors = require('cors');
-const config = require("./config");
+const express = require('express')
+const cookieParser = require('cookie-parser')
+const cors = require('cors')
 const router = require('./routes')
-const secret = config.cookieSecret;
+const path = require('path')
+const secret = process.env.COOKIE_SECRET
 
 module.exports = (app) => {
   app.use(cors({
@@ -17,7 +17,13 @@ module.exports = (app) => {
 
   app.use(cookieParser(secret))
   
-  app.use('/', router)
+  app.use('/api', router)
+
+  app.use(express.static(path.join(__dirname, '../build')))
+
+  app.get('*', (req, res) => {
+      res.sendFile(path.join(__dirname, '../build', 'index.html'))
+  })
 
   app.use(function (err, req, res, next) {
     if (err.name === 'ValidationError' || err.name === 'MongoError') {
@@ -26,6 +32,6 @@ module.exports = (app) => {
       res.status(500)
     }
 
-    res.send(err.message);
+    res.send(err.message)
   });
 };
