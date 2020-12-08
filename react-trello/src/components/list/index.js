@@ -14,10 +14,12 @@ import ButtonClean from '../button-clean'
 import ListColor from '../list-color'
 
 export default function List(props) {
-    const [isVisible, setIsVisible] = useState(false)
     const [isVisibleEdit, setIsVisibleEdit] = useState(false)
     const dropdownRef = useRef(null);
+    const cardRef = useRef(null);
+    const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
+    const [cardName, setCardName] = useState('')
     const history = useHistory()
     const socket = useSocket()
 
@@ -41,6 +43,39 @@ export default function List(props) {
         }
     }
 
+    const addCard = useCallback(async (event) => {
+        event.preventDefault()
+        if (cardName === '') {
+            return
+        }
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`http://localhost:4000/api/projects/lists/cards/${props.list._id}`, {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify({
+                name: cardName,
+                description: '',
+                dueDate: '',
+                progress: '',
+                members: []
+
+            })
+        })
+        if (!response.ok) {
+            history.push("/error")
+            return
+        } else {
+            setIsActive(!isActive)
+            setCardName('')
+            updateProjectSocket()
+
+        }
+
+    }, [history, cardName, props.list._id, props, updateProjectSocket])
+
     const onClick = () => setIsActive(!isActive)
 
     return (
@@ -50,7 +85,7 @@ export default function List(props) {
                     <div className={styles.name}>{props.list.name}</div>
                     <ListColor color={props.list.color || '#A6A48E'} type={'list'} />
                 </div>
-                <ButtonClean 
+                <ButtonClean
                     className={styles.button}
                     onClick={onClick}
                     title={<img className={styles.dots} src={dots} alt="..." width="20" height="6" />}
@@ -62,7 +97,7 @@ export default function List(props) {
                     className={`${styles.menu} ${isActive ? styles.active : ''}`}
                 >
                     <div>
-                        <ButtonClean 
+                        <ButtonClean
                             onClick={() => setIsVisibleEdit(!isVisibleEdit)}
                             title='Edit'
                         />
@@ -98,21 +133,23 @@ export default function List(props) {
                     </div>
                 )}
             </Droppable>
-            <div className={styles.flexend}>
-                <ButtonClean 
+            {/* <div className={styles.flexend}> */}
+            {/* <ButtonClean
                     className={styles['add-task']}
                     onClick={() => setIsVisible(!isVisible)}
                     title='+ Add Task'
-                />
+                /> */}
+            {/* </div> */}
+            <div className={styles.flexend} >
+                {
+                    isVisible ?
+                        <form ref={cardRef} className={styles.container} >
+                            <input className={styles.input} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} />
+                            <ButtonClean type='submit' className={styles.addlist} onClick={addCard} title='+ Add Task' />
+                        </form> : <ButtonClean className={styles['add-task']} onClick={() => setIsVisible(!isVisible)} title='+ Add Task' />
+
+                }
             </div>
-            {
-                isVisible ?
-                    <div>
-                        <Transparent hideForm={() => setIsVisible(!isVisible)}>
-                            <CreateCard hideForm={() => setIsVisible(!isVisible)} listId={props.list._id} project={props.project} />
-                        </Transparent>
-                    </div> : null
-            }
             {
                 isVisibleEdit ?
                     < div >

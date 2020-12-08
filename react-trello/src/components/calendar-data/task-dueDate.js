@@ -33,7 +33,7 @@ export default function TaskDueDate(props) {
         let cardId = props.cardId
         let listId = props.listId
 
-        
+
 
         if (cardDueDate === "" && date === '') {
             console.log('return');
@@ -55,7 +55,7 @@ export default function TaskDueDate(props) {
             return
         } else {
             setIsActive(!isActive)
-            updateProjectSocket()            
+            updateProjectSocket()
         }
 
     }, [history, cardDueDate, updateProjectSocket, setIsActive, isActive, props.cardId, props.listId
@@ -70,22 +70,24 @@ export default function TaskDueDate(props) {
     }
 
 
-   let value= (thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''
+    let value = (thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''
+
+
 
     if (value) {
 
-        let taskDueDate = value  
+        let taskDueDate = value
 
         return (
             <span>
-                {
-                    isActive ?
-                        <DatePicker selected={cardDueDate} onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }} label="Go to date" onBlur={() => setIsActive(!isActive)} />
-                        :
-                        <div className={styles.dueDateField}>
-                            <span onClick={() => setIsActive(!isActive)}>{taskDueDate}</span>                            
-                        </div>
-                }
+                <DatePicker
+                    selected={cardDueDate}
+                    customInput={<div className={styles.dueDateField}>
+                        <span>{taskDueDate}</span>
+                    </div>}
+                    onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }}
+                    label="Go to date"
+                    onBlur={() => setIsActive(!isActive)} />
             </span>
         )
     }

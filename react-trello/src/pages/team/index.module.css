@@ -1,1 +1,24 @@
 
+.newProjectButton {
+    font-size: 19px;
+    font-weight: 500;
+    background: #DFE9EE;
+    color: black;
+    padding: 5px;
+    width: 120px;
+    height: 80px;
+    border-radius: 19px;
+    display: block;
+    margin: 0 auto;
+    margin: 10px;
+    cursor: pointer;
+    border: 2px solid #707070;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+  }
+  
+  .newProjectButton:hover{
+    background-color: #fff;
+    border: 1px solid #707070;
+    color:black;
+    font-style: italic;
+  }
