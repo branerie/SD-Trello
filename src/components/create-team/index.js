@@ -54,7 +54,6 @@ export default function CreateTeam(props) {
     const addMember = (input) => {
         const arr = [...members]
         arr.push(input)
-        console.log(arr);
         setMembers(arr)
         setShowMembers(false)
         setMember('')
@@ -77,7 +76,7 @@ export default function CreateTeam(props) {
             body: JSON.stringify({
                 name,
                 description,
-                members
+                requests: members
             })
         })
         if (!response.ok) {

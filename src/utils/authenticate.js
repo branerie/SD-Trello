@@ -25,7 +25,8 @@ const authenticate = async (url, method, body, onSuccess, onFailure) => {
             onSuccess({
                 username: response.user.username,
                 id: response.user._id,
-                teams: response.teams
+                teams: response.teams,
+                inbox: response.user.inbox
             });
         } else {
             onFailure(response)
