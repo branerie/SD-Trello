@@ -68,10 +68,9 @@ export default function List(props) {
             history.push("/error")
             return
         } else {
-            setIsActive(!isActive)
+            setIsVisible(!isVisible)
             setCardName('')
             updateProjectSocket()
-
         }
 
     }, [history, cardName, props.list._id, props, updateProjectSocket])
@@ -145,7 +144,7 @@ export default function List(props) {
                     isVisible ?
                         <form ref={cardRef} className={styles.container} >
                             <input className={styles.input} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} />
-                            <ButtonClean type='submit' className={styles.addlist} onClick={addCard} title='+ Add Task' />
+                            <ButtonClean type='submit' className={styles.addlist} onClick={addCard} title='+ Add Task' project={props.project} />
                         </form> : <ButtonClean className={styles['add-task']} onClick={() => setIsVisible(!isVisible)} title='+ Add Task' />
 
                 }

@@ -1,10 +1,10 @@
 import React, { useCallback, useContext, useRef, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import { useHistory } from 'react-router-dom';
-import { useSocket } from '../../contexts/SocketProvider';
-import Avatar from 'react-avatar';
+import { useSocket } from '../../contexts/SocketProvider'
+import Avatar from 'react-avatar'
 import ButtonClean from '../button-clean';
 import TeamContext from "../../contexts/TeamContext"
 import pen from '../../images/pen.svg'

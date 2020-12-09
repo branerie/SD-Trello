@@ -1,4 +1,4 @@
-import React from "react"
+import React, { useState } from "react"
 import styles from './index.module.css'
 import logo from '../../images/logo.svg'
 import pic1 from '../../images/welcome-page/welcome-page-1.svg'
@@ -13,10 +13,15 @@ import facebook from '../../images/welcome-page/facebook-icon.svg'
 
 
 import { useHistory } from "react-router-dom"
+import LoginForm from "../../components/login-form"
+import Transparent from "../../components/transparent"
 
 
 
 const WelcomePage = () => {
+
+  const [isVisible, setIsVisible] = useState(false)
+
 
   const history = useHistory()
 
@@ -31,6 +36,15 @@ const WelcomePage = () => {
   return (
 
     <div className={styles.pageContainer}>
+      <div>
+        {isVisible ?
+          < div >
+            <Transparent hideForm={() => setIsVisible(!isVisible)} >
+              <LoginForm hideForm={() => setIsVisible(!isVisible)} />
+            </Transparent >
+          </div > : null
+        }
+      </div>
 
       <div className={styles.contentWrap}>
 
@@ -41,7 +55,7 @@ const WelcomePage = () => {
                 <img src={logo} alt="logo" width='194' height='142' />
               </span>
               <span className={styles.firstButtons}>
-                <button className={styles.loginButton} onClick={goToLogin} >Log In</button>
+                <button className={styles.loginButton} onClick={()=>setIsVisible(!isVisible)} >Log In</button>
                 <button className={styles.signUpButton} onClick={goToSignUp} >Sign Up</button>
               </span>
             </div>
@@ -162,13 +176,13 @@ const WelcomePage = () => {
         <div className={styles.lastColumn}>
           <div className={styles.socialMediaContainer}>
             <span>
-            <img className={styles.socialMedia} src={instagram} alt="" />
+              <img className={styles.socialMedia} src={instagram} alt="" />
             </span>
             <span>
-            <img className={styles.socialMedia} src={twitter} alt="" />
+              <img className={styles.socialMedia} src={twitter} alt="" />
             </span>
             <span>
-            <img className={styles.socialMedia} src={facebook} alt="" />
+              <img className={styles.socialMedia} src={facebook} alt="" />
             </span>
           </div>
           <div className={styles.sd2006}>&#169 SD2006</div>
