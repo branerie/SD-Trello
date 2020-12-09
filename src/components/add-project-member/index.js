@@ -1,10 +1,11 @@
-import React, { useCallback, useState } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { useHistory } from "react-router-dom"
 import Button from '../button'
 import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useSocket } from '../../contexts/SocketProvider'
+import TeamContext from "../../contexts/TeamContext"
 
 
 
@@ -16,10 +17,10 @@ export default function AddMember(props) {
     const [users, setUsers] = useState([])
     const [selectedUser, setSelectedUser] = useState({})
     const [admin, setAdmin] = useState(false)
-
+    const teamContext = useContext(TeamContext)
 
     const history = useHistory()
-
+    const projectId = props.project._id
     // const projectId = props.project._id
 
     const cancelAdd = () => {
@@ -31,9 +32,22 @@ export default function AddMember(props) {
     }, [socket, props.project])
 
 
-    const getAllUser = async () => {
+    const getTeamUsers = async () => {
+        let currentTeamId = ''
+
+        await teamContext.teams.map(t => {
+            return (
+                t.projects.map(p => {
+                    if (p._id === projectId) {
+                        currentTeamId = t._id
+                    }
+                    return currentTeamId
+                })
+            )
+        })
+
         const token = getCookie("x-auth-token")
-        const response = await fetch('/api/user/get-all', {
+        const response = await fetch(`/api/teams/get-users/${currentTeamId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -44,11 +58,12 @@ export default function AddMember(props) {
         if (!response.ok) {
             history.push("/error")
         }
-        const allUsers = await response.json()
+        const data = await response.json()
 
+        
 
-        const filtered = allUsers.filter((e) => {
-            const found = members.find(element => element.username === e.username)
+        const filtered = data.filter((e) => {
+            const found = members.find(element => element.memberId.username === e.username)
             if (found) {
                 return false
             } else {
@@ -57,7 +72,38 @@ export default function AddMember(props) {
         })
 
         setUsers(filtered)
+
     }
+
+
+
+    // const getAllUser = async () => {
+    //     const token = getCookie("x-auth-token")
+    //     const response = await fetch('/api/user/get-all', {
+    //         method: "GET",
+    //         headers: {
+    //             "Content-Type": "application/json",
+    //             "Authorization": token
+    //         }
+    //     })
+
+    //     if (!response.ok) {
+    //         history.push("/error")
+    //     }
+    //     const allUsers = await response.json()
+
+
+    //     const filtered = allUsers.filter((e) => {
+    //         const found = members.find(element => element.memberId.username === e.username)
+    //         if (found) {
+    //             return false
+    //         } else {
+    //             return true
+    //         }
+    //     })
+
+    //     setUsers(filtered)
+    // }
 
     const handleSelect = (id) => {
         const result = users.filter(obj => {
@@ -69,8 +115,8 @@ export default function AddMember(props) {
     const deleteMember = useCallback(async (event, member) => {
         event.preventDefault()
         const projectId = props.project._id
-        const memberId = member.id
-
+        
+        const memberId = member._id
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/projects/${projectId}/user-remove`, {
             method: "POST",
@@ -94,7 +140,7 @@ export default function AddMember(props) {
 
     const handleAdd = useCallback(async (event) => {
         event.preventDefault()
-        const projectId = props.project._id
+        
         const token = getCookie("x-auth-token")
 
         const member = selectedUser
@@ -125,14 +171,20 @@ export default function AddMember(props) {
                 <Title title={"Team members"} />
                 {
                     members.map((element, index) => {
-                        return <Button key={index} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, element) }} title={element.username} />
+                        return (
+                            // <Avatar key={index} name={element.memberId.username} size={40} round={true} maxInitials={2} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, element)}} />
+
+                            
+                            <Button key={index} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, element.memberId)}}  title={element.memberId.username}/>
+                            
+                            )
                     })
                 }
             </div>
             <div>
                 <div className={styles.container} >
                     <div className="select-container">
-                        <select onClick={getAllUser}
+                        <select onClick={getTeamUsers}
                             onChange={(e) => { handleSelect(e.target.value) }}>
                             <option >Select user</option>
                             {

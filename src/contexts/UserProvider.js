@@ -38,8 +38,7 @@ const UserProvider = (props) => {
     }, [history])
 
     function verifyLogin() {
-        const token = getCookie("x-auth-token")
-
+        const token = getCookie("x-auth-token")        
         if (!token) {
 
             setUser({
@@ -76,15 +75,15 @@ const UserProvider = (props) => {
     useEffect(() => {
         verifyLogin()
     }, [])
-    
+
     if (loading) {
         return (
             <Loader
-            type="TailSpin"
-            color="#363338"
-            height={100}
-            width={100}
-            timeout={3000} //3 secs
+                type="TailSpin"
+                color="#363338"
+                height={100}
+                width={100}
+                timeout={3000} //3 secs
             />
         )
     }

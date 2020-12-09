@@ -80,11 +80,11 @@ function verifyLogin(req, res, next) {
         models.TokenBlacklist.findOne({ token })
     ])
         .then(([data, blacklistToken]) => {
+
             if (blacklistToken) { return Promise.reject(new Error('blacklisted token')) }
             models.User.findById(data.id)
                 .then(async (user) => {
                     const teams = await getTeams(user._id)
-
                     return res.send({
                         status: true,
                         user,

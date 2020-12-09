@@ -57,12 +57,6 @@ export default function EditCard(props) {
     }, [socket, props.project])
 
 
-
-
-    const cancelSubmit = () => {
-        props.hideFormEdit()
-    }
-
     const deleteCard = useCallback(async (event) => {
 
         event.preventDefault()

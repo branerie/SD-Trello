@@ -16,7 +16,8 @@
   color: white;
 }
 .container {
-  width: 100%;
+  height: 2em;
+  width: 100%;  
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -52,8 +53,11 @@
   background-color: lemonchiffon;
 }
 .progressInput{
-  width: 100%;
-  padding: 5%;  
+  width: 30%;    
+}
+
+.progressInput::placeholder {
+  color: white;  
 }
 
 .addListButton{
@@ -73,9 +77,9 @@
 
 .inputTaskName {
   border: 1px solid #000000; 
-  background-color: #FFFFFF;
-  border-radius: 10px;
-  margin: 3px;   
+  background-color: #EDF5F9;
+  border-radius: 4px;
+  margin: 2px;   
   padding: 6px;
   font-weight: normal;
   flex-grow: 1;
@@ -94,7 +98,9 @@
 .taskProgress{
   color: white;
   display: flex;
+  align-items: center;
   justify-content: center;
+  height: 100%;
 }
 
 .taskProgressButton{
@@ -112,6 +118,7 @@
 }
 
 .tableText{
+  cursor: pointer;
   display: flex;
   margin: 2%;
 }
