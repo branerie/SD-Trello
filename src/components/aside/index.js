@@ -67,7 +67,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                                 className={styles.link}
                             />
                             <LinkComponent
-                                href='/'
+                                href={`/inbox/${userContext.user.id}`}
                                 title='Inbox'
                                 className={styles.link}
                             />
