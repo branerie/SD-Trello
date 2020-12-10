@@ -29,7 +29,9 @@ const userSchema = new Schema({
         type: String
     },
 
-    projects: [{ type: ObjectId, ref: "ProjectUserRole" }]
+    projects: [{ type: ObjectId, ref: "ProjectUserRole" }],
+
+    inbox: [String]
 
 });
 

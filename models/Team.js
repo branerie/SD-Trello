@@ -26,6 +26,11 @@ const teamSchema = new Schema({
         ref: "User"
     }],
 
+    requests: [{
+        type: ObjectId,
+        ref: "User"
+    }],
+
     projects: [{
         type: ObjectId,
         ref: "Project"

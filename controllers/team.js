@@ -1,6 +1,10 @@
+const mongoose = require('mongoose')
 const models = require('../models')
+const { v4: uuidv4 } = require('uuid');
 const { auth } = require('../utils')
 const router = require('express').Router()
+
+router.post('/invitations/:id', auth, teamInvitations)
 
 router.post('/', auth, createTeam)
 
@@ -13,14 +17,66 @@ router.put('/:id', auth, updateTeam)
 router.delete('/:id', auth, deleteTeam)
 
 
+async function teamInvitations(req, res, next) {
+    const userId = req.user._id
+    const teamId = req.params.id
+    const { messageId, accepted, teamName } = req.body
+    const message = JSON.stringify({id: messageId, subject: 'Team invitation', teamId, teamName})
+
+
+    const session = await mongoose.startSession()
+    session.startTransaction()
+    
+    try {
+        
+        if (accepted) {
+            await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userId }, $push: { members: userId } }).session(session)
+            await models.User.updateOne({ _id: userId }, { $pull: { inbox: message } }).session(session)
+        } else {
+            await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userId } }).session(session)
+            await models.User.updateOne({ _id: userId }, { $pull: { inbox: message } }).session(session)
+        }
+
+        await session.commitTransaction()
+        
+        session.endSession()
+        
+        res.send('Team invitation handled')
+    } catch (error) {
+        await session.abortTransaction()
+        session.endSession()
+        res.send(error)
+    }
+}
+
 async function createTeam(req, res, next) {
     const userId = req.user._id
-    const { name, description, members } = req.body
-    members.push(userId)
+    const { name, description, requests } = req.body
+    const members = [userId]
+    const requestsId = requests.map(r => r._id)
+    
+    const session = await mongoose.startSession()
+    session.startTransaction()
+    
+    try {
+        
+        const teamCreationResult = await models.Team.create([{ name, description, author: userId, members, requests }], { session })
+        const createdTeam = teamCreationResult[0]
+        
+        const message = JSON.stringify({id: uuidv4(), subject: 'Team invitation', teamId: createdTeam._id, teamName: name})
 
-    const createdTeam = await models.Team.create({ name, description, author: userId, members })
+        await models.User.update({ _id: { $in: requestsId } }, { $push: { inbox: message } }, { session })
 
-    res.send(createdTeam)
+        await session.commitTransaction()
+        
+        session.endSession()
+        
+        res.send(createdTeam)
+    } catch (error) {
+        await session.abortTransaction()
+        session.endSession()
+        res.send(error)
+    }
 }
 
 async function getTeams(req, res, next) {
