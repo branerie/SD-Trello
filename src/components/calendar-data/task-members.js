@@ -91,8 +91,7 @@ export default function TaskMembers(props) {
         let arr = [...cardMembers]
 
         if (index !== -1) {
-            arr.splice(index, 1)
-            setCardMembers(arr)
+            arr.splice(index, 1)            
         }
 
         const token = getCookie("x-auth-token")
@@ -123,12 +122,9 @@ export default function TaskMembers(props) {
 
         let arr = [...cardMembers]
 
-        arr.push(selectedUser)
+        arr.push(selectedUser)       
 
-        console.log(arr);
-        setCardMembers(arr)
-
-        // console.log(arr);
+        
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
