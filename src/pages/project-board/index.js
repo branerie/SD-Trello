@@ -32,10 +32,6 @@ export default function ProjectBoard(props) {
     const [currCard, setCurrCard] = useState('')
     const [currList, setCurrList] = useState('')
 
-    const updateProjectSocket = useCallback(() => {
-        socket.emit('project-update', project)
-    }, [socket, project])
-
     const projectUpdate = useCallback((project) => {
 
         setProject(project)
@@ -51,10 +47,13 @@ export default function ProjectBoard(props) {
 
 
     useEffect(() => {
+        const id = params.projectid
+
         if (socket == null) return
-
+        
         socket.on('project-updated', projectUpdate)
-
+        
+        socket.emit('project-join', id)
         return () => socket.off('project-updated')
     }, [socket, projectUpdate])
 
@@ -88,7 +87,7 @@ export default function ProjectBoard(props) {
 
     useEffect(() => {
         getData()
-        const pid = getCookie('pid')
+        const pid = params.projectid
         if (pid && pid !== projectContext.project) {
             projectContext.setProject(pid)
         }
@@ -126,7 +125,6 @@ export default function ProjectBoard(props) {
 
     async function handleOnDragEnd(result) {
         if (!result.destination) return
-
 
         if (result.type === 'droppableItem') {
             let position = result.destination.index
@@ -186,7 +184,7 @@ export default function ProjectBoard(props) {
                 // setLists(newListsArr)
             }
         }
-        getData()
+        socket.emit('project-update', project)
     }
 
     const addList = async (e) => {
@@ -211,7 +209,7 @@ export default function ProjectBoard(props) {
         } else {
             setIsActive(!isActive)
             setListName('')
-            updateProjectSocket()
+            socket.emit('project-update', project)
         }
 
     }

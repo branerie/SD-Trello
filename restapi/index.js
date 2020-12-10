@@ -28,8 +28,13 @@ dbConnection().then(() => {
         socket.on('project-update', async (project) => {
             console.log(username, 'project-update');
             const updatedProject = await sockets.projectUpdate(project._id)
-            socket.broadcast.emit('project-updated', updatedProject)
+            socket.to(project._id).emit('project-updated', updatedProject)
             socket.emit('project-updated', updatedProject)
+        })
+
+        socket.on('project-join', async (projectId) => {
+            console.log(`${username} joined ${projectId}`);
+            socket.join(projectId)
         })
 
         socket.on('team-update', async (teamId) => {

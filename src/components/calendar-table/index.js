@@ -18,9 +18,13 @@ import ListColor from "../list-color"
 
 
 const TableDndApp = (props) => {
+    const [startDay, setStartDay] = useState(getMonday)
+    const [tableData, setTableData] = useState([])
+    const [tableSize, setTableSize] = useState(10)
+
+    const projectContext = useContext(ProjectContext)
 
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
-
 
     function getMonday() {
         let d = new Date()
@@ -31,14 +35,6 @@ const TableDndApp = (props) => {
 
         return monday
     }
-
-    const [startDay, setStartDay] = useState(getMonday)
-    const [tableData, setTableData] = useState([])
-    const [tableSize, setTableSize] = useState(10)
-
-    const projectContext = useContext(ProjectContext)
-
-
 
     const shownDay = (value) => {
         let date = ''
@@ -58,27 +54,18 @@ const TableDndApp = (props) => {
     }
 
 
-
-
-
-
-
-
     const cardData = useCallback(async () => {
         let numberOfRows = 0
 
         let data = []
-        const lists = await props.project.lists
+        const lists = props.project.lists
 
-        await projectContext.setLists(lists)
-
-        // console.log(projectContext.lists);
+        projectContext.setLists(lists)
 
         projectContext.lists
             .filter(element => !(projectContext.hiddenLists.includes(element._id)))
             .map((list) => {
                 numberOfRows++
-                let listCards = list.cards
                 data.push({
                     task: (
                         // <div className={styles.listName} color={list.color} >
@@ -104,11 +91,13 @@ const TableDndApp = (props) => {
                     sunday: '',
                     dueDate: (
                         <AddTask listId={list._id} project={props.project} />
-                    )
-                })
-
-
-
+                        )
+                    })
+                    
+                    
+                    
+                let listCards = list.cards
+                // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa FILTERRRRR
                 listCards.forEach(card => {
 
                     numberOfRows++
