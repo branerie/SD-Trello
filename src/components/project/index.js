@@ -12,7 +12,6 @@ export default function Project(props) {
 
     const onClick = () => {
         projectContext.setProject(props.project._id)
-        document.cookie = `pid=${props.project._id}`
     }
 
 

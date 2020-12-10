@@ -49,7 +49,6 @@ export default function CreateProject() {
         } else {
             const project = await response.json()
             projectContext.setProject(project._id)
-            document.cookie = `pid=${project._id}`
             socket.emit('team-update', teamContext.currentTeam)
             history.push(`/project-board/${teamId}/${project._id}`)
         }

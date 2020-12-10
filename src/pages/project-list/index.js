@@ -1,42 +1,38 @@
-import React, { useCallback, useEffect, useState, useContext } from 'react'
+import React, { useCallback, useEffect, useState, useContext, useRef } from 'react'
 import { useParams, useHistory } from "react-router-dom"
-// import Button from '../../components/button'
 import PageLayout from '../../components/page-layout'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
-// import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import TableDndApp from '../../components/calendar-table'
 import Loader from 'react-loader-spinner'
 import ProjectContext from '../../contexts/ProjectContext'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import ButtonClean from '../../components/button-clean'
 
 export default function ProjectList() {
     const params = useParams()
     const history = useHistory()
+    const dropdownRefFilter = useRef(null)
+    const [isFilterActive, setIsFilterActive] = useDetectOutsideClick(dropdownRefFilter)
+    const [filter, setFilter] = useState({'Not Started': true, 'In Progress': true, 'Done': true})
     const [project, setProject] = useState(null)
-    const [lists, setLists] = useState([])
-    const [members, setMembers] = useState([])
+
     const socket = useSocket()
     const projectContext = useContext(ProjectContext)
 
     const projectUpdate = useCallback((project) => {
-
         setProject(project)
-
-        const memberArr = []
-        project.membersRoles.map(element => {
-            return memberArr.push({ admin: element.admin, username: element.memberId.username })
-
-        })
-        setMembers(memberArr)
-        setLists(project.lists)
     }, [])
 
     useEffect(() => {
+        const id = params.projectid
+
         if (socket == null) return
 
         socket.on('project-updated', projectUpdate)
 
+        socket.emit('project-join', id)
         return () => socket.off('project-updated')
     }, [socket, projectUpdate])
 
@@ -56,13 +52,6 @@ export default function ProjectList() {
         } else {
             const data = await response.json()
             setProject(data)
-            const memberArr = []
-            data.membersRoles.map(element => {
-                return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
-
-            })
-            setMembers(memberArr)
-            setLists(data.lists)
         }
 
 
@@ -70,11 +59,17 @@ export default function ProjectList() {
 
     useEffect(() => {
         getData()
-        const pid = getCookie('pid')
+        const pid = params.projectid
         if (pid && pid !== projectContext.project) {
             projectContext.setProject(pid)
         }
     }, [])
+
+    const progressFilter = (filtered) => {
+        const obj = {...filter}
+        obj[filtered] = false
+        setFilter(obj)
+    }
 
     if (!project) {
         return (
@@ -92,6 +87,33 @@ export default function ProjectList() {
 
     return (
         <PageLayout className={styles.conteiner}>
+            <ButtonClean
+                className={styles.filter}
+                onClick={() => setIsFilterActive(!isFilterActive)}
+                title='Task filters'
+            />
+            {
+                isFilterActive ? <div
+                    ref={dropdownRefFilter}
+                    // className={styles['filter-dropdown']}
+                >
+                    <ButtonClean
+                        title={'Not Started'}
+                        onClick={() => progressFilter('Not Started')}
+                        className={styles.filter}
+                    />
+                    <ButtonClean
+                        title={'In Progress'}
+                        className={styles.filter}
+                        onClick={() => progressFilter('In Progress')}
+                    />
+                    <ButtonClean
+                        title={'Done'}
+                        className={styles.filter}
+                        onClick={() => progressFilter('Done')}
+                    />
+                </div> : null
+            }
             <div className={styles.calendarPageContainer}>
                 <div>
                     <div className={styles.calendarContainer}>

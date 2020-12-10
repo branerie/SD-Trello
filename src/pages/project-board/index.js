@@ -27,10 +27,6 @@ export default function ProjectBoard() {
     const socket = useSocket()
     const projectContext = useContext(ProjectContext)
 
-    const updateProjectSocket = useCallback(() => {
-        socket.emit('project-update', project)
-    }, [socket, project])
-
     const projectUpdate = useCallback((project) => {
 
         setProject(project)
@@ -45,10 +41,13 @@ export default function ProjectBoard() {
     }, [projectContext])
 
     useEffect(() => {
+        const id = params.projectid
+
         if (socket == null) return
-
+        
         socket.on('project-updated', projectUpdate)
-
+        
+        socket.emit('project-join', id)
         return () => socket.off('project-updated')
     }, [socket, projectUpdate])
 
@@ -82,7 +81,7 @@ export default function ProjectBoard() {
 
     useEffect(() => {
         getData()
-        const pid = getCookie('pid')
+        const pid = params.projectid
         if (pid && pid !== projectContext.project) {
             projectContext.setProject(pid)
         }
@@ -120,7 +119,6 @@ export default function ProjectBoard() {
 
     async function handleOnDragEnd(result) {
         if (!result.destination) return
-
 
         if (result.type === 'droppableItem') {
             let position = result.destination.index
@@ -180,7 +178,7 @@ export default function ProjectBoard() {
                 // setLists(newListsArr)
             }
         }
-        getData()
+        socket.emit('project-update', project)
     }
 
     const addList = async (e) => {
@@ -205,7 +203,7 @@ export default function ProjectBoard() {
         } else {
             setIsActive(!isActive)
             setListName('')
-            updateProjectSocket()
+            socket.emit('project-update', project)
         }
 
     }
