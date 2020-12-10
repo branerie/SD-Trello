@@ -6,13 +6,13 @@ import pen from '../../images/pen.svg'
 import ButtonClean from '../button-clean'
 import Avatar from 'react-avatar'
 
-export default function Card({ project, card, listId }) {
+export default function Card(props) {
 
     const [isVisible, setIsVisible] = useState(false)
 
 
 
-
+    const card = props.card
     // const date = new Date(card.dueDate)
     // const day = date.getDate()
     // const month = date.getMonth() + 1
@@ -67,16 +67,16 @@ export default function Card({ project, card, listId }) {
                         return (<Avatar key={element._id} name={element.username} size={30} round={true} maxInitials={2} />)
                     })}
                 </div>
-                {isVisible ?
+                {/* {isVisible ?
                     < div >
                         <Transparent hideForm={() => setIsVisible(!isVisible)} >
                             <EditCard hideForm={() => setIsVisible(!isVisible)} card={card} listId={listId} project={project} />
                         </Transparent >
                     </div > : null
-                }
+                } */}
                 <ButtonClean
                     className={styles.pen}
-                    onClick={() => setIsVisible(!isVisible)}
+                    onClick={() => props.showEditCard()}
                     title={<img src={pen} alt="..." width="11.5" height="11.5" />}
                 />
             </div>

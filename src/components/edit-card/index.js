@@ -1,14 +1,8 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useEffect, useRef, useState } from 'react'
 import { useHistory } from "react-router-dom"
-import Button from '../button'
-import Input from '../input'
-import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-import AddMember from '../add-card-member'
-import DatePicker from "react-datepicker"
 import "react-datepicker/dist/react-datepicker.css"
-import Transparent from '../transparent'
 import { useSocket } from '../../contexts/SocketProvider'
 import pic1 from '../../images/edit-card/pic1.svg'
 import pic2 from '../../images/edit-card/pic2.svg'
@@ -22,9 +16,7 @@ import pic9 from '../../images/edit-card/pic9.svg'
 
 
 
-import Avatar from 'react-avatar'
-import ButtonClean from '../button-clean'
-import pen from '../../images/pen.svg'
+
 import TaskMembers from '../calendar-data/task-members'
 import TaskDueDate from "../calendar-data/task-dueDate"
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
@@ -35,11 +27,13 @@ export default function EditCard(props) {
 
 
     const card = props.card
+    const listId = props.listId
+    const project = props.project
 
     const dropdownRef = useRef(null);
     const [name, setName] = useState(card.name)
     const [description, setDescription] = useState(card.description)
-    const members = props.card.members
+    const members = card.members
     const [dueDate, setDueDate] = useState(new Date(card.dueDate))
     const [progress, setProgress] = useState(card.progress)
     const history = useHistory()
@@ -50,7 +44,7 @@ export default function EditCard(props) {
 
 
     const cardId = card._id
-    const listId = props.listId
+
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
@@ -93,7 +87,6 @@ export default function EditCard(props) {
             return
         }
 
-
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
@@ -117,7 +110,9 @@ export default function EditCard(props) {
             setIsDescriptionActive(false)
         }
 
-    }, [history, name, description, dueDate, progress, listId, cardId, updateProjectSocket])
+    }, [history, props, name, description, dueDate, progress, listId, cardId, updateProjectSocket, EditCard, setIsActive, setIsProgressActive])
+
+
 
     const progressColor = (progress) => {
         if (Number(progress) <= 20) {
@@ -142,6 +137,8 @@ export default function EditCard(props) {
     return (
         <div className={styles.container}>
             <form className={styles.form} >
+
+
                 <div className={styles.leftSide}>
 
                     <div className={styles.firstRow}>

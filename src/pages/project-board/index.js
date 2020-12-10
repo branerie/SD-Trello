@@ -14,8 +14,10 @@ import ProjectContext from '../../contexts/ProjectContext'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Loader from 'react-loader-spinner'
 import ButtonClean from '../../components/button-clean'
+import EditCard from '../../components/edit-card'
 
-export default function ProjectBoard() {
+
+export default function ProjectBoard(props) {
     const params = useParams()
     const history = useHistory()
     const [project, setProject] = useState(null)
@@ -26,6 +28,9 @@ export default function ProjectBoard() {
     const [isActive, setIsActive] = useDetectOutsideClick(listRef)
     const socket = useSocket()
     const projectContext = useContext(ProjectContext)
+    const [isVisible, setIsVisible] = useState(false)
+    const [currCard, setCurrCard] = useState('')
+    const [currList, setCurrList] = useState('')
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', project)
@@ -43,6 +48,7 @@ export default function ProjectBoard() {
         setMembers(memberArr)
         projectContext.setLists(project.lists)
     }, [projectContext])
+
 
     useEffect(() => {
         if (socket == null) return
@@ -211,8 +217,21 @@ export default function ProjectBoard() {
     }
 
 
+
     return (
         <PageLayout>
+
+            {isVisible ?
+                < div >
+                    <Transparent hideForm={() => setIsVisible(!isVisible)} >
+                        <EditCard
+                            hideForm={() => setIsVisible(!isVisible)}
+                            card={currCard}
+                            listId={currList}
+                            project={project} />
+                    </Transparent >
+                </div > : null
+            }
             {/* <div>{project.name}</div>
                 <div>
                     Admins :{members.filter(a => a.admin === true).map((element, index) => {
@@ -247,7 +266,12 @@ export default function ProjectBoard() {
                                                 {(provided) => (
                                                     <div>
                                                         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                            <List list={element} project={project} />
+                                                            <List list={element} project={project}
+                                                                showCurrentCard={(card) => {
+                                                                    setCurrCard(card);
+                                                                    setCurrList(element._id);
+                                                                    setIsVisible(!isVisible)
+                                                                }} />
                                                         </div>
                                                     </div>
                                                 )}
