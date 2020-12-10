@@ -26,14 +26,12 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 export default function EditCard(props) {
 
 
-    const card = props.card
     const listId = props.listId
-    const project = props.project
 
     const dropdownRef = useRef(null);
+    const [card, setCard] = useState(props.card)
     const [name, setName] = useState(card.name)
     const [description, setDescription] = useState(card.description)
-    const members = card.members
     const [dueDate, setDueDate] = useState(new Date(card.dueDate))
     const [progress, setProgress] = useState(card.progress)
     const history = useHistory()
@@ -104,11 +102,14 @@ export default function EditCard(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
+            const updatedCard = await response.json()
+            setCard(updatedCard)
             updateProjectSocket()
             setIsActive(false)
             setIsProgressActive(false)
             setIsDescriptionActive(false)
         }
+
 
     }, [history, props, name, description, dueDate, progress, listId, cardId, updateProjectSocket, EditCard, setIsActive, setIsProgressActive])
 
@@ -246,7 +247,7 @@ export default function EditCard(props) {
                         <div >
                             <p className={styles.text}>Members</p>
                         </div>
-                        <TaskMembers cardMembers={members} size={30} cardId={cardId} listId={listId} project={props.project} title={'Add'} />
+                        <TaskMembers setCard={setCard} card={card} size={30} listId={listId} project={props.project} title={'Add'} />
                     </div>
 
 

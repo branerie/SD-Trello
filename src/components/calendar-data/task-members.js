@@ -16,6 +16,7 @@ export default function TaskMembers(props) {
 
 
     const dropdownRef = useRef(null);
+    const [cardMembers, setCardMembers] = useState(props.card.members)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [selectedUser, setSelectedUser] = useState({})
     const [users, setUsers] = useState([])
@@ -25,8 +26,7 @@ export default function TaskMembers(props) {
 
     const projectId = props.project._id
 
-    const cardMembers = props.cardMembers
-    const cardId = props.cardId
+    const cardId = props.card._id
     const listId = props.listId
 
     const getTeamUsers = async () => {
@@ -87,11 +87,12 @@ export default function TaskMembers(props) {
 
     const deleteMember = useCallback(async (event, member) => {
         event.preventDefault()
-        let cardMembers = props.cardMembers
 
         var index = cardMembers.indexOf(member)
         if (index !== -1) {
-            cardMembers.splice(index, 1)
+            let arr = [...cardMembers]
+            arr.splice(index, 1)
+            setCardMembers(arr)
         }
 
         const token = getCookie("x-auth-token")
@@ -119,8 +120,11 @@ export default function TaskMembers(props) {
 
         const token = getCookie("x-auth-token")
 
-        let cardMembers = props.cardMembers
-        cardMembers.push(selectedUser)
+        let arr = [...cardMembers]
+        console.log(arr);
+        arr.push(selectedUser)
+        console.log(arr);
+        setCardMembers(arr)
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
@@ -135,7 +139,10 @@ export default function TaskMembers(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
+            const updatedCard = await response.json()
+            console.log(updatedCard);
             setIsActive(!isActive)
+            props.setCard(updatedCard)
             updateProjectSocket()
         }
 
