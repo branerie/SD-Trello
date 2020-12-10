@@ -20,6 +20,9 @@ export default function List(props) {
     const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [cardName, setCardName] = useState('')
+    const [currCard, setCurrCard] = useState('')
+    const [currList, setCurrList] = useState('')
+
     const history = useHistory()
     const socket = useSocket()
 
@@ -119,7 +122,14 @@ export default function List(props) {
                                         {(provided) => (
                                             <div>
                                                 <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                    <Card key={index} card={element} listId={props.list._id} project={props.project} />
+                                                    <Card
+                                                        showEditCard={() => {
+                                                            props.showCurrentCard(element)
+                                                        }}
+                                                        key={index}
+                                                        card={element}
+                                                        listId={props.list._id}
+                                                        project={props.project} />
                                                 </div>
                                                 {provided.placeholder}
                                             </div>

@@ -14,8 +14,8 @@ import pen from '../../images/pen.svg'
 export default function TaskMembers(props) {
 
 
-
     const dropdownRef = useRef(null);
+    const [cardMembers, setCardMembers] = useState(props.card.members)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [selectedUser, setSelectedUser] = useState({})
     const [users, setUsers] = useState([])
@@ -25,8 +25,7 @@ export default function TaskMembers(props) {
 
     const projectId = props.project._id
 
-    const cardMembers = props.cardMembers
-    const cardId = props.cardId
+    const cardId = props.card._id
     const listId = props.listId
 
     const getTeamUsers = async () => {
@@ -81,17 +80,18 @@ export default function TaskMembers(props) {
         const result = users.filter(obj => {
             return obj._id === id
         })[0]
-        const selected = result._id
+        const selected = result
         setSelectedUser(selected)
     }
 
     const deleteMember = useCallback(async (event, member) => {
         event.preventDefault()
-        let cardMembers = props.cardMembers
 
         var index = cardMembers.indexOf(member)
+        let arr = [...cardMembers]
+
         if (index !== -1) {
-            cardMembers.splice(index, 1)
+            arr.splice(index, 1)            
         }
 
         const token = getCookie("x-auth-token")
@@ -102,13 +102,14 @@ export default function TaskMembers(props) {
                 "Authorization": token
             },
             body: JSON.stringify({
-                members: cardMembers
+                members: arr
             })
         })
         if (!response.ok) {
             history.push("/error")
         } else {
             updateProjectSocket()
+            setCardMembers(arr)
         }
 
     }, [history, props, cardId, listId, updateProjectSocket])
@@ -119,8 +120,11 @@ export default function TaskMembers(props) {
 
         const token = getCookie("x-auth-token")
 
-        let cardMembers = props.cardMembers
-        cardMembers.push(selectedUser)
+        let arr = [...cardMembers]
+
+        arr.push(selectedUser)       
+
+        
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
@@ -129,13 +133,14 @@ export default function TaskMembers(props) {
                 "Authorization": token
             },
             body: JSON.stringify({
-                members: cardMembers
+                members: arr
             })
         })
         if (!response.ok) {
             history.push("/error")
         } else {
             setIsActive(!isActive)
+            setCardMembers(arr)
             updateProjectSocket()
         }
 
@@ -159,7 +164,7 @@ export default function TaskMembers(props) {
                             </select>
                             <button className={styles.taskProgressButton} onClick={handleAdd}>Add</button>
                         </form>
-                    </span> 
+                    </span>
                     :
                     <div className={styles.container}>
                         <span className={styles.buttoDiv}>
@@ -173,7 +178,7 @@ export default function TaskMembers(props) {
                                 })
                             }
                         </span>
-                        <img className={styles.pen} src={pen} alt="..." width="13" height="13"onClick={() => { getTeamUsers(); setIsActive(!isActive) }} />
+                        <img className={styles.pen} src={pen} alt="..." width="13" height="13" onClick={() => { getTeamUsers(); setIsActive(!isActive) }} />
                         {/* <Avatar name={'+ 1'} size={20} round={true} onClick={() => { getTeamUsers(); setIsActive(!isActive) }} title={props.title} /> */}
                     </div >
             }
