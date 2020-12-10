@@ -247,7 +247,7 @@ export default function EditCard(props) {
                         <div >
                             <p className={styles.text}>Members</p>
                         </div>
-                        <TaskMembers setCard={setCard} card={card} size={30} listId={listId} project={props.project} title={'Add'} />
+                       
                         <TaskMembers card={card} size={30} listId={listId} project={props.project} title={'Add'} />
                     </div>
 

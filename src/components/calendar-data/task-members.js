@@ -80,7 +80,7 @@ export default function TaskMembers(props) {
         const result = users.filter(obj => {
             return obj._id === id
         })[0]
-        const selected = result._id
+        const selected = result
         setSelectedUser(selected)
     }
 
@@ -88,6 +88,8 @@ export default function TaskMembers(props) {
         event.preventDefault()
 
         var index = cardMembers.indexOf(member)
+        let arr = [...cardMembers]
+
         if (index !== -1) {
             arr.splice(index, 1)
             setCardMembers(arr)
@@ -120,9 +122,12 @@ export default function TaskMembers(props) {
         const token = getCookie("x-auth-token")
 
         let arr = [...cardMembers]
-       
+
         arr.push(selectedUser)
-       
+
+        console.log(arr);
+        setCardMembers(arr)
+
         // console.log(arr);
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
@@ -137,9 +142,9 @@ export default function TaskMembers(props) {
         })
         if (!response.ok) {
             history.push("/error")
-        } else {                       
-            setIsActive(!isActive)              
-            setCardMembers(arr)           
+        } else {
+            setIsActive(!isActive)
+            setCardMembers(arr)
             updateProjectSocket()
         }
 
@@ -163,7 +168,7 @@ export default function TaskMembers(props) {
                             </select>
                             <button className={styles.taskProgressButton} onClick={handleAdd}>Add</button>
                         </form>
-                    </span> 
+                    </span>
                     :
                     <div className={styles.container}>
                         <span className={styles.buttoDiv}>
@@ -177,7 +182,7 @@ export default function TaskMembers(props) {
                                 })
                             }
                         </span>
-                        <img className={styles.pen} src={pen} alt="..." width="13" height="13"onClick={() => { getTeamUsers(); setIsActive(!isActive) }} />
+                        <img className={styles.pen} src={pen} alt="..." width="13" height="13" onClick={() => { getTeamUsers(); setIsActive(!isActive) }} />
                         {/* <Avatar name={'+ 1'} size={20} round={true} onClick={() => { getTeamUsers(); setIsActive(!isActive) }} title={props.title} /> */}
                     </div >
             }
