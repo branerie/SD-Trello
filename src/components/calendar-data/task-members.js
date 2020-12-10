@@ -14,7 +14,6 @@ import pen from '../../images/pen.svg'
 export default function TaskMembers(props) {
 
 
-
     const dropdownRef = useRef(null);
     const [cardMembers, setCardMembers] = useState(props.card.members)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
@@ -90,7 +89,6 @@ export default function TaskMembers(props) {
 
         var index = cardMembers.indexOf(member)
         if (index !== -1) {
-            let arr = [...cardMembers]
             arr.splice(index, 1)
             setCardMembers(arr)
         }
@@ -103,13 +101,14 @@ export default function TaskMembers(props) {
                 "Authorization": token
             },
             body: JSON.stringify({
-                members: cardMembers
+                members: arr
             })
         })
         if (!response.ok) {
             history.push("/error")
         } else {
             updateProjectSocket()
+            setCardMembers(arr)
         }
 
     }, [history, props, cardId, listId, updateProjectSocket])
@@ -121,10 +120,10 @@ export default function TaskMembers(props) {
         const token = getCookie("x-auth-token")
 
         let arr = [...cardMembers]
-        console.log(arr);
+       
         arr.push(selectedUser)
-        console.log(arr);
-        setCardMembers(arr)
+       
+        // console.log(arr);
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
@@ -133,16 +132,14 @@ export default function TaskMembers(props) {
                 "Authorization": token
             },
             body: JSON.stringify({
-                members: cardMembers
+                members: arr
             })
         })
         if (!response.ok) {
             history.push("/error")
-        } else {
-            const updatedCard = await response.json()
-            console.log(updatedCard);
-            setIsActive(!isActive)
-            props.setCard(updatedCard)
+        } else {                       
+            setIsActive(!isActive)              
+            setCardMembers(arr)           
             updateProjectSocket()
         }
 

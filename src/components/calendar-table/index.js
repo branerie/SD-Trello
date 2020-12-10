@@ -130,6 +130,7 @@ const TableDndApp = (props) => {
                         assigned:
                             (
                                 <TaskMembers cardMembers={card.members} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
+                                <TaskMembers card={card} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
                             ),
                         monday: thisCardDate + "/" + card.progress,
                         tuesday: thisCardDate + "/" + card.progress,
