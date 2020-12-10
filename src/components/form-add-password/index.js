@@ -4,9 +4,11 @@ import { useHistory } from 'react-router-dom'
 import UserContext from '../../contexts/UserContext'
 import authenticateUpdate from '../../utils/authenticate-update'
 import responseGoogle from '../../utils/responseGoogle'
-import Input from '../input'
-import Title from '../title'
 import styles from './index.module.css'
+import logo from '../../images/logo.svg'
+import google from '../../images/welcome-page/google.svg'
+
+
 
 export default function AddPassword(props) {
     const [password, setPassword] = useState("")
@@ -18,7 +20,7 @@ export default function AddPassword(props) {
     const handleGoogle = async (googleResponse) => {
         let userId
         await responseGoogle(googleResponse, (user) => {
-            userId = user.id            
+            userId = user.id
             context.logIn(user)
             history.push("/")
         }, (response) => {
@@ -43,24 +45,56 @@ export default function AddPassword(props) {
     }, [password, rePassword])
 
     return (
-        <div className={styles.form}>
-            <form className={styles.container} >
-                <Title title="Add password to user" />
-                <Input
-                    type="password"
-                    value={password}
-                    onChange={e => setPassword(e.target.value)}
-                    label="New Password"
-                    id="password"
-                />
-                <Input
-                    type="password"
-                    value={rePassword}
-                    onChange={e => setRePassword(e.target.value)}
-                    label="Confirm Password"
-                    id="rePassword"
-                />
+
+        <form className={styles.container} >
+
+            <div className={styles.logo}>
+                <img src={logo} alt="logo" width='110' height='100' />
+            </div>
+
+            <div className={styles.rightSide}>
+
+                <div className={styles.title} >Add password to user</div>
+
+                <div className={styles.inputContainer}>
+                    <div> Password:</div>
+                    <input
+                    placeholder='********'
+                        className={styles.input}
+                        type="password"
+                        value={password}
+                        onChange={e => setPassword(e.target.value)}
+                        label="New Password"
+                        id="password"
+                    />
+                     <div className={styles.passInstructions}>
+                        <p>Use 8 or more characters with a mix </p>
+                        <p>of letters, numbers & symbols. </p>
+                    </div>
+                </div>
+
+                <div className={styles.inputContainer}>
+                    <div> Confirm Password:</div>
+                    <input
+                    placeholder='********'
+                        className={styles.input}
+                        type="password"
+                        value={rePassword}
+                        onChange={e => setRePassword(e.target.value)}
+                        label="Confirm Password"
+                        id="rePassword"
+                    />
+                </div>
+
+
                 <GoogleLogin
+                    render={renderProps => (
+                        <button onClick={renderProps.onClick}
+                            className={styles.googleLoginBtn}
+                        >
+                            <img src={google} alt="logo" width='25' height='25' />
+                            Submit</button>
+                    )}
                     disabled={disabled}
                     clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
                     buttonText="Submit"
@@ -68,8 +102,8 @@ export default function AddPassword(props) {
                     // onFailure={errorGoogle}
                     cookiePolicy={'single_host_origin'}
                 />
-            </form>
-            <div>User was registered with Google. Please add password for this Website</div>
-        </div>
+                <div>User was registered with Google. Please add password for this Website</div>
+            </div>
+        </form>
     )
 }

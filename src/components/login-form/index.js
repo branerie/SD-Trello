@@ -14,7 +14,7 @@ import google from '../../images/welcome-page/google.svg'
 
 
 
-const LoginForm = () => {
+const LoginForm = (props) => {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
     const [showForm, setShowForm] = useState(false)
@@ -103,16 +103,18 @@ const LoginForm = () => {
 
 
                     <div className={styles.textDiv}>
-                        <p>
+                        <p className={styles.forgotPass}>
                             Forgot Password?
                         </p>
-                        <p>
+                        <p className={styles.newToSmM}>
                             New to Smart Manager?
-                        <button>Sign Up</button>
+                        <button className={styles.signUpBtn} 
+                        onClick={() => { props.goToSignUp(); props.hideForm() }}                        
+                        >Sign Up</button>
                         </p>
-                        <p>
+                        <h3>
                             or
-                        </p>
+                        </h3>
                     </div>
 
 

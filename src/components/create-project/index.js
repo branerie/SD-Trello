@@ -75,6 +75,8 @@ export default function CreateProject() {
             }
             const users = await response.json()
             setAllUsers(users)
+
+            
         }
     }
 
@@ -85,67 +87,110 @@ export default function CreateProject() {
     const addMember = (input) => {
         const arr = [...members]
         arr.push(input)
-        setMembers(arr)
+        setMembers(arr)        
         setShowMembers(false)
         setMember('')
+    }
+
+    const removeMember = (input) => {
+        const arr = members.filter(u => u.email !== input.email)
+        setMembers(arr)
     }
 
     return (
         <div className={styles.form}>
             <form className={styles.container} onSubmit={handleSubmit}>
-                <Title title="Create Project" />
-                <Input
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    label="Name"
-                    id="name"
-                />
-                <Input
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                    label="Description"
-                    id="description"
-                />
-                <Input
-                    value={member}
-                    onFocus={onFocus}
-                    onBlur={onBlur}
-                    onChange={(e) => setMember(e.target.value)}
-                    label="Invite members"
-                    id="members"
-                    placeholder='username'
-                />
-                <Button title="Create" />
-                <div>
+
+                <div className={styles.title} >Create New Project</div>
+
+                <div className={styles.inputContainer}>
+                    <span> Name</span>
+                    <input
+                        className={styles.input}
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        label="Name"
+                        id="name"
+                    />
+                </div>
+
+
+                <div className={styles.inputContainerDescr}>
+                    <span> Description</span>
+                    <textarea
+                        className={styles.textarea}
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                        label="Description"
+                        id="description"
+                    />
+                </div>
+
+
+                <div className={styles.inputContainer}>
+                    <span> Invite Members</span>
+                    <input
+                        className={styles.input}
+                        autocomplete="off"
+                        value={member}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
+                        onChange={(e) => setMember(e.target.value)}
+                        label="Invite members"
+                        id="members"
+                        placeholder='username'
+                    />
+                </div>
+
+
+
+
+                <div className={styles.membersAvatars}>
                     {
                         members.map(m => {
                             return (
-                                <Avatar key={m._id} name={m.username} size={40} round={true} maxInitials={2} />
+                                <Avatar onClick={() => removeMember(m)} key={m._id} name={m.username} size={40} round={true} maxInitials={2} />
                             )
                         })
                     }
                 </div>
-            </form>
-            {
-                showMembers ? <div className={styles.members}>
-                    {
-                        allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
-                                .sort((a,b) => a.username.localeCompare(b.username))
+
+
+
+                {
+                    showMembers ? <div className={styles.members}>
+                        {
+                            allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
+                            .filter((e) => {
+                                const found = members.find(element => element.username === e.username)
+                                if (found) {
+                                    return false
+                                } else {
+                                    return true
+                                }
+                            })
+                                .sort((a, b) => a.username.localeCompare(b.username))
                                 .map(u => {
                                     return (
-                                    <ButtonClean
-                                        key={u._id}
-                                        className={styles.user}
-                                        onClick={() => addMember(u)}
-                                        title={<div>
-                                            <div>{u.username}</div>
-                                            <div className={styles.email}>{u.email}</div>
-                                        </div>}
-                                    />)
+                                        <ButtonClean
+                                            key={u._id}
+                                            className={styles.user}
+                                            onClick={() => addMember(u)}
+                                            title={<div>
+                                                <div>{u.username}</div>
+                                                <div className={styles.email}>{u.email}</div>
+                                            </div>}
+                                        />)
                                 })
-                    }
-                </div> : null
-            }
+                        }
+                    </div> : null
+                }
+
+                <div className={styles.buttonDiv}>
+                    <button type='submit' className={styles.createButton}>Create</button>
+                </div>
+
+            </form>
         </div>
     )
 }

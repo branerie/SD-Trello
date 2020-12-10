@@ -34,27 +34,21 @@ const Navigation = () => {
                         <Switch>
                             <Route exact path="/" >
                                 {loggedIn ? (<Home />) : (<WelcomePage />)}
-                            </Route>
-                            <Route path="/sign-up">
-                                {loggedIn ? (<Redirect to="/" />) : (<SignupPage />)}
-                            </Route>
-                            <Route path="/login">
-                                {loggedIn ? (<Redirect to="/" />) : (<LoginPage />)}
-                            </Route>
+                            </Route>                            
                             <Route path="/profile/:userid">
-                                {loggedIn ? (<ProfilePage />) : (<Redirect to="/login" />)}
+                                {loggedIn ? (<ProfilePage />) : (<Redirect to="/" />)}
                             </Route>
                             <Route path="/inbox/:userid">
                                 {loggedIn ? (<InboxPage />) : (<Redirect to="/login" />)}
                             </Route>
                             <Route path="/project-board/:teamid/:projectid">
-                                {loggedIn ? (<ProjectBoard />) : (<Redirect to="/login" />)}
+                                {loggedIn ? (<ProjectBoard />) : (<Redirect to="/" />)}
                             </Route>
                             <Route path="/project-list/:teamid/:projectid">
-                                {loggedIn ? (<ProjectList />) : (<Redirect to="/login" />)}
+                                {loggedIn ? (<ProjectList />) : (<Redirect to="/" />)}
                             </Route>
                             <Route path="/team/:teamid">
-                                {loggedIn ? (<TeamPage />) : (<Redirect to="/login" />)}
+                                {loggedIn ? (<TeamPage />) : (<Redirect to="/" />)}
                             </Route>
                             <Route component={ErrorPage} />
                         </Switch>

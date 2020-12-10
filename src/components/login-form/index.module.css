@@ -3,7 +3,7 @@
     left: 30%;
     top: 15%;
     z-index: 20;
-    width: 40%;
+    width: 45%;
     height: 70%;
     background-color:#EDF5F9;
     border: solid 2px #707070;
@@ -73,8 +73,33 @@ input{
   }
 
   .textDiv{
+      
       text-align: center;
       margin-right: 20%;
+      
+  }
+
+  .forgotPass{
+    text-decoration: underline;
+    font-weight: lighter;
+    margin-bottom: 5%;
+    color: #363338;
+  }
+
+  .newToSmM{    
+    font-weight: lighter;
+    margin-bottom: 5%;
+    color: #363338;
+  }
+
+  .signUpBtn{
+      border: none;
+      text-decoration: underline;
+      color: #F3981F;
+      margin: 2%;
+      cursor: pointer;
+      font-weight: 500;
+      font-size: 1em;
   }
 
   .googleLoginBtn{     
@@ -82,14 +107,14 @@ input{
     background-color: #F7F7F2;
     border-radius: 10px;
     border: solid 1px #707070 ;
-    width: 12em;
-    height: 2em;
+    width: 50%;
+    height: auto;
     margin: 2%;
-    margin-top: 10%;
+    margin-top: 5%;
     padding: 2%;
     margin-left: 15%;
     z-index: 1;
-    font-size: 1.2em;
+    font-size: 1.1em;
     font-weight: 600;
     cursor: pointer;
     align-items: center;

@@ -15,23 +15,19 @@ import facebook from '../../images/welcome-page/facebook-icon.svg'
 import { useHistory } from "react-router-dom"
 import LoginForm from "../../components/login-form"
 import Transparent from "../../components/transparent"
+import SignupForm from "../../components/signup-form"
 
 
 
 const WelcomePage = () => {
 
   const [isVisible, setIsVisible] = useState(false)
+  const [isVisibleSignUp, setIsVisibleSignUp] = useState(false)
 
 
   const history = useHistory()
 
-  function goToLogin() {
-    history.push('/login')
-  }
-
-  function goToSignUp() {
-    history.push('/sign-up')
-  }
+  
 
   return (
 
@@ -40,7 +36,17 @@ const WelcomePage = () => {
         {isVisible ?
           < div >
             <Transparent hideForm={() => setIsVisible(!isVisible)} >
-              <LoginForm hideForm={() => setIsVisible(!isVisible)} />
+              <LoginForm hideForm={() => setIsVisible(!isVisible)} goToSignUp={()=>setIsVisibleSignUp(!isVisibleSignUp)} />
+            </Transparent >
+          </div > : null
+        }
+      </div>
+
+      <div>
+        {isVisibleSignUp ?
+          < div >
+            <Transparent hideForm={() => setIsVisibleSignUp(!isVisibleSignUp)} >
+              <SignupForm hideForm={() => setIsVisibleSignUp(!isVisibleSignUp)} goToLogin={()=>setIsVisible(!isVisible)} />
             </Transparent >
           </div > : null
         }
@@ -55,8 +61,8 @@ const WelcomePage = () => {
                 <img src={logo} alt="logo" width='194' height='142' />
               </span>
               <span className={styles.firstButtons}>
-                <button className={styles.loginButton} onClick={()=>setIsVisible(!isVisible)} >Log In</button>
-                <button className={styles.signUpButton} onClick={goToSignUp} >Sign Up</button>
+                <button className={styles.loginButton} onClick={()=>setIsVisible(!isVisible)}  >Log In</button>
+                <button className={styles.signUpButton} onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Sign Up</button>
               </span>
             </div>
             <div className={styles.topright}>
@@ -80,7 +86,7 @@ const WelcomePage = () => {
                 <p >Flexible and time saving for the whole team. </p>
               </div>
               <div className={styles.paragraph}>
-                <button className={styles.secondSignUpButton} onClick={goToSignUp} >Free Sign Up</button>
+                <button className={styles.secondSignUpButton}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Free Sign Up</button>
               </div>
             </div>
           </div>
@@ -95,7 +101,7 @@ const WelcomePage = () => {
                 <p >informed with the accomplishment of the projects. </p>
               </div>
               <div className={styles.paragraph}>
-                <button className={styles.thirdSignUpButton} onClick={goToSignUp} >Try It Now</button>
+                <button className={styles.thirdSignUpButton}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Try It Now</button>
               </div>
             </div>
             <div className={styles.pic3Container}>
@@ -124,7 +130,7 @@ const WelcomePage = () => {
               <div className={styles.lastParagraph}>
                 <p >Connect with other teams from <span className={styles.lucida}>The Smart Family</span>,</p>
                 <p > save time with more work done.</p>
-                <button className={styles.lastSignUpButton} onClick={goToSignUp} >Get Started</button>
+                <button className={styles.lastSignUpButton}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Get Started</button>
               </div>
             </div>
             <div className={styles.pic6Container}>
