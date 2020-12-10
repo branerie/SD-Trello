@@ -10,10 +10,12 @@ import settings from '../../images/aside/settings.svg'
 import ProjectContext from '../../contexts/ProjectContext'
 import ButtonHideList from '../button-hide-list'
 import ButtonClean from '../button-clean'
+import UserContext from '../../contexts/UserContext'
 
 export default function Aside({ asideOn, setAsideOn }) {
     const [listVisibility, setListVisibility] = useState(false)
     const projectContext = useContext(ProjectContext)
+    const userContext = useContext(UserContext)
 
     useEffect(() => {
         if (window.location.href.includes('project')) {
@@ -39,7 +41,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                     title={<img src={tasks} alt="my-tasks" width="30" height="25" />}
                 />
                 <LinkComponent
-                    href='/'
+                    href={`/inbox/${userContext.user.id}`}
                     title={<img src={inbox} alt="inbox" width="33" height="34" />}
                 />
                 <LinkComponent
@@ -65,7 +67,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                                 className={styles.link}
                             />
                             <LinkComponent
-                                href='/'
+                                href={`/inbox/${userContext.user.id}`}
                                 title='Inbox'
                                 className={styles.link}
                             />
