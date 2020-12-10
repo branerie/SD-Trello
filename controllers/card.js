@@ -47,8 +47,7 @@ async function updateCard(req, res, next) {
     }
 
 
-    await models.Card.updateOne({ _id: id }, { ...obj })
-    const updatedCard = await models.Card.findOne({ _id: id })
+    const updatedCard = await models.Card.updateOne({ _id: id }, { ...obj })
     res.send(updatedCard)
 
 }
