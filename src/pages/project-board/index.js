@@ -127,7 +127,6 @@ export default function ProjectBoard(props) {
     async function handleOnDragEnd(result) {
         if (!result.destination) return
 
-
         if (result.type === 'droppableItem') {
             let position = result.destination.index
 

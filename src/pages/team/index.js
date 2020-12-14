@@ -9,11 +9,15 @@ import TeamContext from "../../contexts/TeamContext"
 import { useParams } from "react-router-dom"
 import ButtonClean from "../../components/button-clean"
 
+
 const TeamPage = () => {
 
     const [isVisible, setIsVisible] = useState(false)
     const teamContext = useContext(TeamContext)
     const params = useParams()
+
+
+    
 
     useEffect(() => {
         const teamId = params.teamid
@@ -23,7 +27,7 @@ const TeamPage = () => {
     return (
         <PageLayout>
             <div>
-                {teamContext.currentProjects.map((project, index) => {
+                {teamContext.currentProjects.map((project, index) => {                   
                     return (
                         <Project key={project._id} index={index} project={project} />
                     )
@@ -34,7 +38,7 @@ const TeamPage = () => {
                 isVisible ?
                     <div>
                         <Transparent hideForm={() => setIsVisible(false)}>
-                            <CreateProject/>
+                            <CreateProject />
                         </Transparent>
                     </div> : null
             }

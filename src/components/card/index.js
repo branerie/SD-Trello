@@ -62,9 +62,13 @@ export default function Card(props) {
                 card.dueDate ? <div>{`${day}-${month}-${year}`}</div> : null
             } */}
             <div className={styles.flex}>
-                <div>
+                <div className={styles.members}>
                     {card.members.map(element => {
-                        return (<Avatar key={element._id} name={element.username} size={30} round={true} maxInitials={2} />)
+                        return (
+                            <span className={styles.avatar}>
+                            <Avatar key={element._id} name={element.username} size={30} round={true} maxInitials={2} />
+                            </span>
+                            )
                     })}
                 </div>
                 {/* {isVisible ?

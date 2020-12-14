@@ -115,10 +115,39 @@ export default function TaskMembers(props) {
     }, [history, props, cardId, listId, updateProjectSocket])
 
 
+    
+
     const handleAdd = useCallback(async (event) => {
         event.preventDefault()
 
         const token = getCookie("x-auth-token")
+
+        const project = props.project
+        
+        const result = project.membersRoles.filter(obj => {
+            return obj.memberId._id === selectedUser._id
+        })[0]
+         if(!result){
+            if (window.confirm(`Do you want to add ${selectedUser.username} to project?`)){
+                const responseAdd = await fetch(`/api/projects/${projectId}/user`, {
+                    method: "POST",
+                    headers: {
+                        "Content-Type": "application/json",
+                        "Authorization": token
+                    },
+                    body: JSON.stringify({
+                        member:selectedUser,
+                        admin: false
+                    })
+                })
+                if (!responseAdd.ok) {
+                    history.push("/error")
+                } 
+                
+            } else {
+                return
+            }
+         }
 
         let arr = [...cardMembers]
 
