@@ -1,4 +1,4 @@
-import React, { useContext, useState } from 'react'
+import React, {  useContext, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import ProjectContext from '../../contexts/ProjectContext'
 import EditProject from '../edit-project'
@@ -13,8 +13,8 @@ export default function Project(props) {
     const onClick = () => {
         projectContext.setProject(props.project._id)
     }
-
-
+    
+    
 
     return (
         <div className={styles.container}>

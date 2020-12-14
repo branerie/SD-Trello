@@ -15,10 +15,10 @@ import UserContext from '../../contexts/UserContext'
 
 export default function EditProject(props) {
     const [name, setName] = useState(props.project.name)
-    const [isAdmin, setIsAdmin] = useState(false)
     const [description, setDescription] = useState(props.project.description)
     const members = props.project.membersRoles
     const [IsVisibleAdd, setIsVisibleAdd] = useState(false)
+    const [isAdmin, setIsAdmin] = useState(false)
     const context = useContext(UserContext)
     const history = useHistory()
     const socket = useSocket()
@@ -30,12 +30,18 @@ export default function EditProject(props) {
     }, [socket, props.project])
 
 
-    useEffect(() => {
-        const admins = members.filter(a => a.admin === true)
+    async function getData() {
+        const admins = await members.filter(a => a.admin === true)
         if (admins.some(item => item.memberId._id === context.user.id)) {
             setIsAdmin(true)
+        } else {
+            setIsAdmin(false)
         }
-    })
+    }
+
+    useEffect(() => {
+        getData()       
+    }, [getData])
 
 
 
@@ -61,18 +67,12 @@ export default function EditProject(props) {
         }
     }
 
-    const showFormAdd = () => {
-        setIsVisibleAdd(true)
-    }
 
-    const hideFormAdd = () => {
-        setIsVisibleAdd(false)
-    }
 
     return (
         <div className={styles.form}>
             <form className={styles.container} >
-                <Title title="Edit Project" />
+                <Title title="Project" />
                 <Input
                     value={name}
                     onChange={e => setName(e.target.value)}
@@ -86,41 +86,12 @@ export default function EditProject(props) {
                     id="description"
                 />
                 <div className={styles.editMembers}>
-                    <div>Team: </div>
-
-                        Admins :{members.filter(a => a.admin === true).map((element, index) => {
-                        return (
-                            <span className={styles.membersList} key={index}>
-                                <Avatar name={element.memberId.username} size={30} round={true} maxInitials={2} />
-                            </span>
-                        )
-                    }
-                    )}
-                    <div>
-                        Members :{members.filter(a => a.admin === false).map((element, index) => {
-                        return (
-                            <span className={styles.membersList} key={index}>
-                                <Avatar name={element.memberId.username} size={30} round={true} maxInitials={2} />
-                            </span>
-                        )
-                    }
-                    )}
-                    </div>
+                    <AddProjectMember admin={isAdmin} project={props.project} members={props.project.membersRoles} />
                 </div>
             </form>
             <div className={styles.editMembers}>
                 {isAdmin ?
-                    <div>
-                        <Button onClick={showFormAdd} title="Edit members" className={styles.editMembersButton} />
-                        {IsVisibleAdd ?
-                            < div >
-                                <Transparent hideFormAdd={hideFormAdd} >
-                                    <AddProjectMember hideFormAdd={hideFormAdd} project={props.project} members={props.project.membersRoles} />
-                                </Transparent >
-                            </div > : null
-                        }
-                        <Button onClick={handleSubmit} title="Edit" />
-                    </div>
+                    <Button onClick={handleSubmit} title="Edit" />
                     : null
                 }
             </div>

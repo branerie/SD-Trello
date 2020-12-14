@@ -1,8 +1,6 @@
 .container {
-    text-align: center;
-    background-color: rgb(100, 101, 184);
+    margin-top: 5%;    
     height: 100%;
-
 }
 
 .form {
@@ -21,8 +19,49 @@
     color: white;
 }
 
-.members{
+.adminsContainer{
+    margin: 5%; 
+    width: 80%;
+    height: auto; 
+    display: flex; 
+    justify-self: start; 
+    align-items: center; 
+}
+
+.admins{
+    margin: 2%;
+}
+
+.membersContainer{   
+    margin: 5%; 
+    width: 80%;
+    height: auto;    
+    /* display: flex;  */
+    justify-self: start;
+    align-items: center; 
+}
+
+.title{
     width: 20%;
-    height: 10%;
-    color: white;
+}
+
+.members{
+    width: 90%;
+    height: auto;
+    min-height: 45px;
+}
+
+.addButton{
+    margin:5%;
+    width: 10%;
+}
+.draggable {   
+    width: 100%;
+}
+
+.droppable {
+    min-height: 40px;
+    height: auto;
+    width: 100%;
+    flex-grow: 1;
 }

@@ -36,3 +36,17 @@
 .pen:hover {
     background-color: #C1CBCF;
 }
+
+.members{
+    overflow-y: scroll;
+    -ms-overflow-style: none; 
+    scrollbar-width: none;  
+}
+
+.members::-webkit-scrollbar {
+    display: none;
+}
+
+.avatar{
+    margin-bottom: 2%;
+}
