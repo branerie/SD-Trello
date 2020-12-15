@@ -1,8 +1,5 @@
 import React, { useContext, useState } from "react"
 import GoogleLogin from 'react-google-login'
-import Button from "../button"
-import Input from "../input"
-import Title from "../title"
 import styles from "./index.module.css"
 import authenticate from "../../utils/authenticate"
 import UserContext from "../../contexts/UserContext"

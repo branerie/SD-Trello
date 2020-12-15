@@ -8,8 +8,6 @@ import {
 
 import Home from "./pages/home"
 import WelcomePage from "./pages/welcome"
-import SignupPage from "./pages/signup"
-import LoginPage from "./pages/login"
 import ProfilePage from "./pages/profile"
 import InboxPage from "./pages/inbox"
 import ErrorPage from "./pages/error"
@@ -20,6 +18,7 @@ import { SocketProvider } from "./contexts/SocketProvider"
 import ProjectProvider from "./contexts/ProjectProvider"
 import TeamProvider from "./contexts/TeamProvider"
 import TeamPage from "./pages/team"
+import ConfirmationPage from "./pages/confirmation"
 
 const Navigation = () => {
 
@@ -27,14 +26,16 @@ const Navigation = () => {
     const loggedIn = context.user.loggedIn
 
     return (
+                    <BrowserRouter>
         <SocketProvider user={context.user}>
             <ProjectProvider>
                 <TeamProvider>
-                    <BrowserRouter>
                         <Switch>
+                            <Route path="/confirmation/:token"><ConfirmationPage /></Route>
+                            {loggedIn && !context.user.confirmed ? <Redirect to="/confirmation/not-confirmed" /> : null}
                             <Route exact path="/" >
                                 {loggedIn ? (<Home />) : (<WelcomePage />)}
-                            </Route>                            
+                            </Route>
                             <Route path="/profile/:userid">
                                 {loggedIn ? (<ProfilePage />) : (<Redirect to="/" />)}
                             </Route>
@@ -52,10 +53,10 @@ const Navigation = () => {
                             </Route>
                             <Route component={ErrorPage} />
                         </Switch>
-                    </BrowserRouter>
                 </TeamProvider>
             </ProjectProvider>
         </SocketProvider>
+                    </BrowserRouter>
     )
 }
 

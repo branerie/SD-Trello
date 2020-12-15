@@ -24,6 +24,8 @@ router.post('/google-login', googleLoginUser)
 
 router.post('/logout', logoutUser)
 
+router.post('/confirmation', confirmToken)
+
 router.put('/:id', updateUser)
 
 router.delete('/:id', deleteUser)
@@ -49,7 +51,10 @@ async function registerUser(req, res, next) {
     models.User.findOne({ email }, async function (err, user) {
 
         if (user === null) {
-            const createdUser = await models.User.create({ email, username, password })
+            const newUser = new models.User({ email, username, password, confirmed: false })
+            newUser.setConfirmationToken()
+            const createdUser = await newUser.save()
+
             const token = utils.jwt.createToken({ id: createdUser._id })
 
             const teams = await getTeams(createdUser._id)
@@ -57,6 +62,7 @@ async function registerUser(req, res, next) {
                 user: createdUser,
                 teams
             }
+            utils.sendConfirmationEmail(newUser)
             res.header("Authorization", token).send(response)
             return
         }
@@ -171,6 +177,17 @@ async function logoutUser(req, res, next) {
     res.clearCookie(config.authCookieName).send('Logout successfully!')
 }
 
+async function confirmToken(req, res, next) {
+    const { token } = req.body
+
+    try {
+        const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }, { new: true })
+        
+        res.send(user)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 async function updateUser(req, res, next) {
     const id = req.params.id
