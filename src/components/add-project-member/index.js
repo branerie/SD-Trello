@@ -216,14 +216,14 @@ export default function AddMember(props) {
         <div className={styles.container}>
 
 
-            <div className={styles.membersContainer} ref={dropdownRef}>
+            <div className={styles.bigContainer} ref={dropdownRef}>
                 {isAdmin ?
-                    <div>
+                    <span>
                         {isActive ?
                             <div className={styles.members}>
                                 <div>
                                     Add Member to Project
-                        </div>
+                                </div>
                                 <span>
                                     <select
                                         onChange={(e) => { handleSelect(e.target.value) }}>
@@ -268,11 +268,11 @@ export default function AddMember(props) {
 
 
 
-                                <div className={styles.adminsContainer}>
+                                <div className={styles.membersContainer}>
                                     <span className={styles.title}>Members:</span>
                                     <Droppable droppableId={"members"}>
                                         {(provided) => (
-                                            <div className={styles.droppable} ref={provided.innerRef} {...provided.droppableProps}>
+                                            <div className={styles.droppableMembers} ref={provided.innerRef} {...provided.droppableProps}>
                                                 {
                                                     members.filter(a => a.admin !== true).map((element, index) => {
                                                         return (
@@ -299,7 +299,7 @@ export default function AddMember(props) {
 
                             </DragDropContext>
                         }
-                    </div >
+                    </span >
                     :
                     <div>
                         <div className={styles.adminsContainer}>
