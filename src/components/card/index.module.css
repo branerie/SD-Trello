@@ -43,6 +43,10 @@
     scrollbar-width: none;  
 }
 
+/* .avatar{
+    font-size: 20px;
+} */
+
 .members::-webkit-scrollbar {
     display: none;
 }

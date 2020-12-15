@@ -81,7 +81,8 @@ export default function TaskProgress(props) {
         }
         return (
             <div>
-                <img src={pen} alt="..." width="11.5" height="11.5" />
+                Progress
+                {/* <img src={pen} alt="..." width="11.5" height="11.5" /> */}
             </div>
         )
     }
@@ -127,11 +128,7 @@ export default function TaskProgress(props) {
             <span>
 
                 {
-                    isActive ?
-                        // < form ref={dropdownRef} className={styles.container} onSubmit={editCardProgress} >
-                        //     <input className={styles.progressInput} type={'number'} placeholder={taskprogress} onChange={e => setCardProgress(e.target.value)} />
-                        //     <button type='submit' className={styles.taskProgressButton} cardId={cardId} listId={listId} cardName>Edit</button>
-                        // </form> 
+                    isActive ?                        
                         <div ref={dropdownRef} className={styles.taskProgress} onBlur={editCardProgress}>
                             <input
                                 className={styles.progressInput}

@@ -91,7 +91,7 @@ export default function TaskMembers(props) {
         let arr = [...cardMembers]
 
         if (index !== -1) {
-            arr.splice(index, 1)
+            arr.splice(index, 1)            
         }
 
         const token = getCookie("x-auth-token")
@@ -115,7 +115,7 @@ export default function TaskMembers(props) {
     }, [history, props, cardId, listId, updateProjectSocket])
 
 
-
+    
 
     const handleAdd = useCallback(async (event) => {
         event.preventDefault()
@@ -123,12 +123,12 @@ export default function TaskMembers(props) {
         const token = getCookie("x-auth-token")
 
         const project = props.project
-
+        
         const result = project.membersRoles.filter(obj => {
             return obj.memberId._id === selectedUser._id
         })[0]
-        if (!result) {
-            if (window.confirm(`Do you want to add ${selectedUser.username} to project?`)) {
+         if(!result){
+            if (window.confirm(`Do you want to add ${selectedUser.username} to project?`)){
                 const responseAdd = await fetch(`/api/projects/${projectId}/user`, {
                     method: "POST",
                     headers: {
@@ -136,24 +136,24 @@ export default function TaskMembers(props) {
                         "Authorization": token
                     },
                     body: JSON.stringify({
-                        member: selectedUser,
+                        member:selectedUser,
                         admin: false
                     })
                 })
                 if (!responseAdd.ok) {
                     history.push("/error")
-                }
-
+                } 
+                
             } else {
                 return
             }
-        }
+         }
 
         let arr = [...cardMembers]
 
-        arr.push(selectedUser)
+        arr.push(selectedUser)       
 
-
+        
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
@@ -179,38 +179,36 @@ export default function TaskMembers(props) {
 
     return (
         <div>
-            {(cardMembers.length > 3) ?
-                <div className={styles.membersContainer}>
-                    <span className={styles.membersDiv}>
-                        {
-                            cardMembers.slice(0, 3).map((member, index) => {
-                                return (
-                                    <span key={index}>
-                                        <Avatar name={member.username} size={props.size} round={true} maxInitials={2} />
-                                    </span>
-                                )
-                            })
-                        }
-                        <span >
-                            <Avatar name={`+   ${cardMembers.length-3}`} size={props.size} round={true} maxInitials={3} />
+            {
+                isActive ?
+                    <span>
+                        < form ref={dropdownRef} className={styles.container}  >
+                            <select className={styles.select} onChange={(e) => { handleSelect(e.target.value) }}>
+                                <option>Select</option>
+                                {
+                                    users.map((m, index) => (
+                                        <option key={index} value={m._id}>{m.username}</option>
+                                    ))
+                                }
+                            </select>
+                            <button className={styles.addUserButton} onClick={handleAdd}>Add</button>
+                        </form>
+                    </span>
+                    :
+                    <div className={styles.membersContainer}>
+                        <span className={styles.membersDiv}>
+                            {
+                                cardMembers.map((member, index) => {
+                                    return (
+                                        <span key={index}>
+                                            <Avatar name={member.username} size={props.size} round={true} maxInitials={2} onMouseEnter={<div>{member.username}</div>} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, member) }} />
+                                        </span>
+                                    )
+                                })
+                            }
                         </span>
-                    </span>
-                </div >
-                :
-                <div className={styles.membersContainer}>
-                    <span className={styles.membersDiv}>
-                        {
-                            cardMembers.map((member, index) => {
-                                return (
-                                    <span key={index}>
-                                        <Avatar name={member.username} size={props.size} round={true} maxInitials={2} />
-                                    </span>
-                                )
-                            })
-                        }
-                    </span>
-                </div >
-
+                        <img className={styles.pen} src={pen} alt="..." width="13" height="13" onClick={() => { getTeamUsers(); setIsActive(!isActive) }} />
+                    </div >
             }
         </div>
     )
