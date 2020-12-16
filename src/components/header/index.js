@@ -10,17 +10,22 @@ import Transparent from "../transparent"
 import CreateTeam from "../create-team"
 import ProjectContext from "../../contexts/ProjectContext"
 import { useParams } from "react-router-dom"
+import CreateProject from "../create-project"
 
 const Header = ({ asideOn }) => {
     const dropdownRefProfile = useRef(null)
     const dropdownRefView = useRef(null)
+    const dropdownRefProject = useRef(null)
     const dropdownRefTeam = useRef(null)
+    const [isProjectVisibble, setIsProjectVisibble] = useState(false)
+    const [isProjectActive, setIsProjectActive] = useDetectOutsideClick(dropdownRefProject)
     const [isTeamActive, setIsTeamActive] = useDetectOutsideClick(dropdownRefTeam)
     const [isViewVisibble, setIsViewVisibble] = useState(false)
     const [isViewActive, setIsViewActive] = useDetectOutsideClick(dropdownRefView)
     const [viewState, setViewState] = useState(null)
     const [isProfileActive, setIsProfileActive] = useDetectOutsideClick(dropdownRefProfile)
-    const [showForm, setShowForm] = useState(false)
+    const [showTeamForm, setShowTeamForm] = useState(false)
+    const [showProjectForm, setShowProjectForm] = useState(false)
     const context = useContext(UserContext)
     const projectContext = useContext(ProjectContext)
     const teamContext = useContext(TeamContext)
@@ -42,6 +47,8 @@ const Header = ({ asideOn }) => {
 
         if (window.location.href.includes('project')) {
             setIsViewVisibble(true)
+            setIsProjectVisibble(true)
+            teamContext.getCurrentProjects(params.teamid)
 
             if (window.location.href.includes('board')) {
                 setViewState('Board')
@@ -85,8 +92,8 @@ const Header = ({ asideOn }) => {
                                 }
                                 <div className={styles['last-option']}>
                                     <ButtonClean
-                                        onClick={() => setShowForm(true)}
-                                        title='Create New Team'
+                                        onClick={() => setShowTeamForm(true)}
+                                        title='Create Team'
                                         className={styles.logout}
                                     />
                                 </div>
@@ -94,10 +101,58 @@ const Header = ({ asideOn }) => {
                         }
                     </div>
                     {
-                        showForm ? (<Transparent hideForm={() => setShowForm(false)}>
-                            <CreateTeam hideForm={() => { setShowForm(false) }} ></CreateTeam>
+                        showTeamForm ? (<Transparent hideForm={() => setShowTeamForm(false)}>
+                            <CreateTeam hideForm={() => { setShowTeamForm(false) }} ></CreateTeam>
                         </Transparent>) : null
                     }
+
+
+                    {isProjectVisibble && <div className={styles.flex}>
+                        <div className={styles.margin}>
+                            Project:
+                        </div>
+                        <div>
+                            <ButtonClean
+                                className={styles.teams}
+                                onClick={() => setIsProjectActive(!isProjectActive)}
+                                title={projectContext.projectName}
+                            />
+                            {
+                                isProjectActive ? <div
+                                    ref={dropdownRefProject}
+                                    className={`${styles.options} ${styles.font} ${styles['projects-position']}`}
+                                >
+                                    {
+                                        teamContext.currentProjects.map(p => (
+                                            <div key={p._id} className={styles['team-options']}>
+                                                <LinkComponent
+                                                    href={`/project-board/${params.teamid}/${p._id}`}
+                                                    title={p.name}
+                                                    // onClick={() => { selectTeam(p._id, p.name) }}
+                                                    className={`${styles.overflow} ${styles.hover}`}
+                                                />
+                                            </div>
+                                        ))
+                                    }
+                                    <div className={styles['last-option']}>
+                                        <ButtonClean
+                                            onClick={() => setShowProjectForm(true)}
+                                            title='Create Project'
+                                            className={styles.logout}
+                                        />
+                                    </div>
+                                </div> : null
+                            }
+                        </div>
+                        {
+                            showProjectForm && <Transparent hideForm={() => setShowProjectForm(false)}>
+                                <CreateProject hideForm={() => setShowProjectForm(false)} />
+                            </Transparent>
+                        }
+                    </div>}
+
+
+
                     {isViewVisibble && <div className={styles.flex}>
                         <div className={styles.margin}>
                             View:

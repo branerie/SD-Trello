@@ -48,10 +48,7 @@ export default function ProjectBoard(props) {
         projectContext.setLists(project.lists)
     }, [projectContext])
 
-
-    
-
-
+ 
     useEffect(() => {
         const id = params.projectid
 
@@ -80,6 +77,7 @@ export default function ProjectBoard(props) {
         } else {
             const data = await response.json()
             setProject(data)
+            projectContext.setProjectName(data.name)
             const memberArr = []
             data.membersRoles.map(element => {
                 return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
@@ -93,12 +91,12 @@ export default function ProjectBoard(props) {
     }, [params.projectid, history, projectContext])
 
     useEffect(() => {
-        getData()        
+        getData()
         const pid = params.projectid
         if (pid && pid !== projectContext.project) {
             projectContext.setProject(pid)
         }
-    }, [])
+    }, [params.projectid])
 
     if (!project) {
         return (
@@ -138,6 +136,7 @@ export default function ProjectBoard(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
+            socket.emit('team-update', params.teamid)
             history.push('/')
         }
     }

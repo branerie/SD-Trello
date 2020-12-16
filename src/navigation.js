@@ -26,10 +26,10 @@ const Navigation = () => {
     const loggedIn = context.user.loggedIn
 
     return (
-                    <BrowserRouter>
-        <SocketProvider user={context.user}>
-            <ProjectProvider>
-                <TeamProvider>
+        <BrowserRouter>
+            <SocketProvider user={context.user}>
+                <ProjectProvider>
+                    <TeamProvider>
                         <Switch>
                             <Route path="/confirmation/:token"><ConfirmationPage /></Route>
                             {loggedIn && !context.user.confirmed ? <Redirect to="/confirmation/not-confirmed" /> : null}
@@ -53,10 +53,10 @@ const Navigation = () => {
                             </Route>
                             <Route component={ErrorPage} />
                         </Switch>
-                </TeamProvider>
-            </ProjectProvider>
-        </SocketProvider>
-                    </BrowserRouter>
+                    </TeamProvider>
+                </ProjectProvider>
+            </SocketProvider>
+        </BrowserRouter>
     )
 }
 
