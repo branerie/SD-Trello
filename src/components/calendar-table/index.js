@@ -134,7 +134,7 @@ const TableDndApp = (props) => {
                             ),
                         progress:
                             (
-                                <TaskProgress value={card.progress + '/' + card._id + '/' + list._id} project={props.project} />
+                                <TaskProgress value={card.progress + '/' + card._id + '/' + list._id} project={props.project} card={card} />
                             ),
                         assigned:
                             (
@@ -150,7 +150,7 @@ const TableDndApp = (props) => {
                         dueDate: (
                             <div>
                                 <span>
-                                    <TaskDueDate value={(thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + ('0' + (cardDate.getMonth()+1)).slice(-2) + '-' + cardDate.getFullYear() : ''} cardDueDate={cardDate} cardId={card._id} listId={list._id} props={props} project={props.project} card={card} showEditCard={true} />
+                                    <TaskDueDate value={(thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + ('0' + (cardDate.getMonth()+1)).slice(-2) + '-' + cardDate.getFullYear() : ''} cardDueDate={cardDate} cardId={card._id} listId={list._id} props={props} project={props.project} card={card}/>
                                 </span>
                             </div>
                         )

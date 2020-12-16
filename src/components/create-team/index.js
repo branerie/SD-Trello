@@ -5,7 +5,7 @@ import Input from '../input'
 import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-import "react-datepicker/dist/react-datepicker.css"
+// import "../edit-team/node_modules/react-datepicker/dist/react-datepicker.css"
 import TeamContext from '../../contexts/TeamContext'
 import Avatar from 'react-avatar'
 import ButtonClean from '../button-clean'

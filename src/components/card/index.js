@@ -80,7 +80,7 @@ export default function Card(props) {
                             )
                         })}
                         <span className={styles.avatar}>                            
-                            <Avatar name={`+   ${card.members.length-3}`} size={30} round={true} maxInitials={2} className={styles.avatar}/>
+                            <Avatar color={'grey'} name={`+   ${card.members.length-3}`} size={30} round={true} maxInitials={2} className={styles.avatar}/>
                         </span>
                     </div>
                     :

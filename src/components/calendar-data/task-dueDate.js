@@ -19,7 +19,6 @@ export default function TaskDueDate(props) {
     const [cardDueDate, setCardDueDate] = useState(props.cardDueDate)
     const [isVisible, setIsVisible] = useState(false)
 
-    const showEditCard = props.showEditCard
     const history = useHistory()
     const socket = useSocket()
 
@@ -128,10 +127,7 @@ export default function TaskDueDate(props) {
                         </div>
                         :
                         <div className={styles.dueDateField}>
-                            <span onClick={() => setIsActive(!isActive)}>Due Date</span>
-                            {/* <button className={styles.clean} onClick={() => setIsActive(!isActive)} >
-                                <img src={pen} alt="..." width="11.5" height="11.5" />
-                            </button> */}
+                            <span onClick={() => setIsActive(!isActive)}>Due Date</span>                            
                         </div>
                 }
                

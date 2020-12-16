@@ -175,7 +175,7 @@ export default function CreateProject() {
                                             key={u._id}
                                             className={styles.user}
                                             onClick={() => addMember(u)}
-                                            title={<div>
+                                            title={<div className={styles.member}>
                                                 <div>{u.username}</div>
                                                 <div className={styles.email}>{u.email}</div>
                                             </div>}
