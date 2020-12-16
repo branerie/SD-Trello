@@ -62,15 +62,19 @@ export default function EditList(props) {
                     label="Name"
                     id="name"
                 />
-                <div>
-                    Change Color:
-                    <ButtonClean
-                        className={styles['color-button']}
-                        style={{ background: `${color}` }}
-                        onClick={() => setIsColorActive(!isColorActive)}
-                    />
+                <div className={styles.changeColor}>
+                    <span>
+                        Change Color:
+                    </span>
+                    <span className={styles.listColor}>
+                        <ButtonClean
+                            className={styles['color-button']}
+                            style={{ background: `${color}` }}
+                            onClick={() => setIsColorActive(!isColorActive)}
+                        />
+                    </span>
                 </div>
-                {isColorActive && <div ref={dropdownRef}>
+                {isColorActive && <div ref={dropdownRef} >
                     <SketchPicker className={styles['color-pick']} color={color} onChangeComplete={onColorChange} />
                 </div>}
                 <Button onClick={handleSubmit} title="Edit List" />

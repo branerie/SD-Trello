@@ -32,7 +32,8 @@ input{
     border: solid 1px #363338;
     border-radius: 10px;
     height: 1.8em;
-    width: 30%;
+    min-width: 30%;
+    width: auto;
     margin-left: 2%;
     text-align: center;
 }
