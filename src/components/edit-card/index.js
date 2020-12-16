@@ -17,7 +17,7 @@ import pic9 from '../../images/edit-card/pic9.svg'
 
 
 
-import TaskMembers from '../task-members'
+import TaskMembers from '../calendar-data/task-members'
 import TaskDueDate from "../calendar-data/task-dueDate"
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
@@ -255,9 +255,9 @@ export default function EditCard(props) {
 
                     <div className={styles.secondRow}>
                         <div >
-                            {/* <p className={styles.text}>Due Date</p> */}
+                            <p className={styles.text}>Due Date</p>
                             <div className={styles.dueDate} >
-                                <TaskDueDate cardDueDate={dueDate} cardId={cardId} listId={listId} project={props.project} showEditCard={false}/>
+                                <TaskDueDate cardDueDate={dueDate} cardId={cardId} listId={listId} project={props.project} />
                             </div>
 
                         </div>

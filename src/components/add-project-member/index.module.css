@@ -32,22 +32,12 @@
     margin: 2%;
 }
 
-.bigContainer{   
-    /* margin: 5%;  */
-    width: 100%;
-    height: auto; 
-    min-height: 90%;   
-    /* display: flex;  */
-    justify-content: space-between;
-    align-items: center; 
-}
-
 .membersContainer{   
     margin: 5%; 
-    width: 100%;
+    width: 80%;
     height: auto;    
-    display: flex;     
-    justify-content: space-between;
+    /* display: flex;  */
+    justify-self: start;
     align-items: center; 
 }
 
@@ -57,12 +47,11 @@
 
 .members{
     width: 90%;
-    height: 90%;
-    /* min-height: 45px; */
+    height: auto;
+    min-height: 45px;
 }
 
 .addButton{
-    cursor: pointer;
     margin:5%;
     width: 10%;
 }
@@ -71,13 +60,6 @@
 }
 
 .droppable {
-    min-height: 40px;
-    height: auto;
-    width: 100%;
-    flex-grow: 1;
-}
-
-.droppableMembers {
     min-height: 40px;
     height: auto;
     width: 100%;

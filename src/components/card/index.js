@@ -62,38 +62,15 @@ export default function Card(props) {
                 card.dueDate ? <div>{`${day}-${month}-${year}`}</div> : null
             } */}
             <div className={styles.flex}>
-                {(card.members.length > 3) ?
-                    <div className={styles.members}>
-                        {card.members.slice(0, 3).map(element => {
-                            return (
-                                <span className={styles.avatar}>
-                                    <Avatar key={element._id} 
-                                    name={element.username} 
-                                    size={30} 
-                                    round={true}
-                                    className={styles.avatar}
-                                    // maxInitials={2} 
-                                    // textSizeRatio={0.5}
-                                    // textMarginRatio={0.15}
-                                    />
-                                </span>
+                <div className={styles.members}>
+                    {card.members.map(element => {
+                        return (
+                            <span className={styles.avatar}>
+                            <Avatar key={element._id} name={element.username} size={30} round={true} maxInitials={2} />
+                            </span>
                             )
-                        })}
-                        <span className={styles.avatar}>                            
-                            <Avatar name={`+   ${card.members.length-3}`} size={30} round={true} maxInitials={2} className={styles.avatar}/>
-                        </span>
-                    </div>
-                    :
-                    <div className={styles.members}>
-                        {card.members.map(element => {
-                            return (
-                                <span className={styles.avatar}>
-                                    <Avatar key={element._id} name={element.username} size={30} round={true} maxInitials={2} />
-                                </span>
-                            )
-                        })}
-                    </div>
-                }
+                    })}
+                </div>
                 {/* {isVisible ?
                     < div >
                         <Transparent hideForm={() => setIsVisible(!isVisible)} >

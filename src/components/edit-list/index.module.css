@@ -1,34 +1,21 @@
 .container {
     text-align: center;
-    background-color:#DFE9EE;
+    background-color: rgb(43, 226, 89);
     height: 100%;
-    border: solid 2px #707070;
-    border-radius: 27px;
+
 }
 
 .form {
     position: fixed;
-    left: 30%;
-    top: 30%;
+    left: 25%;
+    top: 25%;
     z-index: 20;
-    width: 40%;
-    height: 30%;
-    
+    width: 50%;
+    height: 25%;
 }
-
-.changeColor{
-    margin: 2%;
-    margin-left: 31%;
-    width: 25%;
-    display: flex;
-    justify-content: space-between;
-}
-
-
 
 .color-pick {
     position: absolute;
-    left: 60%;
 }
 
 .color-button {

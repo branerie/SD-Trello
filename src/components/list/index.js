@@ -98,19 +98,17 @@ export default function List(props) {
                     ref={dropdownRef}
                     className={`${styles.menu} ${isActive ? styles.active : ''}`}
                 >
-                    <div onClick={() => setIsVisibleEdit(!isVisibleEdit)}>
-                        {/* <ButtonClean
+                    <div>
+                        <ButtonClean
                             onClick={() => setIsVisibleEdit(!isVisibleEdit)}
                             title='Edit'
-                        /> */}
-                        Edit
+                        />
                     </div>
-                    <div onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteList() }}>
-                        {/* <ButtonClean
+                    <div>
+                        <ButtonClean
                             onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteList() }}
                             title='Delete'
-                        /> */}
-                        Delete
+                        />
                     </div>
                 </div>
             </div>
@@ -155,7 +153,7 @@ export default function List(props) {
                 {
                     isVisible ?
                         <form ref={cardRef} className={styles.container} >
-                            <input className={styles.taskInput} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} />
+                            <input className={styles.input} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} />
                             <ButtonClean type='submit' className={styles.addlist} onClick={addCard} title='+ Add Task' project={props.project} />
                         </form> : <ButtonClean className={styles['add-task']} onClick={() => setIsVisible(!isVisible)} title='+ Add Task' />
 

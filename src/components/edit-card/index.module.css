@@ -4,8 +4,7 @@
     top: 15%;
     z-index: 20;
     width: 40%;
-    min-height: 80%;
-    height: auto;
+    height: 70%;
     background-color:#EDF5F9;
     border: solid 2px #707070;
     border-radius: 27px;
@@ -117,7 +116,7 @@
 }
 
 .bar {    
-    height: 5%;
+    height: 8px;
     width: 120px;
     border-radius: 4px;
     background-color: #E6E6E6;
@@ -133,14 +132,13 @@
 
 .progressInputContainer{
     margin-top: 3%;
-    width: 80%;
+    width: 20%;
     display: flex;
     align-items: center;     
     text-align: center; 
 }
 
 .progressDiv{
-    height: 30%;
     display: flex;
     align-items: center;
     margin-top: 5%;
@@ -150,21 +148,18 @@
 
 
 .membersDiv{
-    /* margin-left: 30%; */
+    margin-left: 30%;
     margin-right: 5%;
     margin-right: 10%;
     min-height: 10%;
     height: auto;
-    width: auto;
     text-align: center;        
     font-weight: normal;
 }
 
 .members{
     display: flex;
-    justify-content: flex-end;
-    flex-wrap: nowrap;
-    height: 40px;
+    flex-wrap: wrap;
     width: 100%;
     /* overflow-x: scroll; */
 }

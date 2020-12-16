@@ -12,9 +12,7 @@ import AddTask from "../calendar-data/add-task"
 import TaskMembers from "../calendar-data/task-members"
 import ProjectContext from "../../contexts/ProjectContext"
 import ListColor from "../list-color"
-import Transparent from "../transparent";
-import EditCard from '../edit-card'
-import pen from '../../images/pen.svg'
+
 
 
 
@@ -23,8 +21,6 @@ const TableDndApp = (props) => {
     const [startDay, setStartDay] = useState(getMonday)
     const [tableData, setTableData] = useState([])
     const [tableSize, setTableSize] = useState(10)
-    const [isVisible, setIsVisible] = useState(false)
-
 
     const projectContext = useContext(ProjectContext)
 
@@ -79,7 +75,7 @@ const TableDndApp = (props) => {
                             <span className={styles.listNameColor}>
                                 <ListColor color={list.color || '#A6A48E'} />
                             </span>
-                            <span className={styles.listNameText} >
+                            <span className={styles.listNameText}>
                                 {list.name}
                             </span>
                         </div>
@@ -95,11 +91,11 @@ const TableDndApp = (props) => {
                     sunday: '',
                     dueDate: (
                         <AddTask listId={list._id} project={props.project} />
-                    )
-                })
-
-
-
+                        )
+                    })
+                    
+                    
+                    
                 let listCards = list.cards
                 // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa FILTERRRRR
                 listCards.forEach(card => {
@@ -114,14 +110,12 @@ const TableDndApp = (props) => {
                     }
                     data.push({
 
-                        task:
-                            (
-                                <TaskName value={card.name + '/' + card._id + '/' + list._id} props={props} project={props.project} />
-                            ),
-                        progress:
-                            (
-                                <TaskProgress value={card.progress + '/' + card._id + '/' + list._id} props={props} project={props.project} />
-                            ),
+                        task: (
+                            <TaskName value={card.name + '/' + card._id + '/' + list._id} props={props} project={props.project} />
+                        ),
+                        progress: (
+                            <TaskProgress value={card.progress + '/' + card._id + '/' + list._id} props={props} project={props.project} />
+                        ),
                         assigned:
                             (
                                 <TaskMembers card={card} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
@@ -134,11 +128,7 @@ const TableDndApp = (props) => {
                         saturday: thisCardDate + "/" + card.progress,
                         sunday: thisCardDate + "/" + card.progress,
                         dueDate: (
-                            <div>
-                                <span>
-                                    <TaskDueDate cardDueDate={cardDate} cardId={card._id} listId={list._id} project={props.project} card={card} showEditCard={true} />
-                                </span>
-                            </div>
+                            <TaskDueDate cardDueDate={cardDate} cardId={card._id} listId={list._id} project={props.project} />
                         )
                     })
 
@@ -374,28 +364,7 @@ const TableDndApp = (props) => {
         await cardData()
         setStartDay(nextDay)
     }
-    
-    
-    const getLastWeek = async () => {
-        
-        var nextDay = startDay
-        nextDay.setDate(nextDay.getDate() - 7)
-        await cardData()
-        setStartDay(nextDay)
-        await cardData()
-        
-    }
-    
-    const getLastDay = async () => {
-        
-        var nextDay = startDay
-        nextDay.setDate(nextDay.getDate() - 1)
-        await cardData()
-        setStartDay(nextDay)
-        await cardData()
-        
-    }    
-    
+
     const getNextDay = async () => {
         var nextDay = startDay
         await nextDay.setDate(nextDay.getDate() + 1)
@@ -406,27 +375,49 @@ const TableDndApp = (props) => {
     }
 
 
+    const getLastWeek = async () => {
+
+        var nextDay = startDay
+        nextDay.setDate(nextDay.getDate() - 7)
+        await cardData()
+        setStartDay(nextDay)
+        await cardData()
+
+    }
+
+    const getLastDay = async () => {
+
+        var nextDay = startDay
+        nextDay.setDate(nextDay.getDate() - 1)
+        await cardData()
+        setStartDay(nextDay)
+        await cardData()
+
+    }
+
+
+
+
     return (
         <div className={styles.reactTable}>
             <div className={styles.buttoDiv}>
-                <span>
-                    <DatePicker
-                        selected={startDay}
-                        customInput={
-                            <div className={styles.navigateButtons}>
-                                Choose Week
+                <button className={styles.navigateButtons} onClick={getLastWeek} >Last week</button>
+                <button className={styles.navigateButtons} onClick={getLastDay} >Previous day</button>
+                <div>
+                    <span>
+                        <DatePicker
+                            selected={startDay}
+                            customInput={
+                                <div className={styles.navigateButtons}>
+                                    Choose Week
                                 </div>
-                        }
-                        showWeekNumbers
-                        onChange={date => setStartDay(date)} />
-                </span>
-
-                {/* <button className={styles.navigateButtons} onClick={getLastDay} >Previous day</button> */}
-                {/* <button className={styles.navigateButtons} onClick={getNextDay}>Next day</button> */}
-                <span>
-                    <button className={styles.navigateButtons} onClick={getLastWeek} >Previous week</button>
-                    <button className={styles.navigateButtons} onClick={getNextWeek}>Next week</button>
-                </span>
+                            }
+                            showWeekNumbers
+                            onChange={date => setStartDay(date)} />
+                    </span>
+                </div>
+                <button className={styles.navigateButtons} onClick={getNextDay}>Next day</button>
+                <button className={styles.navigateButtons} onClick={getNextWeek}>Next week</button>
             </div>
             <div>
                 {/* <DragDropContext onDragEnd={handleDragEnd} > */}
@@ -442,6 +433,7 @@ const TableDndApp = (props) => {
                             },
                             accessor: "task",
                             width: 250,
+
                         },
                         {
                             Header: ({ value }) => {
@@ -455,7 +447,7 @@ const TableDndApp = (props) => {
                                 return <div className={styles.header}>Teammates</div>
                             },
                             accessor: "assigned",
-                            width: 150
+                            width: 200
                         },
                         {
                             Header: getHeaderDate(0),
@@ -518,7 +510,7 @@ const TableDndApp = (props) => {
                                 return <div className={styles.header}>Due Date</div>
                             },
                             accessor: "dueDate",
-                            width: 'auto'
+                            width: 200
                         }
                     ]}
                     defaultPageSize={10}

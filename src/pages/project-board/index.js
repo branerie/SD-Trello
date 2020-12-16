@@ -15,7 +15,6 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Loader from 'react-loader-spinner'
 import ButtonClean from '../../components/button-clean'
 import EditCard from '../../components/edit-card'
-import UserContext from '../../contexts/UserContext'
 
 
 export default function ProjectBoard(props) {
@@ -32,8 +31,6 @@ export default function ProjectBoard(props) {
     const [isVisible, setIsVisible] = useState(false)
     const [currCard, setCurrCard] = useState('')
     const [currList, setCurrList] = useState('')
-    const [isAdmin, setIsAdmin] = useState(false)
-    const context = useContext(UserContext)
 
     const projectUpdate = useCallback((project) => {
 
@@ -49,16 +46,13 @@ export default function ProjectBoard(props) {
     }, [projectContext])
 
 
-    
-
-
     useEffect(() => {
         const id = params.projectid
 
         if (socket == null) return
-
+        
         socket.on('project-updated', projectUpdate)
-
+        
         socket.emit('project-join', id)
         return () => socket.off('project-updated')
     }, [socket, projectUpdate])
@@ -87,13 +81,12 @@ export default function ProjectBoard(props) {
             })
             setMembers(memberArr)
             projectContext.setLists(data.lists)
-            isUserAdmin(data)
         }
 
     }, [params.projectid, history, projectContext])
 
     useEffect(() => {
-        getData()        
+        getData()
         const pid = params.projectid
         if (pid && pid !== projectContext.project) {
             projectContext.setProject(pid)
@@ -113,18 +106,6 @@ export default function ProjectBoard(props) {
             </PageLayout>
         )
     }
-
-    async function isUserAdmin(project) {
-       
-        const admins = await project.membersRoles.filter(a => a.admin === true)
-        if (admins.some(item => item.memberId._id === context.user.id)) {
-            setIsAdmin(true)
-        } else {
-            setIsAdmin(false)
-        }
-    }
-
-    
 
     async function deleteProject() {
         const token = getCookie("x-auth-token")
@@ -296,22 +277,16 @@ export default function ProjectBoard(props) {
                                         )
                                     })
                             }
-                            {
-                                isAdmin ?
+                            <div className={styles.list} >
+                                {
+                                    isActive ?
+                                        <form ref={listRef} className={styles.container} >
+                                            <input className={styles.input} type={'text'} value={listName} onChange={e => setListName(e.target.value)} />
+                                            <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
+                                        </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
+                                }
 
-                                    <div className={styles.list} >
-                                        {
-                                            isActive ?
-                                                <form ref={listRef} className={styles.container} >
-                                                    <input className={styles.input} type={'text'} value={listName} onChange={e => setListName(e.target.value)} />
-                                                    <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
-                                                </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
-                                        }
-
-                                    </div>
-                                    :
-                                    null
-                            }
+                            </div>
                             {provided.placeholder}
                         </div>
                     )}
