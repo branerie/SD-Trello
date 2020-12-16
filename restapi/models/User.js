@@ -1,10 +1,9 @@
-const mongoose = require('mongoose')
-const bcrypt = require('bcrypt')
-const saltRounds = 10
-const Schema = mongoose.Schema
-const Model = mongoose.model
-const { String, ObjectId } = Schema.Types
-const jwt = require('jsonwebtoken')
+const mongoose = require('mongoose');
+const bcrypt = require('bcrypt');
+const saltRounds = 10;
+const Schema = mongoose.Schema;
+const Model = mongoose.model;
+const { String, ObjectId } = Schema.Types;
 
 const userSchema = new Schema({
 
@@ -32,24 +31,16 @@ const userSchema = new Schema({
 
     projects: [{ type: ObjectId, ref: "ProjectUserRole" }],
 
-    inbox: [String],
-
-    confirmed: { type: Boolean, default: true }, 
-
-    confirmationToken: { type: String, default: '' }
+    inbox: [String]
 
 });
 
-userSchema.methods.matchPassword = function (password) {
-    return bcrypt.compare(password, this.password)
-}
+userSchema.methods = {
 
-userSchema.methods.setConfirmationToken = function () {
-    this.confirmationToken = jwt.sign( { data: this._id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 })
-}
+    matchPassword: function (password) {
+        return bcrypt.compare(password, this.password)
+    }
 
-userSchema.methods.generateConfirmationUrl = function () {
-    return `${process.env.HOST}/confirmation/${this.confirmationToken}`
 }
 
 userSchema.pre('save', function (next) {

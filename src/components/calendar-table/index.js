@@ -15,6 +15,7 @@ import ListColor from "../list-color"
 import Transparent from "../transparent";
 import EditCard from '../edit-card'
 import pen from '../../images/pen.svg'
+import { useSocket } from "../../contexts/SocketProvider";
 
 
 
@@ -24,6 +25,7 @@ const TableDndApp = (props) => {
     const [tableData, setTableData] = useState([])
     const [tableSize, setTableSize] = useState(10)
     const [isVisible, setIsVisible] = useState(false)
+    const socket = useSocket()
 
 
     const projectContext = useContext(ProjectContext)
@@ -120,11 +122,11 @@ const TableDndApp = (props) => {
                             ),
                         progress:
                             (
-                                <TaskProgress value={card.progress + '/' + card._id + '/' + list._id} props={props} project={props.project} />
+                                <TaskProgress value={card.progress + '/' + card._id + '/' + list._id} project={props.project} />
                             ),
                         assigned:
                             (
-                                <TaskMembers card={card} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
+                                <TaskMembers value={card.members} card={card} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
                             ),
                         monday: thisCardDate + "/" + card.progress,
                         tuesday: thisCardDate + "/" + card.progress,
@@ -136,7 +138,7 @@ const TableDndApp = (props) => {
                         dueDate: (
                             <div>
                                 <span>
-                                    <TaskDueDate cardDueDate={cardDate} cardId={card._id} listId={list._id} project={props.project} card={card} showEditCard={true} />
+                                    <TaskDueDate value={(thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + ('0' + (cardDate.getMonth()+1)).slice(-2) + '-' + cardDate.getFullYear() : ''} cardDueDate={cardDate} cardId={card._id} listId={list._id} props={props} project={props.project} card={card} showEditCard={true} />
                                 </span>
                             </div>
                         )
@@ -172,6 +174,10 @@ const TableDndApp = (props) => {
 
 
     }, [projectContext, props])
+
+    const updateProjectSocket = useCallback(() => {
+        socket.emit('project-update', props.project)
+    }, [socket, props.project])
 
 
     useEffect(() => {
