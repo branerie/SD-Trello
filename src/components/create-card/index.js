@@ -18,7 +18,7 @@ import pic9 from '../../images/edit-card/pic9.svg'
 
 
 import TaskMembers from '../task-members'
-import TaskDueDate from "../calendar-data/task-dueDate"
+import TaskDueDate from "../task-dueDate"
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 
