@@ -31,12 +31,11 @@
 input{
     border: solid 1px #363338;
     border-radius: 10px;
-    padding: 0.5%;
     height: 1.8em;
-    min-width: 30%;
-    width: auto;
+    width: 30%;
     margin-left: 2%;
     text-align: center;
+    background-color: #EDF5F9;
 }
 
 .inputContainerDescr{    
@@ -44,17 +43,16 @@ input{
     margin-left: 25%;
     margin-bottom: 2%;
     display: flex;
-    
 }
 
 .textarea{
     border: solid 1px #363338;
-    border-radius: 15px;
-    padding: 0.5%;
+    border-radius: 10px;
+    padding: 1%;
     height: 5em;
     width: 30%;
-    margin-left: 2%;
-    background-color: #EDF5F9;    
+    margin-left: 2%;  
+    background-color: #EDF5F9;  
 }
 
 
@@ -69,7 +67,8 @@ input{
     background-color: #363338;
     border-radius: 15px;
     width: 6em;
-    height: 1.2em;
+    min-height: 1.2em;
+    height: auto;
     border: none; 
     margin: 0.5em;
     z-index: 1;
@@ -81,6 +80,7 @@ input{
   .membersAvatars{
       margin-left: 30%;
       margin-right: 30%;
+      margin: 5%;
   }
 
 /* .form {
@@ -101,7 +101,7 @@ input{
     max-height: 150px;
     padding: 10px;
     overflow-y: auto;
-    margin-left: 43%;
+    margin-left: 46%;
     background-color: #EDF5F9;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none; 
@@ -117,6 +117,6 @@ input{
     border-radius: 27px;
 }
 
-/* .email {
+.email {
     font-size: 13px;
-} */
+}

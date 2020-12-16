@@ -24,7 +24,7 @@ export default function TaskMembers(props) {
                             })
                         }
                         <span >
-                            <Avatar name={`+   ${value.length - 3}`} size={props.size} round={true} maxInitials={3} />
+                            <Avatar color={'grey'} name={`+   ${value.length - 3}`} size={props.size} round={true} maxInitials={3} />
                         </span>
                     </span>
                 </div >

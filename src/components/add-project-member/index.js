@@ -22,7 +22,7 @@ export default function AddMember(props) {
     const socket = useSocket()
     const members = props.members
     const [users, setUsers] = useState([])
-    const [selectedUser, setSelectedUser] = useState({})
+    const [selectedUser, setSelectedUser] = useState('')
     const context = useContext(UserContext)
     const [admin, setAdmin] = useState(false)
     const teamContext = useContext(TeamContext)
@@ -87,9 +87,7 @@ export default function AddMember(props) {
 
     }
 
-    async function handleOnDragEnd(result) {
-
-        console.log(result);
+    async function handleOnDragEnd(result) {      
 
         if (!result.destination) {
             console.log('no destination');
@@ -188,6 +186,13 @@ export default function AddMember(props) {
     const handleAdd = useCallback(async (event) => {
         event.preventDefault()
 
+
+        if (!selectedUser) {
+            setIsActive(!isActive)
+
+            return
+        }
+
         const token = getCookie("x-auth-token")
 
         const member = selectedUser
@@ -208,6 +213,7 @@ export default function AddMember(props) {
         } else {
             updateProjectSocket()
             setIsActive(!isActive)
+            setSelectedUser('')
         }
 
     }, [history, props, selectedUser, admin, updateProjectSocket])
@@ -219,24 +225,25 @@ export default function AddMember(props) {
             <div className={styles.bigContainer} ref={dropdownRef}>
                 {isAdmin ?
                     <span>
-                        {isActive ?
-                            <div className={styles.members}>
-                                <div>
-                                    Add Member to Project
+                        {isActive ?                            
+                                <div className={styles.members}>
+                                    <div>
+                                        Add Member to Project
                                 </div>
-                                <span>
-                                    <select
-                                        onChange={(e) => { handleSelect(e.target.value) }}>
-                                        <option >Select user</option>
-                                        {
-                                            users.map((element) => (
-                                                <option key={element._id} value={element._id}>{element.username}</option>
-                                            ))
-                                        }
-                                    </select>
-                                </span>
-                                <span className={styles.addButton} onClick={handleAdd} >Add</span>
-                            </div>
+                                    <span>
+                                        <select
+                                            onChange={(e) => { handleSelect(e.target.value) }}>
+                                            <option >Select user</option>
+                                            {
+                                                users.map((element) => (
+                                                    <option key={element._id} value={element._id}>{element.username}</option>
+                                                ))
+                                            }
+                                        </select>
+                                    </span>
+                                    <span className={styles.addButton} onClick={handleAdd} >Add</span>
+                                </div>
+                            
                             :
                             <DragDropContext onDragEnd={handleOnDragEnd}>
 

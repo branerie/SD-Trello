@@ -8,9 +8,21 @@ import pen from '../../images/pen.svg'
 
 
 export default function TaskProgress(props) {
+
+
+
+    const value = props.value
+    let taskprogress =''
+    let token = value.split('/')
+    if (token.length > 1) {
+
+         taskprogress = token[0]
+    }
+
+
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
-    const [cardProgress, setCardProgress] = useState('')
+    const [cardProgress, setCardProgress] = useState(taskprogress)
     const [color, setColor] = useState('')
 
     const history = useHistory()
@@ -58,7 +70,7 @@ export default function TaskProgress(props) {
             history.push("/error")
             return
         } else {
-            setCardProgress('')
+            // setCardProgress('')
             setIsActive(!isActive)
             updateProjectSocket()
         }
@@ -69,7 +81,7 @@ export default function TaskProgress(props) {
 
     function showTaskProgress(value) {
         if (value !== "null") {
-           
+
 
             return (
                 <div style={{
@@ -107,7 +119,7 @@ export default function TaskProgress(props) {
     }
 
 
-    let value = props.value
+    // let value = props.value
 
     if (value) {
         let token = value.split('/')
@@ -128,17 +140,22 @@ export default function TaskProgress(props) {
             <span>
 
                 {
-                    isActive ?                        
+                    isActive ?
                         <div ref={dropdownRef} className={styles.taskProgress} onBlur={editCardProgress}>
                             <input
                                 className={styles.progressInput}
                                 style={{
-                                    backgroundColor: [getBackGroundColor(taskprogress)], padding: '5px', fontSize: "14px", border: 'solid black 1px',
+                                    backgroundColor: [getBackGroundColor(taskprogress)],
+                                    padding: '5px', fontSize: "14px", border: 'solid black 1px',
                                     borderRadius: '5px', width: '100%',
                                     textAlign: 'center',
-                                    color:'white'
+                                    // color:'white'
                                 }}
-                                type={'number'} placeholder={taskprogress} onChange={e => setCardProgress(e.target.value)} />
+                                type={'number'}
+                                value={cardProgress}
+                                placeholder={'%'}
+                                onChange={e => setCardProgress(e.target.value)}
+                                min="0" max="100" />
                         </div >
                         :
                         <div className={styles.taskProgress} >

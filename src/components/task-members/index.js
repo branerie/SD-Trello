@@ -17,7 +17,7 @@ export default function TaskMembers(props) {
     const dropdownRef = useRef(null);
     const [cardMembers, setCardMembers] = useState(props.card.members)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
-    const [selectedUser, setSelectedUser] = useState({})
+    const [selectedUser, setSelectedUser] = useState('')
     const [users, setUsers] = useState([])
     const history = useHistory()
     const socket = useSocket()
@@ -119,6 +119,10 @@ export default function TaskMembers(props) {
 
     const handleAdd = useCallback(async (event) => {
         event.preventDefault()
+        if(!selectedUser){
+            setIsActive(!isActive)
+            return
+        }
 
         const token = getCookie("x-auth-token")
 
@@ -171,6 +175,7 @@ export default function TaskMembers(props) {
             setIsActive(!isActive)
             setCardMembers(arr)
             updateProjectSocket()
+            setSelectedUser('')
         }
 
     }, [history, props, cardId, listId, isActive, setIsActive, selectedUser, updateProjectSocket])
@@ -183,7 +188,7 @@ export default function TaskMembers(props) {
                 isActive ?
                     <span>
                         < form ref={dropdownRef} className={styles.container}  >
-                            <select className={styles.select} onChange={(e) => { handleSelect(e.target.value) }}>
+                            <select className={styles.select} onChange={(e) => {handleSelect(e.target.value)}}>
                                 <option>Select</option>
                                 {
                                     users.map((m, index) => (

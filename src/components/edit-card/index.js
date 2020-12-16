@@ -4,6 +4,7 @@ import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import "react-datepicker/dist/react-datepicker.css"
 import { useSocket } from '../../contexts/SocketProvider'
+import pen from '../../images/pen.svg'
 import pic1 from '../../images/edit-card/pic1.svg'
 import pic2 from '../../images/edit-card/pic2.svg'
 import pic3 from '../../images/edit-card/pic3.svg'
@@ -168,7 +169,7 @@ export default function EditCard(props) {
                                 <img src={pic2} alt="pic2" />
                             </span>
                             <span className={styles.nameContainer}>
-                                <p  >Progress</p>
+                                <p  >Progress</p>                               
                             </span>
                         </div>
                         <div>
@@ -176,13 +177,14 @@ export default function EditCard(props) {
                                 isProgressActive ?
                                     <div ref={dropdownRef}>
                                         <span className={styles.progressInputContainer}>
-                                            <input type='number' className={styles.nameInput} value={progress} onChange={e => setProgress(e.target.value)} />
+                                            <input type='number' className={styles.nameInput} value={progress} onChange={e => setProgress(e.target.value)} min="0" max="100" />%
                                             <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
                                         </span></div>
                                     :
                                     <div className={styles.progressDiv} onClick={() => setIsProgressActive(true)}>
                                         {
                                             card.progress ?
+
                                                 <div className={styles.bar} >
                                                     <div
                                                         style={{
@@ -191,9 +193,23 @@ export default function EditCard(props) {
                                                         }}
                                                         className={styles.progress}
                                                     />
-                                                </div> : null
+
+                                                </div>
+                                                :
+                                                <div>
+                                                    Enter Task Progress
+                                                    {/* <img className={styles.pen} src={pen} alt="..." width="13" height="13" /> */}
+                                                </div>
                                         }
-                                        <span className={styles.textName} >{card.progress} %</span>
+                                        <span className={styles.textName} >{card.progress}
+                                            {
+                                                card.progress ?
+                                                    <span>%</span>
+                                                    : null
+                                            }
+                                        </span>
+
+
                                     </div>
 
                             }
@@ -247,9 +263,9 @@ export default function EditCard(props) {
                         <div >
                             <p className={styles.text}>Members</p>
                         </div>
-                       <div className={styles.members}>
-                        <TaskMembers card={card} size={30} listId={listId} project={props.project} title={'Add'} />
-                       </div>
+                        <div className={styles.members}>
+                            <TaskMembers card={card} size={30} listId={listId} project={props.project} title={'Add'} />
+                        </div>
                     </div>
 
 
@@ -257,7 +273,7 @@ export default function EditCard(props) {
                         <div >
                             {/* <p className={styles.text}>Due Date</p> */}
                             <div className={styles.dueDate} >
-                                <TaskDueDate cardDueDate={dueDate} cardId={cardId} listId={listId} project={props.project} showEditCard={false}/>
+                                <TaskDueDate cardDueDate={dueDate} cardId={cardId} listId={listId} project={props.project} showEditCard={false} />
                             </div>
 
                         </div>
