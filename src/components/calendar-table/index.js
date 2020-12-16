@@ -102,10 +102,22 @@ const TableDndApp = (props) => {
 
 
 
-                let listCards = list.cards
-                // aaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaaa FILTERRRRR
+                let listCards = list.cards.filter( card => {
+                    if (!props.filter['Not Started'] && (card.progress === 0 || card.progress === null)) {
+                        return false
+                    }
+                    if (!props.filter['In Progress'] && card.progress > 0 && card.progress < 100) {
+                        return false
+                    }
+                    if (!props.filter['Done'] && card.progress === 100) {
+                        return false
+                    }
+                    return true
+                })
+
                 listCards.forEach(card => {
 
+                    console.log(card);
                     numberOfRows++
 
                     let cardDate = ''

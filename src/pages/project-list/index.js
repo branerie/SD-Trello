@@ -7,14 +7,12 @@ import styles from './index.module.css'
 import TableDndApp from '../../components/calendar-table'
 import Loader from 'react-loader-spinner'
 import ProjectContext from '../../contexts/ProjectContext'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import ButtonClean from '../../components/button-clean'
 
 export default function ProjectList() {
     const params = useParams()
     const history = useHistory()
-    const dropdownRefFilter = useRef(null)
-    const [isFilterActive, setIsFilterActive] = useDetectOutsideClick(dropdownRefFilter)
+    const [isFilterActive, setIsFilterActive] = useState(false)
     const [filter, setFilter] = useState({'Not Started': true, 'In Progress': true, 'Done': true})
     const [project, setProject] = useState(null)
 
@@ -67,7 +65,7 @@ export default function ProjectList() {
 
     const progressFilter = (filtered) => {
         const obj = {...filter}
-        obj[filtered] = false
+        obj[filtered] = !obj[filtered]
         setFilter(obj)
     }
 
@@ -94,22 +92,20 @@ export default function ProjectList() {
             />
             {
                 isFilterActive ? <div
-                    ref={dropdownRefFilter}
-                    // className={styles['filter-dropdown']}
                 >
                     <ButtonClean
                         title={'Not Started'}
                         onClick={() => progressFilter('Not Started')}
-                        className={styles.filter}
+                        className={`${styles.filter} ${!filter['Not Started'] ? styles['filter-off'] : ''}`}
                     />
                     <ButtonClean
                         title={'In Progress'}
-                        className={styles.filter}
+                        className={`${styles.filter} ${!filter['In Progress'] ? styles['filter-off'] : ''}`}
                         onClick={() => progressFilter('In Progress')}
                     />
                     <ButtonClean
                         title={'Done'}
-                        className={styles.filter}
+                        className={`${styles.filter} ${!filter['Done'] ? styles['filter-off'] : ''}`}
                         onClick={() => progressFilter('Done')}
                     />
                 </div> : null
@@ -117,7 +113,7 @@ export default function ProjectList() {
             <div className={styles.calendarPageContainer}>
                 <div>
                     <div className={styles.calendarContainer}>
-                        <TableDndApp project={project} />
+                        <TableDndApp project={project} filter={filter} />
                     </div>
                 </div>
             </div>

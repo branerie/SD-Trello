@@ -48,3 +48,7 @@
     color:black;
     font-style: italic;
   }
+
+  .filter-off {
+    background: #b42f2f;
+  }
