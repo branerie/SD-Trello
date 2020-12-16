@@ -11,6 +11,8 @@ router.get('/info/:id', auth, getProjectInfo)
 
 router.post('/', auth, createProject)
 
+router.put('/:id/user-roles', auth, isAdmin, updateUserRoles)
+
 router.put('/:id', auth, isAdmin, updateProject)
 
 router.delete('/:id', auth, isAdmin, deleteProject)
@@ -109,6 +111,20 @@ async function updateProject(req, res, next) {
         const updatedProject = await models.Project.updateOne({ _id: projectId }, { ...obj })
 
         res.send(updatedProject)
+    } catch (error) {
+        res.send(error)
+    }
+
+}
+
+async function updateUserRoles(req, res, next) {
+
+    const { userRole, isAdmin } = req.body;
+
+    try {
+        const updatedUserRole = await models.ProjectUserRole.updateOne({ _id: userRole }, { admin: isAdmin })
+
+        res.send(updatedUserRole)
     } catch (error) {
         res.send(error)
     }
