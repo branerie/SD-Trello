@@ -13,7 +13,7 @@ import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
 import TeamContext from '../../contexts/TeamContext'
 
-export default function CreateProject() {
+export default function CreateProject({ hideForm }) {
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [member, setMember] = useState('')
@@ -51,6 +51,7 @@ export default function CreateProject() {
             projectContext.setProject(project._id)
             socket.emit('team-update', teamContext.currentTeam)
             history.push(`/project-board/${teamId}/${project._id}`)
+            hideForm && hideForm()
         }
     }, [history, name, description])
 

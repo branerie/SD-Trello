@@ -58,7 +58,6 @@ function TeamProvider({ children }) {
 
   useEffect(() => {
     if (socket == null) return
-    console.log('socket-effect');
     socket.on('team-updated', teamUpdate)
 
     return () => socket.off('team-updated')

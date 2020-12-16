@@ -117,7 +117,6 @@ const TableDndApp = (props) => {
 
                 listCards.forEach(card => {
 
-                    console.log(card);
                     numberOfRows++
 
                     let cardDate = ''

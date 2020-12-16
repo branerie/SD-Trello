@@ -50,6 +50,7 @@ export default function ProjectList() {
         } else {
             const data = await response.json()
             setProject(data)
+            projectContext.setProjectName(data.name)
         }
 
 
