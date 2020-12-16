@@ -19,7 +19,8 @@ const responseGoogle = async (googleResponse, onSuccess, onFailure) => {
                 username: response.user.username,
                 id: response.user._id,
                 teams: response.teams,
-                inbox: response.user.inbox
+                inbox: response.user.inbox,
+                confirmed: response.user.confirmed
             });
         } else {
             onFailure(response)
