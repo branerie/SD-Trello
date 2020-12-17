@@ -71,7 +71,7 @@ export default function TaskDueDate(props) {
     }
 
 
-    // let value = (thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''
+    // let value2 = (today !== '' && today !== 0) ? ('0' + today.getDate()).slice(-2) + '-' + (today.toLocaleString('default', { month: 'short' })) + '-' + today.getFullYear() : ''
 
     let value = (thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + ('0' + (cardDate.getMonth()+1)).slice(-2) + '-' + cardDate.getFullYear() : ''
 
@@ -99,7 +99,11 @@ export default function TaskDueDate(props) {
                 {
                     isActive ?
                         <div className={styles.dueDateField}>
-                            <DatePicker selected={today} onChange={(date) => { setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
+                            <DatePicker
+                            customInput={<div>
+                           <span>Select date</span>
+                        </div>}
+                             selected={today} onChange={(date) => { setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
                         </div>
                         :
                         <div className={styles.dueDateField}>

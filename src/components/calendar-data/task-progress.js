@@ -93,7 +93,7 @@ export default function TaskProgress(props) {
         }
         return (
             <div>
-                Progress
+               Add Progress
                 {/* <img src={pen} alt="..." width="11.5" height="11.5" /> */}
             </div>
         )

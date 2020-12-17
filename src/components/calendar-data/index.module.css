@@ -75,6 +75,13 @@
  cursor: pointer;
 }
 
+.dueDateFieldInput{ 
+  min-width: 100px;
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+ }
+
 .inputTaskName {
   border: 1px solid #000000; 
   background-color: #EDF5F9;
@@ -145,4 +152,14 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
+}
+
+.daylyProgress{
+  width: 100%;    
+  display: flex;
+  justify-content: center;
+}
+
+.header{
+  font-weight: bold;
 }

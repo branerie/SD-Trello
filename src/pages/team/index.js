@@ -45,7 +45,7 @@ const TeamPage = () => {
                         </Transparent>
                     </div> : null
             }
-            <button className={styles.newProjectButton} onClick={() => setShowForm(true)} >Edit Team</button>
+            <button className={styles.newProjectButton} onClick={() => setShowForm(true)} >View Team</button>
             {
                 showForm ? 
                 (<Transparent hideForm={() => setShowForm(false)}>
