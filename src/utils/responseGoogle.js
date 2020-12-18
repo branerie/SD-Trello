@@ -14,6 +14,8 @@ const responseGoogle = async (googleResponse, onSuccess, onFailure) => {
 
         const response = await promise.json()
 
+        console.log(response);
+
         if (response.user.username && authToken) {
             onSuccess({
                 username: response.user.username,

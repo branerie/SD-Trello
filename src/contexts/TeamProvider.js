@@ -25,14 +25,8 @@ function TeamProvider({ children }) {
     }
   }
 
-  async function getTeams() {
-    if (userContext.user.teams) {
-      setTeams(userContext.user.teams)
-    }
-  }
-
   useEffect(() => {
-    getTeams()
+    setTeams(userContext.user.teams)
   })
 
   const teamUpdate = useCallback((team) => {
@@ -64,7 +58,7 @@ function TeamProvider({ children }) {
   }, [socket, teamUpdate])
 
   return (
-    <TeamContext.Provider value={{ teams, setTeams, selectedTeam, setSelectedTeam, currentProjects, setCurrentProjects, getCurrentProjects, getTeams, updateSelectedTeam }}>
+    <TeamContext.Provider value={{ teams, setTeams, selectedTeam, setSelectedTeam, currentProjects, setCurrentProjects, getCurrentProjects, updateSelectedTeam }}>
       {children}
     </TeamContext.Provider>
   )

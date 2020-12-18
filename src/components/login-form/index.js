@@ -1,8 +1,6 @@
 import React, { useState, useContext } from "react"
 import GoogleLogin from 'react-google-login'
 import { useHistory } from "react-router-dom"
-import Button from "../button"
-import Input from "../input"
 import styles from "./index.module.css"
 import authenticate from "../../utils/authenticate"
 import UserContext from "../../contexts/UserContext"

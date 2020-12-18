@@ -65,7 +65,7 @@ const Header = ({ asideOn }) => {
                 <div className={styles.links}>
 
                     <div className={styles.margin}>
-                        Teams:
+                        Team:
                     </div>
                     <div>
                         <ButtonClean
@@ -128,7 +128,7 @@ const Header = ({ asideOn }) => {
                                                 <LinkComponent
                                                     href={`/project-board/${params.teamid}/${p._id}`}
                                                     title={p.name}
-                                                    // onClick={() => { selectTeam(p._id, p.name) }}
+                                                    onClick={() => { setIsProjectActive(false) }}
                                                     className={`${styles.overflow} ${styles.hover}`}
                                                 />
                                             </div>
@@ -173,6 +173,7 @@ const Header = ({ asideOn }) => {
                                             href={`/project-board/${params.teamid}/${projectContext.project}`}
                                             title='Board'
                                             className={styles.hover}
+                                            onClick={() => { setIsViewActive(false) }}
                                         />
                                     </div>
                                     <div className={styles['last-option']}>
@@ -180,6 +181,7 @@ const Header = ({ asideOn }) => {
                                             href={`/project-list/${params.teamid}/${projectContext.project}`}
                                             title='List'
                                             className={styles.hover}
+                                            onClick={() => { setIsViewActive(false) }}
                                         />
                                     </div>
                                 </div> : null

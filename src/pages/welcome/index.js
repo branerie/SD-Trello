@@ -10,24 +10,15 @@ import pic6 from '../../images/welcome-page/welcome-page-6.svg'
 import instagram from '../../images/welcome-page/instagram-icon.svg'
 import twitter from '../../images/welcome-page/twitter-icon.svg'
 import facebook from '../../images/welcome-page/facebook-icon.svg'
-
-
-import { useHistory } from "react-router-dom"
 import LoginForm from "../../components/login-form"
 import Transparent from "../../components/transparent"
 import SignupForm from "../../components/signup-form"
-
 
 
 const WelcomePage = () => {
 
   const [isVisible, setIsVisible] = useState(false)
   const [isVisibleSignUp, setIsVisibleSignUp] = useState(false)
-
-
-  const history = useHistory()
-
-  
 
   return (
 
@@ -76,7 +67,6 @@ const WelcomePage = () => {
               </div>
             </div>
           </div>
-
 
           <div className={styles.lowerDivtopContainer}>
             <div className={styles.firstText}>
@@ -137,9 +127,6 @@ const WelcomePage = () => {
               <img className={styles.pic6} src={pic6} alt="" />
             </div>
           </div>
-
-
-
         </div>
 
       </div>
@@ -175,7 +162,6 @@ const WelcomePage = () => {
             <p>Work With US</p>
             <p>Privacy Policy</p>
             <p>Terms &amp Conditions</p>
-
           </div>
         </div>
 
