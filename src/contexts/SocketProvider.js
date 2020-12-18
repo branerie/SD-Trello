@@ -9,7 +9,7 @@ export function useSocket() {
 
 export function SocketProvider({ user, children }) {
   const [socket, setSocket] = useState()
-  const url = process.env.PROD ? '/' : 'http://localhost:4000'
+  const url = window.location.href.includes('heroku') ? '/' : 'http://localhost:4000'
     
   useEffect(() => {
     if (!user) {
