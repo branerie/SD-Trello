@@ -60,7 +60,7 @@ export default function AddPassword(props) {
                     <div> Password:</div>
                     <input
                     placeholder='********'
-                        className={styles.input}
+                        className={styles.passInput}
                         type="password"
                         value={password}
                         onChange={e => setPassword(e.target.value)}
@@ -77,7 +77,7 @@ export default function AddPassword(props) {
                     <div> Confirm Password:</div>
                     <input
                     placeholder='********'
-                        className={styles.input}
+                        className={styles.passInput}
                         type="password"
                         value={rePassword}
                         onChange={e => setRePassword(e.target.value)}
@@ -86,8 +86,12 @@ export default function AddPassword(props) {
                     />
                 </div>
 
+                <div className={styles.buttonDivLogin}>
+                            <button type='submit' className={styles.loginButton}>Submit</button>
+                        </div>
 
-                <GoogleLogin
+
+                {/* <GoogleLogin
                     render={renderProps => (
                         <button onClick={renderProps.onClick}
                             className={styles.googleLoginBtn}
@@ -101,7 +105,7 @@ export default function AddPassword(props) {
                     onSuccess={handleGoogle}
                     // onFailure={errorGoogle}
                     cookiePolicy={'single_host_origin'}
-                />
+                /> */}
                 <div>User was registered with Google. Please add password for this Website</div>
             </div>
         </form>

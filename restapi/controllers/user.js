@@ -115,6 +115,14 @@ async function loginUser(req, res, next) {
 
     try {
         const user = await models.User.findOne({ email })
+     
+
+        if (!user) {
+            let response = {}
+            response.wrongUser = true
+            res.send(response)            
+            return;
+        }
 
         if (!user.password) {
             let response = {}
@@ -124,7 +132,9 @@ async function loginUser(req, res, next) {
         const match = await user.matchPassword(password)
 
         if (!match) {
-            res.status(401).send('Invalid password')
+            let response = {}
+            response.wrongPassword = true
+            res.send(response)            
             return;
         }
 

@@ -23,8 +23,13 @@ const TableDndApp = (props) => {
     const projectContext = useContext(ProjectContext)
 
 
-    function getMonday() {
-        let d = new Date()
+    function getMonday(date) {
+        let d
+        if (date) {
+            d = new Date(date)
+        } else {
+            d = new Date()
+        }
         var day = d.getDay(),
             diff = d.getDate() - day + (day == 0 ? -6 : 1)
         let thisMonday = new Date(d.setDate(diff))
@@ -274,7 +279,7 @@ const TableDndApp = (props) => {
                                 </div>
                         }
                         showWeekNumbers
-                        onChange={date => setStartDay(date)} />
+                        onChange={date => setStartDay(getMonday(date))} />
                 </span>
                 <span>
                     <button className={styles.navigateButtons} onClick={getLastWeek} >Previous week</button>
@@ -300,7 +305,8 @@ const TableDndApp = (props) => {
                     style={{
                         'borderRadius': '10px',
                         'border': '1px solid #707070',
-                        'width':'auto'
+                        'width': 'auto',
+                        'display':'flex'
                     }}
                 />
 

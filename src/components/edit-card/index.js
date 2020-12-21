@@ -163,7 +163,7 @@ export default function EditCard(props) {
                         </div >
                     </div>
 
-                    <div className={styles.secondRow}>
+                    <div className={styles.secondRowProgress} onClick={() => setIsProgressActive(true)}>
                         <div className={styles.inputTitles}>
                             <span className={styles.pic2}>
                                 <img src={pic2} alt="pic2" />
@@ -181,9 +181,9 @@ export default function EditCard(props) {
                                             <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
                                         </span></div>
                                     :
-                                    <div className={styles.progressDiv} onClick={() => setIsProgressActive(true)}>
+                                    <div className={styles.progressDiv} >
                                         {
-                                            card.progress ?
+                                            (card.progress>=0) ?
 
                                                 <div className={styles.bar} >
                                                     <div
@@ -197,16 +197,15 @@ export default function EditCard(props) {
                                                 </div>
                                                 :
                                                 <div>
-                                                    Enter Task Progress
-                                                    {/* <img className={styles.pen} src={pen} alt="..." width="13" height="13" /> */}
+                                                    Enter Task Progress                                                   
                                                 </div>
                                         }
                                         <span className={styles.textName} >{card.progress}
-                                            {
-                                                card.progress ?
+                                            {/* {
+                                                (card.progress>=0) ? */}
                                                     <span>%</span>
-                                                    : null
-                                            }
+                                                    {/* : null
+                                            } */}
                                         </span>
 
 

@@ -13,7 +13,7 @@ import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
 import TeamMembers from '../team-members'
 
-export default function EditTeam(props) {
+export default function EditTeam() {
 
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
@@ -45,7 +45,7 @@ export default function EditTeam(props) {
             }
         })
         let teamAthor = currTeam.author
-
+        console.log(currTeam);
         setMembers(currTeam.members)
 
         setInvited(currTeam.requests)

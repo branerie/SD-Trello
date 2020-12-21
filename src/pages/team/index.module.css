@@ -1,4 +1,4 @@
-.container{
+.teamContainer{
   display: flex;
 }
 
@@ -33,8 +33,9 @@
     font-style: italic;
   }
 
-  .rightSide{
+  .rightSideTeam{
     width: 35%;
+    height: 50%;    
     background-color: #DFE9EE;
     margin: 20px;
     border-radius: 19px;
