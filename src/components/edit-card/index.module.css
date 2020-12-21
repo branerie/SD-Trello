@@ -111,6 +111,12 @@
     height: 10%;
 }
 
+.secondRowProgress{
+    margin-top: 15%;
+    height: 10%;
+    cursor: pointer;
+}
+
 .pic2{    
     margin-top: 3%;
     margin-right: 5%; 

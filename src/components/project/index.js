@@ -1,4 +1,4 @@
-import React, {  useContext, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
 import ProjectContext from '../../contexts/ProjectContext'
 import EditProject from '../edit-project'
@@ -13,28 +13,28 @@ export default function Project(props) {
     const onClick = () => {
         projectContext.setProject(props.project._id)
     }
-    
-    
+
+
 
     return (
         <div className={styles.container}>
-            <div className={styles.top}>
-                <Link to={`/project-board/${params.teamid}/${props.project._id}`} onClick={onClick} className={styles.projectname}>Name: {props.project.name}</Link>
-                <div>
+            <Link to={`/project-board/${params.teamid}/${props.project._id}`} onClick={onClick} className={styles.projectname}>Name: {props.project.name}</Link>
 
-                    <div className={styles.username}>Creator: {props.project.author.username}</div>
 
-                    {isVisible ?
-                        < div >
-                            <Transparent hideForm={() => setIsVisible(!isVisible)} >
-                                <EditProject hideForm={() => setIsVisible(!isVisible)} project={props.project} />
-                            </Transparent >
-                        </div > : null
-                    }
-                    <div className={styles.info} onClick={() => setIsVisible(!isVisible)}>
-                        Info
-                    </div>
+            <div className={styles.username}>
+                <div className={styles.creator}>
+                Creator: {props.project.author.username}
                 </div>
+                {isVisible ?
+                    < div >
+                        <Transparent hideForm={() => setIsVisible(!isVisible)} >
+                            <EditProject hideForm={() => setIsVisible(!isVisible)} project={props.project} />
+                        </Transparent >
+                    </div > : null
+                }
+                <div className={styles.info} onClick={() => setIsVisible(!isVisible)}>
+                    Info
+                    </div>
             </div>
         </div>
     )

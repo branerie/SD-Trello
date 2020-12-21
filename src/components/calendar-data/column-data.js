@@ -144,7 +144,7 @@ const ColumnData = (startDay) => {
                     return <div className={styles.header}>Task</div>
                 },
                 accessor: "task",
-                minWidth: 200
+                minWidth: 150
             },
             {
                 Header: () => {
@@ -163,7 +163,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(0),
                 accessor: "monday",
-                minWidth: 90,                
+                minWidth: 80,                
                 Cell: ({ value }) => {
                     return cellData(value, 0)
                 }
@@ -171,7 +171,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(1),
                 accessor: "tuesday",
-                minWidth: 90,               
+                minWidth: 80,               
                 Cell: ({ value }) => {
                     return cellData(value, 1)
                 }
@@ -179,7 +179,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(2),
                 accessor: "wednesday",
-                minWidth: 90,               
+                minWidth: 80,               
                 Cell: ({ value }) => {
                     return cellData(value, 2)
                 }
@@ -187,7 +187,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(3),
                 accessor: "thursday",
-                minWidth: 90,               
+                minWidth: 80,               
                 Cell: ({ value }) => {
                     return cellData(value, 3)
                 }
@@ -195,7 +195,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(4),
                 accessor: "friday",
-                minWidth: 90,               
+                minWidth: 80,               
                 Cell: ({ value }) => {
                     return cellData(value, 4)
                 }
@@ -203,7 +203,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(5),
                 accessor: "saturday",
-                minWidth: 90,              
+                minWidth: 80,              
                 Cell: ({ value }) => {
                     return cellData(value, 5)
                 }
@@ -211,7 +211,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(6),
                 accessor: "sunday",
-                minWidth: 90,               
+                minWidth: 80,               
                 Cell: ({ value }) => {
                     return cellData(value, 6)
                 }
@@ -221,7 +221,7 @@ const ColumnData = (startDay) => {
                     return <div className={styles.header}>Due Date</div>
                 },
                 accessor: "dueDate",
-                minWidth: 150,               
+                minWidth: 130,               
             }
         ]
     )

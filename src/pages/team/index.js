@@ -29,7 +29,7 @@ const TeamPage = () => {
 
     return (
         <PageLayout>
-            <div className={styles.container}>
+            <div className={styles.teamContainer}>
                 <div className={styles.leftSide}>
                     <div>
                         {teamContext.currentProjects.map((project, index) => {
@@ -47,19 +47,20 @@ const TeamPage = () => {
                                 </Transparent>
                             </div> : null
                     }
-                    <button className={styles.newProjectButton} onClick={() => setShowForm(true)} >View Team</button>
-                    {
-                        showForm ?
-                            (<Transparent hideForm={() => setShowForm(false)}>
-                                <EditTeam hideForm={() => { setShowForm(false) }} team={teamContext} />
-                            </Transparent>)
-                            : null
-                    }
+                   
                 </div>
-                <div className={styles.rightSide}>
+                <div className={styles.rightSideTeam}>
                     <TeamMembers
                         teamId={teamId}
                     />
+                     <button className={styles.newProjectButton} onClick={() => setShowForm(true)} >View Team</button>
+                    {
+                        showForm ?
+                            (<Transparent hideForm={() => setShowForm(false)}>
+                                <EditTeam hideForm={() => { setShowForm(false) }} />
+                            </Transparent>)
+                            : null
+                    }
                 </div>
             </div>
         </PageLayout>

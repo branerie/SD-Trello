@@ -17,6 +17,14 @@ const authenticate = async (url, method, body, onSuccess, onFailure) => {
             onFailure(response)
             return
         }
+        if (response.wrongPassword) {
+            onFailure(response)
+            return
+        }
+        if (response.wrongUser) {
+            onFailure(response)
+            return
+        }
 
         document.cookie = `x-auth-token=${authToken}`
 
