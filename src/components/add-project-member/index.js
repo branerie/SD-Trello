@@ -72,9 +72,9 @@ export default function AddMember(props) {
         }
         const data = await response.json()
 
+        let teamUsers = data.members
 
-
-        const filtered = data.filter((e) => {
+        const filtered = teamUsers.filter((e) => {
             const found = members.find(element => element.memberId.username === e.username)
             if (found) {
                 return false

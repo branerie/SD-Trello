@@ -46,10 +46,10 @@ const TableDndApp = (props) => {
             .map((list) => {
                 numberOfRows++
                 data.push({
-                    task: (                      
-                        <div className={styles.listNameContainer} >
+                    task: (
+                        <div className={styles.listNameContainer} style={{ background: list.color || '#A6A48E' }} >
                             <span className={styles.listNameColor}>
-                                <ListColor color={list.color || '#A6A48E'} />
+                                {/* <ListColor color={list.color || '#A6A48E'} /> */}
                             </span>
                             <span className={styles.listNameText} >
                                 {list.name}
@@ -156,7 +156,7 @@ const TableDndApp = (props) => {
 
     }, [projectContext, props])
 
-    
+
     useEffect(() => {
         cardData()
     }, [cardData])
@@ -242,7 +242,7 @@ const TableDndApp = (props) => {
     //     return result;
     // }   
 
-   
+
     const getNextWeek = async () => {
         var nextDay = startDay
         await nextDay.setDate(nextDay.getDate() + 7)
@@ -259,7 +259,7 @@ const TableDndApp = (props) => {
         await cardData()
 
     }
-  
+
 
 
     return (
@@ -275,7 +275,7 @@ const TableDndApp = (props) => {
                         }
                         showWeekNumbers
                         onChange={date => setStartDay(date)} />
-                </span>              
+                </span>
                 <span>
                     <button className={styles.navigateButtons} onClick={getLastWeek} >Previous week</button>
                     <button className={styles.navigateButtons} onClick={getNextWeek}>Next week</button>
@@ -288,7 +288,7 @@ const TableDndApp = (props) => {
                     // TbodyComponent={DropTbodyComponent}
                     // getTrProps={getTrProps}
                     data={tableData}
-                    columns={                       
+                    columns={
                         ColumnData(startDay)
                     }
                     defaultPageSize={10}
@@ -297,6 +297,11 @@ const TableDndApp = (props) => {
                     background={
                         'white'
                     }
+                    style={{
+                        'borderRadius': '10px',
+                        'border': '1px solid #707070',
+                        'width':'auto'
+                    }}
                 />
 
                 {/* </DragDropContext> */}

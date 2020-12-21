@@ -4,10 +4,12 @@
     top: 15%;
     z-index: 20;
     width: 45%;
-    height: 75%;
+    min-height: 75%;
+    height: auto;
     background-color:#EDF5F9;
     border: solid 2px #707070;
     border-radius: 27px;
+    padding: 2%;
 }
 
 .alerts{
@@ -36,60 +38,60 @@
 
 .title {
     width: 100%;
-    /* text-align: center; */
+    text-align: center;
     color: black;
     text-decoration: underline;
     margin-bottom: 2%;
-    margin-left: 15%;  
+    margin: 0 auto;
+    /* margin-left: 15%;   */
     font-size: 1.8em;
     font-weight: 600;
 }
 
 .inputContainer{
     align-items: center;
-    width: 100%;
-    margin: 5%;
+    width: 30%;
+    margin: 5% auto;
     margin-top: 3%;
-    margin-left: 25%;
     margin-bottom: 2%;
 }
 
-input{
+.signUpInput{
     border: solid 1px #363338;
     border-radius: 5px;
     height: 1.5em;
-    width: 30%;
+    width: 100%;
+    margin: 0 auto;
 }
 
 .passInstructions{
     font-size: 0.7em;
-    
+    margin: 0 auto;
+    text-align: center;
 }
 
 .signUpButton{
     color: #fff;
     background-color: #363338;
     border-radius: 15px;
-    width: 8em;
+    width: 100%;
     height: 1.9em;
     border: none; 
-    margin: 0.5em;
+    margin: 0 auto;
     z-index: 1;
     font-size: 1.5em;
     font-weight: 600;
     cursor: pointer;
   }
 
-  .buttonDiv{
-      margin-top: 5%;
-      margin-left: 18%;
-  }
+  .buttonDivLogin{
+    margin: 5% auto;
+    width: 45%;     
+}
 
-  .textDiv{
-      
+  .textDiv{      
       text-align: center;
-      margin-right: 20%;
-      
+      margin-right: 0 auto;      
   }
 
   .forgotPass{
@@ -101,7 +103,6 @@ input{
 
   .alreadySignUp{    
     font-weight: lighter;
-    margin-bottom: 25%;
     color: #363338;
   }
 
@@ -115,17 +116,20 @@ input{
       font-size: 1em;
   }
 
+  .buttonDivGoogleLogin{
+    margin: 5% auto;
+    width: 70%;    
+}
+
   .googleLoginBtn{     
     color: #363338;
     background-color: #F7F7F2;
     border-radius: 10px;
     border: solid 1px #707070 ;
-    width: 50%;
-    height: auto;
-    margin: 2%;
-    margin-top: 5%;
-    padding: 2%;
-    margin-left: 15%;
+    width: 70%;
+    height: auto;    
+    margin: 5% auto;
+    padding: 2%;    
     z-index: 1;
     font-size: 1.1em;
     font-weight: 600;

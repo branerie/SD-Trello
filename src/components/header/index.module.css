@@ -87,6 +87,7 @@
 
 .avatar {
   margin-right: 20px;
+  cursor: pointer;
 }
 
 .font {
@@ -118,6 +119,7 @@
   border-radius: 1.5em;
   background-color: #EDF5F9;
   color: #363338;
+  cursor: pointer;
 }
 
 .logout-position {
@@ -140,6 +142,7 @@
   border-radius: 1.5em;
   background-color: #EDF5F9;
   color: #363338;
+  cursor: pointer;
 }
 
 .teams-position {

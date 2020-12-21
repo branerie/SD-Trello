@@ -75,7 +75,7 @@ const LoginForm = (props) => {
                     <div className={styles.inputContainer}>
                         <div> Email:</div>
                         <input
-                            className={styles.input}
+                            className={styles.emailInput}
                             placeholder='John@example.com'
                             value={email}
                             onChange={e => setEmail(e.target.value)}
@@ -87,7 +87,7 @@ const LoginForm = (props) => {
                     <div className={styles.inputContainer}>
                         <div> Password:</div>
                         <input
-                            className={styles.input}
+                            className={styles.passInput}
                             placeholder='********'
                             type="password"
                             value={password}
@@ -97,7 +97,7 @@ const LoginForm = (props) => {
                         />
                     </div>
 
-                    <div className={styles.buttonDiv}>
+                    <div className={styles.buttonDivLogin}>
                         <button type='submit' className={styles.loginButton}>Log In</button>
                     </div>
 
@@ -118,7 +118,7 @@ const LoginForm = (props) => {
                     </div>
 
 
-                    <div>
+                    <div className={styles.buttonDivGoogleLogin}>
                         <GoogleLogin
                             render={renderProps => (
                                 <button onClick={renderProps.onClick}

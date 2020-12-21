@@ -41,7 +41,7 @@ const ColumnData = (startDay) => {
                 if (date) {
                     switch (true) {
                         case (date === checked):
-                            color = '#EB4863';
+                            color = '#EF2D2D';
                             message = 'Due Date'
                             break;
                         case ((progress === 100) || (date === 100)):
@@ -53,7 +53,7 @@ const ColumnData = (startDay) => {
                             message = 'In Progress'
                             break;
                         case (date < checked && (progress < 100 || !progress)):
-                            color = '#EB4863';
+                            color = '#EF2D2D';
                             message = 'Delayed'
                             break;
                         default:
@@ -84,7 +84,7 @@ const ColumnData = (startDay) => {
                 let message = ''
                 switch (true) {
                     case (date === checked):
-                        color = '#EB4863';
+                        color = '#EF2D2D';
                         message = 'Due Date'
                         break;
                     case (date > checked && progress !== 100):
