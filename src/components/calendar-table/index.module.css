@@ -100,7 +100,7 @@
     font-weight: inherit;
     outline: none;
     position: relative;
-    margin: 0.5em;
+    /* margin: 0.5em; */
 }
 
 .listNameColor{   

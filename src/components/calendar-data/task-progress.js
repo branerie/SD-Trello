@@ -107,7 +107,7 @@ export default function TaskProgress(props) {
                 currColor = '#0E8D27';
                 break;
             case (value < 20):
-                currColor = '#EB4863'
+                currColor = '#EF2D2D'
                 break;
             case (value < 100):
                 currColor = '#5E9DDC'

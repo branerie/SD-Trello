@@ -74,7 +74,7 @@ export default function CreateProject({ hideForm }) {
                 history.push("/error")
             }
             const users = await response.json()
-            setAllUsers(users)
+            setAllUsers(users.members)
 
             
         }

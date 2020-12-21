@@ -87,7 +87,7 @@ const SignupForm = (props) => {
                     <div> Username:</div>
                     <input
                         placeholder='John Smith'
-                        className={styles.input}
+                        className={styles.signUpInput}
                         value={username}
                         onChange={(e) => setUsername(e.target.value)}
                         label="Username"
@@ -99,7 +99,7 @@ const SignupForm = (props) => {
                     <div> Email:</div>
                     <input
                         placeholder='John@example.com'
-                        className={styles.input}
+                        className={styles.signUpInput}
                         value={email}
                         onChange={(e) => setEmail(e.target.value)}
                         label="Email"
@@ -111,7 +111,7 @@ const SignupForm = (props) => {
                     <div> Password:</div>
                     <input
                         placeholder='********'
-                        className={styles.input}
+                        className={styles.signUpInput}
                         type="password"
                         value={password}
                         onChange={(e) => setPassword(e.target.value)}
@@ -129,7 +129,7 @@ const SignupForm = (props) => {
                     <div> Re-type Password:</div>
                     <input
                         placeholder='********'
-                        className={styles.input}
+                        className={styles.signUpInput}
                         type="password"
                         value={rePassword}
                         onChange={(e) => setRePassword(e.target.value)}
@@ -138,7 +138,7 @@ const SignupForm = (props) => {
                     />
                 </div>
 
-                <div className={styles.buttonDiv}>
+                <div className={styles.buttonDivLogin}>
                     <button type='submit' className={styles.signUpButton}>Get Started</button>
                 </div>
 
@@ -148,6 +148,8 @@ const SignupForm = (props) => {
                         </h3>
                 </div>
 
+
+                <div className={styles.buttonDivGoogleLogin}>
                 <GoogleLogin
                     render={renderProps => (
                         <button onClick={renderProps.onClick}
@@ -162,6 +164,7 @@ const SignupForm = (props) => {
                     // onFailure={errorGoogle}
                     cookiePolicy={'single_host_origin'}
                 />
+                </div>
 
                 <div className={styles.textDiv}>
                     <p className={styles.alreadySignUp}>

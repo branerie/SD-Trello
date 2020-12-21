@@ -55,17 +55,17 @@ export default function TaskMembers(props) {
             history.push("/error")
         }
         const data = await response.json()
+        
+        let filtered = data.members
 
-        let filtered = data
-
-        for (var arr in data) {
+        // for (var arr in data) {
             for (var filter in cardMembers) {
-                if (data[arr]._id === cardMembers[filter]._id) {
+                // if (data[arr]._id === cardMembers[filter]._id) {
                     filtered = filtered.filter(function (obj) {
                         return obj._id !== cardMembers[filter]._id
                     })
-                }
-            }
+        //         }
+        //     }
         }
         setUsers(filtered)
 
