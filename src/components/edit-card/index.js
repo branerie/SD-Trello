@@ -14,6 +14,15 @@ import pic6 from '../../images/edit-card/pic6.svg'
 import pic7 from '../../images/edit-card/pic7.svg'
 import pic8 from '../../images/edit-card/pic8.svg'
 import pic9 from '../../images/edit-card/pic9.svg'
+import pic10 from '../../images/edit-card/pic10.svg'
+import pic11 from '../../images/edit-card/pic11.svg'
+import pic12 from '../../images/edit-card/pic12.svg'
+import pic13 from '../../images/edit-card/pic13.svg'
+import pic14 from '../../images/edit-card/pic14.svg'
+
+
+
+
 
 
 
@@ -169,7 +178,7 @@ export default function EditCard(props) {
                                 <img src={pic2} alt="pic2" />
                             </span>
                             <span className={styles.nameContainer}>
-                                <p  >Progress</p>                               
+                                <p  >Progress</p>
                             </span>
                         </div>
                         <div>
@@ -183,7 +192,7 @@ export default function EditCard(props) {
                                     :
                                     <div className={styles.progressDiv} >
                                         {
-                                            (card.progress>=0) ?
+                                            (card.progress >= 0) ?
 
                                                 <div className={styles.bar} >
                                                     <div
@@ -197,14 +206,14 @@ export default function EditCard(props) {
                                                 </div>
                                                 :
                                                 <div>
-                                                    Enter Task Progress                                                   
+                                                    Enter Task Progress
                                                 </div>
                                         }
                                         <span className={styles.textName} >{card.progress}
                                             {/* {
                                                 (card.progress>=0) ? */}
-                                                    <span>%</span>
-                                                    {/* : null
+                                            <span>%</span>
+                                            {/* : null
                                             } */}
                                         </span>
 
@@ -279,7 +288,7 @@ export default function EditCard(props) {
                     </div>
 
 
-                    <div className={styles.thirdRow}>
+                    <div className={styles.smallButtonsContainer}>
                         <div>
                             <p className={styles.text}>Add</p>
                         </div>
@@ -298,25 +307,34 @@ export default function EditCard(props) {
                         <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic7} alt="pic7" />
                             Reports</div>
+                        <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic10} alt="pic10" />
+                            Add Teammate</div>
                     </div>
 
 
-                    <div className={styles.lasRowRight}>
+                    <div className={styles.smallButtonsContainer}>
                         <div>
                             <p className={styles.text}>Manage</p>
                         </div>
-                        <div className={styles.smallButtonsNoPic} >
+                        <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic11} alt="pic11" />
                             Make Template</div>
-                        <div className={styles.smallButtonsNoPic} >
-                            Remove Note</div>
-                        <button className={styles.smallButtonsNoPic} onClick={(e) => { deleteCard(e) }} title="Delete Task" >
-                            Delete Task</button>
+                        <div className={styles.smallButtons} >
+                        <img className={styles.picsSmallButtons} src={pic13} alt="pic13" />
+                            Remove List</div>
+                        <button className={styles.smallButtons} onClick={(e) => { deleteCard(e) }} title="Delete Task" >
+                            <img className={styles.picsSmallButtons} src={pic12} alt="pic12" />
+                         Delete Task</button>
                         <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic8} alt="pic8" />
                             Settings</div>
                         <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic9} alt="pic9" />
                             View</div>
+                            <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic14} alt="pic14" />
+                            Archive</div>
                     </div>
 
 

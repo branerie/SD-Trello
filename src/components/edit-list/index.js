@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
 import { useHistory } from "react-router-dom"
 import Button from '../button'
 import Input from '../input'
@@ -10,6 +10,8 @@ import { useSocket } from '../../contexts/SocketProvider'
 import ButtonClean from '../button-clean'
 import { SketchPicker } from 'react-color'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import UserContext from '../../contexts/UserContext'
+
 
 
 export default function EditList(props) {
@@ -19,9 +21,29 @@ export default function EditList(props) {
     const dropdownRef = useRef(null)
     const [isColorActive, setIsColorActive] = useDetectOutsideClick(dropdownRef)
     const [color, setColor] = useState(props.list.color || '#A6A48E')
+    const [isAdmin, setIsAdmin] = useState(false)
+    const members = props.project.membersRoles
+    const context = useContext(UserContext)
+
+
+
 
     const projectId = props.project._id
     const listId = props.list._id
+
+    async function getData() {
+        const admins = await members.filter(a => a.admin === true)
+        if (admins.some(item => item.memberId._id === context.user.id)) {
+            setIsAdmin(true)
+        } else {
+            setIsAdmin(false)
+        }
+    }
+
+    useEffect(() => {
+        getData()
+    }, [getData])
+
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
@@ -77,7 +99,12 @@ export default function EditList(props) {
                 {isColorActive && <div ref={dropdownRef} >
                     <SketchPicker className={styles['color-pick']} color={color} onChangeComplete={onColorChange} />
                 </div>}
-                <Button onClick={handleSubmit} title="Edit List" />
+                <div className={styles.editListButton}>
+                {isAdmin ?
+                    <Button onClick={handleSubmit} title="Edit List" />
+                    : null
+                }
+                </div>
             </form>
         </div>
 
