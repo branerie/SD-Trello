@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState, useContext } from "react";
 import styles from './index.module.css'
 import ReactTable from "react-table"
 import "react-table/react-table.css"
+import "react-datepicker/dist/react-datepicker.css"
 import DatePicker from "react-datepicker"
 import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress"
@@ -10,8 +11,10 @@ import AddList from "../calendar-data/add-list"
 import AddTask from "../calendar-data/add-task"
 import TaskMembers from "../calendar-data/task-members"
 import ProjectContext from "../../contexts/ProjectContext"
-import ListColor from "../list-color"
 import ColumnData from "../calendar-data/column-data";
+import Transparent from "../transparent";
+import EditList from "../edit-list";
+
 
 
 
@@ -20,7 +23,16 @@ const TableDndApp = (props) => {
     const [startDay, setStartDay] = useState(getMonday)
     const [tableData, setTableData] = useState([])
     const [tableSize, setTableSize] = useState(10)
+    const [isVisibleEditList, setIsVisibleEditList] = useState(false)
+    const [currList, setCurrList] = useState('')
+
+
+
+
     const projectContext = useContext(ProjectContext)
+
+
+
 
 
     function getMonday(date) {
@@ -48,14 +60,13 @@ const TableDndApp = (props) => {
 
         projectContext.lists
             .filter(element => !(projectContext.hiddenLists.includes(element._id)))
-            .map((list) => {
+            .map((list, index) => {
                 numberOfRows++
                 data.push({
                     task: (
-                        <div className={styles.listNameContainer} style={{ background: list.color || '#A6A48E' }} >
-                            <span className={styles.listNameColor}>
-                                {/* <ListColor color={list.color || '#A6A48E'} /> */}
-                            </span>
+                        <div key={index} className={styles.listNameContainer} style={{ background: list.color || '#A6A48E' }}
+                            onClick={() => { { setCurrList(list); setIsVisibleEditList(!isVisibleEditList) } }}
+                        >
                             <span className={styles.listNameText} >
                                 {list.name}
                             </span>
@@ -71,7 +82,9 @@ const TableDndApp = (props) => {
                     saturday: '',
                     sunday: '',
                     dueDate: (
-                        <AddTask listId={list._id} project={props.project} />
+                        <div>
+                            <AddTask listId={list._id} project={props.project} />
+                        </div>
                     )
                 })
 
@@ -268,7 +281,17 @@ const TableDndApp = (props) => {
 
 
     return (
+
+
         <div className={styles.reactTable}>
+            {
+                isVisibleEditList ?
+                    < div >
+                        <Transparent hideForm={() => setIsVisibleEditList(!isVisibleEditList)} >
+                            <EditList hideForm={() => setIsVisibleEditList(!isVisibleEditList)} list={currList} project={props.project} />
+                        </Transparent >
+                    </div > : null
+            }
             <div className={styles.buttoDiv}>
                 <span>
                     <DatePicker
@@ -278,6 +301,7 @@ const TableDndApp = (props) => {
                                 Choose Week
                                 </div>
                         }
+                        // className={styles.reactDatepicker}
                         showWeekNumbers
                         onChange={date => setStartDay(getMonday(date))} />
                 </span>
@@ -306,7 +330,7 @@ const TableDndApp = (props) => {
                         'borderRadius': '10px',
                         'border': '1px solid #707070',
                         'width': 'auto',
-                        'display':'flex'
+                        'display': 'flex'
                     }}
                 />
 

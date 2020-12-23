@@ -222,8 +222,8 @@
 }
 
 .lasRowRight{
-    margin-top: 15%;
-    height: 25%;
+    margin-top: 10%;
+    height: 30%;
 }
 
 
@@ -233,10 +233,9 @@
     margin-left: 20%;
     cursor: pointer;
     width: 60%;
-    height: 17%;
+    height: 10%;
     font-size: 80%;
     align-items: center;
-    /* text-align: center; */
     font-family: inherit;
     border: none;
     border-radius: 8px;
@@ -257,7 +256,7 @@
     margin-left: 20%;
     cursor: pointer;
     width: 60%;
-    height: 17%;
+    height: 10%;
     font-size: 80%;
     align-items: center;
     justify-content: center;
@@ -270,6 +269,11 @@
     outline: none;
 }
 
+.smallButtonsContainer{
+    margin-top: 5%;
+    height: 30%;
+    margin-bottom: 10%;
+}
 
 /* .editMembers {
     padding: 3%;
