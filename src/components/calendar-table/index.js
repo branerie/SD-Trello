@@ -113,6 +113,29 @@ const TableDndApp = (props) => {
                         cardDate = new Date(card.dueDate)
                         thisCardDate = cardDate.getTime()
                     }
+
+                    let historyArr
+                    if (card.history) {
+                        historyArr = []
+                        let taskHistory = card.history
+                        for (let i = 0; i < taskHistory.length; i++) {
+                            let currElement = taskHistory[i]
+
+                            if (i === taskHistory.length - 1) {
+                                historyArr.push(`${currElement.date}*${currElement.event}`)
+                                break;
+                            }
+
+                            if (currElement.event.slice(0, 8) === taskHistory[i + 1].event.slice(0, 8) && currElement.date === taskHistory[i + 1].date) {
+
+                            } else {
+                                historyArr.push(`${currElement.date}*${currElement.event}`)
+                            }
+                        }
+                    } else {
+                        historyArr = null
+                    }
+
                     data.push({
 
                         task:
@@ -127,13 +150,13 @@ const TableDndApp = (props) => {
                             (
                                 <TaskMembers value={card.members} card={card} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
                             ),
-                        monday: thisCardDate + "/" + card.progress,
-                        tuesday: thisCardDate + "/" + card.progress,
-                        wednesday: thisCardDate + "/" + card.progress,
-                        thursday: thisCardDate + "/" + card.progress,
-                        friday: thisCardDate + "/" + card.progress,
-                        saturday: thisCardDate + "/" + card.progress,
-                        sunday: thisCardDate + "/" + card.progress,
+                        monday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        tuesday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        wednesday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        thursday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        friday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        saturday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        sunday: historyArr + '/' + thisCardDate + "/" + card.progress,
                         dueDate: (
                             <div>
                                 <span>
@@ -278,6 +301,21 @@ const TableDndApp = (props) => {
 
     }
 
+    // const getNextDay = async () => {
+    //     var nextDay = startDay
+    //     await nextDay.setDate(nextDay.getDate() + 1)
+    //     await cardData()
+    //     setStartDay(nextDay)
+    // }
+
+    // const getLastDay = async () => {
+    //     var nextDay = startDay
+    //     nextDay.setDate(nextDay.getDate() - 1)
+    //     await cardData()
+    //     setStartDay(nextDay)
+    //     await cardData()
+    // }
+
 
 
     return (
@@ -309,6 +347,10 @@ const TableDndApp = (props) => {
                     <button className={styles.navigateButtons} onClick={getLastWeek} >Previous week</button>
                     <button className={styles.navigateButtons} onClick={getNextWeek}>Next week</button>
                 </span>
+                {/* <span>
+                    <button className={styles.navigateButtons} onClick={getLastDay} >Previous Day</button>
+                    <button className={styles.navigateButtons} onClick={getNextDay}>Next Day</button>
+                </span> */}
             </div>
             <div>
                 {/* <DragDropContext onDragEnd={handleDragEnd} > */}

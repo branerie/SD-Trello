@@ -20,6 +20,7 @@ import pic9 from '../../images/edit-card/pic9.svg'
 import TaskMembers from '../task-members'
 import TaskDueDate from "../task-dueDate"
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import TaskHistory from '../task-history'
 
 
 
@@ -34,16 +35,21 @@ export default function EditCard(props) {
     const [description, setDescription] = useState('')
     const [dueDate, setDueDate] = useState('')
     const [progress, setProgress] = useState('')
+    const [taskHistory, setTaskHistory] = useState('')
+    const [progressChanged, setProgressChanged] = useState(false)
+
+
     const history = useHistory()
     const socket = useSocket()
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [isProgressActive, setIsProgressActive] = useDetectOutsideClick(dropdownRef)
     const [isDescriptionActive, setIsDescriptionActive] = useState(false)
 
+    const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()))
 
-    
-        const cardId = card._id
-    
+
+    const cardId = card._id
+
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
@@ -86,6 +92,15 @@ export default function EditCard(props) {
             return
         }
 
+        let arr = [...taskHistory]
+        if (progressChanged) {
+            arr.push({
+                'event': `Progress ${progress}%`,
+                'date': today
+            })
+            setTaskHistory(arr)
+        }
+
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
@@ -97,7 +112,8 @@ export default function EditCard(props) {
                 name,
                 description,
                 dueDate,
-                progress
+                progress,
+                history: arr
             })
         })
         if (!response.ok) {
@@ -109,6 +125,8 @@ export default function EditCard(props) {
             setIsActive(false)
             setIsProgressActive(false)
             setIsDescriptionActive(false)
+            setProgressChanged(false)
+
         }
 
 
@@ -147,10 +165,12 @@ export default function EditCard(props) {
         } else {
             const updatedCard = await response.json()
             setCard(updatedCard)
+            setTaskHistory(updatedCard.history)
             updateProjectSocket()
             setIsActive(false)
             setIsProgressActive(false)
             setIsDescriptionActive(false)
+            setProgressChanged(false)
         }
 
 
@@ -190,7 +210,7 @@ export default function EditCard(props) {
                             </span>
                             <span>
                                 {
-                                   (card === '') ?
+                                    (card === '') ?
                                         <span className={styles.nameContainer}>
                                             <input className={styles.createNameInput} placeholder={"Add Task Name"}
                                                 onChange={e => setName(e.target.value)}
@@ -238,7 +258,7 @@ export default function EditCard(props) {
                                             isProgressActive ?
                                                 <div ref={dropdownRef}>
                                                     <span className={styles.progressInputContainer}>
-                                                        <input type='number' className={styles.progressInput} value={progress} onChange={e => setProgress(e.target.value)} />
+                                                        <input type='number' className={styles.progressInput} value={progress} onChange={e => { setProgress(e.target.value); setProgressChanged(true) }} />
                                                         <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
                                                     </span></div>
                                                 :
@@ -304,6 +324,13 @@ export default function EditCard(props) {
 
                     </div>
 
+                    <div className={styles.thirdRow}>
+
+                        <div className={styles.descriptinTitle}>
+                            <p className={styles.text}>History</p>
+                        </div>
+                        <TaskHistory taskHistory={taskHistory} />
+                    </div>
 
                     <div className={styles.lasRow}>
 
