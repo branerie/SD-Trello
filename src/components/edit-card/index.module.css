@@ -204,6 +204,22 @@
     font-weight: normal;
 }
 
+.history{  
+    width: 15em;
+    height: 8em;
+    border: 1px solid #000000; 
+    background-color: #E6E6E6;
+    border: solid 1px #363338;
+    border-radius: 10px;       
+    /* display: flex;    */
+    /* justify-content: space-between;  */
+    padding: 4px;
+    font-weight: normal;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+}
+
 .descriptionButtons{
     height: 10%;
     /* width: 30%; */

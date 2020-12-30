@@ -73,7 +73,7 @@ export default function List(props) {
         } else {
             setIsVisible(!isVisible)
             setCardName('')
-            updateProjectSocket()
+            updateProjectSocket()                      
         }
 
     }, [history, cardName, props.list._id, props, updateProjectSocket])
