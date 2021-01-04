@@ -111,6 +111,12 @@
     height: 10%;
 }
 
+.secondRowProgress{
+    margin-top: 15%;
+    height: 10%;
+    cursor: pointer;
+}
+
 .pic2{    
     margin-top: 3%;
     margin-right: 5%; 
@@ -198,6 +204,22 @@
     font-weight: normal;
 }
 
+.history{  
+    width: 15em;
+    height: 8em;
+    border: 1px solid #000000; 
+    background-color: #E6E6E6;
+    border: solid 1px #363338;
+    border-radius: 10px;       
+    /* display: flex;    */
+    /* justify-content: space-between;  */
+    padding: 4px;
+    font-weight: normal;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+}
+
 .descriptionButtons{
     height: 10%;
     /* width: 30%; */
@@ -216,8 +238,8 @@
 }
 
 .lasRowRight{
-    margin-top: 15%;
-    height: 25%;
+    margin-top: 10%;
+    height: 30%;
 }
 
 
@@ -227,10 +249,9 @@
     margin-left: 20%;
     cursor: pointer;
     width: 60%;
-    height: 17%;
+    height: 10%;
     font-size: 80%;
     align-items: center;
-    /* text-align: center; */
     font-family: inherit;
     border: none;
     border-radius: 8px;
@@ -251,7 +272,7 @@
     margin-left: 20%;
     cursor: pointer;
     width: 60%;
-    height: 17%;
+    height: 10%;
     font-size: 80%;
     align-items: center;
     justify-content: center;
@@ -264,6 +285,11 @@
     outline: none;
 }
 
+.smallButtonsContainer{
+    margin-top: 5%;
+    height: 30%;
+    margin-bottom: 10%;
+}
 
 /* .editMembers {
     padding: 3%;

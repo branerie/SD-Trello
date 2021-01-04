@@ -2,6 +2,7 @@ import React, { useCallback, useEffect, useState, useContext } from "react";
 import styles from './index.module.css'
 import ReactTable from "react-table"
 import "react-table/react-table.css"
+import "react-datepicker/dist/react-datepicker.css"
 import DatePicker from "react-datepicker"
 import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress"
@@ -10,8 +11,10 @@ import AddList from "../calendar-data/add-list"
 import AddTask from "../calendar-data/add-task"
 import TaskMembers from "../calendar-data/task-members"
 import ProjectContext from "../../contexts/ProjectContext"
-import ListColor from "../list-color"
 import ColumnData from "../calendar-data/column-data";
+import Transparent from "../transparent";
+import EditList from "../edit-list";
+
 
 
 
@@ -20,11 +23,25 @@ const TableDndApp = (props) => {
     const [startDay, setStartDay] = useState(getMonday)
     const [tableData, setTableData] = useState([])
     const [tableSize, setTableSize] = useState(10)
+    const [isVisibleEditList, setIsVisibleEditList] = useState(false)
+    const [currList, setCurrList] = useState('')
+
+
+
+
     const projectContext = useContext(ProjectContext)
 
 
-    function getMonday() {
-        let d = new Date()
+
+
+
+    function getMonday(date) {
+        let d
+        if (date) {
+            d = new Date(date)
+        } else {
+            d = new Date()
+        }
         var day = d.getDay(),
             diff = d.getDate() - day + (day == 0 ? -6 : 1)
         let thisMonday = new Date(d.setDate(diff))
@@ -43,14 +60,13 @@ const TableDndApp = (props) => {
 
         projectContext.lists
             .filter(element => !(projectContext.hiddenLists.includes(element._id)))
-            .map((list) => {
+            .map((list, index) => {
                 numberOfRows++
                 data.push({
-                    task: (                      
-                        <div className={styles.listNameContainer} >
-                            <span className={styles.listNameColor}>
-                                <ListColor color={list.color || '#A6A48E'} />
-                            </span>
+                    task: (
+                        <div key={index} className={styles.listNameContainer} style={{ background: list.color || '#A6A48E' }}
+                            onClick={() => { { setCurrList(list); setIsVisibleEditList(!isVisibleEditList) } }}
+                        >
                             <span className={styles.listNameText} >
                                 {list.name}
                             </span>
@@ -66,7 +82,9 @@ const TableDndApp = (props) => {
                     saturday: '',
                     sunday: '',
                     dueDate: (
-                        <AddTask listId={list._id} project={props.project} />
+                        <div>
+                            <AddTask listId={list._id} project={props.project} />
+                        </div>
                     )
                 })
 
@@ -95,6 +113,29 @@ const TableDndApp = (props) => {
                         cardDate = new Date(card.dueDate)
                         thisCardDate = cardDate.getTime()
                     }
+
+                    let historyArr
+                    if (card.history) {
+                        historyArr = []
+                        let taskHistory = card.history
+                        for (let i = 0; i < taskHistory.length; i++) {
+                            let currElement = taskHistory[i]
+
+                            if (i === taskHistory.length - 1) {
+                                historyArr.push(`${currElement.date}*${currElement.event}`)
+                                break;
+                            }
+
+                            if (currElement.event.slice(0, 8) === taskHistory[i + 1].event.slice(0, 8) && currElement.date === taskHistory[i + 1].date) {
+
+                            } else {
+                                historyArr.push(`${currElement.date}*${currElement.event}`)
+                            }
+                        }
+                    } else {
+                        historyArr = null
+                    }
+
                     data.push({
 
                         task:
@@ -109,13 +150,13 @@ const TableDndApp = (props) => {
                             (
                                 <TaskMembers value={card.members} card={card} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
                             ),
-                        monday: thisCardDate + "/" + card.progress,
-                        tuesday: thisCardDate + "/" + card.progress,
-                        wednesday: thisCardDate + "/" + card.progress,
-                        thursday: thisCardDate + "/" + card.progress,
-                        friday: thisCardDate + "/" + card.progress,
-                        saturday: thisCardDate + "/" + card.progress,
-                        sunday: thisCardDate + "/" + card.progress,
+                        monday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        tuesday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        wednesday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        thursday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        friday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        saturday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                        sunday: historyArr + '/' + thisCardDate + "/" + card.progress,
                         dueDate: (
                             <div>
                                 <span>
@@ -156,7 +197,7 @@ const TableDndApp = (props) => {
 
     }, [projectContext, props])
 
-    
+
     useEffect(() => {
         cardData()
     }, [cardData])
@@ -242,7 +283,7 @@ const TableDndApp = (props) => {
     //     return result;
     // }   
 
-   
+
     const getNextWeek = async () => {
         var nextDay = startDay
         await nextDay.setDate(nextDay.getDate() + 7)
@@ -259,11 +300,36 @@ const TableDndApp = (props) => {
         await cardData()
 
     }
-  
+
+    // const getNextDay = async () => {
+    //     var nextDay = startDay
+    //     await nextDay.setDate(nextDay.getDate() + 1)
+    //     await cardData()
+    //     setStartDay(nextDay)
+    // }
+
+    // const getLastDay = async () => {
+    //     var nextDay = startDay
+    //     nextDay.setDate(nextDay.getDate() - 1)
+    //     await cardData()
+    //     setStartDay(nextDay)
+    //     await cardData()
+    // }
+
 
 
     return (
+
+
         <div className={styles.reactTable}>
+            {
+                isVisibleEditList ?
+                    < div >
+                        <Transparent hideForm={() => setIsVisibleEditList(!isVisibleEditList)} >
+                            <EditList hideForm={() => setIsVisibleEditList(!isVisibleEditList)} list={currList} project={props.project} />
+                        </Transparent >
+                    </div > : null
+            }
             <div className={styles.buttoDiv}>
                 <span>
                     <DatePicker
@@ -273,13 +339,18 @@ const TableDndApp = (props) => {
                                 Choose Week
                                 </div>
                         }
+                        // className={styles.reactDatepicker}
                         showWeekNumbers
-                        onChange={date => setStartDay(date)} />
-                </span>              
+                        onChange={date => setStartDay(getMonday(date))} />
+                </span>
                 <span>
                     <button className={styles.navigateButtons} onClick={getLastWeek} >Previous week</button>
                     <button className={styles.navigateButtons} onClick={getNextWeek}>Next week</button>
                 </span>
+                {/* <span>
+                    <button className={styles.navigateButtons} onClick={getLastDay} >Previous Day</button>
+                    <button className={styles.navigateButtons} onClick={getNextDay}>Next Day</button>
+                </span> */}
             </div>
             <div>
                 {/* <DragDropContext onDragEnd={handleDragEnd} > */}
@@ -288,7 +359,7 @@ const TableDndApp = (props) => {
                     // TbodyComponent={DropTbodyComponent}
                     // getTrProps={getTrProps}
                     data={tableData}
-                    columns={                       
+                    columns={
                         ColumnData(startDay)
                     }
                     defaultPageSize={10}
@@ -297,6 +368,12 @@ const TableDndApp = (props) => {
                     background={
                         'white'
                     }
+                    style={{
+                        'borderRadius': '10px',
+                        'border': '1px solid #707070',
+                        'width': 'auto',
+                        'display': 'flex'
+                    }}
                 />
 
                 {/* </DragDropContext> */}

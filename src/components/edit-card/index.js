@@ -14,6 +14,15 @@ import pic6 from '../../images/edit-card/pic6.svg'
 import pic7 from '../../images/edit-card/pic7.svg'
 import pic8 from '../../images/edit-card/pic8.svg'
 import pic9 from '../../images/edit-card/pic9.svg'
+import pic10 from '../../images/edit-card/pic10.svg'
+import pic11 from '../../images/edit-card/pic11.svg'
+import pic12 from '../../images/edit-card/pic12.svg'
+import pic13 from '../../images/edit-card/pic13.svg'
+import pic14 from '../../images/edit-card/pic14.svg'
+
+
+
+
 
 
 
@@ -21,6 +30,7 @@ import pic9 from '../../images/edit-card/pic9.svg'
 import TaskMembers from '../task-members'
 import TaskDueDate from "../task-dueDate"
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import TaskHistory from '../task-history'
 
 
 
@@ -35,12 +45,17 @@ export default function EditCard(props) {
     const [description, setDescription] = useState(card.description)
     const [dueDate, setDueDate] = useState(new Date(card.dueDate))
     const [progress, setProgress] = useState(card.progress)
+    const [taskHistory, setTaskHistory] = useState(card.history)
+    const [progressChanged, setProgressChanged] = useState(false)
     const history = useHistory()
     const socket = useSocket()
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [isProgressActive, setIsProgressActive] = useDetectOutsideClick(dropdownRef)
     const [isDescriptionActive, setIsDescriptionActive] = useState(false)
+    
+    const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()))
 
+   
 
     const cardId = card._id
 
@@ -86,6 +101,15 @@ export default function EditCard(props) {
             return
         }
 
+        let arr = [...taskHistory]
+        if (progressChanged) {
+            arr.push({
+                'event': `Progress ${progress}%`,
+                'date': today
+            })
+            setTaskHistory(arr)
+        }
+
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
@@ -97,7 +121,8 @@ export default function EditCard(props) {
                 name,
                 description,
                 dueDate,
-                progress
+                progress,
+                history: arr
             })
         })
         if (!response.ok) {
@@ -109,6 +134,7 @@ export default function EditCard(props) {
             setIsActive(false)
             setIsProgressActive(false)
             setIsDescriptionActive(false)
+            setProgressChanged(false)
         }
 
 
@@ -163,13 +189,14 @@ export default function EditCard(props) {
                         </div >
                     </div>
 
-                    <div className={styles.secondRow}>
+
+                    <div className={styles.secondRowProgress} onClick={() => setIsProgressActive(true)}>
                         <div className={styles.inputTitles}>
                             <span className={styles.pic2}>
                                 <img src={pic2} alt="pic2" />
                             </span>
                             <span className={styles.nameContainer}>
-                                <p  >Progress</p>                               
+                                <p  >Progress</p>
                             </span>
                         </div>
                         <div>
@@ -177,13 +204,13 @@ export default function EditCard(props) {
                                 isProgressActive ?
                                     <div ref={dropdownRef}>
                                         <span className={styles.progressInputContainer}>
-                                            <input type='number' className={styles.nameInput} value={progress} onChange={e => setProgress(e.target.value)} min="0" max="100" />%
+                                            <input type='number' className={styles.nameInput} value={progress} onChange={e => { setProgress(e.target.value); setProgressChanged(true) }} min="0" max="100" />%
                                             <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
                                         </span></div>
                                     :
-                                    <div className={styles.progressDiv} onClick={() => setIsProgressActive(true)}>
+                                    <div className={styles.progressDiv} >
                                         {
-                                            card.progress ?
+                                            (card.progress >= 0) ?
 
                                                 <div className={styles.bar} >
                                                     <div
@@ -198,15 +225,10 @@ export default function EditCard(props) {
                                                 :
                                                 <div>
                                                     Enter Task Progress
-                                                    {/* <img className={styles.pen} src={pen} alt="..." width="13" height="13" /> */}
                                                 </div>
                                         }
                                         <span className={styles.textName} >{card.progress}
-                                            {
-                                                card.progress ?
-                                                    <span>%</span>
-                                                    : null
-                                            }
+                                            <span>%</span>
                                         </span>
 
 
@@ -216,7 +238,6 @@ export default function EditCard(props) {
                         </div>
 
                     </div>
-
 
 
                     <div className={styles.thirdRow}>
@@ -250,11 +271,22 @@ export default function EditCard(props) {
                     </div>
 
 
-                    <div className={styles.lasRow}>
+                    <div className={styles.thirdRow}>
 
+                        <div className={styles.descriptinTitle}>
+                            <p className={styles.text}>History</p>
+                        </div>                       
+                            <TaskHistory taskHistory={taskHistory} />                        
                     </div>
+                </div>
+
+
+                <div className={styles.lasRow}>
 
                 </div>
+
+
+
 
                 <div className={styles.rightSide}>
 
@@ -280,7 +312,7 @@ export default function EditCard(props) {
                     </div>
 
 
-                    <div className={styles.thirdRow}>
+                    <div className={styles.smallButtonsContainer}>
                         <div>
                             <p className={styles.text}>Add</p>
                         </div>
@@ -299,25 +331,34 @@ export default function EditCard(props) {
                         <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic7} alt="pic7" />
                             Reports</div>
+                        <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic10} alt="pic10" />
+                            Add Teammate</div>
                     </div>
 
 
-                    <div className={styles.lasRowRight}>
+                    <div className={styles.smallButtonsContainer}>
                         <div>
                             <p className={styles.text}>Manage</p>
                         </div>
-                        <div className={styles.smallButtonsNoPic} >
+                        <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic11} alt="pic11" />
                             Make Template</div>
-                        <div className={styles.smallButtonsNoPic} >
-                            Remove Note</div>
-                        <button className={styles.smallButtonsNoPic} onClick={(e) => { deleteCard(e) }} title="Delete Task" >
-                            Delete Task</button>
+                        <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic13} alt="pic13" />
+                            Remove List</div>
+                        <button className={styles.smallButtons} onClick={(e) => { deleteCard(e) }} title="Delete Task" >
+                            <img className={styles.picsSmallButtons} src={pic12} alt="pic12" />
+                         Delete Task</button>
                         <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic8} alt="pic8" />
                             Settings</div>
                         <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic9} alt="pic9" />
                             View</div>
+                        <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic14} alt="pic14" />
+                            Archive</div>
                     </div>
 
 

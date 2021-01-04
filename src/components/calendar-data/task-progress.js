@@ -9,14 +9,17 @@ import pen from '../../images/pen.svg'
 
 export default function TaskProgress(props) {
 
+    const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()))
+    let card = props.card
+    const [taskHistory, setTaskHistory] = useState(card.history)
 
 
     const value = props.value
-    let taskprogress =''
+    let taskprogress = ''
     let token = value.split('/')
     if (token.length > 1) {
 
-         taskprogress = token[0]
+        taskprogress = token[0]
     }
 
 
@@ -53,6 +56,15 @@ export default function TaskProgress(props) {
             return
         }
 
+        let arr = [...taskHistory]
+
+        arr.push({
+            'event': `Progress ${cardProgress}%`,
+            'date': today
+        })
+        setTaskHistory(arr)
+
+
 
 
         const token = getCookie("x-auth-token")
@@ -63,7 +75,8 @@ export default function TaskProgress(props) {
                 "Authorization": token
             },
             body: JSON.stringify({
-                progress: cardProgress
+                progress: cardProgress,
+                history: arr
             })
         })
         if (!response.ok) {
@@ -93,7 +106,7 @@ export default function TaskProgress(props) {
         }
         return (
             <div>
-               Add Progress
+                Add Progress
                 {/* <img src={pen} alt="..." width="11.5" height="11.5" /> */}
             </div>
         )
@@ -107,7 +120,7 @@ export default function TaskProgress(props) {
                 currColor = '#0E8D27';
                 break;
             case (value < 20):
-                currColor = '#EB4863'
+                currColor = '#EF2D2D'
                 break;
             case (value < 100):
                 currColor = '#5E9DDC'

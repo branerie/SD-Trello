@@ -120,19 +120,19 @@ export default function TaskDueDate(props) {
     else {
         return (
             <span className={styles.dueDateField}>
-                {
-                    isActive ?
+                {/* {
+                    isActive ? */}
                         <div className={styles.dueDateField}>
                             <DatePicker customInput={<div>
                                 <span>Select date</span>
                             </div>}
                                 selected={today} onChange={(date) => { setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
                         </div>
-                        :
+                        {/* :
                         <div className={styles.dueDateField}>
                             <span onClick={() => setIsActive(!isActive)}>Due Date</span>
                         </div>
-                }
+                } */}
 
                 <span>
                     {isVisible ?

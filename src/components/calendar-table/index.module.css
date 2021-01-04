@@ -93,14 +93,14 @@
     font-family: inherit;
     border: 0;
     padding: 5px;
-    text-align: center;
-    /* justify-content: center; */
+    text-align: center;    
     align-items: center;
     background-color: inherit;
     font-weight: inherit;
     outline: none;
     position: relative;
-    margin: 0.5em;
+    cursor: pointer;
+    justify-content: space-between;
 }
 
 .listNameColor{   
@@ -118,4 +118,13 @@
     margin-bottom: 2%;   
 }
  
- 
+/* .reactDatepicker {
+    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
+    font-size: 0.8rem;
+    background-color: #a66;
+    color: #000;
+    border: 0px;
+    border-radius: 0;
+    display: inline-block;
+    position: relative;
+  } */

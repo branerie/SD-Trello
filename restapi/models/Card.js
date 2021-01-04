@@ -30,7 +30,11 @@ const cardSchema = new Schema({
 
     progress: {
         type: Number
-    }
+    },
+
+    history: [{
+        
+    }]
 
 })
 

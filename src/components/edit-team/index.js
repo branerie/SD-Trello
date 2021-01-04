@@ -11,13 +11,17 @@ import Avatar from 'react-avatar'
 import ButtonClean from '../button-clean'
 import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
+import TeamMembers from '../team-members'
 
-export default function EditTeam(props) {
+export default function EditTeam() {
 
     const [name, setName] = useState("")
     const [description, setDescription] = useState("")
     const [member, setMember] = useState('')
     const [members, setMembers] = useState([])
+    const [invited, setInvited] = useState([])
+    const [forInvite, setForInvite] = useState([])
+
     const [showMembers, setShowMembers] = useState(false)
     const [allUsers, setAllUsers] = useState([])
     const [isAdmin, setIsAdmin] = useState(false)
@@ -34,7 +38,6 @@ export default function EditTeam(props) {
 
     const getData = useCallback(async () => {
 
-
         let currTeam = {}
         await teamContext.teams.map(t => {
             if (t._id === teamId) {
@@ -42,32 +45,15 @@ export default function EditTeam(props) {
             }
         })
         let teamAthor = currTeam.author
+        console.log(currTeam);
+        setMembers(currTeam.members)
 
-
-
-        const token = getCookie("x-auth-token");
-
-        const response = await fetch(`/api/teams/get-users/${teamId}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            }
-        })
-        if (!response.ok) {
-            history.push("/error")
-        } else {
-            const data = await response.json()
-            setMembers(data)
-            setDescription(currTeam.description)
-            setName(currTeam.name)
-            if (context.user.id === teamAthor) {
-                setIsAdmin(true)
-            }
+        setInvited(currTeam.requests)
+        setDescription(currTeam.description)
+        setName(currTeam.name)
+        if (context.user.id === teamAthor) {
+            setIsAdmin(true)
         }
-
-
-
     }, [])
 
 
@@ -104,16 +90,41 @@ export default function EditTeam(props) {
     }
 
     const addMember = (input) => {
-        const arr = [...members]
+        const arr = [...forInvite]
         arr.push(input)
-        setMembers(arr)
+        setForInvite(arr)
         setShowMembers(false)
         setMember('')
     }
 
-    const removeMember = (input) => {
-        const arr = members.filter(u => u._id !== input._id)
-        setMembers(arr)
+    const removeMember = async (input) => {
+        const arr = await members.filter(u => u._id !== input._id)
+
+
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`/api/teams/${teamId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify({
+                name,
+                description,
+                members: arr
+            })
+        })
+        if (!response.ok) {
+            history.push("/error")
+            return
+        } else {
+            getData()
+        }
+    }
+
+    const removeForInvite = (input) => {
+        const arr = forInvite.filter(u => u._id !== input._id)
+        setForInvite(arr)
     }
 
     const handleSubmit = async (event) => {
@@ -128,7 +139,8 @@ export default function EditTeam(props) {
             body: JSON.stringify({
                 name,
                 description,
-                members
+                members,
+                requests: forInvite
             })
         })
         if (!response.ok) {
@@ -136,8 +148,7 @@ export default function EditTeam(props) {
             return
         } else {
             teamContext.setSelectedTeam(name)
-            getData()
-            props.hideForm()
+            // getData()
             socket.emit('team-update', teamId)
         }
 
@@ -199,11 +210,27 @@ export default function EditTeam(props) {
                                                         return true
                                                     }
                                                 })
+                                                .filter((e) => {
+                                                    const found = invited.find(element => element.username === e.username)
+                                                    if (found) {
+                                                        return false
+                                                    } else {
+                                                        return true
+                                                    }
+                                                })
+                                                .filter((e) => {
+                                                    const found = forInvite.find(element => element.username === e.username)
+                                                    if (found) {
+                                                        return false
+                                                    } else {
+                                                        return true
+                                                    }
+                                                })
                                                 .sort((a, b) => a.username.localeCompare(b.username))
-                                                .map(u => {
+                                                .map((u, index) => {
                                                     return (
                                                         <ButtonClean
-                                                            key={u._id}
+                                                            key={index}
                                                             className={styles.user}
                                                             onClick={() => addMember(u)}
                                                             title={<div>
@@ -215,40 +242,39 @@ export default function EditTeam(props) {
                                         }
                                     </div> : null
                             }
-
-
                             <div className={styles.membersAvatars}>
-                                {
-                                    members.map((m, index) => {
-                                        return (
-                                            <Avatar
-                                                key={index}
-                                                name={m.username}
-                                                size={40} round={true} maxInitials={2}
-                                                onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeMember(m) }}
-                                            />
+                                <span>
+                                    <div>
+                                        Send Invitation:
+                                </div>
+                                    {
+                                        forInvite.map((m, index) => {
+                                            return (
+                                                <Avatar
+                                                    key={index}
+                                                    name={m.username}
+                                                    size={40} round={true} maxInitials={2}
+                                                    onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeForInvite(m) }}
+                                                />
 
-                                        )
-                                    })
-                                }
+                                            )
+                                        })
+                                    }
+                                </span>
                             </div>
+                            <TeamMembers
+                                teamId={teamId}
+                            />
 
                             <div className={styles.buttonDiv}>
                                 <button type='submit' className={styles.createButton}>Submit Changes</button>
                             </div>
                         </div>
                         :
-                        <div className={styles.membersAvatars}>
-                            {
-                                members.map(m => {
-                                    return (
-                                        <ButtonClean
-                                            title={<Avatar key={m._id} name={m.username} size={40} round={true} maxInitials={2} />}
-                                        />
-
-                                    )
-                                })
-                            }
+                        <div>
+                            <TeamMembers
+                                teamId={teamId}
+                            />
                         </div>
                 }
 

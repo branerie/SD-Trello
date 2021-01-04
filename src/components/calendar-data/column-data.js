@@ -4,14 +4,14 @@ import styles from './index.module.css'
 
 
 const ColumnData = (startDay) => {
-    
+
 
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
 
 
 
     const shownDay = (value) => {
-        let date = ''       
+        let date = ''
         date = (('0' + value.getDate())).slice(-2) + '.' + ('0' + (value.getMonth() + 1)).slice(-2)
         return date
     }
@@ -26,22 +26,72 @@ const ColumnData = (startDay) => {
         return weekDay
     }
 
+    const cellDiv = (message, color, messageColor) => {
+        return (
+            <div className={styles.daylyProgress}>
+                <div style={{ background: color, color: messageColor, width: "100%", textAlign: "center", padding: "5px", fontSize: "14px", border: '#363338 solid 1px', borderRadius: '5px' }} >
+                    {message}</div>
+            </div>
+        )
+    }
+
 
     const cellData = (value, num) => {
 
         if (num === 0) {
             if (value) {
                 let token = value.split('/')
-                let date = Number(token[0])
-                let progress = Number(token[1])
+                let date = Number(token[1])
+                let progress = Number(token[2])
+                let history = token[0]
                 let checked = startDay.setDate(startDay.getDate());
-               
+
                 let color = ''
                 let message = ''
+
+                
+                if (progress === 100) {
+                    color = '#0E8D27';
+                    message = 'Finished'
+                    return (
+                        cellDiv(message, color, 'black')
+                    )
+                }
+
+                if (history) {
+                    let currElement = history.split(',')
+                    for (let i = 0; i < currElement.length; i++) {
+
+                        let element = currElement[i].split('*')
+                        let eventDate = element[0]
+
+                        let event = element[1]
+                        let currDate = new Date(eventDate)
+                        currDate.setHours(0, 0, 0, 0)
+
+                        let thisHistoryDate = currDate.getTime()
+
+
+                        if (thisHistoryDate > checked && event === 'Created') {
+                            return (
+                                ''
+                            )
+                        } else if (thisHistoryDate === checked) {
+                            message = event
+                        }
+                        if (thisHistoryDate === checked && !date) {
+                            message = event
+                            return (
+                                cellDiv(message, color, 'black')
+                            )
+                        }
+                    }
+                }
+
                 if (date) {
                     switch (true) {
                         case (date === checked):
-                            color = '#EB4863';
+                            color = '#EF2D2D';
                             message = 'Due Date'
                             break;
                         case ((progress === 100) || (date === 100)):
@@ -50,20 +100,21 @@ const ColumnData = (startDay) => {
                             break;
                         case (date > checked):
                             color = '#5E9DDC';
-                            message = 'In Progress'
+                            if (message === '') {
+                                message = 'In Progress'
+                            }
                             break;
                         case (date < checked && (progress < 100 || !progress)):
-                            color = '#EB4863';
+                            color = '#EF2D2D';
                             message = 'Delayed'
                             break;
                         default:
                             break;
                     }
+
+
                     return (
-                        <div className={styles.daylyProgress}>
-                            <div style={{ background: color, width: "100%", textAlign: "center", padding: "5px", fontSize: "14px", border: '#363338 solid 1px', borderRadius: '5px' }} >
-                                {message}</div>
-                        </div>
+                        cellDiv(message, color, 'black')
                     )
                 } else {
                     return ''
@@ -74,39 +125,84 @@ const ColumnData = (startDay) => {
         } else if (num !== 0) {
             if (value) {
                 let token = value.split('/')
-                let date = Number(token[0])
-                let progress = Number(token[1])
+                let date = Number(token[1])
+                let progress = Number(token[2])
+                let history = token[0]
                 var checkedDate = new Date(startDay);
                 let checked = checkedDate.setDate(checkedDate.getDate() + num);
 
-
                 let color = ''
+                let messageColor = ''
                 let message = ''
-                switch (true) {
-                    case (date === checked):
-                        color = '#EB4863';
-                        message = 'Due Date'
-                        break;
-                    case (date > checked && progress !== 100):
-                        color = '#5E9DDC';
-                        message = 'In Progress'
-                        break;
-                    default:
-                        return null
+
+                if (history) {
+                    let currElement = history.split(',')
+                    for (let i = 0; i < currElement.length; i++) {
+
+                        let element = currElement[i].split('*')
+                        let eventDate = element[0]
+
+                        let event = element[1]
+                        let currDate = new Date(eventDate)
+                        currDate.setHours(0, 0, 0, 0)
+
+                        let thisHistoryDate = currDate.getTime()
+
+
+                        if (thisHistoryDate > checked && event === 'Created') {
+                            return (
+                                ''
+                            )
+                        } else if (thisHistoryDate === checked) {
+                            message = event
+                            messageColor = 'black'
+                        }
+                        if (thisHistoryDate === checked && !date) {
+                            message = event
+                            messageColor = 'black'
+                            return (
+                                cellDiv(message, color, messageColor)
+                            )
+                        }
+
+                    }
                 }
-                return (
-                    <div className={styles.daylyProgress}>
-                        <div style={{ background: color, color: color, width: "100%", textAlign: "center", padding: "5px", fontSize: "14px", border: '#363338 solid 1px', borderRadius: '5px' }} >
-                            {message}</div>
-                    </div>
-                )
+                if (date) {
+                    switch (true) {
+                        case (date === checked):
+                            color = '#EF2D2D';
+                            message = 'Due Date'
+                            messageColor = 'black'
+                            return (
+                                cellDiv(message, color, messageColor)
+                            )
+                        case (date > checked && progress !== 100):
+                            color = '#5E9DDC';
+                            if (message === '') {
+                                messageColor = '#5E9DDC';
+                                message = 'In Progress'
+                            }
+                            break;
+                        default:
+                            if (message === '') {
+                                return null
+                            }
+
+                    }
+
+                    return (
+                        cellDiv(message, color, messageColor)
+                    )
+
+                } else {
+                    return ''
+                }
             } else {
                 return value
             }
         } else {
             return value
         }
-
     }
 
 
@@ -144,7 +240,7 @@ const ColumnData = (startDay) => {
                     return <div className={styles.header}>Task</div>
                 },
                 accessor: "task",
-                minWidth: 200
+                minWidth: 150
             },
             {
                 Header: () => {
@@ -158,12 +254,12 @@ const ColumnData = (startDay) => {
                     return <div className={styles.header}>Teammates</div>
                 },
                 accessor: "assigned",
-                minWidth: 130                
+                minWidth: 130
             },
             {
                 Header: getHeaderDate(0),
                 accessor: "monday",
-                minWidth: 90,                
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return cellData(value, 0)
                 }
@@ -171,7 +267,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(1),
                 accessor: "tuesday",
-                minWidth: 90,               
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return cellData(value, 1)
                 }
@@ -179,7 +275,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(2),
                 accessor: "wednesday",
-                minWidth: 90,               
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return cellData(value, 2)
                 }
@@ -187,7 +283,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(3),
                 accessor: "thursday",
-                minWidth: 90,               
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return cellData(value, 3)
                 }
@@ -195,7 +291,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(4),
                 accessor: "friday",
-                minWidth: 90,               
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return cellData(value, 4)
                 }
@@ -203,7 +299,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(5),
                 accessor: "saturday",
-                minWidth: 90,              
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return cellData(value, 5)
                 }
@@ -211,7 +307,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(6),
                 accessor: "sunday",
-                minWidth: 90,               
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return cellData(value, 6)
                 }
@@ -221,7 +317,7 @@ const ColumnData = (startDay) => {
                     return <div className={styles.header}>Due Date</div>
                 },
                 accessor: "dueDate",
-                minWidth: 150,               
+                minWidth: 130,
             }
         ]
     )

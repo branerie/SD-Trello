@@ -1,3 +1,13 @@
+.teamContainer{
+  display: flex;
+}
+
+.leftSide{
+ width: 80%;
+}
+
+
+
 
 .newProjectButton {
     font-size: 19px;
@@ -22,3 +32,14 @@
     color:black;
     font-style: italic;
   }
+
+  .rightSideTeam{
+    width: 35%;
+    height: 50%;    
+    background-color: #DFE9EE;
+    margin: 20px;
+    border-radius: 19px;
+    border: solid 2px #707070;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+  }
+
