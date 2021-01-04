@@ -57,11 +57,9 @@ const ColumnData = (startDay) => {
                         cellDiv(message, color, 'black')
                     )
                 }
-
                 if (history) {
                     let currElement = history.split(',')
                     for (let i = 0; i < currElement.length; i++) {
-
                         let element = currElement[i].split('*')
                         let eventDate = element[0]
 
@@ -87,6 +85,7 @@ const ColumnData = (startDay) => {
                         }
                     }
                 }
+                
 
                 if (date) {
                     switch (true) {
@@ -111,7 +110,34 @@ const ColumnData = (startDay) => {
                         default:
                             break;
                     }
-
+                    if (history) {
+                        let currElement = history.split(',')
+                        for (let i = 0; i < currElement.length; i++) {
+                            let element = currElement[i].split('*')
+                            let eventDate = element[0]
+    
+                            let event = element[1]
+                            let currDate = new Date(eventDate)
+                            currDate.setHours(0, 0, 0, 0)
+    
+                            let thisHistoryDate = currDate.getTime()
+    
+    
+                            if (thisHistoryDate > checked && event === 'Created') {
+                                return (
+                                    ''
+                                )
+                            } else if (thisHistoryDate === checked) {
+                                message = event
+                            }
+                            if (thisHistoryDate === checked && !date) {
+                                message = event
+                                return (
+                                    cellDiv(message, color, 'black')
+                                )
+                            }
+                        }
+                    }
 
                     return (
                         cellDiv(message, color, 'black')
@@ -205,7 +231,6 @@ const ColumnData = (startDay) => {
         }
     }
 
-
     const getHeaderDate = (num) => {
         var currDay = new Date(startDay);
         currDay.setDate(currDay.getDate() + num)
@@ -230,8 +255,6 @@ const ColumnData = (startDay) => {
             </div>
         )
     }
-
-
 
     return (
         [
