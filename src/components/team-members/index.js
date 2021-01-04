@@ -7,37 +7,10 @@ import TeamContext from "../../contexts/TeamContext"
 
 
 export default function TeamMembers(props) {
+    
 
-    const teamContext = useContext(TeamContext)
-    const [members, setMembers] = useState([])
-    const [invited, setInvited] = useState([])
-
-    const teamId = props.teamId
-
-
-    const getData = useCallback(async () => {
-
-        let currTeam = {}
-        await teamContext.getCurrentProjects(teamId)
-        await teamContext.teams.map(t => {
-            if (t._id === teamId) {
-                currTeam = t
-            }
-        })
-
-        setMembers(currTeam.members)
-        setInvited(currTeam.requests)
-       
-    }, [teamId])
-
-
-    useEffect(() => {
-        getData()
-    }, [getData])
-
-
-
-
+    const members = props.members
+    const invited = props.invited
 
 
 
@@ -50,9 +23,9 @@ export default function TeamMembers(props) {
                     Team Members:
             </div>
                 {
-                    members.map(m => {
+                    members.map((m, index) => {
                         return (
-                            <ButtonClean
+                            <ButtonClean key={index}
                                 title={<Avatar key={m._id} name={m.username} size={40} round={true} maxInitials={2} />}
                             />
 
