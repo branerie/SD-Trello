@@ -1,8 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory, useParams } from "react-router-dom"
-import Button from '../button'
-import Input from '../input'
-import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 // import "react-datepicker/dist/react-datepicker.css"
@@ -13,13 +10,13 @@ import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
 import TeamMembers from '../team-members'
 
-export default function EditTeam() {
-
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
+export default function EditTeam(props) {
+    const currTeam = props.currTeam
+    const [name, setName] = useState(currTeam.name)
+    const [description, setDescription] = useState(currTeam.description)
     const [member, setMember] = useState('')
-    const [members, setMembers] = useState([])
-    const [invited, setInvited] = useState([])
+    const [members, setMembers] = useState(currTeam.members)
+    const [invited, setInvited] = useState(currTeam.requests)
     const [forInvite, setForInvite] = useState([])
 
     const [showMembers, setShowMembers] = useState(false)
@@ -36,16 +33,17 @@ export default function EditTeam() {
 
 
 
+
     const getData = useCallback(async () => {
 
-        let currTeam = {}
-        await teamContext.teams.map(t => {
-            if (t._id === teamId) {
-                currTeam = t
-            }
-        })
+        // let currTeam = {}
+        // await userContext.user.teams.map(t => {
+        //     if (t._id === teamId) {
+        //         currTeam = t
+        //     }
+        // })
         let teamAthor = currTeam.author
-        console.log(currTeam);
+        // console.log(currTeam);
         setMembers(currTeam.members)
 
         setInvited(currTeam.requests)
@@ -118,7 +116,7 @@ export default function EditTeam() {
             history.push("/error")
             return
         } else {
-            getData()
+            // getData()
         }
     }
 
@@ -262,9 +260,48 @@ export default function EditTeam() {
                                     }
                                 </span>
                             </div>
-                            <TeamMembers
-                                teamId={teamId}
-                            />
+                            <div>
+                                <div className={styles.membersAvatars}>
+                                    <div>
+                                        Team Members:
+                                    </div>
+                                    {
+                                        members.map((m, index) => {
+                                            return (
+                                                <ButtonClean key={index}
+                                                    onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeMember(m) }}
+                                                    title={<Avatar key={m._id} name={m.username} size={40} round={true} maxInitials={2} />}
+                                                />
+
+                                            )
+                                        })
+                                    }
+                                </div>
+                                {
+                                    (invited.length !== 0) ?
+
+                                        <div className={styles.membersAvatars}>
+                                            <div>
+                                                Invited Members:
+                        </div>
+                                            {
+                                                invited.map((m, index) => {
+                                                    return (
+                                                        <Avatar
+                                                            key={index}
+                                                            name={m.username}
+                                                            size={40} round={true} maxInitials={2}
+                                                        // onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeMember(m) }}
+                                                        />
+
+                                                    )
+                                                })
+                                            }
+                                        </div>
+                                        :
+                                        null
+                                }
+                            </div>
 
                             <div className={styles.buttonDiv}>
                                 <button type='submit' className={styles.createButton}>Submit Changes</button>
@@ -273,7 +310,7 @@ export default function EditTeam() {
                         :
                         <div>
                             <TeamMembers
-                                teamId={teamId}
+                                members={members} invited={invited}
                             />
                         </div>
                 }
