@@ -14,11 +14,16 @@ async function createCard(req, res, next) {
     const userId = req.user._id
     const listId = req.params.id
     const { name, description, members, dueDate, progress } = req.body
+
+    const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()))
+   
+    const history = [{ 'event': 'Created', 'date': today }]
+
     const session = await mongoose.startSession()
     session.startTransaction()
 
     try {
-        const cardCreationResult = await models.Card.create([{ name, description, author: userId, members, dueDate, progress }], { session })
+        const cardCreationResult = await models.Card.create([{ name, description, author: userId, members, dueDate, progress, history }], { session })
 
         const createdCard = cardCreationResult[0]
 
@@ -34,11 +39,13 @@ async function createCard(req, res, next) {
         session.endSession()
         res.send(error)
     }
+
 }
 
 async function updateCard(req, res, next) {
     const id = req.params.idcard
-    const card = { name, description, members, dueDate, progress } = req.body;
+    const card = { name, description, members, dueDate, progress, history } = req.body    
+
     const obj = {}
     for (let key in card) {
         if (card[key]) {

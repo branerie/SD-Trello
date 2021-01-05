@@ -16,6 +16,8 @@ router.get('/get-all', auth, getAllUsers);
 
 router.get('/:id', getUser)
 
+router.get('/tasks/:teamid', auth, getUserTasks)
+
 router.post('/register', registerUser)
 
 router.post('/login', loginUser)
@@ -116,6 +118,14 @@ async function loginUser(req, res, next) {
     try {
         const user = await models.User.findOne({ email })
 
+
+        if (!user) {
+            let response = {}
+            response.wrongUser = true
+            res.send(response)
+            return;
+        }
+
         if (!user.password) {
             let response = {}
             response.needPassword = true
@@ -124,7 +134,9 @@ async function loginUser(req, res, next) {
         const match = await user.matchPassword(password)
 
         if (!match) {
-            res.status(401).send('Invalid password')
+            let response = {}
+            response.wrongPassword = true
+            res.send(response)
             return;
         }
 
@@ -182,7 +194,7 @@ async function confirmToken(req, res, next) {
 
     try {
         const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }, { new: true })
-        
+
         res.send(user)
     } catch (error) {
         console.log(error)
@@ -191,7 +203,7 @@ async function confirmToken(req, res, next) {
 
 async function updateUser(req, res, next) {
     const id = req.params.id
-    let user = { username, password, email, imageUrl } = req.body
+    let user = { username, password, email, imageUrl, selectedTeam } = req.body
     const obj = {}
     for (let key in user) {
         if (user[key] && key !== 'password') {
@@ -252,6 +264,28 @@ async function deleteUser(req, res, next) {
         res.send(error);
     }
 
+}
+
+async function getUserTasks(req, res, next) {
+    const userId = req.user._id
+    const teamId = req.params.teamid
+    const team = await models.Team.findOne({ _id: teamId })
+        .populate({
+            path: 'projects',
+            populate: {
+                path: 'lists',
+                populate: {
+                    path: 'cards'
+                }
+            }
+        })
+
+    let projects = team.projects
+
+    projects.forEach(p => p.lists.forEach(l => l.cards = l.cards.filter(c => c.members.includes(userId))))
+    projects.forEach(p => p.lists = p.lists.filter(l => l.cards.length !== 0))
+    projects = projects.filter(p => p.lists.length !== 0)
+    res.send(projects)
 }
 
 

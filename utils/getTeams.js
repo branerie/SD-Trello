@@ -19,6 +19,12 @@ async function getTeams(id) {
                     path: 'author'
                 }
             })
+            .populate({
+                path: 'members'                
+            })
+            .populate({
+                path: 'requests'                
+            })
         return teams
 
     } catch (error) {

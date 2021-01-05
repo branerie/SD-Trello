@@ -21,14 +21,14 @@ async function teamInvitations(req, res, next) {
     const userId = req.user._id
     const teamId = req.params.id
     const { messageId, accepted, teamName } = req.body
-    const message = JSON.stringify({id: messageId, subject: 'Team invitation', teamId, teamName})
+    const message = JSON.stringify({ id: messageId, subject: 'Team invitation', teamId, teamName })
 
 
     const session = await mongoose.startSession()
     session.startTransaction()
-    
+
     try {
-        
+
         if (accepted) {
             await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userId }, $push: { members: userId } }).session(session)
             await models.User.updateOne({ _id: userId }, { $pull: { inbox: message } }).session(session)
@@ -38,9 +38,9 @@ async function teamInvitations(req, res, next) {
         }
 
         await session.commitTransaction()
-        
+
         session.endSession()
-        
+
         res.send('Team invitation handled')
     } catch (error) {
         await session.abortTransaction()
@@ -54,23 +54,23 @@ async function createTeam(req, res, next) {
     const { name, description, requests } = req.body
     const members = [userId]
     const requestsId = requests.map(r => r._id)
-    
+
     const session = await mongoose.startSession()
     session.startTransaction()
-    
+
     try {
-        
+
         const teamCreationResult = await models.Team.create([{ name, description, author: userId, members, requests }], { session })
         const createdTeam = teamCreationResult[0]
-        
-        const message = JSON.stringify({id: uuidv4(), subject: 'Team invitation', teamId: createdTeam._id, teamName: name})
+
+        const message = JSON.stringify({ id: uuidv4(), subject: 'Team invitation', teamId: createdTeam._id, teamName: name })
 
         await models.User.update({ _id: { $in: requestsId } }, { $push: { inbox: message } }, { session })
 
         await session.commitTransaction()
-        
+
         session.endSession()
-        
+
         res.send(createdTeam)
     } catch (error) {
         await session.abortTransaction()
@@ -114,8 +114,11 @@ async function getTeamUsers(req, res, next) {
             .populate({
                 path: 'members'
             })
-            
-        res.send(team.members)
+            .populate({
+                path: 'requests'
+            })
+
+        res.send(team)
 
     } catch (error) {
         console.log(error);
@@ -123,18 +126,49 @@ async function getTeamUsers(req, res, next) {
 }
 
 async function updateTeam(req, res, next) {
+
     const teamId = req.params.id
-    const team = { name, description, members } = req.body;
-    const obj = {}
-    for (let key in team) {
-        if (team[key]) {
-            obj[key] = team[key]
+    const { name, description, members, requests } = req.body
+
+    if (requests) {
+        const requestsId = requests.map(r => r._id)
+
+        const session = await mongoose.startSession()
+        session.startTransaction()
+
+        try {
+
+            const teamEditResult = await models.Team.updateOne({ _id: teamId }, { name, description, members, $push: { requests: { $each: requestsId } } }).session(session)
+
+            console.log(teamEditResult);
+
+            const message = JSON.stringify({ id: uuidv4(), subject: 'Team invitation', teamId: teamId, teamName: name })
+
+            await models.User.updateMany({ _id: { $in: requestsId } }, { $push: { inbox: message } }, { session })
+
+            await session.commitTransaction()
+
+            session.endSession()
+            res.send(teamEditResult)
+        } catch (error) {
+            await session.abortTransaction()
+            session.endSession()
+            res.send(error)
         }
+    } else {
+        console.log('v elsa');
+        console.log(members);
+        const team = { name: name, description: description, members: members }
+        const obj = {}
+        for (let key in team) {
+            if (team[key]) {
+                obj[key] = team[key]
+            }
+        }
+        await models.Team.updateOne({ _id: teamId }, { ...obj })
+        const updatedTeam = await models.Team.findOne({ _id: teamId })
+        res.send(updatedTeam)
     }
-
-
-    const updatedTeam = await models.Team.updateOne({ _id: teamId }, { ...obj })
-    res.send(updatedTeam)
 
 }
 
