@@ -1,8 +1,7 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react'
-import { useParams, useHistory } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import PageLayout from '../../components/page-layout'
 import { useSocket } from '../../contexts/SocketProvider'
-import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
 import TableDndApp from '../../components/calendar-table'
 import Loader from 'react-loader-spinner'
@@ -11,16 +10,14 @@ import ButtonClean from '../../components/button-clean'
 
 export default function ProjectList() {
     const params = useParams()
-    const history = useHistory()
     const [isFilterActive, setIsFilterActive] = useState(false)
     const [filter, setFilter] = useState({'Not Started': true, 'In Progress': true, 'Done': true})
-    const [project, setProject] = useState(null)
 
     const socket = useSocket()
     const projectContext = useContext(ProjectContext)
 
     const projectUpdate = useCallback((project) => {
-        setProject(project)
+        projectContext.setProject(project)
     }, [])
 
     useEffect(() => {
@@ -34,43 +31,13 @@ export default function ProjectList() {
         return () => socket.off('project-updated')
     }, [socket, projectUpdate])
 
-    const getData = useCallback(async () => {
-        const id = params.projectid
-        const token = getCookie("x-auth-token");
-
-        const response = await fetch(`/api/projects/info/${id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            }
-        })
-        if (!response.ok) {
-            history.push("/error")
-        } else {
-            const data = await response.json()
-            setProject(data)
-            projectContext.setProjectName(data.name)
-        }
-
-
-    }, [params.projectid, history])
-
-    useEffect(() => {
-        getData()
-        const pid = params.projectid
-        if (pid && pid !== projectContext.project) {
-            projectContext.setProject(pid)
-        }
-    }, [])
-
     const progressFilter = (filtered) => {
         const obj = {...filter}
         obj[filtered] = !obj[filtered]
         setFilter(obj)
     }
 
-    if (!project) {
+    if (!projectContext.project || projectContext.project._id !== params.projectid) {
         return (
             <PageLayout>
                 <Loader
@@ -114,7 +81,7 @@ export default function ProjectList() {
             <div className={styles.calendarPageContainer}>
                 <div>
                     <div className={styles.calendarContainer}>
-                        <TableDndApp project={project} filter={filter} />
+                        <TableDndApp project={projectContext.project} filter={filter} />
                     </div>
                 </div>
             </div>

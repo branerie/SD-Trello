@@ -1,8 +1,5 @@
 import React, { useCallback, useState, useContext } from 'react'
 import { useHistory, useParams } from "react-router-dom"
-import Button from '../button'
-import Input from '../input'
-import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import "react-datepicker/dist/react-datepicker.css"
@@ -48,7 +45,7 @@ export default function CreateProject({ hideForm }) {
             return
         } else {
             const project = await response.json()
-            projectContext.setProject(project._id)
+            projectContext.setProject(project)
             socket.emit('team-update', teamContext.currentTeam)
             history.push(`/project-board/${teamId}/${project._id}`)
             hideForm && hideForm()

@@ -21,7 +21,7 @@ import UserContext from '../../contexts/UserContext'
 export default function ProjectBoard(props) {
     const params = useParams()
     const history = useHistory()
-    const [project, setProject] = useState(null)
+    // const [project, setProject] = useState(null)
     const [members, setMembers] = useState([])
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
     const [listName, setListName] = useState('')
@@ -37,7 +37,7 @@ export default function ProjectBoard(props) {
 
     const projectUpdate = useCallback((project) => {
 
-        setProject(project)
+        projectContext.setProject(project)
 
         const memberArr = []
         project.membersRoles.map(element => {
@@ -48,7 +48,6 @@ export default function ProjectBoard(props) {
         projectContext.setLists(project.lists)
     }, [projectContext])
 
- 
     useEffect(() => {
         const id = params.projectid
 
@@ -60,45 +59,23 @@ export default function ProjectBoard(props) {
         return () => socket.off('project-updated')
     }, [socket, projectUpdate, params.projectid])
 
-
-    const getData = useCallback(async () => {
-        const id = params.projectid
-        const token = getCookie("x-auth-token");
-
-        const response = await fetch(`/api/projects/info/${id}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            }
-        })
-        if (!response.ok) {
-            history.push("/error")
-        } else {
-            const data = await response.json()
-            setProject(data)
-            projectContext.setProjectName(data.name)
-            const memberArr = []
-            data.membersRoles.map(element => {
-                return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
-
-            })
-            setMembers(memberArr)
-            projectContext.setLists(data.lists)
-            isUserAdmin(data)
-        }
-
-    }, [params.projectid, history])
-
     useEffect(() => {
-        getData()
-        const pid = params.projectid
-        if (pid && pid !== projectContext.project) {
-            projectContext.setProject(pid)
+        if (!projectContext.project || projectContext.project._id !== params.projectid) {
+            return
         }
-    }, [getData])
 
-    if (!project) {
+        const memberArr = []
+        projectContext.project.membersRoles.map(element => {
+            return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
+
+        })
+        setMembers(memberArr)
+        projectContext.setLists(projectContext.project.lists)
+        isUserAdmin(projectContext.project)
+
+    }, [projectContext.project])
+
+    if (!projectContext.project || projectContext.project._id !== params.projectid) {
         return (
             <PageLayout>
                 <Loader
@@ -113,7 +90,7 @@ export default function ProjectBoard(props) {
     }
 
     function isUserAdmin(project) {
-       
+
         const admins = project.membersRoles.filter(a => a.admin === true)
         if (admins.some(item => item.memberId._id === context.user.id)) {
             setIsAdmin(true)
@@ -122,11 +99,11 @@ export default function ProjectBoard(props) {
         }
     }
 
-    
+
 
     async function deleteProject() {
         const token = getCookie("x-auth-token")
-        const response = await fetch(`/api/projects/${project._id}`, {
+        const response = await fetch(`/api/projects/${projectContext.project._id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -152,14 +129,14 @@ export default function ProjectBoard(props) {
             position = projectContext.lists.indexOf(previousId) + 1
 
             // console.log(filteredList, position);
-            
+
             // const newListsArr = [...lists]
             // const [reorderedList] = newListsArr.splice(result.source.index, 1)
             // newListsArr.splice(result.destination.index, 0, reorderedList)
             // setLists(newListsArr)
 
             const token = getCookie("x-auth-token")
-            const response = await fetch(`/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
+            const response = await fetch(`/api/projects/lists/${projectContext.project._id}/${result.draggableId}/dnd-update`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -181,7 +158,7 @@ export default function ProjectBoard(props) {
             const source = result.source.droppableId
             const destination = result.destination.droppableId
             const token = getCookie("x-auth-token")
-            const response = await fetch(`/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
+            const response = await fetch(`/api/projects/lists/${projectContext.project._id}/${result.draggableId}/dnd-update`, {
                 method: "PUT",
                 headers: {
                     "Content-Type": "application/json",
@@ -204,7 +181,7 @@ export default function ProjectBoard(props) {
                 // setLists(newListsArr)
             }
         }
-        socket.emit('project-update', project)
+        socket.emit('project-update', projectContext.project)
     }
 
     const addList = async (e) => {
@@ -214,7 +191,7 @@ export default function ProjectBoard(props) {
             return
         }
         const token = getCookie("x-auth-token")
-        const response = await fetch(`/api/projects/lists/${project._id}`, {
+        const response = await fetch(`/api/projects/lists/${projectContext.project._id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -228,7 +205,7 @@ export default function ProjectBoard(props) {
         } else {
             setIsActive(!isActive)
             setListName('')
-            socket.emit('project-update', project)
+            socket.emit('project-update', projectContext.project)
         }
 
     }
@@ -245,7 +222,7 @@ export default function ProjectBoard(props) {
                             hideForm={() => setIsVisible(!isVisible)}
                             card={currCard}
                             listId={currList}
-                            project={project} />
+                            project={projectContext.project} />
                     </Transparent >
                 </div > : null
             }
@@ -283,7 +260,7 @@ export default function ProjectBoard(props) {
                                                 {(provided) => (
                                                     <div>
                                                         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                            <List list={element} project={project}
+                                                            <List list={element} project={projectContext.project}
                                                                 showCurrentCard={(card) => {
                                                                     setCurrCard(card);
                                                                     setCurrList(element._id);
@@ -322,7 +299,7 @@ export default function ProjectBoard(props) {
                 IsVisibleEdit ?
                     < div >
                         <Transparent hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} >
-                            <EditProject hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} project={project} members={members} />
+                            <EditProject hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} project={projectContext.project} members={members} />
                         </Transparent >
                     </div > : null
             }
