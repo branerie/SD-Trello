@@ -5,3 +5,26 @@ display: flex;
 .topright{
   margin-left: 75%;
 }
+
+.teams{  
+  width: 13em;
+  height: 7em;
+  border: 1px solid #000000; 
+  background-color: #E6E6E6;
+  border: solid 1px #363338;
+  border-radius: 10px;       
+  /* display: flex;    */
+  /* justify-content: space-between;  */
+  padding: 4px;
+  font-weight: normal;
+  overflow-y: auto;  
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
+.teamNames {
+  cursor: pointer;
+}
