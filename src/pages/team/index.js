@@ -29,7 +29,7 @@ const TeamPage = () => {
         
         let currTeam = {}
 
-        userContext.user.teams.map((t, index) => {
+        userContext.user.teams.forEach(t => {
             if (t._id === teamId) {
                 currTeam = t
                 setCurrteamUser(t)
@@ -38,7 +38,7 @@ const TeamPage = () => {
         setMembers(currTeam.members)
         setInvited(currTeam.requests)
         setProjects(currTeam.projects)
-    }, [teamId])
+    }, [teamId, userContext.user.teams])
 
 
     useEffect(() => {

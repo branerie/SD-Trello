@@ -14,7 +14,7 @@ const InboxPage = () => {
     useEffect(() => {
         const arr = userContext.user.inbox.map(m => JSON.parse(m))
         setInbox(arr)
-    }, [])
+    }, [userContext.user.inbox])
 
     async function acceptInvitation(message, accepted) {
         const token = getCookie("x-auth-token")

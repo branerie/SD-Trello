@@ -58,7 +58,7 @@ export default function ProjectBoard(props) {
 
         socket.emit('project-join', id)
         return () => socket.off('project-updated')
-    }, [socket, projectUpdate])
+    }, [socket, projectUpdate, params.projectid])
 
 
     const getData = useCallback(async () => {
@@ -112,9 +112,9 @@ export default function ProjectBoard(props) {
         )
     }
 
-    async function isUserAdmin(project) {
+    function isUserAdmin(project) {
        
-        const admins = await project.membersRoles.filter(a => a.admin === true)
+        const admins = project.membersRoles.filter(a => a.admin === true)
         if (admins.some(item => item.memberId._id === context.user.id)) {
             setIsAdmin(true)
         } else {
