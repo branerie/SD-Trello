@@ -21,7 +21,7 @@ export default function TeamMembers(props) {
             <div className={styles.membersAvatars}>
                 <div>
                     Team Members:
-            </div>
+                </div>
                 {
                     members.map((m, index) => {
                         return (

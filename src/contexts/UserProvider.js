@@ -64,7 +64,8 @@ const UserProvider = (props) => {
                     id: response.user._id,
                     teams: response.teams,
                     inbox: response.user.inbox,
-                    confirmed: response.user.confirmed
+                    confirmed: response.user.confirmed,
+                    selectedTeam: response.user.selectedTeam
                 })
             } else {
                 logOut()

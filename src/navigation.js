@@ -10,6 +10,7 @@ import Home from "./pages/home"
 import WelcomePage from "./pages/welcome"
 import ProfilePage from "./pages/profile"
 import InboxPage from "./pages/inbox"
+import MyTasksPage from "./pages/my-tasks"
 import ErrorPage from "./pages/error"
 import UserContext from "./contexts/UserContext"
 import ProjectBoard from "./pages/project-board"
@@ -41,6 +42,9 @@ const Navigation = () => {
                             </Route>
                             <Route path="/inbox/:userid">
                                 {loggedIn ? (<InboxPage />) : (<Redirect to="/login" />)}
+                            </Route>
+                            <Route path="/my-tasks/:userid">
+                                {loggedIn ? (<MyTasksPage />) : (<Redirect to="/login" />)}
                             </Route>
                             <Route path="/project-board/:teamid/:projectid">
                                 {loggedIn ? (<ProjectBoard />) : (<Redirect to="/" />)}

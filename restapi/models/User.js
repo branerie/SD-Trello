@@ -22,13 +22,9 @@ const userSchema = new Schema({
         required: true
     },
 
-    password: {
-        type: String       
-    },  
+    password: { type: String },  
 
-    imageUrl: {
-        type: String
-    },
+    imageUrl: { type: String },
 
     projects: [{ type: ObjectId, ref: "ProjectUserRole" }],
 
@@ -36,7 +32,9 @@ const userSchema = new Schema({
 
     confirmed: { type: Boolean, default: true }, 
 
-    confirmationToken: { type: String, default: '' }
+    confirmationToken: { type: String, default: '' },
+
+    selectedTeam: { type: String }
 
 });
 
