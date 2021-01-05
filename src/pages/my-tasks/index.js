@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useContext } from "react"
 import { useHistory } from "react-router-dom"
 import ButtonClean from "../../components/button-clean"
 import PageLayout from "../../components/page-layout"
@@ -11,9 +11,6 @@ const MyTasksPage = () => {
     const [currTeam, setCurrTeam] = useState(userContext.user.selectedTeam)
     const [projects, setProjects] = useState([])
     const history = useHistory()
-
-    // useEffect(() => {
-    // })
 
     async function selectTeam(team) {
         setCurrTeam(team)

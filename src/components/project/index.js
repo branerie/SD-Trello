@@ -10,15 +10,15 @@ export default function Project(props) {
     const [isVisible, setIsVisible] = useState(false)
     const params = useParams()
 
-    const onClick = () => {
-        projectContext.setProject(props.project._id)
-    }
+    // const onClick = () => {
+    //     projectContext.setProject(props.project)
+    // }
 
 
 
     return (
         <div className={styles.container}>
-            <Link to={`/project-board/${params.teamid}/${props.project._id}`} onClick={onClick} className={styles.projectname}>Name: {props.project.name}</Link>
+            <Link to={`/project-board/${params.teamid}/${props.project._id}`}  className={styles.projectname}>Name: {props.project.name}</Link>
 
 
             <div className={styles.username}>

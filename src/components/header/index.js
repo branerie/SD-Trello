@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState, useEffect } from "react"
+import React, { useContext, useRef, useState, useEffect, useCallback } from "react"
 import styles from "./index.module.css"
 import UserContext from "../../contexts/UserContext"
 import Avatar from "react-avatar"
@@ -9,8 +9,10 @@ import TeamContext from "../../contexts/TeamContext"
 import Transparent from "../transparent"
 import CreateTeam from "../create-team"
 import ProjectContext from "../../contexts/ProjectContext"
-import { useParams } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import CreateProject from "../create-project"
+import getCookie from "../../utils/cookie"
+import Loader from "react-loader-spinner"
 
 const Header = ({ asideOn }) => {
     const dropdownRefProfile = useRef(null)
@@ -30,11 +32,31 @@ const Header = ({ asideOn }) => {
     const projectContext = useContext(ProjectContext)
     const teamContext = useContext(TeamContext)
     const params = useParams()
+    const history = useHistory()
 
     function selectTeam(teamId, teamName) {
         teamContext.getCurrentProjects(teamId)
         teamContext.setSelectedTeam(teamName)
         setIsTeamActive(false)
+    }
+
+    const getData = async () => {
+        const id = params.projectid
+        const token = getCookie("x-auth-token");
+
+        const response = await fetch(`/api/projects/info/${id}`, {
+            method: "GET",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            }
+        })
+        if (!response.ok) {
+            history.push("/error")
+        } else {
+            const data = await response.json()
+            projectContext.setProject(data)
+        }
     }
 
     useEffect(() => {
@@ -45,10 +67,19 @@ const Header = ({ asideOn }) => {
             teamContext.updateSelectedTeam(teamId)
         }
 
+        // if (window.location.href.includes('team')) {
+        //     projectContext.setProject({ name: 'Select' })
+        // }
+
         if (window.location.href.includes('project')) {
             setIsViewVisibble(true)
             setIsProjectVisibble(true)
             teamContext.getCurrentProjects(params.teamid)
+
+            if (projectContext.project === null || projectContext.project._id !== params.projectid) {
+                getData()
+                console.log('???');
+            }
 
             if (window.location.href.includes('board')) {
                 setViewState('Board')
@@ -57,7 +88,11 @@ const Header = ({ asideOn }) => {
                 setViewState('List')
             }
         }
-    })
+    }, [getData, window.location.href])
+
+    if (window.location.href.includes('project') && !projectContext.project) {
+        return null
+    }
 
     return (
         <header className={`${styles.navigation} ${asideOn ? styles.small : ''}`} >
@@ -115,7 +150,7 @@ const Header = ({ asideOn }) => {
                             <ButtonClean
                                 className={styles.teams}
                                 onClick={() => setIsProjectActive(!isProjectActive)}
-                                title={projectContext.projectName}
+                                title={projectContext.project.name}
                             />
                             {
                                 isProjectActive ? <div
@@ -170,7 +205,7 @@ const Header = ({ asideOn }) => {
                                 >
                                     <div className={styles['first-option']}>
                                         <LinkComponent
-                                            href={`/project-board/${params.teamid}/${projectContext.project}`}
+                                            href={`/project-board/${params.teamid}/${projectContext.project._id}`}
                                             title='Board'
                                             className={styles.hover}
                                             onClick={() => { setIsViewActive(false) }}
@@ -178,7 +213,7 @@ const Header = ({ asideOn }) => {
                                     </div>
                                     <div className={styles['last-option']}>
                                         <LinkComponent
-                                            href={`/project-list/${params.teamid}/${projectContext.project}`}
+                                            href={`/project-list/${params.teamid}/${projectContext.project._id}`}
                                             title='List'
                                             className={styles.hover}
                                             onClick={() => { setIsViewActive(false) }}

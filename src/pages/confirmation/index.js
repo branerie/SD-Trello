@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from "react";
+import React, { useState, useEffect, useContext } from "react";
 import { useHistory, useParams } from "react-router-dom";
 import Button from "../../components/button";
 import UserContext from "../../contexts/UserContext";
@@ -11,7 +11,7 @@ const ConfirmationPage = () => {
     const userContext = useContext(UserContext)
 
     
-    const confirmToken = useCallback(async () => {
+    const confirmToken = async () => {
         const token = params.token
         const response = await fetch('/api/user/confirmation', {
             method: "POST",
@@ -36,7 +36,7 @@ const ConfirmationPage = () => {
             setLoading(false)
             setSuccess(true)
         }
-    })
+    }
     
     useEffect(() => {
         confirmToken()
