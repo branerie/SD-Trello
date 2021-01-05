@@ -23,7 +23,7 @@ export default function Project(props) {
 
             <div className={styles.username}>
                 <div className={styles.creator}>
-                Creator: {props.project.author.username}
+                    Creator: {props.project.author.username}
                 </div>
                 {isVisible ?
                     < div >
@@ -34,7 +34,7 @@ export default function Project(props) {
                 }
                 <div className={styles.info} onClick={() => setIsVisible(!isVisible)}>
                     Info
-                    </div>
+                </div>
             </div>
         </div>
     )

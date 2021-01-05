@@ -88,7 +88,7 @@ export default function ProjectBoard(props) {
             isUserAdmin(data)
         }
 
-    }, [params.projectid, history, projectContext])
+    }, [params.projectid, history])
 
     useEffect(() => {
         getData()
@@ -96,7 +96,7 @@ export default function ProjectBoard(props) {
         if (pid && pid !== projectContext.project) {
             projectContext.setProject(pid)
         }
-    }, [params.projectid])
+    }, [getData])
 
     if (!project) {
         return (
@@ -151,6 +151,13 @@ export default function ProjectBoard(props) {
             const previousId = filteredList[position - 1]
             position = projectContext.lists.indexOf(previousId) + 1
 
+            // console.log(filteredList, position);
+            
+            // const newListsArr = [...lists]
+            // const [reorderedList] = newListsArr.splice(result.source.index, 1)
+            // newListsArr.splice(result.destination.index, 0, reorderedList)
+            // setLists(newListsArr)
+
             const token = getCookie("x-auth-token")
             const response = await fetch(`/api/projects/lists/${project._id}/${result.draggableId}/dnd-update`, {
                 method: "PUT",
@@ -166,11 +173,6 @@ export default function ProjectBoard(props) {
             if (!response.ok) {
                 history.push("/error")
             } else {
-                // const newListsArr = [...lists]
-                // const [reorderedList] = newListsArr.splice(result.source.index, 1)
-                // newListsArr.splice(result.destination.index, 0, reorderedList)
-
-                // await setLists(newListsArr)
             }
         }
 
@@ -209,7 +211,6 @@ export default function ProjectBoard(props) {
         e.preventDefault()
 
         if (listName === "") {
-            console.log('return');
             return
         }
         const token = getCookie("x-auth-token")

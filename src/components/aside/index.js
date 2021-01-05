@@ -37,7 +37,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                     title={<img src={home} alt="home" width="34" height="32" />}
                 />
                 <LinkComponent
-                    href='/'
+                    href={`/my-tasks/${userContext.user.id}`}
                     title={<img src={tasks} alt="my-tasks" width="30" height="25" />}
                 />
                 <LinkComponent
@@ -62,8 +62,8 @@ export default function Aside({ asideOn, setAsideOn }) {
                                 className={styles.link}
                             />
                             <LinkComponent
-                                href='/'
-                                title='Projects'
+                                href={`/my-tasks/${userContext.user.id}`}
+                                title='My Tasks'
                                 className={styles.link}
                             />
                             <LinkComponent

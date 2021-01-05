@@ -46,6 +46,9 @@ const InboxPage = () => {
         <PageLayout>
             <div>
                 {
+                    inbox.length === 0 && <div className={styles.title}>Inbox is empty</div>
+                }
+                {
                     inbox.filter(m => m.subject === "Team invitation")
                         .map((m, index) => {
                             return <div key={index} className={styles.message}>

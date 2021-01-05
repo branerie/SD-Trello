@@ -5,7 +5,6 @@ import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Card from '../card'
-import CreateCard from '../create-card'
 import EditList from '../edit-list'
 import Transparent from '../transparent'
 import styles from './index.module.css'
@@ -20,8 +19,6 @@ export default function List(props) {
     const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [cardName, setCardName] = useState('')
-    const [currCard, setCurrCard] = useState('')
-    const [currList, setCurrList] = useState('')
 
     const history = useHistory()
     const socket = useSocket()
