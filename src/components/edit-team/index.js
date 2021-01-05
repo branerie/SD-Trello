@@ -11,7 +11,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import TeamMembers from '../team-members'
 
 export default function EditTeam(props) {
-    const currTeam = props.currTeam
+    const [currTeam,setCurrTeam] = useState(props.currTeam)
     const [name, setName] = useState(currTeam.name)
     const [description, setDescription] = useState(currTeam.description)
     const [member, setMember] = useState('')
@@ -37,19 +37,19 @@ export default function EditTeam(props) {
     const getData = useCallback(async () => {
 
         // let currTeam = {}
-        // await userContext.user.teams.map(t => {
-        //     if (t._id === teamId) {
-        //         currTeam = t
-        //     }
-        // })
-        let teamAthor = currTeam.author
+        await userContext.user.teams.map(t => {
+            if (t._id === teamId) {
+                setCurrTeam(t)
+            }
+        })
+        let teamAuthor = currTeam.author
         // console.log(currTeam);
         setMembers(currTeam.members)
 
         setInvited(currTeam.requests)
         setDescription(currTeam.description)
         setName(currTeam.name)
-        if (context.user.id === teamAthor) {
+        if (context.user.id === teamAuthor) {
             setIsAdmin(true)
         }
     }, [])
@@ -146,8 +146,9 @@ export default function EditTeam(props) {
             return
         } else {
             teamContext.setSelectedTeam(name)
-            // getData()
+            getData()
             socket.emit('team-update', teamId)
+            props.hideForm()
         }
 
     }
