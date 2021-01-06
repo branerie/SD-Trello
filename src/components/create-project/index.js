@@ -1,4 +1,4 @@
-import React, { useCallback, useState, useContext } from 'react'
+import React, { useState, useContext } from 'react'
 import { useHistory, useParams } from "react-router-dom"
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
@@ -24,7 +24,7 @@ export default function CreateProject({ hideForm }) {
     const params = useParams()
     const socket = useSocket()
 
-    const handleSubmit = useCallback(async (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
         const teamId = params.teamid
         const token = getCookie("x-auth-token")
@@ -50,7 +50,7 @@ export default function CreateProject({ hideForm }) {
             history.push(`/project-board/${teamId}/${project._id}`)
             hideForm && hideForm()
         }
-    }, [history, name, description])
+    }
 
     const onFocus = async () => {
         setShowMembers(true)
