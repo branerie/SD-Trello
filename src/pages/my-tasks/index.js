@@ -8,7 +8,7 @@ import styles from './index.module.css'
 
 const MyTasksPage = () => {
     const userContext = useContext(UserContext)
-    const [currTeam, setCurrTeam] = useState(userContext.user.selectedTeam)
+    const [currTeam, setCurrTeam] = useState('')
     const [projects, setProjects] = useState([])
     const history = useHistory()
 
