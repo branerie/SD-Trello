@@ -3,10 +3,8 @@ import styles from './index.module.css'
 import Avatar from 'react-avatar'
 
 
-
 export default function TaskMembers(props) {
 
-         
    const value = props.value
 
     return (

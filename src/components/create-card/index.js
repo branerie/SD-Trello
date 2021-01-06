@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState } from 'react'
 import { useHistory } from "react-router-dom"
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
@@ -13,10 +13,6 @@ import pic6 from '../../images/edit-card/pic6.svg'
 import pic7 from '../../images/edit-card/pic7.svg'
 import pic8 from '../../images/edit-card/pic8.svg'
 import pic9 from '../../images/edit-card/pic9.svg'
-
-
-
-
 import TaskMembers from '../task-members'
 import TaskDueDate from "../task-dueDate"
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
@@ -26,28 +22,22 @@ import TaskHistory from '../task-history'
 
 export default function EditCard(props) {
 
-
     const listId = props.listId
 
     const dropdownRef = useRef(null);
     const [card, setCard] = useState('')
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
-    const [dueDate, setDueDate] = useState('')
     const [progress, setProgress] = useState('')
     const [taskHistory, setTaskHistory] = useState('')
     const [progressChanged, setProgressChanged] = useState(false)
-
-
     const history = useHistory()
     const socket = useSocket()
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [isProgressActive, setIsProgressActive] = useDetectOutsideClick(dropdownRef)
     const [isDescriptionActive, setIsDescriptionActive] = useState(false)
-
+    const dueDate = ''
     const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()))
-
-
     const cardId = card._id
 
 
@@ -81,7 +71,7 @@ export default function EditCard(props) {
     }, [history, props, cardId, listId, updateProjectSocket])
 
 
-    const handleSubmit = useCallback(async (event) => {
+    const handleSubmit = async (event) => {
         event.preventDefault()
 
         if (Number(progress) > 100) {
@@ -130,9 +120,9 @@ export default function EditCard(props) {
         }
 
 
-    }, [history, props, name, description, dueDate, progress, listId, cardId, updateProjectSocket, EditCard, setIsActive, setIsProgressActive])
+    }
 
-    const createTask = useCallback(async (event) => {
+    const createTask = async (event) => {
         if (name === '') {
             return
         }
@@ -172,9 +162,7 @@ export default function EditCard(props) {
             setIsDescriptionActive(false)
             setProgressChanged(false)
         }
-
-
-    }, [history, props, name, description, dueDate, progress, listId, cardId, updateProjectSocket, EditCard, setIsActive, setIsProgressActive])
+    }
 
     const progressColor = (progress) => {
         if (Number(progress) <= 20) {
@@ -189,11 +177,6 @@ export default function EditCard(props) {
         if (Number(progress) > 80) {
             return 'green'
         }
-    }
-
-    let thisCardDate = ''
-    if (dueDate && dueDate !== 0) {
-        thisCardDate = dueDate.getTime()
     }
 
     return (
@@ -269,7 +252,7 @@ export default function EditCard(props) {
                                                                 <div
                                                                     style={{
                                                                         width: `${card.progress}%`,
-                                                                        ['backgroundColor']: progressColor(card.progress)
+                                                                        backgroundColor: progressColor(card.progress)
                                                                     }}
                                                                     className={styles.progress}
                                                                 />

@@ -32,7 +32,7 @@ export function SocketProvider({ user, children }) {
     setSocket(newSocket)
 
     return () => newSocket.close()
-  }, [user])
+  }, [user, url])
 
   return (
     <SocketContext.Provider value={socket}>

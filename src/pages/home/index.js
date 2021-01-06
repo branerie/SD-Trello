@@ -1,6 +1,5 @@
 import React, { useContext, useState } from "react"
 import { useHistory } from "react-router-dom"
-import ButtonClean from "../../components/button-clean"
 import CreateTeam from "../../components/create-team"
 import PageLayout from "../../components/page-layout"
 import Title from "../../components/title"
@@ -9,22 +8,13 @@ import UserContext from "../../contexts/UserContext"
 import styles from './index.module.css'
 import pic1 from '../../images/home-page-pic.svg'
 
-
-
-
-
 const Home = () => {
   const userContext = useContext(UserContext)
   const history = useHistory()
   const [showTeamForm, setShowTeamForm] = useState(false)
   const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useState(false)
-
-
-
   const userName = userContext.user.username
   const userTeams = userContext.user.teams
-
-
 
   const goToTeamPage = (teamId) => {
     history.push(`/team/${teamId}`)
@@ -42,8 +32,6 @@ const Home = () => {
       )
     })
   }
-
-
 
   return (
     <PageLayout>

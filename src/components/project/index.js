@@ -1,20 +1,12 @@
-import React, { useContext, useState } from 'react'
+import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import ProjectContext from '../../contexts/ProjectContext'
 import EditProject from '../edit-project'
 import Transparent from '../transparent'
 import styles from './index.module.css'
 
 export default function Project(props) {
-    const projectContext = useContext(ProjectContext)
     const [isVisible, setIsVisible] = useState(false)
     const params = useParams()
-
-    // const onClick = () => {
-    //     projectContext.setProject(props.project)
-    // }
-
-
 
     return (
         <div className={styles.container}>

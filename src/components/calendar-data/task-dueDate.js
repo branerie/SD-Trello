@@ -10,34 +10,24 @@ import Transparent from "../transparent";
 import EditCard from '../edit-card'
 
 
-
 export default function TaskDueDate(props) {
-
 
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [cardDueDate, setCardDueDate] = useState(props.cardDueDate)
     const [isVisible, setIsVisible] = useState(false)
-
     const history = useHistory()
     const socket = useSocket()
-
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
-
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
     }, [socket, props.project])
 
-
-
-
     const editCardDueDate = useCallback(async (date) => {
 
         let cardId = props.cardId
         let listId = props.listId
-
-
 
         if (cardDueDate === "" && date === '') {
             console.log('return');
@@ -65,13 +55,12 @@ export default function TaskDueDate(props) {
     }, [history, cardDueDate, updateProjectSocket, setIsActive, isActive, props.cardId, props.listId
     ])
 
-
-    let cardDate = ''
-    let thisCardDate = ''
-    if (cardDueDate) {
-        cardDate = new Date(cardDueDate)
-        thisCardDate = cardDate.getTime()
-    }
+    // let cardDate = ''
+    // let thisCardDate = ''
+    // if (cardDueDate) {
+    //     cardDate = new Date(cardDueDate)
+    //     thisCardDate = cardDate.getTime()
+    // }
 
 
     // let value = (thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + (cardDate.toLocaleString('default', { month: 'short' })) + '-' + cardDate.getFullYear() : ''

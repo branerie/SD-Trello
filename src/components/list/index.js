@@ -73,7 +73,7 @@ export default function List(props) {
             updateProjectSocket()                      
         }
 
-    }, [history, cardName, props.list._id, props, updateProjectSocket])
+    }, [history, cardName, props, updateProjectSocket, isVisible, setIsVisible])
 
     const onClick = () => setIsActive(!isActive)
 

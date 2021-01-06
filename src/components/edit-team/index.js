@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory, useParams } from "react-router-dom"
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-// import "react-datepicker/dist/react-datepicker.css"
 import TeamContext from '../../contexts/TeamContext'
 import Avatar from 'react-avatar'
 import ButtonClean from '../button-clean'
@@ -34,16 +33,14 @@ export default function EditTeam(props) {
 
 
 
-    const getData = useCallback(async () => {
+    const getData = useCallback(() => {
 
-        // let currTeam = {}
-        await userContext.user.teams.map(t => {
+        userContext.user.teams.forEach(t => {
             if (t._id === teamId) {
                 setCurrTeam(t)
             }
         })
         let teamAuthor = currTeam.author
-        // console.log(currTeam);
         setMembers(currTeam.members)
 
         setInvited(currTeam.requests)
@@ -52,7 +49,7 @@ export default function EditTeam(props) {
         if (context.user.id === teamAuthor) {
             setIsAdmin(true)
         }
-    }, [])
+    }, [context.user.id, currTeam.author, currTeam.description, currTeam.members, currTeam.name, currTeam.requests, userContext.user.teams, teamId])
 
 
     useEffect(() => {

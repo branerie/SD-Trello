@@ -5,14 +5,11 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import { useHistory } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider'
 import Avatar from 'react-avatar'
-import ButtonClean from '../button-clean';
 import TeamContext from "../../contexts/TeamContext"
 import pen from '../../images/pen.svg'
 
 
-
 export default function TaskMembers(props) {
-
 
     const dropdownRef = useRef(null);
     const [cardMembers, setCardMembers] = useState(props.card.members)
@@ -22,9 +19,7 @@ export default function TaskMembers(props) {
     const history = useHistory()
     const socket = useSocket()
     const teamContext = useContext(TeamContext)
-
     const projectId = props.project._id
-
     const cardId = props.card._id
     const listId = props.listId
 
@@ -55,17 +50,17 @@ export default function TaskMembers(props) {
             history.push("/error")
         }
         const data = await response.json()
-        
+
         let filtered = data.members
 
         // for (var arr in data) {
-            for (var filter in cardMembers) {
-                // if (data[arr]._id === cardMembers[filter]._id) {
-                    filtered = filtered.filter(function (obj) {
-                        return obj._id !== cardMembers[filter]._id
-                    })
-        //         }
-        //     }
+        for (let filter in cardMembers) {
+            // if (data[arr]._id === cardMembers[filter]._id) {
+            filtered = filtered.filter(function (obj) {
+                return obj._id !== cardMembers[filter]._id
+            })
+            //         }
+            //     }
         }
         setUsers(filtered)
 
@@ -91,7 +86,7 @@ export default function TaskMembers(props) {
         let arr = [...cardMembers]
 
         if (index !== -1) {
-            arr.splice(index, 1)            
+            arr.splice(index, 1)
         }
 
         const token = getCookie("x-auth-token")
@@ -112,14 +107,14 @@ export default function TaskMembers(props) {
             setCardMembers(arr)
         }
 
-    }, [history, props, cardId, listId, updateProjectSocket])
+    }, [history, cardId, listId, updateProjectSocket, cardMembers])
 
 
-    
+
 
     const handleAdd = useCallback(async (event) => {
         event.preventDefault()
-        if(!selectedUser){
+        if (!selectedUser) {
             setIsActive(!isActive)
             return
         }
@@ -127,12 +122,12 @@ export default function TaskMembers(props) {
         const token = getCookie("x-auth-token")
 
         const project = props.project
-        
+
         const result = project.membersRoles.filter(obj => {
             return obj.memberId._id === selectedUser._id
         })[0]
-         if(!result){
-            if (window.confirm(`Do you want to add ${selectedUser.username} to project?`)){
+        if (!result) {
+            if (window.confirm(`Do you want to add ${selectedUser.username} to project?`)) {
                 const responseAdd = await fetch(`/api/projects/${projectId}/user`, {
                     method: "POST",
                     headers: {
@@ -140,24 +135,24 @@ export default function TaskMembers(props) {
                         "Authorization": token
                     },
                     body: JSON.stringify({
-                        member:selectedUser,
+                        member: selectedUser,
                         admin: false
                     })
                 })
                 if (!responseAdd.ok) {
                     history.push("/error")
-                } 
-                
+                }
+
             } else {
                 return
             }
-         }
+        }
 
         let arr = [...cardMembers]
 
-        arr.push(selectedUser)       
+        arr.push(selectedUser)
 
-        
+
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
@@ -178,7 +173,7 @@ export default function TaskMembers(props) {
             setSelectedUser('')
         }
 
-    }, [history, props, cardId, listId, isActive, setIsActive, selectedUser, updateProjectSocket])
+    }, [history, props, cardId, listId, isActive, setIsActive, selectedUser, updateProjectSocket, cardMembers, projectId])
 
 
 
@@ -188,7 +183,7 @@ export default function TaskMembers(props) {
                 isActive ?
                     <span>
                         < form ref={dropdownRef} className={styles.container}  >
-                            <select className={styles.select} onChange={(e) => {handleSelect(e.target.value)}}>
+                            <select className={styles.select} onChange={(e) => { handleSelect(e.target.value) }}>
                                 <option>Select</option>
                                 {
                                     users.map((m, index) => (
