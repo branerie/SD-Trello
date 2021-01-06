@@ -27,7 +27,7 @@ function TeamProvider({ children }) {
 
   useEffect(() => {
     setTeams(userContext.user.teams)
-  })
+  }, [userContext.user.teams])
 
   const teamUpdate = useCallback((team) => {
     console.log('teamUpdateFunc', team);

@@ -37,7 +37,7 @@ const UserProvider = (props) => {
         })
     }, [history])
 
-    function verifyLogin() {
+    const verifyLogin = useCallback(() => {
         const token = getCookie("x-auth-token")        
         if (!token) {
 
@@ -72,11 +72,11 @@ const UserProvider = (props) => {
 
             setLoading(false)
         })
-    }
+    }, [logOut])
 
     useEffect(() => {
         verifyLogin()
-    }, [])
+    }, [verifyLogin])
 
     if (loading) {
         return (
