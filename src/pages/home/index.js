@@ -23,6 +23,7 @@ const Home = () => {
 
   const userName = userContext.user.username
   const userTeams = userContext.user.teams
+  const userId = userContext.user._id
 
 
 
@@ -63,7 +64,7 @@ const Home = () => {
 
           <div>
             <button className={styles.navigateButtons}
-            // onClick={history.push(`/team/${teamId}`)}
+            onClick={() => history.push(`/my-tasks/${userId}`)}
             >My Tasks</button>
           </div>
 
@@ -88,7 +89,7 @@ const Home = () => {
                               // className={styles.teamNames}
                               className={styles.navigateButtons}
                               onClick={() => goToTeamPage(t._id)}
-                              onMouseOver={() => showTeamProjects(t)}
+                              
                             >{t.name}</button>
                             {/* <div className={styles.teams}>
                     Projects:
