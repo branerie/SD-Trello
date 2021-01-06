@@ -7,9 +7,7 @@ import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import "react-datepicker/dist/react-datepicker.css"
 import { useSocket } from '../../contexts/SocketProvider'
-import Transparent from '../transparent'
 import AddProjectMember from '../add-project-member'
-import Avatar from 'react-avatar'
 import UserContext from '../../contexts/UserContext'
 
 
@@ -17,7 +15,6 @@ export default function EditProject(props) {
     const [name, setName] = useState(props.project.name)
     const [description, setDescription] = useState(props.project.description)
     const members = props.project.membersRoles
-    const [IsVisibleAdd, setIsVisibleAdd] = useState(false)
     const [isAdmin, setIsAdmin] = useState(false)
     const context = useContext(UserContext)
     const history = useHistory()
@@ -30,14 +27,14 @@ export default function EditProject(props) {
     }, [socket, props.project])
 
 
-    async function getData() {
-        const admins = await members.filter(a => a.admin === true)
+    const getData = useCallback(() => {
+        const admins = members.filter(a => a.admin === true)
         if (admins.some(item => item.memberId._id === context.user.id)) {
             setIsAdmin(true)
         } else {
             setIsAdmin(false)
         }
-    }
+    }, [context.user.id, members])
 
     useEffect(() => {
         getData()       

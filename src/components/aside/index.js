@@ -21,7 +21,7 @@ export default function Aside({ asideOn, setAsideOn }) {
         if (window.location.href.includes('project')) {
             setListVisibility(true)
         }
-    })
+    }, [])
 
     return (
         <div className={styles.aside}>

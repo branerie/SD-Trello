@@ -12,7 +12,6 @@ import ProjectContext from "../../contexts/ProjectContext"
 import { useHistory, useParams } from "react-router-dom"
 import CreateProject from "../create-project"
 import getCookie from "../../utils/cookie"
-import Loader from "react-loader-spinner"
 
 const Header = ({ asideOn }) => {
     const dropdownRefProfile = useRef(null)
@@ -40,7 +39,7 @@ const Header = ({ asideOn }) => {
         setIsTeamActive(false)
     }
 
-    const getData = async () => {
+    const getData = useCallback(async () => {
         const id = params.projectid
         const token = getCookie("x-auth-token");
 
@@ -57,7 +56,7 @@ const Header = ({ asideOn }) => {
             const data = await response.json()
             projectContext.setProject(data)
         }
-    }
+    }, [history, params.projectid, projectContext])
 
     useEffect(() => {
         if (!(window.location.href.includes('team') || window.location.href.includes('project'))) {
@@ -78,7 +77,6 @@ const Header = ({ asideOn }) => {
 
             if (projectContext.project === null || projectContext.project._id !== params.projectid) {
                 getData()
-                console.log('???');
             }
 
             if (window.location.href.includes('board')) {
@@ -88,7 +86,7 @@ const Header = ({ asideOn }) => {
                 setViewState('List')
             }
         }
-    }, [getData, window.location.href])
+    }, [getData, params.projectid, params.teamid, projectContext.project, teamContext])
 
     if (window.location.href.includes('project') && !projectContext.project) {
         return null

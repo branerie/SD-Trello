@@ -4,12 +4,9 @@ import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
 import { useHistory } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider';
-import pen from '../../images/pen.svg'
-
 
 
 export default function TaskName(props) {
-
 
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
@@ -21,7 +18,6 @@ export default function TaskName(props) {
   const updateProjectSocket = useCallback(() => {
     socket.emit('project-update', props.project)
   }, [socket, props.project])
-
 
 
   const editCardName = useCallback(async (event) => {
@@ -74,10 +70,6 @@ export default function TaskName(props) {
       )
     }
     let cardname = token[0]
-    let cardId = token[1]
-    let listId = token[2]
-
-
 
     return (
       <span>

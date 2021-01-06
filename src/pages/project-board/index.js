@@ -21,7 +21,6 @@ import UserContext from '../../contexts/UserContext'
 export default function ProjectBoard(props) {
     const params = useParams()
     const history = useHistory()
-    // const [project, setProject] = useState(null)
     const [members, setMembers] = useState([])
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
     const [listName, setListName] = useState('')
@@ -71,9 +70,10 @@ export default function ProjectBoard(props) {
         })
         setMembers(memberArr)
         projectContext.setLists(projectContext.project.lists)
-        isUserAdmin(projectContext.project)
+        const member = memberArr.find( m => m.id === context.user.id)
+        setIsAdmin(member.admin)
 
-    }, [projectContext.project])
+    }, [projectContext.project, params.projectid, projectContext, context.user.id])
 
     if (!projectContext.project || projectContext.project._id !== params.projectid) {
         return (
@@ -88,18 +88,6 @@ export default function ProjectBoard(props) {
             </PageLayout>
         )
     }
-
-    function isUserAdmin(project) {
-
-        const admins = project.membersRoles.filter(a => a.admin === true)
-        if (admins.some(item => item.memberId._id === context.user.id)) {
-            setIsAdmin(true)
-        } else {
-            setIsAdmin(false)
-        }
-    }
-
-
 
     async function deleteProject() {
         const token = getCookie("x-auth-token")

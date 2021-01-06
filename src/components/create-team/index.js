@@ -1,11 +1,7 @@
 import React, { useContext, useState } from 'react'
 import { useHistory } from "react-router-dom"
-import Button from '../button'
-import Input from '../input'
-import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-// import "../edit-team/node_modules/react-datepicker/dist/react-datepicker.css"
 import TeamContext from '../../contexts/TeamContext'
 import Avatar from 'react-avatar'
 import ButtonClean from '../button-clean'
@@ -136,7 +132,7 @@ export default function CreateTeam(props) {
                     />
                 </div>
                 {
-                    showMembers ?
+                    showMembers &&
                         <div className={styles.members}>
                             {
                                 allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
@@ -162,7 +158,7 @@ export default function CreateTeam(props) {
                                             />)
                                     })
                             }
-                        </div> : null
+                        </div>
                 }
 
                 <div className={styles.membersAvatars}>

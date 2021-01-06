@@ -18,7 +18,7 @@ export default function ProjectList() {
 
     const projectUpdate = useCallback((project) => {
         projectContext.setProject(project)
-    }, [])
+    }, [projectContext])
 
     useEffect(() => {
         const id = params.projectid
@@ -29,7 +29,7 @@ export default function ProjectList() {
 
         socket.emit('project-join', id)
         return () => socket.off('project-updated')
-    }, [socket, projectUpdate])
+    }, [socket, projectUpdate, params.projectid])
 
     const progressFilter = (filtered) => {
         const obj = {...filter}

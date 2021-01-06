@@ -1,33 +1,26 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useRef, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
 import { useHistory } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider';
-import pen from '../../images/pen.svg'
-
 
 export default function TaskProgress(props) {
 
-    const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()))
+    const today = useMemo(() => new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())), [])
     let card = props.card
     const [taskHistory, setTaskHistory] = useState(card.history)
-
-
     const value = props.value
     let taskprogress = ''
     let token = value.split('/')
-    if (token.length > 1) {
 
+    if (token.length > 1) {
         taskprogress = token[0]
     }
-
 
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [cardProgress, setCardProgress] = useState(taskprogress)
-    const [color, setColor] = useState('')
-
     const history = useHistory()
     const socket = useSocket()
 
@@ -65,8 +58,6 @@ export default function TaskProgress(props) {
         setTaskHistory(arr)
 
 
-
-
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
@@ -88,8 +79,7 @@ export default function TaskProgress(props) {
             updateProjectSocket()
         }
 
-    }, [history, cardProgress, updateProjectSocket, isActive, setIsActive, props.value])
-
+    }, [history, cardProgress, updateProjectSocket, isActive, setIsActive, props.value, taskHistory, today])
 
 
     function showTaskProgress(value) {
@@ -107,7 +97,6 @@ export default function TaskProgress(props) {
         return (
             <div>
                 Add Progress
-                {/* <img src={pen} alt="..." width="11.5" height="11.5" /> */}
             </div>
         )
     }
@@ -131,9 +120,6 @@ export default function TaskProgress(props) {
         return currColor
     }
 
-
-    // let value = props.value
-
     if (value) {
         let token = value.split('/')
         if (token.length === 1) {
@@ -142,12 +128,6 @@ export default function TaskProgress(props) {
             )
         }
         let taskprogress = token[0]
-        let cardId = token[1]
-        let listId = token[2]
-
-
-
-
 
         return (
             <span>
@@ -161,8 +141,7 @@ export default function TaskProgress(props) {
                                     backgroundColor: [getBackGroundColor(taskprogress)],
                                     padding: '5px', fontSize: "14px", border: 'solid black 1px',
                                     borderRadius: '5px', width: '100%',
-                                    textAlign: 'center',
-                                    // color:'white'
+                                    textAlign: 'center'
                                 }}
                                 type={'number'}
                                 value={cardProgress}

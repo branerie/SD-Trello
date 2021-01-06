@@ -16,23 +16,13 @@ import Transparent from "../transparent";
 import EditList from "../edit-list";
 
 
-
-
-
 const TableDndApp = (props) => {
     const [startDay, setStartDay] = useState(getMonday)
     const [tableData, setTableData] = useState([])
     const [tableSize, setTableSize] = useState(10)
     const [isVisibleEditList, setIsVisibleEditList] = useState(false)
     const [currList, setCurrList] = useState('')
-
-
-
-
     const projectContext = useContext(ProjectContext)
-
-
-
 
 
     function getMonday(date) {
@@ -43,7 +33,7 @@ const TableDndApp = (props) => {
             d = new Date()
         }
         var day = d.getDay(),
-            diff = d.getDate() - day + (day == 0 ? -6 : 1)
+            diff = d.getDate() - day + (day === 0 ? -6 : 1)
         let thisMonday = new Date(d.setDate(diff))
         let monday = new Date(thisMonday.getFullYear(), thisMonday.getMonth(), thisMonday.getDate())
 
@@ -65,7 +55,7 @@ const TableDndApp = (props) => {
                 data.push({
                     task: (
                         <div key={index} className={styles.listNameContainer} style={{ background: list.color || '#A6A48E' }}
-                            onClick={() => { { setCurrList(list); setIsVisibleEditList(!isVisibleEditList) } }}
+                            onClick={() => { setCurrList(list); setIsVisibleEditList(!isVisibleEditList) } }
                         >
                             <span className={styles.listNameText} >
                                 {list.name}
@@ -195,7 +185,7 @@ const TableDndApp = (props) => {
         return numberOfRows
 
 
-    }, [projectContext, props])
+    }, [projectContext, props, isVisibleEditList])
 
 
     useEffect(() => {
