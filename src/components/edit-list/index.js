@@ -24,21 +24,17 @@ export default function EditList(props) {
     const [isAdmin, setIsAdmin] = useState(false)
     const members = props.project.membersRoles
     const context = useContext(UserContext)
-
-
-
-
     const projectId = props.project._id
     const listId = props.list._id
 
-    async function getData() {
-        const admins = await members.filter(a => a.admin === true)
+    const getData = useCallback(() => {
+        const admins = members.filter(a => a.admin === true)
         if (admins.some(item => item.memberId._id === context.user.id)) {
             setIsAdmin(true)
         } else {
             setIsAdmin(false)
         }
-    }
+    }, [context.user.id, members])
 
     useEffect(() => {
         getData()

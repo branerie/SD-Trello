@@ -1,10 +1,9 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useCallback, useRef, useState, useMemo } from 'react'
 import { useHistory } from "react-router-dom"
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import "react-datepicker/dist/react-datepicker.css"
 import { useSocket } from '../../contexts/SocketProvider'
-import pen from '../../images/pen.svg'
 import pic1 from '../../images/edit-card/pic1.svg'
 import pic2 from '../../images/edit-card/pic2.svg'
 import pic3 from '../../images/edit-card/pic3.svg'
@@ -19,31 +18,19 @@ import pic11 from '../../images/edit-card/pic11.svg'
 import pic12 from '../../images/edit-card/pic12.svg'
 import pic13 from '../../images/edit-card/pic13.svg'
 import pic14 from '../../images/edit-card/pic14.svg'
-
-
-
-
-
-
-
-
 import TaskMembers from '../task-members'
 import TaskDueDate from "../task-dueDate"
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import TaskHistory from '../task-history'
 
 
-
 export default function EditCard(props) {
 
-
     const listId = props.listId
-
     const dropdownRef = useRef(null);
     const [card, setCard] = useState(props.card)
     const [name, setName] = useState(card.name)
     const [description, setDescription] = useState(card.description)
-    const [dueDate, setDueDate] = useState(new Date(card.dueDate))
     const [progress, setProgress] = useState(card.progress)
     const [taskHistory, setTaskHistory] = useState(card.history)
     const [progressChanged, setProgressChanged] = useState(false)
@@ -52,11 +39,8 @@ export default function EditCard(props) {
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [isProgressActive, setIsProgressActive] = useDetectOutsideClick(dropdownRef)
     const [isDescriptionActive, setIsDescriptionActive] = useState(false)
-    
-    const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()))
-
-   
-
+    const dueDate = useMemo(() => new Date(card.dueDate), [card.dueDate])
+    const today = useMemo(() => new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())), [])
     const cardId = card._id
 
 
@@ -86,7 +70,6 @@ export default function EditCard(props) {
             updateProjectSocket()
             props.hideForm()
         }
-
     }, [history, props, cardId, listId, updateProjectSocket])
 
 
@@ -137,8 +120,7 @@ export default function EditCard(props) {
             setProgressChanged(false)
         }
 
-
-    }, [history, props, name, description, dueDate, progress, listId, cardId, updateProjectSocket, EditCard, setIsActive, setIsProgressActive])
+    }, [history, name, description, dueDate, progress, listId, cardId, updateProjectSocket, setIsActive, setIsProgressActive, progressChanged, taskHistory, today])
 
 
 
@@ -155,11 +137,6 @@ export default function EditCard(props) {
         if (Number(progress) > 80) {
             return 'green'
         }
-    }
-
-    let thisCardDate = ''
-    if (dueDate && dueDate !== 0) {
-        thisCardDate = dueDate.getTime()
     }
 
     return (
@@ -216,7 +193,7 @@ export default function EditCard(props) {
                                                     <div
                                                         style={{
                                                             width: `${card.progress}%`,
-                                                            ['backgroundColor']: progressColor(card.progress)
+                                                            backgroundColor: progressColor(card.progress)
                                                         }}
                                                         className={styles.progress}
                                                     />
