@@ -32,9 +32,7 @@ const userSchema = new Schema({
 
     confirmed: { type: Boolean, default: true }, 
 
-    confirmationToken: { type: String, default: '' },
-
-    selectedTeam: { type: String }
+    confirmationToken: { type: String, default: '' }
 
 });
 

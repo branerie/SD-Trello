@@ -203,7 +203,7 @@ async function confirmToken(req, res, next) {
 
 async function updateUser(req, res, next) {
     const id = req.params.id
-    let user = { username, password, email, imageUrl, selectedTeam } = req.body
+    let user = { username, password, email, imageUrl } = req.body
     const obj = {}
     for (let key in user) {
         if (user[key] && key !== 'password') {
