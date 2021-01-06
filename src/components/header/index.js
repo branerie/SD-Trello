@@ -78,7 +78,6 @@ const Header = ({ asideOn }) => {
 
             if (projectContext.project === null || projectContext.project._id !== params.projectid) {
                 getData()
-                console.log('???');
             }
 
             if (window.location.href.includes('board')) {
