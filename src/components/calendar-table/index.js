@@ -11,9 +11,10 @@ import AddList from "../calendar-data/add-list"
 import AddTask from "../calendar-data/add-task"
 import TaskMembers from "../calendar-data/task-members"
 import ProjectContext from "../../contexts/ProjectContext"
-import ColumnData from "../calendar-data/column-data";
-import Transparent from "../transparent";
-import EditList from "../edit-list";
+import ColumnData from "../calendar-data/column-data"
+import Transparent from "../transparent"
+import EditList from "../edit-list"
+import UserContext from '../../contexts/UserContext'
 
 
 const TableDndApp = (props) => {
@@ -23,6 +24,8 @@ const TableDndApp = (props) => {
     const [isVisibleEditList, setIsVisibleEditList] = useState(false)
     const [currList, setCurrList] = useState('')
     const projectContext = useContext(ProjectContext)
+    const userContext = useContext(UserContext)
+
 
 
     function getMonday(date) {
@@ -40,6 +43,23 @@ const TableDndApp = (props) => {
         return monday
     }
 
+
+    const onListClick = (list) => {
+        const memberArr = []
+        projectContext.project.membersRoles.map(element => {
+            return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
+
+        })
+        projectContext.setLists(projectContext.project.lists)
+        const member = memberArr.find(m => m.id === userContext.user.id)
+
+        if (member && member.admin) {
+            setCurrList(list)
+            setIsVisibleEditList(!isVisibleEditList)
+        }
+    }
+
+
     const cardData = useCallback(async () => {
         let numberOfRows = 0
 
@@ -55,7 +75,7 @@ const TableDndApp = (props) => {
                 data.push({
                     task: (
                         <div key={index} className={styles.listNameContainer} style={{ background: list.color || '#A6A48E' }}
-                            onClick={() => { setCurrList(list); setIsVisibleEditList(!isVisibleEditList) } }
+                            onClick={() => onListClick(list)}
                         >
                             <span className={styles.listNameText} >
                                 {list.name}
@@ -185,7 +205,7 @@ const TableDndApp = (props) => {
         return numberOfRows
 
 
-    }, [projectContext, props, isVisibleEditList])
+    }, [projectContext, props])
 
 
     useEffect(() => {

@@ -4,7 +4,7 @@
     top: 15%;
     z-index: 20;
     width: 45%;
-    min-height: 75%;
+    min-height: 70%;
     height: auto;
     background-color:#EDF5F9;
     border: solid 2px #707070;
@@ -24,9 +24,9 @@
 .logo{
     margin: 5%;
     margin-top: 0%;
-    margin-right: 10%;
+    margin-right: 5%;
     height: 90%;
-    width: 20%;
+    width: 10%;
 }
 .rightSide{
     width: 80%;
@@ -65,7 +65,7 @@
 }
 
 .passInstructions{
-    font-size: 0.7em;
+    font-size: 0.65em;
     margin: 0 auto;
     text-align: center;
 }
@@ -110,7 +110,7 @@
       border: none;
       text-decoration: underline;
       color: #F3981F;
-      margin: 2%;
+      margin: 1%;
       cursor: pointer;
       font-weight: 500;
       font-size: 1em;
@@ -118,6 +118,7 @@
 
   .buttonDivGoogleLogin{
     margin: 5% auto;
+    margin-bottom: 1%;
     width: 70%;    
 }
 

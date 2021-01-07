@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState, useRef } from 'react'
 import { useParams, useHistory } from "react-router-dom"
-import Button from '../../components/button'
 import EditProject from '../../components/edit-project'
 import List from '../../components/list'
 import PageLayout from '../../components/page-layout'
@@ -16,6 +15,7 @@ import Loader from 'react-loader-spinner'
 import ButtonClean from '../../components/button-clean'
 import EditCard from '../../components/edit-card'
 import UserContext from '../../contexts/UserContext'
+import EditList from '../../components/edit-list'
 
 
 export default function ProjectBoard(props) {
@@ -23,6 +23,7 @@ export default function ProjectBoard(props) {
     const history = useHistory()
     const [members, setMembers] = useState([])
     const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
+    const [isVisibleEditList, setIsVisibleEditList] = useState(false)
     const [listName, setListName] = useState('')
     const listRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(listRef)
@@ -70,8 +71,11 @@ export default function ProjectBoard(props) {
         })
         setMembers(memberArr)
         projectContext.setLists(projectContext.project.lists)
-        const member = memberArr.find( m => m.id === context.user.id)
-        setIsAdmin(member.admin)
+        const member = memberArr.find(m => m.id === context.user.id)
+
+        if (member) {
+            setIsAdmin(member.admin)
+        }
 
     }, [projectContext.project, params.projectid, projectContext, context.user.id])
 
@@ -89,22 +93,7 @@ export default function ProjectBoard(props) {
         )
     }
 
-    async function deleteProject() {
-        const token = getCookie("x-auth-token")
-        const response = await fetch(`/api/projects/${projectContext.project._id}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            }
-        })
-        if (!response.ok) {
-            history.push("/error")
-        } else {
-            socket.emit('team-update', params.teamid)
-            history.push('/')
-        }
-    }
+
 
     async function handleOnDragEnd(result) {
         if (!result.destination) return
@@ -214,6 +203,14 @@ export default function ProjectBoard(props) {
                     </Transparent >
                 </div > : null
             }
+            {
+                isVisibleEditList ?
+                    < div >
+                        <Transparent hideForm={() => setIsVisibleEditList(!isVisibleEditList)} >
+                            <EditList hideForm={() => setIsVisibleEditList(!isVisibleEditList)} list={currList} project={projectContext.project} />
+                        </Transparent >
+                    </div > : null
+            }
             {/* <div>{project.name}</div>
                 <div>
                     Admins :{members.filter(a => a.admin === true).map((element, index) => {
@@ -248,7 +245,11 @@ export default function ProjectBoard(props) {
                                                 {(provided) => (
                                                     <div>
                                                         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                            <List list={element} project={projectContext.project}
+                                                            <List list={element} project={projectContext.project} isAdmin={isAdmin}
+                                                                showEditList={() => {
+                                                                    setCurrList(element._id)
+                                                                    setIsVisibleEditList(!isVisibleEditList)
+                                                                }}
                                                                 showCurrentCard={(card) => {
                                                                     setCurrCard(card);
                                                                     setCurrList(element._id);
@@ -282,7 +283,9 @@ export default function ProjectBoard(props) {
                     )}
                 </Droppable>
             </DragDropContext>
-            <Button title='Edit Project' onClick={() => setIsVisibleEdit(!IsVisibleEdit)} />
+
+            <button className={styles.navigateButtons} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} >View Project</button>
+
             {
                 IsVisibleEdit ?
                     < div >
@@ -291,7 +294,7 @@ export default function ProjectBoard(props) {
                         </Transparent >
                     </div > : null
             }
-            <Button title='Delete Project' onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteProject() }} />
+
             <img className={styles.pic} src={pic} alt="" width="373" height="312" />
         </PageLayout>
     )

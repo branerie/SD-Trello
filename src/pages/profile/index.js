@@ -1,9 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from "react"
 import Loader from "react-loader-spinner"
 import { useParams, useHistory } from "react-router-dom"
-import EditProfile from "../../components/edit-profile"
 import PageLayout from "../../components/page-layout"
-import Transparent from "../../components/transparent"
 import styles from './index.module.css'
 import pic1 from '../../images/profile-page-pic.svg'
 import pen from '../../images/pen.svg'
@@ -23,11 +21,11 @@ const ProfilePage = () => {
   const [password, setPassword] = useState(null);
   const [rePassword, setRePassword] = useState(null);
   const [alert, setAlert] = useState(false)
-
-
-
-
   const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useState(false)
+
+
+
+  
   const params = useParams()
   const history = useHistory()
 
@@ -48,7 +46,7 @@ const ProfilePage = () => {
       setUserEmail(user.email)
       
     }
-  }, [params.userid, history])
+  }, [history, id])
 
 
 
