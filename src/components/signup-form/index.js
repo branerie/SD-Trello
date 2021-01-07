@@ -119,11 +119,10 @@ const SignupForm = (props) => {
                         id="password"
                     />
                     <div className={styles.passInstructions}>
-                        <p>Use 8 or more characters with a mix </p>
-                        <p>of letters, numbers & symbols. </p>
+                        <p>Use 8 or more characters with a</p>
+                        <p>mix of letters, numbers & symbols. </p>
                     </div>
                 </div>
-
 
                 <div className={styles.inputContainer}>
                     <div> Re-type Password:</div>

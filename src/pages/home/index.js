@@ -21,18 +21,18 @@ const Home = () => {
     history.push(`/team/${teamId}`)
   }
 
-  const goToProjectPage = (projectId, teamId) => {
-    history.push(`/project-board/${teamId}/${projectId}`)
-  }
+  // const goToProjectPage = (projectId, teamId) => {
+  //   history.push(`/project-board/${teamId}/${projectId}`)
+  // }
 
-  const showTeamProjects = (team) => {
-    console.log(team);
-    team.projects.map((p, index) => {
-      return (
-        <div key={index} onClick={() => goToProjectPage(p._id, team._id)}>{p.name}</div>
-      )
-    })
-  }
+  // const showTeamProjects = (team) => {
+  //   console.log(team);
+  //   team.projects.map((p, index) => {
+  //     return (
+  //       <div key={index} onClick={() => goToProjectPage(p._id, team._id)}>{p.name}</div>
+  //     )
+  //   })
+  // }
 
   return (
     <PageLayout>
@@ -45,10 +45,10 @@ const Home = () => {
       </div>
       
         <Title title='Smart Manager' />
-        <div >{`Wellcome ${userName}`}</div>
         <div className={styles.container}>
         
         <div className={styles.leftButtons}>          
+        <div >{`Wellcome ${userName}`}</div>
 
           <div>
             <button className={styles.navigateButtons}

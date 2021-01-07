@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import Button from '../button'
 import Input from '../input'
 import Title from '../title'
@@ -19,6 +19,8 @@ export default function EditProject(props) {
     const context = useContext(UserContext)
     const history = useHistory()
     const socket = useSocket()
+    const params = useParams()
+
 
     const projectId = props.project._id
 
@@ -37,7 +39,7 @@ export default function EditProject(props) {
     }, [context.user.id, members])
 
     useEffect(() => {
-        getData()       
+        getData()
     }, [getData])
 
 
@@ -64,6 +66,22 @@ export default function EditProject(props) {
         }
     }
 
+    async function deleteProject() {
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`/api/projects/${props.project._id}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            }
+        })
+        if (!response.ok) {
+            history.push("/error")
+        } else {
+            socket.emit('team-update', params.teamid)
+            history.push('/')
+        }
+    }
 
 
     return (
@@ -88,7 +106,10 @@ export default function EditProject(props) {
             </form>
             <div className={styles.editMembers}>
                 {isAdmin ?
-                    <Button onClick={handleSubmit} title="Edit" />
+                    <div className={styles.buttonsDiv}>
+                        <button className={styles.navigateButtons} onClick={handleSubmit}  >Edit</button>
+                        <button className={styles.navigateButtons} onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteProject() }}  >Delete</button>
+                    </div>
                     : null
                 }
             </div>

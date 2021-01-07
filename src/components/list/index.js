@@ -5,23 +5,26 @@ import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Card from '../card'
-import EditList from '../edit-list'
-import Transparent from '../transparent'
 import styles from './index.module.css'
 import dots from '../../images/dots.svg'
 import ButtonClean from '../button-clean'
 import ListColor from '../list-color'
 
+
 export default function List(props) {
-    const [isVisibleEdit, setIsVisibleEdit] = useState(false)
     const dropdownRef = useRef(null);
     const cardRef = useRef(null);
     const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [cardName, setCardName] = useState('')
 
+
     const history = useHistory()
     const socket = useSocket()
+
+    const isAdmin = props.isAdmin
+
+
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
@@ -70,7 +73,7 @@ export default function List(props) {
         } else {
             setIsVisible(!isVisible)
             setCardName('')
-            updateProjectSocket()                      
+            updateProjectSocket()
         }
 
     }, [history, cardName, props, updateProjectSocket, isVisible, setIsVisible])
@@ -84,18 +87,22 @@ export default function List(props) {
                     <div className={styles.name}>{props.list.name}</div>
                     <ListColor color={props.list.color || '#A6A48E'} type={'list'} />
                 </div>
-                <ButtonClean
-                    className={styles.button}
-                    onClick={onClick}
-                    title={<img className={styles.dots} src={dots} alt="..." width="20" height="6" />}
-                />
+                {isAdmin ?
+                    <ButtonClean
+                        className={styles.button}
+                        onClick={onClick}
+                        title={<img className={styles.dots} src={dots} alt="..." width="20" height="6" />}
+                    />
+                    : null
+                }
             </div>
             <div className={styles.relative}>
                 <div
                     ref={dropdownRef}
                     className={`${styles.menu} ${isActive ? styles.active : ''}`}
                 >
-                    <div onClick={() => setIsVisibleEdit(!isVisibleEdit)}>
+
+                    <div onClick={() => props.showEditList()}>
                         {/* <ButtonClean
                             onClick={() => setIsVisibleEdit(!isVisibleEdit)}
                             title='Edit'
@@ -157,15 +164,7 @@ export default function List(props) {
                         </form> : <ButtonClean className={styles['add-task']} onClick={() => setIsVisible(!isVisible)} title='+ Add Task' />
 
                 }
-            </div>
-            {
-                isVisibleEdit ?
-                    < div >
-                        <Transparent hideForm={() => setIsVisibleEdit(!isVisibleEdit)} >
-                            <EditList hideForm={() => setIsVisibleEdit(!isVisibleEdit)} list={props.list} project={props.project} />
-                        </Transparent >
-                    </div > : null
-            }
+            </div>           
         </div>
     )
 }

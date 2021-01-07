@@ -46,6 +46,7 @@ const WelcomePage = () => {
       <div className={styles.contentWrap}>
 
         <div className={styles.topContainer}>
+          
           <div className={styles.topDivtopContainer}>
             <div className={styles.headerNav}>
               <span className={styles.logo}>
