@@ -79,7 +79,22 @@ async function createProject(req, res, next) {
 
         const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session)
 
-        await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { session })
+        const updatedProject = await models.Project.findByIdAndUpdate({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { new: true })
+            .populate({
+                path: 'lists',
+                populate: {
+                    path: 'cards',
+                    populate: {
+                        path: 'members'
+                    }
+                }
+            })
+            .populate({
+                path: 'membersRoles',
+                populate: {
+                    path: 'memberId',
+                }
+            }).session(session)
         await models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
         await models.Team.updateOne({ _id: teamId }, { $push: { projects: createdProject } }, { session })
 
@@ -87,7 +102,7 @@ async function createProject(req, res, next) {
 
         session.endSession()
 
-        res.send(createdProject)
+        res.send(updatedProject)
     } catch (error) {
         await session.abortTransaction()
         session.endSession()

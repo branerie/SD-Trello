@@ -65,7 +65,6 @@ export default function EditProject(props) {
     }
 
 
-
     return (
         <div className={styles.form}>
             <form className={styles.container} >
@@ -87,12 +86,8 @@ export default function EditProject(props) {
                 </div>
             </form>
             <div className={styles.editMembers}>
-                {isAdmin ?
-                    <Button onClick={handleSubmit} title="Edit" />
-                    : null
-                }
+                { isAdmin && <Button onClick={handleSubmit} title="Edit" /> }
             </div>
         </div>
-
     )
 }

@@ -45,7 +45,6 @@ export default function CreateProject({ hideForm }) {
             return
         } else {
             const project = await response.json()
-            projectContext.setProject(project)
             socket.emit('team-update', teamContext.currentTeam)
             history.push(`/project-board/${teamId}/${project._id}`)
             hideForm && hideForm()
@@ -72,8 +71,6 @@ export default function CreateProject({ hideForm }) {
             }
             const users = await response.json()
             setAllUsers(users.members)
-
-            
         }
     }
 
@@ -111,7 +108,6 @@ export default function CreateProject({ hideForm }) {
                     />
                 </div>
 
-
                 <div className={styles.inputContainerDescr}>
                     <span> Description</span>
                     <textarea
@@ -122,7 +118,6 @@ export default function CreateProject({ hideForm }) {
                         id="description"
                     />
                 </div>
-
 
                 <div className={styles.inputContainer}>
                     <span> Invite Members</span>
@@ -139,9 +134,6 @@ export default function CreateProject({ hideForm }) {
                     />
                 </div>
 
-
-
-
                 <div className={styles.membersAvatars}>
                     {
                         members.map(m => {
@@ -152,10 +144,8 @@ export default function CreateProject({ hideForm }) {
                     }
                 </div>
 
-
-
                 {
-                    showMembers ? <div className={styles.members}>
+                    showMembers && <div className={styles.members}>
                         {
                             allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
                             .filter((e) => {
@@ -180,7 +170,7 @@ export default function CreateProject({ hideForm }) {
                                         />)
                                 })
                         }
-                    </div> : null
+                    </div>
                 }
 
                 <div className={styles.buttonDiv}>
