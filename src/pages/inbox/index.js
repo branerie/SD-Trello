@@ -2,6 +2,7 @@ import React, { useState, useEffect, useContext } from "react"
 import { useHistory } from "react-router-dom"
 import Button from "../../components/button"
 import PageLayout from "../../components/page-layout"
+import Title from "../../components/title"
 import UserContext from "../../contexts/UserContext"
 import getCookie from "../../utils/cookie"
 import styles from './index.module.css'
@@ -44,6 +45,7 @@ const InboxPage = () => {
 
     return (
         <PageLayout>
+            <Title title='Inbox' />
             <div>
                 {
                     inbox.length === 0 && <div className={styles.title}>Inbox is empty</div>

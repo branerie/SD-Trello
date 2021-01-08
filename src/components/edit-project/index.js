@@ -8,6 +8,7 @@ import "react-datepicker/dist/react-datepicker.css"
 import { useSocket } from '../../contexts/SocketProvider'
 import AddProjectMember from '../add-project-member'
 import UserContext from '../../contexts/UserContext'
+import isUserAdmin from '../../utils/isUserAdmin'
 
 
 export default function EditProject(props) {
@@ -15,7 +16,7 @@ export default function EditProject(props) {
     const [description, setDescription] = useState(props.project.description)
     const members = props.project.membersRoles
     const [isAdmin, setIsAdmin] = useState(false)
-    const context = useContext(UserContext)
+    const userContext = useContext(UserContext)
     const history = useHistory()
     const socket = useSocket()
     const params = useParams()
@@ -27,19 +28,9 @@ export default function EditProject(props) {
         socket.emit('project-update', props.project)
     }, [socket, props.project])
 
-
-    const getData = useCallback(() => {
-        const admins = members.filter(a => a.admin === true)
-        if (admins.some(item => item.memberId._id === context.user.id)) {
-            setIsAdmin(true)
-        } else {
-            setIsAdmin(false)
-        }
-    }, [context.user.id, members])
-
     useEffect(() => {
-        getData()
-    }, [getData])
+        setIsAdmin(isUserAdmin(userContext.user.id, members))
+    }, [members, userContext.user.id])
 
 
 
@@ -82,7 +73,6 @@ export default function EditProject(props) {
         }
     }
 
-
     return (
         <div className={styles.form}>
             <form className={styles.container} >
@@ -113,6 +103,5 @@ export default function EditProject(props) {
                 }
             </div>
         </div>
-
     )
 }
