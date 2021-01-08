@@ -3,8 +3,8 @@
     left: 30%;
     top: 15%;
     z-index: 50;
-    width: 45%;
-    height: 70%;
+    width: 49%;
+    min-height: 78%;
     background-color:#EDF5F9;
     border: solid 2px #707070;
     border-radius: 27px;
@@ -14,16 +14,16 @@
 
 .logo{
     margin: 5%;
-    margin-top: 10%;
-    margin-right: 10%;
+    margin-top: 5%;
+    margin-right: 2%;
     height: 100%;
-    width: 20%;
+    width: 10%;
 }
 .rightSide{
     width: 80%;
    height: 100%;
    /* margin-right: 25%; */
-   margin-top: 10%;  
+   margin-top: 5%;  
    align-items: center;
 }
 
@@ -43,8 +43,7 @@
 .inputContainer{
     align-items: center;
     width: 30%;
-    margin: 5% auto;
-    
+    margin: 5% auto;    
     margin-bottom: 2%;
 }
 
@@ -80,11 +79,14 @@
     width: 25%;     
 }
 
-  .textDiv{
-      
-      text-align: center;
-      margin-right: 20%;
-      
+.textLogin{
+    margin: 5% auto;
+    width: 45%;  
+    text-align: center;   
+}
+
+  .textDiv{      
+    text-align: center; 
   }
 
   .forgotPass{
@@ -110,22 +112,3 @@
       font-size: 1em;
   }
 
-  .googleLoginBtn{     
-    color: #363338;
-    background-color: #F7F7F2;
-    border-radius: 10px;
-    border: solid 1px #707070 ;
-    width: 50%;
-    height: auto;
-    margin: 2%;
-    margin-top: 5%;
-    padding: 2%;
-    margin-left: 15%;
-    z-index: 1;
-    font-size: 1.1em;
-    font-weight: 600;
-    cursor: pointer;
-    align-items: center;
-    display: flex;
-    justify-content: space-between;
-  }

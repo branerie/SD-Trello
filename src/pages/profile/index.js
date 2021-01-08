@@ -63,7 +63,6 @@ const ProfilePage = () => {
       setAlert(true)
       return
   }
-    
 
     await authenticateUpdate(`/api/user/${id}`, 'PUT', {
       username,

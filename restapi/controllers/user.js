@@ -210,14 +210,14 @@ async function updateUser(req, res, next) {
             obj[key] = user[key]
         }
     }
-
+   
     if (password) {
         await bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, async (err, hash) => {
                 if (err) { next(err); return }
 
-                const updatedUser = await models.User.updateOne({ _id: id }, { ...obj, password: hash })
-
+                const result = await models.User.updateOne({ _id: id }, { ...obj, password: hash })
+                const updatedUser = await models.User.findOne({_id: id})
                 const teams = await getTeams(updatedUser._id)
                 const response = {
                     user: updatedUser,
@@ -228,8 +228,8 @@ async function updateUser(req, res, next) {
             })
         })
     } else {
-        const updatedUser = await models.User.updateOne({ _id: id }, obj)
-
+        const result = await models.User.updateOne({ _id: id }, obj)
+        const updatedUser = await models.User.findOne({_id: id})
         const teams = await getTeams(updatedUser._id)
         const response = {
             user: updatedUser,
