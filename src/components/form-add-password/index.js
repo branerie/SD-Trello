@@ -62,7 +62,7 @@ export default function AddPassword(props) {
                     <button type='submit' className={styles.loginButton}>Submit</button>
                 </div>
 
-                <div>User was registered with Google. Please add password for this Website</div>
+                <div className={styles.textLogin}>User was registered with Google. Please add password for this Website</div>
             </div>
         </form>
     )

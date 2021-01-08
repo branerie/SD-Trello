@@ -8,6 +8,10 @@ import { useParams } from "react-router-dom"
 import EditTeam from "../../components/edit-team"
 import TeamMembers from "../../components/team-members"
 import UserContext from "../../contexts/UserContext"
+import TeamContext from "../../contexts/TeamContext"
+
+
+
 
 const TeamPage = () => {
 
@@ -19,21 +23,34 @@ const TeamPage = () => {
     const [currTeamUser, setCurrteamUser] = useState({})
     const params = useParams()
     const userContext = useContext(UserContext)
+    const teamContext = useContext(TeamContext)
+
     const teamId = params.teamid
 
     useEffect(() => {
         let currTeam = {}
+        let found
 
         userContext.user.teams.forEach(t => {
             if (t._id === teamId) {
                 currTeam = t
                 setCurrteamUser(t)
-            }
+                found = true
+            } 
         })
+        if(!found) {
+            teamContext.teams.forEach(t => {
+                if (t._id === teamId) {
+                    currTeam = t
+                    setCurrteamUser(t)
+                }
+            })
+        }
         setMembers(currTeam.members)
         setInvited(currTeam.requests)
         setProjects(currTeam.projects)
-    }, [teamId, userContext.user.teams])
+    }, [teamId, userContext.user.teams, params,teamContext.teams])
+
 
     return (
         <PageLayout>
