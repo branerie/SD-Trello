@@ -44,20 +44,20 @@ const TableDndApp = (props) => {
     }
 
 
-    const onListClick = (list) => {
+    const onListClick = useCallback(async(list) => {
         const memberArr = []
-        projectContext.project.membersRoles.map(element => {
+       await projectContext.project.membersRoles.map(element => {
             return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
 
         })
         projectContext.setLists(projectContext.project.lists)
-        const member = memberArr.find(m => m.id === userContext.user.id)
+        const member = await memberArr.find(m => m.id === userContext.user.id)
 
         if (member && member.admin) {
             setCurrList(list)
             setIsVisibleEditList(!isVisibleEditList)
         }
-    }
+    },[isVisibleEditList,projectContext,userContext.user.id])
 
 
     const cardData = useCallback(async () => {
@@ -205,7 +205,7 @@ const TableDndApp = (props) => {
         return numberOfRows
 
 
-    }, [projectContext, props])
+    }, [projectContext, props,onListClick])
 
 
     useEffect(() => {

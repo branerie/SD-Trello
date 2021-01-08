@@ -25,17 +25,17 @@
 }
 
 .logo{
-    margin: 5%;
+    margin: 1%;
     margin-top: 0%;
-    margin-right: 5%;
-    height: 900%;
+    margin-right: 2%;
+    height: 90%;
     width: 10%;
 }
 .rightSide{
     width: 80%;
    height: 90%;
    /* margin-right: 25%; */
-   margin: 0 auto;
+   /* margin: 0 auto; */
    /* margin-top: 10%;   */
    display: block;
    align-items: center; 
@@ -57,11 +57,8 @@
 
 .inputContainer{
     align-items: center;
-    width: 30%;
-
-    /* margin: 5%; */
-    margin: 5% auto;
-    /* margin-left: 25%; */
+    width: 30%;    
+    margin: 5% auto;    
     margin-bottom: 2%;
 }
 
@@ -99,11 +96,8 @@
       width: 25%;     
   }
 
-  .textDiv{
-      
-      text-align: center;
-      /* margin-right: 20%; */
-      
+  .textDiv{      
+      text-align: center;      
   }
 
   .buttonDivGoogleLogin{

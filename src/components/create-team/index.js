@@ -80,8 +80,11 @@ export default function CreateTeam(props) {
             return
         } else {
             const team = await response.json()
+            console.log(userContext.user.teams);
             const arr = [...teamContext.teams]
             arr.push(team)
+            // const userTeams = [...userContext.user.teams]
+            // userTeams.push(team)
             teamContext.setTeams(arr)
             teamContext.setSelectedTeam(team.name)
             props.hideForm()
@@ -109,7 +112,7 @@ export default function CreateTeam(props) {
                 </div>
 
                 <div className={styles.inputContainerDescr}>
-                    <span> Description</span>
+                    <span className={styles.descriptionText}> Description</span>
                     <textarea
                         className={styles.textarea}
                         value={description}
