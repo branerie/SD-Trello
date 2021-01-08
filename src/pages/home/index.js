@@ -48,7 +48,7 @@ const Home = () => {
         <div className={styles.container}>
         
         <div className={styles.leftButtons}>          
-        <div >{`Wellcome ${userName}`}</div>
+        <div >{`Welcome ${userName}`}</div>
 
           <div>
             <button className={styles.navigateButtons}
