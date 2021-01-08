@@ -1,48 +1,88 @@
 .filter {
-  background: #DFE9EE;
+  background: #F7F7F2;
   color: black;
   padding: 10px;
-  width: 110px;
+  min-width: 190px;
+  max-width: 250px;
+  height: 50px;
   border-radius: 10px;
   display: block;
   margin: 0 auto;
   margin: 10px;
+  margin-bottom: 30px;
   cursor: pointer;
   border: 1px solid #707070;
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+  font-size: 26px;
+  font-weight: bold;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
-.filter:hover{
-  background-color: #fff;
-  border: 1px solid #707070;
-  color:black;
-  font-style: italic;
-}
-
-.filter-off {
-  background: #b42f2f;
+.selected {
+  position: relative;
+  bottom: 15px;
+  background: #363338;
+  color: #F7F7F2;
+  height: 80px;
+  border-radius: 32px;
 }
 
 .project {
-  width: 100%;
-  background-color: #DFE9EE;
+  width: 65%;
+  background-color: #FFFFFF;
   margin: 20px;
+  margin-left: 150px;
   border-radius: 19px;
-  border: solid 2px #707070;
+  border: solid 1px #707070;
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+  padding-bottom: 20px;
+}
+
+.project-name {
+  font-size: 26px;
+  color: #363338;
+  padding: 15px;
 }
 
 .title {
   padding: 15px;
-  text-decoration: none;
-  font-size: 1.6em;
-  color: black;
+  color: #363338;
+  text-decoration: underline;
+  font-size: 36px;
+  text-align: center;
 }
 
 .card {
   display: flex;
+  margin: 15px;
+  font-size: 22px;
 }
 
-.card div {
-  margin: 10px;
+.card > div {
+  width: 22%;
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+}
+
+.date {
+  width: 34%;
+  display: flex;
+}
+
+.pic {
+  position: absolute;
+  bottom: 30px;
+  right: 50px;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.link {
+  text-decoration: none;
+  color: #363338;
 }

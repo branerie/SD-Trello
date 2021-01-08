@@ -40,9 +40,9 @@ export default function EditCard(props) {
     const [isProgressActive, setIsProgressActive] = useDetectOutsideClick(dropdownRef)
     const [isDescriptionActive, setIsDescriptionActive] = useState(false)
     const dueDate = useMemo(() => new Date(card.dueDate), [card.dueDate])
-    const today = useMemo(() => new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())), [])
+    const today = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), [])
     const cardId = card._id
-
+    console.log(dueDate);
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)

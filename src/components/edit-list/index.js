@@ -11,7 +11,7 @@ import ButtonClean from '../button-clean'
 import { SketchPicker } from 'react-color'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import UserContext from '../../contexts/UserContext'
-
+import isUserAdmin from '../../utils/isUserAdmin'
 
 
 export default function EditList(props) {
@@ -23,23 +23,13 @@ export default function EditList(props) {
     const [color, setColor] = useState(props.list.color || '#A6A48E')
     const [isAdmin, setIsAdmin] = useState(false)
     const members = props.project.membersRoles
-    const context = useContext(UserContext)
+    const userContext = useContext(UserContext)
     const projectId = props.project._id
     const listId = props.list._id
 
-    const getData = useCallback(() => {
-        const admins = members.filter(a => a.admin === true)
-        if (admins.some(item => item.memberId._id === context.user.id)) {
-            setIsAdmin(true)
-        } else {
-            setIsAdmin(false)
-        }
-    }, [context.user.id, members])
-
     useEffect(() => {
-        getData()
-    }, [getData])
-
+        setIsAdmin(isUserAdmin(userContext.user.id ,members))
+    }, [members, userContext.user.id])
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
@@ -92,14 +82,12 @@ export default function EditList(props) {
                         />
                     </span>
                 </div>
-                {isColorActive && <div ref={dropdownRef} >
+                { isColorActive && <div ref={dropdownRef } >
                     <SketchPicker className={styles['color-pick']} color={color} onChangeComplete={onColorChange} />
                 </div>}
                 <div className={styles.editListButton}>
-                {isAdmin ?
-                    <Button onClick={handleSubmit} title="Edit List" />
-                    : null
-                }
+                { isAdmin && <Button onClick={handleSubmit} title="Edit List" /> }
+
                 </div>
             </form>
         </div>

@@ -3,7 +3,7 @@ import styles from "./index.module.css"
 
 const Title = ( {title} ) => {
     return (
-    <h1 className={styles.title}>{title}</h1>
+    <div className={styles.title}>{title}</div>
     )
 }
 

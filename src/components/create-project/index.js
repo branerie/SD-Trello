@@ -3,7 +3,6 @@ import { useHistory, useParams } from "react-router-dom"
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import "react-datepicker/dist/react-datepicker.css"
-import ProjectContext from '../../contexts/ProjectContext'
 import ButtonClean from '../button-clean'
 import Avatar from 'react-avatar'
 import UserContext from '../../contexts/UserContext'
@@ -17,7 +16,6 @@ export default function CreateProject({ hideForm }) {
     const [members, setMembers] = useState([])
     const [showMembers, setShowMembers] = useState(false)
     const [allUsers, setAllUsers] = useState([])
-    const projectContext = useContext(ProjectContext)
     const userContext = useContext(UserContext)
     const teamContext = useContext(TeamContext)
     const history = useHistory()
