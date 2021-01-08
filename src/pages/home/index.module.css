@@ -3,6 +3,7 @@
 .container{
   display: flex;
   justify-content: space-between;
+  flex-wrap: wrap;
   /* height: 100%; */
 }
 
@@ -17,18 +18,13 @@
 
 .leftButtons{
   width: 20%;
+  margin-left: 2%;
 }
 .rightButtons{
   width: 20%;
+  text-align: center;
 }
 
-.pic1{
-  /* margin: 0, auto; */
-}
-
-.topright{
-  margin-left: 75%;
-}
 
 .teams{  
   width: 11em;

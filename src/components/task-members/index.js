@@ -196,17 +196,19 @@ export default function TaskMembers(props) {
                     </span>
                     :
                     <div className={styles.membersContainer}>
+                        { (cardMembers.length  !==0)? 
                         <span className={styles.membersDiv}>
                             {
                                 cardMembers.map((member, index) => {
                                     return (
-                                        <span key={index}>
+                                        <span key={index} className={styles.eachMember}>
                                             <Avatar name={member.username} size={props.size} round={true} maxInitials={2} onMouseEnter={<div>{member.username}</div>} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, member) }} />
                                         </span>
                                     )
                                 })
                             }
-                        </span>
+                        </span>:null
+                        }       
                         <img className={styles.pen} src={pen} alt="..." width="13" height="13" onClick={() => { getTeamUsers(); setIsActive(!isActive) }} />
                     </div >
             }
