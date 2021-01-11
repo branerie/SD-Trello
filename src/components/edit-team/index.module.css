@@ -5,6 +5,7 @@
     z-index: 20;
     width: 45%;
     height: auto;
+    max-height: 80%;
     background-color:#DFE9EE;
     border: solid 2px #707070;
     border-radius: 27px;
@@ -25,7 +26,7 @@
     align-items: center;
     width: 100%;
     margin-left: 25%;
-    margin-bottom: 2%;
+    margin-bottom: 1%;
 }
 
 input{
@@ -41,7 +42,7 @@ input{
 .inputContainerDescr{    
     width: 100%;    
     margin-left: 25%;
-    margin-bottom: 2%;
+    margin-bottom: 1%;
     display: flex;
 }
 
@@ -80,18 +81,11 @@ input{
   .membersAvatars{
       margin-left: 30%;
       margin-right: 30%;
-      margin: 5%;
+      margin: 2%;
       /* display: flex; */
   }
 
-/* .form {
-    position: fixed;
-    left: 25%;
-    top: 25%;
-    z-index: 20;
-    width: 50%;
-    height: 25%;
-} */
+
 
 .members {    
     z-index: 25;  

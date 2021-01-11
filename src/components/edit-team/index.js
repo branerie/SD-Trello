@@ -10,14 +10,13 @@ import { useSocket } from '../../contexts/SocketProvider'
 import TeamMembers from '../team-members'
 
 export default function EditTeam(props) {
-    const [currTeam,setCurrTeam] = useState(props.currTeam)
+    const [currTeam, setCurrTeam] = useState(props.currTeam)
     const [name, setName] = useState(currTeam.name)
     const [description, setDescription] = useState(currTeam.description)
     const [member, setMember] = useState('')
     const [members, setMembers] = useState(currTeam.members)
     const [invited, setInvited] = useState(currTeam.requests)
     const [forInvite, setForInvite] = useState([])
-
     const [showMembers, setShowMembers] = useState(false)
     const [allUsers, setAllUsers] = useState([])
     const [isAdmin, setIsAdmin] = useState(false)
@@ -42,7 +41,6 @@ export default function EditTeam(props) {
         })
         let teamAuthor = currTeam.author
         setMembers(currTeam.members)
-
         setInvited(currTeam.requests)
         setDescription(currTeam.description)
         setName(currTeam.name)
@@ -93,6 +91,8 @@ export default function EditTeam(props) {
     }
 
     const removeMember = async (input) => {
+
+
         const arr = await members.filter(u => u._id !== input._id)
 
 
@@ -107,6 +107,30 @@ export default function EditTeam(props) {
                 name,
                 description,
                 members: arr
+            })
+        })
+        if (!response.ok) {
+            history.push("/error")
+            return
+        } else {
+            // getData()
+        }
+    }
+
+    const removeInvited = async (input) => {
+
+
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`/api/teams/${teamId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify({
+                name,
+                description,
+                removeInvitation: input
             })
         })
         if (!response.ok) {
@@ -281,7 +305,7 @@ export default function EditTeam(props) {
                                         <div className={styles.membersAvatars}>
                                             <div>
                                                 Invited Members:
-                        </div>
+                                            </div>
                                             {
                                                 invited.map((m, index) => {
                                                     return (
@@ -289,7 +313,7 @@ export default function EditTeam(props) {
                                                             key={index}
                                                             name={m.username}
                                                             size={40} round={true} maxInitials={2}
-                                                        // onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeMember(m) }}
+                                                            onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeInvited(m) }}
                                                         />
 
                                                     )

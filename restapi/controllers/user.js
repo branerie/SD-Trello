@@ -129,6 +129,7 @@ async function loginUser(req, res, next) {
         if (!user.password) {
             let response = {}
             response.needPassword = true
+            response.userId = user._id
             res.send(response)
         }
         const match = await user.matchPassword(password)
