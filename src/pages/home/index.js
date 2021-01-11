@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useRef } from "react"
 import { useHistory } from "react-router-dom"
 import CreateTeam from "../../components/create-team"
 import PageLayout from "../../components/page-layout"
@@ -7,12 +7,15 @@ import Transparent from "../../components/transparent"
 import UserContext from "../../contexts/UserContext"
 import styles from './index.module.css'
 import pic1 from '../../images/home-page-pic.svg'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+
 
 const Home = () => {
+  const dropdownRef = useRef(null)
   const userContext = useContext(UserContext)
   const history = useHistory()
   const [showTeamForm, setShowTeamForm] = useState(false)
-  const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useState(false)
+  const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useDetectOutsideClick(dropdownRef)
   const userName = userContext.user.username
   const userTeams = userContext.user.teams
   const userId = userContext.user._id
@@ -43,16 +46,16 @@ const Home = () => {
           </Transparent>) : null
         }
       </div>
-      
-        <Title title='Smart Manager' />
-        <div className={styles.container}>
-        
-        <div className={styles.leftButtons}>          
-        <div >{`Welcome ${userName}`}</div>
+
+      <Title title='Smart Manager' />
+      <div className={styles.container}>
+
+        <div className={styles.leftButtons}>
+          <div >{`Welcome ${userName}`}</div>
 
           <div>
             <button className={styles.navigateButtons}
-            onClick={() => history.push(`/my-tasks/${userId}`)}
+              onClick={() => history.push(`/my-tasks/${userId}`)}
             >My Tasks</button>
           </div>
 
@@ -67,7 +70,7 @@ const Home = () => {
             <div>
               {
                 showTeamsVisibleForm ?
-                  <div className={styles.teams}>
+                  <div className={styles.teams} ref={dropdownRef}>
                     {
                       userTeams.map((t, index) => {
                         return (
@@ -77,7 +80,7 @@ const Home = () => {
                               // className={styles.teamNames}
                               className={styles.navigateButtons}
                               onClick={() => goToTeamPage(t._id)}
-                              
+
                             >{t.name}</button>
                             {/* <div className={styles.teams}>
                     Projects:
@@ -109,18 +112,18 @@ const Home = () => {
               className={styles.navigateButtons}
             >Create New Team</ button>
           </div>
-        
+
         </div>
-        
+
         <span className={styles.picContainer}>
           <img className={styles.pic1} src={pic1} alt="" />
         </span>
 
         <span className={styles.rightButtons}>
-        <div >{`Recently visited:`}</div>
+          <div >{`Recently visited:`}</div>
           <div>
-            < button 
-            // onClick={() => setShowTeamForm(true)}
+            < button
+              // onClick={() => setShowTeamForm(true)}
               // title='Create Team' 
               // className={styles.teamNames}
               className={styles.navigateButtons}
@@ -130,8 +133,8 @@ const Home = () => {
           </div>
 
           <div>
-            < button 
-            // onClick={() => setShowTeamForm(true)}
+            < button
+              // onClick={() => setShowTeamForm(true)}
               // title='Create Team' 
               // className={styles.teamNames}
               className={styles.navigateButtons}
@@ -141,8 +144,8 @@ const Home = () => {
           </div>
 
           <div>
-            < button 
-            // onClick={() => setShowTeamForm(true)}
+            < button
+              // onClick={() => setShowTeamForm(true)}
               // title='Create Team' 
               // className={styles.teamNames}
               className={styles.navigateButtons}
@@ -151,9 +154,9 @@ const Home = () => {
               </ button>
           </div>
         </span>
-        
-        
-        </div>
+
+
+      </div>
 
 
 
