@@ -1,4 +1,4 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext, useEffect, useCallback } from "react"
 import { Link, useHistory } from "react-router-dom"
 import ButtonClean from "../../components/button-clean"
 import PageLayout from "../../components/page-layout"
@@ -7,18 +7,20 @@ import UserContext from "../../contexts/UserContext"
 import getCookie from "../../utils/cookie"
 import styles from './index.module.css'
 import myTasks from '../../images/my-tasks/my-tasks.svg'
-import TaskDueDate from "../../components/task-dueDate"
+import { useSocket } from "../../contexts/SocketProvider"
 
 const MyTasksPage = () => {
     const userContext = useContext(UserContext)
     const [currTeam, setCurrTeam] = useState('')
     const [projects, setProjects] = useState([])
     const history = useHistory()
+    const socket = useSocket()
 
-    async function selectTeam(team) {
+    const selectTeam = useCallback(async (team) => {
+        console.log(team);
         setCurrTeam(team)
 
-        const token = getCookie("x-auth-token");
+        const token = getCookie("x-auth-token")
 
         const response = await fetch(`/api/user/tasks/${team._id}`, {
             method: "GET",
@@ -31,16 +33,32 @@ const MyTasksPage = () => {
             history.push("/error")
         } else {
             const data = await response.json()
+            console.log(data);
             setProjects(data)
         }
+    }, [history])
+
+    useEffect(() => {
+        if (!currTeam || socket == null) return
+
+        const id = currTeam._id
+
+        socket.on('task-team-updated', taskTeamUpdate)
+        socket.on('task-update-team', (teamId) => {
+            if (teamId === id) {
+                const team = {...currTeam}
+                selectTeam(team)
+            }
+        })
+
+        socket.emit('task-team-join', id)
+        return () => socket.off('task-team-updated')
+    }, [currTeam, socket, selectTeam])
+
+    function taskTeamUpdate(projects) {
+        console.log('updateedddd');
+        setProjects(projects)
     }
-
-    function getCardDate(cardDueDate) {
-        const dueDate = new Date(cardDueDate)
-        return dueDate
-    }
-
-
 
     return (
         <PageLayout>
@@ -80,13 +98,8 @@ const MyTasksPage = () => {
                                                             <div><span className={styles.bold}>Task:</span> {card.name}</div>
                                                             <div><span className={styles.bold}>Progress:</span> {card.progress}</div>
                                                             <span className={styles.date}>
-                                                                <span className={styles.bold}>Due Date:</span>
-                                                                <TaskDueDate cardDueDate={getCardDate(card.dueDate)}
-                                                                    cardId={card._id}
-                                                                    listId={list._id}
-                                                                    project={project}
-                                                                    showEditCard={false}
-                                                                />
+                                                                <span className={styles.bold}>Days Remaining:</span>
+                                                                {Math.ceil((Date.parse(card.dueDate) - Date.now())/ 1000/3600/24)}
                                                             </span>
                                                             <div><span className={styles.bold}>List:</span> {list.name}</div>
                                                         </div>

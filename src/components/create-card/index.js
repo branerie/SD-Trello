@@ -1,5 +1,5 @@
 import React, { useCallback, useRef, useState } from 'react'
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import "react-datepicker/dist/react-datepicker.css"
@@ -19,8 +19,7 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import TaskHistory from '../task-history'
 
 
-
-export default function EditCard(props) {
+export default function CreateCard(props) {
 
     const listId = props.listId
 
@@ -33,6 +32,7 @@ export default function EditCard(props) {
     const [progressChanged, setProgressChanged] = useState(false)
     const history = useHistory()
     const socket = useSocket()
+    const params = useParams()
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [isProgressActive, setIsProgressActive] = useDetectOutsideClick(dropdownRef)
     const [isDescriptionActive, setIsDescriptionActive] = useState(false)
@@ -345,7 +345,14 @@ export default function EditCard(props) {
                                 {(card === '') ?
                                     null
                                     :
-                                    <TaskDueDate cardDueDate={dueDate} cardId={cardId} listId={listId} project={props.project} showEditCard={false} />
+                                    <TaskDueDate
+                                        cardDueDate={dueDate}
+                                        cardId={cardId}
+                                        listId={listId}
+                                        project={props.project}
+                                        showEditCard={false}
+                                        teamId={params.teamid}
+                                    />
                                 }
                             </div>
 

@@ -34,6 +34,7 @@ export default function ProjectBoard(props) {
     const [currList, setCurrList] = useState('')
     const [isAdmin, setIsAdmin] = useState(false)
     const context = useContext(UserContext)
+    const teamId = params.teamid
 
     const projectUpdate = useCallback((project) => {
 
@@ -159,6 +160,7 @@ export default function ProjectBoard(props) {
             }
         }
         socket.emit('project-update', projectContext.project)
+        socket.emit('task-team-update', teamId)
     }
 
     const addList = async (e) => {
@@ -199,7 +201,9 @@ export default function ProjectBoard(props) {
                             hideForm={() => setIsVisible(!isVisible)}
                             card={currCard}
                             listId={currList}
-                            project={projectContext.project} />
+                            project={projectContext.project}
+                            teamId={teamId}
+                        />
                     </Transparent >
                 </div > : null
             }

@@ -16,7 +16,6 @@ async function createCard(req, res, next) {
     const { name, description, members, dueDate, progress } = req.body
 
     const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()))
-    console.log(today);
    
     const history = [{ 'event': 'Created', 'date': today }]
 
