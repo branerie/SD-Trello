@@ -42,7 +42,7 @@ const LoginForm = (props) => {
         await authenticate("/api/user/login", 'POST', {
             email,
             password
-        }, (user) => {
+        }, (user) => {            
             context.logIn(user)
             history.push("/")
         }, (response) => {
@@ -61,7 +61,7 @@ const LoginForm = (props) => {
     }
 
     const handleGoogle = (googleResponse) => {
-        responseGoogle(googleResponse, (user) => {
+        responseGoogle(googleResponse, (user) => {            
             context.logIn(user)
             history.push("/")
         }, (response) => {
@@ -80,7 +80,7 @@ const LoginForm = (props) => {
                 showForm ?
                     <div>
                         <Transparent hideForm={hideForm}>
-                            <AddPassword hideForm={hideForm} userId={userId}/>
+                            <AddPassword hideForm={hideForm} userId={userId} email={email}/>
                         </Transparent>
                     </div> : null
             }

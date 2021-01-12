@@ -24,6 +24,23 @@ const Home = () => {
     history.push(`/team/${teamId}`)
   }
 
+  const goToProject = (projectId) => {
+
+    userTeams.map(t => {
+      return (t.projects.forEach(element => {
+        if (element._id === projectId) {
+          history.push(`/project-board/${t._id}/${projectId}`)
+        }
+      }))
+    })
+
+  }
+
+
+
+
+  const recentProjects = userContext.user.recentProjects
+
   // const goToProjectPage = (projectId, teamId) => {
   //   history.push(`/project-board/${teamId}/${projectId}`)
   // }
@@ -47,11 +64,11 @@ const Home = () => {
         }
       </div>
 
-      <Title title='Smart Manager' />
+      <Title title='Home' />
+      <div className={styles.welcomeUser}>{`Welcome ${userName}!`}</div>
       <div className={styles.container}>
 
         <div className={styles.leftButtons}>
-          <div >{`Welcome ${userName}`}</div>
 
           <div>
             <button className={styles.navigateButtons}
@@ -70,18 +87,18 @@ const Home = () => {
             <div>
               {
                 showTeamsVisibleForm ?
-                  <div className={styles.teams} ref={dropdownRef}>
+                  <div className={styles.teamsHome} ref={dropdownRef}>
                     {
                       userTeams.map((t, index) => {
                         return (
                           <span>
                             {/* <div> */}
-                            <button key={index}
+                            <div key={index}
                               // className={styles.teamNames}
-                              className={styles.navigateButtons}
+                              className={styles.navigateButtonsTeams}
                               onClick={() => goToTeamPage(t._id)}
 
-                            >{t.name}</button>
+                            >{t.name}</div>
                             {/* <div className={styles.teams}>
                     Projects:
                     {
@@ -120,39 +137,22 @@ const Home = () => {
         </span>
 
         <span className={styles.rightButtons}>
-          <div >{`Recently visited:`}</div>
-          <div>
-            < button
-              // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
-              className={styles.navigateButtons}
-            >
-              Project 1
-              </ button>
-          </div>
+          {
+            (recentProjects) ?
+              <div>
+                <div >{`Recent projects:`}</div>
+                {
+                  recentProjects.slice(0).reverse().map((p, index) => {
+                    return (
+                      <button key={index} className={styles.navigateButtons} onClick={()=>goToProject(p._id)}>{p.name}</button>
+                    )
+                  })
+                }
 
-          <div>
-            < button
-              // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
-              className={styles.navigateButtons}
-            >
-              Project 2
-              </ button>
-          </div>
 
-          <div>
-            < button
-              // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
-              className={styles.navigateButtons}
-            >
-              Project 3
-              </ button>
-          </div>
+              </div>
+              : null
+          }
         </span>
 
 

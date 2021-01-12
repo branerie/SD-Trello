@@ -4,6 +4,7 @@ import logo from '../../images/logo.svg'
 import { useHistory } from 'react-router-dom'
 import Alert from '../alert'
 import authenticateUpdate from '../../utils/authenticate-update'
+import authenticate from "../../utils/authenticate"
 import UserContext from "../../contexts/UserContext"
 
 
@@ -19,6 +20,7 @@ export default function AddPassword(props) {
 
     const history = useHistory()
     const userId = props.userId
+    const email = props.email
     // const [disabled, setDisabled] = useState(true)
 
     // useEffect(() => {
@@ -49,13 +51,23 @@ export default function AddPassword(props) {
         await authenticateUpdate(`/api/user/${userId}`, 'PUT', {
             password
         }, (user) => {
-            userContext.logIn(user)
-            history.push("/")
+            console.log(user)           
         }, (e) => {
             console.log("Error", e);
         })
 
-    }, [history, userContext, password, rePassword, userId])
+        await authenticate("/api/user/login", 'POST', {
+            email,
+            password
+        }, (user) => {
+            userContext.logIn(user)
+            history.push("/")
+        }, (response) => {
+            
+            console.log("Error", response)
+        })
+
+    }, [history, userContext, password, rePassword, userId, email])
 
 
 

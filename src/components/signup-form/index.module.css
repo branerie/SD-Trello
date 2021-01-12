@@ -54,7 +54,14 @@
     margin: 5% auto;
     margin-top: 3%;
     margin-bottom: 2%;
+    /* padding: 1px; */
 }
+
+::placeholder {  
+                  
+    /* Firefox, Chrome, Opera */ 
+    text-align: left; 
+} 
 
 .signUpInput{
     border: solid 1px #363338;
@@ -114,6 +121,7 @@
       cursor: pointer;
       font-weight: 500;
       font-size: 1em;
+      background-color: #EDF5F9;
   }
 
   .buttonDivGoogleLogin{
@@ -127,7 +135,7 @@
     background-color: #F7F7F2;
     border-radius: 10px;
     border: solid 1px #707070 ;
-    width: 70%;
+    width: 65%;
     height: auto;    
     margin: 5% auto;
     padding: 2%;    
