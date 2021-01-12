@@ -150,11 +150,17 @@ const TableDndApp = (props) => {
 
                         task:
                             (
-                                <TaskName value={card.name + '/' + card._id + '/' + list._id} props={props} project={props.project} />
+                                <TaskName 
+                                // value={card.name + '/' + card._id + '/' + list._id}
+                                card = {card} listId={list._id}
+                                 project={props.project} />
                             ),
                         progress:
                             (
-                                <TaskProgress value={card.progress + '/' + card._id + '/' + list._id} project={props.project} card={card} />
+                                <TaskProgress 
+                                value={card.progress + '/' + card._id + '/' + list._id} 
+                                listId={list._id}
+                                project={props.project} card={card} />
                             ),
                         assigned:
                             (
