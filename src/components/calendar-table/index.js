@@ -153,7 +153,7 @@ const TableDndApp = (props) => {
                                 <TaskName 
                                 // value={card.name + '/' + card._id + '/' + list._id}
                                 card = {card} listId={list._id}
-                                 project={props.project} />
+                                project={props.project} />
                             ),
                         progress:
                             (

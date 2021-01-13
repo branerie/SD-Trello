@@ -63,14 +63,14 @@ export default function ProjectBoard(props) {
     }, [socket, projectUpdate, params.projectid])
 
 
-    
+
 
     useEffect(() => {
         if (!projectContext.project || projectContext.project._id !== params.projectid) {
             return
-        } 
-            
-        
+        }
+
+
 
         const memberArr = []
         projectContext.project.membersRoles.map(element => {
@@ -85,7 +85,7 @@ export default function ProjectBoard(props) {
             setIsAdmin(member.admin)
         }
 
-        
+
 
 
     }, [projectContext.project, params.projectid, projectContext, context.user.id])
@@ -251,7 +251,8 @@ export default function ProjectBoard(props) {
     return (
         <PageLayout>
 
-            {isVisible ?
+            {
+                isVisible &&
                 < div >
                     <Transparent hideForm={() => setIsVisible(!isVisible)} >
                         <EditCard
@@ -262,37 +263,16 @@ export default function ProjectBoard(props) {
                             teamId={teamId}
                         />
                     </Transparent >
-                </div > : null
+                </div >
             }
             {
-                isVisibleEditList ?
-                    < div >
-                        <Transparent hideForm={() => setIsVisibleEditList(!isVisibleEditList)} >
-                            <EditList hideForm={() => setIsVisibleEditList(!isVisibleEditList)} list={currList} project={projectContext.project} />
-                        </Transparent >
-                    </div > : null
+                isVisibleEditList &&
+                < div >
+                    <Transparent hideForm={() => setIsVisibleEditList(!isVisibleEditList)} >
+                        <EditList hideForm={() => setIsVisibleEditList(!isVisibleEditList)} list={currList} project={projectContext.project} />
+                    </Transparent >
+                </div >
             }
-            {/* <div>{project.name}</div>
-                <div>
-                    Admins :{members.filter(a => a.admin === true).map((element, index) => {
-                    return (
-                        <div key={index}>
-                            {element.username}
-                        </div>
-                    )
-                }
-                )}
-                </div>
-                <div>
-                    Members :{members.filter(a => a.admin === false).map((element, index) => {
-                    return (
-                        <div key={index}>
-                            {element.username}
-                        </div>
-                    )
-                }
-                )}
-                </div> */}
             <DragDropContext onDragEnd={handleOnDragEnd}>
                 <Droppable droppableId='droppable' direction='horizontal' type='droppableItem'>
                     {(provided) => (
@@ -324,20 +304,17 @@ export default function ProjectBoard(props) {
                                     })
                             }
                             {
-                                isAdmin ?
+                                isAdmin &&
+                                <div className={styles.list} >
+                                    {
+                                        isActive ?
+                                            <form ref={listRef} className={styles.container} >
+                                                <input className={styles.input} type={'text'} value={listName} onChange={e => setListName(e.target.value)} />
+                                                <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
+                                            </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
+                                    }
 
-                                    <div className={styles.list} >
-                                        {
-                                            isActive ?
-                                                <form ref={listRef} className={styles.container} >
-                                                    <input className={styles.input} type={'text'} value={listName} onChange={e => setListName(e.target.value)} />
-                                                    <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
-                                                </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
-                                        }
-
-                                    </div>
-                                    :
-                                    null
+                                </div>
                             }
                             {provided.placeholder}
                         </div>
@@ -348,12 +325,12 @@ export default function ProjectBoard(props) {
             <button className={styles.navigateButtons} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} >View Project</button>
 
             {
-                IsVisibleEdit ?
-                    < div >
-                        <Transparent hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} >
-                            <EditProject hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} project={projectContext.project} members={members} />
-                        </Transparent >
-                    </div > : null
+                IsVisibleEdit &&
+                < div >
+                    <Transparent hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} >
+                        <EditProject hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} project={projectContext.project} members={members} />
+                    </Transparent >
+                </div >
             }
 
             <img className={styles.pic} src={pic} alt="" width="373" height="312" />

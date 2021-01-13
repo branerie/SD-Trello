@@ -132,7 +132,9 @@ export default function TaskDueDate(props) {
                                     hideForm={() => setIsVisible(!isVisible)}
                                     card={props.card}
                                     listId={props.listId}
-                                    project={props.project} />
+                                    project={props.project}
+                                    teamId={teamId}
+                                />
                             </Transparent >
                         </span >
                         :

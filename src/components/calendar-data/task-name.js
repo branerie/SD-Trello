@@ -2,7 +2,7 @@ import React, { useCallback, useRef, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider';
 
 
@@ -14,15 +14,11 @@ export default function TaskName(props) {
   const [cardName, setCardName] = useState(card.name)
   const history = useHistory()
   const socket = useSocket()
-
-
-  const updateProjectSocket = useCallback(() => {
-    socket.emit('project-update', props.project)
-  }, [socket, props.project])
-
+  const params = useParams()
+  const teamId = params.teamid
 
   const editCardName = useCallback(async (event) => {
-    event.preventDefault()    
+    event.preventDefault()
 
     const cardId = card._id
     const listId = props.listId
@@ -48,10 +44,11 @@ export default function TaskName(props) {
       return
     } else {
       setIsActive(!isActive)
-      updateProjectSocket()
+      socket.emit('project-update', props.project)
+      socket.emit('task-team-update', teamId)
     }
 
-  }, [history, cardName, updateProjectSocket, isActive, setIsActive,card._id,props.listId])
+  }, [history, cardName, isActive, setIsActive, card._id, props.listId, props.project, socket, teamId])
 
 
   return (

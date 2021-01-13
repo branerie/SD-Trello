@@ -26,7 +26,8 @@ export default function Card({ card, showEditCard }) {
             <div>
                 <div>{card.name}</div>
                 {
-                    card.progress ? <div className={styles.bar} >
+                    card.progress &&
+                    <div className={styles.bar} >
                         <div
                             style={{
                                 width: `${card.progress}%`,
@@ -34,7 +35,7 @@ export default function Card({ card, showEditCard }) {
                             }}
                             className={styles.progress}
                         />
-                    </div> : null
+                    </div>
                 }
             </div>
             <div className={styles.flex}>
@@ -43,17 +44,17 @@ export default function Card({ card, showEditCard }) {
                         {card.members.slice(0, 3).map(element => {
                             return (
                                 <span className={styles.avatar}>
-                                    <Avatar key={element._id} 
-                                    name={element.username} 
-                                    size={30} 
-                                    round={true}
-                                    className={styles.avatar}
+                                    <Avatar key={element._id}
+                                        name={element.username}
+                                        size={30}
+                                        round={true}
+                                        className={styles.avatar}
                                     />
                                 </span>
                             )
                         })}
-                        <span className={styles.avatar}>                            
-                            <Avatar color={'grey'} name={`+   ${card.members.length-3} ${('0'+(card.members.length-3)).slice(2)}`} size={30} round={true} maxInitials={3} className={styles.avatar}/>
+                        <span className={styles.avatar}>
+                            <Avatar color={'grey'} name={`+   ${card.members.length - 3} ${('0' + (card.members.length - 3)).slice(2)}`} size={30} round={true} maxInitials={3} className={styles.avatar} />
                         </span>
                     </div>
                     :
