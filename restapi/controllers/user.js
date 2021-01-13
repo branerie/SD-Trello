@@ -30,6 +30,8 @@ router.post('/confirmation', confirmToken)
 
 router.put('/:id', updateUser)
 
+router.put('/recentProjects/:id', updateUserRecentProjects)
+
 router.delete('/:id', deleteUser)
 
 
@@ -129,6 +131,7 @@ async function loginUser(req, res, next) {
         if (!user.password) {
             let response = {}
             response.needPassword = true
+            response.userId = user._id
             res.send(response)
         }
         const match = await user.matchPassword(password)
@@ -171,6 +174,7 @@ async function googleLoginUser(req, res, next) {
         const token = utils.jwt.createToken({ id: user._id })
 
         const teams = await getTeams(user._id)
+        
         const response = {
             user,
             teams
@@ -210,14 +214,14 @@ async function updateUser(req, res, next) {
             obj[key] = user[key]
         }
     }
-   
+
     if (password) {
         await bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, async (err, hash) => {
                 if (err) { next(err); return }
 
                 const result = await models.User.updateOne({ _id: id }, { ...obj, password: hash })
-                const updatedUser = await models.User.findOne({_id: id})
+                const updatedUser = await models.User.findOne({ _id: id })
                 const teams = await getTeams(updatedUser._id)
                 const response = {
                     user: updatedUser,
@@ -229,7 +233,7 @@ async function updateUser(req, res, next) {
         })
     } else {
         const result = await models.User.updateOne({ _id: id }, obj)
-        const updatedUser = await models.User.findOne({_id: id})
+        const updatedUser = await models.User.findOne({ _id: id })
         const teams = await getTeams(updatedUser._id)
         const response = {
             user: updatedUser,
@@ -239,6 +243,22 @@ async function updateUser(req, res, next) {
     }
 }
 
+async function updateUserRecentProjects(req, res, next) {
+    const id = req.params.id
+    const { recentProjects } = req.body
+
+
+    const result = await models.User.updateOne({ _id: id }, {recentProjects})
+    const updatedUser = await models.User.findOne({ _id: id })
+
+    const teams = await getTeams(updatedUser._id)
+    const response = {
+        user: updatedUser,
+        teams
+    }
+    res.send(response)
+
+}
 
 async function deleteUser(req, res, next) {
     const id = req.params.id;

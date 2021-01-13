@@ -33,7 +33,9 @@ const userSchema = new Schema({
 
     confirmed: { type: Boolean, default: true }, 
 
-    confirmationToken: { type: String, default: '' }
+    confirmationToken: { type: String, default: '' },
+
+    recentProjects: []
 
 });
 

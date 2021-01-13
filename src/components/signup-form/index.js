@@ -76,103 +76,102 @@ const SignupForm = (props) => {
 
 
             <div className={styles.innerContainer}>
-            <div className={styles.logo}>
-                <img src={logo} alt="logo" width='110' height='100' />
-            </div>
-
-            <div className={styles.rightSide}>
-                <div className={styles.title}  >Sign Up with E-mail</div>
-
-                <div className={styles.inputContainer}>
-                    <div> Username:</div>
-                    <input
-                        placeholder='John Smith'
-                        className={styles.signUpInput}
-                        value={username}
-                        onChange={(e) => setUsername(e.target.value)}
-                        label="Username"
-                        id="username"
-                    />
+                <div className={styles.logo}>
+                    <img src={logo} alt="logo" width='110' height='100' />
                 </div>
 
-                <div className={styles.inputContainer}>
-                    <div> Email:</div>
-                    <input
-                        placeholder='John@example.com'
-                        className={styles.signUpInput}
-                        value={email}
-                        onChange={(e) => setEmail(e.target.value)}
-                        label="Email"
-                        id="email"
-                    />
-                </div>
+                <div className={styles.rightSide}>
+                    <div className={styles.title}  >Sign Up with E-mail</div>
 
-                <div className={styles.inputContainer}>
-                    <div> Password:</div>
-                    <input
-                        placeholder='********'
-                        className={styles.signUpInput}
-                        type="password"
-                        value={password}
-                        onChange={(e) => setPassword(e.target.value)}
-                        label="Password"
-                        id="password"
-                    />
-                    <div className={styles.passInstructions}>
-                        <p>Use 8 or more characters with a</p>
-                        <p>mix of letters, numbers & symbols. </p>
+                    <div className={styles.inputContainer}>
+                        <div> Username:</div>
+                        <input
+                            placeholder='John Smith'
+                            className={styles.signUpInput}
+                            value={username}
+                            onChange={(e) => setUsername(e.target.value)}
+                            label="Username"
+                            id="username"
+                        />
+                    </div>
+
+                    <div className={styles.inputContainer}>
+                        <div> Email:</div>
+                        <input
+                            placeholder='John@example.com'
+                            className={styles.signUpInput}
+                            value={email}
+                            onChange={(e) => setEmail(e.target.value)}
+                            label="Email"
+                            id="email"
+                        />
+                    </div>
+
+                    <div className={styles.inputContainer}>
+                        <div> Password:</div>
+                        <input
+                            placeholder='********'
+                            className={styles.signUpInput}
+                            type="password"
+                            value={password}
+                            onChange={(e) => setPassword(e.target.value)}
+                            label="Password"
+                            id="password"
+                        />
+                        <div className={styles.passInstructions}>
+                            <p>Use 8 or more characters with a</p>
+                            <p>mix of letters, numbers & symbols. </p>
+                        </div>
+                    </div>
+
+                    <div className={styles.inputContainer}>
+                        <div> Re-type Password:</div>
+                        <input
+                            placeholder='********'
+                            className={styles.signUpInput}
+                            type="password"
+                            value={rePassword}
+                            onChange={(e) => setRePassword(e.target.value)}
+                            label="Re-Password"
+                            id="re-password"
+                        />
+                    </div>
+
+                    <div className={styles.buttonDivLogin}>
+                        <button type='submit' className={styles.signUpButton}>Get Started</button>
+                    </div>
+
+                    <div className={styles.textDiv}>
+                        <h3>
+                            or
+                        </h3>
+                    </div>
+
+
+                    <div className={styles.buttonDivGoogleLogin}>
+                        <GoogleLogin
+                            render={renderProps => (
+                                <button onClick={renderProps.onClick}
+                                    className={styles.googleLoginBtn}
+                                >
+                                    <img src={google} alt="logo" width='25' height='25' />Sign Up with Google</button>
+                            )}
+                            clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
+                            buttonText="Sign up with Google"
+                            onSuccess={handleGoogle}
+                            // onFailure={errorGoogle}
+                            cookiePolicy={'single_host_origin'}
+                        />
+                    </div>
+
+                    <div className={styles.textDiv}>
+                        <p className={styles.alreadySignUp}>
+                            Already Sign Up?
+                        <button className={styles.signUpBtn} onClick={() => { props.goToLogin(); props.hideForm() }}>Log In</button>
+                        </p>
+
                     </div>
                 </div>
-
-                <div className={styles.inputContainer}>
-                    <div> Re-type Password:</div>
-                    <input
-                        placeholder='********'
-                        className={styles.signUpInput}
-                        type="password"
-                        value={rePassword}
-                        onChange={(e) => setRePassword(e.target.value)}
-                        label="Re-Password"
-                        id="re-password"
-                    />
-                </div>
-
-                <div className={styles.buttonDivLogin}>
-                    <button type='submit' className={styles.signUpButton}>Get Started</button>
-                </div>
-
-                <div className={styles.textDiv}>
-                    <h3>
-                        or
-                        </h3>
-                </div>
-
-
-                <div className={styles.buttonDivGoogleLogin}>
-                <GoogleLogin
-                    render={renderProps => (
-                        <button onClick={renderProps.onClick}
-                            className={styles.googleLoginBtn}
-                        >
-                            <img src={google} alt="logo" width='25' height='25' />
-                            Sign Up with Google</button>
-                    )}
-                    clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
-                    buttonText="Sign up with Google"
-                    onSuccess={handleGoogle}
-                    // onFailure={errorGoogle}
-                    cookiePolicy={'single_host_origin'}
-                />
-                </div>
-
-                <div className={styles.textDiv}>
-                    <p className={styles.alreadySignUp}>
-                        Already Sign Up?
-                        <button className={styles.signUpBtn} onClick={() => { props.goToLogin(); props.hideForm() }}>Log In</button>
-                    </p>
-
-                </div>
-            </div>
             </div>
         </form>
 

@@ -17,6 +17,7 @@ const LoginForm = (props) => {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
     const [showForm, setShowForm] = useState(false)
+    const [userId, setUserId] = useState('')
     const context = useContext(UserContext)
     const history = useHistory()
     const [fillAlert, setFillAlert] = useState(false)
@@ -41,11 +42,12 @@ const LoginForm = (props) => {
         await authenticate("/api/user/login", 'POST', {
             email,
             password
-        }, (user) => {
+        }, (user) => {            
             context.logIn(user)
             history.push("/")
         }, (response) => {
             if (response.needPassword) {
+                setUserId(response.userId)
                 setShowForm(true)
             }
             if (response.wrongPassword) {
@@ -59,7 +61,7 @@ const LoginForm = (props) => {
     }
 
     const handleGoogle = (googleResponse) => {
-        responseGoogle(googleResponse, (user) => {
+        responseGoogle(googleResponse, (user) => {            
             context.logIn(user)
             history.push("/")
         }, (response) => {
@@ -78,7 +80,7 @@ const LoginForm = (props) => {
                 showForm ?
                     <div>
                         <Transparent hideForm={hideForm}>
-                            <AddPassword hideForm={hideForm} />
+                            <AddPassword hideForm={hideForm} userId={userId} email={email}/>
                         </Transparent>
                     </div> : null
             }

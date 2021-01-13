@@ -49,6 +49,8 @@ export default function ProjectBoard(props) {
         projectContext.setLists(project.lists)
     }, [projectContext])
 
+
+
     useEffect(() => {
         const id = params.projectid
 
@@ -60,10 +62,15 @@ export default function ProjectBoard(props) {
         return () => socket.off('project-updated')
     }, [socket, projectUpdate, params.projectid])
 
+
+    
+
     useEffect(() => {
         if (!projectContext.project || projectContext.project._id !== params.projectid) {
             return
-        }
+        } 
+            
+        
 
         const memberArr = []
         projectContext.project.membersRoles.map(element => {
@@ -78,7 +85,52 @@ export default function ProjectBoard(props) {
             setIsAdmin(member.admin)
         }
 
+        
+
+
     }, [projectContext.project, params.projectid, projectContext, context.user.id])
+
+
+    const updateUserRecentProjects = useCallback(async () => {
+        const userId = context.user.id
+        console.log(context.user)
+        let updatedUser = { ...context.user }
+        let oldArr = [...updatedUser.recentProjects]
+
+        const arr = oldArr.filter(p => p._id !== params.projectid)
+        arr.push({ _id: params.projectid, name: projectContext.project.name })
+
+        if (arr.length > 3) {
+            arr.shift()
+        }
+
+        updatedUser.recentProjects = arr
+
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`/api/user/recentProjects/${userId}`, {
+            method: "PUT",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            }, body: JSON.stringify({
+                recentProjects: arr
+            })
+        })
+        if (!response.ok) {
+            history.push("/error")
+        } else {
+            context.setUser(updatedUser)
+        }
+    }, [context, history, params.projectid, projectContext.project])
+
+    useEffect(() => {
+        if (!projectContext.project || projectContext.project._id !== params.projectid) {
+            return
+        } else {
+            updateUserRecentProjects()
+        }
+    }, [params.projectid, projectContext.project])
+
 
     if (!projectContext.project || projectContext.project._id !== params.projectid) {
         return (
@@ -93,6 +145,11 @@ export default function ProjectBoard(props) {
             </PageLayout>
         )
     }
+
+
+
+
+
 
 
 

@@ -1,4 +1,4 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState, useRef } from "react"
 import { useHistory } from "react-router-dom"
 import CreateTeam from "../../components/create-team"
 import PageLayout from "../../components/page-layout"
@@ -7,12 +7,15 @@ import Transparent from "../../components/transparent"
 import UserContext from "../../contexts/UserContext"
 import styles from './index.module.css'
 import pic1 from '../../images/home-page-pic.svg'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+
 
 const Home = () => {
+  const dropdownRef = useRef(null)
   const userContext = useContext(UserContext)
   const history = useHistory()
   const [showTeamForm, setShowTeamForm] = useState(false)
-  const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useState(false)
+  const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useDetectOutsideClick(dropdownRef)
   const userName = userContext.user.username
   const userTeams = userContext.user.teams
   const userId = userContext.user._id
@@ -20,6 +23,23 @@ const Home = () => {
   const goToTeamPage = (teamId) => {
     history.push(`/team/${teamId}`)
   }
+
+  const goToProject = (projectId) => {
+
+    userTeams.map(t => {
+      return (t.projects.forEach(element => {
+        if (element._id === projectId) {
+          history.push(`/project-board/${t._id}/${projectId}`)
+        }
+      }))
+    })
+
+  }
+
+
+
+
+  const recentProjects = userContext.user.recentProjects
 
   // const goToProjectPage = (projectId, teamId) => {
   //   history.push(`/project-board/${teamId}/${projectId}`)
@@ -43,16 +63,16 @@ const Home = () => {
           </Transparent>) : null
         }
       </div>
-      
-        <Title title='Smart Manager' />
-        <div className={styles.container}>
-        
-        <div className={styles.leftButtons}>          
-        <div >{`Welcome ${userName}`}</div>
+
+      <Title title='Home' />
+      <div className={styles.welcomeUser}>{`Welcome ${userName}!`}</div>
+      <div className={styles.container}>
+
+        <div className={styles.leftButtons}>
 
           <div>
             <button className={styles.navigateButtons}
-            onClick={() => history.push(`/my-tasks/${userId}`)}
+              onClick={() => history.push(`/my-tasks/${userId}`)}
             >My Tasks</button>
           </div>
 
@@ -67,18 +87,18 @@ const Home = () => {
             <div>
               {
                 showTeamsVisibleForm ?
-                  <div className={styles.teams}>
+                  <div className={styles.teamsHome} ref={dropdownRef}>
                     {
                       userTeams.map((t, index) => {
                         return (
                           <span>
                             {/* <div> */}
-                            <button key={index}
+                            <div key={index}
                               // className={styles.teamNames}
-                              className={styles.navigateButtons}
+                              className={styles.navigateButtonsTeams}
                               onClick={() => goToTeamPage(t._id)}
-                              
-                            >{t.name}</button>
+
+                            >{t.name}</div>
                             {/* <div className={styles.teams}>
                     Projects:
                     {
@@ -109,51 +129,34 @@ const Home = () => {
               className={styles.navigateButtons}
             >Create New Team</ button>
           </div>
-        
+
         </div>
-        
+
         <span className={styles.picContainer}>
           <img className={styles.pic1} src={pic1} alt="" />
         </span>
 
         <span className={styles.rightButtons}>
-        <div >{`Recently visited:`}</div>
-          <div>
-            < button 
-            // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
-              className={styles.navigateButtons}
-            >
-              Project 1
-              </ button>
-          </div>
+          {
+            (recentProjects) ?
+              <div>
+                <div >{`Recent projects:`}</div>
+                {
+                  recentProjects.slice(0).reverse().map((p, index) => {
+                    return (
+                      <button key={index} className={styles.navigateButtons} onClick={()=>goToProject(p._id)}>{p.name}</button>
+                    )
+                  })
+                }
 
-          <div>
-            < button 
-            // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
-              className={styles.navigateButtons}
-            >
-              Project 2
-              </ button>
-          </div>
 
-          <div>
-            < button 
-            // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
-              className={styles.navigateButtons}
-            >
-              Project 3
-              </ button>
-          </div>
+              </div>
+              : null
+          }
         </span>
-        
-        
-        </div>
+
+
+      </div>
 
 
 

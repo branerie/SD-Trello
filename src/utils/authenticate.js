@@ -36,6 +36,7 @@ const authenticate = async (url, method, body, onSuccess, onFailure) => {
                 teams: response.teams,
                 inbox: response.user.inbox,
                 confirmed: response.user.confirmed,
+                recentProjects: response.user.recentProjects
             });
         } else {
             onFailure(response)

@@ -8,9 +8,10 @@ import { useSocket } from '../../contexts/SocketProvider';
 
 export default function TaskName(props) {
 
+  const card = props.card
   const dropdownRef = useRef(null);
   const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
-  const [cardName, setCardName] = useState('')
+  const [cardName, setCardName] = useState(card.name)
   const history = useHistory()
   const socket = useSocket()
 
@@ -21,13 +22,10 @@ export default function TaskName(props) {
 
 
   const editCardName = useCallback(async (event) => {
-    event.preventDefault()
+    event.preventDefault()    
 
-    console.log(cardName);
-
-    let data = props.value.split('/')
-    let cardId = data[1]
-    let listId = data[2]
+    const cardId = card._id
+    const listId = props.listId
 
 
     if (cardName === "") {
@@ -49,51 +47,27 @@ export default function TaskName(props) {
       history.push("/error")
       return
     } else {
-      setCardName('')
       setIsActive(!isActive)
       updateProjectSocket()
     }
 
-  }, [history, cardName, updateProjectSocket, isActive, setIsActive, props.value])
+  }, [history, cardName, updateProjectSocket, isActive, setIsActive,card._id,props.listId])
 
 
+  return (
+    <span>
+      {
+        isActive ?
+          < div ref={dropdownRef} className={styles.nameContainer} onBlur={editCardName} >
+            <input className={styles.inputTaskName} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} />
+          </div> :
+          <div className={styles.tableText} onClick={() => setIsActive(!isActive)} >
+            <span>{cardName}</span>
+          </div >
+      }
+    </span>
+  )
 
-
-
-  let value = props.value
-
-  if (value) {
-    let token = value.split('/')
-    if (token.length === 1) {
-      return (
-        <div className={styles.listName}>{value}</div>
-      )
-    }
-    let cardname = token[0]
-
-    return (
-      <span>
-        {
-          isActive ?
-            < div ref={dropdownRef} className={styles.container} onBlur={editCardName} >
-              <input className={styles.inputTaskName} type={'text'} placeholder={cardname} onChange={e => setCardName(e.target.value)} />
-              {/* <button type='submit' className={styles.taskProgressButton} cardId={cardId} listId={listId} cardName>Edit</button> */}
-            </div> :
-            <div className={styles.tableText} onClick={() => setIsActive(!isActive)} >
-              <span>{cardname}</span>
-
-              {/* <button type='submit' className={styles.clean} onClick={() => setIsActive(!isActive)} >
-                <img src={pen} alt="..." width="11.5" height="11.5" />
-              </button> */}
-
-            </div >
-        }
-      </span>
-    )
-  }
-  else {
-    return value
-  }
 
 }
 

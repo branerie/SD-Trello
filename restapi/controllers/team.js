@@ -128,7 +128,16 @@ async function getTeamUsers(req, res, next) {
 async function updateTeam(req, res, next) {
 
     const teamId = req.params.id
-    const { name, description, members, requests } = req.body
+    const { name, description, members, requests, removeInvitation } = req.body
+    
+    
+    if (removeInvitation) {
+        const userForRemove = removeInvitation._id
+        await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userForRemove } })
+        const updatedTeam = await models.Team.findOne({ _id: teamId })
+        res.send(updatedTeam)
+        return
+    }
 
     if (requests) {
         const requestsId = requests.map(r => r._id)
@@ -139,8 +148,6 @@ async function updateTeam(req, res, next) {
         try {
 
             const teamEditResult = await models.Team.updateOne({ _id: teamId }, { name, description, members, $push: { requests: { $each: requestsId } } }).session(session)
-
-            console.log(teamEditResult);
 
             const message = JSON.stringify({ id: uuidv4(), subject: 'Team invitation', teamId: teamId, teamName: name })
 
@@ -156,8 +163,7 @@ async function updateTeam(req, res, next) {
             res.send(error)
         }
     } else {
-        console.log('v elsa');
-        console.log(members);
+
         const team = { name: name, description: description, members: members }
         const obj = {}
         for (let key in team) {

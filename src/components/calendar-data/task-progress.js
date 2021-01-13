@@ -8,19 +8,19 @@ import { useSocket } from '../../contexts/SocketProvider';
 export default function TaskProgress(props) {
 
     const today = useMemo(() => new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())), [])
-    let card = props.card
+    const card = props.card
     const [taskHistory, setTaskHistory] = useState(card.history)
-    const value = props.value
-    let taskprogress = ''
-    let token = value.split('/')
+    // const value = props.value
+    // let taskprogress = ''
+    // let token = value.split('/')
 
-    if (token.length > 1) {
-        taskprogress = token[0]
-    }
+    // if (token.length > 1) {
+    //     taskprogress = token[0]
+    // }
 
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
-    const [cardProgress, setCardProgress] = useState(taskprogress)
+    const [cardProgress, setCardProgress] = useState(card.progress)
     const history = useHistory()
     const socket = useSocket()
 
@@ -33,9 +33,12 @@ export default function TaskProgress(props) {
     const editCardProgress = useCallback(async (event) => {
         event.preventDefault()
 
-        let data = props.value.split('/')
-        let cardId = data[1]
-        let listId = data[2]
+        // let data = props.value.split('/')
+        // let cardId = data[1]
+        // let listId = data[2]
+
+        const cardId = card._id
+        const listId = props.listId
 
 
         if (cardProgress === "") {
@@ -79,17 +82,18 @@ export default function TaskProgress(props) {
             updateProjectSocket()
         }
 
-    }, [history, cardProgress, updateProjectSocket, isActive, setIsActive, props.value, taskHistory, today])
+    }, [history, cardProgress, updateProjectSocket, isActive, setIsActive, taskHistory, today,card._id,props.listId])
 
 
     function showTaskProgress(value) {
-        if (value !== "null") {
-
-
+        if (value) {
             return (
                 <div style={{
-                    backgroundColor: getBackGroundColor(value), padding: '5px', fontSize: "14px", border: 'solid black 1px',
-                    borderRadius: '5px'
+                    backgroundColor: getBackGroundColor(value),
+                    padding: '5px',                   
+                    fontSize: "14px", border: 'solid black 1px',
+                    borderRadius: '5px',
+                    height: '100%', width: '100%', textAlign: 'center'
                 }} > {value} %</div>
             )
 
@@ -105,7 +109,7 @@ export default function TaskProgress(props) {
     function getBackGroundColor(value) {
         let currColor = ''
         switch (true) {
-            case (value === "100"):
+            case (value === 100 || value === '100'):
                 currColor = '#0E8D27';
                 break;
             case (value < 20):
@@ -120,48 +124,44 @@ export default function TaskProgress(props) {
         return currColor
     }
 
-    if (value) {
-        let token = value.split('/')
-        if (token.length === 1) {
-            return (
-                <div className={styles.listName}>{value}</div>
-            )
-        }
-        let taskprogress = token[0]
 
-        return (
-            <span>
 
-                {
-                    isActive ?
-                        <div ref={dropdownRef} className={styles.taskProgress} onBlur={editCardProgress}>
-                            <input
-                                className={styles.progressInput}
-                                style={{
-                                    backgroundColor: [getBackGroundColor(taskprogress)],
-                                    padding: '5px', fontSize: "14px", border: 'solid black 1px',
-                                    borderRadius: '5px', width: '100%',
-                                    textAlign: 'center'
-                                }}
-                                type={'number'}
-                                value={cardProgress}
-                                placeholder={'%'}
-                                onChange={e => setCardProgress(e.target.value)}
-                                min="0" max="100" />
-                        </div >
-                        :
-                        <div className={styles.taskProgress} >
-                            <button className={styles.taskProgressButton} onClick={() => setIsActive(!isActive)} >
-                                <span>{showTaskProgress(taskprogress)}</span>
-                            </button>
-                        </div >
-                }
-            </span>
-        )
-    }
-    else {
-        return showTaskProgress('')
-    }
+    return (
+        <span>
+
+            {
+                isActive ?
+                    <div ref={dropdownRef} className={styles.taskProgress} onBlur={editCardProgress}>
+                        <input
+                            className={styles.taskProgressButtonInput}
+                            style={{
+                                backgroundColor: [getBackGroundColor(cardProgress)],
+                                // padding: '2px',
+                                // fontSize: "16px",
+                                // 'font-family': 'inherit',
+                                // border: 'solid black 1px',
+                                // borderRadius: '5px', width: '100%', 
+                                // height:'inherit',
+                                // textAlign: 'center'
+                            }}
+                            type={'number'}
+                            value={cardProgress}
+                            // placeholder={'%'}
+                            onChange={e => setCardProgress(e.target.value)}
+                            min="0" max="100" />
+                    </div >
+                    :
+                    <div className={styles.taskProgress}
+                        onClick={() => setIsActive(!isActive)}                        >
+                        {/* <button className={styles.taskProgressButton}  */}
+                        {/* > */}
+                        {showTaskProgress(cardProgress)}
+                        {/* </button> */}
+                    </div >
+            }
+        </span>
+    )
+
 
 }
 
