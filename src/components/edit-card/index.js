@@ -42,11 +42,6 @@ export default function EditCard(props) {
     const dueDate = useMemo(() => new Date(card.dueDate), [card.dueDate])
     const today = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), [])
     const cardId = card._id
-    console.log(dueDate);
-
-    const updateProjectSocket = useCallback(() => {
-        socket.emit('project-update', props.project)
-    }, [socket, props.project])
 
 
     const deleteCard = useCallback(async (event) => {
@@ -67,10 +62,11 @@ export default function EditCard(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
-            updateProjectSocket()
+            socket.emit('project-update', props.project)
+            socket.emit('task-team-update', props.teamId)
             props.hideForm()
         }
-    }, [history, props, cardId, listId, updateProjectSocket])
+    }, [history, props, cardId, listId, socket])
 
 
     const handleSubmit = useCallback(async (event) => {
@@ -113,14 +109,15 @@ export default function EditCard(props) {
         } else {
             const updatedCard = await response.json()
             setCard(updatedCard)
-            updateProjectSocket()
+            socket.emit('project-update', props.project)
+            socket.emit('task-team-update', props.teamId)
             setIsActive(false)
             setIsProgressActive(false)
             setIsDescriptionActive(false)
             setProgressChanged(false)
         }
 
-    }, [history, name, description, dueDate, progress, listId, cardId, updateProjectSocket, setIsActive, setIsProgressActive, progressChanged, taskHistory, today])
+    }, [history, name, description, dueDate, progress, listId, cardId, setIsActive, setIsProgressActive, progressChanged, taskHistory, today, socket, props.teamId, props.project])
 
 
 
@@ -273,7 +270,14 @@ export default function EditCard(props) {
                             <p className={styles.text}>Members</p>
                         </div>
                         <div className={styles.members}>
-                            <TaskMembers card={card} size={30} listId={listId} project={props.project} title={'Add'} />
+                            <TaskMembers
+                                card={card}
+                                size={30}
+                                listId={listId}
+                                project={props.project}
+                                title={'Add'}
+                                teamId={props.teamId}
+                            />
                         </div>
                     </div>
 
@@ -282,7 +286,14 @@ export default function EditCard(props) {
                         <div >
                             {/* <p className={styles.text}>Due Date</p> */}
                             <div className={styles.dueDate} >
-                                <TaskDueDate cardDueDate={dueDate} cardId={cardId} listId={listId} project={props.project} showEditCard={false} />
+                                <TaskDueDate
+                                    cardDueDate={dueDate}
+                                    cardId={cardId}
+                                    listId={listId}
+                                    project={props.project}
+                                    showEditCard={false}
+                                    teamId={props.teamId}
+                                />
                             </div>
 
                         </div>

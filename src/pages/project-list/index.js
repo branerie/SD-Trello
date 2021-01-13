@@ -59,8 +59,8 @@ export default function ProjectList() {
                 title='Task filters'
             />
             {
-                isFilterActive ? <div
-                >
+                isFilterActive &&
+                <div>
                     <ButtonClean
                         title={'Not Started'}
                         onClick={() => progressFilter('Not Started')}
@@ -76,7 +76,7 @@ export default function ProjectList() {
                         className={`${styles.filter} ${!filter['Done'] ? styles['filter-off'] : ''}`}
                         onClick={() => progressFilter('Done')}
                     />
-                </div> : null
+                </div>
             }
             <div className={styles.calendarPageContainer}>
                 <div>

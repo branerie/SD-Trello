@@ -15,6 +15,7 @@ import ColumnData from "../calendar-data/column-data"
 import Transparent from "../transparent"
 import EditList from "../edit-list"
 import UserContext from '../../contexts/UserContext'
+import { useParams } from "react-router-dom";
 
 
 const TableDndApp = (props) => {
@@ -25,8 +26,7 @@ const TableDndApp = (props) => {
     const [currList, setCurrList] = useState('')
     const projectContext = useContext(ProjectContext)
     const userContext = useContext(UserContext)
-
-
+    const params = useParams()
 
     function getMonday(date) {
         let d
@@ -153,7 +153,7 @@ const TableDndApp = (props) => {
                                 <TaskName 
                                 // value={card.name + '/' + card._id + '/' + list._id}
                                 card = {card} listId={list._id}
-                                 project={props.project} />
+                                project={props.project} />
                             ),
                         progress:
                             (
@@ -176,7 +176,16 @@ const TableDndApp = (props) => {
                         dueDate: (
                             <div>
                                 <span>
-                                    <TaskDueDate value={(thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + ('0' + (cardDate.getMonth() + 1)).slice(-2) + '-' + cardDate.getFullYear() : ''} cardDueDate={cardDate} cardId={card._id} listId={list._id} props={props} project={props.project} card={card} />
+                                    <TaskDueDate 
+                                        value={(thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + ('0' + (cardDate.getMonth() + 1)).slice(-2) + '-' + cardDate.getFullYear() : ''}
+                                        cardDueDate={cardDate}
+                                        cardId={card._id}
+                                        listId={list._id}
+                                        props={props}
+                                        project={props.project}
+                                        card={card}
+                                        teamId={params.teamid}
+                                    />
                                 </span>
                             </div>
                         )
@@ -211,7 +220,7 @@ const TableDndApp = (props) => {
         return numberOfRows
 
 
-    }, [projectContext, props,onListClick])
+    }, [projectContext, props,onListClick, params.teamid])
 
 
     useEffect(() => {

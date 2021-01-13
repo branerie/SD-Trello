@@ -20,12 +20,13 @@ export function SocketProvider({ user, children }) {
       return
     }
     const username = user.username
+    const userId = user.id
     const teams = [...user.teams]
     const teamsId = teams.map( t => t._id)
     const teamsStr = JSON.stringify(teamsId)
     const newSocket = io(
       url, {
-        query: { teamsStr, username },
+        query: { teamsStr, username, userId },
         transports: ['websocket']
       }
     )
