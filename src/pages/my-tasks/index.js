@@ -1,5 +1,5 @@
 import React, { useState, useContext, useEffect, useCallback } from "react"
-import { useHistory } from "react-router-dom"
+import { Link, useHistory } from "react-router-dom"
 import ButtonClean from "../../components/button-clean"
 import PageLayout from "../../components/page-layout"
 import Title from "../../components/title"
@@ -8,7 +8,7 @@ import getCookie from "../../utils/cookie"
 import styles from './index.module.css'
 import myTasks from '../../images/my-tasks/my-tasks.svg'
 import { useSocket } from "../../contexts/SocketProvider"
-import MyTasksProject from "../../components/my-tasks-project"
+import MyTasksTask from "../../components/my-tasks-task"
 
 const MyTasksPage = () => {
     const userContext = useContext(UserContext)
@@ -84,7 +84,37 @@ const MyTasksPage = () => {
                             projects.length === 0 ? <div className={styles.title}>There is no current tasks</div> :
                                 projects.map(project => {
                                     return (
-                                        <MyTasksProject key={project._id} project={project} currTeam={currTeam} />
+                                        <div key={project._id} className={styles.project}>
+                                            <div className={styles['project-name']}>
+                                                <Link to={`/project-board/${currTeam._id}/${project._id}`} className={styles.link}>
+                                                    <span className={styles.bold}>Project:</span> {project.name}
+                                                </Link>
+                                            </div>
+                                            <div className={`${styles.header} ${styles.card}`}>
+                                                <div className={styles.task}>Task:</div>
+                                                <div className={styles.list}>List:</div>
+                                                <div className={styles.progress}>Progress:</div>
+                                                <div className={styles.days}>Days Till End:</div>
+                                            </div>
+                                            {
+                                                project.lists.map(list => {
+                                                    return (
+                                                        <div key={list._id}>
+                                                            {list.cards.map(card => {
+                                                                return (
+                                                                    <MyTasksTask
+                                                                        key={card._id}
+                                                                        currTeam={currTeam}
+                                                                        project={project}
+                                                                        list={list}
+                                                                        card={card}
+                                                                    />
+                                                                )
+                                                            })}
+                                                        </div>)
+                                                })
+                                            }
+                                        </div>
                                     )
                                 })
                         }

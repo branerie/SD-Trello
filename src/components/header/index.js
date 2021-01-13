@@ -66,10 +66,6 @@ const Header = ({ asideOn }) => {
             teamContext.updateSelectedTeam(teamId)
         }
 
-        // if (window.location.href.includes('team')) {
-        //     projectContext.setProject({ name: 'Select' })
-        // }
-
         if (window.location.href.includes('project')) {
             setIsViewVisibble(true)
             setIsProjectVisibble(true)

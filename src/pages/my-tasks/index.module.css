@@ -43,3 +43,68 @@
   bottom: 30px;
   right: 50px;
 }
+
+.project {
+  width: 65%;
+  background-color: #F7F7F2;
+  margin: 20px;
+  margin-left: 150px;
+  border-radius: 19px;
+  border: solid 1px #707070;
+  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+  padding-bottom: 10px;
+}
+
+.project-name {
+  font-size: 27px;
+  color: #363338;
+  margin: 15px;
+  margin-left: 20px;
+  font-weight: normal;
+}
+
+.link {
+  text-decoration: none;
+  color: #363338;
+}
+
+.bold {
+  font-weight: bold;
+}
+
+.header {
+  font-weight: bold;
+  text-decoration: underline;
+}
+
+.card {
+  display: flex;
+  margin-left: 20px;
+  font-size: 20px;
+  height: 35px;
+}
+
+.card > div {
+  white-space: nowrap; 
+  overflow: hidden;
+  text-overflow: ellipsis;
+  color: #363338;
+}
+
+.task {
+  width: 35%;
+}
+
+.progress {
+  width: 13%;
+  text-align: center;
+}
+
+.days {
+  width: 13%;
+  text-align: center;
+}
+
+.list {
+  width: 35%;
+}
