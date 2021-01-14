@@ -2,7 +2,7 @@ import React, { useCallback, useMemo, useRef, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider';
 
 export default function TaskProgress(props) {
@@ -23,11 +23,8 @@ export default function TaskProgress(props) {
     const [cardProgress, setCardProgress] = useState(taskprogress)
     const history = useHistory()
     const socket = useSocket()
-
-
-    const updateProjectSocket = useCallback(() => {
-        socket.emit('project-update', props.project)
-    }, [socket, props.project])
+    const params = useParams()
+    const teamId = params.teamid
 
 
     const editCardProgress = useCallback(async (event) => {
@@ -79,10 +76,11 @@ export default function TaskProgress(props) {
         } else {
             // setCardProgress('')
             setIsActive(!isActive)
-            updateProjectSocket()
+            socket.emit('project-update', props.project)
+            socket.emit('task-team-update', teamId)
         }
 
-    }, [history, cardProgress, updateProjectSocket, isActive, setIsActive, taskHistory, today,card._id,props.listId])
+    }, [history, cardProgress, isActive, setIsActive, taskHistory, today, card._id, props.listId, props.project, socket, teamId])
 
 
     function showTaskProgress(value) {
@@ -91,7 +89,7 @@ export default function TaskProgress(props) {
             return (
                 <div style={{
                     backgroundColor: getBackGroundColor(value),
-                    padding: '5px',                   
+                    padding: '5px',
                     fontSize: "14px", border: 'solid black 1px',
                     borderRadius: '5px',
                     height: '100%', width: '100%', textAlign: 'center'

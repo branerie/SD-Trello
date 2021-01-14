@@ -66,9 +66,10 @@ export default function TaskMembers(props) {
 
     }
 
-    const updateProjectSocket = useCallback(() => {
+    const updateSocket = useCallback(() => {
         socket.emit('project-update', props.project)
-    }, [socket, props.project])
+        socket.emit('task-team-update', props.teamId)
+    }, [socket, props.project, props.teamId])
 
 
     const handleSelect = (id) => {
@@ -103,11 +104,11 @@ export default function TaskMembers(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
-            updateProjectSocket()
+            updateSocket()
             setCardMembers(arr)
         }
 
-    }, [history, cardId, listId, updateProjectSocket, cardMembers])
+    }, [history, cardId, listId, updateSocket, cardMembers])
 
 
 
@@ -169,11 +170,11 @@ export default function TaskMembers(props) {
         } else {
             setIsActive(!isActive)
             setCardMembers(arr)
-            updateProjectSocket()
+            updateSocket()
             setSelectedUser('')
         }
 
-    }, [history, props, cardId, listId, isActive, setIsActive, selectedUser, updateProjectSocket, cardMembers, projectId])
+    }, [history, props, cardId, listId, isActive, setIsActive, selectedUser, updateSocket, cardMembers, projectId])
 
 
 

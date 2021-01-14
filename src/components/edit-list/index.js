@@ -1,5 +1,5 @@
-import React, { useCallback, useContext, useEffect, useRef, useState } from 'react'
-import { useHistory } from "react-router-dom"
+import React, { useContext, useEffect, useRef, useState } from 'react'
+import { useHistory, useParams } from "react-router-dom"
 import Button from '../button'
 import Input from '../input'
 import Title from '../title'
@@ -26,16 +26,14 @@ export default function EditList(props) {
     const userContext = useContext(UserContext)
     const projectId = props.project._id
     const listId = props.list._id
+    const params = useParams()
+    const teamId = params.teamid
 
     console.log(props.list);
 
     useEffect(() => {
         setIsAdmin(isUserAdmin(userContext.user.id ,members))
     }, [members, userContext.user.id])
-
-    const updateProjectSocket = useCallback(() => {
-        socket.emit('project-update', props.project)
-    }, [socket, props.project])
 
     async function handleSubmit(event) {
         event.preventDefault()
@@ -51,7 +49,8 @@ export default function EditList(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
-            updateProjectSocket()
+            socket.emit('project-update', props.project)
+            socket.emit('task-team-update', teamId)
             props.hideForm()
         }
 

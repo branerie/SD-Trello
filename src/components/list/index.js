@@ -1,6 +1,6 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
@@ -17,16 +17,15 @@ export default function List(props) {
     const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [cardName, setCardName] = useState('')
-
-
     const history = useHistory()
     const socket = useSocket()
-
+    const params = useParams()
+    const teamId = params.teamid
     const isAdmin = props.isAdmin
 
 
 
-    const updateProjectSocket = useCallback(() => {
+    const updateSocket = useCallback(() => {
         socket.emit('project-update', props.project)
     }, [socket, props.project])
 
@@ -42,7 +41,8 @@ export default function List(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
-            updateProjectSocket()
+            updateSocket()
+            socket.emit('task-team-update', teamId)
         }
     }
 
@@ -73,10 +73,10 @@ export default function List(props) {
         } else {
             setIsVisible(!isVisible)
             setCardName('')
-            updateProjectSocket()
+            updateSocket()
         }
 
-    }, [history, cardName, props, updateProjectSocket, isVisible, setIsVisible])
+    }, [history, cardName, props, updateSocket, isVisible, setIsVisible])
 
     const onClick = () => setIsActive(!isActive)
 
@@ -87,13 +87,13 @@ export default function List(props) {
                     <div className={styles.name}>{props.list.name}</div>
                     <ListColor color={props.list.color || '#A6A48E'} type={'list'} />
                 </div>
-                {isAdmin ?
+                {
+                    isAdmin &&
                     <ButtonClean
                         className={styles.button}
                         onClick={onClick}
                         title={<img className={styles.dots} src={dots} alt="..." width="20" height="6" />}
                     />
-                    : null
                 }
             </div>
             <div className={styles.relative}>
@@ -164,7 +164,7 @@ export default function List(props) {
                         </form> : <ButtonClean className={styles['add-task']} onClick={() => setIsVisible(!isVisible)} title='+ Add Task' />
 
                 }
-            </div>           
+            </div>
         </div>
     )
 }

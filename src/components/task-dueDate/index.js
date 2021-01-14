@@ -24,7 +24,8 @@ export default function TaskDueDate(props) {
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
-    }, [socket, props.project])
+        socket.emit('task-team-update', props.teamId)
+    }, [socket, props.project, props.teamId])
      
 
 
@@ -48,7 +49,8 @@ export default function TaskDueDate(props) {
                 "Authorization": token
             },
             body: JSON.stringify({
-                dueDate: date
+                dueDate: date,
+                teamId: props.teamId
             })
         })
         if (!response.ok) {
@@ -57,10 +59,10 @@ export default function TaskDueDate(props) {
         } else {
             setIsActive(!isActive)
             updateProjectSocket()
+
         }
 
-    }, [history, cardDueDate, updateProjectSocket, setIsActive, isActive, props.cardId, props.listId
-    ])
+    }, [history, cardDueDate, updateProjectSocket, setIsActive, isActive, props.cardId, props.listId, props.teamId])
 
 
     let cardDate = ''

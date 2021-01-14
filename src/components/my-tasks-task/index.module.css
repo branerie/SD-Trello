@@ -1,0 +1,67 @@
+.card {
+    display: flex;
+    margin-left: 20px;
+    font-size: 20px;
+    height: 35px;
+}
+  
+.card > div {
+    white-space: nowrap; 
+    overflow: hidden;
+    text-overflow: ellipsis;
+    color: #363338;
+}
+  
+.task {
+    width: 35%;
+}
+
+.progress {
+    width: 13%;
+    text-align: center;
+}
+  
+.days {
+    width: 13%;
+    text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.deadline {
+    background-color:  rgb(245, 156, 156);
+    font-size: 16px;
+    align-self: center;
+    border-radius: 5px;
+    padding: 5px;
+}
+  
+.list {
+    width: 35%;
+}
+
+.pen {
+    width: 30px;
+    border-radius: 5px;
+}
+  
+.pen:hover {
+    background-color: #C1CBCF;
+}
+
+.input {
+    font-family: 'Lato';
+    font-size: 20px;
+    font-weight: normal;
+    height: 25px;
+    width: 55px;
+    background-color: #F7F7F2;
+}
+
+.bad-input {
+    background-color: rgb(245, 156, 156);
+}
+
+.no-border {
+    border: none;
+}
