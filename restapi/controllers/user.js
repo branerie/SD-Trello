@@ -295,18 +295,23 @@ async function getUserTasks(req, res, next) {
             populate: {
                 path: 'lists',
                 populate: {
-                    path: 'cards'
+                    path: 'cards',
+                    populate: {
+                        path: 'members'
+                    }
                 }
             }
         })
 
     let projects = team.projects
-
-    projects.forEach(p => p.lists.forEach(l => l.cards = l.cards.filter(c => c.members.includes(userId))))
+    
+    projects.forEach(p => p.lists.forEach(l => l.cards = l.cards.filter(c => {
+        const isMembers = c.members.some(m => m._id.toString() === userId.toString())
+        return isMembers
+    })))
     projects.forEach(p => p.lists = p.lists.filter(l => l.cards.length !== 0))
     projects = projects.filter(p => p.lists.length !== 0)
     res.send(projects)
 }
-
 
 module.exports = router

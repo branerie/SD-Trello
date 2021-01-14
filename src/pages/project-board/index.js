@@ -93,7 +93,6 @@ export default function ProjectBoard(props) {
 
     const updateUserRecentProjects = useCallback(async () => {
         const userId = context.user.id
-        console.log(context.user)
         let updatedUser = { ...context.user }
         let oldArr = [...updatedUser.recentProjects]
 

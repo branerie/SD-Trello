@@ -18,7 +18,6 @@ const MyTasksPage = () => {
     const socket = useSocket()
 
     const selectTeam = useCallback(async (team) => {
-        console.log(team);
         setCurrTeam(team)
 
         const token = getCookie("x-auth-token")
@@ -57,6 +56,7 @@ const MyTasksPage = () => {
 
     function taskTeamUpdate(projects) {
         setProjects(projects)
+        console.log('update');
     }
 
     return (
