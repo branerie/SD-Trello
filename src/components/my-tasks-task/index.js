@@ -16,6 +16,7 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
     const [isInputOk, setIsInputOk] = useState(true)
     const history = useHistory()
     const socket = useSocket()
+    console.log(card.dueDate);
     const days = Math.ceil((Date.parse(card.dueDate) - Date.now()) / 1000 / 3600 / 24)
 
     useEffect (() => {
@@ -108,7 +109,7 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
             <div className={styles.days}>
                 {
                     card.progress === 100 ? (<div>Done</div>) :
-                    Date.parse(card.dueDate) === 0 ? (<div>No Deadline</div>) :
+                    Date.parse(card.dueDate) === 0 || card.dueDate === null ? (<div>No Deadline</div>) :
                     days < 0 ? (<div className={styles.deadline}>Deadline Passed</div>) :
                     <div>{days}</div>
                 }
