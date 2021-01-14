@@ -7,8 +7,8 @@ function sockets(socket) {
     socket.join(userId)
     console.log(username, 'connected')
     const teams = JSON.parse(socket.handshake.query.teamsStr)
-    teams.map( t => socket.join(t))
-    
+    teams.map(t => socket.join(t))
+
     socket.on('team-update', async (teamId) => {
         console.log(username, 'team-update')
         const updatedTeam = await teamUpdate(teamId)
@@ -27,7 +27,7 @@ function sockets(socket) {
         socket.to(project._id).emit('project-updated', updatedProject)
         socket.emit('project-updated', updatedProject)
     })
-    
+
     socket.on('task-team-join', (teamId) => {
         console.log(`${username} joined task-${teamId}`)
         socket.join(`task-${teamId}`)
@@ -39,7 +39,7 @@ function sockets(socket) {
         socket.to(`task-${teamId}`).emit('task-update-team', teamId)
         socket.emit('task-team-updated', updatedTeamProjects)
     })
-    
+
 }
 
 async function teamUpdate(id) {
@@ -89,23 +89,29 @@ async function projectUpdate(id) {
 
 async function taskTeamUpdate(teamId, userId) {
     const team = await models.Team.findOne({ _id: teamId })
-    .populate({
-        path: 'projects',
-        populate: {
-            path: 'lists',
+        .populate({
+            path: 'projects',
             populate: {
-                path: 'cards'
+                path: 'lists',
+                populate: {
+                    path: 'cards',
+                    populate: {
+                        path: 'members'
+                    }
+                }
             }
-        }
-    })
+        })
 
-let projects = team.projects
+    let projects = team.projects
 
-projects.forEach(p => p.lists.forEach(l => l.cards = l.cards.filter(c => c.members.includes(userId))))
-projects.forEach(p => p.lists = p.lists.filter(l => l.cards.length !== 0))
-projects = projects.filter(p => p.lists.length !== 0)
+    projects.forEach(p => p.lists.forEach(l => l.cards = l.cards.filter(c => {
+        const isMembers = c.members.some(m => m._id.toString() == userId.toString())
+        return isMembers
+    })))
+    projects.forEach(p => p.lists = p.lists.filter(l => l.cards.length !== 0))
+    projects = projects.filter(p => p.lists.length !== 0)
 
-return projects
+    return projects
 }
 
 module.exports = sockets

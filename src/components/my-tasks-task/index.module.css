@@ -24,6 +24,16 @@
 .days {
     width: 13%;
     text-align: center;
+    display: flex;
+    justify-content: center;
+}
+
+.deadline {
+    background-color:  rgb(245, 156, 156);
+    font-size: 16px;
+    align-self: center;
+    border-radius: 5px;
+    padding: 5px;
 }
   
 .list {
@@ -44,10 +54,14 @@
     font-size: 20px;
     font-weight: normal;
     height: 25px;
-    width: 50px;
+    width: 55px;
     background-color: #F7F7F2;
 }
 
 .bad-input {
     background-color: rgb(245, 156, 156);
+}
+
+.no-border {
+    border: none;
 }
