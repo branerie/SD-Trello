@@ -46,9 +46,9 @@
     overflow-y: auto;  
     -ms-overflow-style: none;
     scrollbar-width: none;
-    /* justify-content: space-between; */
-    background-color: #E6E6E6;
-    border: solid 1px #363338;
+    justify-content: flex-end;
+    background-color: #EDF5F9;
+    /* border: solid 1px #363338; */
     border-radius: 10px;       
   
   }

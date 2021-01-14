@@ -1,9 +1,11 @@
-.reactTable {
+.pageContainer {
     width: 100%;
-    position: unset;
+    position: unset;    
     display: flex;
     flex-direction: column;
     /* border: 1px solid rgba(0,0,0,0.1); */
+    /* height: 78vh; */
+    height: auto;
 }
 
 
@@ -29,11 +31,7 @@
 }
 
 
-.container {
-    width: 100%;
-    display: flex;
-    flex-wrap: wrap;
-}
+
 .input {
     border: 1px solid #000000; 
     background-color: #FFFFFF;
@@ -82,6 +80,10 @@
     color:black;
     font-style: italic;
   }
+
+
+
+
   .header{
       font-weight: bold;
   }
@@ -128,3 +130,134 @@
     display: inline-block;
     position: relative;
   } */
+
+  /* background: #DFE9EE;
+  color: black;
+  padding: 10px;
+  min-width: 150px;
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
+  margin: 10px;
+  cursor: pointer;
+  border: 1px solid #707070;
+  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+  text-align: center; */
+
+  /* .buttonNextDay {
+	margin: 2rem auto;
+	text-align: center;
+    min-width: 110px;
+    margin: 0 auto;
+    margin: 10px;
+	padding: 5px;
+    background: #F7F7F2;
+  border: 1px solid #707070;    
+	color: black;
+  position: relative;
+}
+.buttonNextDay p {
+	vertical-align: middle;
+	/* font-family: "Lato";
+	font-size: 1.75rem; */
+/* } */
+/* .buttonNextDay::after {
+  content: "";
+  display: block;
+  position: absolute;
+  border: 1px solid #707070;    
+   
+  border-color: transparent #707070;
+  border-style: solid;
+  border-width: 20px 0px 20px 20px;
+  top: 0;
+  left: 100%;
+}  */
+
+
+
+
+.buttonNextDay {
+    width: 120px;
+    margin: 20px;
+    margin-left: 10px;
+    background: #F7F7F2;
+    border: 1px solid #707070;    
+    position: relative;
+    padding: 6px;
+    text-align: center;
+    color: black;
+    cursor: pointer;
+}
+
+.buttonNextDay:after,
+.buttonNextDay:before {
+    content: '';
+    display: block;
+    position: absolute;
+    left: 100%;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.buttonNextDay:after {
+    top: 0px;
+    border-color: transparent transparent transparent #F7F7F2;
+    border-width: 13.7px;
+}
+
+.buttonNextDay:before {
+    top: -1px;
+    border-color: transparent transparent transparent #707070;
+    border-width: 14.7px;
+}
+
+.buttonNextDay:hover{
+    color:black;
+    font-style: italic;
+  }
+
+ /* } */
+
+
+  .buttonPreviouseDay {
+    width: 120px;
+    margin: 20px;
+    margin-right: 10px;
+    background: #F7F7F2;
+    border: 1px solid #707070;    
+    position: relative;
+    padding: 6px;
+    text-align: center;
+    color: black;
+    cursor: pointer;
+}
+
+.buttonPreviouseDay:after,
+.buttonPreviouseDay:before {
+    content: '';
+    display: block;
+    position: absolute;
+    right: 100%;
+    width: 0;
+    height: 0;
+    border-style: solid;
+}
+
+.buttonPreviouseDay:after {
+    top: 0px;
+    border-color:transparent #F7F7F2  transparent transparent ;
+    border-width: 13.5px;
+}
+
+.buttonPreviouseDay:before {
+    top: -1px;
+    border-color:transparent #707070  transparent transparent ;
+    border-width: 14.5px;
+}
+
+.buttonPreviouseDay:hover{
+    color:black;
+    font-style: italic;
+  }

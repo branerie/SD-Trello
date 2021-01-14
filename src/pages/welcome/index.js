@@ -150,7 +150,7 @@ const WelcomePage = () => {
           </div>
           <div className={styles.footerInfo}>
             <p>Contact Us</p>
-            <p>Ordering {`&amp`} Payment FAQ</p>
+            <p>Ordering & Payment FAQ</p>
           </div>
         </div>
 
@@ -162,7 +162,7 @@ const WelcomePage = () => {
             <p>About SMART MANAGER</p>
             <p>Work With US</p>
             <p>Privacy Policy</p>
-            <p>Terms &amp Conditions</p>
+            <p>Terms & Conditions</p>
           </div>
         </div>
 
@@ -178,7 +178,7 @@ const WelcomePage = () => {
               <img className={styles.socialMedia} src={facebook} alt="" />
             </span>
           </div>
-          <div className={styles.sd2006}>&#169 SD2006</div>
+          <div className={styles.sd2006}>SD2006</div>
 
         </div>
 

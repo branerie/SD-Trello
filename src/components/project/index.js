@@ -9,24 +9,26 @@ export default function Project(props) {
     const params = useParams()
 
     return (
-        <div className={styles.container}>
-            <Link to={`/project-board/${params.teamid}/${props.project._id}`}  className={styles.projectname}>Name: {props.project.name}</Link>
+        <div>
+            {isVisible ?
+                < div >
+                    <Transparent hideForm={() => setIsVisible(!isVisible)} >
+                        <EditProject hideForm={() => setIsVisible(!isVisible)} project={props.project} />
+                    </Transparent >
+                </div > : null
+            }
+            <div className={styles.container}>
+                <div className={styles.leftSide}>
+                    <Link to={`/project-board/${params.teamid}/${props.project._id}`} className={styles.key}>Name: <span className={styles.value}>{props.project.name}</span></Link>
 
-
-            <div className={styles.username}>
-                <div className={styles.creator}>
-                    Creator: {props.project.author.username}
+                    <div className={styles.key}>
+                        Creator: <span className={styles.value}>{props.project.author.username}</span>
+                    </div>
                 </div>
-                {isVisible ?
-                    < div >
-                        <Transparent hideForm={() => setIsVisible(!isVisible)} >
-                            <EditProject hideForm={() => setIsVisible(!isVisible)} project={props.project} />
-                        </Transparent >
-                    </div > : null
-                }
+
                 <div className={styles.info} onClick={() => setIsVisible(!isVisible)}>
                     Info
-                </div>
+            </div>
             </div>
         </div>
     )

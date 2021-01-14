@@ -27,6 +27,8 @@ export default function EditList(props) {
     const projectId = props.project._id
     const listId = props.list._id
 
+    console.log(props.list);
+
     useEffect(() => {
         setIsAdmin(isUserAdmin(userContext.user.id ,members))
     }, [members, userContext.user.id])

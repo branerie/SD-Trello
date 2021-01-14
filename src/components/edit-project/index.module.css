@@ -1,6 +1,7 @@
 .container {
-    text-align: center; 
+    /* text-align: center;  */
     margin: 5%;
+    font-size: 20px;
 }
 
 .form {
@@ -8,12 +9,23 @@
     left: 30%;
     top: 15%;
     z-index: 20;
-    width: 40%;
-    height: 70%;
-    background-color: #DFE9EE;
+    width: 45%;
+    height: auto;
+    max-height: 80%;
+    background-color:#F7F7F2;
+    border: solid 2px#707070;
     border-radius: 27px;
-    border: solid 2px #707070;
-    font-size: 15px;
+    color: black;
+}
+
+.title {
+    width: 100%;
+    text-align: center;
+    color: black;
+    text-decoration: underline;
+    margin: 2%;    
+    font-size: 1.8em;
+    font-weight: 500;
 }
 
 .buttonsDiv{
@@ -21,6 +33,7 @@
     margin: 0, auto;
     display: flex;
     justify-content: center;
+    margin-bottom: 2%;
 }
 
 .navigateButtons {
@@ -36,4 +49,43 @@
     border: 1px solid #707070;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+}
+
+.inputContainer{
+    /* align-items: center; */
+    width: 100%;
+    margin-left: 25%;
+    margin-bottom: 1%;
+}
+
+input{
+    border: solid 1px #363338;
+    border-radius: 10px;
+    height: 1.8em;
+    width: 30%;
+    margin-left: 2%;
+    text-align: center;
+    background-color:#DFE9EE;
+}
+
+.inputContainerDescr{    
+    width: 100%;    
+    margin-left: 25%;
+    margin-bottom: 1%;
+    display: flex;
+}
+
+.textarea{
+    border: solid 1px #363338;
+    border-radius: 10px;
+    padding: 1%;
+    height: 5em;
+    width: 29%;
+    margin-left: 2%;  
+    background-color: #DFE9EE;  
+    resize: none;
+}
+
+.editMembers{
+    height: 30%;
 }

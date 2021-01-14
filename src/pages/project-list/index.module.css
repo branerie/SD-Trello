@@ -6,6 +6,8 @@
     flex-grow: 10;
     display: grid; 
 }
+
+
 .table{
     border: solid red 1px;
     width: 1000px;

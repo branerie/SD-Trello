@@ -6,8 +6,8 @@
     width: 45%;
     height: auto;
     max-height: 80%;
-    background-color:#DFE9EE;
-    border: solid 2px #707070;
+    background-color:#F7F7F2;
+    border: solid 2px#707070;
     border-radius: 27px;
     color: black;
 }
@@ -29,14 +29,31 @@
     margin-bottom: 1%;
 }
 
+.inputContainerInvite{
+    align-items: center;
+    width: 100%;
+    margin-left: 22%;
+    margin-bottom: 1%;
+}
+
 input{
     border: solid 1px #363338;
     border-radius: 10px;
     height: 1.8em;
-    width: 30%;
+    width: 38%;
     margin-left: 2%;
     text-align: center;
-    background-color: #EDF5F9;
+    background-color:#DFE9EE;
+}
+
+.inputInvite{
+    border: solid 1px #363338;
+    border-radius: 10px;
+    height: 1.8em;
+    width: 20%;
+    margin-left: 2%;
+    text-align: center;
+    background-color:#DFE9EE;
 }
 
 .inputContainerDescr{    
@@ -53,7 +70,8 @@ input{
     height: 5em;
     width: 30%;
     margin-left: 2%;  
-    background-color: #EDF5F9;  
+    background-color: #DFE9EE; 
+    resize: none; 
 }
 
 
@@ -64,18 +82,18 @@ input{
 }
 
 .createButton{
-    color: #fff;
-    background-color: #363338;
-    border-radius: 15px;
-    width: 6em;
-    min-height: 1.2em;
-    height: auto;
-    border: none; 
-    margin: 0.5em;
-    z-index: 1;
-    font-size: 1.3em;
-    font-weight: 600;
+    background: #DFE9EE;
+    color: black;
+    padding: 10px;
+    min-width: 150px;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+    margin: 10px;
     cursor: pointer;
+    border: 1px solid #707070;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+    text-align: center;
   }
 
   .membersAvatars{
@@ -85,7 +103,10 @@ input{
       /* display: flex; */
   }
 
-
+.membersDiv{
+    margin: 5%;
+    margin-top: 0%;
+}
 
 .members {    
     z-index: 25;  

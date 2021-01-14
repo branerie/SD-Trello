@@ -202,11 +202,11 @@ export default function AddMember(props) {
         <div className={styles.container}>
 
 
-            <div className={styles.bigContainer} ref={dropdownRef}>
+            <div className={styles.bigContainer} >
                 {isAdmin ?
                     <span>
                         {isActive ?
-                            <div className={styles.members}>
+                            <div className={styles.members} ref={dropdownRef}>
                                 <div>
                                     Add Member to Project
                                 </div>

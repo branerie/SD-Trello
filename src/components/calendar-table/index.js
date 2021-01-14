@@ -44,9 +44,9 @@ const TableDndApp = (props) => {
     }
 
 
-    const onListClick = useCallback(async(list) => {
+    const onListClick = useCallback(async (list) => {
         const memberArr = []
-       await projectContext.project.membersRoles.map(element => {
+        await projectContext.project.membersRoles.map(element => {
             return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
 
         })
@@ -57,7 +57,7 @@ const TableDndApp = (props) => {
             setCurrList(list)
             setIsVisibleEditList(!isVisibleEditList)
         }
-    },[isVisibleEditList,projectContext,userContext.user.id])
+    }, [isVisibleEditList, projectContext, userContext.user.id])
 
 
     const cardData = useCallback(async () => {
@@ -150,17 +150,17 @@ const TableDndApp = (props) => {
 
                         task:
                             (
-                                <TaskName 
-                                // value={card.name + '/' + card._id + '/' + list._id}
-                                card = {card} listId={list._id}
-                                 project={props.project} />
+                                <TaskName
+                                    // value={card.name + '/' + card._id + '/' + list._id}
+                                    card={card} listId={list._id}
+                                    project={props.project} />
                             ),
                         progress:
                             (
-                                <TaskProgress 
-                                value={card.progress + '/' + card._id + '/' + list._id} 
-                                listId={list._id}
-                                project={props.project} card={card} />
+                                <TaskProgress
+                                    value={card.progress + '/' + card._id + '/' + list._id}
+                                    listId={list._id}
+                                    project={props.project} card={card} />
                             ),
                         assigned:
                             (
@@ -211,7 +211,7 @@ const TableDndApp = (props) => {
         return numberOfRows
 
 
-    }, [projectContext, props,onListClick])
+    }, [projectContext, props, onListClick])
 
 
     useEffect(() => {
@@ -317,27 +317,27 @@ const TableDndApp = (props) => {
 
     }
 
-    // const getNextDay = async () => {
-    //     var nextDay = startDay
-    //     await nextDay.setDate(nextDay.getDate() + 1)
-    //     await cardData()
-    //     setStartDay(nextDay)
-    // }
+    const getNextDay = async () => {
+        var nextDay = startDay
+        await nextDay.setDate(nextDay.getDate() + 1)
+        await cardData()
+        setStartDay(nextDay)
+    }
 
-    // const getLastDay = async () => {
-    //     var nextDay = startDay
-    //     nextDay.setDate(nextDay.getDate() - 1)
-    //     await cardData()
-    //     setStartDay(nextDay)
-    //     await cardData()
-    // }
+    const getLastDay = async () => {
+        var nextDay = startDay
+        nextDay.setDate(nextDay.getDate() - 1)
+        await cardData()
+        setStartDay(nextDay)
+        await cardData()
+    }
 
 
 
     return (
 
 
-        <div className={styles.reactTable}>
+        <div className={styles.pageContainer}>
             {
                 isVisibleEditList ?
                     < div >
@@ -361,6 +361,9 @@ const TableDndApp = (props) => {
                 </span>
                 <span>
                     <button className={styles.navigateButtons} onClick={getLastWeek} >Previous week</button>
+                    <button className={styles.buttonPreviouseDay} onClick={getLastDay} >Previous day</button>
+                   
+                    <button className={styles.buttonNextDay} onClick={getNextDay}>Next day</button>
                     <button className={styles.navigateButtons} onClick={getNextWeek}>Next week</button>
                 </span>
                 {/* <span>
@@ -388,7 +391,9 @@ const TableDndApp = (props) => {
                         'borderRadius': '10px',
                         'border': '1px solid #707070',
                         'width': 'auto',
-                        'display': 'flex'
+                        'display': 'flex',
+                        'height': '70vh'
+                        // 'height': 'auto'
                     }}
                 />
 
