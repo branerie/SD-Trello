@@ -203,11 +203,11 @@ export default function EditTeam(props) {
                 </div>
                 {
                     isAdmin ?
-                        <div>
-                            <div className={styles.inputContainer}>
+                        <div className={styles.membersDiv}>
+                            <div className={styles.inputContainerInvite}>
                                 <span> Invite Members</span>
                                 <input
-                                    className={styles.input}
+                                    className={styles.inputInvite}
                                     autocomplete="off"
                                     value={member}
                                     onChange={inputMembers}

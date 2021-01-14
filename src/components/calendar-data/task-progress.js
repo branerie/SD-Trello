@@ -10,17 +10,17 @@ export default function TaskProgress(props) {
     const today = useMemo(() => new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())), [])
     const card = props.card
     const [taskHistory, setTaskHistory] = useState(card.history)
-    // const value = props.value
-    // let taskprogress = ''
-    // let token = value.split('/')
+    const value = props.value
+    let taskprogress = ''
+    let token = value.split('/')
 
-    // if (token.length > 1) {
-    //     taskprogress = token[0]
-    // }
+    if (token.length > 1) {
+        taskprogress = token[0]
+    }
 
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
-    const [cardProgress, setCardProgress] = useState(card.progress)
+    const [cardProgress, setCardProgress] = useState(taskprogress)
     const history = useHistory()
     const socket = useSocket()
     const params = useParams()
@@ -84,7 +84,8 @@ export default function TaskProgress(props) {
 
 
     function showTaskProgress(value) {
-        if (value) {
+        console.log(value);
+        if (value && value !== 'null') {
             return (
                 <div style={{
                     backgroundColor: getBackGroundColor(value),
@@ -149,13 +150,20 @@ export default function TaskProgress(props) {
                             min="0" max="100" />
                     </div >
                     :
+                    // <div>
+                    // { 
+                    //     (taskprogress!== null)?
+
                     <div className={styles.taskProgress}
                         onClick={() => setIsActive(!isActive)}                        >
                         {/* <button className={styles.taskProgressButton}  */}
                         {/* > */}
-                        {showTaskProgress(cardProgress)}
+                        {showTaskProgress(taskprogress)}
                         {/* </button> */}
                     </div >
+                    // : <span>Add Progress</span>
+                    // }
+                    // </div>
             }
         </span>
     )

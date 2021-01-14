@@ -76,28 +76,36 @@ export default function EditProject(props) {
     return (
         <div className={styles.form}>
             <form className={styles.container} >
-                <Title title="Project" />
-                <Input
+            <div className={styles.title} >Project</div>
+                <div className={styles.inputContainer}>
+                    <span> Name</span>
+                <input
+                        className={styles.input}
                     value={name}
                     onChange={e => setName(e.target.value)}
                     label="Name"
                     id="name"
                 />
-                <Input
+                </div>
+                <div className={styles.inputContainerDescr}>
+                    <span> Description</span>
+                    <textarea
+                        className={styles.textarea}
                     value={description}
                     onChange={e => setDescription(e.target.value)}
                     label="Description"
-                    id="description"
+                    id="description"                    
                 />
+                </div>
                 <div className={styles.editMembers}>
                     <AddProjectMember admin={isAdmin} project={props.project} members={props.project.membersRoles} />
                 </div>
             </form>
-            <div className={styles.editMembers}>
+            <div>
                 {isAdmin ?
                     <div className={styles.buttonsDiv}>
                         <button className={styles.navigateButtons} onClick={handleSubmit}  >Edit</button>
-                        <button className={styles.navigateButtons} onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteProject() }}  >Delete</button>
+                        <button className={styles.navigateButtons} onClick={() => { if (window.confirm('Are you sure you wish to delete this project?')) deleteProject() }}  >Delete Project</button>
                     </div>
                     : null
                 }

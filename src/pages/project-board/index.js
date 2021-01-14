@@ -287,7 +287,7 @@ export default function ProjectBoard(props) {
                                                         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
                                                             <List list={element} project={projectContext.project} isAdmin={isAdmin}
                                                                 showEditList={() => {
-                                                                    setCurrList(element._id)
+                                                                    setCurrList(element)
                                                                     setIsVisibleEditList(!isVisibleEditList)
                                                                 }}
                                                                 showCurrentCard={(card) => {

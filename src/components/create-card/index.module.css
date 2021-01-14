@@ -230,6 +230,7 @@
     /* justify-content: space-between;  */
     padding: 4px;
     font-weight: normal;
+    resize: none;
 }
 
 .descriptionButtons{

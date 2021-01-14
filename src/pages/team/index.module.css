@@ -1,28 +1,38 @@
 .teamContainer{
   display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
 }
 
 .leftSide{
- width: 80%;
+ width: 60%;
 }
 
+.rightSde{
+  width: 40%;
+  min-width: 300px;
+  margin: 0, auto;
+  margin-top: 50px;  
+  /* align-items: center; */
+}
 
 
 
 .newProjectButton {
-    font-size: 19px;
+    font-size: 16px;
     font-weight: 500;
     background: #DFE9EE;
     color: black;
     padding: 5px;
     width: 120px;
-    height: 80px;
+    height: 46px;
     border-radius: 19px;
     display: block;
     margin: 0 auto;
     margin: 10px;
+    margin-left: 25px;
     cursor: pointer;
-    border: 2px solid #707070;
+    border: 1px solid #707070;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
   }
   
@@ -34,12 +44,23 @@
   }
 
   .rightSideTeam{
-    width: 35%;
-    height: 50%;    
-    background-color: #DFE9EE;
-    margin: 20px;
-    border-radius: 19px;
-    border: solid 2px #707070;
+    /* min-width: 300px; */
+    width: 80%;
+    /* height: 50%;     */
+    margin-bottom: 50px;
+    margin-left: 20%;
+    background-color: #F7F7F2;
+    border-radius: 22px;
+    border: solid 1px #707070;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+    font-size: 20px;
+    padding: 5px;
+  }
+
+  .pic1{
+    position: absolute;
+    bottom: 20px;
+    right: 100px;
+    /* margin-left: 25%; */
   }
 

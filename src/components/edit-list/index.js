@@ -29,6 +29,8 @@ export default function EditList(props) {
     const params = useParams()
     const teamId = params.teamid
 
+    console.log(props.list);
+
     useEffect(() => {
         setIsAdmin(isUserAdmin(userContext.user.id ,members))
     }, [members, userContext.user.id])
