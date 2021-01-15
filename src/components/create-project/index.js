@@ -24,7 +24,7 @@ export default function CreateProject({ hideForm }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        const teamId = params.teamid
+        const teamId = params.teamid    
         const token = getCookie("x-auth-token")
         const response = await fetch('/api/projects', {
             method: "POST",
@@ -43,7 +43,7 @@ export default function CreateProject({ hideForm }) {
             return
         } else {
             const project = await response.json()
-            socket.emit('team-update', teamContext.currentTeam)
+            socket.emit('team-update', teamId)            
             history.push(`/project-board/${teamId}/${project._id}`)
             hideForm && hideForm()
         }
@@ -121,7 +121,7 @@ export default function CreateProject({ hideForm }) {
                     <span> Invite Members</span>
                     <input
                         className={styles.input}
-                        autocomplete="off"
+                        autoComplete="off"
                         value={member}
                         onFocus={onFocus}
                         onBlur={onBlur}

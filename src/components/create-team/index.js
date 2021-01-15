@@ -126,7 +126,7 @@ export default function CreateTeam(props) {
                     <span> Invite Members</span>
                     <input
                         className={styles.input}
-                        autocomplete="off"
+                        autoComplete="off"
                         value={member}
                         onChange={inputMembers}
                         label="Invite members"
