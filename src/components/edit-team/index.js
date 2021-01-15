@@ -208,7 +208,7 @@ export default function EditTeam(props) {
                                 <span> Invite Members</span>
                                 <input
                                     className={styles.inputInvite}
-                                    autocomplete="off"
+                                    autoComplete="off"
                                     value={member}
                                     onChange={inputMembers}
                                     label="Invite members"

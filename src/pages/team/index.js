@@ -4,13 +4,14 @@ import PageLayout from "../../components/page-layout"
 import Project from '../../components/project'
 import Transparent from "../../components/transparent"
 import CreateProject from '../../components/create-project'
-import { useParams } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import EditTeam from "../../components/edit-team"
 import TeamMembers from "../../components/team-members"
 import UserContext from "../../contexts/UserContext"
 import TeamContext from "../../contexts/TeamContext"
 import pic1 from '../../images/team-page/pic1.svg'
 import { useSocket } from "../../contexts/SocketProvider"
+import getCookie from '../../utils/cookie'
 
 
 
@@ -27,6 +28,7 @@ const TeamPage = () => {
     const userContext = useContext(UserContext)
     const teamContext = useContext(TeamContext)
     const socket = useSocket()
+    const history = useHistory()
 
 
     const teamId = params.teamid
@@ -35,7 +37,7 @@ const TeamPage = () => {
     // const teamUpdate = useCallback((team) => {
 
     //     teamContext.setSelectedTeam(team)
-        
+
     // }, [teamContext])
 
 
@@ -58,21 +60,27 @@ const TeamPage = () => {
         let currTeam = {}
         let found
 
-        userContext.user.teams.forEach(t => {
+        // userContext.user.teams.forEach(t => {
+        //     if (t._id === teamId) {
+        //         currTeam = t
+        //         setCurrteamUser(t)
+        //         found = true
+        //     }
+        // })
+        // if (!found) {
+        teamContext.teams.forEach(t => {
             if (t._id === teamId) {
                 currTeam = t
                 setCurrteamUser(t)
                 found = true
             }
         })
+
         if (!found) {
-            teamContext.teams.forEach(t => {
-                if (t._id === teamId) {
-                    currTeam = t
-                    setCurrteamUser(t)
-                }
-            })
+            return
         }
+        console.log(currTeam);
+        
         setMembers(currTeam.members)
         setInvited(currTeam.requests)
         setProjects(currTeam.projects)
@@ -118,9 +126,9 @@ const TeamPage = () => {
 
 
                 </div>
-                    <div className={styles.pic1}>
-                        <img src={pic1} alt="" />
-                    </div>
+                <div className={styles.pic1}>
+                    <img src={pic1} alt="" />
+                </div>
             </div>
         </PageLayout>
     )

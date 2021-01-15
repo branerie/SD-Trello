@@ -59,7 +59,7 @@ async function teamUpdate(id) {
                 populate: {
                     path: 'author'
                 }
-            })
+            })            
         return team
 
     } catch (error) {
