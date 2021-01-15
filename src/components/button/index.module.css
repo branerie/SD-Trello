@@ -1,19 +1,10 @@
-.submit {
-    background: #234465;
-    color: #fff;
-    padding: 10px;
-    width: 110px;
-    border-radius: 5px;
+.button {
+    background: #363338;
+    color:#F7F7F2;
+    padding: 8px 20px;
+    border-radius: 15px;
     display: block;
-    margin: 0 auto;
-    margin: 10px;
     cursor: pointer;
-    border: 2px solid #234465;
-  }
-  
-  .submit:hover{
-    background-color: #fff;
-    border: 2px solid #234465;
-    color: #234465;
-    font-style: italic;
-  }
+    border: 2px solid #363338;
+    font-size: 15px;
+}

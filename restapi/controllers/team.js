@@ -1,6 +1,5 @@
 const mongoose = require('mongoose')
 const models = require('../models')
-const { v4: uuidv4 } = require('uuid');
 const { auth } = require('../utils')
 const router = require('express').Router()
 
@@ -20,23 +19,25 @@ router.delete('/:id', auth, deleteTeam)
 async function teamInvitations(req, res, next) {
     const userId = req.user._id
     const teamId = req.params.id
-    const { messageId, accepted, teamName } = req.body
-    const message = JSON.stringify({ id: messageId, subject: 'Team invitation', teamId, teamName })
-
+    const { message, accepted } = req.body
 
     const session = await mongoose.startSession()
     session.startTransaction()
 
     try {
 
+        await models.Message.updateOne({ _id: message._id }, { $pull: { recievers: userId } }).session(session)
+
+        const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamId, invitedBy: message.invitedBy, newMessage: false, recievers: [userId], accepted }], { session })
+        const createdMessage = messageCreationResult[0]
+        await models.User.updateOne({ _id: userId }, { $pull: { inbox: message._id }, $push: { inboxHistory: createdMessage } }).session(session)
+
         if (accepted) {
             await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userId }, $push: { members: userId } }).session(session)
-            await models.User.updateOne({ _id: userId }, { $pull: { inbox: message } }).session(session)
         } else {
             await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userId } }).session(session)
-            await models.User.updateOne({ _id: userId }, { $pull: { inbox: message } }).session(session)
         }
-
+        
         await session.commitTransaction()
 
         session.endSession()
@@ -63,18 +64,21 @@ async function createTeam(req, res, next) {
         const teamCreationResult = await models.Team.create([{ name, description, author: userId, members, requests }], { session })
         const createdTeam = teamCreationResult[0]
 
-        const message = JSON.stringify({ id: uuidv4(), subject: 'Team invitation', teamId: createdTeam._id, teamName: name })
-
-        await models.User.update({ _id: { $in: requestsId } }, { $push: { inbox: message } }, { session })
+        if (requestsId) {
+            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: createdTeam, invitedBy: userId, newMessage: true, recievers: requestsId }], { session })
+            const createdMessage = messageCreationResult[0]
+    
+            await models.User.updateMany({ _id: { $in: requestsId } }, { $push: { inbox: createdMessage } }, { session })
+        }
 
         await session.commitTransaction()
-
         session.endSession()
 
         res.send(createdTeam)
     } catch (error) {
         await session.abortTransaction()
         session.endSession()
+        console.log(error);
         res.send(error)
     }
 }
@@ -129,14 +133,43 @@ async function updateTeam(req, res, next) {
 
     const teamId = req.params.id
     const { name, description, members, requests, removeInvitation } = req.body
-    
-    
+
+    const team = { name, description, members }
+    const obj = {}
+    for (let key in team) {
+        if (team[key]) {
+            obj[key] = team[key]
+        }
+    }
+
     if (removeInvitation) {
-        const userForRemove = removeInvitation._id
-        await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userForRemove } })
-        const updatedTeam = await models.Team.findOne({ _id: teamId })
-        res.send(updatedTeam)
-        return
+
+        const session = await mongoose.startSession()
+        session.startTransaction()
+
+        try {
+
+            const userForRemove = removeInvitation._id
+            await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userForRemove } }).session(session)
+
+            const oldMessage = await models.Message.findOneAndUpdate({ team: teamId, recievers: { "$in" : [userForRemove]} }, { $pull: { recievers: userForRemove } }, { new: true }).session(session)
+
+            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamId, invitedBy: req.user._id, newMessage: false, recievers: [userForRemove], canceled: true }], { session })
+            const createdMessage = messageCreationResult[0]
+
+            await models.User.updateOne({ _id: userForRemove }, { $pull: { inbox: oldMessage._id }, $push: { inboxHistory: createdMessage } }).session(session)
+
+            await session.commitTransaction()
+
+            session.endSession()
+            res.send('Success')
+            return
+        } catch (error) {
+            await session.abortTransaction()
+            session.endSession()
+            res.send(error)
+            return
+        }
     }
 
     if (requests) {
@@ -147,11 +180,12 @@ async function updateTeam(req, res, next) {
 
         try {
 
-            const teamEditResult = await models.Team.updateOne({ _id: teamId }, { name, description, members, $push: { requests: { $each: requestsId } } }).session(session)
+            const teamEditResult = await models.Team.updateOne({ _id: teamId }, { ...obj, $push: { requests: { $each: requestsId } } }).session(session)
 
-            const message = JSON.stringify({ id: uuidv4(), subject: 'Team invitation', teamId: teamId, teamName: name })
+            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamId, invitedBy: req.user._id, newMessage: true, recievers: requestsId }], { session })
+            const createdMessage = messageCreationResult[0]
 
-            await models.User.updateMany({ _id: { $in: requestsId } }, { $push: { inbox: message } }, { session })
+            await models.User.updateMany({ _id: { $in: requestsId } }, { $push: { inbox: createdMessage } }, { session })
 
             await session.commitTransaction()
 
@@ -164,13 +198,6 @@ async function updateTeam(req, res, next) {
         }
     } else {
 
-        const team = { name: name, description: description, members: members }
-        const obj = {}
-        for (let key in team) {
-            if (team[key]) {
-                obj[key] = team[key]
-            }
-        }
         await models.Team.updateOne({ _id: teamId }, { ...obj })
         const updatedTeam = await models.Team.findOne({ _id: teamId })
         res.send(updatedTeam)
