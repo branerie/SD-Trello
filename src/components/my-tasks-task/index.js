@@ -16,7 +16,6 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
     const [isInputOk, setIsInputOk] = useState(true)
     const history = useHistory()
     const socket = useSocket()
-    console.log(card.dueDate);
     const days = Math.ceil((Date.parse(card.dueDate) - Date.now()) / 1000 / 3600 / 24)
 
     useEffect (() => {
@@ -35,7 +34,6 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
             return
         }
 
-        if (progress === 'Add') return
         if (progress === '') {
             if (card.progress === null) {
                 setProgress('Add')
@@ -84,6 +82,7 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
     function onFocus() {
         setIsInputActive(true)
         if (progress === 'Add') {
+            setProgress('')
             return
         }
         setProgress(Number(progress.slice(0, -1)))

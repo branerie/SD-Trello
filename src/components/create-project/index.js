@@ -7,7 +7,6 @@ import ButtonClean from '../button-clean'
 import Avatar from 'react-avatar'
 import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
-import TeamContext from '../../contexts/TeamContext'
 
 export default function CreateProject({ hideForm }) {
     const [name, setName] = useState("")
@@ -17,7 +16,6 @@ export default function CreateProject({ hideForm }) {
     const [showMembers, setShowMembers] = useState(false)
     const [allUsers, setAllUsers] = useState([])
     const userContext = useContext(UserContext)
-    const teamContext = useContext(TeamContext)
     const history = useHistory()
     const params = useParams()
     const socket = useSocket()
