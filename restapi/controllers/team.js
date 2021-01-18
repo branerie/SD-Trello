@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const models = require('../models')
-const { auth } = require('../utils')
+const { auth, userInbox } = require('../utils')
 const router = require('express').Router()
 
 router.post('/invitations/:id', auth, teamInvitations)
@@ -38,11 +38,13 @@ async function teamInvitations(req, res, next) {
             await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userId } }).session(session)
         }
         
+        
         await session.commitTransaction()
-
+        
         session.endSession()
+        const user = await userInbox(userId)
 
-        res.send('Team invitation handled')
+        res.send(user)
     } catch (error) {
         await session.abortTransaction()
         session.endSession()
@@ -78,7 +80,6 @@ async function createTeam(req, res, next) {
     } catch (error) {
         await session.abortTransaction()
         session.endSession()
-        console.log(error);
         res.send(error)
     }
 }

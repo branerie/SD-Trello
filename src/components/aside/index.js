@@ -6,6 +6,7 @@ import menu from '../../images/aside/menu.svg'
 import home from '../../images/aside/home.svg'
 import tasks from '../../images/aside/tasks.svg'
 import inbox from '../../images/aside/inbox.svg'
+import bell from '../../images/aside/inbox-bell.svg'
 import settings from '../../images/aside/settings.svg'
 import ProjectContext from '../../contexts/ProjectContext'
 import ButtonHideList from '../button-hide-list'
@@ -48,6 +49,14 @@ export default function Aside({ asideOn, setAsideOn }) {
                     href='/'
                     title={<img src={settings} alt="settings" width="25" height="25" />}
                 />
+                {
+                    userContext.user.inbox.length !== 0 &&
+                    <LinkComponent
+                        href={`/inbox/${userContext.user.id}`}
+                        title={<img src={bell} alt="inbox" width="33" height="34" />}
+                        className={styles.bell}
+                    />
+                }
             </aside>
             {
                 asideOn ?

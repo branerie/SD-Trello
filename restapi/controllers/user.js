@@ -4,8 +4,7 @@ const config = require('../config/config')
 const utils = require('../utils')
 const router = require('express').Router()
 const bcrypt = require('bcrypt')
-const googleAuth = require('../utils/googleAuth')
-const { auth, isAdmin } = require('../utils')
+const { auth, isAdmin, userInbox, googleAuth } = require('../utils')
 const { decode } = require('jsonwebtoken')
 const getTeams = require('../utils/getTeams')
 
@@ -13,6 +12,8 @@ const getTeams = require('../utils/getTeams')
 router.get('/verify', verifyLogin);
 
 router.get('/get-all', auth, getAllUsers);
+
+router.get('/inbox', auth, getUserInbox);
 
 router.get('/:id', getUser)
 
@@ -37,16 +38,16 @@ router.delete('/:id', deleteUser)
 
 async function getUser(req, res, next) {
     const user = await models.User.findById(req.params.id)
-    res.send(user);
+    res.send(user)
 }
 
 async function getAllUsers(req, res, next) {
     const users = await models.User.find({})
-    res.send(users);
+    res.send(users)
 }
 
 async function registerUser(req, res, next) {
-    const { email, username, password } = req.body;
+    const { email, username, password } = req.body
     if (!password) {
         res.send("Missing password")
         return
@@ -76,7 +77,7 @@ async function registerUser(req, res, next) {
         res.send(userExist)
 
         if (err) {
-            console.log(err);
+            console.log(err)
         }
     })
 }
@@ -100,11 +101,11 @@ function verifyLogin(req, res, next) {
                         user,
                         teams
                     })
-                });
+                })
         })
         .catch(err => {
             if (['token expired', 'blacklisted token', 'jwt must be provided'].includes(err.message)) {
-                res.status(401).send('UNAUTHORIZED!');
+                res.status(401).send('UNAUTHORIZED!')
                 return;
             }
 
@@ -125,7 +126,7 @@ async function loginUser(req, res, next) {
             let response = {}
             response.wrongUser = true
             res.send(response)
-            return;
+            return
         }
 
         if (!user.password) {
@@ -140,7 +141,7 @@ async function loginUser(req, res, next) {
             let response = {}
             response.wrongPassword = true
             res.send(response)
-            return;
+            return
         }
 
         const token = utils.jwt.createToken({ id: user._id })
@@ -174,7 +175,7 @@ async function googleLoginUser(req, res, next) {
         const token = utils.jwt.createToken({ id: user._id })
 
         const teams = await getTeams(user._id)
-        
+
         const response = {
             user,
             teams
@@ -248,7 +249,7 @@ async function updateUserRecentProjects(req, res, next) {
     const { recentProjects } = req.body
 
 
-    const result = await models.User.updateOne({ _id: id }, {recentProjects})
+    const result = await models.User.updateOne({ _id: id }, { recentProjects })
     const updatedUser = await models.User.findOne({ _id: id })
 
     const teams = await getTeams(updatedUser._id)
@@ -264,24 +265,24 @@ async function deleteUser(req, res, next) {
     const id = req.params.id;
 
     const session = await mongoose.startSession()
-    session.startTransaction();
+    session.startTransaction()
 
     try {
-        const removedUser = await models.User.deleteOne({ _id: id }).session(session);
-        const userProjectsRoles = await models.ProjectUserRole.find({ memberId: id }).session(session);
-        await models.Project.updateMany({ _id: { $in: userProjectsRoles.projectId } }, { $pull: { membersRoles: userProjectsRoles._id } }).session(session);
-        await models.Project.deleteMany({ author: id }).session(session);
-        await models.ProjectUserRole.deleteMany({ memberId: id }).session(session);
+        const removedUser = await models.User.deleteOne({ _id: id }).session(session)
+        const userProjectsRoles = await models.ProjectUserRole.find({ memberId: id }).session(session)
+        await models.Project.updateMany({ _id: { $in: userProjectsRoles.projectId } }, { $pull: { membersRoles: userProjectsRoles._id } }).session(session)
+        await models.Project.deleteMany({ author: id }).session(session)
+        await models.ProjectUserRole.deleteMany({ memberId: id }).session(session)
 
-        await session.commitTransaction();
+        await session.commitTransaction()
 
-        session.endSession();
+        session.endSession()
 
-        res.send(removedUser);
+        res.send(removedUser)
     } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
-        res.send(error);
+        await session.abortTransaction()
+        session.endSession()
+        res.send(error)
     }
 
 }
@@ -304,7 +305,7 @@ async function getUserTasks(req, res, next) {
         })
 
     let projects = team.projects
-    
+
     projects.forEach(p => p.lists.forEach(l => l.cards = l.cards.filter(c => {
         const isMembers = c.members.some(m => m._id.toString() === userId.toString())
         return isMembers
@@ -312,6 +313,17 @@ async function getUserTasks(req, res, next) {
     projects.forEach(p => p.lists = p.lists.filter(l => l.cards.length !== 0))
     projects = projects.filter(p => p.lists.length !== 0)
     res.send(projects)
+}
+
+async function getUserInbox(req, res, next) {
+    try {
+        userId = req.user._id
+        const user = await userInbox(userId)
+        res.send(user)
+    } catch (err) {
+        console.log(err)
+        res.send(error)
+    }
 }
 
 module.exports = router

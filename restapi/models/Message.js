@@ -11,10 +11,10 @@ const messageSchema = new Schema({
         required: true
     },
 
-    team: [{
+    team: {
         type: ObjectId,
         ref: "Team",
-    }],
+    },
 
     invitedBy: {
         type: ObjectId,

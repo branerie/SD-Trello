@@ -1,113 +1,68 @@
-import React, { useState, useEffect, useContext } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { useHistory } from "react-router-dom"
-import Button from "../../components/button"
+import TeamInvitationHistory from "../../components/inbox/history/team-invitation-history"
+import TeamInvitation from "../../components/inbox/team-invitation"
 import PageLayout from "../../components/page-layout"
 import Title from "../../components/title"
-import UserContext from "../../contexts/UserContext"
 import getCookie from "../../utils/cookie"
 import styles from './index.module.css'
 
 const InboxPage = () => {
     const [inbox, setInbox] = useState([])
     const [inboxHistory, setInboxHistory] = useState([])
-    const userContext = useContext(UserContext)
     const history = useHistory()
+    const token = getCookie("x-auth-token")
+    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }
 
-    useEffect(() => {
-        setInbox(userContext.user.inbox)
-        setInboxHistory(userContext.user.inboxHistory)
-    }, [userContext.user.inbox, userContext.user.inboxHistory])
-
-    async function acceptInvitation(message, accepted) {
-        const token = getCookie("x-auth-token")
-        const response = await fetch(`/api/teams/invitations/${message.teamId}`, {
-            method: "POST",
+    const getInbox = useCallback(async () => {
+        const response = await fetch('/api/user/inbox', {
+            method: 'GET',
             headers: {
                 "Content-Type": "application/json",
                 "Authorization": token
-            },
-            body: JSON.stringify({
-                message,
-                accepted
-            })
+            }
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
-            const arr = inbox.filter(m => m._id !== message._id)
-            setInbox(arr)
-            if (accepted) {
-                history.push(`/team/${message.teamId}`)
-            }
+            const user = await response.json()
+            setInbox(user.inbox)
+            setInboxHistory(user.inboxHistory)
         }
-    }
+    }, [history, token])
+
+    useEffect(() => {
+        getInbox()
+    }, [getInbox])
 
     return (
         <PageLayout>
-            <Title title='Inbox' />
             <div>
+                <Title title='Inbox' />
                 {
                     inbox.length === 0 && <div className={styles.title}>Inbox is empty</div>
                 }
                 {
                     inbox.filter(m => m.subject === "Team invitation")
                         .map(m => {
-                            return <div key={m._id} className={styles.message}>
-                                <div className={styles.container}>
-                                    <div className={styles.bold}>{m.subject}</div>
-                                    <div>date</div>
-                                </div>
-                                <div>
-                                    <div className={`${styles.bold} ${styles.inline}`}>Team name:</div>
-                                    <div className={styles.inline}>{m.team.name}</div>
-                                </div>
-                                <div>
-                                    <div className={`${styles.bold} ${styles.inline}`}>Invited by:</div>
-                                    <div className={styles.inline}>{m.invitedBy.name}</div>
-                                </div>
-                                <div>
-                                    <Button
-                                        className={styles.button}
-                                        onClick={() => acceptInvitation(m, true)}
-                                        title='Accept'
-                                    />
-                                    <Button
-                                        className={styles.button}
-                                        onClick={() => acceptInvitation(m, false)}
-                                        title='Decline'
-                                    />
-                                </div>
-                            </div>
+                            return <TeamInvitation key={m._id} message={m} setInbox={setInbox} setInboxHistory={setInboxHistory} options={options} />
                         })
                 }
             </div>
-            <Title title='History' />
-            {
-                inboxHistory.length === 0 && <div className={styles.title}>No history</div>
-            }
-            {/* {
-                inboxHistory.filter(m => m.subject === "Team invitation")
-                    .map((m, index) => {
-                        return <div key={index} className={styles.message}>
-                            <div className={styles.container}>
-                                <div className={styles.bold}>{m.subject}</div>
-                                <div>date</div>
-                            </div>
-                            <div>
-                                <div className={`${styles.bold} ${styles.inline}`}>Team name:</div>
-                                <div className={styles.inline}>{m.teamName}</div>
-                            </div>
-                            <div>
-                                <div className={`${styles.bold} ${styles.inline}`}>Invited by:</div>
-                                <div className={styles.inline}>{m.teamName}</div>
-                            </div>
-                            <div>
 
-                            </div>
-                        </div>
-                    })
-            } */}
+            {
+                inboxHistory.length !== 0 && 
+                <div>
+                    <Title title='History' />
+                    {
+                        inboxHistory.filter(m => m.subject === "Team invitation")
+                            .map(m => {
+                                return <TeamInvitationHistory key={m._id} message={m} options={options} />
+                            })
+                    }
+                </div>
+            }
         </PageLayout>
     )
 }

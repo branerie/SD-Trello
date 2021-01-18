@@ -21,7 +21,6 @@ const authenticateUpdate = async (url, method, body, onSuccess, onFailure) => {
                 id: response.user._id,
                 teams: response.teams,
                 inbox: response.user.inbox,
-                inboxHistory: response.user.inboxHistory,
                 confirmed: response.user.confirmed,
                 recentProjects: response.user.recentProjects
             });
