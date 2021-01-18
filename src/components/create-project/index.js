@@ -22,7 +22,7 @@ export default function CreateProject({ hideForm }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-        const teamId = params.teamid    
+        const teamId = params.teamid
         const token = getCookie("x-auth-token")
         const response = await fetch('/api/projects', {
             method: "POST",
@@ -41,9 +41,9 @@ export default function CreateProject({ hideForm }) {
             return
         } else {
             const project = await response.json()
-            socket.emit('team-update', teamId)            
-            history.push(`/project-board/${teamId}/${project._id}`)
             hideForm && hideForm()
+            socket.emit('team-update', teamId)
+            history.push(`/project-board/${teamId}/${project._id}`)
         }
     }
 
@@ -77,7 +77,7 @@ export default function CreateProject({ hideForm }) {
     const addMember = (input) => {
         const arr = [...members]
         arr.push(input)
-        setMembers(arr)        
+        setMembers(arr)
         setShowMembers(false)
         setMember('')
     }
@@ -144,14 +144,14 @@ export default function CreateProject({ hideForm }) {
                     showMembers && <div className={styles.members}>
                         {
                             allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
-                            .filter((e) => {
-                                const found = members.find(element => element.username === e.username)
-                                if (found) {
-                                    return false
-                                } else {
-                                    return true
-                                }
-                            })
+                                .filter((e) => {
+                                    const found = members.find(element => element.username === e.username)
+                                    if (found) {
+                                        return false
+                                    } else {
+                                        return true
+                                    }
+                                })
                                 .sort((a, b) => a.username.localeCompare(b.username))
                                 .map(u => {
                                     return (

@@ -43,7 +43,6 @@ export default function EditCard(props) {
     const today = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), [])
     const cardId = card._id
 
-    console.log(card);
 
     const deleteCard = useCallback(async (event) => {
 

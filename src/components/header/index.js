@@ -56,7 +56,7 @@ const Header = ({ asideOn }) => {
             const data = await response.json()
             projectContext.setProject(data)
         }
-    }, [history, params.projectid, projectContext])
+    }, [history, params, projectContext])
 
     useEffect(() => {
         if (!(window.location.href.includes('team') || window.location.href.includes('project'))) {
@@ -82,7 +82,7 @@ const Header = ({ asideOn }) => {
                 setViewState('List')
             }
         }
-    }, [getData, params.projectid, params.teamid, projectContext.project, teamContext])
+    }, [getData, params, params.teamid, projectContext.project, teamContext])
 
     if (window.location.href.includes('project') && !projectContext.project) {
         return null

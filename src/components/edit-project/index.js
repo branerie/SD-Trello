@@ -1,7 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory, useParams } from "react-router-dom"
-import Input from '../input'
-import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import "react-datepicker/dist/react-datepicker.css"
@@ -20,7 +18,6 @@ export default function EditProject(props) {
     const history = useHistory()
     const socket = useSocket()
     const params = useParams()
-
 
     const projectId = props.project._id
 
@@ -53,6 +50,7 @@ export default function EditProject(props) {
         } else {
             updateProjectSocket()
             props.hideForm()
+            socket.emit('team-update', params.teamid)
         }
     }
 
@@ -68,34 +66,35 @@ export default function EditProject(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
+            props.hideForm()
             socket.emit('team-update', params.teamid)
-            history.push('/')
+            history.push(`/team/${params.teamid}`)
         }
     }
 
     return (
         <div className={styles.form}>
             <form className={styles.container} >
-            <div className={styles.title} >Project</div>
+                <div className={styles.title} >Project</div>
                 <div className={styles.inputContainer}>
                     <span> Name</span>
-                <input
+                    <input
                         className={styles.input}
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    label="Name"
-                    id="name"
-                />
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        label="Name"
+                        id="name"
+                    />
                 </div>
                 <div className={styles.inputContainerDescr}>
                     <span> Description</span>
                     <textarea
                         className={styles.textarea}
-                    value={description}
-                    onChange={e => setDescription(e.target.value)}
-                    label="Description"
-                    id="description"                    
-                />
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                        label="Description"
+                        id="description"
+                    />
                 </div>
                 <div className={styles.editMembers}>
                     <AddProjectMember admin={isAdmin} project={props.project} members={props.project.membersRoles} />
