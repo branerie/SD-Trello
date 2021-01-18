@@ -91,9 +91,9 @@ const Home = () => {
                     {
                       userTeams.map((t, index) => {
                         return (
-                          <span>
+                          <span key={index}>
                             {/* <div> */}
-                            <div key={index}
+                            <div 
                               // className={styles.teamNames}
                               className={styles.navigateButtonsTeams}
                               onClick={() => goToTeamPage(t._id)}
@@ -144,7 +144,7 @@ const Home = () => {
                 {
                   recentProjects.slice(0).reverse().map((p, index) => {
                     return (
-                      <button key={index} className={styles.navigateButtons} onClick={()=>goToProject(p._id)}>{p.name}</button>
+                      <button key={p._id} className={styles.navigateButtons} onClick={()=>goToProject(p._id)}>{p.name}</button>
                     )
                   })
                 }

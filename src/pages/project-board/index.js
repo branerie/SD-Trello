@@ -128,7 +128,7 @@ export default function ProjectBoard(props) {
         } else {
             updateUserRecentProjects()
         }
-    }, [params.projectid, projectContext.project, updateUserRecentProjects])
+    }, [params.projectid, projectContext.project])
 
 
     if (!projectContext.project || projectContext.project._id !== params.projectid) {

@@ -29,11 +29,10 @@ function TeamProvider({ children }) {
     setTeams(userContext.user.teams)
   }, [userContext.user.teams])
 
-  const teamUpdate = useCallback((team) => {
-    console.log('teamUpdateFunc', team);
+  const teamUpdate = useCallback(async () => {
     const token = getCookie("x-auth-token")
 
-    fetch("/api/teams", {
+    await fetch("/api/teams", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
@@ -42,9 +41,9 @@ function TeamProvider({ children }) {
     }).then(promise => {
       return promise.json()
     }).then(response => {
-      console.log(response);
+      console.log('teamUpdate')
       setTeams(response)
-      const user = {...userContext.user}
+      const user = { ...userContext.user }
       user.teams = response
       userContext.setUser(user)
     })
@@ -55,7 +54,7 @@ function TeamProvider({ children }) {
     socket.on('team-updated', teamUpdate)
 
     return () => socket.off('team-updated')
-  }, [socket, teamUpdate])
+  }, [socket,teamUpdate])
 
   return (
     <TeamContext.Provider value={{ teams, setTeams, selectedTeam, setSelectedTeam, currentProjects, setCurrentProjects, getCurrentProjects, updateSelectedTeam }}>

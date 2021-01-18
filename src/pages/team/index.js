@@ -4,14 +4,14 @@ import PageLayout from "../../components/page-layout"
 import Project from '../../components/project'
 import Transparent from "../../components/transparent"
 import CreateProject from '../../components/create-project'
-import { useHistory, useParams } from "react-router-dom"
+import { useParams } from "react-router-dom"
 import EditTeam from "../../components/edit-team"
 import TeamMembers from "../../components/team-members"
 import UserContext from "../../contexts/UserContext"
 import TeamContext from "../../contexts/TeamContext"
 import pic1 from '../../images/team-page/pic1.svg'
 import { useSocket } from "../../contexts/SocketProvider"
-import getCookie from '../../utils/cookie'
+
 
 
 
@@ -28,63 +28,62 @@ const TeamPage = () => {
     const userContext = useContext(UserContext)
     const teamContext = useContext(TeamContext)
     const socket = useSocket()
-    const history = useHistory()
+    // const [teams, setTeams] = useState([])
+
 
 
     const teamId = params.teamid
 
 
-    // const teamUpdate = useCallback((team) => {
-
-    //     teamContext.setSelectedTeam(team)
-
-    // }, [teamContext])
-
-
-
-    // useEffect(() => {
-    //     const id = params.teamid
-
-    //     if (socket == null) return
-
-    //     socket.on('team-updated', teamUpdate)
-
-    //     socket.emit('team-join', id)
-    //     return () => socket.off('team-updated')
-    // }, [socket, teamUpdate, params.teamid])
-
-
-
-
-    useEffect(() => {
+    const teamUpdate = useCallback(() => {
         let currTeam = {}
-        let found
-
-        // userContext.user.teams.forEach(t => {
-        //     if (t._id === teamId) {
-        //         currTeam = t
-        //         setCurrteamUser(t)
-        //         found = true
-        //     }
-        // })
-        // if (!found) {
+        let found        
         teamContext.teams.forEach(t => {
             if (t._id === teamId) {
                 currTeam = t
                 setCurrteamUser(t)
                 found = true
             }
-        })
-
+        })  
         if (!found) {
             return
         }
-        console.log(currTeam);
-        
         setMembers(currTeam.members)
         setInvited(currTeam.requests)
         setProjects(currTeam.projects)
-    }, [teamId, userContext.user.teams, params, teamContext.teams])
+    }, [teamId, teamContext.teams])
+
+
+
+    useEffect(() => {
+
+        if (socket == null) return
+
+        socket.on('team-update', teamUpdate())
+        // return () => socket.off('team-updated')
+    }, [socket, teamUpdate, params, teamContext.teams, userContext, teamId])
+
+
+
+
+    // useEffect(() => {
+    //     let currTeam = {}
+    //     let found        
+    //     teamContext.teams.forEach(t => {
+    //         if (t._id === teamId) {
+    //             currTeam = t
+    //             setCurrteamUser(t)
+    //             found = true
+    //         }
+    //     })
+    //     if (!found) {
+    //         return
+    //     }        
+
+    //     setMembers(currTeam.members)
+    //     setInvited(currTeam.requests)
+    //     setProjects(currTeam.projects)
+    // }, [teamContext.teams, teamId, teamContext, userContext])
 
 
     return (

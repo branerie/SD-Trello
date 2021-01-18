@@ -84,7 +84,7 @@ export default function TaskProgress(props) {
 
 
     function showTaskProgress(value) {
-        console.log(value);
+        
         if (value && value !== 'null') {
             return (
                 <div style={{

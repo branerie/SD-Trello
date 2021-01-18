@@ -137,7 +137,8 @@ export default function EditTeam(props) {
             history.push("/error")
             return
         } else {
-            // getData()
+            getData()
+            socket.emit('team-update', teamId)
         }
     }
 

@@ -103,6 +103,12 @@ async function getTeams(req, res, next) {
                     path: 'author'
                 }
             })
+            .populate({
+                path: 'members'
+            })    
+            .populate({
+                path: 'requests'
+            })    
         res.send(teams)
 
     } catch (error) {
