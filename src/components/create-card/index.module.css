@@ -1,11 +1,12 @@
 .container {
     position: fixed;
     left: 30%;
-    top: 15%;
+    top: 12%;
     z-index: 20;
     width: 40%;
     min-height: 80%;
     height: auto;
+    max-height: 85%;
     background-color:#EDF5F9;
     border: solid 2px #707070;
     border-radius: 27px;
@@ -138,11 +139,15 @@
     cursor: pointer;
 }
 
-
-
 .secondRow{
     margin-top: 15%;
     height: 10%;
+}
+
+.secondRowProgress{
+    margin-top: 15%;
+    height: 10%;
+    cursor: pointer;
 }
 
 .pic2{    
@@ -198,7 +203,7 @@
     display: flex;
     justify-content: flex-end;
     flex-wrap: nowrap;
-    height: 40px;
+    height: 65px;
     width: 100%;
     /* overflow-x: scroll; */
 }
@@ -262,10 +267,9 @@
     margin-left: 20%;
     cursor: pointer;
     width: 60%;
-    height: 17%;
+    height: 10%;
     font-size: 80%;
     align-items: center;
-    /* text-align: center; */
     font-family: inherit;
     border: none;
     border-radius: 8px;
@@ -299,6 +303,11 @@
     outline: none;
 }
 
+.smallButtonsContainer{
+    margin-top: 5%;
+    height: 30%;
+    margin-bottom: 10%;
+}
 
 /* .editMembers {
     padding: 3%;

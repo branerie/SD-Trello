@@ -124,18 +124,17 @@ export default function List(props) {
                         {
                             props.list.cards.map((element, index) => {
                                 return (
-                                    <Draggable key={index} draggableId={element._id} index={index}>
+                                    <Draggable key={element._id} draggableId={element._id} 
+                                    index={index}
+                                    >
                                         {(provided) => (
                                             <div>
                                                 <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                    <Card
+                                                    <Card card={element} listId={props.list._id} project={props.project}
                                                         showEditCard={() => {
                                                             props.showCurrentCard(element)
                                                         }}
-                                                        key={index}
-                                                        card={element}
-                                                        listId={props.list._id}
-                                                        project={props.project} />
+                                                    />
                                                 </div>
                                                 {provided.placeholder}
                                             </div>

@@ -255,12 +255,6 @@ export default function EditCard(props) {
                 </div>
 
 
-                <div className={styles.lasRow}>
-
-                </div>
-
-
-
 
                 <div className={styles.rightSide}>
 
@@ -283,8 +277,7 @@ export default function EditCard(props) {
 
 
                     <div className={styles.secondRow}>
-                        <div >
-                            {/* <p className={styles.text}>Due Date</p> */}
+                        <div >                           
                             <div className={styles.dueDate} >
                                 <TaskDueDate
                                     cardDueDate={dueDate}
