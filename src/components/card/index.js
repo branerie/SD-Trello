@@ -43,7 +43,7 @@ export default function Card({ card, showEditCard }) {
                     <div className={styles.members}>
                         {card.members.slice(0, 3).map(element => {
                             return (
-                                <span className={styles.avatar}>
+                                <span className={styles.avatar} key={element._id}>
                                     <Avatar key={element._id}
                                         name={element.username}
                                         size={30}
@@ -61,7 +61,7 @@ export default function Card({ card, showEditCard }) {
                     <div className={styles.members}>
                         {card.members.map(element => {
                             return (
-                                <span className={styles.avatar}>
+                                <span className={styles.avatar} key={element._id}>
                                     <Avatar key={element._id} name={element.username} size={30} round={true} maxInitials={2} />
                                 </span>
                             )

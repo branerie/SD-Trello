@@ -68,7 +68,7 @@ const Home = () => {
       <div className={styles.welcomeUser}>{`Welcome ${userName}!`}</div>
       <div className={styles.container}>
 
-        <div className={styles.leftButtons}>
+        <span className={styles.leftButtons}>
 
           <div>
             <button className={styles.navigateButtons}
@@ -130,7 +130,7 @@ const Home = () => {
             >Create New Team</ button>
           </div>
 
-        </div>
+        </span>
 
         <span className={styles.picContainer}>
           <img className={styles.pic1} src={pic1} alt="" />
