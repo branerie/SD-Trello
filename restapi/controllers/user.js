@@ -253,7 +253,6 @@ async function updateUserRecentProjects(req, res, next) {
 
     const result = await models.User.updateOne({ _id: id }, { recentProjects })
     const updatedUser = await models.User.findOne({ _id: id })
-
     const teams = await getTeams(updatedUser._id)
     const response = {
         user: updatedUser,

@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from "react"
+import React, { useState, useEffect, useCallback, useContext, useRef } from "react"
 import Loader from "react-loader-spinner"
 import { useParams, useHistory } from "react-router-dom"
 import PageLayout from "../../components/page-layout"
@@ -6,13 +6,14 @@ import styles from './index.module.css'
 import pic1 from '../../images/profile-page-pic.svg'
 import pen from '../../images/pen.svg'
 import authenticateUpdate from '../../utils/authenticate-update';
-
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Title from "../../components/title"
 import UserContext from "../../contexts/UserContext"
 import Alert from "../../components/alert"
 
 
 const ProfilePage = () => {
+  const dropdownRef = useRef(null)
   const userContext = useContext(UserContext)
   const [userEmail, setUserEmail] = useState(null)
   const [passwordActive, setPaswordActive] = useState(true)
@@ -21,7 +22,7 @@ const ProfilePage = () => {
   const [password, setPassword] = useState(null);
   const [rePassword, setRePassword] = useState(null);
   const [alert, setAlert] = useState(false)
-  const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useState(false)
+  const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useDetectOutsideClick(dropdownRef)
 
 
 
@@ -148,7 +149,7 @@ const ProfilePage = () => {
             <div>
               {
                 showTeamsVisibleForm ?
-                  <div className={styles.teams}>
+                  <div className={styles.teams} ref={dropdownRef}>
                     {
                       userTeams.map((t, index) => {
                         return (

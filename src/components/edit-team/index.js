@@ -174,6 +174,32 @@ export default function EditTeam(props) {
 
     }
 
+    async function deleteTeam() {
+
+        if (!window.confirm('You will lost all team information - projects, lists and tasks')) {
+            return
+        }
+
+
+        const token = getCookie("x-auth-token")
+        const response = await fetch(`/api/teams/${teamId}`, {
+            method: "DELETE",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            }
+        })
+        if (!response.ok) {
+            history.push("/error")
+        } else {
+            // teamContext.setSelectedTeam(name)
+            // getData()
+            // socket.emit('team-update', teamId)
+            history.push("/")
+            props.hideForm()
+        }
+    }
+
     return (
         <div className={styles.form}>
             <form className={styles.container} onSubmit={handleSubmit}>
@@ -327,6 +353,8 @@ export default function EditTeam(props) {
 
                             <div className={styles.buttonDiv}>
                                 <button type='submit' className={styles.createButton}>Submit Changes</button>
+                                <button className={styles.createButton} onClick={() => { if (window.confirm('Are you sure you wish to delete this team?')) deleteTeam() }}  >Delete Team</button>
+
                             </div>
                         </div>
                         :
