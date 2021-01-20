@@ -43,7 +43,7 @@ export default function TeamInvitationHistory({ message, options, setInboxHistor
             </div>
             <div>
                 <div className={`${styles.bold} ${styles.inline}`}>Invited by:</div>
-                <div className={styles.inline}>{message.invitedBy.username}</div>
+                <div className={styles.inline}>{message.sendFrom.username}</div>
             </div>
             <div>
                 <Button
@@ -51,17 +51,17 @@ export default function TeamInvitationHistory({ message, options, setInboxHistor
                     onClick={() => setShowEditTeamForm(true)}
                     title='View Team'
                 />
+                <Button
+                    className={styles.button}
+                    onClick={() => { if (window.confirm('Are you sure you wish to delete this message?')) deleteMessage() }}
+                    title='Delete Message'
+                />
                 {
                     showEditTeamForm &&
                     (<Transparent hideForm={() => setShowEditTeamForm(false)}>
                         <EditTeam currTeam={message.team} hideForm={() => { setShowEditTeamForm(false) }} />
                     </Transparent>)
                 }
-                <Button
-                    className={styles.button}
-                    onClick={() => { if (window.confirm('Are you sure you wish to delete this message?')) deleteMessage() }}
-                    title='Delete Message'
-                />
             </div>
         </div>
     )

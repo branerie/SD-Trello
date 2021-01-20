@@ -14,7 +14,7 @@ async function userInbox(userId) {
                     select: 'username'
                 }]
             }, {
-                path: 'invitedBy',
+                path: 'sendFrom',
                 select: 'username'
             }]
         }, {
@@ -29,7 +29,7 @@ async function userInbox(userId) {
                     select: 'username'
                 }]
             }, {
-                path: 'invitedBy',
+                path: 'sendFrom',
                 select: 'username'
             }]
         }])

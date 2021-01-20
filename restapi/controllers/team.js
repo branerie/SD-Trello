@@ -28,9 +28,13 @@ async function teamInvitations(req, res, next) {
 
         await models.Message.updateOne({ _id: message._id }, { $pull: { recievers: userId } }).session(session)
 
-        const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamId, invitedBy: message.invitedBy, newMessage: false, recievers: [userId], accepted }], { session })
+        const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamId, sendFrom: message.sendFrom, recievers: [userId], accepted }], { session })
         const createdMessage = messageCreationResult[0]
         await models.User.updateOne({ _id: userId }, { $pull: { inbox: message._id }, $push: { inboxHistory: createdMessage } }).session(session)
+
+        const responseMessageCreationResult = await models.Message.create([{ subject: 'Team invitation response', team: teamId, sendFrom: message.sendFrom, recievers: [message.sendFrom._id], accepted }], { session })
+        const createdResponseMessage = responseMessageCreationResult[0]
+        await models.User.updateOne({ _id: message.sendFrom._id }, { $push: { inbox: createdResponseMessage } }).session(session)
 
         if (accepted) {
             await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userId }, $push: { members: userId } }).session(session)
@@ -66,7 +70,7 @@ async function createTeam(req, res, next) {
         const createdTeam = teamCreationResult[0]
 
         if (requestsId) {
-            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: createdTeam, invitedBy: userId, newMessage: true, recievers: requestsId }], { session })
+            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: createdTeam, sendFrom: userId, recievers: requestsId }], { session })
             const createdMessage = messageCreationResult[0]
 
             await models.User.updateMany({ _id: { $in: requestsId } }, { $push: { inbox: createdMessage } }, { session })
@@ -166,7 +170,7 @@ async function updateTeam(req, res, next) {
 
             const oldMessage = await models.Message.findOneAndUpdate({ team: teamId, recievers: { "$in": [userForRemove] } }, { $pull: { recievers: userForRemove } }, { new: true }).session(session)
 
-            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamId, invitedBy: req.user._id, newMessage: false, recievers: [userForRemove], canceled: true }], { session })
+            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamId, sendFrom: req.user._id, newMessage: false, recievers: [userForRemove], canceled: true }], { session })
             const createdMessage = messageCreationResult[0]
 
             await models.User.updateOne({ _id: userForRemove }, { $pull: { inbox: oldMessage._id }, $push: { inboxHistory: createdMessage } }).session(session)
@@ -194,7 +198,7 @@ async function updateTeam(req, res, next) {
 
             const teamEditResult = await models.Team.updateOne({ _id: teamId }, { ...obj, $push: { requests: { $each: requestsId } } }).session(session)
 
-            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamId, invitedBy: req.user._id, newMessage: true, recievers: requestsId }], { session })
+            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamId, sendFrom: req.user._id, newMessage: true, recievers: requestsId }], { session })
             const createdMessage = messageCreationResult[0]
 
             await models.User.updateMany({ _id: { $in: requestsId } }, { $push: { inbox: createdMessage } }, { session })

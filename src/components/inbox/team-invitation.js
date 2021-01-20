@@ -39,6 +39,7 @@ export default function TeamInvitation({ message, setInbox, setInboxHistory, opt
                 history.push(`/team/${message.teamId}`)
             }
             socket.emit('message-sent', userId)
+            socket.emit('message-sent', message.sendFrom._id)
         }
     }
 
@@ -54,7 +55,7 @@ export default function TeamInvitation({ message, setInbox, setInboxHistory, opt
             </div>
             <div>
                 <div className={`${styles.bold} ${styles.inline}`}>Invited by:</div>
-                <div className={styles.inline}>{message.invitedBy.username}</div>
+                <div className={styles.inline}>{message.sendFrom.username}</div>
             </div>
             <div>
                 <Button
