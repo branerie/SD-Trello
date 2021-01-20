@@ -1,0 +1,27 @@
+.searchContainer{
+    width: 250px;
+    max-height: 200px;
+    height: auto;
+    min-height: 30px;
+    /* position: relative; */
+    /* top: 80%; */
+    /* left: 75%; */
+    color: black;
+    padding: 10px;
+    border: solid 1px #363338;
+    overflow-y: auto;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none; 
+    margin-left: 1%;
+    margin-top: 1%;
+    margin-right: 20px;
+
+    white-space: nowrap; 
+    /* overflow: hidden; */
+    text-overflow: ellipsis;
+
+    background: #DFE9EE;
+    position: absolute;
+    border-radius: 10px;
+    cursor: pointer;
+}

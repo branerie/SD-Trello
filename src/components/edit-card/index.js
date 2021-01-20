@@ -245,7 +245,7 @@ export default function EditCard(props) {
                     </div>
 
 
-                    <div className={styles.thirdRow}>
+                    <div className={styles.fourthRow}>
 
                         <div className={styles.descriptinTitle}>
                             <p className={styles.text}>History</p>

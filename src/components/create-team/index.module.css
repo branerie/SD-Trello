@@ -1,5 +1,6 @@
 .container {    
     position: fixed;
+    /* position: absolute; */
     left: 30%;
     top: 15%;
     z-index: 20;
@@ -97,11 +98,14 @@ input{
     height: 25%;
 } */
 
-.members {    
+.members {  
+    position: fixed;
+    top: 48%;
+    left: 6%;  
     z-index: 25;  
     border: solid 1px #363338;
     border-radius: 27px;
-    width: 30%;
+    width: 15%;
     height: auto;
     max-height: 150px;
     padding: 10px;

@@ -41,7 +41,7 @@ input{
     border-radius: 10px;
     height: 1.8em;
     width: 38%;
-    margin-left: 2%;
+    margin-left: 4%;
     text-align: center;
     background-color:#DFE9EE;
 }
@@ -50,7 +50,7 @@ input{
     border: solid 1px #363338;
     border-radius: 10px;
     height: 1.8em;
-    width: 20%;
+    width: 10%;
     margin-left: 2%;
     text-align: center;
     background-color:#DFE9EE;
@@ -69,7 +69,7 @@ input{
     padding: 1%;
     height: 5em;
     width: 30%;
-    margin-left: 2%;  
+    margin-left: 4%;  
     background-color: #DFE9EE; 
     resize: none; 
 }
@@ -109,17 +109,20 @@ input{
     margin-top: 0%;
 }
 
-.members {    
+.members {  
+    position: fixed;
+    top: 46%;
+    left: 4%;  
     z-index: 25;  
     border: solid 1px #363338;
     border-radius: 27px;
-    width: 30%;
+    width: 13%;
     height: auto;
     max-height: 150px;
     padding: 10px;
     overflow-y: auto;
     margin-left: 46%;
-    background-color: #EDF5F9;
+    background-color:#DFE9EE;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none; 
 }

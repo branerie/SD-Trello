@@ -53,11 +53,11 @@ export default function CreateCard(props) {
 
     const deleteCard = useCallback(async (event) => {
         event.preventDefault()
-        
+
         if (name === '') {
             return
         }
-        
+
 
         if (!window.confirm('Are you sure you wish to delete this item?')) {
             return
@@ -77,7 +77,7 @@ export default function CreateCard(props) {
             props.hideForm()
         }
 
-    }, [history, props, cardId, listId, updateProjectSocket])
+    }, [history, props, cardId, listId, updateProjectSocket, name])
 
 
     const handleSubmit = async (event) => {
@@ -133,11 +133,11 @@ export default function CreateCard(props) {
 
     const createTask = async (event) => {
         event.preventDefault()
-       
+
         if (name === '') {
             return
         }
-      
+
 
         if (Number(progress) > 100) {
             setProgress(100)
@@ -344,20 +344,20 @@ export default function CreateCard(props) {
                                 null
                                 :
                                 <TaskMembers
-                                card={card}
-                                size={30}
-                                listId={listId}
-                                project={props.project}
-                                title={'Add'}
-                                teamId={props.teamId}
-                            />
+                                    card={card}
+                                    size={30}
+                                    listId={listId}
+                                    project={props.project}
+                                    title={'Add'}
+                                    teamId={props.teamId}
+                                />
                             }
                         </div>
                     </div>
 
 
                     <div className={styles.secondRow}>
-                        <div >                           
+                        <div >
                             <div className={styles.dueDate} >
                                 {(card === '') ?
                                     null
@@ -412,8 +412,8 @@ export default function CreateCard(props) {
                         <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic13} alt="pic13" />
                             Remove List</div>
-                        <button className={styles.smallButtons} 
-                        onClick={(e) => { deleteCard(e) }} title="Delete Task" >
+                        <button className={styles.smallButtons}
+                            onClick={(e) => { deleteCard(e) }} title="Delete Task" >
                             <img className={styles.picsSmallButtons} src={pic12} alt="pic12" />
                          Delete Task</button>
                         <div className={styles.smallButtons} >

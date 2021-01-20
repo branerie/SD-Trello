@@ -12,12 +12,14 @@ import ProjectContext from "../../contexts/ProjectContext"
 import { useHistory, useParams } from "react-router-dom"
 import CreateProject from "../create-project"
 import getCookie from "../../utils/cookie"
+import SearchResults from "../search-results"
 
 const Header = ({ asideOn }) => {
     const dropdownRefProfile = useRef(null)
     const dropdownRefView = useRef(null)
     const dropdownRefProject = useRef(null)
     const dropdownRefTeam = useRef(null)
+    const dropdownRefSearch = useRef(null)
     const [isProjectVisibble, setIsProjectVisibble] = useState(false)
     const [isProjectActive, setIsProjectActive] = useDetectOutsideClick(dropdownRefProject)
     const [isTeamActive, setIsTeamActive] = useDetectOutsideClick(dropdownRefTeam)
@@ -26,6 +28,10 @@ const Header = ({ asideOn }) => {
     const [viewState, setViewState] = useState(null)
     const [isProfileActive, setIsProfileActive] = useDetectOutsideClick(dropdownRefProfile)
     const [showTeamForm, setShowTeamForm] = useState(false)
+    const [showSearchForm, setShowSearchForm] = useDetectOutsideClick(dropdownRefSearch)
+    const [searchInput, setSearchInput] = useState('')
+
+
     const [showProjectForm, setShowProjectForm] = useState(false)
     const context = useContext(UserContext)
     const projectContext = useContext(ProjectContext)
@@ -82,7 +88,7 @@ const Header = ({ asideOn }) => {
                 setViewState('List')
             }
         }
-    }, [getData, params, params.teamid, projectContext.project, teamContext])
+    }, [getData, params, params.teamid, projectContext.project, teamContext,])
 
     if (window.location.href.includes('project') && !projectContext.project) {
         return null
@@ -134,6 +140,7 @@ const Header = ({ asideOn }) => {
                             <CreateTeam hideForm={() => { setShowTeamForm(false) }} ></CreateTeam>
                         </Transparent>) : null
                     }
+
 
 
                     {isProjectVisibble && <div className={styles.flex}>
@@ -220,7 +227,22 @@ const Header = ({ asideOn }) => {
                 </div>
 
                 <div className={`${styles.links} ${styles.font}`}>
-                    <input className={styles.input} type='text' placeholder='Search...' />
+                    <span>
+                        <input className={styles.input} type='text' placeholder='Search...'
+                            autoComplete="off"
+                            value={searchInput}
+                            onChange={(e) => setSearchInput(e.target.value)}
+                            onClick={() => setShowSearchForm(true)}
+                        />
+                        {
+                            (searchInput.length > 1 && showSearchForm) ?
+                                (
+                                    <div ref={dropdownRefSearch}>
+                                        <SearchResults searchInput={searchInput} hideForm={() => { setShowSearchForm(!showSearchForm); setSearchInput('') }} />
+                                    </div>
+                                ) : null
+                        }
+                    </span>
                     <ButtonClean
                         className={styles.avatar}
                         onClick={() => setIsProfileActive(!isProfileActive)}

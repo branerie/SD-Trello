@@ -204,6 +204,52 @@ export default function EditTeam(props) {
         <div className={styles.form}>
             <form className={styles.container} onSubmit={handleSubmit}>
 
+                {
+                    showMembers ?
+                        <div className={styles.members}>
+                            {
+                                allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
+                                    .filter((e) => {
+                                        const found = members.find(element => element.username === e.username)
+                                        if (found) {
+                                            return false
+                                        } else {
+                                            return true
+                                        }
+                                    })
+                                    .filter((e) => {
+                                        const found = invited.find(element => element.username === e.username)
+                                        if (found) {
+                                            return false
+                                        } else {
+                                            return true
+                                        }
+                                    })
+                                    .filter((e) => {
+                                        const found = forInvite.find(element => element.username === e.username)
+                                        if (found) {
+                                            return false
+                                        } else {
+                                            return true
+                                        }
+                                    })
+                                    .sort((a, b) => a.username.localeCompare(b.username))
+                                    .map((u, index) => {
+                                        return (
+                                            <ButtonClean
+                                                key={index}
+                                                className={styles.user}
+                                                onClick={() => addMember(u)}
+                                                title={<div>
+                                                    <div>{u.username}</div>
+                                                    <div className={styles.email}>{u.email}</div>
+                                                </div>}
+                                            />)
+                                    })
+                            }
+                        </div> : null
+                }
+
                 <div className={styles.title} >Team</div>
 
                 <div className={styles.inputContainer}>
@@ -243,51 +289,7 @@ export default function EditTeam(props) {
                                 />
                             </div>
 
-                            {
-                                showMembers ?
-                                    <div className={styles.members}>
-                                        {
-                                            allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
-                                                .filter((e) => {
-                                                    const found = members.find(element => element.username === e.username)
-                                                    if (found) {
-                                                        return false
-                                                    } else {
-                                                        return true
-                                                    }
-                                                })
-                                                .filter((e) => {
-                                                    const found = invited.find(element => element.username === e.username)
-                                                    if (found) {
-                                                        return false
-                                                    } else {
-                                                        return true
-                                                    }
-                                                })
-                                                .filter((e) => {
-                                                    const found = forInvite.find(element => element.username === e.username)
-                                                    if (found) {
-                                                        return false
-                                                    } else {
-                                                        return true
-                                                    }
-                                                })
-                                                .sort((a, b) => a.username.localeCompare(b.username))
-                                                .map((u, index) => {
-                                                    return (
-                                                        <ButtonClean
-                                                            key={index}
-                                                            className={styles.user}
-                                                            onClick={() => addMember(u)}
-                                                            title={<div>
-                                                                <div>{u.username}</div>
-                                                                <div className={styles.email}>{u.email}</div>
-                                                            </div>}
-                                                        />)
-                                                })
-                                        }
-                                    </div> : null
-                            }
+
                             <div className={styles.membersAvatars}>
                                 <span>
                                     <div>

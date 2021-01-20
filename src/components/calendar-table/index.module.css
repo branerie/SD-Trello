@@ -119,145 +119,26 @@
     text-align: center;
     margin-bottom: 2%;   
 }
+
  
-/* .reactDatepicker {
-    font-family: "Helvetica Neue", Helvetica, Arial, sans-serif;
-    font-size: 0.8rem;
-    background-color: #a66;
-    color: #000;
-    border: 0px;
-    border-radius: 0;
-    display: inline-block;
+ .daysButtons{
+     display: flex;
+     align-items: center;
+ }
+
+ .picContainer {
     position: relative;
-  } */
-
-  /* background: #DFE9EE;
-  color: black;
-  padding: 10px;
-  min-width: 150px;
-  border-radius: 10px;
-  display: block;
-  margin: 0 auto;
-  margin: 10px;
-  cursor: pointer;
-  border: 1px solid #707070;
-  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-  text-align: center; */
-
-  /* .buttonNextDay {
-	margin: 2rem auto;
-	text-align: center;
-    min-width: 110px;
-    margin: 0 auto;
-    margin: 10px;
-	padding: 5px;
-    background: #F7F7F2;
-  border: 1px solid #707070;    
-	color: black;
-  position: relative;
-}
-.buttonNextDay p {
-	vertical-align: middle;
-	/* font-family: "Lato";
-	font-size: 1.75rem; */
-/* } */
-/* .buttonNextDay::after {
-  content: "";
-  display: block;
-  position: absolute;
-  border: 1px solid #707070;    
-   
-  border-color: transparent #707070;
-  border-style: solid;
-  border-width: 20px 0px 20px 20px;
-  top: 0;
-  left: 100%;
-}  */
-
-
-
-
-.buttonNextDay {
-    width: 120px;
-    margin: 20px;
-    margin-left: 10px;
-    background: #F7F7F2;
-    border: 1px solid #707070;    
-    position: relative;
-    padding: 6px;
     text-align: center;
     color: black;
+    font-size: 13px;
+    min-width: 150px;
     cursor: pointer;
 }
 
-.buttonNextDay:after,
-.buttonNextDay:before {
-    content: '';
-    display: block;
+  .centeredText {
     position: absolute;
-    left: 100%;
-    width: 0;
-    height: 0;
-    border-style: solid;
-}
-
-.buttonNextDay:after {
-    top: 0px;
-    border-color: transparent transparent transparent #F7F7F2;
-    border-width: 13.7px;
-}
-
-.buttonNextDay:before {
-    top: -1px;
-    border-color: transparent transparent transparent #707070;
-    border-width: 14.7px;
-}
-
-.buttonNextDay:hover{
-    color:black;
-    font-style: italic;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
   }
 
- /* } */
-
-
-  .buttonPreviouseDay {
-    width: 120px;
-    margin: 20px;
-    margin-right: 10px;
-    background: #F7F7F2;
-    border: 1px solid #707070;    
-    position: relative;
-    padding: 6px;
-    text-align: center;
-    color: black;
-    cursor: pointer;
-}
-
-.buttonPreviouseDay:after,
-.buttonPreviouseDay:before {
-    content: '';
-    display: block;
-    position: absolute;
-    right: 100%;
-    width: 0;
-    height: 0;
-    border-style: solid;
-}
-
-.buttonPreviouseDay:after {
-    top: 0px;
-    border-color:transparent #F7F7F2  transparent transparent ;
-    border-width: 13.5px;
-}
-
-.buttonPreviouseDay:before {
-    top: -1px;
-    border-color:transparent #707070  transparent transparent ;
-    border-width: 14.5px;
-}
-
-.buttonPreviouseDay:hover{
-    color:black;
-    font-style: italic;
-  }
