@@ -91,56 +91,7 @@ export default function CreateProject({ hideForm }) {
         <div className={styles.form}>
             <form className={styles.container} onSubmit={handleSubmit}>
 
-                <div className={styles.title} >Create New Project</div>
-
-                <div className={styles.inputContainer}>
-                    <span> Name</span>
-                    <input
-                        className={styles.input}
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        label="Name"
-                        id="name"
-                    />
-                </div>
-
-                <div className={styles.inputContainerDescr}>
-                    <span> Description</span>
-                    <textarea
-                        className={styles.textarea}
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        label="Description"
-                        id="description"
-                    />
-                </div>
-
-                <div className={styles.inputContainer}>
-                    <span> Invite Members</span>
-                    <input
-                        className={styles.input}
-                        autoComplete="off"
-                        value={member}
-                        onFocus={onFocus}
-                        onBlur={onBlur}
-                        onChange={(e) => setMember(e.target.value)}
-                        label="Invite members"
-                        id="members"
-                        placeholder='username'
-                    />
-                </div>
-
-                <div className={styles.membersAvatars}>
-                    {
-                        members.map(m => {
-                            return (
-                                <Avatar onClick={() => removeMember(m)} key={m._id} name={m.username} size={40} round={true} maxInitials={2} />
-                            )
-                        })
-                    }
-                </div>
-
-                {
+            {
                     showMembers && <div className={styles.members}>
                         {
                             allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
@@ -168,6 +119,55 @@ export default function CreateProject({ hideForm }) {
                         }
                     </div>
                 }
+
+                <div className={styles.title} >Create New Project</div>
+
+                <div className={styles.inputContainer}>
+                    <span> Name</span>
+                    <input
+                        className={styles.input}
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        label="Name"
+                        id="name"
+                    />
+                </div>
+
+                <div className={styles.inputContainerDescr}>
+                    <span> Description</span>
+                    <textarea
+                        className={styles.textarea}
+                        value={description}
+                        onChange={e => setDescription(e.target.value)}
+                        label="Description"
+                        id="description"
+                    />
+                </div>
+
+                <div className={styles.inputContainer}>
+                    <span> Invite Members</span>
+                    <input
+                        className={styles.membersInput}
+                        autoComplete="off"
+                        value={member}
+                        onFocus={onFocus}
+                        onBlur={onBlur}
+                        onChange={(e) => setMember(e.target.value)}
+                        label="Invite members"
+                        id="members"
+                        placeholder='username'
+                    />
+                </div>
+
+                <div className={styles.membersAvatars}>
+                    {
+                        members.map(m => {
+                            return (
+                                <Avatar onClick={() => removeMember(m)} key={m._id} name={m.username} size={40} round={true} maxInitials={2} />
+                            )
+                        })
+                    }
+                </div>                
 
                 <div className={styles.buttonDiv}>
                     <button type='submit' className={styles.createButton}>Create</button>

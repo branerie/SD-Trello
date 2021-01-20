@@ -79,14 +79,13 @@ const Home = () => {
           </div>
 
           <div>
-            <div>
+            <div className={styles.myTeamsContainer}>
               < button onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)}
                 // title='Create Team' 
                 // className={styles.teamNames}
-                className={styles.navigateButtons}
+                className={styles.myTeamButton}
               >My Teams</ button>
-            </div>
-            <div>
+            <div className={styles.selectTeamContainer}>
               {
                 showTeamsVisibleForm ?
                   <div className={styles.teamsHome} ref={dropdownRef}>
@@ -95,7 +94,7 @@ const Home = () => {
                         return (
                           <span key={index}>
                             {/* <div> */}
-                            <div 
+                            <div
                               // className={styles.teamNames}
                               className={styles.navigateButtonsTeams}
                               onClick={() => goToTeamPage(t._id)}
@@ -119,8 +118,8 @@ const Home = () => {
                     }
                   </div>
                   : null
-
               }
+            </div>
             </div>
           </div>
 
@@ -146,7 +145,9 @@ const Home = () => {
                 {
                   recentProjects.slice(0).reverse().map((p, index) => {
                     return (
-                      <button key={p._id} className={styles.navigateButtons} onClick={()=>goToProject(p._id)}>{p.name}</button>
+                      <div key={p._id}>
+                        <button className={styles.navigateButtons} onClick={() => goToProject(p._id)}>{p.name}</button>
+                      </div>
                     )
                   })
                 }

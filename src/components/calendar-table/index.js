@@ -15,7 +15,11 @@ import ColumnData from "../calendar-data/column-data"
 import Transparent from "../transparent"
 import EditList from "../edit-list"
 import UserContext from '../../contexts/UserContext'
-import { useParams } from "react-router-dom";
+import { useParams } from "react-router-dom"
+import previous from '../../images/project-list/previous-day.svg'
+import next from '../../images/project-list/next-day.svg'
+
+
 
 
 const TableDndApp = (props) => {
@@ -149,11 +153,11 @@ const TableDndApp = (props) => {
                     data.push({
 
                         task:
-                            (   
-                               <TaskName 
-                                // value={card.name + '/' + card._id + '/' + list._id}
-                                card = {card} listId={list._id}
-                                project={props.project} />
+                            (
+                                <TaskName
+                                    // value={card.name + '/' + card._id + '/' + list._id}
+                                    card={card} listId={list._id}
+                                    project={props.project} />
                             ),
                         progress:
                             (
@@ -176,7 +180,7 @@ const TableDndApp = (props) => {
                         dueDate: (
                             <div>
                                 <span>
-                                    <TaskDueDate 
+                                    <TaskDueDate
                                         value={(thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + ('0' + (cardDate.getMonth() + 1)).slice(-2) + '-' + cardDate.getFullYear() : ''}
                                         cardDueDate={cardDate}
                                         cardId={card._id}
@@ -221,7 +225,7 @@ const TableDndApp = (props) => {
 
 
 
-    }, [projectContext, props,onListClick, params.teamid])
+    }, [projectContext, props, onListClick, params.teamid])
 
 
 
@@ -370,11 +374,21 @@ const TableDndApp = (props) => {
                         showWeekNumbers
                         onChange={date => setStartDay(getMonday(date))} />
                 </span>
-                <span>
+                <span className={styles.daysButtons}>
                     <button className={styles.navigateButtons} onClick={getLastWeek} >Previous week</button>
-                    <button className={styles.buttonPreviouseDay} onClick={getLastDay} >Previous day</button>
-                   
-                    <button className={styles.buttonNextDay} onClick={getNextDay}>Next day</button>
+
+                    {/* <span className={styles.daysButtons}> */}
+                        <div className={styles.picContainer} onClick={getLastDay}>
+                        <img className={styles.buttonPreviousDay} src={previous} alt="..." width="126" height="27"  />
+                        <div class={styles.centeredText}>Previous day</div>
+                        </div>
+
+                        <div className={styles.picContainer} onClick={getNextDay}>
+                        <img className={styles.buttonPreviousDay} src={next} alt="..." width="126" height="27"  />
+                        <div class={styles.centeredText}>Next day</div>
+                        </div>
+                    {/* </span> */}
+
                     <button className={styles.navigateButtons} onClick={getNextWeek}>Next week</button>
                 </span>
                 {/* <span>
@@ -399,6 +413,7 @@ const TableDndApp = (props) => {
                         'white'
                     }
                     style={{
+                        'background': '#DFE9EE',
                         'borderRadius': '10px',
                         'border': '1px solid #707070',
                         'width': 'auto',
