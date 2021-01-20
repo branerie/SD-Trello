@@ -1,5 +1,5 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
+import { useHistory, useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import Button from '../button'
@@ -12,6 +12,8 @@ export default function TeamInvitation({ message, setInbox, setInboxHistory, opt
     const history = useHistory()
     const token = getCookie("x-auth-token")
     const socket = useSocket()
+    const params = useParams()
+    const userId = params.userid
 
     async function acceptInvitation(message, accepted) {
         const response = await fetch(`/api/teams/invitations/${message.team._id}`, {
@@ -36,8 +38,7 @@ export default function TeamInvitation({ message, setInbox, setInboxHistory, opt
             if (accepted) {
                 history.push(`/team/${message.teamId}`)
             }
-
-            // TODO
+            socket.emit('message-sent', userId)
         }
     }
 

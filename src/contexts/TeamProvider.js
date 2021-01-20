@@ -1,5 +1,6 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
 import getCookie from '../utils/cookie'
+import userObject from '../utils/userObject'
 import { useSocket } from './SocketProvider'
 import TeamContext from './TeamContext'
 import UserContext from './UserContext'
@@ -32,29 +33,28 @@ function TeamProvider({ children }) {
   const teamUpdate = useCallback(async () => {
     const token = getCookie("x-auth-token")
 
-    await fetch("/api/teams", {
+    const promise = await fetch("/api/teams", {
       method: "GET",
       headers: {
         "Content-Type": "application/json",
         "Authorization": token
       }
-    }).then(promise => {
-      return promise.json()
-    }).then(response => {
-      console.log('teamUpdate')
-      setTeams(response)
-      const user = { ...userContext.user }
-      user.teams = response
-      userContext.setUser(user)
     })
+
+    const response = await promise.json()
+
+    setTeams(response.teams)
+
+    const user =  userObject(response)
+    userContext.logIn(user)
+
   }, [userContext])
 
   useEffect(() => {
     if (socket == null) return
     socket.on('team-updated', teamUpdate)
-
     return () => socket.off('team-updated')
-  }, [socket,teamUpdate])
+  }, [socket, teamUpdate])
 
   return (
     <TeamContext.Provider value={{ teams, setTeams, selectedTeam, setSelectedTeam, currentProjects, setCurrentProjects, getCurrentProjects, updateSelectedTeam }}>

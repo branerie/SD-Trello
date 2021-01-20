@@ -1,3 +1,5 @@
+import userObject from "./userObject"
+
 const responseGoogle = async (googleResponse, onSuccess, onFailure) => {
 
     try {
@@ -15,14 +17,7 @@ const responseGoogle = async (googleResponse, onSuccess, onFailure) => {
         const response = await promise.json()
 
         if (response.user.username && authToken) {
-            onSuccess({
-                username: response.user.username,
-                id: response.user._id,
-                teams: response.teams,
-                inbox: response.user.inbox,
-                confirmed: response.user.confirmed,
-                recentProjects: response.user.recentProjects
-            });
+            onSuccess(userObject(response))
         } else {
             onFailure(response)
         }

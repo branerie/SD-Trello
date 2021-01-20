@@ -88,6 +88,7 @@ async function getTeams(req, res, next) {
     const { _id } = req.user
 
     try {
+        const user = await models.User.findOne({ _id: _id })
         const teams = await models.Team.find({ members: _id })
             .populate({
                 path: 'projects',
@@ -109,8 +110,13 @@ async function getTeams(req, res, next) {
             })    
             .populate({
                 path: 'requests'
-            })    
-        res.send(teams)
+            })
+        
+        const response = {
+            user,
+            teams
+        }
+        res.send(response)
 
     } catch (error) {
         console.log(error);

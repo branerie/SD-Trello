@@ -1,3 +1,5 @@
+import userObject from "./userObject"
+
 const authenticate = async (url, method, body, onSuccess, onFailure) => {
     try {
 
@@ -30,14 +32,7 @@ const authenticate = async (url, method, body, onSuccess, onFailure) => {
 
 
         if (response.user.username && authToken) {
-            onSuccess({
-                username: response.user.username,
-                id: response.user._id,
-                teams: response.teams,
-                inbox: response.user.inbox,
-                confirmed: response.user.confirmed,
-                recentProjects: response.user.recentProjects
-            });
+            onSuccess(userObject(response));
         } else {
             onFailure(response)
         }

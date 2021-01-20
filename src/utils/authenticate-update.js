@@ -1,4 +1,5 @@
-import getCookie from "./cookie";
+import getCookie from "./cookie"
+import userObject from "./userObject"
 
 const authenticateUpdate = async (url, method, body, onSuccess, onFailure) => {
 
@@ -14,23 +15,16 @@ const authenticateUpdate = async (url, method, body, onSuccess, onFailure) => {
             }
         })
         
-        const response = await promise.json();
+        const response = await promise.json()
         if (response.user.username) {
-            onSuccess({
-                username: response.user.username,
-                id: response.user._id,
-                teams: response.teams,
-                inbox: response.user.inbox,
-                confirmed: response.user.confirmed,
-                recentProjects: response.user.recentProjects
-            });
+            onSuccess(userObject(response))
         } else {
-            onFailure();
+            onFailure()
         }
 
     } catch (e) {
-        onFailure(e);
+        onFailure(e)
     }
 }
 
-export default authenticateUpdate;
+export default authenticateUpdate

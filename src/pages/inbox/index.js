@@ -1,16 +1,22 @@
-import React, { useState, useEffect, useCallback } from "react"
+import React, { useState, useEffect, useCallback, useContext } from "react"
 import { useHistory } from "react-router-dom"
 import TeamInvitationHistory from "../../components/inbox/history/team-invitation-history"
 import TeamInvitation from "../../components/inbox/team-invitation"
 import PageLayout from "../../components/page-layout"
 import Title from "../../components/title"
+import { useSocket } from "../../contexts/SocketProvider"
+import UserContext from "../../contexts/UserContext"
 import getCookie from "../../utils/cookie"
+import userObject from "../../utils/userObject"
 import styles from './index.module.css'
 
 const InboxPage = () => {
     const [inbox, setInbox] = useState([])
     const [inboxHistory, setInboxHistory] = useState([])
     const history = useHistory()
+    const socket = useSocket()
+    const userContext = useContext(UserContext)
+    const logIn = userContext.logIn
     const token = getCookie("x-auth-token")
     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }
 
@@ -36,6 +42,20 @@ const InboxPage = () => {
         getInbox()
     }, [getInbox])
 
+    const updateUser = useCallback(async (response) => {
+        const user = userObject(response)
+        logIn(user)
+        setInbox(response.inboxUser.inbox)
+        setInboxHistory(response.inboxUser.inboxHistory)
+    }, [logIn])
+
+    useEffect (() => {
+        if (socket) {
+            socket.on('message-sent', updateUser)
+            return () => socket.off('message-sent')
+        }
+    }, [socket, updateUser])
+
     return (
         <PageLayout>
             <div>
@@ -58,7 +78,7 @@ const InboxPage = () => {
                     {
                         inboxHistory.filter(m => m.subject === "Team invitation")
                             .map(m => {
-                                return <TeamInvitationHistory key={m._id} message={m} options={options} />
+                                return <TeamInvitationHistory key={m._id} message={m} options={options} setInboxHistory={setInboxHistory} />
                             })
                     }
                 </div>

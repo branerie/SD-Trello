@@ -31,7 +31,9 @@ router.post('/confirmation', confirmToken)
 
 router.put('/:id', updateUser)
 
-router.put('/recentProjects/:id', updateUserRecentProjects)
+router.put('/recentProjects/:id', auth, updateUserRecentProjects)
+
+router.delete('/message/:messageid', auth, deleteUserMessage)
 
 router.delete('/:id', deleteUser)
 
@@ -319,6 +321,28 @@ async function getUserInbox(req, res, next) {
     try {
         userId = req.user._id
         const user = await userInbox(userId)
+        res.send(user)
+    } catch (err) {
+        console.log(err)
+        res.send(error)
+    }
+}
+
+async function deleteUserMessage(req, res, next) {
+    const userId = req.user._id
+    const messageId = req.params.messageid
+    const session = await mongoose.startSession()
+    session.startTransaction()
+
+    try {
+        await models.User.updateOne({ _id: userId }, { $pull: { inboxHistory: messageId } }).session(session)
+        await models.Message.deleteOne({ _id: messageId }).session(session)
+        await session.commitTransaction()
+
+        session.endSession()
+
+        const user = await userInbox(userId)
+
         res.send(user)
     } catch (err) {
         console.log(err)
