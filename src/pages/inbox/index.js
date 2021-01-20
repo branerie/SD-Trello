@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback, useContext } from "react"
 import { useHistory } from "react-router-dom"
 import TeamInvitationHistory from "../../components/inbox/history/team-invitation-history"
 import TeamInvitation from "../../components/inbox/team-invitation"
+import TeamInvitationResponse from "../../components/inbox/team-invitation-response"
 import PageLayout from "../../components/page-layout"
 import Title from "../../components/title"
 import { useSocket } from "../../contexts/SocketProvider"
@@ -49,7 +50,7 @@ const InboxPage = () => {
         setInboxHistory(response.inboxUser.inboxHistory)
     }, [logIn])
 
-    useEffect (() => {
+    useEffect(() => {
         if (socket) {
             socket.on('message-sent', updateUser)
             return () => socket.off('message-sent')
@@ -64,22 +65,63 @@ const InboxPage = () => {
                     inbox.length === 0 && <div className={styles.title}>Inbox is empty</div>
                 }
                 {
-                    inbox.filter(m => m.subject === "Team invitation")
-                        .map(m => {
-                            return <TeamInvitation key={m._id} message={m} setInbox={setInbox} setInboxHistory={setInboxHistory} options={options} />
-                        })
+                    [...inbox].reverse().map(m => {
+                        switch (m.subject) {
+                            case 'Team invitation':
+                                return <TeamInvitation
+                                    key={m._id}
+                                    message={m}
+                                    setInbox={setInbox}
+                                    setInboxHistory={setInboxHistory}
+                                    options={options}
+                                />
+
+                            case 'Team invitation response':
+                                return <TeamInvitationResponse
+                                    key={m._id} message={m}
+                                    setInbox={setInbox}
+                                    setInboxHistory={setInboxHistory}
+                                    options={options}
+                                    isInbox={true}
+                                />
+
+                            default:
+                                break;
+                        }
+                        return ''
+                    })
                 }
             </div>
 
             {
-                inboxHistory.length !== 0 && 
+                inboxHistory.length !== 0 &&
                 <div>
                     <Title title='History' />
                     {
-                        inboxHistory.filter(m => m.subject === "Team invitation")
-                            .map(m => {
-                                return <TeamInvitationHistory key={m._id} message={m} options={options} setInboxHistory={setInboxHistory} />
-                            })
+                        [...inboxHistory].reverse().map(m => {
+                            switch (m.subject) {
+                                case 'Team invitation':
+                                    return <TeamInvitationHistory
+                                        key={m._id}
+                                        message={m}
+                                        options={options}
+                                        setInboxHistory={setInboxHistory}
+                                    />
+
+                                case 'Team invitation response':
+                                    return <TeamInvitationResponse
+                                        key={m._id} message={m}
+                                        setInbox={setInbox}
+                                        setInboxHistory={setInboxHistory}
+                                        options={options}
+                                        isInbox={false}
+                                    />
+
+                                default:
+                                    break;
+                            }
+                            return ''
+                        })
                     }
                 </div>
             }

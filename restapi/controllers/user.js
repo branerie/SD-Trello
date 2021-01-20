@@ -29,6 +29,8 @@ router.post('/logout', logoutUser)
 
 router.post('/confirmation', confirmToken)
 
+router.post('/inbox', auth, moveMessageToHistory)
+
 router.put('/:id', updateUser)
 
 router.put('/recentProjects/:id', auth, updateUserRecentProjects)
@@ -339,6 +341,22 @@ async function deleteUserMessage(req, res, next) {
         await session.commitTransaction()
 
         session.endSession()
+
+        const user = await userInbox(userId)
+
+        res.send(user)
+    } catch (err) {
+        console.log(err)
+        res.send(error)
+    }
+}
+
+async function moveMessageToHistory(req, res, next) {
+    const userId = req.user._id
+    const { message } = req.body
+
+    try {
+        await models.User.updateOne({ _id: userId }, { $pull: { inbox: message._id }, $push: { inboxHistory: message } })
 
         const user = await userInbox(userId)
 

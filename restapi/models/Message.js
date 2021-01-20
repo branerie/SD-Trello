@@ -16,7 +16,7 @@ const messageSchema = new Schema({
         ref: "Team",
     },
 
-    invitedBy: {
+    sendFrom: {
         type: ObjectId,
         ref: "User"
     },
@@ -26,10 +26,6 @@ const messageSchema = new Schema({
     },
 
     canceled: {
-        type: Boolean
-    },
-
-    newMessage: {
         type: Boolean
     },
 
