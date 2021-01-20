@@ -1,6 +1,6 @@
 const mongoose = require('mongoose')
 const models = require('../models')
-const { auth } = require('../utils')
+const { auth, userInbox } = require('../utils')
 const router = require('express').Router()
 
 router.post('/invitations/:id', auth, teamInvitations)
@@ -39,10 +39,11 @@ async function teamInvitations(req, res, next) {
         }
 
         await session.commitTransaction()
-
+        
         session.endSession()
+        const user = await userInbox(userId)
 
-        res.send('Team invitation handled')
+        res.send(user)
     } catch (error) {
         await session.abortTransaction()
         session.endSession()
@@ -78,7 +79,6 @@ async function createTeam(req, res, next) {
     } catch (error) {
         await session.abortTransaction()
         session.endSession()
-        console.log(error);
         res.send(error)
     }
 }
@@ -87,6 +87,7 @@ async function getTeams(req, res, next) {
     const { _id } = req.user
 
     try {
+        const user = await models.User.findOne({ _id: _id })
         const teams = await models.Team.find({ members: _id })
             .populate({
                 path: 'projects',
@@ -109,7 +110,12 @@ async function getTeams(req, res, next) {
             .populate({
                 path: 'requests'
             })
-        res.send(teams)
+
+        const response = {
+            user,
+            teams
+        }
+        res.send(response)
 
     } catch (error) {
         console.log(error);

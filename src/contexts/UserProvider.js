@@ -2,6 +2,7 @@ import React, { useState, useEffect, useCallback } from "react"
 import Loader from "react-loader-spinner"
 import { useHistory } from "react-router-dom"
 import getCookie from "../utils/cookie"
+import userObject from "../utils/userObject"
 import UserContext from "./UserContext"
 
 const UserProvider = (props) => {
@@ -38,7 +39,7 @@ const UserProvider = (props) => {
     }, [history])
 
     const verifyLogin = useCallback(() => {
-        const token = getCookie("x-auth-token")        
+        const token = getCookie("x-auth-token")
         if (!token) {
 
             setUser({
@@ -59,15 +60,7 @@ const UserProvider = (props) => {
             return promise.json()
         }).then(response => {
             if (response.status) {
-                logIn({
-                    username: response.user.username,
-                    id: response.user._id,
-                    teams: response.teams,
-                    inbox: response.user.inbox,
-                    inboxHistory: response.user.inboxHistory,
-                    confirmed: response.user.confirmed,
-                    recentProjects: response.user.recentProjects
-                })
+                logIn(userObject(response))
             } else {
                 logOut()
             }

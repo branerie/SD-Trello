@@ -128,8 +128,6 @@ export default function EditTeam(props) {
                 "Authorization": token
             },
             body: JSON.stringify({
-                name,
-                description,
                 removeInvitation: input
             })
         })
@@ -170,6 +168,7 @@ export default function EditTeam(props) {
             teamContext.setSelectedTeam(name)
             getData()
             socket.emit('team-update', teamId)
+            socket.emit('multiple-messages-sent', forInvite)
             props.hideForm()
         }
 

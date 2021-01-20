@@ -33,7 +33,7 @@ const Navigation = () => {
                     <TeamProvider>
                         <Switch>
                             <Route path="/confirmation/:token"><ConfirmationPage /></Route>
-                            {loggedIn && !context.user.confirmed ? <Redirect to="/confirmation/not-confirmed" /> : null}
+                            {loggedIn && !context.user.confirmed && <Redirect to="/confirmation/not-confirmed" />}
                             <Route exact path="/" >
                                 {loggedIn ? (<Home />) : (<WelcomePage />)}
                             </Route>
@@ -41,10 +41,10 @@ const Navigation = () => {
                                 {loggedIn ? (<ProfilePage />) : (<Redirect to="/" />)}
                             </Route>
                             <Route path="/inbox/:userid">
-                                {loggedIn ? (<InboxPage />) : (<Redirect to="/login" />)}
+                                {loggedIn ? (<InboxPage />) : (<Redirect to="/" />)}
                             </Route>
                             <Route path="/my-tasks/:userid">
-                                {loggedIn ? (<MyTasksPage />) : (<Redirect to="/login" />)}
+                                {loggedIn ? (<MyTasksPage />) : (<Redirect to="/" />)}
                             </Route>
                             <Route path="/project-board/:teamid/:projectid">
                                 {loggedIn ? (<ProjectBoard />) : (<Redirect to="/" />)}

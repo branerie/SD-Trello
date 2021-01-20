@@ -1,4 +1,6 @@
 const models = require('../models')
+const getTeams = require('../utils/getTeams')
+const userInbox = require('../utils/userInbox')
 
 function sockets(socket) {
 
@@ -40,6 +42,36 @@ function sockets(socket) {
         socket.emit('task-team-updated', updatedTeamProjects)
     })
 
+    socket.on('multiple-messages-sent', async (recievers) => {
+        console.log(username, 'multiple-messages-sent')
+        recievers.map(async r => {
+            const user = await models.User.findOne({ _id: r._id }).select('-password')
+            const teams = await getTeams(r._id)
+            const inboxUser = await userInbox(r._id)
+            const response = {
+                user,
+                teams,
+                inboxUser
+            }
+            socket.to(`${r._id}`).emit('message-sent', response)
+        })
+    })
+
+    socket.on('message-sent', async (recieverId) => {
+        console.log(username, 'message-sent')
+        const user = await models.User.findOne({ _id: recieverId }).select('-password')
+        const teams = await getTeams(recieverId)
+        const inboxUser = await userInbox(recieverId)
+        const response = {
+            user,
+            teams,
+            inboxUser
+        }
+        socket.to(`${recieverId}`).emit('message-sent', response)
+        if (recieverId === userId) {
+            socket.emit('message-sent', response)
+        }
+    })
 }
 
 async function teamUpdate(id) {
@@ -62,11 +94,11 @@ async function teamUpdate(id) {
             })
             .populate({
                 path: 'members'
-            })    
+            })
             .populate({
                 path: 'requests'
-            })    
-            
+            })
+
         return team
 
     } catch (error) {

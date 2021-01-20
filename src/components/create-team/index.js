@@ -89,6 +89,7 @@ export default function CreateTeam(props) {
             teamContext.setSelectedTeam(team.name)
             props.hideForm()
             socket.emit('team-update', team._id)
+            socket.emit('multiple-messages-sent', members)
             history.push(`/team/${team._id}`)
         }
 
