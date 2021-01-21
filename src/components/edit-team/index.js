@@ -119,7 +119,6 @@ export default function EditTeam(props) {
 
     const removeInvited = async (input) => {
 
-
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/teams/${teamId}`, {
             method: "PUT",
@@ -134,7 +133,7 @@ export default function EditTeam(props) {
         if (!response.ok) {
             history.push("/error")
             return
-        } else {
+        } else {           
             getData()
             socket.emit('team-update', teamId)
         }

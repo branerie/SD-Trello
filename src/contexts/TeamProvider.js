@@ -19,6 +19,7 @@ function TeamProvider({ children }) {
     }
   }
 
+
   function updateSelectedTeam(teamId) {
     const current = teams.find(t => t._id === teamId)
     if (current) {
@@ -44,7 +45,6 @@ function TeamProvider({ children }) {
     const response = await promise.json()
 
     setTeams(response.teams)
-
     const user =  userObject(response)
     userContext.logIn(user)
 

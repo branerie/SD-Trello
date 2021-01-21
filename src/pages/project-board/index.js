@@ -16,6 +16,8 @@ import ButtonClean from '../../components/button-clean'
 import EditCard from '../../components/edit-card'
 import UserContext from '../../contexts/UserContext'
 import EditList from '../../components/edit-list'
+import TeamContext from '../../contexts/TeamContext'
+import userObject from '../../utils/userObject'
 
 
 export default function ProjectBoard(props) {
@@ -118,7 +120,9 @@ export default function ProjectBoard(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
-            context.setUser(updatedUser)
+            const data = await response.json()
+            const user = userObject(data)
+            context.logIn(user)
         }
     }, [context, history, params.projectid, projectContext.project])
 
@@ -144,12 +148,6 @@ export default function ProjectBoard(props) {
             </PageLayout>
         )
     }
-
-
-
-
-
-
 
 
     async function handleOnDragEnd(result) {

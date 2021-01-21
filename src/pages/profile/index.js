@@ -18,7 +18,7 @@ const ProfilePage = () => {
   const [userEmail, setUserEmail] = useState(null)
   const [passwordActive, setPaswordActive] = useState(true)
   const [userNameActive, setUserNameActive] = useState(true)
-  const [username, setUsername] = useState(null);
+  const [username, setUsername] = useState(userContext.user.username);
   const [password, setPassword] = useState(null);
   const [rePassword, setRePassword] = useState(null);
   const [alert, setAlert] = useState(false)
@@ -26,7 +26,7 @@ const ProfilePage = () => {
 
 
 
-  
+
   const params = useParams()
   const history = useHistory()
 
@@ -34,7 +34,7 @@ const ProfilePage = () => {
   const userName = userContext.user.username
   const userTeams = userContext.user.teams
   const id = params.userid;
-  
+
 
 
   const getData = useCallback(async () => {
@@ -45,7 +45,7 @@ const ProfilePage = () => {
     } else {
       const user = await response.json()
       setUserEmail(user.email)
-      
+
     }
   }, [history, id])
 
@@ -56,14 +56,14 @@ const ProfilePage = () => {
 
     setAlert(false)
 
-    if(!username && !password){
+    if (!username && !password) {
       return
     }
 
     if (password !== rePassword) {
       setAlert(true)
       return
-  }
+    }
 
     await authenticateUpdate(`/api/user/${id}`, 'PUT', {
       username,
@@ -128,7 +128,6 @@ const ProfilePage = () => {
 
           <div>
             <button className={styles.navigateButtons}
-            // onClick={}`)}
             >Email:</button>
           </div>
 
@@ -139,36 +138,32 @@ const ProfilePage = () => {
           </div>
 
           <div>
-            <div>
+            <div className={styles.myTeamsContainer}>
               < button onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)}
-                // title='Create Team' 
-                // className={styles.teamNames}
-                className={styles.navigateButtons}
+                className={styles.myTeamButton}
               >My Teams</ button>
-            </div>
-            <div>
-              {
-                showTeamsVisibleForm ?
-                  <div className={styles.teams} ref={dropdownRef}>
-                    {
-                      userTeams.map((t, index) => {
-                        return (
-                          <div>
-                            <button key={index}
-                              // className={styles.teamNames}
-                              className={styles.navigateButtons}
-                              onClick={() => goToTeamPage(t._id)}
-                            >{t.name}</button>
+              <div className={styles.selectTeamContainer}>
+                {
+                  showTeamsVisibleForm ?
+                    <div className={styles.teamsHome} ref={dropdownRef}>
+                      {
+                        userTeams.map((t, index) => {
+                          return (
+                            <span key={index}>
+                              <div
+                                className={styles.navigateButtonsTeams}
+                                onClick={() => goToTeamPage(t._id)}
 
-                          </div>
+                              >{t.name}</div>
+                            </span>
+                          )
+                        }
                         )
                       }
-                      )
-                    }
-                  </div>
-                  : null
-
-              }
+                    </div>
+                    : null
+                }
+              </div>
             </div>
           </div>
 
@@ -179,12 +174,13 @@ const ProfilePage = () => {
 
         <span className={styles.middleButtons}>
 
-        
+
           <div>
             < input
               // onClick={() => setShowTeamForm(true)}
               // title='Create Team' 
               // className={styles.teamNames}
+              value={username}
               onChange={e => setUsername(e.target.value)}
               className={styles.inputFieldsProfile}
               placeholder={userName}
@@ -194,10 +190,7 @@ const ProfilePage = () => {
           </div>
 
           <div>
-            < input
-              // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
+            < input              
               onChange={e => setPassword(e.target.value)}
               className={styles.inputFieldsProfile}
               placeholder={'********'}
@@ -207,13 +200,11 @@ const ProfilePage = () => {
           </div>
 
           <div className={styles.alerts}>
-                <Alert alert={alert} message={'Passwords do not match'} />                
-            </div>
+            <Alert alert={alert} message={'Passwords do not match'} />
+          </div>
 
           <div>
-            < input
-              // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
+            < input              
               onChange={e => setRePassword(e.target.value)}
               className={styles.inputFieldsProfile}
               placeholder={'********'}
@@ -228,7 +219,7 @@ const ProfilePage = () => {
               // title='Create Team' 
               // className={styles.teamNames}
               className={styles.inputFieldsProfile}
-              placeholder={userEmail}
+              value={userEmail}
               disabled={true}
             // type="password"
             />
@@ -236,7 +227,7 @@ const ProfilePage = () => {
 
 
           <div className={styles.buttonDivSave}>
-            <button type='submit' className={styles.saveButton} onClick={(e)=>handleSubmit(e)}>Save</button>
+            <button type='submit' className={styles.saveButton} onClick={(e) => handleSubmit(e)}>Save</button>
           </div>
         </span>
 
