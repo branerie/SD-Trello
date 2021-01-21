@@ -12,6 +12,8 @@ function TeamProvider({ children }) {
   const userContext = useContext(UserContext)
   const socket = useSocket()
 
+  console.log(teams);
+
   function getCurrentProjects(teamId) {
     const current = teams.find(t => t._id === teamId)
     if (current) {
@@ -32,7 +34,6 @@ function TeamProvider({ children }) {
 
   const teamUpdate = useCallback(async () => {
     const token = getCookie("x-auth-token")
-
     const promise = await fetch("/api/teams", {
       method: "GET",
       headers: {
@@ -44,6 +45,7 @@ function TeamProvider({ children }) {
     const response = await promise.json()
 
     setTeams(response.teams)
+    console.log(response.teams);
 
     const user =  userObject(response)
     userContext.logIn(user)

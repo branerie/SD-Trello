@@ -346,6 +346,8 @@ async function deleteUserMessage(req, res, next) {
 
         res.send(user)
     } catch (err) {
+        await session.abortTransaction()
+        session.endSession()
         console.log(err)
         res.send(error)
     }
