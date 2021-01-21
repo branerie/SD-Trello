@@ -43,8 +43,10 @@ async function createCard(req, res, next) {
 }
 
 async function updateCard(req, res, next) {
+    const userId = req.user._id
     const id = req.params.idcard
-    const card = { name, description, members, dueDate, progress, history } = req.body    
+    const card = { name, description, members, dueDate, progress, history } = req.body
+    const { newMember, teamId, projectId, cardId, listId } = req.body
 
     const obj = {}
     for (let key in card) {
@@ -53,11 +55,30 @@ async function updateCard(req, res, next) {
         }
     }
 
+    const session = await mongoose.startSession();
+    session.startTransaction();
 
-    await models.Card.updateOne({ _id: id }, { ...obj })
-    const updatedCard = await models.Card.findOne({ _id: id })
-    res.send(updatedCard)
+    try {
+        await models.Card.updateOne({ _id: id }, { ...obj }).session(session)
+        const updatedCard = await models.Card.findOne({ _id: id })
 
+        if (newMember) {
+            const messageCreationResult = await models.Message.create([{ subject: 'Task assignment', team: teamId, project: projectId, list: listId, card: cardId, sendFrom: userId, recievers: [newMember] }], { session })
+            const createdMessage = messageCreationResult[0]
+            await models.User.updateOne({ _id: newMember._id }, { $push: { inbox: createdMessage } })
+        }
+
+        await session.commitTransaction()
+        session.endSession()
+
+        res.send(updatedCard)
+
+    } catch(err) {
+        await session.abortTransaction();
+        session.endSession();
+        console.log(err);
+        res.send(err);
+    }
 }
 
 async function deleteCard(req, res, next) {

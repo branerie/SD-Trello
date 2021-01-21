@@ -2,7 +2,7 @@ import React, { useCallback, useContext, useRef, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import { useHistory } from 'react-router-dom';
+import { useHistory, useParams } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider'
 import Avatar from 'react-avatar'
 import TeamContext from "../../contexts/TeamContext"
@@ -19,6 +19,7 @@ export default function TaskMembers(props) {
     const history = useHistory()
     const socket = useSocket()
     const teamContext = useContext(TeamContext)
+    const params = useParams()
     const projectId = props.project._id
     const cardId = props.card._id
     const listId = props.listId
@@ -115,6 +116,9 @@ export default function TaskMembers(props) {
 
     const handleAdd = useCallback(async (event) => {
         event.preventDefault()
+
+        const teamId = params.teamid
+
         if (!selectedUser) {
             setIsActive(!isActive)
             return
@@ -153,8 +157,6 @@ export default function TaskMembers(props) {
 
         arr.push(selectedUser)
 
-
-
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
             headers: {
@@ -162,7 +164,12 @@ export default function TaskMembers(props) {
                 "Authorization": token
             },
             body: JSON.stringify({
-                members: arr
+                members: arr,
+                newMember: selectedUser,
+                teamId,
+                projectId: project._id,
+                cardId,
+                listId 
             })
         })
         if (!response.ok) {
@@ -172,9 +179,10 @@ export default function TaskMembers(props) {
             setCardMembers(arr)
             updateSocket()
             setSelectedUser('')
+            socket.emit('message-sent', selectedUser._id)
         }
 
-    }, [history, props, cardId, listId, isActive, setIsActive, selectedUser, updateSocket, cardMembers, projectId])
+    }, [history, props, cardId, listId, isActive, setIsActive, selectedUser, updateSocket, cardMembers, projectId, params.teamid, socket])
 
 
 

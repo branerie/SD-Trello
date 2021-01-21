@@ -16,6 +16,15 @@ async function userInbox(userId) {
             }, {
                 path: 'sendFrom',
                 select: 'username'
+            }, {
+                path: 'project',
+                select: 'name'
+            }, {
+                path: 'list',
+                select: 'name'
+            }, {
+                path: 'card',
+                select: 'name'
             }]
         }, {
             path: 'inboxHistory',
@@ -31,6 +40,15 @@ async function userInbox(userId) {
             }, {
                 path: 'sendFrom',
                 select: 'username'
+            }, {
+                path: 'project',
+                select: 'name'
+            }, {
+                path: 'list',
+                select: 'name'
+            }, {
+                path: 'card',
+                select: 'name'
             }]
         }])
         .select('inbox inboxHistory -_id')

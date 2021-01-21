@@ -32,7 +32,7 @@ async function teamInvitations(req, res, next) {
         const createdMessage = messageCreationResult[0]
         await models.User.updateOne({ _id: userId }, { $pull: { inbox: message._id }, $push: { inboxHistory: createdMessage } }).session(session)
 
-        const responseMessageCreationResult = await models.Message.create([{ subject: 'Team invitation response', team: teamId, sendFrom: message.sendFrom, recievers: [message.sendFrom._id], accepted }], { session })
+        const responseMessageCreationResult = await models.Message.create([{ subject: 'Team invitation response', team: teamId, sendFrom: userId, recievers: [message.sendFrom._id], accepted }], { session })
         const createdResponseMessage = responseMessageCreationResult[0]
         await models.User.updateOne({ _id: message.sendFrom._id }, { $push: { inbox: createdResponseMessage } }).session(session)
 

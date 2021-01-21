@@ -16,6 +16,21 @@ const messageSchema = new Schema({
         ref: "Team",
     },
 
+    project: {
+        type: ObjectId,
+        ref: "Project",
+    },
+
+    list: {
+        type: ObjectId,
+        ref: "List",
+    },
+
+    card: {
+        type: ObjectId,
+        ref: "Card",
+    },
+
     sendFrom: {
         type: ObjectId,
         ref: "User"
