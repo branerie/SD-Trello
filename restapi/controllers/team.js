@@ -159,13 +159,13 @@ async function updateTeam(req, res, next) {
     }
 
     if (removeInvitation) {
-
         const session = await mongoose.startSession()
         session.startTransaction()
-
+        
         try {
-
+            
             const userForRemove = removeInvitation._id
+            
             await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userForRemove } }).session(session)
 
             const oldMessage = await models.Message.findOneAndUpdate({ team: teamId, recievers: { "$in": [userForRemove] } }, { $pull: { recievers: userForRemove } }, { new: true }).session(session)

@@ -32,6 +32,7 @@ const TableDndApp = (props) => {
     const userContext = useContext(UserContext)
     const params = useParams()
 
+
     function getMonday(date) {
         let d
         if (date) {
@@ -46,7 +47,6 @@ const TableDndApp = (props) => {
 
         return monday
     }
-
 
     const onListClick = useCallback(async (list) => {
         const memberArr = []
@@ -194,9 +194,7 @@ const TableDndApp = (props) => {
                             </div>
                         )
                     })
-
                 })
-
                 return data
             })
 
@@ -204,7 +202,7 @@ const TableDndApp = (props) => {
         data.push({
             task: (
                 <AddList props={props} project={props.project} />
-            ),
+            ),            
             progress: '',
             assigned: '',
             monday: "",
@@ -223,17 +221,12 @@ const TableDndApp = (props) => {
         setTableData(data)
         return numberOfRows
 
-
-
     }, [projectContext, props, onListClick, params.teamid])
-
 
 
     useEffect(() => {
         cardData()
     }, [cardData])
-
-
 
     // const DragTrComponent = (props) => {
 
@@ -323,13 +316,11 @@ const TableDndApp = (props) => {
     }
 
     const getLastWeek = async () => {
-
         var nextDay = startDay
         nextDay.setDate(nextDay.getDate() - 7)
         await cardData()
         setStartDay(nextDay)
         await cardData()
-
     }
 
     const getNextDay = async () => {
@@ -375,26 +366,22 @@ const TableDndApp = (props) => {
                         onChange={date => setStartDay(getMonday(date))} />
                 </span>
                 <span className={styles.daysButtons}>
+
                     <button className={styles.navigateButtons} onClick={getLastWeek} >Previous week</button>
+                    
+                    <div className={styles.picContainer} onClick={getLastDay}>
+                        <img className={styles.buttonPreviousDay} src={previous} alt="..." width="126" height="27" />
+                        <div className={styles.centeredText}>Previous day</div>
+                    </div>
 
-                    {/* <span className={styles.daysButtons}> */}
-                        <div className={styles.picContainer} onClick={getLastDay}>
-                        <img className={styles.buttonPreviousDay} src={previous} alt="..." width="126" height="27"  />
-                        <div class={styles.centeredText}>Previous day</div>
-                        </div>
-
-                        <div className={styles.picContainer} onClick={getNextDay}>
-                        <img className={styles.buttonPreviousDay} src={next} alt="..." width="126" height="27"  />
-                        <div class={styles.centeredText}>Next day</div>
-                        </div>
-                    {/* </span> */}
+                    <div className={styles.picContainer} onClick={getNextDay}>
+                        <img className={styles.buttonPreviousDay} src={next} alt="..." width="126" height="27" />
+                        <div className={styles.centeredText}>Next day</div>
+                    </div>
 
                     <button className={styles.navigateButtons} onClick={getNextWeek}>Next week</button>
                 </span>
-                {/* <span>
-                    <button className={styles.navigateButtons} onClick={getLastDay} >Previous Day</button>
-                    <button className={styles.navigateButtons} onClick={getNextDay}>Next Day</button>
-                </span> */}
+                
             </div>
             <div>
                 {/* <DragDropContext onDragEnd={handleDragEnd} > */}
@@ -418,8 +405,7 @@ const TableDndApp = (props) => {
                         'border': '1px solid #707070',
                         'width': 'auto',
                         'display': 'flex',
-                        'height': '70vh'
-                        // 'height': 'auto'
+                        'height': '70vh'                        
                     }}
                 />
 

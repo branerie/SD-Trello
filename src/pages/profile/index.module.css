@@ -73,6 +73,7 @@
   }
 
   .inputFieldsProfile{
+    text-align: center;
     min-width: 200px;
     width: 100%;
     min-height: 30px;
@@ -83,6 +84,21 @@
     margin-top: 5px;
     background-color:white;
   }
+  ::-webkit-input-placeholder {
+    text-align: center;
+ }
+ 
+ :-moz-placeholder { /* Firefox 18- */
+    text-align: center;  
+ }
+ 
+ ::-moz-placeholder {  /* Firefox 19+ */
+    text-align: center;  
+ }
+ 
+ :-ms-input-placeholder {  
+    text-align: center; 
+ }
 
   .profilePic{
     width: 200px;
@@ -132,5 +148,81 @@
 .alerts{
   width: 300px;
   height: auto;
+  
+}
+
+.myTeamButton {
+  /* height: 40px;
+  background: #DFE9EE;
+  color: black;
+  padding: 10px;
+  min-width: 150px;
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
+  margin: 10px;
+  cursor: pointer;
+  border: 1px solid #707070;
+  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+  text-align: center; */
+  background: #DFE9EE;
+  color: black;
+  padding: 10px;
+  min-width: 150px;
+  min-height: 50px;
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
+  margin-bottom: 20px;
+  cursor: pointer;
+  border: 1px solid #707070;
+  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+}
+
+.myTeamsContainer{
+  display: flex;
+  height: 60px;
+}
+
+.selectTeamContainer{
+  margin-left: 10px;
+}
+
+.teamsHome{ 
+  width: 11em;  
+  height: auto;
+  max-height: 180px;
+  border: 1px solid #000000; 
+  background-color: #363338;
+  border: solid 1px #363338;
+  border-radius: 10px; 
+  padding: 4px;
+  font-weight: normal;
+  overflow-y: auto;  
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+::-webkit-scrollbar {
+  display: none;
+}
+
+.navigateButtonsTeams {
+  background: #DFE9EE;
+  color: black;
+  padding: 10px;
+  max-width: 150px;
+  min-height: 20px;
+  height: auto;
+  border-radius: 10px;
+  display:flex;
+  justify-content: center;
+  flex-wrap: wrap;
+  text-align: center;
+  margin: 0 auto;
+  margin: 10px;
+  cursor: pointer;
+  border: 1px solid #707070;
+  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
   
 }

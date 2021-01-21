@@ -92,25 +92,13 @@ const Home = () => {
                     {
                       userTeams.map((t, index) => {
                         return (
-                          <span key={index}>
-                            {/* <div> */}
-                            <div
-                              // className={styles.teamNames}
+                          <span key={index}>                            
+                            <div                              
                               className={styles.navigateButtonsTeams}
                               onClick={() => goToTeamPage(t._id)}
 
                             >{t.name}</div>
-                            {/* <div className={styles.teams}>
-                    Projects:
-                    {
-                      t.projects.map((p, index) => {
-                        return (
-                          <div key={index} className={styles.navigateButtons} onClick={() => goToProjectPage(p._id, t._id)}>{p.name}</div>
-                        )
-                      })
-                    }
-                  </div> */}
-                            {/* </div> */}
+                            
                           </span>
                         )
                       }
