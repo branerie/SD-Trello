@@ -29,11 +29,15 @@ const userSchema = new Schema({
 
     projects: [{ type: ObjectId, ref: "ProjectUserRole" }],
 
-    inbox: [String],
+    inbox: [{ type: ObjectId, ref: 'Message' }],
+
+    inboxHistory: [{ type: ObjectId, ref: 'Message' }],
 
     confirmed: { type: Boolean, default: true }, 
 
-    confirmationToken: { type: String, default: '' }
+    confirmationToken: { type: String, default: '' },
+
+    recentProjects: []
 
 });
 
