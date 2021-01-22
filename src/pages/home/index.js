@@ -90,7 +90,8 @@ const Home = () => {
                 showTeamsVisibleForm ?
                   <div className={styles.teamsHome} ref={dropdownRef}>
                     {
-                      userTeams.map((t, index) => {
+                      userTeams.length > 0
+                      ? userTeams.map((t, index) => {
                         return (
                           <span key={index}>                            
                             <div                              
@@ -103,6 +104,7 @@ const Home = () => {
                         )
                       }
                       )
+                      : "You haven't joined any teams yet"
                     }
                   </div>
                   : null
