@@ -31,7 +31,7 @@ router.post('/confirmation', confirmToken)
 
 router.post('/inbox', auth, moveMessageToHistory)
 
-router.put('/:id', updateUser)
+router.put('/:id', auth, updateUser)
 
 router.put('/recentProjects/:id', auth, updateUserRecentProjects)
 

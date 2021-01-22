@@ -26,7 +26,11 @@ async function teamInvitations(req, res, next) {
 
     try {
 
-        await models.Message.updateOne({ _id: message._id }, { $pull: { recievers: userId } }).session(session)
+        if (message.recievers.length === 1) {
+            await models.Message.deleteOne({ _id: message._id })
+        } else {
+            await models.Message.updateOne({ _id: message._id }, { $pull: { recievers: userId } }).session(session)
+        }
 
         const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamId, sendFrom: message.sendFrom, recievers: [userId], accepted }], { session })
         const createdMessage = messageCreationResult[0]

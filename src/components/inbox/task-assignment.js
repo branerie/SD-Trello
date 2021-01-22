@@ -13,28 +13,24 @@ export default function TaskAssignment({ message, setInboxHistory, options, isIn
     const params = useParams()
     const userId = params.userid
 
-    async function moveToHistory(isGoToProject) {
-        if (isInbox) {
-            const response = await fetch('/api/user/inbox', {
-                method: "POST",
-                headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": token
-                },
-                body: JSON.stringify({
-                    message
-                })
+    async function moveToHistory() {
+        const response = await fetch('/api/user/inbox', {
+            method: "POST",
+            headers: {
+                "Content-Type": "application/json",
+                "Authorization": token
+            },
+            body: JSON.stringify({
+                message
             })
-            if (!response.ok) {
-                history.push("/error")
-                return
-            } else {
-                await response.json()
-                socket.emit('message-sent', userId)
-            }
+        })
+        if (!response.ok) {
+            history.push("/error")
+            return
+        } else {
+            await response.json()
+            socket.emit('message-sent', userId)
         }
-
-        if (isGoToProject) history.push(`/project-board/${message.team._id}/${message.project._id}`)
     }
 
     async function deleteMessage() {
@@ -64,13 +60,9 @@ export default function TaskAssignment({ message, setInboxHistory, options, isIn
             <div>
                 <div className={`${styles.bold} ${styles.inline}`}>Project:</div>
                 <div className={styles.inline}>{message.project.name}</div>
-            </div>
-            <div>
-                <div className={`${styles.bold} ${styles.inline}`}>List:</div>
+                <div className={`${styles.bold} ${styles.inline} ${styles.margin}`}>List:</div>
                 <div className={styles.inline}>{message.list.name}</div>
-            </div>
-            <div>
-                <div className={`${styles.bold} ${styles.inline}`}>Task:</div>
+                <div className={`${styles.bold} ${styles.inline} ${styles.margin}`}>Task:</div>
                 <div className={styles.inline}>{message.card.name}</div>
             </div>
             <div>
@@ -80,14 +72,14 @@ export default function TaskAssignment({ message, setInboxHistory, options, isIn
             <div>
                 <Button
                     className={styles.button}
-                    onClick={() => moveToHistory(true)}
+                    onClick={() => history.push(`/project-board/${message.team._id}/${message.project._id}`)}
                     title='Go to Project'
                 />
                 {
                     isInbox &&
                     <Button
                         className={styles.button}
-                        onClick={() => moveToHistory(false)}
+                        onClick={moveToHistory}
                         title='Move to History'
                     />
                 }
