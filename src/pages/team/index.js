@@ -108,6 +108,9 @@ const TeamPage = () => {
                     }
 
                 </div>
+               
+               
+               
                 <div className={styles.rightSde}>
                     <div className={styles.rightSideTeam}>
                         <TeamMembers
@@ -123,10 +126,10 @@ const TeamPage = () => {
                         }
                     </div>
 
-
-                </div>
                 <div className={styles.pic1}>
                     <img src={pic1} alt="" />
+                </div>
+
                 </div>
             </div>
         </PageLayout>

@@ -144,18 +144,24 @@ export default function EditCard(props) {
                 <div className={styles.leftSide}>
 
                     <div className={styles.firstRow}>
+
                         <div className={styles.inputTitles}>
                             <span className={styles.pic1}>
                                 <img src={pic1} alt="pic1" />
                             </span>
                             {
                                 isActive ?
-                                    <div ref={dropdownRef}>
-                                        <span className={styles.nameContainer}>
-                                            <input className={styles.nameInput} value={name} onChange={e => setName(e.target.value)} />
+                                    // <div ref={dropdownRef}>
+                                        <span className={styles.nameContainer}
+                                        ref={dropdownRef}
+                                        >
+                                            {/* <input className={styles.nameInput} */}
+                                            <textarea className={styles.nameInput}
+                                             value={name} onChange={e => setName(e.target.value)} />
                                             <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
                                         </span>
-                                    </div> :
+                                    // </div> 
+                                    :
                                     <span className={styles.nameContainer}>
                                         <p className={styles.textName} onClick={() => setIsActive(!isActive)}>{card.name}</p>
                                     </span>

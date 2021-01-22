@@ -24,24 +24,33 @@
 
 .inputContainer{
     align-items: center;
-    width: 100%;
+    width: 50%;
     margin-left: 25%;
     margin-bottom: 2%;
     font-weight: normal;
+    display: flex;
+    
 }
 
-input{
+.inputName{
     border: solid 1px #363338;
     border-radius: 10px;
     height: 1.8em;
-    width: 30%;
-    margin-left: 2%;
+    width: 100%;
+    margin-left: 5%;
     text-align: center;
     background-color: #DFE9EE;
 }
 
 .inputContainerDescr{    
-    width: 100%;    
+    width: 50%;    
+    margin-left: 25%;
+    margin-bottom: 2%;
+    display: flex;
+}
+
+.inputContainerMembers{    
+    width: 50%;    
     margin-left: 25%;
     margin-bottom: 2%;
     display: flex;
@@ -51,18 +60,32 @@ input{
     font-weight: normal;
 }
 
-.textarea{
+.textareaDescr{
     border: solid 1px #363338;
     border-radius: 15px;
     height: 5em;
-    width: 30%;
-    margin-left: 2%;  
+    width: 100%;
+    margin-left: 5%;  
     background-color: #DFE9EE;
     resize: none; 
-    padding: 0.5%;
+    padding: 1%;
      
 }
 
+.membersText{
+    font-weight: normal;
+    width: 100%;
+}
+
+.inputMembers{
+    border: solid 1px #363338;
+    border-radius: 10px;
+    height: 1.8em;
+    width: 100%;
+    margin-left: 1%;
+    text-align: center;
+    background-color: #DFE9EE;
+}
 
 .buttonDiv{
     margin: 5%;

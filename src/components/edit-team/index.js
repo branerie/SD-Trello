@@ -254,7 +254,7 @@ export default function EditTeam(props) {
                 <div className={styles.inputContainer}>
                     <span> Name</span>
                     <input
-                        className={styles.input}
+                        className={styles.inputName}
                         value={name}
                         onChange={e => setName(e.target.value)}
                         label="Name"
@@ -265,7 +265,7 @@ export default function EditTeam(props) {
                 <div className={styles.inputContainerDescr}>
                     <span> Description</span>
                     <textarea
-                        className={styles.textarea}
+                        className={styles.textareaDescr}
                         value={description}
                         onChange={e => setDescription(e.target.value)}
                         label="Description"
@@ -276,7 +276,7 @@ export default function EditTeam(props) {
                     isAdmin ?
                         <div className={styles.membersDiv}>
                             <div className={styles.inputContainerInvite}>
-                                <span> Invite Members</span>
+                                <span className={styles.textInvite}> Invite Members</span>
                                 <input
                                     className={styles.inputInvite}
                                     autoComplete="off"

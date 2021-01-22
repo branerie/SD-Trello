@@ -24,20 +24,22 @@
 
 .inputContainer{
     align-items: center;
-    width: 100%;
+    width: 50%;
     margin-left: 25%;
     margin-bottom: 2%;
+    display: flex;
 }
 
-input{
+.inputName{
     border: solid 1px #363338;
     border-radius: 10px;
     padding: 0.5%;
     height: 1.8em;
-    min-width: 34.5%;
-    width: auto;
+    /* min-width: 34.5%; */
+    width: 100%;
     margin-left: 4%;
     text-align: center;
+    background-color: #DFE9EE;
 }
 
 .membersInput{
@@ -45,29 +47,33 @@ input{
     border-radius: 10px;
     padding: 0.5%;
     height: 1.8em;
-    min-width: 25%;
-    width: auto;
-    margin-left: 2%;
+    width: 100%;
+    margin-left: 0%;
     text-align: center;
+    background-color: #DFE9EE;
 }
 
 .inputContainerDescr{    
-    width: 100%;    
+    width: 50%;    
     margin-left: 25%;
     margin-bottom: 2%;
     display: flex;
     
 }
 
-.textarea{
+.textareaDescr{
     border: solid 1px #363338;
     border-radius: 15px;
-    padding: 0.5%;
+    padding: 1%;
     height: 5em;
-    width: 30%;
+    width: 100%;
     margin-left: 2%;
     background-color: #DFE9EE;  
     resize: none;  
+}
+
+.textInvite{
+    width: 100%;
 }
 
 

@@ -67,7 +67,6 @@ const Home = () => {
       </div>
 
       <Title title='Home' />
-      <div className={styles.welcomeUser}>{`Welcome ${userName}!`}</div>
       <div className={styles.container}>
 
         <span className={styles.leftButtons}>
@@ -85,29 +84,29 @@ const Home = () => {
                 // className={styles.teamNames}
                 className={styles.myTeamButton}
               >My Teams</ button>
-            <div className={styles.selectTeamContainer}>
-              {
-                showTeamsVisibleForm ?
-                  <div className={styles.teamsHome} ref={dropdownRef}>
-                    {
-                      userTeams.map((t, index) => {
-                        return (
-                          <span key={index}>                            
-                            <div                              
-                              className={styles.navigateButtonsTeams}
-                              onClick={() => goToTeamPage(t._id)}
+              <div className={styles.selectTeamContainer}>
+                {
+                  showTeamsVisibleForm ?
+                    <div className={styles.teamsHome} ref={dropdownRef}>
+                      {
+                        userTeams.map((t, index) => {
+                          return (
+                            <span key={index}>
+                              <div
+                                className={styles.navigateButtonsTeams}
+                                onClick={() => goToTeamPage(t._id)}
 
-                            >{t.name}</div>
-                            
-                          </span>
+                              >{t.name}</div>
+
+                            </span>
+                          )
+                        }
                         )
                       }
-                      )
-                    }
-                  </div>
-                  : null
-              }
-            </div>
+                    </div>
+                    : null
+                }
+              </div>
             </div>
           </div>
 
@@ -121,9 +120,11 @@ const Home = () => {
 
         </span>
 
-        <span className={styles.picContainer}>
+        <div className={styles.picContainer}>
           <img className={styles.pic1} src={pic1} alt="" />
-        </span>
+          <div className={styles.welcomeUser}>{`Welcome ${userName}!`}</div>
+        </div>
+
 
         <span className={styles.rightButtons}>
           {

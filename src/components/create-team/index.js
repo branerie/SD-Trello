@@ -134,29 +134,31 @@ export default function CreateTeam(props) {
                 <div className={styles.inputContainer}>
                     <span> Name</span>
                     <input
-                        className={styles.input}
+                        className={styles.inputName}
                         value={name}
                         onChange={e => setName(e.target.value)}
                         label="Name"
                         id="name"
+                        placeholder='Team Name'
                     />
                 </div>
 
                 <div className={styles.inputContainerDescr}>
                     <span className={styles.descriptionText}> Description</span>
                     <textarea
-                        className={styles.textarea}
+                        className={styles.textareaDescr}
                         value={description}
                         onChange={e => setDescription(e.target.value)}
                         label="Description"
                         id="description"
+                        placeholder='Team Description'
                     />
                 </div>
 
-                <div className={styles.inputContainer}>
-                    <span> Invite Members</span>
+                <div className={styles.inputContainerMembers}>
+                    <span className={styles.membersText}> Invite Members</span>
                     <input
-                        className={styles.input}
+                        className={styles.inputMembers}
                         autoComplete="off"
                         value={member}
                         onChange={inputMembers}
