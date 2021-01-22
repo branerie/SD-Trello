@@ -65,7 +65,8 @@ async function updateListDnD(req, res, next) {
                     populate: {
                         path: 'cards',
                         populate: {
-                            path: 'members'
+                            path: 'members',
+                            select: '-password'
                         }
                     }
                 })
@@ -73,6 +74,7 @@ async function updateListDnD(req, res, next) {
                     path: 'membersRoles',
                     populate: {
                         path: 'memberId',
+                        select: '-password'
                     }
                 })
 

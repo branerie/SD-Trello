@@ -95,25 +95,28 @@ async function getTeams(req, res, next) {
     const { _id } = req.user
 
     try {
-        const user = await models.User.findOne({ _id: _id })
+        const user = await models.User.findOne({ _id: _id }).select('-password')
         const teams = await models.Team.find({ members: _id })
             .populate({
                 path: 'projects',
                 populate: {
                     path: 'membersRoles',
                     populate: {
-                        path: 'memberId'
+                        path: 'memberId',
+                        select: '-password'
                     }
                 }
             })
             .populate({
                 path: 'projects',
                 populate: {
-                    path: 'author'
+                    path: 'author',
+                    select: '-password'
                 }
             })
             .populate({
-                path: 'members'
+                path: 'members',
+                select: '-password'
             })
             .populate({
                 path: 'requests'
@@ -136,7 +139,8 @@ async function getTeamUsers(req, res, next) {
     try {
         const team = await models.Team.findOne({ _id: teamId })
             .populate({
-                path: 'members'
+                path: 'members',
+                select: '-password'
             })
             .populate({
                 path: 'requests'
@@ -262,7 +266,7 @@ async function deleteTeam(req, res, next) {
 
             await models.Team.updateOne({ projects: idProject }, { $pull: { projects: idProject } }).session(session)
 
-            const removedProjectResult = await models.Project.deleteOne({ _id: idProject }).session(session)
+            await models.Project.deleteOne({ _id: idProject }).session(session)
         })
 
 
