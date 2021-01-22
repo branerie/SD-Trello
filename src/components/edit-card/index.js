@@ -136,6 +136,11 @@ export default function EditCard(props) {
         }
     }
 
+    const changeProgress = (value) => {
+        setProgress(value)
+        setProgressChanged(true) 
+    }
+
     return (
         <div className={styles.container}>
             <form className={styles.form} >
@@ -178,7 +183,14 @@ export default function EditCard(props) {
                                 isProgressActive ?
                                     <div ref={dropdownRef}>
                                         <span className={styles.progressInputContainer}>
-                                            <input type='number' className={styles.nameInput} value={progress} onChange={e => { setProgress(e.target.value); setProgressChanged(true) }} min="0" max="100" />%
+                                            <input 
+                                                type='number' 
+                                                className={styles.nameInput} 
+                                                value={progress} 
+                                                onChange={e => changeProgress(e.target.value)} 
+                                                min="0" 
+                                                max="100"
+                                            />%
                                             <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
                                         </span></div>
                                     :
