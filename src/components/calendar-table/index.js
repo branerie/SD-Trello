@@ -19,34 +19,14 @@ import { useParams } from "react-router-dom"
 import previous from '../../images/project-list/previous-day.svg'
 import next from '../../images/project-list/next-day.svg'
 
-
-
-
 const TableDndApp = (props) => {
     const [startDay, setStartDay] = useState(getMonday)
     const [tableData, setTableData] = useState([])
-    const [tableSize, setTableSize] = useState(10)
     const [isVisibleEditList, setIsVisibleEditList] = useState(false)
     const [currList, setCurrList] = useState('')
     const projectContext = useContext(ProjectContext)
     const userContext = useContext(UserContext)
     const params = useParams()
-
-
-    function getMonday(date) {
-        let d
-        if (date) {
-            d = new Date(date)
-        } else {
-            d = new Date()
-        }
-        var day = d.getDay(),
-            diff = d.getDate() - day + (day === 0 ? -6 : 1)
-        let thisMonday = new Date(d.setDate(diff))
-        let monday = new Date(thisMonday.getFullYear(), thisMonday.getMonth(), thisMonday.getDate())
-
-        return monday
-    }
 
     const onListClick = useCallback(async (list) => {
         const memberArr = []
@@ -64,141 +44,139 @@ const TableDndApp = (props) => {
     }, [isVisibleEditList, projectContext, userContext.user.id])
 
 
-    const cardData = useCallback(async () => {
-        let numberOfRows = 0
-
-        let data = []
+    const updateTableData = () => {
+        const data = []
         const lists = props.project.lists
-
         projectContext.setLists(lists)
 
-        projectContext.lists
-            .filter(element => !(projectContext.hiddenLists.includes(element._id)))
-            .map((list, index) => {
-                numberOfRows++
+        lists.forEach((list, index) => {
+            if (projectContext.hiddenLists.includes(list._id)) {
+                return
+            }
+
+            data.push({
+                task: (
+                    <div 
+                        key={index} 
+                        className={styles.listNameContainer} 
+                        style={{ background: list.color || '#A6A48E' }}
+                        onClick={() => onListClick(list)}
+                    >
+                        <span className={styles.listNameText} >
+                            {list.name}
+                        </span>
+                    </div>
+                ),
+                progress: '',
+                assigned: '',
+                monday: '',
+                tuesday: '',
+                wednesday: '',
+                thursday: '',
+                friday: '',
+                saturday: '',
+                sunday: '',
+                dueDate: (
+                    <div>
+                        <AddTask listId={list._id} project={props.project} />
+                    </div>
+                )
+            })
+
+
+
+            let listCards = list.cards.filter(card => {
+                if (!props.filter['Not Started'] && (card.progress === 0 || card.progress === null)) {
+                    return false
+                }
+                if (!props.filter['In Progress'] && card.progress > 0 && card.progress < 100) {
+                    return false
+                }
+                if (!props.filter['Done'] && card.progress === 100) {
+                    return false
+                }
+                return true
+            })
+
+            listCards.forEach(card => {
+
+                let cardDate = ''
+                let thisCardDate = ''
+                if (card.dueDate) {
+                    cardDate = new Date(card.dueDate)
+                    thisCardDate = cardDate.getTime()
+                }
+
+                let historyArr
+                if (card.history) {
+                    historyArr = []
+                    let taskHistory = card.history
+                    for (let i = 0; i < taskHistory.length; i++) {
+                        let currElement = taskHistory[i]
+
+                        if (i === taskHistory.length - 1) {
+                            historyArr.push(`${currElement.date}*${currElement.event}`)
+                            break;
+                        }
+
+                        if (currElement.event.slice(0, 8) === taskHistory[i + 1].event.slice(0, 8) && currElement.date === taskHistory[i + 1].date) {
+
+                        } else {
+                            historyArr.push(`${currElement.date}*${currElement.event}`)
+                        }
+                    }
+                } else {
+                    historyArr = null
+                }
+
                 data.push({
-                    task: (
-                        <div key={index} className={styles.listNameContainer} style={{ background: list.color || '#A6A48E' }}
-                            onClick={() => onListClick(list)}
-                        >
-                            <span className={styles.listNameText} >
-                                {list.name}
-                            </span>
-                        </div>
-                    ),
-                    progress: '',
-                    assigned: '',
-                    monday: '',
-                    tuesday: '',
-                    wednesday: '',
-                    thursday: '',
-                    friday: '',
-                    saturday: '',
-                    sunday: '',
+
+                    task:
+                        (
+                            <TaskName
+                                // value={card.name + '/' + card._id + '/' + list._id}
+                                card={card} listId={list._id}
+                                project={props.project} />
+                        ),
+                    progress:
+                        (
+                            <TaskProgress
+                                value={card.progress + '/' + card._id + '/' + list._id}
+                                listId={list._id}
+                                project={props.project} card={card} />
+                        ),
+                    assigned:
+                        (
+                            <TaskMembers value={card.members} card={card} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
+                        ),
+                    monday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                    tuesday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                    wednesday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                    thursday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                    friday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                    saturday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                    sunday: historyArr + '/' + thisCardDate + "/" + card.progress,
                     dueDate: (
                         <div>
-                            <AddTask listId={list._id} project={props.project} />
+                            <span>
+                                <TaskDueDate
+                                    value={(thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + ('0' + (cardDate.getMonth() + 1)).slice(-2) + '-' + cardDate.getFullYear() : ''}
+                                    cardDueDate={cardDate}
+                                    cardId={card._id}
+                                    listId={list._id}
+                                    props={props}
+                                    project={props.project}
+                                    card={card}
+                                    teamId={params.teamid}
+                                />
+                            </span>
                         </div>
                     )
                 })
-
-
-
-                let listCards = list.cards.filter(card => {
-                    if (!props.filter['Not Started'] && (card.progress === 0 || card.progress === null)) {
-                        return false
-                    }
-                    if (!props.filter['In Progress'] && card.progress > 0 && card.progress < 100) {
-                        return false
-                    }
-                    if (!props.filter['Done'] && card.progress === 100) {
-                        return false
-                    }
-                    return true
-                })
-
-                listCards.forEach(card => {
-
-                    numberOfRows++
-
-                    let cardDate = ''
-                    let thisCardDate = ''
-                    if (card.dueDate) {
-                        cardDate = new Date(card.dueDate)
-                        thisCardDate = cardDate.getTime()
-                    }
-
-                    let historyArr
-                    if (card.history) {
-                        historyArr = []
-                        let taskHistory = card.history
-                        for (let i = 0; i < taskHistory.length; i++) {
-                            let currElement = taskHistory[i]
-
-                            if (i === taskHistory.length - 1) {
-                                historyArr.push(`${currElement.date}*${currElement.event}`)
-                                break;
-                            }
-
-                            if (currElement.event.slice(0, 8) === taskHistory[i + 1].event.slice(0, 8) && currElement.date === taskHistory[i + 1].date) {
-
-                            } else {
-                                historyArr.push(`${currElement.date}*${currElement.event}`)
-                            }
-                        }
-                    } else {
-                        historyArr = null
-                    }
-
-                    data.push({
-
-                        task:
-                            (
-                                <TaskName
-                                    // value={card.name + '/' + card._id + '/' + list._id}
-                                    card={card} listId={list._id}
-                                    project={props.project} />
-                            ),
-                        progress:
-                            (
-                                <TaskProgress
-                                    value={card.progress + '/' + card._id + '/' + list._id}
-                                    listId={list._id}
-                                    project={props.project} card={card} />
-                            ),
-                        assigned:
-                            (
-                                <TaskMembers value={card.members} card={card} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
-                            ),
-                        monday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                        tuesday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                        wednesday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                        thursday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                        friday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                        saturday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                        sunday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                        dueDate: (
-                            <div>
-                                <span>
-                                    <TaskDueDate
-                                        value={(thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + ('0' + (cardDate.getMonth() + 1)).slice(-2) + '-' + cardDate.getFullYear() : ''}
-                                        cardDueDate={cardDate}
-                                        cardId={card._id}
-                                        listId={list._id}
-                                        props={props}
-                                        project={props.project}
-                                        card={card}
-                                        teamId={params.teamid}
-                                    />
-                                </span>
-                            </div>
-                        )
-                    })
-                })
-                return data
             })
+            return data
+        })
 
-        numberOfRows++
         data.push({
             task: (
                 <AddList props={props} project={props.project} />
@@ -215,127 +193,59 @@ const TableDndApp = (props) => {
             dueDate: ''
         })
 
-        setTableSize(numberOfRows)
-
-
         setTableData(data)
-        return numberOfRows
-
-    }, [projectContext, props, onListClick, params.teamid])
+    }
 
 
     useEffect(() => {
-        cardData()
-    }, [cardData])
+        updateTableData()
+    }, [])
 
-    // const DragTrComponent = (props) => {
+    function getMonday(inputDate) {
+        const date = inputDate 
+                        ? new Date(inputDate)
+                        : new Date()
 
-    //     const {children = null, rowInfo} = props;
-    //     if (rowInfo) {
-    //         // debugger;
-    //         const {original, index} = rowInfo;
-    //         const {firstName} = original;
-    //         return (
-    //             <Draggable key={firstName} index={index} draggableId={firstName}>
-    //                 {(draggableProvided, draggableSnapshot) => (
-    //                     <div
-    //                         ref={draggableProvided.innerRef}
-    //                         {...draggableProvided.draggableProps}
-    //                         {...draggableProvided.dragHandleProps}
-    //                     >
-    //                         <ReactTable.defaultProps.TrComponent>
-    //                             {children}
-    //                         </ReactTable.defaultProps.TrComponent>
-    //                     </div>
-    //                 )}
-    //             </Draggable>
-    //         )
-    //     } else
-    //         return (
-    //             <ReactTable.defaultProps.TrComponent>
-    //                 {children}
-    //             </ReactTable.defaultProps.TrComponent>
-    //         )
+        const day = date.getDay()
+        const diff = date.getDate() - day + (day === 0 ? -6 : 1)
 
-    // }
+        const lastMonday = new Date(date.setDate(diff))
+        const monday = new Date(
+                            lastMonday.getFullYear(), 
+                            lastMonday.getMonth(), 
+                            lastMonday.getDate())
 
-    // const DropTbodyComponent = (props) => {
+        return monday
+    }
 
-    //     const { children = null } = props
-
-    //     return (
-    //         <Droppable droppableId="droppable">
-    //             {(droppableProvided, droppableSnapshot) => (
-    //                 <div ref={droppableProvided.innerRef}>
-    //                     <ReactTable.defaultProps.TbodyComponent>
-    //                         {children}
-    //                     </ReactTable.defaultProps.TbodyComponent>
-    //                 </div>
-    //             )}
-    //         </Droppable>
-    //     )
-
-    // }
-
-
-    // const handleDragEnd = result => {
-    //     if (!result.destination) {
-    //         return
-    //     }
-
-    //     const newData = reorder(
-    //         tableData,
-    //         result.source.index,
-    //         result.destination.index
-    //     );
-
-    //     // tableData = newData
-
-    // };
-
-
-    // const getTrProps = (props, rowInfo) => {
-
-    //     return { rowInfo }
-    // };
-
-    // const reorder = (list, startIndex, endIndex) => {
-    //     const result = Array.from(list);
-    //     const [removed] = result.splice(startIndex, 1);
-    //     result.splice(endIndex, 0, removed);
-
-    //     return result;
-    // }   
-
-
-    const getNextWeek = async () => {
+    const getNextWeek = () => {
         var nextDay = startDay
-        await nextDay.setDate(nextDay.getDate() + 7)
-        await cardData()
+        nextDay.setDate(nextDay.getDate() + 7)
+        updateTableData()
         setStartDay(nextDay)
     }
 
-    const getLastWeek = async () => {
+    const getLastWeek = () => {
         var nextDay = startDay
         nextDay.setDate(nextDay.getDate() - 7)
-        await cardData()
+        updateTableData()
         setStartDay(nextDay)
-        await cardData()
+        updateTableData()
     }
 
-    const getNextDay = async () => {
+    const getNextDay = () => {
         var nextDay = startDay
-        await nextDay.setDate(nextDay.getDate() + 1)
-        await cardData()
+        nextDay.setDate(nextDay.getDate() + 1)
+        updateTableData()
         setStartDay(nextDay)
     }
 
-    const getLastDay = async () => {
+    const getLastDay = () => {
         var nextDay = startDay
         nextDay.setDate(nextDay.getDate() - 1)
-        await cardData()
+        updateTableData()
         setStartDay(nextDay)
-        await cardData()
+        updateTableData()
     }
 
 
@@ -394,7 +304,7 @@ const TableDndApp = (props) => {
                         ColumnData(startDay)
                     }
                     defaultPageSize={10}
-                    pageSize={tableSize}
+                    pageSize={tableData.length}
                     showPagination={false}
                     background={
                         'white'
