@@ -1,4 +1,4 @@
-import React, { useContext, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect, useCallback } from 'react'
 import LinkComponent from '../link'
 import styles from './index.module.css'
 import logo from '../../images/logo.svg'
@@ -12,17 +12,33 @@ import ProjectContext from '../../contexts/ProjectContext'
 import ButtonHideList from '../button-hide-list'
 import ButtonClean from '../button-clean'
 import UserContext from '../../contexts/UserContext'
+import userObject from '../../utils/userObject'
+import { useSocket } from '../../contexts/SocketProvider'
 
 export default function Aside({ asideOn, setAsideOn }) {
     const [listVisibility, setListVisibility] = useState(false)
     const projectContext = useContext(ProjectContext)
     const userContext = useContext(UserContext)
+    const socket = useSocket()
+    const logIn = userContext.logIn
 
     useEffect(() => {
         if (window.location.href.includes('project')) {
             setListVisibility(true)
         }
     }, [])
+
+    const updateUser = useCallback(async (response) => {
+        const user = userObject(response)
+        logIn(user)
+    }, [logIn])
+
+    useEffect(() => {
+        if (socket) {
+            socket.on('message-sent', updateUser)
+            return () => socket.off('message-sent')
+        }
+    }, [socket, updateUser])
 
     return (
         <div className={styles.aside}>
