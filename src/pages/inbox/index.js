@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useCallback, useContext } from "react"
 import { useHistory } from "react-router-dom"
 import TeamInvitationHistory from "../../components/inbox/history/team-invitation-history"
+import TaskAssignment from "../../components/inbox/task-assignment"
 import TeamInvitation from "../../components/inbox/team-invitation"
 import TeamInvitationResponse from "../../components/inbox/team-invitation-response"
 import PageLayout from "../../components/page-layout"
@@ -78,7 +79,18 @@ const InboxPage = () => {
 
                             case 'Team invitation response':
                                 return <TeamInvitationResponse
-                                    key={m._id} message={m}
+                                    key={m._id}
+                                    message={m}
+                                    setInbox={setInbox}
+                                    setInboxHistory={setInboxHistory}
+                                    options={options}
+                                    isInbox={true}
+                                />
+
+                            case 'Task assignment':
+                                return <TaskAssignment
+                                    key={m._id}
+                                    message={m}
                                     setInbox={setInbox}
                                     setInboxHistory={setInboxHistory}
                                     options={options}
@@ -110,7 +122,18 @@ const InboxPage = () => {
 
                                 case 'Team invitation response':
                                     return <TeamInvitationResponse
-                                        key={m._id} message={m}
+                                        key={m._id}
+                                        message={m}
+                                        setInbox={setInbox}
+                                        setInboxHistory={setInboxHistory}
+                                        options={options}
+                                        isInbox={false}
+                                    />
+
+                                case 'Task assignment':
+                                    return <TaskAssignment
+                                        key={m._id}
+                                        message={m}
                                         setInbox={setInbox}
                                         setInboxHistory={setInboxHistory}
                                         options={options}
