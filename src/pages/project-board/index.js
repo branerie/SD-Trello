@@ -16,11 +16,10 @@ import ButtonClean from '../../components/button-clean'
 import EditCard from '../../components/edit-card'
 import UserContext from '../../contexts/UserContext'
 import EditList from '../../components/edit-list'
-import TeamContext from '../../contexts/TeamContext'
 import userObject from '../../utils/userObject'
 
 
-export default function ProjectBoard(props) {
+export default function ProjectBoard() {
     const params = useParams()
     const history = useHistory()
     const [members, setMembers] = useState([])
@@ -35,8 +34,10 @@ export default function ProjectBoard(props) {
     const [currCard, setCurrCard] = useState('')
     const [currList, setCurrList] = useState('')
     const [isAdmin, setIsAdmin] = useState(false)
+    const [dndActive, setDndActive] = useState(false)
     const context = useContext(UserContext)
     const teamId = params.teamid
+    const token = getCookie("x-auth-token")
 
     const projectUpdate = useCallback((project) => {
 
@@ -72,7 +73,7 @@ export default function ProjectBoard(props) {
             return
         }
 
-
+        if (dndActive) return
 
         const memberArr = []
         projectContext.project.membersRoles.map(element => {
@@ -87,10 +88,7 @@ export default function ProjectBoard(props) {
             setIsAdmin(member.admin)
         }
 
-
-
-
-    }, [projectContext.project, params.projectid, projectContext, context.user.id])
+    }, [projectContext.project, params.projectid, projectContext, context.user.id, dndActive])
 
 
     const updateUserRecentProjects = useCallback(async () => {
@@ -107,7 +105,6 @@ export default function ProjectBoard(props) {
 
         updatedUser.recentProjects = arr
 
-        const token = getCookie("x-auth-token")
         const response = await fetch(`/api/user/recentProjects/${userId}`, {
             method: "PUT",
             headers: {
@@ -124,7 +121,7 @@ export default function ProjectBoard(props) {
             const user = userObject(data)
             context.logIn(user)
         }
-    }, [context, history, params.projectid, projectContext.project])
+    }, [context, history, params.projectid, projectContext.project, token])
 
     useEffect(() => {
         if (!projectContext.project || projectContext.project._id !== params.projectid) {
@@ -153,6 +150,8 @@ export default function ProjectBoard(props) {
     async function handleOnDragEnd(result) {
         if (!result.destination) return
 
+        setDndActive(true)
+
         if (result.type === 'droppableItem') {
             let position = result.destination.index
 
@@ -160,14 +159,11 @@ export default function ProjectBoard(props) {
             const previousId = filteredList[position - 1]
             position = projectContext.lists.indexOf(previousId) + 1
 
-            // console.log(filteredList, position);
-
-            // const newListsArr = [...lists]
-            // const [reorderedList] = newListsArr.splice(result.source.index, 1)
-            // newListsArr.splice(result.destination.index, 0, reorderedList)
-            // setLists(newListsArr)
-
-            const token = getCookie("x-auth-token")
+            const newListsArr = [...projectContext.lists]
+            const [reorderedList] = newListsArr.splice(result.source.index, 1)
+            newListsArr.splice(result.destination.index, 0, reorderedList)
+            projectContext.setLists(newListsArr)
+            
             const response = await fetch(`/api/projects/lists/${projectContext.project._id}/${result.draggableId}/dnd-update`, {
                 method: "PUT",
                 headers: {
@@ -182,14 +178,30 @@ export default function ProjectBoard(props) {
             if (!response.ok) {
                 history.push("/error")
             } else {
+                const updatedProject = await response.json()
+                projectContext.setProject(updatedProject)
             }
         }
 
         if (result.type === 'droppableSubItem') {
             const position = result.destination.index
+            const oldPosition = result.source.index
             const source = result.source.droppableId
             const destination = result.destination.droppableId
-            const token = getCookie("x-auth-token")
+
+            const newListsArr = [...projectContext.lists]
+            let sourcePosition = ''
+            let destinationPosition = ''
+
+            for (let list of newListsArr) {
+                if (list._id === source) sourcePosition = newListsArr.indexOf(list)
+                if (list._id === destination) destinationPosition = newListsArr.indexOf(list)
+            }
+
+            const [ task ] = newListsArr[sourcePosition].cards.splice(oldPosition, 1)
+            newListsArr[destinationPosition].cards.splice(position, 0, task)
+            projectContext.setLists(newListsArr)
+
             const response = await fetch(`/api/projects/lists/${projectContext.project._id}/${result.draggableId}/dnd-update`, {
                 method: "PUT",
                 headers: {
@@ -205,16 +217,12 @@ export default function ProjectBoard(props) {
             })
             if (!response.ok) {
                 history.push("/error")
-            } else {
-                // const newListsArr = [...lists]
-                // const [reorderedList] = newListsArr.splice(result.source.index, 1)
-                // newListsArr.splice(result.destination.index, 0, reorderedList)
-
-                // setLists(newListsArr)
             }
         }
+
         socket.emit('project-update', projectContext.project)
         socket.emit('task-team-update', teamId)
+        setDndActive(false)
     }
 
     const addList = async (e) => {
@@ -223,7 +231,6 @@ export default function ProjectBoard(props) {
         if (listName === "") {
             return
         }
-        const token = getCookie("x-auth-token")
         const response = await fetch(`/api/projects/lists/${projectContext.project._id}`, {
             method: "POST",
             headers: {
@@ -300,6 +307,7 @@ export default function ProjectBoard(props) {
                                         )
                                     })
                             }
+                            {provided.placeholder}
                             {
                                 isAdmin &&
                                 <div className={styles.list} >
@@ -313,7 +321,6 @@ export default function ProjectBoard(props) {
 
                                 </div>
                             }
-                            {provided.placeholder}
                         </div>
                     )}
                 </Droppable>
