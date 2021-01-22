@@ -24,51 +24,58 @@
 
 .inputContainer{
     align-items: center;
-    width: 100%;
+    width: 50%;
     margin-left: 25%;
-    margin-bottom: 1%;
+    margin-bottom: 2%;
+    display: flex;
 }
 
 .inputContainerInvite{
     align-items: center;
-    width: 100%;
+    width: 56%;
     margin-left: 22%;
     margin-bottom: 1%;
+    display: flex;
 }
 
-input{
+.inputName{
     border: solid 1px #363338;
     border-radius: 10px;
     height: 1.8em;
-    width: 38%;
+    width: 100%;
     margin-left: 4%;
-    text-align: center;
+    text-align: left;
     background-color:#DFE9EE;
+    padding: 2px;
+}
+
+.textInvite{
+    width: 100%;
 }
 
 .inputInvite{
     border: solid 1px #363338;
     border-radius: 10px;
     height: 1.8em;
-    width: 10%;
-    margin-left: 2%;
+    width: 100%;
+    margin-left: 0%;
     text-align: center;
     background-color:#DFE9EE;
 }
 
 .inputContainerDescr{    
-    width: 100%;    
+    width: 50%;    
     margin-left: 25%;
-    margin-bottom: 1%;
+    margin-bottom: 2%;
     display: flex;
 }
 
-.textarea{
+.textareaDescr{
     border: solid 1px #363338;
     border-radius: 10px;
     padding: 1%;
     height: 5em;
-    width: 30%;
+    width: 100%;
     margin-left: 4%;  
     background-color: #DFE9EE; 
     resize: none; 

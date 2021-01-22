@@ -7,10 +7,28 @@
     justify-content: space-between; 
     padding: 6px;
     font-weight: normal;
-    height: 35px;
+    /* height: 35px; */
+    height: fit-content;
+    max-height: 200px; 
+}
+
+.leftSide{
+    max-width: 50%;
+    height: fit-content;
+    overflow-x: hidden;
+    
+}
+
+.cardName{
+    max-height: 180px;
+    overflow-y: scroll;  
 }
 
 .bar {
+    position: relative;
+    bottom: 0%;
+
+
     height: 8px;
     width: 120px;
     border-radius: 4px;
@@ -25,6 +43,8 @@
 
 .flex {
     display: flex;
+    max-height: 30px;
+ 
 }
 
 .pen {

@@ -4,6 +4,8 @@
     height: 100%;
     border: solid 2px #707070;
     border-radius: 27px;
+    background-color:#F7F7F2;
+
 }
 
 .form {
@@ -14,6 +16,25 @@
     width: 40%;
     height: 30%;
     
+}
+
+.inputContainer{
+    /* align-items: center; */
+    width: 50%;
+    margin-left: 25%;
+    margin-bottom: 2%;
+    display: flex;
+}
+
+.inputListName{
+    border: solid 1px #363338;
+    border-radius: 10px;
+    height: 1.8em;
+    width: 100%;
+    margin-left: 4%;
+    text-align: left;
+    background-color:#DFE9EE;
+    padding: 2px;
 }
 
 .changeColor{

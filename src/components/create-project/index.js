@@ -125,27 +125,30 @@ export default function CreateProject({ hideForm }) {
                 <div className={styles.inputContainer}>
                     <span> Name</span>
                     <input
-                        className={styles.input}
+                        className={styles.inputName}
                         value={name}
                         onChange={e => setName(e.target.value)}
                         label="Name"
                         id="name"
+                        placeholder='Project Name'
                     />
                 </div>
 
                 <div className={styles.inputContainerDescr}>
                     <span> Description</span>
                     <textarea
-                        className={styles.textarea}
+                        className={styles.textareaDescr}
                         value={description}
                         onChange={e => setDescription(e.target.value)}
                         label="Description"
                         id="description"
+                        placeholder='Project Description'
+
                     />
                 </div>
 
                 <div className={styles.inputContainer}>
-                    <span> Invite Members</span>
+                    <span className={styles.textInvite}> Invite Members</span>
                     <input
                         className={styles.membersInput}
                         autoComplete="off"
@@ -155,7 +158,7 @@ export default function CreateProject({ hideForm }) {
                         onChange={(e) => setMember(e.target.value)}
                         label="Invite members"
                         id="members"
-                        placeholder='username'
+                        placeholder='Teammate Username'
                     />
                 </div>
 

@@ -65,12 +65,17 @@ export default function EditList(props) {
         <div className={styles.form}>
             <form className={styles.container} >
                 <Title title="Edit List" />
-                <Input
+
+                <div className={styles.inputContainer}>
+                    <span> Name</span>
+                <input
+                    className={styles.inputListName}
                     value={name}
                     onChange={e => setName(e.target.value)}
                     label="Name"
                     id="name"
                 />
+                </div>
                 <div className={styles.changeColor}>
                     <span>
                         Change Color:
