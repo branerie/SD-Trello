@@ -15,7 +15,7 @@ export default function List(props) {
     const dropdownRef = useRef(null);
     const cardRef = useRef(null);
     const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
+    const [isEditListActive, setIsEditListActive] = useDetectOutsideClick(dropdownRef)
     const [cardName, setCardName] = useState('')
     const history = useHistory()
     const socket = useSocket()
@@ -78,7 +78,10 @@ export default function List(props) {
 
     }, [history, cardName, props, updateSocket, isVisible, setIsVisible])
 
-    const onClick = () => setIsActive(!isActive)
+    function editList() {
+        props.showEditList()
+        setIsEditListActive(!isEditListActive)
+    }
 
     return (
         <div key={props.list._id} className={styles.list}>
@@ -91,32 +94,24 @@ export default function List(props) {
                     isAdmin &&
                     <ButtonClean
                         className={styles.button}
-                        onClick={onClick}
+                        onClick={() => setIsEditListActive(!isEditListActive)}
                         title={<img className={styles.dots} src={dots} alt="..." width="20" height="6" />}
                     />
                 }
             </div>
             <div className={styles.relative}>
-                <div
-                    ref={dropdownRef}
-                    className={`${styles.menu} ${isActive ? styles.active : ''}`}
-                >
-
-                    <div onClick={() => props.showEditList()}>
-                        {/* <ButtonClean
-                            onClick={() => setIsVisibleEdit(!isVisibleEdit)}
+                {isEditListActive && <div ref={dropdownRef} className={`${styles.menu}`} >
+                        <ButtonClean
+                            onClick={editList}
                             title='Edit'
-                        /> */}
-                        Edit
-                    </div>
-                    <div onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteList() }}>
-                        {/* <ButtonClean
+                            className={styles.edit}
+                        />
+                        <ButtonClean
                             onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteList() }}
                             title='Delete'
-                        /> */}
-                        Delete
-                    </div>
-                </div>
+                            className={styles.delete}
+                        />
+                </div>}
             </div>
             <Droppable droppableId={props.list._id} type='droppableSubItem'>
                 {(provided) => (

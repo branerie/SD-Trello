@@ -7,7 +7,7 @@ import home from '../../images/aside/home.svg'
 import tasks from '../../images/aside/tasks.svg'
 import inbox from '../../images/aside/inbox.svg'
 import bell from '../../images/aside/inbox-bell.svg'
-import settings from '../../images/aside/settings.svg'
+// import settings from '../../images/aside/settings.svg'
 import ProjectContext from '../../contexts/ProjectContext'
 import ButtonHideList from '../button-hide-list'
 import ButtonClean from '../button-clean'
@@ -61,10 +61,10 @@ export default function Aside({ asideOn, setAsideOn }) {
                     href={`/inbox/${userContext.user.id}`}
                     title={<img src={inbox} alt="inbox" width="33" height="34" />}
                 />
-                <LinkComponent
+                {/* <LinkComponent
                     href={`/profile/${userContext.user.id}`}
                     title={<img src={settings} alt="settings" width="25" height="25" />}
-                />
+                /> */}
                 {
                     userContext.user.inbox.length !== 0 &&
                     <LinkComponent
@@ -96,11 +96,11 @@ export default function Aside({ asideOn, setAsideOn }) {
                                 title='Inbox'
                                 className={styles.link}
                             />
-                            <LinkComponent
+                            {/* <LinkComponent
                                 href={`/profile/${userContext.user.id}`}
                                 title='Settings'
                                 className={styles.link}
-                            />
+                            /> */}
                         </div>
                         {listVisibility && <div className={styles.bottomright}>
                             {
