@@ -26,10 +26,6 @@
 }
 
 .bar {
-    position: relative;
-    bottom: 0%;
-
-
     height: 8px;
     width: 120px;
     border-radius: 4px;

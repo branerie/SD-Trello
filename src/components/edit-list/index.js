@@ -1,7 +1,6 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from "react-router-dom"
 import Button from '../button'
-import Input from '../input'
 import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
@@ -28,8 +27,6 @@ export default function EditList(props) {
     const listId = props.list._id
     const params = useParams()
     const teamId = params.teamid
-
-    console.log(props.list);
 
     useEffect(() => {
         setIsAdmin(isUserAdmin(userContext.user.id ,members))
@@ -58,7 +55,6 @@ export default function EditList(props) {
 
     const onColorChange = (color) => {
         setColor(color.hex)
-        setIsColorActive(false)
     }
 
     return (

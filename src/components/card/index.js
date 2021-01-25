@@ -26,7 +26,7 @@ export default function Card({ card, showEditCard }) {
             <div className={styles.leftSide}>
                 <div className={styles.cardName}>{card.name}</div>
                 {
-                    card.progress &&
+                    card.progress ?
                     <div className={styles.bar} >
                         <div
                             style={{
@@ -35,7 +35,7 @@ export default function Card({ card, showEditCard }) {
                             }}
                             className={styles.progress}
                         />
-                    </div>
+                    </div> : null
                 }
             </div>
             <div className={styles.flex}>

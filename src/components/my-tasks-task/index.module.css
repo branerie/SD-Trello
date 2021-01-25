@@ -56,6 +56,9 @@
     height: 25px;
     width: 55px;
     background-color: #F7F7F2;
+    border: 1px solid #363338;
+    border-radius: 5px;
+    text-align: center;
 }
 
 .bad-input {
