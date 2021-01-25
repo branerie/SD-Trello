@@ -211,7 +211,7 @@ export default function AddMember(props) {
                                     Add Member to Project
                                 </div>
                                 <span>
-                                    <select
+                                    <select className={styles.memberSelect}
                                         onChange={(e) => { handleSelect(e.target.value) }}>
                                         <option >Select user</option>
                                         {

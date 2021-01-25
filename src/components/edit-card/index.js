@@ -72,6 +72,7 @@ export default function EditCard(props) {
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault()
 
+
         if (Number(progress) > 100) {
             setProgress(100)
             return
@@ -107,8 +108,8 @@ export default function EditCard(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
-            const updatedCard = await response.json()
-            setCard(updatedCard)
+            const updatedCard = await response.json()            
+            setCard(updatedCard)            
             socket.emit('project-update', props.project)
             socket.emit('task-team-update', props.teamId)
             setIsActive(false)
@@ -184,7 +185,7 @@ export default function EditCard(props) {
                                 isProgressActive ?
                                     <div ref={dropdownRef}>
                                         <span className={styles.progressInputContainer}>
-                                            <input type='number' className={styles.nameInput} value={progress} onChange={e => { setProgress(e.target.value); setProgressChanged(true) }} min="0" max="100" />%
+                                            <input type='number' className={styles.progressInput} value={progress} onChange={e => { setProgress(e.target.value); setProgressChanged(true) }} min="0" max="100" />%
                                             <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
                                         </span></div>
                                     :

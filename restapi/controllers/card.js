@@ -60,7 +60,7 @@ async function updateCard(req, res, next) {
 
     try {
         await models.Card.updateOne({ _id: id }, { ...obj }).session(session)
-        const updatedCard = await models.Card.findOne({ _id: id })
+        const updatedCard = await models.Card.findOne({ _id: id }).session(session)
 
         if (newMember) {
             const messageCreationResult = await models.Message.create([{ subject: 'Task assignment', team: teamId, project: projectId, list: listId, card: cardId, sendFrom: userId, recievers: [newMember] }], { session })
@@ -70,7 +70,7 @@ async function updateCard(req, res, next) {
 
         await session.commitTransaction()
         session.endSession()
-
+        console.log(updatedCard);
         res.send(updatedCard)
 
     } catch(err) {
