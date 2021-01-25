@@ -108,8 +108,8 @@ export default function EditCard(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
-            const updatedCard = await response.json()            
-            setCard(updatedCard)            
+            const updatedCard = await response.json()
+            setCard(updatedCard)
             socket.emit('project-update', props.project)
             socket.emit('task-team-update', props.teamId)
             setIsActive(false)
@@ -152,16 +152,12 @@ export default function EditCard(props) {
                             </span>
                             {
                                 isActive ?
-                                    // <div ref={dropdownRef}>
-                                        <span className={styles.nameContainer}
-                                        ref={dropdownRef}
-                                        >
-                                            {/* <input className={styles.nameInput} */}
-                                            <textarea className={styles.nameInput}
-                                             value={name} onChange={e => setName(e.target.value)} />
-                                            <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
-                                        </span>
-                                    // </div> 
+                                    <span className={styles.nameContainer}
+                                         onBlur={handleSubmit}
+                                    >
+                                        <textarea ref={dropdownRef} className={styles.nameInput}
+                                            value={name} onChange={e => setName(e.target.value)} />
+                                    </span>
                                     :
                                     <span className={styles.nameContainer}>
                                         <p className={styles.textName} onClick={() => setIsActive(!isActive)}>{card.name}</p>
@@ -176,23 +172,26 @@ export default function EditCard(props) {
                             <span className={styles.pic2}>
                                 <img src={pic2} alt="pic2" />
                             </span>
-                            <span className={styles.nameContainer}>
+                            <span className={styles.progressContainer}>
                                 <p  >Progress</p>
                             </span>
                         </div>
                         <div>
                             {
                                 isProgressActive ?
-                                    <div ref={dropdownRef}>
-                                        <span className={styles.progressInputContainer}>
-                                            <input type='number' className={styles.progressInput} value={progress} onChange={e => { setProgress(e.target.value); setProgressChanged(true) }} min="0" max="100" />%
-                                            <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
+                                    <div onBlur={handleSubmit}
+                                    // ref={dropdownRef}
+                                    >
+                                        <span className={styles.progressInputContainer}
+                                        >
+                                            <input type='number'
+                                                ref={dropdownRef}
+                                                className={styles.progressInput} value={progress} onChange={e => { setProgress(e.target.value); setProgressChanged(true) }} min="0" max="100" />%
                                         </span></div>
                                     :
                                     <div className={styles.progressDiv} >
                                         {
-                                            (card.progress >= 0) ?
-
+                                            (card.progress ) ?
                                                 <div className={styles.bar} >
                                                     <div
                                                         style={{
@@ -256,8 +255,8 @@ export default function EditCard(props) {
 
                         <div className={styles.descriptinTitle}>
                             <p className={styles.text}>History</p>
-                        </div>                       
-                            <TaskHistory taskHistory={taskHistory} />                        
+                        </div>
+                        <TaskHistory taskHistory={taskHistory} />
                     </div>
                 </div>
 
@@ -284,7 +283,7 @@ export default function EditCard(props) {
 
 
                     <div className={styles.secondRow}>
-                        <div >                           
+                        <div >
                             <div className={styles.dueDate} >
                                 <TaskDueDate
                                     cardDueDate={dueDate}

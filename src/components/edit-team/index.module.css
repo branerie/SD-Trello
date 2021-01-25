@@ -46,7 +46,8 @@
     margin-left: 4%;
     text-align: left;
     background-color:#DFE9EE;
-    padding: 2px;
+    padding: 1%;
+    outline: none;
 }
 
 .textInvite{
@@ -59,8 +60,10 @@
     height: 1.8em;
     width: 100%;
     margin-left: 0%;
-    text-align: center;
+    text-align: left;
     background-color:#DFE9EE;
+    padding: 1%;
+    outline: none;
 }
 
 .inputContainerDescr{    
@@ -79,6 +82,7 @@
     margin-left: 4%;  
     background-color: #DFE9EE; 
     resize: none; 
+    outline: none;
 }
 
 
@@ -102,6 +106,7 @@
     border: 1px solid #707070;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+    outline: none;
   }
 
   .membersAvatars{

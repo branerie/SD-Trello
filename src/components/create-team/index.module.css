@@ -38,8 +38,10 @@
     height: 1.8em;
     width: 100%;
     margin-left: 5%;
-    text-align: center;
+    text-align: left;
     background-color: #DFE9EE;
+    outline: none;
+    padding: 1%;
 }
 
 .inputContainerDescr{    
@@ -69,6 +71,7 @@
     background-color: #DFE9EE;
     resize: none; 
     padding: 1%;
+    outline: none;
      
 }
 
@@ -83,8 +86,10 @@
     height: 1.8em;
     width: 100%;
     margin-left: 1%;
-    text-align: center;
+    text-align: left;
     background-color: #DFE9EE;
+    outline: none;
+    padding: 1%;
 }
 
 .buttonDiv{

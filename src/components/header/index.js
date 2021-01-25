@@ -234,6 +234,7 @@ const Header = ({ asideOn }) => {
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                             onClick={() => setShowSearchForm(true)}
+                            onBlur={() => {setShowSearchForm(false); setSearchInput('')}}
                         />
                         {
                             (searchInput.length > 1 && showSearchForm) ?
