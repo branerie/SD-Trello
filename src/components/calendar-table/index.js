@@ -83,19 +83,20 @@ const TableDndApp = (props) => {
                 )
             })
 
-
-
             let listCards = list.cards.filter(card => {
-                if (!props.filter['Not Started'] && (card.progress === 0 || card.progress === null)) {
-                    return false
+                if (props.filter['Not Started'] && (card.progress === 0 || card.progress === null)) {
+                    return true
                 }
-                if (!props.filter['In Progress'] && card.progress > 0 && card.progress < 100) {
-                    return false
+
+                if (props.filter['In Progress'] && card.progress > 0 && card.progress < 100) {
+                    return true
                 }
-                if (!props.filter['Done'] && card.progress === 100) {
-                    return false
+                
+                if (props.filter['Done'] && card.progress === 100) {
+                    return true
                 }
-                return true
+
+                return false
             })
 
             listCards.forEach(card => {
@@ -119,8 +120,10 @@ const TableDndApp = (props) => {
                             break;
                         }
 
-                        if (currElement.event.slice(0, 8) === taskHistory[i + 1].event.slice(0, 8) && currElement.date === taskHistory[i + 1].date) {
-
+                        const currElementSlice = currElement.event.slice(0, 8)
+                        const taskHistorySlice = taskHistory[i + 1].event.slice(0, 8)
+                        if (currElementSlice === taskHistorySlice && currElement.date === taskHistory[i + 1].date) {
+                            console.log('WTF!?!?!?!?!?')
                         } else {
                             historyArr.push(`${currElement.date}*${currElement.event}`)
                         }
@@ -199,7 +202,7 @@ const TableDndApp = (props) => {
 
     useEffect(() => {
         updateTableData()
-    }, [])
+    }, [props.filter])
 
     function getMonday(inputDate) {
         const date = inputDate 
