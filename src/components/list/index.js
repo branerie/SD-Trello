@@ -124,8 +124,8 @@ export default function List(props) {
                         {
                             props.list.cards.map((element, index) => {
                                 return (
-                                    <Draggable key={element._id} draggableId={element._id} 
-                                    index={index}
+                                    <Draggable key={element._id} draggableId={element._id}
+                                        index={index}
                                     >
                                         {(provided) => (
                                             <div>
@@ -147,18 +147,21 @@ export default function List(props) {
                     </div>
                 )}
             </Droppable>
-            {/* <div className={styles.flexend}> */}
-            {/* <ButtonClean
-                    className={styles['add-task']}
-                    onClick={() => setIsVisible(!isVisible)}
-                    title='+ Add Task'
-                /> */}
-            {/* </div> */}
             <div className={styles.flexend} >
                 {
                     isVisible ?
                         <form ref={cardRef} className={styles.container} >
-                            <input className={styles.taskInput} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} />
+                            <input
+                                ref={function (input) {
+                                    if (input != null) {
+                                        input.focus();
+                                    }
+                                }}
+                                className={styles.taskInput}
+                                type={'text'}
+                                value={cardName}
+                                onChange={e => setCardName(e.target.value)}
+                            />
                             <ButtonClean type='submit' className={styles.addlist} onClick={addCard} title='+ Add Task' project={props.project} />
                         </form> : <ButtonClean className={styles['add-task']} onClick={() => setIsVisible(!isVisible)} title='+ Add Task' />
 

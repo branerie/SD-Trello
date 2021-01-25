@@ -163,7 +163,7 @@ export default function ProjectBoard() {
             const [reorderedList] = newListsArr.splice(result.source.index, 1)
             newListsArr.splice(result.destination.index, 0, reorderedList)
             projectContext.setLists(newListsArr)
-            
+
             const response = await fetch(`/api/projects/lists/${projectContext.project._id}/${result.draggableId}/dnd-update`, {
                 method: "PUT",
                 headers: {
@@ -198,7 +198,7 @@ export default function ProjectBoard() {
                 if (list._id === destination) destinationPosition = newListsArr.indexOf(list)
             }
 
-            const [ task ] = newListsArr[sourcePosition].cards.splice(oldPosition, 1)
+            const [task] = newListsArr[sourcePosition].cards.splice(oldPosition, 1)
             newListsArr[destinationPosition].cards.splice(position, 0, task)
             projectContext.setLists(newListsArr)
 
@@ -314,7 +314,17 @@ export default function ProjectBoard() {
                                     {
                                         isActive ?
                                             <form ref={listRef} className={styles.container} >
-                                                <input className={styles.input} type={'text'} value={listName} onChange={e => setListName(e.target.value)} />
+                                                <input
+                                                    ref={function (input) {
+                                                        if (input != null) {
+                                                            input.focus();
+                                                        }
+                                                    }}
+                                                    className={styles.input}
+                                                    type={'text'}
+                                                    value={listName}
+                                                    onChange={e => setListName(e.target.value)}
+                                                />
                                                 <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
                                             </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
                                     }

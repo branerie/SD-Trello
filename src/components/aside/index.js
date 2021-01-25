@@ -75,7 +75,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                 }
             </aside>
             {
-                asideOn ?
+                asideOn &&
                     <div className={styles.menu}>
                         <div className={styles.topright}>
                             <div className={styles.logo}>
@@ -104,14 +104,14 @@ export default function Aside({ asideOn, setAsideOn }) {
                         </div>
                         {listVisibility && <div className={styles.bottomright}>
                             {
-                                projectContext.lists.map((element, index) => {
+                                projectContext.lists.map((element) => {
                                     return (
                                         <ButtonHideList key={element._id} list={element} type={'aside'} />
                                     )
                                 })
                             }
                         </div>}
-                    </div> : null
+                    </div>
             }
 
         </div>
