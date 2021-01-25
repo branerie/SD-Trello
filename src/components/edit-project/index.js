@@ -27,7 +27,7 @@ export default function EditProject(props) {
 
     useEffect(() => {
         setIsAdmin(isUserAdmin(userContext.user.id, members))
-    }, [members, userContext.user.id])
+    }, [members, userContext.user.id, props])
 
 
 

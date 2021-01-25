@@ -13,10 +13,9 @@
 }
 
 .leftSide{
-    max-width: 50%;
+    width: 68%;
     height: fit-content;
-    overflow-x: hidden;
-    
+    overflow-x: hidden;    
 }
 
 .cardName{
@@ -24,6 +23,17 @@
     overflow-wrap:break-word;
     overflow-y: scroll;  
 }
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.cardName::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .cardName {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
 
 .bar {
     position: relative;
@@ -44,8 +54,9 @@
 
 .flex {
     display: flex;
-    max-height: 30px;
- 
+    justify-content: flex-end;
+    width: 32%;
+    max-height: 30px; 
 }
 
 .pen {
@@ -74,4 +85,7 @@
 
 .avatar{
     margin-bottom: 2%;
+    width: 50px;
+    height: 50px;
 }
+
