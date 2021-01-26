@@ -56,7 +56,6 @@ const MyTasksPage = () => {
 
     function taskTeamUpdate(projects) {
         setProjects(projects)
-        console.log('update');
     }
 
     return (

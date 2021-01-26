@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useRef, useState } from 'react'
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import styles from './index.module.css'
 import Avatar from 'react-avatar'
 import getCookie from '../../utils/cookie'
@@ -23,11 +23,13 @@ export default function AddMember(props) {
     const isAdmin = props.admin
     const history = useHistory()
     const projectId = props.project._id
+    const params = useParams()
 
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
-    }, [socket, props.project])
+        socket.emit('team-update', params.teamid)
+    }, [socket, props.project, params.teamid])
 
 
     const getTeamUsers = async () => {
