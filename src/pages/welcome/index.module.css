@@ -87,13 +87,6 @@
   right: 35px;
   top: 40px;
 }
- .topright{
-  position: absolute;
-  right:  0; 
-  top: 0;
-  width: 50%;
-}
-
 
 .pic1 {     
   overflow: hidden;
@@ -103,16 +96,15 @@
   width: auto;
   height: auto;
   max-width:800px;
+  width: 50vw;
 }
 
 .pic2 {  
   /* z-index: 1;   */
   position: absolute;
-  right: 350px; 
+  right: 7vw; 
   top: 100px;
-  width: auto;
-  height: auto;
-  max-width: 200px;
+  width: 30vw;
 }
 
 .lowerDivtopContainer{

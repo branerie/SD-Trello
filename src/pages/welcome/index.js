@@ -59,12 +59,11 @@ const WelcomePage = () => {
             </div>
             <div className={styles.topright}>
               <div className={styles.pic1}>
-                <img src={pic1} alt="" />
-                {/* width="800" height="630" */}
+                <img src={pic1} alt="" width='100%' />
+                
               </div>
               <div className={styles.pic2}>
-                <img src={pic2} alt="" />
-                {/* width="450" height="350" */}
+                <img src={pic2} alt="" width='100%' />
               </div>
             </div>
           </div>
