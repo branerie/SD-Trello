@@ -96,6 +96,8 @@ export default function ProjectBoard() {
         let updatedUser = { ...context.user }
         let oldArr = [...updatedUser.recentProjects]
 
+        if (oldArr[2]._id === params.projectid) return
+
         const arr = oldArr.filter(p => p._id !== params.projectid)
         arr.push({ _id: params.projectid, name: projectContext.project.name })
 
@@ -103,7 +105,7 @@ export default function ProjectBoard() {
             arr.shift()
         }
 
-        updatedUser.recentProjects = arr
+        // updatedUser.recentProjects = arr
 
         const response = await fetch(`/api/user/recentProjects/${userId}`, {
             method: "PUT",
@@ -129,7 +131,7 @@ export default function ProjectBoard() {
         } else {
             updateUserRecentProjects()
         }
-    }, [params.projectid, projectContext.project])
+    }, [params.projectid, projectContext.project, updateUserRecentProjects])
 
 
     if (!projectContext.project || projectContext.project._id !== params.projectid) {

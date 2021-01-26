@@ -20,8 +20,6 @@ const Home = () => {
   const userTeams = userContext.user.teams
   const userId = userContext.user._id
 
-  console.log(userContext.user);
-
   const goToTeamPage = (teamId) => {
     history.push(`/team/${teamId}`)
   }
