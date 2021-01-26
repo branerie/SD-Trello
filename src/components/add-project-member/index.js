@@ -213,7 +213,7 @@ export default function AddMember(props) {
                                         <div>
                                                 Add Member to Project
                                 
-                                            <span>
+                                            <div>
                                                 <select className={styles.memberSelect}
                                                     onChange={(e) => { handleSelect(e.target.value) }}>
                                                     <option >Select user</option>
@@ -224,8 +224,8 @@ export default function AddMember(props) {
 
                                                     }
                                                 </select>
-                                            </span>
                                             <span className={styles.addButton} onClick={handleAdd} >Add</span>
+                                            </div>
                                         </div>
                                         :
                                         <div>There are no more members in your team</div>                                      

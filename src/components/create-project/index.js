@@ -22,6 +22,11 @@ export default function CreateProject({ hideForm }) {
 
     const handleSubmit = async (event) => {
         event.preventDefault()
+
+        if(name === ''){
+            return
+        }
+
         const teamId = params.teamid
         const token = getCookie("x-auth-token")
         const response = await fetch('/api/projects', {
@@ -91,34 +96,7 @@ export default function CreateProject({ hideForm }) {
         <div className={styles.form}>
             <form className={styles.container} onSubmit={handleSubmit}>
 
-            {
-                    showMembers && <div className={styles.members}>
-                        {
-                            allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
-                                .filter((e) => {
-                                    const found = members.find(element => element.username === e.username)
-                                    if (found) {
-                                        return false
-                                    } else {
-                                        return true
-                                    }
-                                })
-                                .sort((a, b) => a.username.localeCompare(b.username))
-                                .map(u => {
-                                    return (
-                                        <ButtonClean
-                                            key={u._id}
-                                            className={styles.user}
-                                            onClick={() => addMember(u)}
-                                            title={<div className={styles.member}>
-                                                <div>{u.username}</div>
-                                                <div className={styles.email}>{u.email}</div>
-                                            </div>}
-                                        />)
-                                })
-                        }
-                    </div>
-                }
+           
 
                 <div className={styles.title} >Create New Project</div>
 
@@ -149,6 +127,8 @@ export default function CreateProject({ hideForm }) {
 
                 <div className={styles.inputContainer}>
                     <span className={styles.textInvite}> Invite Members</span>
+
+                    <div className={styles.inviteInput}>
                     <input
                         className={styles.membersInput}
                         autoComplete="off"
@@ -160,6 +140,38 @@ export default function CreateProject({ hideForm }) {
                         id="members"
                         placeholder='Teammate Username'
                     />
+
+                    <div className={styles.selectForInvite}>
+                    {
+                    showMembers && <div className={styles.members}>
+                        {
+                            allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
+                                .filter((e) => {
+                                    const found = members.find(element => element.username === e.username)
+                                    if (found) {
+                                        return false
+                                    } else {
+                                        return true
+                                    }
+                                })
+                                .sort((a, b) => a.username.localeCompare(b.username))
+                                .map(u => {
+                                    return (
+                                        <ButtonClean
+                                            key={u._id}
+                                            className={styles.user}
+                                            onClick={() => addMember(u)}
+                                            title={<div className={styles.member}>
+                                                <div>{u.username}</div>
+                                                <div className={styles.email}>{u.email}</div>
+                                            </div>}
+                                        />)
+                                })
+                        }
+                    </div>
+                    }
+                    </div>
+                    </div>
                 </div>
 
                 <div className={styles.membersAvatars}>

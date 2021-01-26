@@ -6,6 +6,7 @@
     width: 45%;
     min-height: 70%;
     height: auto;
+    max-height: 90vh;
     background-color:#EDF5F9;
     border: solid 2px #707070;
     border-radius: 27px;  
@@ -70,6 +71,7 @@
     margin: 0 auto;
     padding: 3px;
     text-align: left;
+    outline: none;
 }
 .passInput{
     border: solid 1px #363338;
@@ -79,7 +81,7 @@
     margin: 0 auto;
     padding: 3px;
     text-align: left;
-
+    outline: none;
 }
 
 .loginButton{
@@ -94,6 +96,7 @@
     font-size: 1.5em;
     font-weight: 600;
     cursor: pointer;
+    outline: none;
   }
 
   .buttonDivLogin{
@@ -152,4 +155,5 @@
     align-items: center;
     display: flex;
     justify-content: space-between;
+    outline: none;
   }

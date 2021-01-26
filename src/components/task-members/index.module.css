@@ -94,6 +94,17 @@
     min-width: 180px;
 }
 
+
+.allCardMembers::-webkit-scrollbar {
+  display: none;
+}
+
+
+.allCardMembers {
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+
 .eachMember{
     margin: 3px;
     display: block;
