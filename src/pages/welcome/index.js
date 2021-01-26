@@ -58,14 +58,14 @@ const WelcomePage = () => {
               </span>
             </div>
             <div className={styles.topright}>
-              <div className={styles.pic1}>
-                <img src={pic1} alt="" />
+              {/* <div className={styles.pic1}> */}
+                <img src={pic1} alt="" className={styles.pic1}/>
                 {/* width="800" height="630" */}
-              </div>
-              <div className={styles.pic2}>
-                <img src={pic2} alt="" />
+              {/* </div> */}
+              {/* <div className={styles.pic2}> */}
+                <img src={pic2} alt="" className={styles.pic2}/>
                 {/* width="450" height="350" */}
-              </div>
+              {/* </div> */}
             </div>
           </div>
 
