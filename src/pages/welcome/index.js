@@ -58,6 +58,7 @@ const WelcomePage = () => {
               </span>
             </div>
             <div className={styles.topright}>
+
               <div className={styles.pic1}>
                 <img src={pic1} alt="" width='100%' />
                 
@@ -65,6 +66,7 @@ const WelcomePage = () => {
               <div className={styles.pic2}>
                 <img src={pic2} alt="" width='100%' />
               </div>
+
             </div>
           </div>
 

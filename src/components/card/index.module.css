@@ -68,7 +68,8 @@
 .members{
     overflow-y: scroll;
     -ms-overflow-style: none; 
-    scrollbar-width: none;  
+    scrollbar-width: none;
+    cursor: pointer;  
 }
 
 /* .avatar{
