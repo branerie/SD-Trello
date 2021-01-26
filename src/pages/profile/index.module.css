@@ -10,13 +10,13 @@
   }
   
   .picContainer{
-    width: auto;
-    margin-left: 5%;
+    width: 30%;
+    /* margin-left: 5%; */
   }
   
   .leftButtons{
-    width: 13%;
-    margin-left: 100px;
+    width: 15%;
+    margin-left: 50px;
   }
   .middleButtons{
     width: 20%;

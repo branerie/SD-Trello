@@ -172,7 +172,7 @@ const ProfilePage = () => {
         </div>
 
 
-        <span className={styles.middleButtons}>
+        <div className={styles.middleButtons}>
 
 
           <div>
@@ -229,10 +229,10 @@ const ProfilePage = () => {
           <div className={styles.buttonDivSave}>
             <button type='submit' className={styles.saveButton} onClick={(e) => handleSubmit(e)}>Save</button>
           </div>
-        </span>
+        </div>
 
 
-        <span className={styles.picContainer}>
+        <div className={styles.picContainer}>
 
 
           <div className={styles.profilePicContainer}>
@@ -247,9 +247,9 @@ const ProfilePage = () => {
 
 
           <div>
-            <img className={styles.pic1} src={pic1} alt="" width="80%" height="80%" />
+            <img className={styles.pic1} src={pic1} alt="" width="100%" height="100%" />
           </div>
-        </span>
+        </div>
 
       </div>
 
