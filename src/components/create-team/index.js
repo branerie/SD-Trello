@@ -100,39 +100,15 @@ export default function CreateTeam(props) {
 
     }
 
+    const onBlur = () => {
+        setTimeout(() => setShowMembers(false), 120)
+    }
+
     return (
         <div className={styles.form}>
 
             <form className={styles.container} onSubmit={handleSubmit}>
-                {
-                    showMembers &&
-                    <div className={styles.members}>
-                        {
-                            allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
-                                .filter((e) => {
-                                    const found = members.find(element => element.username === e.username)
-                                    if (found) {
-                                        return false
-                                    } else {
-                                        return true
-                                    }
-                                })
-                                .sort((a, b) => a.username.localeCompare(b.username))
-                                .map(u => {
-                                    return (
-                                        <ButtonClean
-                                            key={u._id}
-                                            className={styles.user}
-                                            onClick={() => addMember(u)}
-                                            title={<div>
-                                                <div>{u.username}</div>
-                                                <div className={styles.email}>{u.email}</div>
-                                            </div>}
-                                        />)
-                                })
-                        }
-                    </div>
-                }
+
 
                 <div className={styles.title} >Create New Team</div>
 
@@ -162,15 +138,52 @@ export default function CreateTeam(props) {
 
                 <div className={styles.inputContainerMembers}>
                     <span className={styles.membersText}> Invite Members</span>
-                    <input
-                        className={styles.inputMembers}
-                        autoComplete="off"
-                        value={member}
-                        onChange={inputMembers}
-                        label="Invite members"
-                        id="members"
-                        placeholder='username'
-                    />
+
+                    <div className={styles.inviteInput}>
+                        <input
+                            className={styles.inputMembers}
+                            autoComplete="off"
+                            value={member}
+                            onChange={inputMembers}
+                            label="Invite members"
+                            id="members"
+                            placeholder='username'
+                            onBlur={onBlur}
+
+                        />
+
+                        <div className={styles.selectForInvite}>
+                            {
+                                showMembers &&
+                                <div className={styles.members}>
+                                    {
+                                        allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
+                                            .filter((e) => {
+                                                const found = members.find(element => element.username === e.username)
+                                                if (found) {
+                                                    return false
+                                                } else {
+                                                    return true
+                                                }
+                                            })
+                                            .sort((a, b) => a.username.localeCompare(b.username))
+                                            .map(u => {
+                                                return (
+                                                    <ButtonClean
+                                                        key={u._id}
+                                                        className={styles.user}
+                                                        onClick={() => addMember(u)}
+                                                        title={<div>
+                                                            <div>{u.username}</div>
+                                                            <div className={styles.email}>{u.email}</div>
+                                                        </div>}
+                                                    />)
+                                            })
+                                    }
+                                </div>
+                            }
+                        </div>
+                    </div>
                 </div>
 
 
