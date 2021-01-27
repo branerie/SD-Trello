@@ -1,37 +1,53 @@
 .container {
-    width: 80%;   
+    width: 80%; 
+    min-width: 500px;  
     background-color:#F7F7F2;
-    margin: 50px;
+    /* margin: 40px; */
     margin-left: 30px;
-    min-height: 120px;
+    margin-top: 20px;
+    /* margin-bottom: 10px; */
+    height: 100px;
     border-radius: 19px;
     border: solid 1px #707070;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
     display: flex;
     flex-wrap: wrap;
     justify-content: space-between;
-    padding: 2%;
+    padding: 1%;
+    overflow-y: scroll;
+    flex-grow: 1;
 }
 
+/* Hide scrollbar for Chrome, Safari and Opera */
+.container::-webkit-scrollbar {
+    display: none;
+  }
+  
+  /* Hide scrollbar for IE, Edge and Firefox */
+  .container {
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  /* Firefox */
+  }
+
 .leftSide{
-    margin-top: 2%;
+    /* margin-top: 1%; */
     /* max-width: 500px; */
     /* display: flex; */
     /* align-items: stretch; */
 }
 
 .key {
-    padding: 15px;
+    padding: 10px;
     text-decoration: none;
     font-size: 1.6em;
     font-weight: 600;
     color: black;
-    margin-top: 10%;
+    margin-top: 2%;
     /* width: 70%; */
 }
 
 .value {
-    padding: 15px;
+    padding: 10px;
     text-decoration: none;
     font-size: 1em;
     font-weight: 400;
@@ -65,8 +81,8 @@
     margin-top: auto;
     /* margin-left: 70%; */
     font-size: 1em;
-    margin-right: 5%;
-    /* margin-bottom: 2%; */
+    margin-right: 1%;
+    margin-bottom: 1%;
     /* padding: 2px; */
     /* border-radius: 5px; */
     text-align: center;

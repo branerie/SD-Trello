@@ -1,0 +1,52 @@
+.containerMemb{
+    width: 0;
+    height: 0;
+}
+
+
+
+
+.allCardMembers{
+    position: relative;
+    top: 0;
+    left: 60%;
+    /* text-align: end; */
+    /* margin-right: 10%; */
+    /* min-height: 50px;   */
+    overflow-y: scroll;
+    max-height: 150px;
+    border: 1px solid #000000; 
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    margin: 10px;  
+    padding: 5px; 
+    z-index: 50;
+    margin-left: 180px;
+    margin-top: 20px;
+    width: fit-content;
+    min-width: 180px;
+}
+
+
+.allCardMembers::-webkit-scrollbar {
+  display: none;
+}
+
+
+.allCardMembers {
+  -ms-overflow-style: none; 
+  scrollbar-width: none;  
+}
+
+.eachMember{
+    margin: 3px;
+    display: block;
+}
+
+.avatar{
+    margin-right: 5px;   
+}
+
+/* #allCardMembers:hover .hide{
+    visibility: visible;
+} */

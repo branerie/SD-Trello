@@ -27,7 +27,7 @@ export default function EditProject(props) {
 
     useEffect(() => {
         setIsAdmin(isUserAdmin(userContext.user.id, members))
-    }, [members, userContext.user.id])
+    }, [members, userContext.user.id, props])
 
 
 
@@ -76,10 +76,11 @@ export default function EditProject(props) {
         <div className={styles.form}>
             <form className={styles.container} >
                 <div className={styles.title} >Project</div>
+                
                 <div className={styles.inputContainer}>
                     <span> Name</span>
                     <input
-                        className={styles.input}
+                        className={styles.inputPrName}
                         value={name}
                         onChange={e => setName(e.target.value)}
                         label="Name"
@@ -89,11 +90,12 @@ export default function EditProject(props) {
                 <div className={styles.inputContainerDescr}>
                     <span> Description</span>
                     <textarea
-                        className={styles.textarea}
+                        className={styles.textareaDescr}
                         value={description}
                         onChange={e => setDescription(e.target.value)}
                         label="Description"
                         id="description"
+                        placeholder='Project Description'
                     />
                 </div>
                 <div className={styles.editMembers}>

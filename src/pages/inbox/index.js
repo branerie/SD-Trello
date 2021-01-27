@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext } from "react"
+import React, { useState, useEffect, useCallback } from "react"
 import { useHistory } from "react-router-dom"
 import TeamInvitationHistory from "../../components/inbox/history/team-invitation-history"
 import TaskAssignment from "../../components/inbox/task-assignment"
@@ -7,9 +7,7 @@ import TeamInvitationResponse from "../../components/inbox/team-invitation-respo
 import PageLayout from "../../components/page-layout"
 import Title from "../../components/title"
 import { useSocket } from "../../contexts/SocketProvider"
-import UserContext from "../../contexts/UserContext"
 import getCookie from "../../utils/cookie"
-import userObject from "../../utils/userObject"
 import styles from './index.module.css'
 
 const InboxPage = () => {
@@ -17,8 +15,6 @@ const InboxPage = () => {
     const [inboxHistory, setInboxHistory] = useState([])
     const history = useHistory()
     const socket = useSocket()
-    const userContext = useContext(UserContext)
-    const logIn = userContext.logIn
     const token = getCookie("x-auth-token")
     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }
 
@@ -45,11 +41,9 @@ const InboxPage = () => {
     }, [getInbox])
 
     const updateUser = useCallback(async (response) => {
-        const user = userObject(response)
-        logIn(user)
         setInbox(response.inboxUser.inbox)
         setInboxHistory(response.inboxUser.inboxHistory)
-    }, [logIn])
+    }, [])
 
     useEffect(() => {
         if (socket) {

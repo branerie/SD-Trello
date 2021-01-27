@@ -6,10 +6,12 @@
     width: 45%;
     min-height: 70%;
     height: auto;
+    max-height: 90vh;
     background-color:#EDF5F9;
     border: solid 2px #707070;
-    border-radius: 27px;
+    border-radius: 27px;  
     padding: 2%;
+    overflow-y: auto;
 }
 
 .alerts{
@@ -50,7 +52,7 @@
 
 .inputContainer{
     align-items: center;
-    width: 30%;
+    width: 40%;
     margin: 5% auto;
     margin-top: 3%;
     margin-bottom: 2%;
@@ -69,6 +71,9 @@
     height: 1.5em;
     width: 100%;
     margin: 0 auto;
+    text-align: left;
+    padding: 2px;
+    outline: none;
 }
 
 .passInstructions{
@@ -89,6 +94,7 @@
     font-size: 1.5em;
     font-weight: 600;
     cursor: pointer;
+    outline: none;
   }
 
   .buttonDivLogin{
@@ -146,4 +152,5 @@
     align-items: center;
     display: flex;
     justify-content: space-between;
+    outline: none;
   }

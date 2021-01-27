@@ -10,12 +10,20 @@ const ColumnData = (startDay) => {
     }
 
     const cellDiv = (message, color, messageColor) => {
+        const progressStyle = { 
+            background: color, 
+            color: messageColor,
+            width: '100%',
+            textAlign: 'center',
+            padding: '5px', 
+            fontSize: '14px',
+            border: '1px solid #363338',
+            borderRadius: '5px'
+        }
+
         return (
             <div className={styles.daylyProgress}>
-                <div 
-                    style={{ background: color, color: messageColor }} 
-                    className={styles['progress-bar']}
-                >
+                <div style={progressStyle}>
                     {message}
                 </div>
             </div>

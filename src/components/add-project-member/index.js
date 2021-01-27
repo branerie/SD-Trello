@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useRef, useState } from 'react'
-import { useHistory } from "react-router-dom"
+import { useHistory, useParams } from "react-router-dom"
 import styles from './index.module.css'
 import Avatar from 'react-avatar'
 import getCookie from '../../utils/cookie'
@@ -23,17 +23,19 @@ export default function AddMember(props) {
     const isAdmin = props.admin
     const history = useHistory()
     const projectId = props.project._id
+    const params = useParams()
 
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
-    }, [socket, props.project])
+        socket.emit('team-update', params.teamid)
+    }, [socket, props.project, params.teamid])
 
 
     const getTeamUsers = async () => {
         let currentTeamId = ''
 
-        await teamContext.teams.map(t => {
+        teamContext.teams.map(t => {
             return (
                 t.projects.map(p => {
                     if (p._id === projectId) {
@@ -207,84 +209,93 @@ export default function AddMember(props) {
                     <span>
                         {isActive ?
                             <div className={styles.members} ref={dropdownRef}>
-                                <div>
-                                    Add Member to Project
-                                </div>
-                                <span>
-                                    <select
-                                        onChange={(e) => { handleSelect(e.target.value) }}>
-                                        <option >Select user</option>
-                                        {
-                                            users.map((element) => (
-                                                <option key={element._id} value={element._id}>{element.username}</option>
-                                            ))
-                                        }
-                                    </select>
-                                </span>
-                                <span className={styles.addButton} onClick={handleAdd} >Add</span>
-                            </div>
+                                {
+                                    (users.length > 0) ?
+                                    
+                                        <div>
+                                                Add Member to Project
+                                
+                                            <div>
+                                                <select className={styles.memberSelect}
+                                                    onChange={(e) => { handleSelect(e.target.value) }}>
+                                                    <option >Select user</option>
+                                                    {
+                                                        users.map((element) => (
+                                                            <option key={element._id} value={element._id}>{element.username}</option>
+                                                        ))
 
+                                                    }
+                                                </select>
+                                            <span className={styles.addButton} onClick={handleAdd} >Add</span>
+                                            </div>
+                                        </div>
+                                        :
+                                        <div>There are no more members in your team</div>                                      
+                                    
+                                }
+                            </div>
                             :
                             <DragDropContext onDragEnd={handleOnDragEnd}>
 
 
-                                <div className={styles.adminsContainer}>
-                                    <span className={styles.title}>Admins:</span>
-                                    <Droppable droppableId={"admins"}>
-                                        {(provided) => (
-                                            <div className={styles.droppable} ref={provided.innerRef}  {...provided.droppableProps} >
-                                                {
-                                                    members.filter(a => a.admin === true).map((element, index) => {
-                                                        return (
-                                                            <Draggable key={element.memberId._id} draggableId={element._id} index={index}>
-                                                                {(provided) => (
-                                                                    <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                                        <Avatar name={element.memberId.username} size={40} round={true} maxInitials={2} />
-                                                                        {provided.placeholder}
-                                                                    </span>
-                                                                )}
-                                                            </Draggable>
-                                                        )
-                                                    })
-                                                }
-                                                {provided.placeholder}
-                                            </div>
-                                        )}
-                                    </Droppable>
-                                </div>
+                            <div className={styles.adminsContainer}>
+                                <span className={styles.title}>Admins:</span>
+                                <Droppable droppableId={"admins"}>
+                                    {(provided) => (
+                                        <div className={styles.droppable} ref={provided.innerRef}  {...provided.droppableProps} >
+                                            {
+                                                members.filter(a => a.admin === true).map((element, index) => {
+                                                    return (
+                                                        <Draggable key={element.memberId._id} draggableId={element._id} index={index}>
+                                                            {(provided) => (
+                                                                <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+                                                                    <Avatar name={element.memberId.username} size={40} round={true} maxInitials={2} />
+                                                                    {provided.placeholder}
+                                                                </span>
+                                                            )}
+                                                        </Draggable>
+                                                    )
+                                                })
+                                            }
+                                            {provided.placeholder}
+                                        </div>
+                                    )}
+                                </Droppable>
+                            </div>
 
 
 
-                                <div className={styles.membersContainer}>
-                                    <span className={styles.title}>Members:</span>
-                                    <Droppable droppableId={"members"}>
-                                        {(provided) => (
-                                            <div className={styles.droppableMembers} ref={provided.innerRef} {...provided.droppableProps}>
-                                                {
-                                                    members.filter(a => a.admin !== true).map((element, index) => {
-                                                        return (
-                                                            <Draggable key={element.memberId._id} draggableId={element._id} index={index} >
-                                                                {(provided) => (
+                            <div className={styles.membersContainer}>
+                                <span className={styles.title}>Members:</span>
+                                <Droppable droppableId={"members"}>
+                                    {(provided) => (
+                                        <div className={styles.droppableMembers} ref={provided.innerRef} {...provided.droppableProps}>
+                                            {
+                                                members.filter(a => a.admin !== true).map((element, index) => {
+                                                    return (
+                                                        <Draggable key={element.memberId._id} draggableId={element._id} index={index} >
+                                                            {(provided) => (
 
-                                                                    <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                                        <Avatar key={index} name={element.memberId.username} size={40} round={true} maxInitials={2}
-                                                                            onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, element.memberId) }} />
-                                                                        {provided.placeholder}
-                                                                    </span>
-                                                                )}
-                                                            </Draggable>
-                                                        )
-                                                    })
-                                                }
-                                                {provided.placeholder}
-                                            </div>
-                                        )}
-                                    </Droppable>
-                                    <span className={styles.addButton} onClick={() => { setIsActive(!isActive); getTeamUsers() }} >Add</span>
-                                </div>
+                                                                <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+                                                                    <Avatar key={index} name={element.memberId.username} size={40} round={true} maxInitials={2}
+                                                                        onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, element.memberId) }} />
+                                                                    {provided.placeholder}
+                                                                </span>
+                                                            )}
+                                                        </Draggable>
+                                                    )
+                                                })
+                                            }
+                                            {provided.placeholder}
+                                        </div>
+                                    )}
+                                </Droppable>
+                                <span className={styles.addButton} onClick={() => { setIsActive(!isActive); getTeamUsers() }} >Add</span>
+                            </div>
 
 
-                            </DragDropContext>
+                        </DragDropContext>
+                        
                         }
                     </span >
                     :

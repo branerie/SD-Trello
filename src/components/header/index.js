@@ -228,11 +228,13 @@ const Header = ({ asideOn }) => {
 
                 <div className={`${styles.links} ${styles.font}`}>
                     <span>
-                        <input className={styles.input} type='text' placeholder='Search...'
+                        <input className={styles.input} type='text'
+                            placeholder={!showSearchForm ? 'Search...' : 'Enter Project or Team name'}
                             autoComplete="off"
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                             onClick={() => setShowSearchForm(true)}
+                            onBlur={() => {setShowSearchForm(false); setSearchInput('')}}
                         />
                         {
                             (searchInput.length > 1 && showSearchForm) ?

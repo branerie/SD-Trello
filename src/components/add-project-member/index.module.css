@@ -34,7 +34,9 @@
 
 .bigContainer{   
     /* margin: 5%;  */
-    width: 100%;
+    width: 90%;
+    margin: 0 auto;
+    margin-left: 5%;
     height: auto; 
     min-height: 100%;   
     /* display: flex;  */
@@ -53,13 +55,27 @@
 
 .title{
     width: 20%;
+    margin-right: 1%;
 }
 
 .members{
-    /* width: 90%; */
+    width: 70%;
     margin: 0, auto;
+    margin-left: 23%;
     /* height: 90%; */
     /* min-height: 45px; */
+}
+
+.memberSelect {
+    min-width: 80%;
+    width: auto;
+    min-width: 180px;
+    height: 40px;
+    margin: 4%;
+    margin-left: 0;
+    background-color:#DFE9EE;
+    border: solid 1px #363338;
+    border-radius: 10px;
 }
 
 .addButton{

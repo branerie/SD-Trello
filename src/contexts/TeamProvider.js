@@ -12,8 +12,6 @@ function TeamProvider({ children }) {
   const userContext = useContext(UserContext)
   const socket = useSocket()
 
-  console.log(teams);
-
   function getCurrentProjects(teamId) {
     const current = teams.find(t => t._id === teamId)
     if (current) {

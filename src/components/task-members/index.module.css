@@ -66,4 +66,59 @@
 
   .eachMember{
     margin: 1px;
+    cursor: pointer;
   }
+
+  .containerMemb{
+    position: relative; 
+    right: 180px;   
+    width: 0;
+    height: 0;
+    z-index: 50;
+    text-align: left;
+}
+
+
+
+
+.allCardMembers{   
+    overflow-y: scroll;
+    max-height: 150px;
+    border: 1px solid #000000; 
+    background-color: #FFFFFF;
+    border-radius: 10px;
+    margin-right: 50%;  
+    padding: 5px; 
+    z-index: 50;
+    width: fit-content;
+    min-width: 180px;
+}
+
+
+.allCardMembers::-webkit-scrollbar {
+  display: none;
+}
+
+
+.allCardMembers {
+  -ms-overflow-style: none;
+  scrollbar-width: none; 
+}
+
+.eachMember{
+    margin: 3px;
+    display: block;
+}
+
+.avatar{
+    margin-right: 1px;   
+}
+
+.membersDiv{
+  display: flex;
+  justify-content:flex-end;
+}
+
+.members{
+  margin-right: 15px;
+}

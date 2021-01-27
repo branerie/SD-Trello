@@ -24,20 +24,36 @@
 
 .inputContainer{
     align-items: center;
-    width: 100%;
+    width: 50%;
     margin-left: 25%;
     margin-bottom: 2%;
+    display: flex;
+    /* flex-wrap: wrap; */
+    justify-content: space-between;
 }
 
-input{
+.inputName{
     border: solid 1px #363338;
     border-radius: 10px;
-    padding: 0.5%;
+    padding: 1%;
     height: 1.8em;
-    min-width: 34.5%;
-    width: auto;
+    /* min-width: 34.5%; */
+    width: 100%;
     margin-left: 4%;
-    text-align: center;
+    text-align: left;
+    background-color: #DFE9EE;
+    outline: none;
+
+}
+
+.inviteInput{
+    width: 60%;
+    z-index: 20;
+}
+
+.selectForInvite{
+    width: 100%;
+    height: 0;
 }
 
 .membersInput{
@@ -45,51 +61,61 @@ input{
     border-radius: 10px;
     padding: 0.5%;
     height: 1.8em;
-    min-width: 25%;
-    width: auto;
-    margin-left: 2%;
-    text-align: center;
+    width: 100%;
+    margin-left: 0%;
+    text-align: left;
+    background-color: #DFE9EE;
+    outline: none;
 }
 
 .inputContainerDescr{    
-    width: 100%;    
+    width: 50%;    
     margin-left: 25%;
     margin-bottom: 2%;
     display: flex;
     
 }
 
-.textarea{
+.textareaDescr{
     border: solid 1px #363338;
     border-radius: 15px;
-    padding: 0.5%;
+    padding: 1%;
     height: 5em;
-    width: 30%;
+    width: 100%;
     margin-left: 2%;
     background-color: #DFE9EE;  
-    resize: none;  
+    resize: none; 
+    outline: none; 
+}
+
+.textInvite{
+    width: auto;
 }
 
 
 .buttonDiv{
+    width: 50%;
     margin: 5%;
     margin-bottom: 2%;
-    margin-left: 40%;
+    margin-left: 25%;
+    display: flex;
+    justify-content: center;
 }
 
 .createButton{
     background: #DFE9EE;
     color: black;
     padding: 10px;
-    min-width: 150px;
+    width: 150px;
     border-radius: 10px;
     display: block;
-    margin: 0 auto;
     margin: 10px;
+    margin: 0 auto;
     cursor: pointer;
     border: 1px solid #707070;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
     text-align: center;
+    outline: none;
   }
 
   .membersAvatars{
@@ -107,18 +133,20 @@ input{
 } */
 
 .members {  
-    position: fixed;
-    top: 47%;
-    left: 5%;  
+    /* position: fixed; */
+    /* top: 47%; */
+    /* left: 5%;   */
     z-index: 25;  
     border: solid 1px #363338;
     border-radius: 27px;
-    width: 13%;
+    font-size: 18px;
+    /* width: 100%; */
+    /* min-width: fit-content; */
     height: auto;
     max-height: 150px;
     padding: 10px;
     overflow-y: auto;
-    margin-left: 46%;
+    /* margin-left: 46%; */
     background-color:#DFE9EE;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none; 
@@ -134,6 +162,6 @@ input{
     border-radius: 27px;
 }
 
-/* .email {
+.email {
     font-size: 13px;
-} */
+}

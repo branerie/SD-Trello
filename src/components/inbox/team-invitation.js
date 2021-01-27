@@ -35,9 +35,6 @@ export default function TeamInvitation({ message, setInbox, setInboxHistory, opt
             socket.emit('team-update', message.team._id)
             setInbox(user.inbox)
             setInboxHistory(user.inboxHistory)
-            if (accepted) {
-                history.push(`/team/${message.teamId}`)
-            }
             socket.emit('message-sent', userId)
             socket.emit('message-sent', message.sendFrom._id)
         }

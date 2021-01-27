@@ -20,8 +20,6 @@ const Home = () => {
   const userTeams = userContext.user.teams
   const userId = userContext.user._id
 
-  console.log(userContext.user);
-
   const goToTeamPage = (teamId) => {
     history.push(`/team/${teamId}`)
   }
@@ -67,7 +65,6 @@ const Home = () => {
       </div>
 
       <Title title='Home' />
-      <div className={styles.welcomeUser}>{`Welcome ${userName}!`}</div>
       <div className={styles.container}>
 
         <span className={styles.leftButtons}>
@@ -83,8 +80,9 @@ const Home = () => {
               < button onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)}
                 // title='Create Team' 
                 // className={styles.teamNames}
-                className={styles.myTeamButton}
-              >My Teams</ button>
+                className={styles.myTeamButton}>
+                  My Teams
+              </ button>
             <div className={styles.selectTeamContainer}>
               {
                 showTeamsVisibleForm ?
@@ -123,9 +121,10 @@ const Home = () => {
 
         </span>
 
-        <span className={styles.picContainer}>
+        <div className={styles.picContainer}>
           <img className={styles.pic1} src={pic1} alt="" />
-        </span>
+          <div className={styles.welcomeUser}>{`Welcome ${userName}!`}</div>
+        </div>
 
         <span className={styles.rightButtons}>
           {
@@ -147,12 +146,7 @@ const Home = () => {
               : null
           }
         </span>
-
-
       </div>
-
-
-
     </PageLayout>
   )
 }

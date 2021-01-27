@@ -83,6 +83,9 @@
   padding-right: 10px;
   margin-right: 20px;
   border: none;
+  text-align: left;
+  background-color: #EDF5F9;
+  outline: none
 }
 
 .avatar {

@@ -19,11 +19,11 @@ export default function SearchResults(props) {
 
     for (let index = 0; index < teams.length; index++) {
         const team = teams[index];
-        let obj = { 'name': team.name, 'id': team._id, 'type': 'team' }
+        let obj = { 'name': `Team: ${team.name}`, 'id': team._id, 'type': 'team' }
         resultArr.push(obj)
         for (let index = 0; index < team.projects.length; index++) {
             const project = team.projects[index];
-            let obj = { 'name': project.name, 'id': project._id, 'type': 'project' }
+            let obj = { 'name': `Project: ${project.name}`, 'id': project._id, 'type': 'project' }
             resultArr.push(obj)
         }
     }

@@ -15,6 +15,8 @@ export default function TaskMembers(props) {
     const [cardMembers, setCardMembers] = useState(props.card.members)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [selectedUser, setSelectedUser] = useState('')
+    const [showEachMember, setShowEachMember] = useState(false)
+
     const [users, setUsers] = useState([])
     const history = useHistory()
     const socket = useSocket()
@@ -169,7 +171,7 @@ export default function TaskMembers(props) {
                 teamId,
                 projectId: project._id,
                 cardId,
-                listId 
+                listId
             })
         })
         if (!response.ok) {
@@ -187,41 +189,90 @@ export default function TaskMembers(props) {
 
 
     return (
-        <div>
+        <div onMouseLeave={() => setShowEachMember(false)}>
             {
-                isActive ?
-                    <span>
-                        < form ref={dropdownRef} className={styles.container}  >
-                            <select className={styles.select} onChange={(e) => { handleSelect(e.target.value) }}>
-                                <option>Select</option>
-                                {
-                                    users.map((m, index) => (
-                                        <option key={index} value={m._id}>{m.username}</option>
-                                    ))
-                                }
-                            </select>
-                            <button className={styles.addUserButton} onClick={handleAdd}>Add</button>
-                        </form>
-                    </span>
-                    :
-                    <div className={styles.membersContainer}>
-                        { (cardMembers.length  !==0)? 
-                        <span className={styles.membersDiv}>
+                showEachMember ?
+                    <div className={styles.containerMemb} >
+                        <div className={styles.allCardMembers}>
                             {
-                                cardMembers.map((member, index) => {
+                                cardMembers.map((m, index) => {
                                     return (
-                                        <span key={index} className={styles.eachMember}>
-                                            <Avatar name={member.username} size={props.size} round={true} maxInitials={2} onMouseEnter={<div>{member.username}</div>} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, member) }} />
-                                        </span>
+                                        <div key={index} className={styles.eachMember} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, m) }}>
+                                            <span className={styles.avatar} key={m._id}>
+                                                <Avatar key={m._id}
+                                                    name={m.username}
+                                                    size={30}
+                                                    round={true}
+                                                    className={styles.avatar}
+                                                />
+                                            </span>
+                                            <span>{m.username}</span>
+                                        </div>
                                     )
                                 })
                             }
-                        </span>:null
-                        }       
-                        <img className={styles.pen} src={pen} alt="..." width="13" height="13" onClick={() => { getTeamUsers(); setIsActive(!isActive) }} />
-                    </div >
+                        </div>
+                    </div>
+                    :
+                    <div>
+                        {
+                            isActive ?
+                                <span>
+                                    < form ref={dropdownRef} className={styles.container}  >
+                                        <select className={styles.select} onChange={(e) => { handleSelect(e.target.value) }}>
+                                            <option>Select</option>
+                                            {
+                                                users.map((m, index) => (
+                                                    <option key={index} value={m._id}>{m.username}</option>
+                                                ))
+                                            }
+                                        </select>
+                                        <button className={styles.addUserButton} onClick={handleAdd}>Add</button>
+                                    </form>
+                                </span >
+                                :
+                                <div className={styles.membersDiv}>
+                                    {
+                                        (cardMembers.length > 3) ?
+                                            
+                                                <span className={styles.members} onMouseEnter={() => setShowEachMember(true)}>
+                                                    {cardMembers.slice(0, 3).map(element => {
+                                                        return (
+                                                            <span className={styles.avatar} key={element._id}>
+                                                                <Avatar key={element._id}
+                                                                    name={element.username}
+                                                                    size={30}
+                                                                    round={true}
+                                                                    className={styles.avatar}
+                                                                />
+                                                            </span>
+                                                        )
+                                                    })}
+                                                    <span className={styles.avatar}>
+                                                        <Avatar color={'grey'} name={`+   ${(cardMembers.length - 3)} ${('0' + (cardMembers.length - 3)).slice(2)}`} size={30} round={true} maxInitials={3} className={styles.avatar}
+                                                        />
+                                                    </span>
+                                                </span>
+
+                                            
+                                            :
+                                            <span className={styles.members} onMouseEnter={() => setShowEachMember(true)}>
+                                                {cardMembers.map(element => {
+                                                    return (
+                                                        <span className={styles.avatar} key={element._id}>
+                                                            <Avatar key={element._id} name={element.username} size={30} round={true} maxInitials={2} />
+                                                        </span>
+                                                    )
+                                                })}
+                                            </span>
+                                    }
+
+                                    <img className={styles.pen} src={pen} alt="..." width="13" height="13" onClick={() => { getTeamUsers(); setIsActive(!isActive) }} />
+                                </div >
+                        }
+                    </div>
             }
-        </div>
+        </div >
     )
 }
 
