@@ -52,7 +52,7 @@ export default function TaskName(props) {
 
 
   return (
-    <span>
+    <div>
       {
         isActive ?
           < div ref={dropdownRef} className={styles.nameContainer} onBlur={editCardName} >
@@ -62,7 +62,7 @@ export default function TaskName(props) {
             <span>{cardName}</span>
           </div >
       }
-    </span>
+    </div>
   )
 
 

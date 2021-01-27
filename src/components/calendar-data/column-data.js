@@ -1,42 +1,37 @@
 import React from 'react'
 import styles from './index.module.css'
 
-
+const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
 
 const ColumnData = (startDay) => {
-
-
-    const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
-
-
-
-    const shownDay = (value) => {
-        let date = ''
-        date = (('0' + value.getDate())).slice(-2) + '.' + ('0' + (value.getMonth() + 1)).slice(-2)
-        return date
-    }
-
-    const weekDay = (value) => {
-        let num = value.getDay()
-        const weekArray = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday', 'Sunday']
-        if (num > 6) {
-            num = num - 7
-        }
-        var weekDay = weekArray[num]
-        return weekDay
+    const formatDate = (date) => {
+        return date.toLocaleDateString('eg-GB', { day: '2-digit', month: '2-digit' })
+                   .replace('/', '.')
     }
 
     const cellDiv = (message, color, messageColor) => {
+        const progressStyle = { 
+            background: color, 
+            color: messageColor,
+            width: '100%',
+            textAlign: 'center',
+            padding: '5px', 
+            fontSize: '14px',
+            border: '1px solid #363338',
+            borderRadius: '5px'
+        }
+
         return (
             <div className={styles.daylyProgress}>
-                <div style={{ background: color, color: messageColor, width: "100%", textAlign: "center", padding: "5px", fontSize: "14px", border: '#363338 solid 1px', borderRadius: '5px' }} >
-                    {message}</div>
+                <div style={progressStyle}>
+                    {message}
+                </div>
             </div>
         )
     }
 
 
-    const cellData = (value, num) => {
+    const getCellData = (value, num) => {
 
         if (num === 0) {
             if (value) {
@@ -232,17 +227,17 @@ const ColumnData = (startDay) => {
     }
 
     const getHeaderDate = (num) => {
-        var currDay = new Date(startDay);
+        var currDay = new Date(startDay)
         currDay.setDate(currDay.getDate() + num)
-        let dayOfWeek = weekDay(currDay)
-        let day = shownDay(currDay)
+        let dayOfWeek = weekdays[currDay.getDay()]
+        let day = formatDate(currDay)
         let color = ''
 
-        let thisDay = new Date(today)
+        let thisDay = new Date()
         let thisDate = thisDay.getTime()
 
         var checkedDate = new Date(startDay);
-        let checked = checkedDate.setDate(checkedDate.getDate() + num);
+        let checked = checkedDate.setDate(checkedDate.getDate() + num)
 
         if (checked === thisDate) {
             color = "#CFE2EC"
@@ -256,6 +251,14 @@ const ColumnData = (startDay) => {
         )
     }
 
+    const wrapCellData = (cellData) => {
+        return (
+            <div style={{ whiteSpace: 'normal' }}>
+                {cellData}
+            </div>
+        )
+    }
+
     return (
         [
             {
@@ -263,28 +266,31 @@ const ColumnData = (startDay) => {
                     return <div className={styles.header}>Task</div>
                 },
                 accessor: "task",
-                minWidth: 150
+                minWidth: 150,
+                Cell: ({ value }) => wrapCellData(value)
             },
             {
                 Header: () => {
                     return <div className={styles.header}>Progress</div>
                 },
                 accessor: "progress",
-                minWidth: 100
+                minWidth: 100,
+                Cell: ({ value }) => wrapCellData(value)
             },
             {
                 Header: () => {
                     return <div className={styles.header}>Teammates</div>
                 },
                 accessor: "assigned",
-                minWidth: 130
+                minWidth: 130,
+                Cell: ({ value }) => wrapCellData(value)
             },
             {
                 Header: getHeaderDate(0),
                 accessor: "monday",
                 minWidth: 100,
                 Cell: ({ value }) => {
-                    return cellData(value, 0)
+                    return getCellData(value, 0)
                 }
             },
             {
@@ -292,7 +298,7 @@ const ColumnData = (startDay) => {
                 accessor: "tuesday",
                 minWidth: 100,
                 Cell: ({ value }) => {
-                    return cellData(value, 1)
+                    return getCellData(value, 1)
                 }
             },
             {
@@ -300,7 +306,7 @@ const ColumnData = (startDay) => {
                 accessor: "wednesday",
                 minWidth: 100,
                 Cell: ({ value }) => {
-                    return cellData(value, 2)
+                    return getCellData(value, 2)
                 }
             },
             {
@@ -308,7 +314,7 @@ const ColumnData = (startDay) => {
                 accessor: "thursday",
                 minWidth: 100,
                 Cell: ({ value }) => {
-                    return cellData(value, 3)
+                    return getCellData(value, 3)
                 }
             },
             {
@@ -316,7 +322,7 @@ const ColumnData = (startDay) => {
                 accessor: "friday",
                 minWidth: 100,
                 Cell: ({ value }) => {
-                    return cellData(value, 4)
+                    return getCellData(value, 4)
                 }
             },
             {
@@ -324,7 +330,7 @@ const ColumnData = (startDay) => {
                 accessor: "saturday",
                 minWidth: 100,
                 Cell: ({ value }) => {
-                    return cellData(value, 5)
+                    return getCellData(value, 5)
                 }
             },
             {
@@ -332,7 +338,7 @@ const ColumnData = (startDay) => {
                 accessor: "sunday",
                 minWidth: 100,
                 Cell: ({ value }) => {
-                    return cellData(value, 6)
+                    return getCellData(value, 6)
                 }
             },
             {

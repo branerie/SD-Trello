@@ -80,31 +80,34 @@ const Home = () => {
               < button onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)}
                 // title='Create Team' 
                 // className={styles.teamNames}
-                className={styles.myTeamButton}
-              >My Teams</ button>
-              <div className={styles.selectTeamContainer}>
-                {
-                  showTeamsVisibleForm ?
-                    <div className={styles.teamsHome} ref={dropdownRef}>
-                      {
-                        userTeams.map((t, index) => {
-                          return (
-                            <span key={index}>
-                              <div
-                                className={styles.navigateButtonsTeams}
-                                onClick={() => goToTeamPage(t._id)}
+                className={styles.myTeamButton}>
+                  My Teams
+              </ button>
+            <div className={styles.selectTeamContainer}>
+              {
+                showTeamsVisibleForm ?
+                  <div className={styles.teamsHome} ref={dropdownRef}>
+                    {
+                      userTeams.length > 0
+                      ? userTeams.map((t, index) => {
+                        return (
+                          <span key={index}>                            
+                            <div                              
+                              className={styles.navigateButtonsTeams}
+                              onClick={() => goToTeamPage(t._id)}
 
-                              >{t.name}</div>
-
-                            </span>
-                          )
-                        }
+                            >{t.name}</div>
+                            
+                          </span>
                         )
                       }
-                    </div>
-                    : null
-                }
-              </div>
+                      )
+                      : "You haven't joined any teams yet"
+                    }
+                  </div>
+                  : null
+              }
+            </div>
             </div>
           </div>
 
@@ -122,7 +125,6 @@ const Home = () => {
           <img className={styles.pic1} src={pic1} alt="" />
           <div className={styles.welcomeUser}>{`Welcome ${userName}!`}</div>
         </div>
-
 
         <span className={styles.rightButtons}>
           {
@@ -144,12 +146,7 @@ const Home = () => {
               : null
           }
         </span>
-
-
       </div>
-
-
-
     </PageLayout>
   )
 }
