@@ -4,8 +4,6 @@ import styles from './index.module.css'
 
 
 export default function ShowAllTaskMembers(props) {
-
-
     const members = props.members
 
     return (

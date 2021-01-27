@@ -18,6 +18,7 @@ import UserContext from '../../contexts/UserContext'
 import { useParams } from "react-router-dom"
 import previous from '../../images/project-list/previous-day.svg'
 import next from '../../images/project-list/next-day.svg'
+import MembersList from "../members-list";
 
 const createTableEntry = (entryData) => {
     return {
@@ -157,7 +158,12 @@ const TableDndApp = (props) => {
                         ),
                     assigned:
                         (
-                            <TaskMembers value={card.members} card={card} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
+                            // <TaskMembers value={card.members} card={card} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
+                            <MembersList
+                                members={card.members}
+                                maxLength={3}
+                                maxDisplayLength={3}                                
+                            />
                         ),
                     monday: historyArr + '/' + thisCardDate + "/" + card.progress,
                     tuesday: historyArr + '/' + thisCardDate + "/" + card.progress,
