@@ -31,7 +31,7 @@ router.post('/confirmation', confirmToken)
 
 router.post('/inbox', auth, moveMessageToHistory)
 
-router.put('/:id', updateUser)
+router.put('/:id', auth, updateUser)
 
 router.put('/recentProjects/:id', auth, updateUserRecentProjects)
 
@@ -46,7 +46,7 @@ async function getUser(req, res, next) {
 }
 
 async function getAllUsers(req, res, next) {
-    const users = await models.User.find({})
+    const users = await models.User.find({}).select('-password')
     res.send(users)
 }
 
@@ -97,7 +97,7 @@ function verifyLogin(req, res, next) {
         .then(([data, blacklistToken]) => {
 
             if (blacklistToken) { return Promise.reject(new Error('blacklisted token')) }
-            models.User.findById(data.id)
+            models.User.findById(data.id).select('-password')
                 .then(async (user) => {
                     const teams = await getTeams(user._id)
                     return res.send({
@@ -123,7 +123,7 @@ async function loginUser(req, res, next) {
     const { email, password } = req.body
 
     try {
-        const user = await models.User.findOne({ email })
+        const user = await models.User.findOne({ email }).select('-password')
 
 
         if (!user) {
@@ -171,7 +171,7 @@ async function googleLoginUser(req, res, next) {
     }
 
     try {
-        let user = await models.User.findOne({ email })
+        let user = await models.User.findOne({ email }).select('-password')
         if (user === null) {
             user = await models.User.create({ email, username, imageUrl })
         }
@@ -202,7 +202,7 @@ async function confirmToken(req, res, next) {
     const { token } = req.body
 
     try {
-        const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }, { new: true })
+        const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }, { new: true }).select('-password')
 
         res.send(user)
     } catch (error) {
@@ -225,8 +225,8 @@ async function updateUser(req, res, next) {
             bcrypt.hash(password, salt, async (err, hash) => {
                 if (err) { next(err); return }
 
-                const result = await models.User.updateOne({ _id: id }, { ...obj, password: hash })
-                const updatedUser = await models.User.findOne({ _id: id })
+                await models.User.updateOne({ _id: id }, { ...obj, password: hash })
+                const updatedUser = await models.User.findOne({ _id: id }).select('-password')
                 const teams = await getTeams(updatedUser._id)
                 const response = {
                     user: updatedUser,
@@ -237,8 +237,8 @@ async function updateUser(req, res, next) {
             })
         })
     } else {
-        const result = await models.User.updateOne({ _id: id }, obj)
-        const updatedUser = await models.User.findOne({ _id: id })
+        await models.User.updateOne({ _id: id }, obj)
+        const updatedUser = await models.User.findOne({ _id: id }).select('-password')
         const teams = await getTeams(updatedUser._id)
         const response = {
             user: updatedUser,
@@ -253,8 +253,8 @@ async function updateUserRecentProjects(req, res, next) {
     const { recentProjects } = req.body
 
 
-    const result = await models.User.updateOne({ _id: id }, { recentProjects })
-    const updatedUser = await models.User.findOne({ _id: id })
+    await models.User.updateOne({ _id: id }, { recentProjects })
+    const updatedUser = await models.User.findOne({ _id: id }).select('-password')
     const teams = await getTeams(updatedUser._id)
     const response = {
         user: updatedUser,
@@ -301,7 +301,8 @@ async function getUserTasks(req, res, next) {
                 populate: {
                     path: 'cards',
                     populate: {
-                        path: 'members'
+                        path: 'members',
+                        select: '-password'
                     }
                 }
             }
