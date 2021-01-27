@@ -8,23 +8,40 @@
     height: auto;
     flex-wrap: wrap;
   }
-  
-  .picContainer{
-    width: 30%;
-    /* margin-left: 5%; */
+
+  .leftContainer{
+    display: flex;
+    justify-content: space-around;
+    height: auto;
+    flex-wrap: wrap;
+    min-width: 48%;
   }
+  
+  
   
   .leftButtons{
-    width: 15%;
-    margin-left: 50px;
+    width: 40%;
+    min-width: 150px;
+    margin-left: 5%;
   }
   .middleButtons{
-    width: 20%;
-    /* margin:  auto; */
+    width: 40%;
+    min-width: 200px;
+    /* margin-right: 5%; */
+
+  }
+
+  .picContainer{
+    width: auto; 
+    min-width: 200px;
+    max-width: 500px;
+    margin: 0 auto;
   }
   
   .pic1{
     margin-top: 8%;
+    width: 90%;
+    height: auto;
   }
   
   .topright{
@@ -134,6 +151,7 @@
     background-color: #363338;
     border-radius: 20px;
     width: 80%;
+    min-width: 80px;
     max-width: 150px;
     margin: 10%;
     height: 50px;

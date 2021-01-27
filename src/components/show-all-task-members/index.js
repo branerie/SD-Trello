@@ -20,6 +20,7 @@ export default function ShowAllTaskMembers(props) {
                                                 name={m.username}
                                                 size={30}
                                                 round={true}
+                                                maxInitials={2}
                                                 className={styles.avatar}
                                             />
                                         </span>

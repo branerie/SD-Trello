@@ -94,6 +94,10 @@ const Header = ({ asideOn }) => {
         return null
     }
 
+    const onBlur = () => {
+        setTimeout(() => (setShowSearchForm(false)), 120)
+    }
+
     return (
         <header className={`${styles.navigation} ${asideOn ? styles.small : ''}`} >
             <div className={styles.container}>
@@ -234,15 +238,17 @@ const Header = ({ asideOn }) => {
                             value={searchInput}
                             onChange={(e) => setSearchInput(e.target.value)}
                             onClick={() => setShowSearchForm(true)}
-                            onBlur={() => {setShowSearchForm(false); setSearchInput('')}}
+                            onBlur={onBlur}
                         />
                         {
-                            (searchInput.length > 1 && showSearchForm) ?
-                                (
+                            (
+                                searchInput.length > 0
+                                 && 
+                                 showSearchForm) ?                                
                                     <div ref={dropdownRefSearch}>
                                         <SearchResults searchInput={searchInput} hideForm={() => { setShowSearchForm(!showSearchForm); setSearchInput('') }} />
                                     </div>
-                                ) : null
+                                 : null
                         }
                     </span>
                     <ButtonClean
