@@ -19,29 +19,40 @@ import { useParams } from "react-router-dom"
 import previous from '../../images/project-list/previous-day.svg'
 import next from '../../images/project-list/next-day.svg'
 
+const createTableEntry = (entryData) => {
+    return {
+        task: entryData.task || '',
+        progress: entryData.progress || '',
+        assigned: entryData.assigned || '',
+        monday: entryData.monday || '',
+        tuesday: entryData.tuesday || '',
+        wednesday: entryData.wednesday || '',
+        thursday: entryData.thursday || '',
+        friday: entryData.friday || '',
+        saturday: entryData.saturday || '',
+        sunday: entryData.sunday || '',
+        dueDate: entryData.dueDate || ''
+    }
+}
+
 const TableDndApp = (props) => {
-    const [startDay, setStartDay] = useState(getMonday)
+    const [startDate, setStartDate] = useState(getMonday())
     const [tableData, setTableData] = useState([])
-    const [isVisibleEditList, setIsVisibleEditList] = useState(false)
     const [currList, setCurrList] = useState('')
     const projectContext = useContext(ProjectContext)
     const userContext = useContext(UserContext)
     const params = useParams()
 
-    const onListClick = useCallback(async (list) => {
-        const memberArr = []
-        await projectContext.project.membersRoles.map(element => {
-            return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
-
-        })
-        projectContext.setLists(projectContext.project.lists)
-        const member = await memberArr.find(m => m.id === userContext.user.id)
+    const onListClick = useCallback((list) => {
+        const member = projectContext.project.membersRoles.find(m => 
+                            m.memberId._id === userContext.user.id)                    
 
         if (member && member.admin) {
             setCurrList(list)
-            setIsVisibleEditList(!isVisibleEditList)
         }
-    }, [isVisibleEditList, projectContext, userContext.user.id])
+
+        projectContext.setLists(projectContext.project.lists)
+    }, [projectContext, userContext.user.id])
 
 
     const updateTableData = () => {
@@ -54,7 +65,7 @@ const TableDndApp = (props) => {
                 return
             }
 
-            data.push({
+            data.push(createTableEntry({
                 task: (
                     <div 
                         key={index} 
@@ -67,36 +78,33 @@ const TableDndApp = (props) => {
                         </span>
                     </div>
                 ),
-                progress: '',
-                assigned: '',
-                monday: '',
-                tuesday: '',
-                wednesday: '',
-                thursday: '',
-                friday: '',
-                saturday: '',
-                sunday: '',
                 dueDate: (
                     <div>
                         <AddTask listId={list._id} project={props.project} />
                     </div>
                 )
-            })
+            }))
 
             let listCards = list.cards.filter(card => {
-                if (props.filter['Not Started'] && (card.progress === 0 || card.progress === null)) {
-                    return true
+                let cardFilter = false
+                if (props.filter.bool['Not Started'] && 
+                    (card.progress === 0 || card.progress === null)) {
+                    cardFilter = true
                 }
 
-                if (props.filter['In Progress'] && card.progress > 0 && card.progress < 100) {
-                    return true
+                if (props.filter.bool['In Progress'] && card.progress > 0 && card.progress < 100) {
+                    cardFilter = true
                 }
                 
-                if (props.filter['Done'] && card.progress === 100) {
-                    return true
+                if (props.filter.bool['Done'] && card.progress === 100) {
+                    cardFilter = true
                 }
 
-                return false
+                const userFilter = props.filter.member 
+                                        ? card.members.some(m => m._id === props.filter.member.id) 
+                                        : true
+
+                return cardFilter && userFilter
             })
 
             listCards.forEach(card => {
@@ -123,7 +131,7 @@ const TableDndApp = (props) => {
                         const currElementSlice = currElement.event.slice(0, 8)
                         const taskHistorySlice = taskHistory[i + 1].event.slice(0, 8)
                         if (currElementSlice === taskHistorySlice && currElement.date === taskHistory[i + 1].date) {
-                            console.log('WTF!?!?!?!?!?')
+
                         } else {
                             historyArr.push(`${currElement.date}*${currElement.event}`)
                         }
@@ -132,8 +140,7 @@ const TableDndApp = (props) => {
                     historyArr = null
                 }
 
-                data.push({
-
+                data.push(createTableEntry({
                     task:
                         (
                             <TaskName
@@ -175,100 +182,56 @@ const TableDndApp = (props) => {
                             </span>
                         </div>
                     )
-                })
+                }))
             })
             return data
         })
 
-        data.push({
+        data.push(createTableEntry({
             task: (
                 <AddList props={props} project={props.project} />
-            ),            
-            progress: '',
-            assigned: '',
-            monday: "",
-            tuesday: "",
-            wednesday: "",
-            thursday: "",
-            friday: "",
-            saturday: "",
-            sunday: "",
-            dueDate: ''
-        })
+            )
+        }))
 
         setTableData(data)
     }
 
-
     useEffect(() => {
         updateTableData()
-    }, [props.filter])
+    }, [props.filter, props.project])
 
-    function getMonday(inputDate) {
-        const date = inputDate 
-                        ? new Date(inputDate)
-                        : new Date()
+    const changeStartDate = (dayDiff) => {
+        const newStartDate = new Date(startDate)
+        newStartDate.setDate(newStartDate.getDate() + dayDiff)
+        updateTableData()
+        setStartDate(newStartDate)
+    }
 
-        const day = date.getDay()
-        const diff = date.getDate() - day + (day === 0 ? -6 : 1)
-
-        const lastMonday = new Date(date.setDate(diff))
-        const monday = new Date(
-                            lastMonday.getFullYear(), 
-                            lastMonday.getMonth(), 
-                            lastMonday.getDate())
-
+    function getMonday (date) {
+        date = date || new Date()
+    
+        // need to change to 7 in case date is Sunday (which in JS is 0, while Monday is 1)
+        const dateDay = date.getDay() || 7
+        const monday = new Date(date)
+        monday.setDate(date.getDate() - (dateDay - 1))
+    
         return monday
     }
 
-    const getNextWeek = () => {
-        var nextDay = startDay
-        nextDay.setDate(nextDay.getDate() + 7)
-        updateTableData()
-        setStartDay(nextDay)
-    }
-
-    const getLastWeek = () => {
-        var nextDay = startDay
-        nextDay.setDate(nextDay.getDate() - 7)
-        updateTableData()
-        setStartDay(nextDay)
-        updateTableData()
-    }
-
-    const getNextDay = () => {
-        var nextDay = startDay
-        nextDay.setDate(nextDay.getDate() + 1)
-        updateTableData()
-        setStartDay(nextDay)
-    }
-
-    const getLastDay = () => {
-        var nextDay = startDay
-        nextDay.setDate(nextDay.getDate() - 1)
-        updateTableData()
-        setStartDay(nextDay)
-        updateTableData()
-    }
-
-
-
     return (
-
-
         <div className={styles.pageContainer}>
             {
-                isVisibleEditList ?
+                currList ?
                     < div >
-                        <Transparent hideForm={() => setIsVisibleEditList(!isVisibleEditList)} >
-                            <EditList hideForm={() => setIsVisibleEditList(!isVisibleEditList)} list={currList} project={props.project} />
+                        <Transparent hideForm={() => setCurrList('')} >
+                            <EditList hideForm={() => setCurrList('')} list={currList} project={props.project} />
                         </Transparent >
                     </div > : null
             }
             <div className={styles.buttoDiv}>
                 <span>
                     <DatePicker
-                        selected={startDay}
+                        selected={startDate}
                         customInput={
                             <div className={styles.navigateButtons}>
                                 Choose Week
@@ -276,23 +239,37 @@ const TableDndApp = (props) => {
                         }
                         // className={styles.reactDatepicker}
                         showWeekNumbers
-                        onChange={date => setStartDay(getMonday(date))} />
+                        onChange={date => setStartDate(getMonday(date))} />
                 </span>
                 <span className={styles.daysButtons}>
 
-                    <button className={styles.navigateButtons} onClick={getLastWeek} >Previous week</button>
+                    <button className={styles.navigateButtons} onClick={() => changeStartDate(-7)}>
+                        Previous week
+                    </button>
                     
-                    <div className={styles.picContainer} onClick={getLastDay}>
-                        <img className={styles.buttonPreviousDay} src={previous} alt="..." width="126" height="27" />
+                    <div className={styles.picContainer} onClick={() => changeStartDate(-1)}>
+                        <img 
+                            className={styles.buttonPreviousDay} 
+                            src={previous} alt="..." width="126" height="27"
+                        />
                         <div className={styles.centeredText}>Previous day</div>
                     </div>
 
-                    <div className={styles.picContainer} onClick={getNextDay}>
-                        <img className={styles.buttonPreviousDay} src={next} alt="..." width="126" height="27" />
+                    <div className={styles.picContainer} onClick={() => changeStartDate(1)}>
+                        <img 
+                            className={styles.buttonPreviousDay} 
+                            src={next} alt="..." width="126"
+                            height="27" 
+                        />
                         <div className={styles.centeredText}>Next day</div>
                     </div>
 
-                    <button className={styles.navigateButtons} onClick={getNextWeek}>Next week</button>
+                    <button 
+                        className={styles.navigateButtons}
+                        onClick={() => changeStartDate(7)}
+                    >
+                        Next week
+                    </button>
                 </span>
                 
             </div>
@@ -304,7 +281,7 @@ const TableDndApp = (props) => {
                     // getTrProps={getTrProps}
                     data={tableData}
                     columns={
-                        ColumnData(startDay)
+                        ColumnData(startDate)
                     }
                     defaultPageSize={10}
                     pageSize={tableData.length}

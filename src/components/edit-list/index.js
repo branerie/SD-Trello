@@ -53,7 +53,6 @@ export default function EditList(props) {
             socket.emit('task-team-update', teamId)
             props.hideForm()
         }
-
     }
 
     const onColorChange = (color) => {
