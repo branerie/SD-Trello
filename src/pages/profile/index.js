@@ -106,6 +106,8 @@ const ProfilePage = () => {
 
       <div className={styles.container}>
 
+        <div className={styles.leftContainer}>
+
         <div className={styles.leftButtons}>
 
           <div>
@@ -231,6 +233,10 @@ const ProfilePage = () => {
           </div>
         </div>
 
+        </div>
+
+
+
 
         <div className={styles.picContainer}>
 
@@ -246,9 +252,11 @@ const ProfilePage = () => {
           </div>
 
 
-          <div>
-            <img className={styles.pic1} src={pic1} alt="" width="100%" height="100%" />
-          </div>
+          
+            <img className={styles.pic1} src={pic1} alt="" 
+            // width="80%" height="80%"
+             />
+          
         </div>
 
       </div>
