@@ -26,11 +26,7 @@ async function teamInvitations(req, res, next) {
 
     try {
 
-        if (message.recievers.length === 1) {
-            await models.Message.deleteOne({ _id: message._id })
-        } else {
-            await models.Message.updateOne({ _id: message._id }, { $pull: { recievers: userId } }).session(session)
-        }
+        await models.Message.updateOne({ _id: message._id }, { $pull: { recievers: userId } }).session(session)
 
         const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamId, sendFrom: message.sendFrom, recievers: [userId], accepted }], { session })
         const createdMessage = messageCreationResult[0]
@@ -95,28 +91,25 @@ async function getTeams(req, res, next) {
     const { _id } = req.user
 
     try {
-        const user = await models.User.findOne({ _id: _id }).select('-password')
+        const user = await models.User.findOne({ _id: _id })
         const teams = await models.Team.find({ members: _id })
             .populate({
                 path: 'projects',
                 populate: {
                     path: 'membersRoles',
                     populate: {
-                        path: 'memberId',
-                        select: '-password'
+                        path: 'memberId'
                     }
                 }
             })
             .populate({
                 path: 'projects',
                 populate: {
-                    path: 'author',
-                    select: '-password'
+                    path: 'author'
                 }
             })
             .populate({
-                path: 'members',
-                select: '-password'
+                path: 'members'
             })
             .populate({
                 path: 'requests'
@@ -139,8 +132,7 @@ async function getTeamUsers(req, res, next) {
     try {
         const team = await models.Team.findOne({ _id: teamId })
             .populate({
-                path: 'members',
-                select: '-password'
+                path: 'members'
             })
             .populate({
                 path: 'requests'
@@ -167,13 +159,13 @@ async function updateTeam(req, res, next) {
     }
 
     if (removeInvitation) {
+
         const session = await mongoose.startSession()
         session.startTransaction()
-        
+
         try {
-            
+
             const userForRemove = removeInvitation._id
-            
             await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userForRemove } }).session(session)
 
             const oldMessage = await models.Message.findOneAndUpdate({ team: teamId, recievers: { "$in": [userForRemove] } }, { $pull: { recievers: userForRemove } }, { new: true }).session(session)
@@ -266,7 +258,7 @@ async function deleteTeam(req, res, next) {
 
             await models.Team.updateOne({ projects: idProject }, { $pull: { projects: idProject } }).session(session)
 
-            await models.Project.deleteOne({ _id: idProject }).session(session)
+            const removedProjectResult = await models.Project.deleteOne({ _id: idProject }).session(session)
         })
 
 

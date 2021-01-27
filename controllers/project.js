@@ -33,15 +33,11 @@ async function getUserProjects(req, res, next) {
 async function getAllProjects(req, res, next) {
 
     const projects = await models.Project.find({})
-        .populate({
-            path: 'author',
-            select: '-password'
-        })
+        .populate('author')
         .populate({
             path: 'membersRoles',
             populate: {
                 path: 'memberId',
-                select: '-password'
             }
         })
     res.send(projects)
@@ -55,8 +51,7 @@ async function getProjectInfo(req, res, next) {
             populate: {
                 path: 'cards',
                 populate: {
-                    path: 'members',
-                    select: '-password'
+                    path: 'members'
                 }
             }
         })
@@ -64,7 +59,6 @@ async function getProjectInfo(req, res, next) {
             path: 'membersRoles',
             populate: {
                 path: 'memberId',
-                select: '-password'
             }
         })
     res.send(project)
@@ -91,8 +85,7 @@ async function createProject(req, res, next) {
                 populate: {
                     path: 'cards',
                     populate: {
-                        path: 'members',
-                        select: '-password'
+                        path: 'members'
                     }
                 }
             })
@@ -100,7 +93,6 @@ async function createProject(req, res, next) {
                 path: 'membersRoles',
                 populate: {
                     path: 'memberId',
-                    select: '-password'
                 }
             }).session(session)
         await models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
@@ -231,6 +223,8 @@ async function addMember(req, res, next) {
 async function removeMember(req, res, next) {
     const { memberId } = req.body
     const projectId = req.params.id
+    const { _id } = req.user
+
 
     const session = await mongoose.startSession()
     session.startTransaction()

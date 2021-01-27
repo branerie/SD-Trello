@@ -9,21 +9,18 @@ async function getTeams(id) {
                 populate: {
                     path: 'membersRoles',
                     populate: {
-                        path: 'memberId',
-                        select: '-password'
+                        path: 'memberId'
                     }
                 }
             })
             .populate({
                 path: 'projects',
                 populate: {
-                    path: 'author',
-                    select: '-password'
+                    path: 'author'
                 }
             })
             .populate({
-                path: 'members',
-                select: '-password'
+                path: 'members'                
             })
             .populate({
                 path: 'requests'                
