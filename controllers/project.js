@@ -11,6 +11,8 @@ router.get('/info/:id', auth, getProjectInfo)
 
 router.post('/', auth, createProject)
 
+router.put('/:id/user-roles', auth, isAdmin, updateUserRoles)
+
 router.put('/:id', auth, isAdmin, updateProject)
 
 router.delete('/:id', auth, isAdmin, deleteProject)
@@ -31,11 +33,15 @@ async function getUserProjects(req, res, next) {
 async function getAllProjects(req, res, next) {
 
     const projects = await models.Project.find({})
-        .populate('author')
+        .populate({
+            path: 'author',
+            select: '-password'
+        })
         .populate({
             path: 'membersRoles',
             populate: {
                 path: 'memberId',
+                select: '-password'
             }
         })
     res.send(projects)
@@ -49,7 +55,8 @@ async function getProjectInfo(req, res, next) {
             populate: {
                 path: 'cards',
                 populate: {
-                    path: 'members'
+                    path: 'members',
+                    select: '-password'
                 }
             }
         })
@@ -57,6 +64,7 @@ async function getProjectInfo(req, res, next) {
             path: 'membersRoles',
             populate: {
                 path: 'memberId',
+                select: '-password'
             }
         })
     res.send(project)
@@ -77,7 +85,24 @@ async function createProject(req, res, next) {
 
         const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session)
 
-        await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { session })
+        const updatedProject = await models.Project.findByIdAndUpdate({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { new: true })
+            .populate({
+                path: 'lists',
+                populate: {
+                    path: 'cards',
+                    populate: {
+                        path: 'members',
+                        select: '-password'
+                    }
+                }
+            })
+            .populate({
+                path: 'membersRoles',
+                populate: {
+                    path: 'memberId',
+                    select: '-password'
+                }
+            }).session(session)
         await models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
         await models.Team.updateOne({ _id: teamId }, { $push: { projects: createdProject } }, { session })
 
@@ -85,7 +110,7 @@ async function createProject(req, res, next) {
 
         session.endSession()
 
-        res.send(createdProject)
+        res.send(updatedProject)
     } catch (error) {
         await session.abortTransaction()
         session.endSession()
@@ -109,6 +134,20 @@ async function updateProject(req, res, next) {
         const updatedProject = await models.Project.updateOne({ _id: projectId }, { ...obj })
 
         res.send(updatedProject)
+    } catch (error) {
+        res.send(error)
+    }
+
+}
+
+async function updateUserRoles(req, res, next) {
+
+    const { userRole, isAdmin } = req.body;
+
+    try {
+        const updatedUserRole = await models.ProjectUserRole.updateOne({ _id: userRole }, { admin: isAdmin })
+
+        res.send(updatedUserRole)
     } catch (error) {
         res.send(error)
     }
@@ -192,8 +231,6 @@ async function addMember(req, res, next) {
 async function removeMember(req, res, next) {
     const { memberId } = req.body
     const projectId = req.params.id
-    const { _id } = req.user
-
 
     const session = await mongoose.startSession()
     session.startTransaction()

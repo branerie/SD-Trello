@@ -1,4 +1,4 @@
-const models = require("../models");
+const models = require("../models")
 
 async function getTeams(id) {
 
@@ -9,15 +9,24 @@ async function getTeams(id) {
                 populate: {
                     path: 'membersRoles',
                     populate: {
-                        path: 'memberId'
+                        path: 'memberId',
+                        select: '-password'
                     }
                 }
             })
             .populate({
                 path: 'projects',
                 populate: {
-                    path: 'author'
+                    path: 'author',
+                    select: '-password'
                 }
+            })
+            .populate({
+                path: 'members',
+                select: '-password'
+            })
+            .populate({
+                path: 'requests'                
             })
         return teams
 

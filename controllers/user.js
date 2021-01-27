@@ -4,8 +4,7 @@ const config = require('../config/config')
 const utils = require('../utils')
 const router = require('express').Router()
 const bcrypt = require('bcrypt')
-const googleAuth = require('../utils/googleAuth')
-const { auth, isAdmin } = require('../utils')
+const { auth, isAdmin, userInbox, googleAuth } = require('../utils')
 const { decode } = require('jsonwebtoken')
 const getTeams = require('../utils/getTeams')
 
@@ -14,7 +13,11 @@ router.get('/verify', verifyLogin);
 
 router.get('/get-all', auth, getAllUsers);
 
+router.get('/inbox', auth, getUserInbox);
+
 router.get('/:id', getUser)
+
+router.get('/tasks/:teamid', auth, getUserTasks)
 
 router.post('/register', registerUser)
 
@@ -24,23 +27,31 @@ router.post('/google-login', googleLoginUser)
 
 router.post('/logout', logoutUser)
 
-router.put('/:id', updateUser)
+router.post('/confirmation', confirmToken)
+
+router.post('/inbox', auth, moveMessageToHistory)
+
+router.put('/:id', auth, updateUser)
+
+router.put('/recentProjects/:id', auth, updateUserRecentProjects)
+
+router.delete('/message/:messageid', auth, deleteUserMessage)
 
 router.delete('/:id', deleteUser)
 
 
 async function getUser(req, res, next) {
     const user = await models.User.findById(req.params.id)
-    res.send(user);
+    res.send(user)
 }
 
 async function getAllUsers(req, res, next) {
-    const users = await models.User.find({})
-    res.send(users);
+    const users = await models.User.find({}).select('-password')
+    res.send(users)
 }
 
 async function registerUser(req, res, next) {
-    const { email, username, password } = req.body;
+    const { email, username, password } = req.body
     if (!password) {
         res.send("Missing password")
         return
@@ -49,7 +60,10 @@ async function registerUser(req, res, next) {
     models.User.findOne({ email }, async function (err, user) {
 
         if (user === null) {
-            const createdUser = await models.User.create({ email, username, password })
+            const newUser = new models.User({ email, username, password, confirmed: false })
+            newUser.setConfirmationToken()
+            const createdUser = await newUser.save()
+
             const token = utils.jwt.createToken({ id: createdUser._id })
 
             const teams = await getTeams(createdUser._id)
@@ -57,6 +71,7 @@ async function registerUser(req, res, next) {
                 user: createdUser,
                 teams
             }
+            utils.sendConfirmationEmail(newUser)
             res.header("Authorization", token).send(response)
             return
         }
@@ -66,7 +81,7 @@ async function registerUser(req, res, next) {
         res.send(userExist)
 
         if (err) {
-            console.log(err);
+            console.log(err)
         }
     })
 }
@@ -80,21 +95,21 @@ function verifyLogin(req, res, next) {
         models.TokenBlacklist.findOne({ token })
     ])
         .then(([data, blacklistToken]) => {
+
             if (blacklistToken) { return Promise.reject(new Error('blacklisted token')) }
-            models.User.findById(data.id)
+            models.User.findById(data.id).select('-password')
                 .then(async (user) => {
                     const teams = await getTeams(user._id)
-
                     return res.send({
                         status: true,
                         user,
                         teams
                     })
-                });
+                })
         })
         .catch(err => {
             if (['token expired', 'blacklisted token', 'jwt must be provided'].includes(err.message)) {
-                res.status(401).send('UNAUTHORIZED!');
+                res.status(401).send('UNAUTHORIZED!')
                 return;
             }
 
@@ -108,18 +123,29 @@ async function loginUser(req, res, next) {
     const { email, password } = req.body
 
     try {
-        const user = await models.User.findOne({ email })
+        const user = await models.User.findOne({ email }).select('-password')
+
+
+        if (!user) {
+            let response = {}
+            response.wrongUser = true
+            res.send(response)
+            return
+        }
 
         if (!user.password) {
             let response = {}
             response.needPassword = true
+            response.userId = user._id
             res.send(response)
         }
         const match = await user.matchPassword(password)
 
         if (!match) {
-            res.status(401).send('Invalid password')
-            return;
+            let response = {}
+            response.wrongPassword = true
+            res.send(response)
+            return
         }
 
         const token = utils.jwt.createToken({ id: user._id })
@@ -145,7 +171,7 @@ async function googleLoginUser(req, res, next) {
     }
 
     try {
-        let user = await models.User.findOne({ email })
+        let user = await models.User.findOne({ email }).select('-password')
         if (user === null) {
             user = await models.User.create({ email, username, imageUrl })
         }
@@ -153,6 +179,7 @@ async function googleLoginUser(req, res, next) {
         const token = utils.jwt.createToken({ id: user._id })
 
         const teams = await getTeams(user._id)
+
         const response = {
             user,
             teams
@@ -171,6 +198,17 @@ async function logoutUser(req, res, next) {
     res.clearCookie(config.authCookieName).send('Logout successfully!')
 }
 
+async function confirmToken(req, res, next) {
+    const { token } = req.body
+
+    try {
+        const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }, { new: true }).select('-password')
+
+        res.send(user)
+    } catch (error) {
+        console.log(error)
+    }
+}
 
 async function updateUser(req, res, next) {
     const id = req.params.id
@@ -187,8 +225,8 @@ async function updateUser(req, res, next) {
             bcrypt.hash(password, salt, async (err, hash) => {
                 if (err) { next(err); return }
 
-                const updatedUser = await models.User.updateOne({ _id: id }, { ...obj, password: hash })
-
+                await models.User.updateOne({ _id: id }, { ...obj, password: hash })
+                const updatedUser = await models.User.findOne({ _id: id }).select('-password')
                 const teams = await getTeams(updatedUser._id)
                 const response = {
                     user: updatedUser,
@@ -199,8 +237,8 @@ async function updateUser(req, res, next) {
             })
         })
     } else {
-        const updatedUser = await models.User.updateOne({ _id: id }, obj)
-
+        await models.User.updateOne({ _id: id }, obj)
+        const updatedUser = await models.User.findOne({ _id: id }).select('-password')
         const teams = await getTeams(updatedUser._id)
         const response = {
             user: updatedUser,
@@ -210,32 +248,126 @@ async function updateUser(req, res, next) {
     }
 }
 
+async function updateUserRecentProjects(req, res, next) {
+    const id = req.params.id
+    const { recentProjects } = req.body
+
+
+    await models.User.updateOne({ _id: id }, { recentProjects })
+    const updatedUser = await models.User.findOne({ _id: id }).select('-password')
+    const teams = await getTeams(updatedUser._id)
+    const response = {
+        user: updatedUser,
+        teams
+    }
+    res.send(response)
+
+}
 
 async function deleteUser(req, res, next) {
     const id = req.params.id;
 
     const session = await mongoose.startSession()
-    session.startTransaction();
+    session.startTransaction()
 
     try {
-        const removedUser = await models.User.deleteOne({ _id: id }).session(session);
-        const userProjectsRoles = await models.ProjectUserRole.find({ memberId: id }).session(session);
-        await models.Project.updateMany({ _id: { $in: userProjectsRoles.projectId } }, { $pull: { membersRoles: userProjectsRoles._id } }).session(session);
-        await models.Project.deleteMany({ author: id }).session(session);
-        await models.ProjectUserRole.deleteMany({ memberId: id }).session(session);
+        const removedUser = await models.User.deleteOne({ _id: id }).session(session)
+        const userProjectsRoles = await models.ProjectUserRole.find({ memberId: id }).session(session)
+        await models.Project.updateMany({ _id: { $in: userProjectsRoles.projectId } }, { $pull: { membersRoles: userProjectsRoles._id } }).session(session)
+        await models.Project.deleteMany({ author: id }).session(session)
+        await models.ProjectUserRole.deleteMany({ memberId: id }).session(session)
 
-        await session.commitTransaction();
+        await session.commitTransaction()
 
-        session.endSession();
+        session.endSession()
 
-        res.send(removedUser);
+        res.send(removedUser)
     } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
-        res.send(error);
+        await session.abortTransaction()
+        session.endSession()
+        res.send(error)
     }
 
 }
 
+async function getUserTasks(req, res, next) {
+    const userId = req.user._id
+    const teamId = req.params.teamid
+    const team = await models.Team.findOne({ _id: teamId })
+        .populate({
+            path: 'projects',
+            populate: {
+                path: 'lists',
+                populate: {
+                    path: 'cards',
+                    populate: {
+                        path: 'members',
+                        select: '-password'
+                    }
+                }
+            }
+        })
+
+    let projects = team.projects
+
+    projects.forEach(p => p.lists.forEach(l => l.cards = l.cards.filter(c => {
+        const isMembers = c.members.some(m => m._id.toString() === userId.toString())
+        return isMembers
+    })))
+    projects.forEach(p => p.lists = p.lists.filter(l => l.cards.length !== 0))
+    projects = projects.filter(p => p.lists.length !== 0)
+    res.send(projects)
+}
+
+async function getUserInbox(req, res, next) {
+    try {
+        userId = req.user._id
+        const user = await userInbox(userId)
+        res.send(user)
+    } catch (err) {
+        console.log(err)
+        res.send(error)
+    }
+}
+
+async function deleteUserMessage(req, res, next) {
+    const userId = req.user._id
+    const messageId = req.params.messageid
+    const session = await mongoose.startSession()
+    session.startTransaction()
+
+    try {
+        await models.User.updateOne({ _id: userId }, { $pull: { inboxHistory: messageId } }).session(session)
+        await models.Message.deleteOne({ _id: messageId }).session(session)
+        await session.commitTransaction()
+
+        session.endSession()
+
+        const user = await userInbox(userId)
+
+        res.send(user)
+    } catch (err) {
+        await session.abortTransaction()
+        session.endSession()
+        console.log(err)
+        res.send(error)
+    }
+}
+
+async function moveMessageToHistory(req, res, next) {
+    const userId = req.user._id
+    const { message } = req.body
+
+    try {
+        await models.User.updateOne({ _id: userId }, { $pull: { inbox: message._id }, $push: { inboxHistory: message } })
+
+        const user = await userInbox(userId)
+
+        res.send(user)
+    } catch (err) {
+        console.log(err)
+        res.send(error)
+    }
+}
 
 module.exports = router
