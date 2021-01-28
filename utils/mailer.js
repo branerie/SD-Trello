@@ -19,7 +19,7 @@ module.exports = function sendConfirmationEmail(user) {
         to: user.email,
         subject: 'Welcome to Smart Manager',
         text: `
-        Welcome to Smart Manager. Please comfirm your email
+        Welcome to Smart Manager. Please confirm your email
 
         ${user.generateConfirmationUrl()}
         `
@@ -27,3 +27,19 @@ module.exports = function sendConfirmationEmail(user) {
 
     transport.sendMail(email)
 }
+
+// module.exports = function sendChangePasswordEmail(user) {
+//     const transport = setup()
+//     const email = {
+//         from,
+//         to: user.email,
+//         subject: 'Smart Manager - New password',
+//         text: `
+//         In order to activate your new password, please confirm your email by following the link below
+
+//         ${user.generateConfirmationUrl()}
+//         `
+//     }
+
+//     transport.sendMail(email)
+// }

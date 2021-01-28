@@ -57,15 +57,28 @@ async function registerUser(req, res, next) {
         return
     }
 
+
     models.User.findOne({ email }, async function (err, user) {
+        if (user !== null) {
+            let userExist = {}
+            userExist.error = true
+            userExist.exist = true
+            res.send(userExist)
+            return
+        }
 
         if (user === null) {
             const newUser = new models.User({ email, username, password, confirmed: false })
+
+            
             newUser.setConfirmationToken()
             const createdUser = await newUser.save()
 
             const token = utils.jwt.createToken({ id: createdUser._id })
 
+            
+            // const updatedUser = await models.User.findOne({ _id: createdUser._id }).select('-password')
+            
             const teams = await getTeams(createdUser._id)
             const response = {
                 user: createdUser,
@@ -75,10 +88,7 @@ async function registerUser(req, res, next) {
             res.header("Authorization", token).send(response)
             return
         }
-        let userExist = {}
-        userExist.error = true
-        userExist.exist = true
-        res.send(userExist)
+
 
         if (err) {
             console.log(err)
@@ -123,23 +133,24 @@ async function loginUser(req, res, next) {
     const { email, password } = req.body
 
     try {
-        const user = await models.User.findOne({ email }).select('-password')
+        const foundUser = await models.User.findOne({ email })
 
 
-        if (!user) {
+        if (!foundUser) {
             let response = {}
             response.wrongUser = true
             res.send(response)
             return
         }
 
-        if (!user.password) {
+        if (!foundUser.password) {
             let response = {}
             response.needPassword = true
-            response.userId = user._id
+            response.userId = foundUser._id
             res.send(response)
+            return
         }
-        const match = await user.matchPassword(password)
+        const match = await foundUser.matchPassword(password)
 
         if (!match) {
             let response = {}
@@ -148,8 +159,8 @@ async function loginUser(req, res, next) {
             return
         }
 
-        const token = utils.jwt.createToken({ id: user._id })
-
+        const token = utils.jwt.createToken({ id: foundUser._id })
+        const user = await models.User.findOne({ email }).select('-password')
         const teams = await getTeams(user._id)
         const response = {
             user,
@@ -200,10 +211,11 @@ async function logoutUser(req, res, next) {
 
 async function confirmToken(req, res, next) {
     const { token } = req.body
-
+    console.log(token);
     try {
-        const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }, { new: true }).select('-password')
-
+        const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }
+        // , { new: true }
+        ).select('-password')
         res.send(user)
     } catch (error) {
         console.log(error)
@@ -213,6 +225,7 @@ async function confirmToken(req, res, next) {
 async function updateUser(req, res, next) {
     const id = req.params.id
     let user = { username, password, email, imageUrl } = req.body
+
     const obj = {}
     for (let key in user) {
         if (user[key] && key !== 'password') {
@@ -221,19 +234,42 @@ async function updateUser(req, res, next) {
     }
 
     if (password) {
+
         await bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, async (err, hash) => {
                 if (err) { next(err); return }
-
-                await models.User.updateOne({ _id: id }, { ...obj, password: hash })
+                await models.User.updateOne({ _id: id }, { ...obj, password: hash, confirmed: false })
                 const updatedUser = await models.User.findOne({ _id: id }).select('-password')
+
+                updatedUser.setConfirmationToken() // test
+
+
                 const teams = await getTeams(updatedUser._id)
                 const response = {
                     user: updatedUser,
                     teams
                 }
+
+                utils.sendConfirmationEmail(updatedUser) //test
+
+
+
                 res.send(response)
                 return
+
+                // newUser.setConfirmationToken()
+                // const createdUser = await newUser.save()
+
+                // const token = utils.jwt.createToken({ id: createdUser._id })
+
+                // const teams = await getTeams(createdUser._id)
+                // const response = {
+                //     user: createdUser,
+                //     teams
+                // }
+                // utils.sendConfirmationEmail(newUser)
+                // res.header("Authorization", token).send(response)
+                // return
             })
         })
     } else {
