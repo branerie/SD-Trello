@@ -11,6 +11,23 @@
     border-radius: 27px;
     color: black;
 }
+.container {    
+    position: absolute;
+    left: 30vw;
+    top: 15vh;
+    z-index: 20;
+    /* width: auto; */
+    width: 600px;
+    height: auto;
+    /* max-height: 90%; */
+    background-color:#F7F7F2;
+    border: solid 2px#707070;
+    border-radius: 27px;
+    color: black;
+    overflow-y: unset;
+    overflow-x: hidden;
+}
+
 
 .title {
     width: 100%;

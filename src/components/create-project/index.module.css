@@ -1,15 +1,19 @@
+
 .container {    
     position: fixed;
-    left: 30%;
-    top: 15%;
+    left: 30vw;
+    top: 15vh;
     z-index: 20;
-    width: 45%;
+    /* width: auto; */
+    width: 600px;
     height: auto;
+    /* max-height: 90%; */
     background-color:#F7F7F2;
-    border: solid 2px #707070;
+    border: solid 2px#707070;
     border-radius: 27px;
     color: black;
-    font-size: 20px;
+    overflow-y: unset;
+    overflow-x: hidden;
 }
 
 .title {

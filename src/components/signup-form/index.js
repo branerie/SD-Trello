@@ -12,22 +12,40 @@ import google from '../../images/welcome-page/google.svg'
 
 
 const SignupForm = (props) => {
-    const [username, setUsername] = useState(null)
-    const [password, setPassword] = useState(null)
-    const [email, setEmail] = useState(null)
-    const [rePassword, setRePassword] = useState(null)
+    const [username, setUsername] = useState('')
+    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
+    const [rePassword, setRePassword] = useState('')
     const [alert, setAlert] = useState(false)
     const [fillAlert, setFillAlert] = useState(false)
     const [userExist, setUserExist] = useState(false)
+    const [validEmailAlert, setValidEmailAlert] = useState(false)
     const context = useContext(UserContext)
     const history = useHistory()
+
+
+    function validateEmail(email) {
+        var re = /^\w+([\.-]?\w+)*@\w+([\.-]?\w+)*(\.\w{2,3})+$/;
+        return re.test(email);
+    }
+
 
     const handleSubmit = async (event) => {
         event.preventDefault()
 
+
+
+        setValidEmailAlert(false)
         setAlert(false)
         setFillAlert(false)
         setUserExist(false)
+
+        const valid = validateEmail(email)
+        
+        if (!valid) {
+            setValidEmailAlert(true)
+            return
+        }
 
         if (password !== rePassword) {
             setAlert(true)
@@ -68,11 +86,7 @@ const SignupForm = (props) => {
 
 
         <form className={styles.container} onSubmit={handleSubmit}>
-            <div className={styles.alerts}>
-                <Alert alert={alert} message={'Passwords do not match'} />
-                <Alert alert={userExist} message={'User with this email already exists'} />
-                <Alert alert={fillAlert} message={'Please fill all fileds'} />
-            </div>
+
 
 
             <div className={styles.innerContainer}>
@@ -81,6 +95,13 @@ const SignupForm = (props) => {
                 </div>
 
                 <div className={styles.rightSide}>
+
+                    <div className={styles.alerts}>
+                        <Alert alert={alert} message={'Passwords do not match'} />
+                        <Alert alert={userExist} message={'User with this email already exists'} />
+                        <Alert alert={fillAlert} message={'Please fill all fileds'} />
+                        <Alert alert={validEmailAlert} message={'Please enter valid email address'} />
+                    </div>
                     <div className={styles.title}  >Sign Up with E-mail</div>
 
                     <div className={styles.inputContainer}>

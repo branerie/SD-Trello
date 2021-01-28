@@ -12,9 +12,9 @@
 
 .rightSde{
   width: 40%;
-  min-width: 400px;
+  min-width: 300px;
   margin: 0, auto;
-  margin-top: 50px; 
+  margin-top: 40px; 
   /* position: fixed;  */
   /* align-items: center; */
 }

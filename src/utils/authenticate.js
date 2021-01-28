@@ -2,7 +2,7 @@ import userObject from "./userObject"
 
 const authenticate = async (url, method, body, onSuccess, onFailure) => {
     try {
-
+        
         const promise = await fetch(url, {
             method,
             body: JSON.stringify(body),
@@ -14,7 +14,7 @@ const authenticate = async (url, method, body, onSuccess, onFailure) => {
         
         const authToken = promise.headers.get("Authorization")
         const response = await promise.json()
-
+        
         if (response.needPassword) {
             onFailure(response)
             return
@@ -24,6 +24,10 @@ const authenticate = async (url, method, body, onSuccess, onFailure) => {
             return
         }
         if (response.wrongUser) {
+            onFailure(response)
+            return
+        }
+        if (response.exist) {
             onFailure(response)
             return
         }

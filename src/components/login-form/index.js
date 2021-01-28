@@ -29,7 +29,7 @@ const LoginForm = (props) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-
+        
         setFillAlert(false)
         setWrongPassAllert(false)
         setWrongUserAllert(false)
