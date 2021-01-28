@@ -2,8 +2,8 @@ import React, { useState } from 'react'
 import styles from './index.module.css'
 import pen from '../../images/pen.svg'
 import ButtonClean from '../button-clean'
-import Avatar from 'react-avatar'
 import ShowAllTaskMembers from '../show-all-task-members'
+import MembersList from '../members-list'
 
 export default function Card({ card, showEditCard }) {
 
@@ -43,70 +43,31 @@ export default function Card({ card, showEditCard }) {
 
     return (
 
-        <div className={styles.card}
-            onMouseLeave={() => setAvatarsHover(false)}
-        >
-            {
-                avatarsHover ?
-
-                    <ShowAllTaskMembers members={card.members} />
-
-                    : null
-            }
+        <div className={styles.card} onMouseLeave={() => setAvatarsHover(false)}>
+            { avatarsHover && <ShowAllTaskMembers members={card.members} /> }
             <div className={styles.leftSide}>
                 <div className={styles.cardName}>{card.name}</div>
                 {
                     card.progress ?
-                    <div className={styles.bar} >
-                        <div
-                            style={{
-                                width: `${card.progress}%`,
-                                backgroundColor: progressColor(card.progress)
-                            }}
-                            className={styles.progress}
-                        />
-                    </div> : null
+                        <div className={styles.bar} >
+                            <div
+                                style={{
+                                    width: `${card.progress}%`,
+                                    backgroundColor: progressColor(card.progress)
+                                }}
+                                className={styles.progress}
+                            />
+                        </div> : null
                 }
             </div>
 
             <div className={styles.flex}>
-                {
-                    (card.members.length > 3) ?
-                        <div >
-                            <div className={styles.members} onClick={() => setAvatarsHover(true)}>
-                                {card.members.slice(0, 1).map(element => {
-                                    return (
-                                        <span className={styles.avatar} key={element._id}>
-                                            <Avatar key={element._id}
-                                                name={element.username}
-                                                size={30}
-                                                round={true}
-                                                className={styles.avatar}
-                                            />
-                                        </span>
-                                    )
-                                })}
-                                <span className={styles.avatar}>
-                                    <Avatar color={'grey'} name={`+   ${(card.members.length - 1)} ${('0' + (card.members.length - 1)).slice(2)}`} size={30} round={true} maxInitials={3} className={styles.avatar}
-                                    />
-                                </span>
-                            </div>
-
-                        </div>
-                        :
-                        <div className={styles.members} onClick={() => setAvatarsHover(true)}>
-                            {card.members.map(element => {
-                                return (
-                                    <span className={styles.avatar} key={element._id}>
-                                        <Avatar key={element._id} name={element.username} size={30} round={true} maxInitials={2} />
-                                    </span>
-                                )
-                            })}
-                        </div>
-                }
-                <div>
-
-                </div>
+                <MembersList 
+                    members={card.members} 
+                    maxLength={3}
+                    maxDisplayLength={1} 
+                    onClick={() => setAvatarsHover(true)} 
+                />
                 <ButtonClean
                     className={styles.pen}
                     onClick={() => showEditCard()}

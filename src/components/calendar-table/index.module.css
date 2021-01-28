@@ -95,8 +95,6 @@
     font-family: inherit;
     border: 0;
     padding: 5px;
-    text-align: center;    
-    align-items: center;
     background-color: inherit;
     font-weight: inherit;
     outline: none;
@@ -115,7 +113,7 @@
 }
 
 .listNameText{   
-    text-align: center;
+    /* text-align: center; */
     margin-bottom: 2%;   
 }
 

@@ -5,7 +5,7 @@ const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Frida
 
 const ColumnData = (startDay) => {
     const formatDate = (date) => {
-        return date.toLocaleDateString('eg-GB', { day: '2-digit', month: '2-digit' })
+        return date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })
                    .replace('/', '.')
     }
 
@@ -253,7 +253,7 @@ const ColumnData = (startDay) => {
 
     const wrapCellData = (cellData) => {
         return (
-            <div style={{ whiteSpace: 'normal' }}>
+            <div style={{ whiteSpace: 'normal', overflowWrap: 'anywhere', textAlign: 'left' }}>
                 {cellData}
             </div>
         )
@@ -266,7 +266,7 @@ const ColumnData = (startDay) => {
                     return <div className={styles.header}>Task</div>
                 },
                 accessor: "task",
-                minWidth: 150,
+                minWidth: 400,
                 Cell: ({ value }) => wrapCellData(value)
             },
             {
@@ -274,7 +274,7 @@ const ColumnData = (startDay) => {
                     return <div className={styles.header}>Progress</div>
                 },
                 accessor: "progress",
-                minWidth: 100,
+                minWidth: 80,
                 Cell: ({ value }) => wrapCellData(value)
             },
             {
@@ -282,13 +282,13 @@ const ColumnData = (startDay) => {
                     return <div className={styles.header}>Teammates</div>
                 },
                 accessor: "assigned",
-                minWidth: 130,
+                minWidth: 150,
                 Cell: ({ value }) => wrapCellData(value)
             },
             {
                 Header: getHeaderDate(0),
                 accessor: "monday",
-                minWidth: 100,
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return getCellData(value, 0)
                 }
@@ -296,7 +296,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(1),
                 accessor: "tuesday",
-                minWidth: 100,
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return getCellData(value, 1)
                 }
@@ -304,7 +304,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(2),
                 accessor: "wednesday",
-                minWidth: 100,
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return getCellData(value, 2)
                 }
@@ -312,7 +312,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(3),
                 accessor: "thursday",
-                minWidth: 100,
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return getCellData(value, 3)
                 }
@@ -320,7 +320,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(4),
                 accessor: "friday",
-                minWidth: 100,
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return getCellData(value, 4)
                 }
@@ -328,7 +328,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(5),
                 accessor: "saturday",
-                minWidth: 100,
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return getCellData(value, 5)
                 }
@@ -336,7 +336,7 @@ const ColumnData = (startDay) => {
             {
                 Header: getHeaderDate(6),
                 accessor: "sunday",
-                minWidth: 100,
+                minWidth: 90,
                 Cell: ({ value }) => {
                     return getCellData(value, 6)
                 }
@@ -346,7 +346,7 @@ const ColumnData = (startDay) => {
                     return <div className={styles.header}>Due Date</div>
                 },
                 accessor: "dueDate",
-                minWidth: 130,
+                minWidth: 120,
             }
         ]
     )
