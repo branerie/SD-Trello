@@ -13,6 +13,9 @@ const ConfirmationPage = () => {
     
     const confirmToken = async () => {
         const token = params.token
+
+        
+        
         const response = await fetch('/api/user/confirmation', {
             method: "POST",
             headers: {
@@ -27,6 +30,7 @@ const ConfirmationPage = () => {
             return
         } else {
             const user = await response.json()
+            console.log(user);
             userContext.logIn({
                 username: user.username,
                 id: user._id,

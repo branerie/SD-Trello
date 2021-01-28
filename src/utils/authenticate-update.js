@@ -4,8 +4,9 @@ import userObject from "./userObject"
 const authenticateUpdate = async (url, method, body, onSuccess, onFailure) => {
 
     try {
+        
         const cookie = getCookie('x-auth-token')
-
+    
         const promise = await fetch(url, {
             method,
             body: JSON.stringify(body),
@@ -16,7 +17,8 @@ const authenticateUpdate = async (url, method, body, onSuccess, onFailure) => {
         })
         
         const response = await promise.json()
-        if (response.user.username) {
+        
+        if (response.user.username) {            
             onSuccess(userObject(response))
         } else {
             onFailure()
