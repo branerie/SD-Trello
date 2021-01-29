@@ -113,7 +113,7 @@ export default function EditTeam(props) {
             history.push("/error")
             return
         } else {
-            // getData()
+            socket.emit('team-update', teamId)
         }
     }
 
@@ -191,9 +191,10 @@ export default function EditTeam(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
-            // teamContext.setSelectedTeam(name)
-            // getData()
-            // socket.emit('team-update', teamId)
+            const deletedTeam = await response.json()
+            socket.emit('team-update', teamId)
+            const recievers = [...deletedTeam.members, ...deletedTeam.requests]
+            socket.emit('team-deleted', { id: teamId, recievers })
             history.push("/")
             props.hideForm()
         }

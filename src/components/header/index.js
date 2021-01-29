@@ -13,6 +13,7 @@ import { useHistory, useParams } from "react-router-dom"
 import CreateProject from "../create-project"
 import getCookie from "../../utils/cookie"
 import SearchResults from "../search-results"
+import { useSocket } from "../../contexts/SocketProvider"
 
 const Header = ({ asideOn }) => {
     const dropdownRefProfile = useRef(null)
@@ -38,6 +39,7 @@ const Header = ({ asideOn }) => {
     const teamContext = useContext(TeamContext)
     const params = useParams()
     const history = useHistory()
+    const socket = useSocket()
 
     function selectTeam(teamId, teamName) {
         teamContext.getCurrentProjects(teamId)
@@ -89,6 +91,18 @@ const Header = ({ asideOn }) => {
             }
         }
     }, [getData, params, params.teamid, projectContext.project, teamContext,])
+
+    useEffect(() => {
+        if (!(window.location.href.includes('team') || window.location.href.includes('project'))) return
+        if (socket == null) return
+        socket.on('team-deleted', goHome)
+        return () => socket.off('team-deleted')
+    })
+
+    function goHome(deletedTeameamId) {
+        if (deletedTeameamId !== params.teamid) return
+        history.push('/')
+    }
 
     if (window.location.href.includes('project') && !projectContext.project) {
         return null
