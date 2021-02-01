@@ -35,13 +35,13 @@ const assembleColumnData = (startDate) => {
         )
     }
 
-    const getWeekdayCellData = (dataString, numDaysOffsetDaysOffset) => {
+    const getWeekdayCellData = (dataString, numDaysOffset) => {
         if (!dataString) {
             return ''
         }
 
         const { date, history, progress } = JSON.parse(dataString)
-        const cellDate = getDateWithOffset(startDate, numDaysOffsetDaysOffset)
+        const cellDate = getDateWithOffset(startDate, numDaysOffset)
         const eventsInWeek = []
         let finishedDate = null
         if (history) {
@@ -84,7 +84,7 @@ const assembleColumnData = (startDate) => {
         }
 
         // if we get to here, we know that there are no new events on the day of the cell
-        const isMonday = numDaysOffsetDaysOffset === 0
+        const isMonday = numDaysOffset === 0
         if (isMonday && progress && progress === 100 && eventsInWeek.length === 0) {
             // progress for task is 100% and no new events happen during the week
             return getWeekdayCellHtml('Finished', CELL_COLORS.FINISHED)
