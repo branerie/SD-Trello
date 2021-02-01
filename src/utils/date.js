@@ -1,4 +1,4 @@
-const FORMAT_REGEX = /%\w/g
+const FORMAT_REGEX = /%[yYmbBdwW]/g
 
 const MONTHS = [ 
     'January', 'February', 'March', 'April', 'May', 'June', 'July', 

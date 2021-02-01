@@ -167,7 +167,7 @@ const TableDndApp = (props) => {
 
     useEffect(() => {
         updateTableData()
-    }, [props.filter, props.project])
+    }, [props.filter, props.project, projectContext.hiddenLists])
 
     const changeStartDate = (dayDiff) => {
         const newStartDate = getDateWithOffset(startDate, dayDiff)
