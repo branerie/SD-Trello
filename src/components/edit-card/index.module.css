@@ -10,7 +10,7 @@
     max-height: 85%;
     background-color:#EDF5F9;
     border: solid 2px #707070;
-    border-radius: 27px;   
+    border-radius: 27px;
 }
 
 .form{
@@ -37,7 +37,7 @@
 
 .text{
     font-family: 'Lato', sans-serif;
-    font-size: 1.1em;
+    font-size: 1.2em;
     text-align: center;
 }
 
@@ -82,24 +82,25 @@
 } */
 
 .nameInput{      
-        width: 100%;
-        /* height: 3em; */
-        /* height: auto; */
-        /* max-height: 5em; */
-        border: 1px solid #000000; 
-        background-color: #E6E6E6;
-        border: solid 1px #363338;
-        border-radius: 10px;       
-        /* display: flex;    */
-        /* justify-content: space-between;  */
-        padding: 4px;
-        font-weight: normal;
-        resize: none;
-        margin-right: 1%;
-        font-size: 1.2em;
-        height: auto;
-        min-height: 20px;
-        max-height: 100px;
+    width: 100%;
+    /* height: 3em; */
+    /* height: auto; */
+    /* max-height: 5em; */
+    border: 1px solid #695a5a; 
+    background-color: #E6E6E6;
+    border: solid 1px #363338;
+    border-radius: 10px;       
+    /* display: flex;    */
+    /* justify-content: space-between;  */
+    padding: 4px;
+    font-weight: normal;
+    resize: none;
+    margin-right: 1%;
+    font-size: 1.2em;
+    font-family: 'Lato', sans-serif;
+    height: auto;
+    min-height: 20px;
+    max-height: 100px;
 }
 
 .progressInput{      
@@ -356,6 +357,11 @@
     margin-top: 5%;
     height: 30%;
     margin-bottom: 10%;
+}
+
+.nameWrapper {
+    display: flex;
+    align-items: flex-start;
 }
 
 /* .editMembers {
