@@ -1,15 +1,20 @@
 import React from 'react'
 import styles from './index.module.css'
+import { checkDateEquality, compareDates, getDateWithOffset, formatDate } from '../../utils/date'
 
-const weekdays = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
+const CELL_COLORS = {
+    CREATED: '#0E8D27',
+    DUE_DATE: '#EF2D2D',
+    DELAYED: '#EF2D2D',
+    FINISHED: '#0E8D27',
+    PROGRESS: '#5E9DDC'
+}
 
-const ColumnData = (startDay) => {
-    const formatDate = (date) => {
-        return date.toLocaleDateString('en-GB', { day: '2-digit', month: '2-digit' })
-                   .replace('/', '.')
-    }
+const assembleColumnData = (startDate) => {
+    const currentDate = new Date()
+    const endDate = getDateWithOffset(startDate, 6)
 
-    const cellDiv = (message, color, messageColor) => {
+    const getWeekdayCellHtml = (message, color, messageColor = 'black') => {
         const progressStyle = { 
             background: color, 
             color: messageColor,
@@ -30,223 +35,104 @@ const ColumnData = (startDay) => {
         )
     }
 
-
-    const getCellData = (value, num) => {
-
-        if (num === 0) {
-            if (value) {
-                let token = value.split('/')
-                let date = Number(token[1])
-                let progress = Number(token[2])
-                let history = token[0]
-                let checked = startDay.setDate(startDay.getDate());
-
-                let color = ''
-                let message = ''
-
-                
-                if (progress === 100) {
-                    color = '#0E8D27';
-                    message = 'Finished'
-                    return (
-                        cellDiv(message, color, 'black')
-                    )
-                }
-                if (history) {
-                    let currElement = history.split(',')
-                    for (let i = 0; i < currElement.length; i++) {
-                        let element = currElement[i].split('*')
-                        let eventDate = element[0]
-
-                        let event = element[1]
-                        let currDate = new Date(eventDate)
-                        currDate.setHours(0, 0, 0, 0)
-
-                        let thisHistoryDate = currDate.getTime()
-
-
-                        if (thisHistoryDate > checked && event === 'Created') {
-                            return (
-                                ''
-                            )
-                        } else if (thisHistoryDate === checked) {
-                            message = event
-                        }
-                        if (thisHistoryDate === checked && !date) {
-                            message = event
-                            return (
-                                cellDiv(message, color, 'black')
-                            )
-                        }
-                    }
-                }
-                
-
-                if (date) {
-                    switch (true) {
-                        case (date === checked):
-                            color = '#EF2D2D';
-                            message = 'Due Date'
-                            break;
-                        case ((progress === 100) || (date === 100)):
-                            color = '#0E8D27';
-                            message = 'Finished'
-                            break;
-                        case (date > checked):
-                            color = '#5E9DDC';
-                            if (message === '') {
-                                message = 'In Progress'
-                            }
-                            break;
-                        case (date < checked && (progress < 100 || !progress)):
-                            color = '#EF2D2D';
-                            message = 'Delayed'
-                            break;
-                        default:
-                            break;
-                    }
-                    if (history) {
-                        let currElement = history.split(',')
-                        for (let i = 0; i < currElement.length; i++) {
-                            let element = currElement[i].split('*')
-                            let eventDate = element[0]
-    
-                            let event = element[1]
-                            let currDate = new Date(eventDate)
-                            currDate.setHours(0, 0, 0, 0)
-    
-                            let thisHistoryDate = currDate.getTime()
-    
-    
-                            if (thisHistoryDate > checked && event === 'Created') {
-                                return (
-                                    ''
-                                )
-                            } else if (thisHistoryDate === checked) {
-                                message = event
-                            }
-                            if (thisHistoryDate === checked && !date) {
-                                message = event
-                                return (
-                                    cellDiv(message, color, 'black')
-                                )
-                            }
-                        }
-                    }
-
-                    return (
-                        cellDiv(message, color, 'black')
-                    )
-                } else {
-                    return ''
-                }
-            } else {
-                return value
-            }
-        } else if (num !== 0) {
-            if (value) {
-                let token = value.split('/')
-                let date = Number(token[1])
-                let progress = Number(token[2])
-                let history = token[0]
-                var checkedDate = new Date(startDay);
-                let checked = checkedDate.setDate(checkedDate.getDate() + num);
-
-                let color = ''
-                let messageColor = ''
-                let message = ''
-
-                if (history) {
-                    let currElement = history.split(',')
-                    for (let i = 0; i < currElement.length; i++) {
-
-                        let element = currElement[i].split('*')
-                        let eventDate = element[0]
-
-                        let event = element[1]
-                        let currDate = new Date(eventDate)
-                        currDate.setHours(0, 0, 0, 0)
-
-                        let thisHistoryDate = currDate.getTime()
-
-
-                        if (thisHistoryDate > checked && event === 'Created') {
-                            return (
-                                ''
-                            )
-                        } else if (thisHistoryDate === checked) {
-                            message = event
-                            messageColor = 'black'
-                        }
-                        if (thisHistoryDate === checked && !date) {
-                            message = event
-                            messageColor = 'black'
-                            return (
-                                cellDiv(message, color, messageColor)
-                            )
-                        }
-
-                    }
-                }
-                if (date) {
-                    switch (true) {
-                        case (date === checked):
-                            color = '#EF2D2D';
-                            message = 'Due Date'
-                            messageColor = 'black'
-                            return (
-                                cellDiv(message, color, messageColor)
-                            )
-                        case (date > checked && progress !== 100):
-                            color = '#5E9DDC';
-                            if (message === '') {
-                                messageColor = '#5E9DDC';
-                                message = 'In Progress'
-                            }
-                            break;
-                        default:
-                            if (message === '') {
-                                return null
-                            }
-
-                    }
-
-                    return (
-                        cellDiv(message, color, messageColor)
-                    )
-
-                } else {
-                    return ''
-                }
-            } else {
-                return value
-            }
-        } else {
-            return value
+    const getWeekdayCellData = (dataString, numDaysOffsetDaysOffset) => {
+        if (!dataString) {
+            return ''
         }
+
+        const { date, history, progress } = JSON.parse(dataString)
+        const cellDate = getDateWithOffset(startDate, numDaysOffsetDaysOffset)
+        const eventsInWeek = []
+        let finishedDate = null
+        if (history) {
+            for (let event of history) {
+                const eventDate = new Date(event.date)
+                if (compareDates(eventDate, startDate) >= 0 && 
+                    compareDates(eventDate, endDate) <= 0) {
+                    eventsInWeek.push(event)
+                }
+
+                if (event.event === 'Progress 100%') {
+                    finishedDate = eventDate
+                }
+            }
+        }
+
+        // gets last event that occurred on this date for this task (if any occurred)
+        const eventInCell = history && eventsInWeek.reverse().find(event => {
+            const eventDate = new Date(event.date)
+            return checkDateEquality(eventDate, cellDate)
+        })
+
+        const dueDate = date ? new Date(date) : null
+        const isAfterDueDate = dueDate && compareDates(cellDate, dueDate) > 0
+        if (eventInCell) {
+            const [eventType, eventValue] = eventInCell.event.split(' ')
+
+            if (eventType === 'Created') {
+                return getWeekdayCellHtml(eventType, CELL_COLORS.CREATED)
+            } else {
+                if (eventType === 'Progress' && eventValue && eventValue === '100%') {
+                    return getWeekdayCellHtml('Finished', CELL_COLORS.FINISHED)
+                }
+
+                const cellBackgroundColor = isAfterDueDate 
+                                            ? CELL_COLORS.DELAYED
+                                            : CELL_COLORS.PROGRESS
+                return getWeekdayCellHtml(eventInCell.event, cellBackgroundColor)
+            }
+        }
+
+        // if we get to here, we know that there are no new events on the day of the cell
+        const isMonday = numDaysOffsetDaysOffset === 0
+        if (isMonday && progress && progress === 100 && eventsInWeek.length === 0) {
+            // progress for task is 100% and no new events happen during the week
+            return getWeekdayCellHtml('Finished', CELL_COLORS.FINISHED)
+        }
+
+        if (dueDate) {
+            if (checkDateEquality(cellDate, dueDate)) {
+                if (compareDates(currentDate, dueDate) > 0) {
+                    // cell date is the task due date and current date is later than that
+                    return getWeekdayCellHtml('Delayed', CELL_COLORS.DELAYED)
+                }
+
+                return getWeekdayCellHtml('Due Date', CELL_COLORS.DUE_DATE)
+            }
+
+            if (compareDates(cellDate, dueDate) > 0) {
+                if (isMonday && compareDates(currentDate, cellDate) > 0) {
+                    return getWeekdayCellHtml('Delayed', CELL_COLORS.DELAYED)
+                }
+
+                return ''
+            }
+
+            if (finishedDate && compareDates(cellDate, finishedDate) > 0) {
+                // task has finished in the past and cell date is later than date of finish
+                return ''
+            }
+            
+            // task is neither Finished, nor Delayed, but has a Due Date
+            // therefore, it's In Progress
+            const cellText = isMonday ? 'In Progress' : ''
+            return getWeekdayCellHtml(cellText, CELL_COLORS.PROGRESS)
+        }
+
+        return ''
     }
+        
+    const getHeaderDateHtml = (numDaysOffset) => {
+        const headerDate = getDateWithOffset(startDate, numDaysOffset)
+        const color = checkDateEquality(currentDate, headerDate) ? "#CFE2EC" : ''
 
-    const getHeaderDate = (num) => {
-        var currDay = new Date(startDay)
-        currDay.setDate(currDay.getDate() + num)
-        let dayOfWeek = weekdays[currDay.getDay()]
-        let day = formatDate(currDay)
-        let color = ''
-
-        let thisDay = new Date()
-        let thisDate = thisDay.getTime()
-
-        var checkedDate = new Date(startDay);
-        let checked = checkedDate.setDate(checkedDate.getDate() + num)
-
-        if (checked === thisDate) {
-            color = "#CFE2EC"
-        }
+        const displayedDate = formatDate(headerDate, '%d.%m')
+        const displayedDayOfWeek = formatDate(headerDate, '%W')
 
         return (
-            <div style={{ background: color, color: 'black' }}>
-                <div style={{ fontWeight: '600' }}>{dayOfWeek}</div>
-                <div style={{ fontSize: '80%' }}>{day}</div>
+            <div style={{ backgroundColor: color, color: 'black' }}>
+                <div style={{ fontWeight: '600' }}>{displayedDayOfWeek}</div>
+                <div style={{ fontSize: '80%' }}>{displayedDate}</div>
             </div>
         )
     }
@@ -282,63 +168,63 @@ const ColumnData = (startDay) => {
                     return <div className={styles.header}>Teammates</div>
                 },
                 accessor: "assigned",
-                minWidth: 150,
+                minWidth: 90,
                 Cell: ({ value }) => wrapCellData(value)
             },
             {
-                Header: getHeaderDate(0),
+                Header: getHeaderDateHtml(0),
                 accessor: "monday",
-                minWidth: 90,
+                minWidth: 100,
                 Cell: ({ value }) => {
-                    return getCellData(value, 0)
+                    return getWeekdayCellData(value, 0)
                 }
             },
             {
-                Header: getHeaderDate(1),
+                Header: getHeaderDateHtml(1),
                 accessor: "tuesday",
-                minWidth: 90,
+                minWidth: 100,
                 Cell: ({ value }) => {
-                    return getCellData(value, 1)
+                    return getWeekdayCellData(value, 1)
                 }
             },
             {
-                Header: getHeaderDate(2),
+                Header: getHeaderDateHtml(2),
                 accessor: "wednesday",
-                minWidth: 90,
+                minWidth: 100,
                 Cell: ({ value }) => {
-                    return getCellData(value, 2)
+                    return getWeekdayCellData(value, 2)
                 }
             },
             {
-                Header: getHeaderDate(3),
+                Header: getHeaderDateHtml(3),
                 accessor: "thursday",
-                minWidth: 90,
+                minWidth: 100,
                 Cell: ({ value }) => {
-                    return getCellData(value, 3)
+                    return getWeekdayCellData(value, 3)
                 }
             },
             {
-                Header: getHeaderDate(4),
+                Header: getHeaderDateHtml(4),
                 accessor: "friday",
-                minWidth: 90,
+                minWidth: 100,
                 Cell: ({ value }) => {
-                    return getCellData(value, 4)
+                    return getWeekdayCellData(value, 4)
                 }
             },
             {
-                Header: getHeaderDate(5),
+                Header: getHeaderDateHtml(5),
                 accessor: "saturday",
-                minWidth: 90,
+                minWidth: 100,
                 Cell: ({ value }) => {
-                    return getCellData(value, 5)
+                    return getWeekdayCellData(value, 5)
                 }
             },
             {
-                Header: getHeaderDate(6),
+                Header: getHeaderDateHtml(6),
                 accessor: "sunday",
-                minWidth: 90,
+                minWidth: 100,
                 Cell: ({ value }) => {
-                    return getCellData(value, 6)
+                    return getWeekdayCellData(value, 6)
                 }
             },
             {
@@ -353,4 +239,4 @@ const ColumnData = (startDay) => {
 }
 
 
-export default ColumnData
+export default assembleColumnData
