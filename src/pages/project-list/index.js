@@ -105,10 +105,7 @@ export default function ProjectList() {
                     />
                     <ButtonCleanDropdown
                         options={projectContext.project.membersRoles.map(mr => {
-                            return {
-                                value: mr.memberId._id,
-                                displayValue: mr.memberId.username
-                            }
+                            return { value: mr.memberId._id, displayValue: mr.memberId.username }
                         })}
                         title={(filter.member && filter.member.name) || 'Member'}
                         onOptionClick={(memberId, memberName) => setFilter({
