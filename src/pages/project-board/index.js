@@ -256,41 +256,41 @@ export default function ProjectBoard() {
 
     return (
         <PageLayout>
-
-            {
-                isVisible &&
-                < div >
-                    <Transparent hideForm={() => setIsVisible(!isVisible)} >
-                        <EditCard
-                            hideForm={() => setIsVisible(!isVisible)}
-                            card={currCard}
-                            listId={currList}
-                            project={projectContext.project}
-                            teamId={teamId}
-                        />
-                    </Transparent >
-                </div >
-            }
-            {
-                isVisibleEditList &&
-                < div >
-                    <Transparent hideForm={() => setIsVisibleEditList(!isVisibleEditList)} >
-                        <EditList hideForm={() => setIsVisibleEditList(!isVisibleEditList)} list={currList} project={projectContext.project} />
-                    </Transparent >
-                </div >
-            }
-            <DragDropContext onDragEnd={handleOnDragEnd}>
-                <Droppable droppableId='droppable' direction='horizontal' type='droppableItem'>
-                    {(provided) => (
-                        <div className={styles.flex} ref={provided.innerRef} >
-                            {
-                                projectContext.lists
-                                    .filter(element => !(projectContext.hiddenLists.includes(element._id)))
-                                    .map((element, index) => {
-                                        return (
-                                            <Draggable key={element._id} draggableId={element._id} index={index}>
-                                                {(provided) => (
-                                                    <div>
+            <div style={{ position: 'absolute' }}>
+                {
+                    isVisible &&
+                    < div >
+                        <Transparent hideForm={() => setIsVisible(!isVisible)} >
+                            <EditCard
+                                hideForm={() => setIsVisible(!isVisible)}
+                                card={currCard}
+                                listId={currList}
+                                project={projectContext.project}
+                                teamId={teamId}
+                            />
+                        </Transparent >
+                    </div >
+                }
+                {
+                    isVisibleEditList &&
+                    < div >
+                        <Transparent hideForm={() => setIsVisibleEditList(!isVisibleEditList)} >
+                            <EditList hideForm={() => setIsVisibleEditList(!isVisibleEditList)} list={currList} project={projectContext.project} />
+                        </Transparent >
+                    </div >
+                }
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                    <Droppable droppableId='droppable' direction='horizontal' type='droppableItem'>
+                        {(provided) => (
+                            <div className={styles['container-droppable']} ref={provided.innerRef} >
+                                {
+                                    projectContext.lists
+                                        .filter(element => !(projectContext.hiddenLists.includes(element._id)))
+                                        .map((element, index) => {
+                                            return (
+                                                <Draggable key={element._id} draggableId={element._id} index={index}>
+                                                    {(provided) => (
+                                                        // <div>
                                                         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
                                                             <List list={element} project={projectContext.project} isAdmin={isAdmin}
                                                                 showEditList={() => {
@@ -303,53 +303,54 @@ export default function ProjectBoard() {
                                                                     setIsVisible(!isVisible)
                                                                 }} />
                                                         </div>
-                                                    </div>
-                                                )}
-                                            </Draggable>
-                                        )
-                                    })
-                            }
-                            {provided.placeholder}
-                            {
-                                isAdmin &&
-                                <div className={styles.list} >
-                                    {
-                                        isActive ?
-                                            <form ref={listRef} className={styles.container} >
-                                                <input
-                                                    ref={function (input) {
-                                                        if (input != null) {
-                                                            input.focus();
-                                                        }
-                                                    }}
-                                                    className={styles.input}
-                                                    type={'text'}
-                                                    value={listName}
-                                                    onChange={e => setListName(e.target.value)}
-                                                />
-                                                <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
-                                            </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
-                                    }
+                                                        // </div>
+                                                    )}
+                                                </Draggable>
+                                            )
+                                        })
+                                }
+                                {provided.placeholder}
+                                {
+                                    isAdmin &&
+                                    <div className={styles.list} >
+                                        {
+                                            isActive ?
+                                                <form ref={listRef} className={styles.container} >
+                                                    <input
+                                                        ref={function (input) {
+                                                            if (input != null) {
+                                                                input.focus();
+                                                            }
+                                                        }}
+                                                        className={styles.input}
+                                                        type={'text'}
+                                                        value={listName}
+                                                        onChange={e => setListName(e.target.value)}
+                                                    />
+                                                    <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
+                                                </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
+                                        }
 
-                                </div>
-                            }
-                        </div>
-                    )}
-                </Droppable>
-            </DragDropContext>
+                                    </div>
+                                }
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
 
-            <button className={styles.navigateButtons} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} >View Project</button>
+                <button className={styles.navigateButtons} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} >View Project</button>
 
-            {
-                IsVisibleEdit &&
-                < div >
-                    <Transparent hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} >
-                        <EditProject hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} project={projectContext.project} members={members} />
-                    </Transparent >
-                </div >
-            }
+                {
+                    IsVisibleEdit &&
+                    < div >
+                        <Transparent hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} >
+                            <EditProject hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} project={projectContext.project} members={members} />
+                        </Transparent >
+                    </div >
+                }
 
-            <img className={styles.pic} src={pic} alt="" width="373" height="312" />
+                <img className={styles.pic} src={pic} alt="" width="373" height="312" />
+            </div>
         </PageLayout>
     )
 }

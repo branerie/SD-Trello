@@ -37,7 +37,8 @@ export default function AddPassword(props) {
 
         setAlert(false)
         setFillAlert(false)
-
+        
+        
         if (!password || !rePassword) {
             setFillAlert(true)
             return
@@ -46,12 +47,11 @@ export default function AddPassword(props) {
         if (password !== rePassword) {
             setAlert(true)
             return
-        }       
-
+        }
         await authenticateUpdate(`/api/user/${userId}`, 'PUT', {
             password
         }, (user) => {
-            console.log(user)           
+            console.log(user)
         }, (e) => {
             console.log("Error", e);
         })
@@ -63,7 +63,7 @@ export default function AddPassword(props) {
             userContext.logIn(user)
             history.push("/")
         }, (response) => {
-            
+
             console.log("Error", response)
         })
 
@@ -75,10 +75,7 @@ export default function AddPassword(props) {
 
         <form className={styles.container} >
 
-            <div className={styles.alerts}>
-                <Alert alert={alert} message={'Passwords do not match'} />
-                <Alert alert={fillAlert} message={'Please fill all fileds'} />
-            </div>
+
 
             <div className={styles.innerContainer}>
 
@@ -87,6 +84,10 @@ export default function AddPassword(props) {
                 </div>
 
                 <div className={styles.rightSide}>
+                    <div className={styles.alerts}>
+                        <Alert alert={alert} message={'Passwords do not match'} />
+                        <Alert alert={fillAlert} message={'Please fill all fileds'} />
+                    </div>
 
                     <div className={styles.title} >Add password to user</div>
 

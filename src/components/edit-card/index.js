@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState, useMemo } from 'react'
+import React, { useCallback, useRef, useState, useMemo, useEffect } from 'react'
 import { useHistory } from "react-router-dom"
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
@@ -24,11 +24,9 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import TaskHistory from '../task-history'
 
 
-export default function EditCard(props) {
-
-    const listId = props.listId
+export default function EditCard({ listId, card: initialCard, project, teamId, hideForm }) {
     const dropdownRef = useRef(null);
-    const [card, setCard] = useState(props.card)
+    const [card, setCard] = useState(initialCard)
     const [name, setName] = useState(card.name)
     const [description, setDescription] = useState(card.description)
     const [progress, setProgress] = useState(card.progress)
@@ -42,6 +40,10 @@ export default function EditCard(props) {
     const dueDate = useMemo(() => new Date(card.dueDate), [card.dueDate])
     const today = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), [])
     const cardId = card._id
+
+    useEffect(() => {
+        setCard(initialCard)
+    }, [initialCard])
 
 
     const deleteCard = useCallback(async (event) => {
@@ -62,11 +64,11 @@ export default function EditCard(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
-            socket.emit('project-update', props.project)
-            socket.emit('task-team-update', props.teamId)
-            props.hideForm()
+            socket.emit('project-update', project)
+            socket.emit('task-team-update', teamId)
+            hideForm()
         }
-    }, [history, props, cardId, listId, socket])
+    }, [history, project, teamId, cardId, listId, socket])
 
 
     const handleSubmit = useCallback(async (event) => {
@@ -110,15 +112,15 @@ export default function EditCard(props) {
         } else {
             const updatedCard = await response.json()
             setCard(updatedCard)
-            socket.emit('project-update', props.project)
-            socket.emit('task-team-update', props.teamId)
+            socket.emit('project-update', project)
+            socket.emit('task-team-update', teamId)
             setIsActive(false)
             setIsProgressActive(false)
             setIsDescriptionActive(false)
             setProgressChanged(false)
         }
 
-    }, [history, name, description, dueDate, progress, listId, cardId, setIsActive, setIsProgressActive, progressChanged, taskHistory, today, socket, props.teamId, props.project])
+    }, [history, name, description, dueDate, progress, listId, cardId, setIsActive, setIsProgressActive, progressChanged, taskHistory, today, socket, teamId, project])
 
 
 
@@ -151,7 +153,7 @@ export default function EditCard(props) {
 
                     <div className={styles.firstRow}>
 
-                        <div className={styles.inputTitles}>
+                        <div className={styles.nameWrapper}>
                             <span className={styles.pic1}>
                                 <img src={pic1} alt="pic1" />
                             </span>
@@ -161,7 +163,8 @@ export default function EditCard(props) {
                                          onBlur={handleSubmit}
                                     >
                                         <textarea ref={dropdownRef} className={styles.nameInput}
-                                            value={name} onChange={e => setName(e.target.value)} />
+                                            value={name} onChange={e => setName(e.target.value)} 
+                                        />
                                     </span>
                                     :
                                     <span className={styles.nameContainer}>
@@ -178,7 +181,7 @@ export default function EditCard(props) {
                                 <img src={pic2} alt="pic2" />
                             </span>
                             <span className={styles.progressContainer}>
-                                <p  >Progress</p>
+                                <p>Progress</p>
                             </span>
                         </div>
                         <div>
@@ -191,7 +194,12 @@ export default function EditCard(props) {
                                         >
                                             <input type='number'
                                                 ref={dropdownRef}
-                                                className={styles.progressInput} value={progress} onChange={e => { setProgress(e.target.value); setProgressChanged(true) }} min="0" max="100" />%
+                                                className={styles.progressInput} 
+                                                value={progress} 
+                                                onChange={e => changeProgress(e.target.value)} 
+                                                min="0" 
+                                                max="100" 
+                                            />%
                                         </span></div>
                                     :
                                     <div className={styles.progressDiv} >
@@ -279,9 +287,9 @@ export default function EditCard(props) {
                                 card={card}
                                 size={30}
                                 listId={listId}
-                                project={props.project}
+                                project={project}
                                 title={'Add'}
-                                teamId={props.teamId}
+                                teamId={teamId}
                             />
                         </div>
                     </div>
@@ -294,9 +302,9 @@ export default function EditCard(props) {
                                     cardDueDate={dueDate}
                                     cardId={cardId}
                                     listId={listId}
-                                    project={props.project}
+                                    project={project}
                                     showEditCard={false}
-                                    teamId={props.teamId}
+                                    teamId={teamId}
                                 />
                             </div>
 

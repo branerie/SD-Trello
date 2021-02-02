@@ -9,31 +9,17 @@ import TaskProgress from "../calendar-data/task-progress"
 import TaskDueDate from "../calendar-data/task-dueDate"
 import AddList from "../calendar-data/add-list"
 import AddTask from "../calendar-data/add-task"
-import TaskMembers from "../calendar-data/task-members"
 import ProjectContext from "../../contexts/ProjectContext"
-import ColumnData from "../calendar-data/column-data"
+import assembleColumnData from "../calendar-data/column-data"
 import Transparent from "../transparent"
 import EditList from "../edit-list"
 import UserContext from '../../contexts/UserContext'
 import { useParams } from "react-router-dom"
 import previous from '../../images/project-list/previous-day.svg'
 import next from '../../images/project-list/next-day.svg'
-
-const createTableEntry = (entryData) => {
-    return {
-        task: entryData.task || '',
-        progress: entryData.progress || '',
-        assigned: entryData.assigned || '',
-        monday: entryData.monday || '',
-        tuesday: entryData.tuesday || '',
-        wednesday: entryData.wednesday || '',
-        thursday: entryData.thursday || '',
-        friday: entryData.friday || '',
-        saturday: entryData.saturday || '',
-        sunday: entryData.sunday || '',
-        dueDate: entryData.dueDate || ''
-    }
-}
+import MembersList from "../members-list"
+import { formatDate, getDateWithOffset } from '../../utils/date'
+import { createTableEntry, getMonday, parseCardHistory  } from './utils'
 
 const TableDndApp = (props) => {
     const [startDate, setStartDate] = useState(getMonday())
@@ -60,7 +46,7 @@ const TableDndApp = (props) => {
         const lists = props.project.lists
         projectContext.setLists(lists)
 
-        lists.forEach((list, index) => {
+        lists.forEach((list, histIndex) => {
             if (projectContext.hiddenLists.includes(list._id)) {
                 return
             }
@@ -68,7 +54,7 @@ const TableDndApp = (props) => {
             data.push(createTableEntry({
                 task: (
                     <div 
-                        key={index} 
+                        key={histIndex} 
                         className={styles.listNameContainer} 
                         style={{ background: list.color || '#A6A48E' }}
                         onClick={() => onListClick(list)}
@@ -108,37 +94,16 @@ const TableDndApp = (props) => {
             })
 
             listCards.forEach(card => {
+                const cardDueDate = card.dueDate ? new Date(card.dueDate) : ''
+                const historyArr2 = parseCardHistory(card.history)
 
-                let cardDate = ''
-                let thisCardDate = ''
-                if (card.dueDate) {
-                    cardDate = new Date(card.dueDate)
-                    thisCardDate = cardDate.getTime()
+                const cellData = {
+                    date: cardDueDate,
+                    history: historyArr2,
+                    progress: card.progress
                 }
 
-                let historyArr
-                if (card.history) {
-                    historyArr = []
-                    let taskHistory = card.history
-                    for (let i = 0; i < taskHistory.length; i++) {
-                        let currElement = taskHistory[i]
-
-                        if (i === taskHistory.length - 1) {
-                            historyArr.push(`${currElement.date}*${currElement.event}`)
-                            break;
-                        }
-
-                        const currElementSlice = currElement.event.slice(0, 8)
-                        const taskHistorySlice = taskHistory[i + 1].event.slice(0, 8)
-                        if (currElementSlice === taskHistorySlice && currElement.date === taskHistory[i + 1].date) {
-
-                        } else {
-                            historyArr.push(`${currElement.date}*${currElement.event}`)
-                        }
-                    }
-                } else {
-                    historyArr = null
-                }
+                const weekdayData = JSON.stringify(cellData)
 
                 data.push(createTableEntry({
                     task:
@@ -157,21 +122,25 @@ const TableDndApp = (props) => {
                         ),
                     assigned:
                         (
-                            <TaskMembers value={card.members} card={card} cardId={card._id} listId={list._id} project={props.project} size={30} title='+' />
+                            <MembersList
+                                members={card.members}
+                                maxLength={3}
+                                maxDisplayLength={1}                                
+                            />
                         ),
-                    monday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                    tuesday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                    wednesday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                    thursday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                    friday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                    saturday: historyArr + '/' + thisCardDate + "/" + card.progress,
-                    sunday: historyArr + '/' + thisCardDate + "/" + card.progress,
+                    monday: weekdayData,
+                    tuesday: weekdayData,
+                    wednesday: weekdayData,
+                    thursday: weekdayData,
+                    friday: weekdayData,
+                    saturday: weekdayData,
+                    sunday: weekdayData,
                     dueDate: (
                         <div>
                             <span>
                                 <TaskDueDate
-                                    value={(thisCardDate !== '' && thisCardDate !== 0) ? ('0' + cardDate.getDate()).slice(-2) + '-' + ('0' + (cardDate.getMonth() + 1)).slice(-2) + '-' + cardDate.getFullYear() : ''}
-                                    cardDueDate={cardDate}
+                                    value={cardDueDate ? formatDate(cardDueDate, '%d-%m-%Y') : ''}
+                                    cardDueDate={cardDueDate}
                                     cardId={card._id}
                                     listId={list._id}
                                     props={props}
@@ -198,35 +167,25 @@ const TableDndApp = (props) => {
 
     useEffect(() => {
         updateTableData()
-    }, [props.filter, props.project])
+    }, [props.filter, props.project, projectContext.hiddenLists])
 
     const changeStartDate = (dayDiff) => {
-        const newStartDate = new Date(startDate)
-        newStartDate.setDate(newStartDate.getDate() + dayDiff)
-        updateTableData()
+        const newStartDate = getDateWithOffset(startDate, dayDiff)
         setStartDate(newStartDate)
-    }
-
-    function getMonday (date) {
-        date = date || new Date()
-    
-        // need to change to 7 in case date is Sunday (which in JS is 0, while Monday is 1)
-        const dateDay = date.getDay() || 7
-        const monday = new Date(date)
-        monday.setDate(date.getDate() - (dateDay - 1))
-    
-        return monday
     }
 
     return (
         <div className={styles.pageContainer}>
-            {
-                currList ?
+            { currList &&
                     < div >
                         <Transparent hideForm={() => setCurrList('')} >
-                            <EditList hideForm={() => setCurrList('')} list={currList} project={props.project} />
+                            <EditList 
+                                hideForm={() => setCurrList('')} 
+                                list={currList}
+                                 project={props.project} 
+                            />
                         </Transparent >
-                    </div > : null
+                    </div >
             }
             <div className={styles.buttoDiv}>
                 <span>
@@ -281,7 +240,7 @@ const TableDndApp = (props) => {
                     // getTrProps={getTrProps}
                     data={tableData}
                     columns={
-                        ColumnData(startDate)
+                        assembleColumnData(startDate)
                     }
                     defaultPageSize={10}
                     pageSize={tableData.length}
@@ -303,7 +262,6 @@ const TableDndApp = (props) => {
             </div>
         </div>
     )
-
 }
 
 export default TableDndApp
