@@ -51,7 +51,10 @@ const MyTasksPage = () => {
         })
 
         socket.emit('task-team-join', id)
-        return () => socket.off('task-team-updated')
+        return () => {
+            socket.off('task-team-updated')
+            socket.off('task-update-team')
+        }
     }, [currTeam, socket, selectTeam])
 
     function taskTeamUpdate(projects) {

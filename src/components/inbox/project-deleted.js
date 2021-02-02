@@ -5,7 +5,7 @@ import getCookie from '../../utils/cookie'
 import Button from '../button'
 import styles from './index.module.css'
 
-export default function TeamInvitationResponse({ message, setInboxHistory, options, isInbox }) {
+export default function ProjectDeleted({ message, setInboxHistory, options, isInbox }) {
     const history = useHistory()
     const token = getCookie("x-auth-token")
     const socket = useSocket()
@@ -54,14 +54,13 @@ export default function TeamInvitationResponse({ message, setInboxHistory, optio
         <div className={styles.message}>
             <div className={styles.container}>
                 <div className={styles.container}>
-                    <div className={styles.bold}>{message.subject}:</div>
-                    <span>{message.sendFrom.username}{message.accepted ? <span> accepted</span> : <span> declined</span>}</span>
+                    <div className={styles.bold}>Project {message.project.name} deleted</div>
                 </div>
                 <div>{new Date(message.createdAt).toLocaleDateString("en-US", options)}</div>
             </div>
             <div>
-                <div className={`${styles.bold} ${styles.inline}`}>Team name:</div>
-                <div className={styles.inline}>{message.team.name}</div>
+                <div className={`${styles.bold} ${styles.inline}`}>Deleted by:</div>
+                <div className={styles.inline}>{message.sendFrom.username}</div>
             </div>
             <div>
                 {

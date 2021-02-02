@@ -12,10 +12,6 @@ import TeamContext from "../../contexts/TeamContext"
 import pic1 from '../../images/team-page/pic1.svg'
 import { useSocket } from "../../contexts/SocketProvider"
 
-
-
-
-
 const TeamPage = () => {
 
     const [isVisible, setIsVisible] = useState(false)
@@ -28,23 +24,19 @@ const TeamPage = () => {
     const userContext = useContext(UserContext)
     const teamContext = useContext(TeamContext)
     const socket = useSocket()
-    // const [teams, setTeams] = useState([])
-
-
-
     const teamId = params.teamid
 
 
     const teamUpdate = useCallback(() => {
         let currTeam = {}
-        let found        
+        let found
         teamContext.teams.forEach(t => {
             if (t._id === teamId) {
                 currTeam = t
                 setCurrteamUser(t)
                 found = true
             }
-        })  
+        })
         if (!found) {
             return
         }
@@ -59,11 +51,13 @@ const TeamPage = () => {
 
         if (socket == null) return
 
-        socket.on('team-update', teamUpdate())
-        // return () => socket.off('team-updated')
+        socket.on('team-update', teamUpdate)
+        return () => socket.off('team-updated')
     }, [socket, teamUpdate, params, teamContext.teams, userContext, teamId])
 
-
+    useEffect(() => {
+        teamUpdate()
+    }, [teamUpdate])
 
 
     // useEffect(() => {
@@ -106,11 +100,8 @@ const TeamPage = () => {
                                 </Transparent>
                             </div> : null
                     }
-
                 </div>
-               
-               
-               
+
                 <div className={styles.rightSde}>
                     <div className={styles.rightSideTeam}>
                         <TeamMembers
@@ -118,17 +109,16 @@ const TeamPage = () => {
                         />
                         <button className={styles.newProjectButton} onClick={() => setShowForm(true)} >View Team</button>
                         {
-                            showForm ?
-                                (<Transparent hideForm={() => setShowForm(false)}>
-                                    <EditTeam currTeam={currTeamUser} hideForm={() => { setShowForm(false) }} />
-                                </Transparent>)
-                                : null
+                            showForm &&
+                            <Transparent hideForm={() => setShowForm(false)}>
+                                <EditTeam currTeam={currTeamUser} hideForm={() => { setShowForm(false) }} />
+                            </Transparent>
                         }
                     </div>
 
-                <div className={styles.pic1}>
-                    <img src={pic1} alt="" />
-                </div>
+                    <div className={styles.pic1}>
+                        <img src={pic1} alt="" />
+                    </div>
 
                 </div>
             </div>

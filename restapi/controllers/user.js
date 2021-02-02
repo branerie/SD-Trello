@@ -436,7 +436,12 @@ async function deleteUserMessage(req, res, next) {
 
     try {
         await models.User.updateOne({ _id: userId }, { $pull: { inboxHistory: messageId } }).session(session)
-        await models.Message.deleteOne({ _id: messageId }).session(session)
+        const message = await models.Message.findOneAndUpdate({ _id: messageId }, { $pull: { recievers: userId } }, { new: true }).session(session)
+
+        if (message.recievers.length === 0) {
+            await models.Message.deleteOne({ _id: messageId }).session(session)
+        }
+
         await session.commitTransaction()
 
         session.endSession()

@@ -69,22 +69,26 @@ export default function TaskAssignment({ message, setInboxHistory, options, isIn
                 <div className={`${styles.bold} ${styles.inline}`}>Assigned by:</div>
                 <div className={styles.inline}>{message.sendFrom.username}</div>
             </div>
+            {
+                (message.team.isDeleted || message.project.isDeleted) &&
+                <div className={styles.bold}>Project deleted</div>
+            }
             <div>
-                <Button
-                    className={styles.button}
-                    onClick={() => history.push(`/project-board/${message.team._id}/${message.project._id}`)}
-                    title='Go to Project'
-                />
                 {
-                    isInbox &&
+                    !message.team.isDeleted && !message.project.isDeleted &&
+                    <Button
+                        className={styles.button}
+                        onClick={() => history.push(`/project-board/${message.team.id}/${message.project.id}`)}
+                        title='Go to Project'
+                    />
+                }
+                {
+                    isInbox ?
                     <Button
                         className={styles.button}
                         onClick={moveToHistory}
                         title='Move to History'
-                    />
-                }
-                {
-                    !isInbox &&
+                    /> :
                     <Button
                         className={styles.button}
                         onClick={() => { if (window.confirm('Are you sure you wish to delete this message?')) deleteMessage(message) }}

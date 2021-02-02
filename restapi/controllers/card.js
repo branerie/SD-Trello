@@ -62,7 +62,16 @@ async function updateCard(req, res, next) {
         await models.Card.updateOne({ _id: id }, { ...obj }).session(session)
         
         if (newMember) {
-            const messageCreationResult = await models.Message.create([{ subject: 'Task assignment', team: teamId, project: projectId, list: listId, card: cardId, sendFrom: userId, recievers: [newMember] }], { session })
+            const team = await models.Team.findOne({ _id: teamId })
+            const teamObj = { name: team.name, id: team._id }
+            const project = await models.Project.findOne({ _id: projectId })
+            const projectObj = { name: project.name, id: projectId }
+            const list = await models.List.findOne({ _id: listId })
+            const listObj = { name: list.name, id: listId }
+            const card = await models.Card.findOne({ _id: cardId })
+            const cardObj = { name: card.name, id: cardId }
+            
+            const messageCreationResult = await models.Message.create([{ subject: 'Task assignment', team: teamObj, project: projectObj, list: listObj, card: cardObj, sendFrom: userId, recievers: [newMember] }], { session })
             const createdMessage = messageCreationResult[0]
             await models.User.updateOne({ _id: newMember._id }, { $push: { inbox: createdMessage } })
         }
