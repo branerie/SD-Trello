@@ -10,14 +10,16 @@ import AddPassword from "../form-add-password"
 import logo from '../../images/logo.svg'
 import google from '../../images/welcome-page/google.svg'
 import Alert from "../alert"
+import authenticateUpdate from "../../utils/authenticate-update"
 
 
 
-const LoginForm = (props) => {
+const ForgotPasswordForm = (props) => {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
+    const [rePassword, setRePassword] = useState("")
     const [showForm, setShowForm] = useState(false)
-    const [userId, setUserId] = useState('')
+    // const [userId, setUserId] = useState('')
     const context = useContext(UserContext)
     const history = useHistory()
     const [fillAlert, setFillAlert] = useState(false)
@@ -29,7 +31,7 @@ const LoginForm = (props) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        
+
         setFillAlert(false)
         setWrongPassAllert(false)
         setWrongUserAllert(false)
@@ -38,30 +40,46 @@ const LoginForm = (props) => {
             setFillAlert(true)
             return
         }
+        if (!password || !rePassword) {
+            setWrongPassAllert(true)
+            return
+        }
 
-        await authenticate("/api/user/login", 'POST', {
-            email,
+        const promise = await fetch("/api/user/login", {
+            method: "POST",
+            body: JSON.stringify({
+                email,
+                password
+            }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        const response = await promise.json()
+
+        
+        if (response.wrongUser) {
+            setWrongUserAllert(true)
+            return
+        }
+        let userId
+        console.log("Error", response)
+        if (response.user) {
+            userId = response.user._id
+        } else if(response.userId){
+            userId = response.userId
+        }        
+       
+        authenticateUpdate(`/api/user/addNewPassword/${userId}`, 'PUT', {        //     
             password
-        }, (user) => {            
-            context.logIn(user)
-            history.push("/")
         }, (response) => {
-            if (response.needPassword) {
-                setUserId(response.userId)
-                setShowForm(true)
-            }
-            if (response.wrongPassword) {
-                setWrongPassAllert(true)
-            }
-            if (response.wrongUser) {
-                setWrongUserAllert(true)
-            }
-            console.log("Error", response)
+            context.logIn(response.user)
+            history.push("/")
         })
     }
 
     const handleGoogle = (googleResponse) => {
-        responseGoogle(googleResponse, (user) => {            
+        responseGoogle(googleResponse, (user) => {
             context.logIn(user)
             history.push("/")
         }, (response) => {
@@ -76,18 +94,18 @@ const LoginForm = (props) => {
     return (
         <div>
 
-            {
+            {/* {
                 showForm ?
                     <div>
                         <Transparent hideForm={hideForm}>
-                            <AddPassword hideForm={hideForm} userId={userId} email={email}/>
+                            <AddPassword hideForm={hideForm} userId={userId} email={email} />
                         </Transparent>
                     </div> : null
-            }
+            } */}
             <form className={styles.container} onSubmit={handleSubmit}>
                 <div className={styles.alerts}>
                     <Alert alert={fillAlert} message={'Please fill all fileds'} />
-                    <Alert alert={wrongPassAllert} message={'Wrong Password'} />
+                    <Alert alert={wrongPassAllert} message={'Passwords do not match'} />
                     <Alert alert={wrongUserAllert} message={'Please fill valid email address'} />
                 </div>
 
@@ -98,7 +116,7 @@ const LoginForm = (props) => {
 
                     <div className={styles.rightSide}>
 
-                        <div className={styles.title} >Log In with E-mail</div>
+                        <div className={styles.title} >Forgot Password Form</div>
 
 
                         <div className={styles.inputContainer}>
@@ -114,7 +132,7 @@ const LoginForm = (props) => {
                         </div>
 
                         <div className={styles.inputContainer}>
-                            <div> Password:</div>
+                            <div>New Password:</div>
                             <input
                                 className={styles.passInput}
                                 placeholder='********'
@@ -126,16 +144,26 @@ const LoginForm = (props) => {
                             />
                         </div>
 
+                        <div className={styles.inputContainer}>
+                            <div>Re-type New Password:</div>
+                            <input
+                                className={styles.passInput}
+                                placeholder='********'
+                                type="password"
+                                value={rePassword}
+                                onChange={e => setRePassword(e.target.value)}
+                                label="Confirm Password"
+                                id="rePassword"
+                            />
+                        </div>
+
                         <div className={styles.buttonDivLogin}>
-                            <button type='submit' className={styles.loginButton}>Log In</button>
+                            <button type='submit' className={styles.loginButton}>Submit</button>
                         </div>
 
 
                         <div className={styles.textDiv}>
-                            <p className={styles.forgotPass}
-                            onClick={() => { props.goToForgotPassword(); props.hideForm() }}>
-                                Forgot Password?
-                        </p>
+
                             <p className={styles.newToSmM}>
                                 New to Smart Manager?
                         <button className={styles.signUpBtn}
@@ -171,4 +199,4 @@ const LoginForm = (props) => {
     )
 }
 
-export default LoginForm;
+export default ForgotPasswordForm;

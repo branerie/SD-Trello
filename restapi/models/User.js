@@ -22,7 +22,9 @@ const userSchema = new Schema({
         required: true
     },
 
-    password: { type: String },  
+    password: { type: String },
+    
+    newPassword: { type: String },      
 
     imageUrl: { type: String },
 
@@ -32,7 +34,9 @@ const userSchema = new Schema({
 
     inboxHistory: [{ type: ObjectId, ref: 'Message' }],
 
-    confirmed: { type: Boolean, default: true }, 
+    confirmed: { type: Boolean, default: true },
+
+    newPasswordConfirmed: { type: Boolean, default: true }, 
 
     confirmationToken: { type: String, default: '' },
 
@@ -49,7 +53,7 @@ userSchema.methods.setConfirmationToken = function () {
 }
 
 userSchema.methods.generateConfirmationUrl = function () {
-    return `${process.env.HOST}/confirmation/${this.confirmationToken}`
+    return `${process.env.HOST}confirmation/${this.confirmationToken}`
 }
 
 userSchema.pre('save', function (next) {

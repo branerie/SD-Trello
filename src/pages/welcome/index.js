@@ -13,12 +13,15 @@ import facebook from '../../images/welcome-page/facebook-icon.svg'
 import LoginForm from "../../components/login-form"
 import Transparent from "../../components/transparent"
 import SignupForm from "../../components/signup-form"
+import ForgotPasswordForm from "../../components/form-forgot-password"
 
 
 const WelcomePage = () => {
 
   const [isVisible, setIsVisible] = useState(false)
   const [isVisibleSignUp, setIsVisibleSignUp] = useState(false)
+  const [isVisibleForgot, setIsVisibleForgot] = useState(false)
+
 
   return (
 
@@ -27,7 +30,8 @@ const WelcomePage = () => {
         {isVisible ?
           < div >
             <Transparent hideForm={() => setIsVisible(!isVisible)} >
-              <LoginForm hideForm={() => setIsVisible(!isVisible)} goToSignUp={()=>setIsVisibleSignUp(!isVisibleSignUp)} />
+              <LoginForm hideForm={() => setIsVisible(!isVisible)} goToSignUp={()=>setIsVisibleSignUp(!isVisibleSignUp)} 
+              goToForgotPassword={()=>setIsVisibleForgot(!isVisibleForgot)}/>
             </Transparent >
           </div > : null
         }
@@ -38,6 +42,15 @@ const WelcomePage = () => {
           < div >
             <Transparent hideForm={() => setIsVisibleSignUp(!isVisibleSignUp)} >
               <SignupForm hideForm={() => setIsVisibleSignUp(!isVisibleSignUp)} goToLogin={()=>setIsVisible(!isVisible)} />
+            </Transparent >
+          </div > : null
+        }
+      </div>
+      <div>
+        {isVisibleForgot ?
+          < div >
+            <Transparent hideForm={() => setIsVisibleForgot(!isVisibleForgot)} >
+              <ForgotPasswordForm hideForm={() => setIsVisibleForgot(!isVisibleForgot)} goToSignUp={()=>setIsVisibleSignUp(!isVisibleSignUp)} />
             </Transparent >
           </div > : null
         }

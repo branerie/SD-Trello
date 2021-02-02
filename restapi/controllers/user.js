@@ -33,6 +33,8 @@ router.post('/inbox', auth, moveMessageToHistory)
 
 router.put('/:id', auth, updateUser)
 
+router.put('/addNewPassword/:id', addNewPassword)
+
 router.put('/recentProjects/:id', auth, updateUserRecentProjects)
 
 router.delete('/message/:messageid', auth, deleteUserMessage)
@@ -70,21 +72,18 @@ async function registerUser(req, res, next) {
         if (user === null) {
             const newUser = new models.User({ email, username, password, confirmed: false })
 
-            
+
             newUser.setConfirmationToken()
             const createdUser = await newUser.save()
 
             const token = utils.jwt.createToken({ id: createdUser._id })
 
-            
-            // const updatedUser = await models.User.findOne({ _id: createdUser._id }).select('-password')
-            
             const teams = await getTeams(createdUser._id)
             const response = {
                 user: createdUser,
                 teams
             }
-            utils.sendConfirmationEmail(newUser)
+            utils.sendConfirmationEmail(newUser, 'account')
             res.header("Authorization", token).send(response)
             return
         }
@@ -155,6 +154,7 @@ async function loginUser(req, res, next) {
         if (!match) {
             let response = {}
             response.wrongPassword = true
+            response.userId = foundUser._id
             res.send(response)
             return
         }
@@ -210,17 +210,56 @@ async function logoutUser(req, res, next) {
 }
 
 async function confirmToken(req, res, next) {
-    const { token } = req.body
-    console.log(token);
-    try {
-        const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }
-        // , { new: true }
-        ).select('-password')
-        res.send(user)
-    } catch (error) {
-        console.log(error)
+    const { token, registration } = req.body
+
+
+
+    if (registration) {
+        try {
+            const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }
+                , { new: true }
+            ).select('-password')
+            const newToken = utils.jwt.createToken({ id: user._id })
+            const teams = await getTeams(user._id)
+            const response = {
+                user,
+                teams
+            }           
+            res.header("Authorization", newToken).send(response)
+        } catch (error) {
+            console.log(error)
+        }
+    } else {
+        try {            
+            const userNewPassword = await models.User.findOne({ confirmationToken: token })
+            
+            const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', password: userNewPassword.newPassword, newPassword: '', newPasswordConfirmed: true }, { new: true }).select('-password')
+            const newToken = utils.jwt.createToken({ id: user._id })
+            const teams = await getTeams(user._id)
+            const response = {
+                user,
+                teams
+            }           
+            res.header("Authorization", newToken).send(response)
+        } catch (error) {
+            console.log(error)
+        }
     }
 }
+
+// async function passwordConfirmToken(req, res, next) {
+//     const { token } = req.body
+//     console.log(token);
+//     try {
+//         const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', newPasswordConfirmed: true }
+//             , { new: true }
+//         ).select('-password')
+//         console.log(user);
+//         res.send(user)
+//     } catch (error) {
+//         console.log(error)
+//     }
+// }
 
 async function updateUser(req, res, next) {
     const id = req.params.id
@@ -238,10 +277,14 @@ async function updateUser(req, res, next) {
         await bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, async (err, hash) => {
                 if (err) { next(err); return }
-                await models.User.updateOne({ _id: id }, { ...obj, password: hash, confirmed: false })
-                const updatedUser = await models.User.findOne({ _id: id }).select('-password')
+
+                const updatedUser = await models.User.findOneAndUpdate({ _id: id }, { ...obj, newPassword: hash, newPasswordConfirmed: false }
+                    , { new: true }
+                ).select('-password')
+
 
                 updatedUser.setConfirmationToken() // test
+                await updatedUser.save()
 
 
                 const teams = await getTeams(updatedUser._id)
@@ -250,26 +293,13 @@ async function updateUser(req, res, next) {
                     teams
                 }
 
-                utils.sendConfirmationEmail(updatedUser) //test
-
+                utils.sendConfirmationEmail(updatedUser, 'pass') //test
 
 
                 res.send(response)
                 return
 
-                // newUser.setConfirmationToken()
-                // const createdUser = await newUser.save()
 
-                // const token = utils.jwt.createToken({ id: createdUser._id })
-
-                // const teams = await getTeams(createdUser._id)
-                // const response = {
-                //     user: createdUser,
-                //     teams
-                // }
-                // utils.sendConfirmationEmail(newUser)
-                // res.header("Authorization", token).send(response)
-                // return
             })
         })
     } else {
@@ -282,6 +312,38 @@ async function updateUser(req, res, next) {
         }
         res.send(response)
     }
+}
+
+async function addNewPassword(req, res, next) {
+    const id = req.params.id
+
+    const { password } = req.body
+    await bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, async (err, hash) => {
+            if (err) { next(err); return }
+
+            const updatedUser = await models.User.findOneAndUpdate({ _id: id }, { newPassword: hash, newPasswordConfirmed: false }
+                , { new: true }
+            ).select('-password')
+
+
+            updatedUser.setConfirmationToken() // test
+            await updatedUser.save()
+
+            const teams = await getTeams(updatedUser._id)
+            const response = {
+                user: updatedUser,
+                teams
+            }
+
+            utils.sendConfirmationEmail(updatedUser, 'pass') //test
+
+
+            res.send(response)
+            return
+
+        })
+    })
 }
 
 async function updateUserRecentProjects(req, res, next) {
