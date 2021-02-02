@@ -55,6 +55,8 @@ const ProfilePage = () => {
     event.preventDefault()
 
     setAlert(false)
+    setPaswordActive(!passwordActive)
+
 
     if (!username && !password) {
       return
@@ -64,6 +66,10 @@ const ProfilePage = () => {
       setAlert(true)
       return
     }
+
+    // if(password && rePassword){
+    //   setChangePassAlert(true)
+    // }
 
     await authenticateUpdate(`/api/user/${id}`, 'PUT', {
       username,
@@ -108,130 +114,135 @@ const ProfilePage = () => {
 
         <div className={styles.leftContainer}>
 
-        <div className={styles.leftButtons}>
+          <div className={styles.leftButtons}>
 
-          <div>
-            <button className={styles.navigateButtons}
-              onClick={() => { setUserNameActive(!userNameActive) }}
-            >Username:</button>
-          </div>
+            <div>
+              <button className={styles.navigateButtons}
+                onClick={() => { setUserNameActive(!userNameActive) }}
+              >Username:</button>
+            </div>
 
-          <div>
-            <button className={styles.navigateButtons}
-              onClick={() => { setPaswordActive(!passwordActive) }}
-            >Change Password</button>
-          </div>
+            <div>
+              <button className={styles.navigateButtons}
+                onClick={() => { setPaswordActive(!passwordActive) }}
+              >Change Password</button>
+            </div>
 
-          <div>
-            <button className={styles.navigateButtons}
-              onClick={() => { setPaswordActive(!passwordActive) }}
-            >Confirm Password</button>
-          </div>
+            <div>
+              <button className={styles.navigateButtons}
+                onClick={() => { setPaswordActive(!passwordActive) }}
+              >Confirm Password</button>
+            </div>
 
-          <div>
-            <button className={styles.navigateButtons}
-            >Email:</button>
-          </div>
+            <div>
+              <button className={styles.navigateButtons}
+              >Email:</button>
+            </div>
 
-          <div>
-            <button className={styles.navigateButtons}
-              onClick={() => history.push(`/my-tasks/${id}`)}
-            >My Tasks</button>
-          </div>
+            <div>
+              <button className={styles.navigateButtons}
+                onClick={() => history.push(`/my-tasks/${id}`)}
+              >My Tasks</button>
+            </div>
 
-          <div>
-            <div className={styles.myTeamsContainer}>
-              < button onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)}
-                className={styles.myTeamButton}
-              >My Teams</ button>
-              <div className={styles.selectTeamContainer}>
-                {
-                  showTeamsVisibleForm ?
-                    <div className={styles.teamsHome} ref={dropdownRef}>
-                      {
-                        userTeams.map((t, index) => {
-                          return (
-                            <span key={index}>
-                              <div
-                                className={styles.navigateButtonsTeams}
-                                onClick={() => goToTeamPage(t._id)}
+            <div>
+              <div className={styles.myTeamsContainer}>
+                < button onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)}
+                  className={styles.myTeamButton}
+                >My Teams</ button>
+                <div className={styles.selectTeamContainer}>
+                  {
+                    showTeamsVisibleForm ?
+                      <div className={styles.teamsHome} ref={dropdownRef}>
+                        {
+                          userTeams.map((t, index) => {
+                            return (
+                              <span key={index}>
+                                <div
+                                  className={styles.navigateButtonsTeams}
+                                  onClick={() => goToTeamPage(t._id)}
 
-                              >{t.name}</div>
-                            </span>
+                                >{t.name}</div>
+                              </span>
+                            )
+                          }
                           )
                         }
-                        )
-                      }
-                    </div>
-                    : null
-                }
+                      </div>
+                      : null
+                  }
+                </div>
               </div>
             </div>
+
+
+
           </div>
 
 
-
-        </div>
-
-
-        <div className={styles.middleButtons}>
+          <div className={styles.middleButtons}>
 
 
-          <div>
-            < input
-              // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-              className={styles.inputFieldsProfile}
-              placeholder={userName}
-              disabled={userNameActive}
-            />
+            <div>
+              < input
+                // onClick={() => setShowTeamForm(true)}
+                // title='Create Team' 
+                // className={styles.teamNames}
+                value={username}
+                onChange={e => setUsername(e.target.value)}
+                className={styles.inputFieldsProfile}
+                placeholder={userName}
+                disabled={userNameActive}
+              />
 
+            </div>
+
+            <div>
+              < input
+                onChange={e => setPassword(e.target.value)}
+                className={styles.inputFieldsProfile}
+                placeholder={'********'}
+                disabled={passwordActive}
+                type="password"
+              />
+            </div>
+
+            <div className={styles.alerts}>
+              <Alert alert={alert} message={'Passwords do not match'} />
+            </div>
+
+            {!passwordActive ?
+              <div className={styles.newPassAlert}>
+                Important!!! You have to activate your new password by following the link sent to your email. You have to do this in the next hour in order for your new password to be activated
+            </div> : null
+            }
+            <div>
+              < input
+                onChange={e => setRePassword(e.target.value)}
+                className={styles.inputFieldsProfile}
+                placeholder={'********'}
+                disabled={passwordActive}
+                type="password"
+              />
+            </div>
+
+            <div>
+              < input
+                // onClick={() => setShowTeamForm(true)}
+                // title='Create Team' 
+                // className={styles.teamNames}
+                className={styles.inputFieldsProfile}
+                value={userEmail}
+                disabled={true}
+              // type="password"
+              />
+            </div>
+
+
+            <div className={styles.buttonDivSave}>
+              <button type='submit' className={styles.saveButton} onClick={(e) => handleSubmit(e)}>Save</button>
+            </div>
           </div>
-
-          <div>
-            < input              
-              onChange={e => setPassword(e.target.value)}
-              className={styles.inputFieldsProfile}
-              placeholder={'********'}
-              disabled={passwordActive}
-              type="password"
-            />
-          </div>
-
-          <div className={styles.alerts}>
-            <Alert alert={alert} message={'Passwords do not match'} />
-          </div>
-
-          <div>
-            < input              
-              onChange={e => setRePassword(e.target.value)}
-              className={styles.inputFieldsProfile}
-              placeholder={'********'}
-              disabled={passwordActive}
-              type="password"
-            />
-          </div>
-
-          <div>
-            < input
-              // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
-              className={styles.inputFieldsProfile}
-              value={userEmail}
-              disabled={true}
-            // type="password"
-            />
-          </div>
-
-
-          <div className={styles.buttonDivSave}>
-            <button type='submit' className={styles.saveButton} onClick={(e) => handleSubmit(e)}>Save</button>
-          </div>
-        </div>
 
         </div>
 
@@ -252,11 +263,11 @@ const ProfilePage = () => {
           </div>
 
 
-          
-            <img className={styles.pic1} src={pic1} alt="" 
-            // width="80%" height="80%"
-             />
-          
+
+          <img className={styles.pic1} src={pic1} alt=""
+          // width="80%" height="80%"
+          />
+
         </div>
 
       </div>

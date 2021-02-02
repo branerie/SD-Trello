@@ -5,6 +5,7 @@ function userObject(response) {
         teams: response.teams,
         inbox: response.user.inbox,
         confirmed: response.user.confirmed,
+        newPasswordConfirmed: response.user.newPasswordConfirmed,
         recentProjects: response.user.recentProjects
     }
 }

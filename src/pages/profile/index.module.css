@@ -173,10 +173,15 @@
 
 .alerts{
   width: 300px;
-  height: auto;
-  
+  height: auto;  
 }
-
+.newPassAlert{
+  background-color: rgb(219, 88, 88);  
+  max-width: 300px;
+  height: auto; 
+  padding: 5px;
+  margin: auto; 
+}
 .myTeamButton {
   /* height: 40px;
   background: #DFE9EE;

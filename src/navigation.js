@@ -33,7 +33,9 @@ const Navigation = () => {
                     <TeamProvider>
                         <Switch>
                             <Route path="/confirmation/:token"><ConfirmationPage /></Route>
-                            {loggedIn && !context.user.confirmed && <Redirect to="/confirmation/not-confirmed" />}
+                            {((loggedIn && !context.user.confirmed)
+                            ||(loggedIn && !context.user.newPasswordConfirmed)
+                            ) && <Redirect to="/confirmation/not-confirmed" />}                            
                             <Route exact path="/" >
                                 {loggedIn ? (<Home />) : (<WelcomePage />)}
                             </Route>
