@@ -85,7 +85,6 @@ export default function CreateTeam(props) {
             return
         } else {
             const team = await response.json()
-            console.log(userContext.user.teams);
             const arr = [...teamContext.teams]
             arr.push(team)
             // const userTeams = [...userContext.user.teams]
