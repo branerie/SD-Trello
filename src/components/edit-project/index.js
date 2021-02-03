@@ -67,7 +67,11 @@ export default function EditProject(props) {
             history.push("/error")
         } else {
             props.hideForm()
-            socket.emit('team-update', params.teamid)
+            const obj = {
+                projectId: props.project._id,
+                teamId: params.teamid
+            }
+            socket.emit('project-deleted', obj)
             history.push(`/team/${params.teamid}`)
         }
     }

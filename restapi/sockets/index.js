@@ -50,6 +50,27 @@ function sockets(socket) {
         socket.emit('project-updated', updatedProject)
     })
 
+    socket.on('project-deleted', async (obj) => {
+        console.log(username, 'team-deleted')
+        socket.to(obj.teamId).emit('project-deleted', obj.projectId)
+        const team = await models.Team.findOne({ _id: obj.teamId }).select('members')
+        team.members.map(async m => {
+            const user = await models.User.findOne({ _id: m }).select('-password')
+            const teams = await getTeams(m)
+            const inboxUser = await userInbox(m)
+            const response = {
+                user,
+                teams,
+                inboxUser
+            }
+            if (user.id === userId) {
+                socket.emit('message-sent', response)
+            }
+            socket.to(`${m}`).emit('message-sent', response)
+        })
+
+    })
+
     socket.on('task-team-join', (teamId) => {
         console.log(`${username} joined task-${teamId}`)
         socket.join(`task-${teamId}`)
