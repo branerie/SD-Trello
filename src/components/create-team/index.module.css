@@ -105,8 +105,8 @@
     border: solid 1px #363338;
     border-radius: 10px;
     height: 1.8em;
-    width: 100%;
-    margin-left: 1%;
+    /* width: 100%; */
+    /* margin-left: 1%; */
     text-align: left;
     background-color: #DFE9EE;
     outline: none;

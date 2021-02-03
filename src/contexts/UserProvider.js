@@ -40,6 +40,7 @@ const UserProvider = (props) => {
 
     const verifyLogin = useCallback(() => {
         const token = getCookie("x-auth-token")
+        console.log(token)
         if (!token) {
 
             setUser({
@@ -62,7 +63,7 @@ const UserProvider = (props) => {
             if (response.status) {
                 logIn(userObject(response))
             } else {
-                logOut()
+                logOut()                
             }
 
             setLoading(false)
