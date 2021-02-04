@@ -19,7 +19,7 @@ import previous from '../../images/project-list/previous-day.svg'
 import next from '../../images/project-list/next-day.svg'
 import MembersList from "../members-list"
 import { formatDate, getDateWithOffset } from '../../utils/date'
-import { createTableEntry, getMonday, parseCardHistory  } from './utils'
+import { createTableEntry, getMonday, parseCardHistory, applyCardFilters  } from './utils'
 
 const TableDndApp = (props) => {
     const [startDate, setStartDate] = useState(getMonday())
@@ -71,27 +71,7 @@ const TableDndApp = (props) => {
                 )
             }))
 
-            let listCards = list.cards.filter(card => {
-                let cardFilter = false
-                if (props.filter.bool['Not Started'] && 
-                    (card.progress === 0 || card.progress === null)) {
-                    cardFilter = true
-                }
-
-                if (props.filter.bool['In Progress'] && card.progress > 0 && card.progress < 100) {
-                    cardFilter = true
-                }
-                
-                if (props.filter.bool['Done'] && card.progress === 100) {
-                    cardFilter = true
-                }
-
-                const userFilter = props.filter.member 
-                                        ? card.members.some(m => m._id === props.filter.member.id) 
-                                        : true
-
-                return cardFilter && userFilter
-            })
+            let listCards = list.cards.filter(card => applyCardFilters(card, props.filter))
 
             listCards.forEach(card => {
                 const cardDueDate = card.dueDate ? new Date(card.dueDate) : ''
@@ -136,20 +116,16 @@ const TableDndApp = (props) => {
                     saturday: weekdayData,
                     sunday: weekdayData,
                     dueDate: (
-                        <div>
-                            <span>
-                                <TaskDueDate
-                                    value={cardDueDate ? formatDate(cardDueDate, '%d-%m-%Y') : ''}
-                                    cardDueDate={cardDueDate}
-                                    cardId={card._id}
-                                    listId={list._id}
-                                    props={props}
-                                    project={props.project}
-                                    card={card}
-                                    teamId={params.teamid}
-                                />
-                            </span>
-                        </div>
+                        <TaskDueDate
+                            value={cardDueDate ? formatDate(cardDueDate, '%d-%m-%Y') : ''}
+                            cardDueDate={cardDueDate}
+                            cardId={card._id}
+                            listId={list._id}
+                            props={props}
+                            project={props.project}
+                            card={card}
+                            teamId={params.teamid}
+                        />
                     )
                 }))
             })
@@ -248,14 +224,10 @@ const TableDndApp = (props) => {
                     background={
                         'white'
                     }
-                    style={{
-                        'background': '#DFE9EE',
-                        'borderRadius': '10px',
-                        'border': '1px solid #707070',
-                        'width': 'auto',
-                        'display': 'flex',
-                        'height': '70vh'                        
-                    }}
+                    className={`${styles.reactTable} -highlight`}
+                    getTbodyProps={() => ({
+                        className: styles.reactTableBody
+                    })}
                 />
 
                 {/* </DragDropContext> */}

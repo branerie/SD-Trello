@@ -56,7 +56,13 @@ export default function TaskName(props) {
       {
         isActive ?
           < div ref={dropdownRef} className={styles.nameContainer} onBlur={editCardName} >
-            <input className={styles.inputTaskName} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} />
+            {/* <input className={styles.inputTaskName} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} /> */}
+            <textarea 
+              className={styles.inputTaskName} 
+              value={cardName}
+              onChange={e => setCardName(e.target.value)}
+              rows={2}
+            />
           </div> :
           <div className={styles.tableText} onClick={() => setIsActive(!isActive)} >
             <span>{cardName}</span>

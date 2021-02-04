@@ -92,7 +92,12 @@ export default function TaskProgress(props) {
                     padding: '5px',
                     fontSize: "14px", border: 'solid black 1px',
                     borderRadius: '5px',
-                    height: '100%', width: '100%', textAlign: 'center'
+                    minHeight: '2rem', 
+                    width: '100%', 
+                    textAlign: 'center',
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center'
                 }} > {value} %</div>
             )
 
@@ -126,7 +131,7 @@ export default function TaskProgress(props) {
 
 
     return (
-        <span>
+        <>
 
             {
                 isActive ?
@@ -135,13 +140,6 @@ export default function TaskProgress(props) {
                             className={styles.taskProgressButtonInput}
                             style={{
                                 backgroundColor: [getBackGroundColor(cardProgress)],
-                                // padding: '2px',
-                                // fontSize: "16px",
-                                // 'font-family': 'inherit',
-                                // border: 'solid black 1px',
-                                // borderRadius: '5px', width: '100%', 
-                                // height:'inherit',
-                                // textAlign: 'center'
                             }}
                             type={'number'}
                             value={cardProgress}
@@ -165,7 +163,7 @@ export default function TaskProgress(props) {
                     // }
                     // </div>
             }
-        </span>
+        </>
     )
 
 

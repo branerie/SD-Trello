@@ -19,11 +19,13 @@ const assembleColumnData = (startDate) => {
             background: color, 
             color: messageColor,
             width: '100%',
-            textAlign: 'center',
             padding: '5px', 
             fontSize: '14px',
             border: '1px solid #363338',
-            borderRadius: '5px'
+            borderRadius: '5px',
+            display: 'flex',
+            alignItems: 'center',
+            justifyContent: 'center'
         }
 
         return (
@@ -43,8 +45,13 @@ const assembleColumnData = (startDate) => {
         const { date, history, progress } = JSON.parse(dataString)
         const cellDate = getDateWithOffset(startDate, numDaysOffset)
         const eventsInWeek = []
+        let taskStartDate = null
         let finishedDate = null
         if (history) {
+            if (history.length > 0) {
+                taskStartDate = new Date(history[0].date)
+            } 
+
             for (let event of history) {
                 const eventDate = new Date(event.date)
                 if (compareDates(eventDate, startDate) >= 0 && 
@@ -112,6 +119,12 @@ const assembleColumnData = (startDate) => {
                 // task has finished in the past and cell date is later than date of finish
                 return ''
             }
+
+            if (isMonday && taskStartDate && compareDates(taskStartDate, startDate) > 0) {
+                // task has started, but first displayed date is earlier than task start date
+                return ''
+            }
+
             
             // task is neither Finished, nor Delayed, but has a Due Date
             // therefore, it's In Progress
@@ -139,10 +152,45 @@ const assembleColumnData = (startDate) => {
 
     const wrapCellData = (cellData) => {
         return (
-            <div style={{ whiteSpace: 'normal', overflowWrap: 'anywhere', textAlign: 'left' }}>
+            <div style={{ 
+                whiteSpace: 'normal', 
+                overflowWrap: 'anywhere', 
+                textAlign: 'left',
+                height: '100%'}}
+            >
                 {cellData}
             </div>
         )
+    }
+
+    const sortByTask = (taskOne, taskTwo) => {
+        const taskOneName = taskOne.props.card ? taskOne.props.card.name : ''
+        const taskTwoName = taskTwo.props.card ? taskTwo.props.card.name : ''
+
+        return taskOneName.localeCompare(taskTwoName)
+    }
+
+    const sortByProgress = (progressOne, progressTwo) => {
+        const firstValue = progressOne ? parseInt(progressOne.props.value.split('/')[0]) : 0
+        const secondValue = progressTwo ? parseInt(progressTwo.props.value.split('/')[0]) : 0
+
+        if (firstValue > secondValue) {
+            return 1
+        } else if (firstValue < secondValue) {
+            return -1
+        }
+
+        return 0
+    }
+
+    const sortByDueDate = (dueDateOne, dueDateTwo) => {
+        const dueDateOneValue = dueDateOne.props && dueDateOne.props.cardDueDate
+        const dueDateTwoValue = dueDateTwo.props && dueDateTwo.props.cardDueDate
+
+        const parsedDateOne = dueDateOneValue ? new Date(dueDateOneValue) : new Date('1970-01-01')
+        const parsedDateTwo = dueDateTwoValue ? new Date(dueDateTwoValue) : new Date('1970-01-01')
+
+        return compareDates(parsedDateOne, parsedDateTwo)
     }
 
     return (
@@ -152,16 +200,20 @@ const assembleColumnData = (startDate) => {
                     return <div className={styles.header}>Task</div>
                 },
                 accessor: "task",
-                minWidth: 400,
-                Cell: ({ value }) => wrapCellData(value)
+                minWidth: 450,
+                Cell: ({ value }) => wrapCellData(value),
+                sortable: true,
+                sortMethod: sortByTask
             },
             {
                 Header: () => {
                     return <div className={styles.header}>Progress</div>
                 },
                 accessor: "progress",
-                minWidth: 80,
-                Cell: ({ value }) => wrapCellData(value)
+                minWidth: 70,
+                Cell: ({ value }) => wrapCellData(value),
+                sortable: true,
+                sortMethod: sortByProgress
             },
             {
                 Header: () => {
@@ -169,7 +221,8 @@ const assembleColumnData = (startDate) => {
                 },
                 accessor: "assigned",
                 minWidth: 90,
-                Cell: ({ value }) => wrapCellData(value)
+                Cell: ({ value }) => wrapCellData(value),
+                sortable: false
             },
             {
                 Header: getHeaderDateHtml(0),
@@ -232,7 +285,9 @@ const assembleColumnData = (startDate) => {
                     return <div className={styles.header}>Due Date</div>
                 },
                 accessor: "dueDate",
-                minWidth: 120,
+                minWidth: 110,
+                sortable: true,
+                sortMethod: sortByDueDate
             }
         ]
     )

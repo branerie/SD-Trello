@@ -17,7 +17,7 @@ export default function AddTask(props) {
 
         <div className={styles.flexend}>
             <ButtonClean
-                className={styles.addnote}
+                className={styles.cursorPointer}
                 onClick={() => setIsVisible(!isVisible)}
                 title='+ Add Task'
             />

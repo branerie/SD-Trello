@@ -1,3 +1,5 @@
+import { compareDates } from "../../utils/date"
+
 const createTableEntry = (entryData) => {
     return {
         task: entryData.task || '',
@@ -58,8 +60,35 @@ const getMonday = (date) => {
     return monday
 }
 
+const applyCardFilters = (card, filters) => {
+    let isCardFilterPassed = false
+    if (filters.bool.notStarted && 
+        (card.progress === 0 || card.progress === null)) {
+        isCardFilterPassed = true
+    }
+
+    if (filters.bool.inProgress && card.progress > 0 && card.progress < 100) {
+        isCardFilterPassed = true
+    }
+    
+    if (filters.bool.done && card.progress === 100) {
+        isCardFilterPassed = true
+    }
+
+    const isUserFilterPassed = filters.member 
+                    ? card.members.some(m => m._id === filters.member.id) 
+                    : true
+
+    const isDueDateFilterPassed = filters.dueBefore
+                    ? card.dueDate && compareDates(new Date(card.dueDate), filters.dueBefore) <= 0
+                    : true
+
+    return isCardFilterPassed && isUserFilterPassed && isDueDateFilterPassed
+}
+
 export {
     createTableEntry,
     parseCardHistory,
-    getMonday
+    getMonday,
+    applyCardFilters
 }

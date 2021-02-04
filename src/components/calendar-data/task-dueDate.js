@@ -81,27 +81,26 @@ export default function TaskDueDate(props) {
                     </div>}
                     onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }}
                     label="Go to date"
-                    onBlur={() => setIsActive(!isActive)} />
+                    onBlur={() => setIsActive(!isActive)} 
+                />
 
-                <span>
-                    {isVisible ?
-                        < span >
-                            <Transparent hideForm={() => setIsVisible(!isVisible)} >
-                                <EditCard
-                                    hideForm={() => setIsVisible(!isVisible)}
-                                    card={props.card}
-                                    listId={props.listId}
-                                    project={props.project}
-                                    teamId={teamId}
-                                />
-                            </Transparent >
-                        </span >
-                        :
-                        <span>
-                            <img className={styles.pen} src={pen} alt="..." width="13" height="13" onClick={() => setIsVisible(true)} />
-                        </span>
-                    }
-                </span>
+                {isVisible ?
+                    < span >
+                        <Transparent hideForm={() => setIsVisible(!isVisible)} >
+                            <EditCard
+                                hideForm={() => setIsVisible(!isVisible)}
+                                card={props.card}
+                                listId={props.listId}
+                                project={props.project}
+                                teamId={teamId}
+                            />
+                        </Transparent >
+                    </span >
+                    :
+                    <span>
+                        <img className={styles.pen} src={pen} alt="..." width="13" height="13" onClick={() => setIsVisible(true)} />
+                    </span>
+                }
 
 
             </span>
@@ -109,14 +108,16 @@ export default function TaskDueDate(props) {
     }
     else {
         return (
-            <span className={styles.dueDateField}>
+            <div className={styles.dueDateField}>
                 {/* {
                     isActive ? */}
                         <div className={styles.dueDateField}>
-                            <DatePicker customInput={<div>
-                                <span>Select date</span>
-                            </div>}
-                                selected={today} onChange={(date) => { setCardDueDate(date); editCardDueDate(date) }} label="Go to date" />
+                            <DatePicker 
+                                customInput={<span>Select date</span>}
+                                selected={today} 
+                                onChange={(date) => { setCardDueDate(date); editCardDueDate(date) }} 
+                                label="Go to date" 
+                            />
                         </div>
                         {/* :
                         <div className={styles.dueDateField}>
@@ -124,26 +125,29 @@ export default function TaskDueDate(props) {
                         </div>
                 } */}
 
-                <span>
-                    {isVisible ?
-                        < span >
-                            <Transparent hideForm={() => setIsVisible(!isVisible)} >
-                                <EditCard
-                                    hideForm={() => setIsVisible(!isVisible)}
-                                    card={props.card}
-                                    listId={props.listId}
-                                    project={props.project}
-                                    teamId={teamId}
-                                />
-                            </Transparent >
-                        </span >
-                        :
-                        <span>
-                            <img className={styles.pen} src={pen} alt="..." width="13" height="13" onClick={() => setIsVisible(true)} />
-                        </span>
-                    }
-                </span>
-            </span>
+                {isVisible ?
+                    < span >
+                        <Transparent hideForm={() => setIsVisible(!isVisible)} >
+                            <EditCard
+                                hideForm={() => setIsVisible(!isVisible)}
+                                card={props.card}
+                                listId={props.listId}
+                                project={props.project}
+                                teamId={teamId}
+                            />
+                        </Transparent >
+                    </span >
+                    :
+                    <img 
+                        className={styles.pen} 
+                        src={pen} 
+                        alt="..." 
+                        width="13" 
+                        height="13" 
+                        onClick={() => setIsVisible(true)} 
+                    />
+                }
+            </div>
         )
     }
 
