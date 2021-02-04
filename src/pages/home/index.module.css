@@ -2,7 +2,7 @@
 
 .container{
   display: flex;
-  justify-content: space-between;
+  justify-content: space-evenly;
   flex-wrap: wrap;
   /* max-width: 100vw; */
   /* height: 100%; */
@@ -11,7 +11,7 @@
 
 
 .picContainer{
-  width: 40%;
+  width: auto;
   /* margin: 0, auto; */
   /* display: flex; */
   justify-content: center;
@@ -36,18 +36,22 @@
 }
 
 .leftButtons{
-  width: 20%;
+  width: auto;
   margin-left: 2%;
   margin-top: 2%;
 }
 .rightButtons{
-  width: 20%;
+  width: auto;
   text-align: center;
 }
 
 .myTeamsContainer{
   display: flex;
   height: 60px;
+}
+
+.teamsPopUp{
+  width: 0;
 }
 
 .teamsHome{ 
