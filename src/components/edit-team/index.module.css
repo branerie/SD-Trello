@@ -56,7 +56,7 @@
 
 .textInvite{
     font-weight: normal;
-    width: auto;
+    width: 50%;
     margin-right: 2%;
 }
 
@@ -64,11 +64,12 @@
     border: solid 1px #363338;
     border-radius: 10px;
     height: 1.8em;
-    width: 100%;
+    width: 96%;
     margin-left: 0%;
     text-align: left;
     background-color:#DFE9EE;
-    padding: 1%;
+    padding: 2%;
+    padding-right: 1%;
     outline: none;
 }
 
@@ -132,7 +133,7 @@
 }
 
 .inviteInput{
-    width: 100%;
+    width: 53%;
     min-width: 150px;
     z-index: 20;
 }

@@ -104,7 +104,7 @@ export default function CreateTeam(props) {
     }
 
     return (
-        <div className={styles.form}>
+        // <div className={styles.form}>
 
             <form className={styles.container} onSubmit={handleSubmit}>
 
@@ -153,7 +153,8 @@ export default function CreateTeam(props) {
 
                         <div className={styles.selectForInvite}>
                             {
-                                showMembers &&
+                               showMembers && 
+                                <div className={styles.membersPopUp}>
                                 <div className={styles.members}>
                                     {
                                         allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
@@ -180,6 +181,7 @@ export default function CreateTeam(props) {
                                             })
                                     }
                                 </div>
+                                    </div>
                             }
                         </div>
                     </div>
@@ -206,6 +208,6 @@ export default function CreateTeam(props) {
 
 
             </form>
-        </div>
+        // </div>
     )
 }
