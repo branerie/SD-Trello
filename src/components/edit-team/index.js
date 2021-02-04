@@ -29,9 +29,6 @@ export default function EditTeam(props) {
 
     const teamId = params.teamid
 
-
-
-
     const getData = useCallback(() => {
 
         userContext.user.teams.forEach(t => {
@@ -136,6 +133,7 @@ export default function EditTeam(props) {
         } else {
             getData()
             socket.emit('team-update', teamId)
+            socket.emit('message-sent', input._id)
         }
     }
 
@@ -192,7 +190,6 @@ export default function EditTeam(props) {
             history.push("/error")
         } else {
             const deletedTeam = await response.json()
-            socket.emit('team-update', teamId)
             const recievers = [...deletedTeam.members, ...deletedTeam.requests]
             socket.emit('team-deleted', { id: teamId, recievers })
             history.push("/")

@@ -95,13 +95,25 @@ const Header = ({ asideOn }) => {
     useEffect(() => {
         if (!(window.location.href.includes('team') || window.location.href.includes('project'))) return
         if (socket == null) return
-        socket.on('team-deleted', goHome)
+        socket.on('team-deleted', goToHomePage)
         return () => socket.off('team-deleted')
     })
 
-    function goHome(deletedTeameamId) {
-        if (deletedTeameamId !== params.teamid) return
+    useEffect(() => {
+        if (!window.location.href.includes('project')) return
+        if (socket == null) return
+        socket.on('project-deleted', goToTeamPage)
+        return () => socket.off('project-deleted')
+    })
+
+    function goToHomePage(deletedTeamId) {
+        if (deletedTeamId !== params.teamid) return
         history.push('/')
+    }
+
+    function goToTeamPage(deletedProjectId) {
+        if (deletedProjectId !== params.projectid) return
+        history.push(`/team/${params.teamid}`)
     }
 
     if (window.location.href.includes('project') && !projectContext.project) {

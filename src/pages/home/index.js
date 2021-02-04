@@ -83,6 +83,7 @@ const Home = () => {
                 className={styles.myTeamButton}>
                   My Teams
               </ button>
+              <div className={styles.teamsPopUp}>
             <div className={styles.selectTeamContainer}>
               {
                 showTeamsVisibleForm ?
@@ -107,6 +108,7 @@ const Home = () => {
                   </div>
                   : null
               }
+            </div>
             </div>
             </div>
           </div>

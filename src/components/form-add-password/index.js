@@ -4,8 +4,6 @@ import logo from '../../images/logo.svg'
 import { useHistory } from 'react-router-dom'
 import Alert from '../alert'
 import UserContext from "../../contexts/UserContext"
-import userObject from '../../utils/userObject'
-import authenticate from '../../utils/authenticate'
 import authenticateUpdate from '../../utils/authenticate-update'
 
 
@@ -21,16 +19,7 @@ export default function AddPassword(props) {
 
     const history = useHistory()
     const userId = props.userId
-    // const email = props.email
-    // const [disabled, setDisabled] = useState(true)
-
-    // useEffect(() => {
-    //     if (password && password === rePassword) {
-    //         setDisabled(false)
-    //     } else {
-    //         setDisabled(true)
-    //     }
-    // }, [password, rePassword])
+   
 
 
     const handleSubmit = useCallback(async (event) => {
@@ -49,25 +38,7 @@ export default function AddPassword(props) {
             setAlert(true)
             return
         }
-        // const response = await fetch(`/api/user/addNewPassword/${userId}`, {
-        //     method: "PUT",
-        //     headers: {
-        //         "Content-Type": "application/json"
-        //     },
-        //     body: JSON.stringify({
-        //         password
-        //     })
-        // })
-        // if (!response.ok) {
-        //     history.push("/error")
-        //     return
-        // } else {
-        //     const resp = await response.json()
-        //     console.log(resp.user);
-        //     userContext.logIn(resp.user)
-        //     console.log(userContext.user);
-        //     history.push("/")
-        // }
+       
 
         await authenticateUpdate(`/api/user/addNewPassword/${userId}`, 'PUT', {        //     
             password        
@@ -75,11 +46,7 @@ export default function AddPassword(props) {
             userContext.logIn(response.user)
             console.log(userContext.user);
             history.push("/")
-        })
-
-
-
-        
+        })        
 
     }, [history, userContext, password, rePassword, userId])
 
@@ -88,8 +55,6 @@ export default function AddPassword(props) {
     return (
 
         <form className={styles.container} >
-
-
 
             <div className={styles.innerContainer}>
 

@@ -23,7 +23,7 @@ export default function CreateProject({ hideForm }) {
     const handleSubmit = async (event) => {
         event.preventDefault()
 
-        if(name === ''){
+        if (name === '') {
             return
         }
 
@@ -93,42 +93,42 @@ export default function CreateProject({ hideForm }) {
     }
 
     return (
-        <div className={styles.form}>
-            <form className={styles.container} onSubmit={handleSubmit}>
+        // <div className={styles.form}>
+        <form className={styles.container} onSubmit={handleSubmit}>
 
-           
 
-                <div className={styles.title} >Create New Project</div>
 
-                <div className={styles.inputContainer}>
-                    <span> Name</span>
-                    <input
-                        className={styles.inputName}
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        label="Name"
-                        id="name"
-                        placeholder='Project Name'
-                    />
-                </div>
+            <div className={styles.title} >Create New Project</div>
 
-                <div className={styles.inputContainerDescr}>
-                    <span> Description</span>
-                    <textarea
-                        className={styles.textareaDescr}
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        label="Description"
-                        id="description"
-                        placeholder='Project Description'
+            <div className={styles.inputContainer}>
+                <span> Name</span>
+                <input
+                    className={styles.inputName}
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    label="Name"
+                    id="name"
+                    placeholder='Project Name'
+                />
+            </div>
 
-                    />
-                </div>
+            <div className={styles.inputContainerDescr}>
+                <span> Description</span>
+                <textarea
+                    className={styles.textareaDescr}
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                    label="Description"
+                    id="description"
+                    placeholder='Project Description'
 
-                <div className={styles.inputContainer}>
-                    <span className={styles.textInvite}> Invite Members</span>
+                />
+            </div>
 
-                    <div className={styles.inviteInput}>
+            <div className={styles.inputContainer}>
+                <span className={styles.textInvite}> Invite Members</span>
+
+                <div className={styles.inviteInput}>
                     <input
                         className={styles.membersInput}
                         autoComplete="off"
@@ -142,53 +142,54 @@ export default function CreateProject({ hideForm }) {
                     />
 
                     <div className={styles.selectForInvite}>
-                    {
-                    showMembers && <div className={styles.members}>
                         {
-                            allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
-                                .filter((e) => {
-                                    const found = members.find(element => element.username === e.username)
-                                    if (found) {
-                                        return false
-                                    } else {
-                                        return true
-                                    }
-                                })
-                                .sort((a, b) => a.username.localeCompare(b.username))
-                                .map(u => {
-                                    return (
-                                        <ButtonClean
-                                            key={u._id}
-                                            className={styles.user}
-                                            onClick={() => addMember(u)}
-                                            title={<div className={styles.member}>
-                                                <div>{u.username}</div>
-                                                <div className={styles.email}>{u.email}</div>
-                                            </div>}
-                                        />)
-                                })
+                            showMembers &&
+                            <div className={styles.members}>
+                                {
+                                    allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
+                                        .filter((e) => {
+                                            const found = members.find(element => element.username === e.username)
+                                            if (found) {
+                                                return false
+                                            } else {
+                                                return true
+                                            }
+                                        })
+                                        .sort((a, b) => a.username.localeCompare(b.username))
+                                        .map(u => {
+                                            return (
+                                                <ButtonClean
+                                                    key={u._id}
+                                                    className={styles.user}
+                                                    onClick={() => addMember(u)}
+                                                    title={<div>
+                                                        <div>{u.username}</div>
+                                                        <div className={styles.email}>{u.email}</div>
+                                                    </div>}
+                                                />)
+                                        })
+                                }
+                            </div>
                         }
                     </div>
-                    }
-                    </div>
-                    </div>
                 </div>
+            </div>
 
-                <div className={styles.membersAvatars}>
-                    {
-                        members.map(m => {
-                            return (
-                                <Avatar onClick={() => removeMember(m)} key={m._id} name={m.username} size={40} round={true} maxInitials={2} />
-                            )
-                        })
-                    }
-                </div>                
+            <div className={styles.membersAvatars}>
+                {
+                    members.map(m => {
+                        return (
+                            <Avatar onClick={() => removeMember(m)} key={m._id} name={m.username} size={40} round={true} maxInitials={2} />
+                        )
+                    })
+                }
+            </div>
 
-                <div className={styles.buttonDiv}>
-                    <button type='submit' className={styles.createButton}>Create</button>
-                </div>
+            <div className={styles.buttonDiv}>
+                <button type='submit' className={styles.createButton}>Create</button>
+            </div>
 
-            </form>
-        </div>
+        </form>
+        // </div>
     )
 }

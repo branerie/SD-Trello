@@ -40,7 +40,6 @@ const UserProvider = (props) => {
 
     const verifyLogin = useCallback(() => {
         const token = getCookie("x-auth-token")
-        console.log(token)
         if (!token) {
 
             setUser({

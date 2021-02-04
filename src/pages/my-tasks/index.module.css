@@ -7,6 +7,8 @@
   height: 80px;
 }
 
+
+
 .filter {
   background: #F7F7F2;
   color: #363338;
@@ -39,16 +41,15 @@
 }
 
 .pic {
-  position: absolute;
-  bottom: 30px;
-  right: 50px;
+  text-align: center;
 }
 
 .project {
-  width: 65%;
+  width: 100%;
+  max-width: 1600px;
+  min-width: 1000px;
+  margin-bottom: 20px;
   background-color: #F7F7F2;
-  margin: 20px;
-  margin-left: 150px;
   border-radius: 19px;
   border: solid 1px #707070;
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);

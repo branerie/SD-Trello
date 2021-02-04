@@ -1,28 +1,28 @@
 
 .container {    
     position: fixed;
-    left: 30vw;
-    top: 15vh;
+    /* position: absolute; */
+    left: 30%;
+    top: 15%;
     z-index: 20;
-    /* width: auto; */
     width: 600px;
     height: auto;
-    /* max-height: 90%; */
     background-color:#F7F7F2;
-    border: solid 2px#707070;
+    border: solid 2px #707070;
     border-radius: 27px;
     color: black;
-    overflow-y: unset;
-    overflow-x: hidden;
+    font-size: 1.2rem;
 }
 
 .title {
-    width: 100%;
+    width: 50%;
+    margin: 2%; 
+    margin-left: 25%;
+    margin-bottom: 5%;
     text-align: center;
     color: black;
     text-decoration: underline;
-    margin: 2%;    
-    font-size: 1.8em;
+    font-size: 2rem;
     font-weight: 500;
 }
 
@@ -51,7 +51,7 @@
 }
 
 .inviteInput{
-    width: 60%;
+    width: 53%;
     z-index: 20;
 }
 
@@ -65,11 +65,13 @@
     border-radius: 10px;
     padding: 0.5%;
     height: 1.8em;
-    width: 100%;
+    width: 96%;
     margin-left: 0%;
     text-align: left;
     background-color: #DFE9EE;
     outline: none;
+    padding: 2%;
+    padding-right: 1%;
 }
 
 .inputContainerDescr{    
@@ -93,32 +95,29 @@
 }
 
 .textInvite{
-    width: auto;
+    width: 45%;
 }
 
 
 .buttonDiv{
-    width: 50%;
-    margin: 5%;
+    width: 30%;
+    margin: 0 auto;
+    margin-top: 5%;
     margin-bottom: 2%;
-    margin-left: 25%;
-    display: flex;
-    justify-content: center;
 }
 
 .createButton{
-    background: #DFE9EE;
-    color: black;
-    padding: 10px;
-    width: 150px;
-    border-radius: 10px;
-    display: block;
-    margin: 10px;
-    margin: 0 auto;
+    color: #fff;
+    background-color: #363338;
+    border-radius: 15px;
+    width: 6em;
+    height: 1.4em;
+    border: none; 
+    margin: 0.5em;
+    z-index: 1;
+    font-size: 1.3em;
+    font-weight: 600;
     cursor: pointer;
-    border: 1px solid #707070;
-    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
     outline: none;
   }
 

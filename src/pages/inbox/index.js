@@ -11,6 +11,7 @@ import getCookie from "../../utils/cookie"
 import styles from './index.module.css'
 import TeamDeleted from "../../components/inbox/team-deleted"
 import ProjectDeleted from "../../components/inbox/project-deleted"
+import TeamInvitationCanceled from "../../components/inbox/team-invitation-canceled"
 
 const InboxPage = () => {
     const [inbox, setInbox] = useState([])
@@ -83,6 +84,16 @@ const InboxPage = () => {
                                     isInbox={true}
                                 />
 
+                            case 'Team invitation canceled':
+                                return <TeamInvitationCanceled
+                                    key={m._id}
+                                    message={m}
+                                    setInbox={setInbox}
+                                    setInboxHistory={setInboxHistory}
+                                    options={options}
+                                    isInbox={true}
+                                />
+
                             case 'Task assignment':
                                 return <TaskAssignment
                                     key={m._id}
@@ -139,6 +150,16 @@ const InboxPage = () => {
 
                                 case 'Team invitation response':
                                     return <TeamInvitationResponse
+                                        key={m._id}
+                                        message={m}
+                                        setInbox={setInbox}
+                                        setInboxHistory={setInboxHistory}
+                                        options={options}
+                                        isInbox={false}
+                                    />
+
+                                case 'Team invitation canceled':
+                                    return <TeamInvitationCanceled
                                         key={m._id}
                                         message={m}
                                         setInbox={setInbox}
