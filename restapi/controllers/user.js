@@ -142,11 +142,14 @@ async function loginUser(req, res, next) {
             return
         }
 
+        const token = utils.jwt.createToken({ id: foundUser._id })
+
         if (!foundUser.password) {
             let response = {}
             response.needPassword = true
             response.userId = foundUser._id
-            res.send(response)
+            res.header("Authorization", token).send(response)
+
             return
         }
         const match = await foundUser.matchPassword(password)
@@ -155,11 +158,11 @@ async function loginUser(req, res, next) {
             let response = {}
             response.wrongPassword = true
             response.userId = foundUser._id
-            res.send(response)
+            res.header("Authorization", token).send(response)
+
             return
         }
 
-        const token = utils.jwt.createToken({ id: foundUser._id })
         const user = await models.User.findOne({ email }).select('-password')
         const teams = await getTeams(user._id)
         const response = {
@@ -210,56 +213,32 @@ async function logoutUser(req, res, next) {
 }
 
 async function confirmToken(req, res, next) {
-    const { token, registration } = req.body
-
-
-
-    if (registration) {
-        try {
-            const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }
+    const { token } = req.body
+    try {
+        const foundUser = await models.User.findOne({ confirmationToken: token })
+        let user
+        if (foundUser.confirmed) {
+            user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', password: foundUser.newPassword, newPassword: '', newPasswordConfirmed: true }, { new: true }).select('-password')
+        } else {
+            user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }
                 , { new: true }
             ).select('-password')
-            const newToken = utils.jwt.createToken({ id: user._id })
-            const teams = await getTeams(user._id)
-            const response = {
-                user,
-                teams
-            }           
-            res.header("Authorization", newToken).send(response)
-        } catch (error) {
-            console.log(error)
         }
-    } else {
-        try {            
-            const userNewPassword = await models.User.findOne({ confirmationToken: token })
-            
-            const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', password: userNewPassword.newPassword, newPassword: '', newPasswordConfirmed: true }, { new: true }).select('-password')
-            const newToken = utils.jwt.createToken({ id: user._id })
-            const teams = await getTeams(user._id)
-            const response = {
-                user,
-                teams
-            }           
-            res.header("Authorization", newToken).send(response)
-        } catch (error) {
-            console.log(error)
+        const newToken = utils.jwt.createToken({ id: user._id })
+        const teams = await getTeams(user._id)
+        const response = {
+            user,
+            teams
         }
+        res.header("Authorization", newToken).send(response)
+
+    } catch (error) {
+        console.log(error)
     }
+
 }
 
-// async function passwordConfirmToken(req, res, next) {
-//     const { token } = req.body
-//     console.log(token);
-//     try {
-//         const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', newPasswordConfirmed: true }
-//             , { new: true }
-//         ).select('-password')
-//         console.log(user);
-//         res.send(user)
-//     } catch (error) {
-//         console.log(error)
-//     }
-// }
+
 
 async function updateUser(req, res, next) {
     const id = req.params.id

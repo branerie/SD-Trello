@@ -32,7 +32,7 @@ const authenticate = async (url, method, body, onSuccess, onFailure) => {
             return
         }
 
-        document.cookie = `x-auth-token=${authToken}`
+        document.cookie = `x-auth-token=${authToken};path=/`
 
 
         if (response.user.username && authToken) {

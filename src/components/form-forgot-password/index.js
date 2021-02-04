@@ -2,11 +2,8 @@ import React, { useState, useContext } from "react"
 import GoogleLogin from 'react-google-login'
 import { useHistory } from "react-router-dom"
 import styles from "./index.module.css"
-import authenticate from "../../utils/authenticate"
 import UserContext from "../../contexts/UserContext"
 import responseGoogle from "../../utils/responseGoogle"
-import Transparent from "../transparent"
-import AddPassword from "../form-add-password"
 import logo from '../../images/logo.svg'
 import google from '../../images/welcome-page/google.svg'
 import Alert from "../alert"
@@ -18,8 +15,6 @@ const ForgotPasswordForm = (props) => {
     const [password, setPassword] = useState("")
     const [email, setEmail] = useState("")
     const [rePassword, setRePassword] = useState("")
-    const [showForm, setShowForm] = useState(false)
-    // const [userId, setUserId] = useState('')
     const context = useContext(UserContext)
     const history = useHistory()
     const [fillAlert, setFillAlert] = useState(false)
@@ -40,7 +35,7 @@ const ForgotPasswordForm = (props) => {
             setFillAlert(true)
             return
         }
-        if (!password || !rePassword) {
+        if (password !== rePassword) {
             setWrongPassAllert(true)
             return
         }
@@ -55,9 +50,9 @@ const ForgotPasswordForm = (props) => {
                 "Content-Type": "application/json"
             }
         })
+
         const response = await promise.json()
 
-        
         if (response.wrongUser) {
             setWrongUserAllert(true)
             return
@@ -66,10 +61,10 @@ const ForgotPasswordForm = (props) => {
         console.log("Error", response)
         if (response.user) {
             userId = response.user._id
-        } else if(response.userId){
+        } else if (response.userId) {
             userId = response.userId
-        }        
-       
+        }
+
         authenticateUpdate(`/api/user/addNewPassword/${userId}`, 'PUT', {        //     
             password
         }, (response) => {
@@ -87,21 +82,11 @@ const ForgotPasswordForm = (props) => {
         })
     }
 
-    const hideForm = () => {
-        setShowForm(false)
-    }
+
 
     return (
         <div>
-
-            {/* {
-                showForm ?
-                    <div>
-                        <Transparent hideForm={hideForm}>
-                            <AddPassword hideForm={hideForm} userId={userId} email={email} />
-                        </Transparent>
-                    </div> : null
-            } */}
+            
             <form className={styles.container} onSubmit={handleSubmit}>
                 <div className={styles.alerts}>
                     <Alert alert={fillAlert} message={'Please fill all fileds'} />
@@ -188,7 +173,6 @@ const ForgotPasswordForm = (props) => {
                                 clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
                                 buttonText="Login"
                                 onSuccess={handleGoogle}
-                                // onFailure={errorGoogle}
                                 cookiePolicy={'single_host_origin'}
                             />
                         </div>
