@@ -85,11 +85,7 @@ const LoginForm = (props) => {
                     </div> : null
             }
             <form className={styles.container} onSubmit={handleSubmit}>
-                <div className={styles.alerts}>
-                    <Alert alert={fillAlert} message={'Please fill all fileds'} />
-                    <Alert alert={wrongPassAllert} message={'Wrong Password'} />
-                    <Alert alert={wrongUserAllert} message={'Please fill valid email address'} />
-                </div>
+                
 
                 <div className={styles.innerContainer}>
                     <div className={styles.logo}>
@@ -97,6 +93,11 @@ const LoginForm = (props) => {
                     </div>
 
                     <div className={styles.rightSide}>
+                    <div className={styles.alerts}>
+                    <Alert alert={fillAlert} message={'Please fill all fileds'} />
+                    <Alert alert={wrongPassAllert} message={'Wrong Password'} />
+                    <Alert alert={wrongUserAllert} message={'Please fill valid email address'} />
+                </div>
 
                         <div className={styles.title} >Log In with E-mail</div>
 
