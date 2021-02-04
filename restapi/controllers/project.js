@@ -175,15 +175,16 @@ async function deleteProject(req, res, next) {
 
         const projectUserRoles = await models.Project.findOne({ _id: idProject }).select('membersRoles -_id')
 
-        const members = await models.ProjectUserRole.find({ _id: { $in: projectUserRoles.membersRoles } }).select('memberId')
+        const members = await models.ProjectUserRole.find({ _id: { $in: projectUserRoles.membersRoles } })
 
         const membersArr = []
 
-        members.forEach(async (element) => {
+        for (let element of members) {
             await models.User.updateOne({ _id: element.memberId }, { $pull: { projects: element._id } }).session(session)
             await models.ProjectUserRole.deleteOne({ _id: element._id }).session(session)
             membersArr.push(element.memberId)
-        })
+        }
+
 
         await models.Team.updateOne({ projects: idProject }, { $pull: { projects: idProject } }).session(session)
 

@@ -95,7 +95,7 @@ const MyTasksPage = () => {
                                             <div className={`${styles.header} ${styles.card}`}>
                                                 <div className={styles.task}>Task:</div>
                                                 <div className={styles.list}>List:</div>
-                                                <div className={styles.progress}>Progress:</div>
+                                                <div className={styles.progress}>Progress (%):</div>
                                                 <div className={styles.days}>Days Till End:</div>
                                             </div>
                                             {
@@ -122,9 +122,12 @@ const MyTasksPage = () => {
                         }
                     </div>
             }
-            <div>
-                <img className={styles.pic} src={myTasks} alt="" width="364px" height="262px" />
-            </div>
+            {
+                (!currTeam || projects.length === 0) &&
+                <div className={styles.pic}>
+                    <img src={myTasks} alt="My tasks picture" width="30%"/>
+                </div>
+            }
         </PageLayout>
     )
 }

@@ -59,6 +59,7 @@
     border: 1px solid #363338;
     border-radius: 5px;
     text-align: center;
+    cursor: pointer;
 }
 
 .bad-input {

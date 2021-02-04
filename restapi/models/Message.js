@@ -36,10 +36,6 @@ const messageSchema = new Schema({
         type: Boolean
     },
 
-    canceled: {
-        type: Boolean
-    },
-
     recievers: [{
         type: ObjectId,
         ref: "User"

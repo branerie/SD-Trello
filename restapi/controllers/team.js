@@ -175,15 +175,16 @@ async function updateTeam(req, res, next) {
 
             const userForRemove = removeInvitation._id
 
-            const updatedTeam = await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userForRemove } }).session(session)
+            const updatedTeam = await models.Team.findOneAndUpdate({ _id: teamId }, { $pull: { requests: userForRemove } }, { new: true }).session(session)
             const teamObj = { name: updatedTeam.name, id: teamId }
 
             const oldMessage = await models.Message.findOneAndUpdate({ 'team.id': teamId, recievers: { "$in": [userForRemove] } }, { $pull: { recievers: userForRemove } }, { new: true }).session(session)
 
-            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamObj, sendFrom: req.user._id, recievers: [userForRemove], canceled: true }], { session })
+            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation canceled', team: teamObj, sendFrom: req.user._id, recievers: [userForRemove] }], { session })
             const createdMessage = messageCreationResult[0]
 
-            await models.User.updateOne({ _id: userForRemove }, { $pull: { inbox: oldMessage._id }, $push: { inboxHistory: createdMessage } }).session(session)
+            await models.User.updateOne({ _id: userForRemove }, { $pull: { inbox: oldMessage.id } }).session(session)
+            await models.User.updateOne({ _id: userForRemove }, { $push: { inbox: createdMessage } }).session(session)
 
             await session.commitTransaction()
 
@@ -206,7 +207,7 @@ async function updateTeam(req, res, next) {
 
         try {
 
-            const teamEditResult = await models.Team.updateOne({ _id: teamId }, { ...obj, $push: { requests: { $each: requestsId } } }).session(session)
+            const teamEditResult = await models.Team.findOneAndUpdate({ _id: teamId }, { ...obj, $push: { requests: { $each: requestsId } } }, { new: true }).session(session)
             const teamObj = { name: teamEditResult.name, id: teamId }
 
             const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamObj, sendFrom: req.user._id, recievers: requestsId }], { session })
@@ -242,33 +243,33 @@ async function deleteTeam(req, res, next) {
 
     try {
 
-        teamForDelete.projects.forEach(async (project) => {
+        for (let project of teamForDelete.projects) {
             const idProject = project._id
-
+    
             const searchedLists = await models.Project.findOne({ _id: idProject }).select('lists -_id').populate('lists')
-
+    
             let cardsArray = []
             searchedLists.lists.map(a => cardsArray = cardsArray.concat(a.cards))
-
+    
             await models.Card.deleteMany({ _id: { $in: cardsArray } }).session(session)
-
+    
             let listsArray = []
             searchedLists.lists.map(a => listsArray.push(a._id))
-
-
+    
+    
             await models.List.deleteMany({ _id: { $in: listsArray } }).session(session)
-
+    
             const projectUserRoles = await models.Project.findOne({ _id: idProject }).select('membersRoles -_id')
-
+    
             const membersArr = await models.ProjectUserRole.find({ _id: { $in: projectUserRoles.membersRoles } }).select('memberId')
-
-            membersArr.forEach(async (element) => {
+    
+            for (let element of membersArr) {
                 await models.User.updateOne({ _id: element.memberId }, { $pull: { projects: element._id } }).session(session)
                 await models.ProjectUserRole.deleteOne({ _id: element._id }).session(session)
-            })
-
+            }
+    
             await models.Project.deleteOne({ _id: idProject }).session(session)
-        })
+        }
 
         const teamObj = { name: teamForDelete.name, id: idTeam, isDeleted: true }
         const messages = await models.Message.find({ "team.id": idTeam })
