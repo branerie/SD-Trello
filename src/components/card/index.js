@@ -71,7 +71,7 @@ export default function Card({ card, showEditCard }) {
                 <ButtonClean
                     className={styles.pen}
                     onClick={() => showEditCard()}
-                    title={<img src={pen} alt="..." width="11.5" height="11.5" />}
+                    title={<img src={pen} alt="" width="11.5" height="11.5" />}
                 />
             </div>
         </div >

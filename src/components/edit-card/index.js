@@ -24,22 +24,27 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import TaskHistory from '../task-history'
 
 
-export default function EditCard({ listId, card: initialCard, project, teamId, hideForm }) {
+export default function EditCard({ listId, initialCard, project, teamId, hideForm }) {
     const dropdownRef = useRef(null);
+    const nameRef = useRef(null);
     const [card, setCard] = useState(initialCard)
     const [name, setName] = useState(card.name)
     const [description, setDescription] = useState(card.description)
     const [progress, setProgress] = useState(card.progress)
     const [taskHistory, setTaskHistory] = useState(card.history)
     const [progressChanged, setProgressChanged] = useState(false)
+    const [progressType, setProgressType] = useState('text')
     const history = useHistory()
     const socket = useSocket()
+    const [nameHeight, setNameHeight] = useState(null)
+    const [currInput, setCurrInput] = useState(null)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [isProgressActive, setIsProgressActive] = useDetectOutsideClick(dropdownRef)
     const [isDescriptionActive, setIsDescriptionActive] = useState(false)
     const dueDate = useMemo(() => new Date(card.dueDate), [card.dueDate])
     const today = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), [])
     const cardId = card._id
+    const token = getCookie("x-auth-token")
 
     useEffect(() => {
         setCard(initialCard)
@@ -53,7 +58,6 @@ export default function EditCard({ listId, card: initialCard, project, teamId, h
         if (!window.confirm('Are you sure you wish to delete this item?')) {
             return
         }
-        const token = getCookie("x-auth-token")
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "DELETE",
             headers: {
@@ -68,7 +72,7 @@ export default function EditCard({ listId, card: initialCard, project, teamId, h
             socket.emit('task-team-update', teamId)
             hideForm()
         }
-    }, [history, project, teamId, cardId, listId, socket])
+    }, [history, project, teamId, cardId, listId, socket, token, hideForm])
 
 
     const handleSubmit = useCallback(async (event) => {
@@ -92,7 +96,6 @@ export default function EditCard({ listId, card: initialCard, project, teamId, h
             setTaskHistory(arr)
         }
 
-        const token = getCookie("x-auth-token")
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
             method: "PUT",
             headers: {
@@ -120,7 +123,7 @@ export default function EditCard({ listId, card: initialCard, project, teamId, h
             setProgressChanged(false)
         }
 
-    }, [history, name, description, dueDate, progress, listId, cardId, setIsActive, setIsProgressActive, progressChanged, taskHistory, today, socket, teamId, project])
+    }, [history, name, description, dueDate, progress, listId, cardId, setIsActive, setIsProgressActive, progressChanged, taskHistory, today, socket, teamId, project, token])
 
 
 
@@ -141,96 +144,89 @@ export default function EditCard({ listId, card: initialCard, project, teamId, h
 
     const changeProgress = (value) => {
         setProgress(value)
-        setProgressChanged(true) 
+        setProgressChanged(true)
     }
+
+    useEffect(() => {
+        setNameHeight(nameRef.current.scrollHeight + 2)
+    }, [])
 
     return (
         <div className={styles.container}>
-            <form className={styles.form} >
 
+            <div className={styles['task-name']}>
+                <span>
+                    <img src={pic1} alt="pic1" />
+                </span>
+                <textarea
+                    ref={nameRef}
+                    className={styles['name-input']}
+                    style={{ 'height': nameHeight }}
+                    value={name}
+                    onChange={(e) => {
+                        setName(e.target.value)
+                        setNameHeight(nameRef.current.scrollHeight + 2)
+                    }}
+                    onBlur={e => {
+                        if (currInput === name) return
+                        handleSubmit(e)
+                    }}
+                    onFocus={() => setCurrInput(name)}
+                />
+            </div>
 
-                <div className={styles.leftSide}>
+            <div className={styles['task-body']} >
 
-                    <div className={styles.firstRow}>
+                <div className={styles['left-side']}>
 
-                        <div className={styles.nameWrapper}>
-                            <span className={styles.pic1}>
-                                <img src={pic1} alt="pic1" />
-                            </span>
+                    <div className={styles['task-progress']} >
+                        <label for='progress'>
+                            <img src={pic2} alt="pic2" />
+                            <span className={styles['margin-left']}>Progress</span>
+                        </label>
+                        <div className={styles['progress-bar']} >
                             {
-                                isActive ?
-                                    <span className={styles.nameContainer}
-                                         onBlur={handleSubmit}
-                                    >
-                                        <textarea ref={dropdownRef} className={styles.nameInput}
-                                            value={name} onChange={e => setName(e.target.value)} 
+                                card.progress ?
+                                    <div className={styles.bar} >
+                                        <div
+                                            style={{
+                                                width: `${card.progress}%`,
+                                                backgroundColor: progressColor(card.progress)
+                                            }}
+                                            className={styles.progress}
                                         />
-                                    </span>
-                                    :
-                                    <span className={styles.nameContainer}>
-                                        <p className={styles.textName} onClick={() => setIsActive(!isActive)}>{card.name}</p>
-                                    </span>
+                                    </div> : null
                             }
-                        </div >
-                    </div>
-
-
-                    <div className={styles.secondRowProgress} onClick={() => setIsProgressActive(true)}>
-                        <div className={styles.inputTitles}>
-                            <span className={styles.pic2}>
-                                <img src={pic2} alt="pic2" />
-                            </span>
-                            <span className={styles.progressContainer}>
-                                <p>Progress</p>
-                            </span>
                         </div>
-                        <div>
-                            {
-                                isProgressActive ?
-                                    <div onBlur={handleSubmit}
-                                    // ref={dropdownRef}
-                                    >
-                                        <span className={styles.progressInputContainer}
-                                        >
-                                            <input type='number'
-                                                ref={dropdownRef}
-                                                className={styles.progressInput} 
-                                                value={progress} 
-                                                onChange={e => changeProgress(e.target.value)} 
-                                                min="0" 
-                                                max="100" 
-                                            />%
-                                        </span></div>
-                                    :
-                                    <div className={styles.progressDiv} >
-                                        {
-                                            (card.progress ) ?
-                                                <div className={styles.bar} >
-                                                    <div
-                                                        style={{
-                                                            width: `${card.progress}%`,
-                                                            backgroundColor: progressColor(card.progress)
-                                                        }}
-                                                        className={styles.progress}
-                                                    />
-
-                                                </div>
-                                                :
-                                                <div>
-                                                    Enter Task Progress
-                                                </div>
-                                        }
-                                        <span className={styles.textName} >{card.progress}
-                                            <span>%</span>
-                                        </span>
-
-
-                                    </div>
-
-                            }
+                        <div className={styles['progress-input-container']}>
+                            <input
+                                id='progress'
+                                type={progressType}
+                                ref={dropdownRef}
+                                className={styles['progress-input']}
+                                value={progress}
+                                onChange={e => changeProgress(e.target.value)}
+                                min="0"
+                                max="100"
+                                onBlur={e => {
+                                    setProgressType('text')
+                                    if (currInput === progress) return
+                                    handleSubmit(e)
+                                }}
+                                onFocus={() => {
+                                    setCurrInput(progress)
+                                    setProgressType('number')
+                                }}
+                            />%
                         </div>
 
                     </div>
+
+
+
+
+
+
 
 
                     <div className={styles.thirdRow}>
@@ -275,7 +271,7 @@ export default function EditCard({ listId, card: initialCard, project, teamId, h
 
 
 
-                <div className={styles.rightSide}>
+                <div className={styles['right-side']}>
 
 
                     <div className={styles.membersDiv}>
@@ -364,7 +360,7 @@ export default function EditCard({ listId, card: initialCard, project, teamId, h
 
                 </div>
 
-            </form>
+            </div>
         </div>
 
     )
