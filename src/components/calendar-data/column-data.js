@@ -163,36 +163,6 @@ const assembleColumnData = (startDate) => {
         )
     }
 
-    const sortByTask = (taskOne, taskTwo) => {
-        const taskOneName = taskOne.props.card ? taskOne.props.card.name : ''
-        const taskTwoName = taskTwo.props.card ? taskTwo.props.card.name : ''
-
-        return taskOneName.localeCompare(taskTwoName)
-    }
-
-    const sortByProgress = (progressOne, progressTwo) => {
-        const firstValue = progressOne ? parseInt(progressOne.props.value.split('/')[0]) : 0
-        const secondValue = progressTwo ? parseInt(progressTwo.props.value.split('/')[0]) : 0
-
-        if (firstValue > secondValue) {
-            return 1
-        } else if (firstValue < secondValue) {
-            return -1
-        }
-
-        return 0
-    }
-
-    const sortByDueDate = (dueDateOne, dueDateTwo) => {
-        const dueDateOneValue = dueDateOne.props && dueDateOne.props.cardDueDate
-        const dueDateTwoValue = dueDateTwo.props && dueDateTwo.props.cardDueDate
-
-        const parsedDateOne = dueDateOneValue ? new Date(dueDateOneValue) : new Date('1970-01-01')
-        const parsedDateTwo = dueDateTwoValue ? new Date(dueDateTwoValue) : new Date('1970-01-01')
-
-        return compareDates(parsedDateOne, parsedDateTwo)
-    }
-
     return (
         [
             {
@@ -203,7 +173,6 @@ const assembleColumnData = (startDate) => {
                 minWidth: 450,
                 Cell: ({ value }) => wrapCellData(value),
                 sortable: true,
-                sortMethod: sortByTask
             },
             {
                 Header: () => {
@@ -213,7 +182,7 @@ const assembleColumnData = (startDate) => {
                 minWidth: 70,
                 Cell: ({ value }) => wrapCellData(value),
                 sortable: true,
-                sortMethod: sortByProgress
+                sortMethod: () => {}
             },
             {
                 Header: () => {
@@ -228,57 +197,50 @@ const assembleColumnData = (startDate) => {
                 Header: getHeaderDateHtml(0),
                 accessor: "monday",
                 minWidth: 100,
-                Cell: ({ value }) => {
-                    return getWeekdayCellData(value, 0)
-                }
+                Cell: ({ value }) => getWeekdayCellData(value, 0),
+                sortable: false
             },
             {
                 Header: getHeaderDateHtml(1),
                 accessor: "tuesday",
                 minWidth: 100,
-                Cell: ({ value }) => {
-                    return getWeekdayCellData(value, 1)
-                }
+                Cell: ({ value }) => getWeekdayCellData(value, 1),
+                sortable: false
             },
             {
                 Header: getHeaderDateHtml(2),
                 accessor: "wednesday",
                 minWidth: 100,
-                Cell: ({ value }) => {
-                    return getWeekdayCellData(value, 2)
-                }
+                Cell: ({ value }) => getWeekdayCellData(value, 2),
+                sortable: false
             },
             {
                 Header: getHeaderDateHtml(3),
                 accessor: "thursday",
                 minWidth: 100,
-                Cell: ({ value }) => {
-                    return getWeekdayCellData(value, 3)
-                }
+                Cell: ({ value }) => getWeekdayCellData(value, 3),
+                sortable: false
             },
             {
                 Header: getHeaderDateHtml(4),
                 accessor: "friday",
                 minWidth: 100,
-                Cell: ({ value }) => {
-                    return getWeekdayCellData(value, 4)
-                }
+                Cell: ({ value }) => getWeekdayCellData(value, 4),
+                sortable: false
             },
             {
                 Header: getHeaderDateHtml(5),
                 accessor: "saturday",
                 minWidth: 100,
-                Cell: ({ value }) => {
-                    return getWeekdayCellData(value, 5)
-                }
+                Cell: ({ value }) => getWeekdayCellData(value, 5),
+                sortable: false
             },
             {
                 Header: getHeaderDateHtml(6),
                 accessor: "sunday",
                 minWidth: 100,
-                Cell: ({ value }) => {
-                    return getWeekdayCellData(value, 6)
-                }
+                Cell: ({ value }) => getWeekdayCellData(value, 6),
+                sortable: false
             },
             {
                 Header: () => {
@@ -287,7 +249,7 @@ const assembleColumnData = (startDate) => {
                 accessor: "dueDate",
                 minWidth: 110,
                 sortable: true,
-                sortMethod: sortByDueDate
+                sortMethod: () => {}
             }
         ]
     )

@@ -2,22 +2,24 @@
   width: 100%;
 }
 
-.task{
+.task {
   background-color: blue;
 }
-.buttoDiv{
+
+.buttoDiv {
   margin: 3%;
   display: flex;
   justify-content: space-between;
 }
 
-.listName{
+.listName {
   background-color: rgb(201, 39, 39);
   color: white;
 }
+
 .container {
   height: 2em;
-  width: 100%;  
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
@@ -25,27 +27,27 @@
 
 .nameContainer {
   /* height: 50px; */
-  width: 100%;  
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
 .input {
-  border: 1px solid #000000; 
+  border: 1px solid #000000;
   background-color: #FFFFFF;
   border-radius: 10px;
-  margin: 10px;   
+  margin: 10px;
   padding: 6px;
   font-weight: normal;
   flex-grow: 1;
 }
 
-.inputList{
-  border: 1px solid #000000; 
+.inputList {
+  border: 1px solid #000000;
   background-color: #FFFFFF;
   border-radius: 10px;
-  margin: 5px;   
+  margin: 5px;
   padding: 6px;
   font-weight: normal;
   flex-grow: 1;
@@ -58,9 +60,11 @@
   border-radius: 5px;
   color: white;
 }
+
 .addlist:hover {
   background-color: lemonchiffon;
 }
+
 /* .progressInput{
   width: 30%;    
 } */
@@ -69,7 +73,7 @@
   color: white;  
 } */
 
-.addListButton{
+.addListButton {
   font-size: 15px;
   font-weight: bold;
   margin: 10px;
@@ -78,23 +82,23 @@
   color: black;
 }
 
-.dueDateField{ 
- display: flex;
- justify-content: space-between;
- cursor: pointer;
-}
-
-.dueDateFieldInput{
+.dueDateField {
   display: flex;
   justify-content: space-between;
   cursor: pointer;
- }
+}
+
+.dueDateFieldInput {
+  display: flex;
+  justify-content: space-between;
+  cursor: pointer;
+}
 
 .inputTaskName {
-  border: 1px solid #000000; 
+  border: 1px solid #000000;
   background-color: #EDF5F9;
   border-radius: 4px;
-  margin: 2px;   
+  margin: 2px;
   padding: 6px;
   font-weight: normal;
   font-family: 'Lato';
@@ -112,13 +116,13 @@
   outline: none;
 }
 
-.taskProgress{
+.taskProgress {
   /* color: white; */
   display: flex;
   align-items: flex-start;
   justify-content: center;
   /* height: 33px; */
-  
+
   cursor: pointer;
   width: 100%;
   height: 100%;
@@ -132,7 +136,7 @@
   outline: none;
 }
 
-.taskProgressButton{
+.taskProgressButton {
   cursor: pointer;
   width: 100%;
   height: 100%;
@@ -146,7 +150,7 @@
   outline: none;
 }
 
-.taskProgressButtonInput{
+.taskProgressButtonInput {
   cursor: pointer;
   width: 100%;
   height: 100%;
@@ -161,22 +165,23 @@
   /* display: flex; */
 }
 
-.tableText{
+.tableText {
   cursor: pointer;
   display: flex;
   margin: 2%;
 }
 
-.select{
+.select {
   height: 100%;
   padding: 2%;
   margin: 4%;
 }
-.pen{
+
+.pen {
   cursor: pointer;
 }
 
-.membersDiv{
+.membersDiv {
   margin: 3%;
   display: flex;
   /* flex-wrap: wrap; */
@@ -185,23 +190,79 @@
 
 .membersContainer {
   height: auto;
-  width: 100%;  
+  width: 100%;
   display: flex;
   align-items: center;
   justify-content: space-between;
 }
 
-.daylyProgress{
+.daylyProgress {
   width: 100%;
-  min-height: 2rem; 
+  min-height: 2rem;
   display: flex;
   justify-content: center;
 }
 
-.header{
+.header {
   font-weight: bold;
 }
 
 .cursorPointer {
   cursor: pointer;
+}
+
+.filter {
+  background: #DFE9EE;
+  color: black;
+  padding: 10px;
+  min-width: 7rem;
+  border-radius: 10px;
+  display: block;
+  margin: 0 auto;
+  margin: 10px;
+  cursor: pointer;
+  border: 1px solid #707070;
+  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+  text-align: center;
+  font-family: 'Lato';
+}
+
+.filter:hover {
+  background-color: #363338;
+  color: white;
+  border: 1px solid #707070;
+}
+
+.filter-off {
+  background: #b42f2f;
+}
+
+.filters {
+  display: flex;
+  position: absolute;
+  height: 24rem;
+  z-index: 2;
+  top: 4.5rem;
+  padding: 1.5rem 2.25rem;
+  flex-direction: column;
+  align-items: center;
+  justify-content: space-between;
+  background-color: #EDF5F9;
+  border: 1px solid #707070;
+  border-radius: 1.5rem;
+}
+
+.filters-container {
+  position: relative;
+}
+
+.filters-clicked {
+  background-color: #363338;
+  color: white;
+}
+
+.filter-option {
+  min-width: 10rem;
+  font-size: 1.25rem;
+  border-radius: 1.2rem;
 }
