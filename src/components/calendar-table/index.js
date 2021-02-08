@@ -19,15 +19,29 @@ import previous from '../../images/project-list/previous-day.svg'
 import next from '../../images/project-list/next-day.svg'
 import MembersList from "../members-list"
 import { formatDate, getDateWithOffset } from '../../utils/date'
-import { createTableEntry, getMonday, parseCardHistory, applyCardFilters  } from './utils'
+import { 
+    createTableEntry, 
+    getMonday, 
+    parseCardHistory, 
+    applyCardFilters, 
+    getCardsSortMethod  
+} from './utils'
+import TaskFilters from "../calendar-data/task-filters";
 
 const TableDndApp = (props) => {
-    const [startDate, setStartDate] = useState(getMonday())
-    const [tableData, setTableData] = useState([])
-    const [currList, setCurrList] = useState('')
     const projectContext = useContext(ProjectContext)
     const userContext = useContext(UserContext)
     const params = useParams()
+    const [startDate, setStartDate] = useState(getMonday())
+    const [tableData, setTableData] = useState([])
+    const [currList, setCurrList] = useState('')
+    const [sortCriteria, setSortCriteria] = useState({ columnName: null, isDescending: false })
+    const [filter, setFilter] = useState({
+        bool: { notStarted: true, inProgress: true, done: true },
+        member: null,
+        dueBefore: null,
+        isUsed: false
+    })
 
     const onListClick = useCallback((list) => {
         const member = projectContext.project.membersRoles.find(m => 
@@ -40,11 +54,15 @@ const TableDndApp = (props) => {
         projectContext.setLists(projectContext.project.lists)
     }, [projectContext, userContext.user.id])
 
+    useEffect(() => {
+        updateTableData()
+    }, [filter, props.project, projectContext.hiddenLists, sortCriteria])
 
-    const updateTableData = () => {
+    function updateTableData() {
         const data = []
         const lists = props.project.lists
         projectContext.setLists(lists)
+        const cardsSortMethod = getCardsSortMethod(sortCriteria.columnName, sortCriteria.isDescending)
 
         lists.forEach((list, histIndex) => {
             if (projectContext.hiddenLists.includes(list._id)) {
@@ -71,7 +89,10 @@ const TableDndApp = (props) => {
                 )
             }))
 
-            let listCards = list.cards.filter(card => applyCardFilters(card, props.filter))
+            let listCards = list.cards.filter(card => applyCardFilters(card, filter))
+            if (sortCriteria.columnName) {
+                listCards = listCards.sort(cardsSortMethod)
+            }
 
             listCards.forEach(card => {
                 const cardDueDate = card.dueDate ? new Date(card.dueDate) : ''
@@ -138,12 +159,16 @@ const TableDndApp = (props) => {
             )
         }))
 
-        setTableData(data)
+        /* 
+        Rows need to be reversed if descending sort as by default ReactTable simply reverses 
+        the data if descending sort is selected, expecting the data to already be sorted in 
+        ascending order. However, this puts the list names below their respective tasks, 
+        so we need to do this terrible hack of pre-reversing the data in that case.
+        Possible solution to avoid this "hack" is to switch to subcomponents in ReactTable
+        and make each list a subtable. Then the sort should act per-subcomponent 
+        */
+        setTableData(sortCriteria.isDescending ? data.reverse() : data)
     }
-
-    useEffect(() => {
-        updateTableData()
-    }, [props.filter, props.project, projectContext.hiddenLists])
 
     const changeStartDate = (dayDiff) => {
         const newStartDate = getDateWithOffset(startDate, dayDiff)
@@ -164,18 +189,20 @@ const TableDndApp = (props) => {
                     </div >
             }
             <div className={styles.buttoDiv}>
-                <span>
+                <div style={{ display: 'flex' }}>
                     <DatePicker
                         selected={startDate}
                         customInput={
                             <div className={styles.navigateButtons}>
                                 Choose Week
-                                </div>
+                            </div>
                         }
                         // className={styles.reactDatepicker}
                         showWeekNumbers
-                        onChange={date => setStartDate(getMonday(date))} />
-                </span>
+                        onChange={date => setStartDate(getMonday(date))} 
+                    />
+                    <TaskFilters filter={filter} setFilter={setFilter} />
+                </div>
                 <span className={styles.daysButtons}>
 
                     <button className={styles.navigateButtons} onClick={() => changeStartDate(-7)}>
@@ -228,6 +255,10 @@ const TableDndApp = (props) => {
                     getTbodyProps={() => ({
                         className: styles.reactTableBody
                     })}
+                    onSortedChange={(sortInfo) => {
+                        const { id: columnName, desc: isDescending } = sortInfo[0]
+                        setSortCriteria({ columnName, isDescending })
+                    }}
                 />
 
                 {/* </DragDropContext> */}

@@ -1,5 +1,49 @@
 import { compareDates } from "../../utils/date"
 
+const sortByTask = (cardOne, cardTwo) => cardOne.name.localeCompare(cardTwo.name)
+
+const sortByProgress = (cardOne, cardTwo) => {
+    const firstValue = cardOne.progress || 0
+    const secondValue = cardTwo.progress || 0
+
+    if (firstValue > secondValue) {
+        return 1
+    } else if (firstValue < secondValue) {
+        return -1
+    }
+
+    return 0
+}
+
+const sortByDueDate = (cardOne, cardTwo) => {
+    const parsedDateOne = cardOne.dueDate ? new Date(cardOne.dueDate) : new Date('1970-01-01')
+    const parsedDateTwo = cardTwo.dueDate ? new Date(cardTwo.dueDate) : new Date('1970-01-01')
+
+    return compareDates(parsedDateOne, parsedDateTwo)
+}
+
+const getCardsSortMethod = (columnName, isDescending) => {
+    let sortingFunc = null
+    switch(columnName) {
+        case 'task':
+            sortingFunc = sortByTask
+            break
+        case 'progress':
+            sortingFunc = sortByProgress
+            break
+        case 'dueDate':
+            sortingFunc = sortByDueDate
+            break
+        default:
+            return null
+    }
+
+    return (firstValue, secondValue) => {
+        const sortingEvaluation = sortingFunc(firstValue, secondValue)
+        return isDescending ? -sortingEvaluation : sortingEvaluation
+    }
+}
+
 const createTableEntry = (entryData) => {
     return {
         task: entryData.task || '',
@@ -90,5 +134,6 @@ export {
     createTableEntry,
     parseCardHistory,
     getMonday,
-    applyCardFilters
+    applyCardFilters,
+    getCardsSortMethod
 }

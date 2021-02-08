@@ -75,9 +75,9 @@
 }
   
   .navigateButtons:hover{
-    background-color: #fff;
+    background-color: #363338;
     border: 1px solid #707070;
-    color:black;
+    color: white;
     font-style: italic;
   }
 
@@ -145,7 +145,7 @@
     border: 1px solid #707070;
     width: auto;
     display: flex;
-    height: 70vh;    
+    height: 79vh;    
 }
 
 .reactTableBody {

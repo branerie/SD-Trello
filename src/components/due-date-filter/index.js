@@ -4,7 +4,7 @@ import DatePicker from 'react-datepicker'
 import { formatDate } from '../../utils/date'
 import FilterWrapper from '../filter-wrapper'
 
-const DueDateFilter = ({ dueBefore, filterStyle, onChange }) => {
+const DueDateFilter = ({ dueBefore, buttonStyle, onChange }) => {
     return (
         <FilterWrapper
             legendContent={
@@ -22,9 +22,9 @@ const DueDateFilter = ({ dueBefore, filterStyle, onChange }) => {
             <DatePicker
                 selected={dueBefore}
                 customInput={
-                    <div className={filterStyle}>
+                    <button className={buttonStyle}>
                         {dueBefore ? formatDate(dueBefore, '%d-%m-%Y') : 'Due Before'}
-                    </div>
+                    </button>
                 }
                 showWeekNumbers={true}
                 onChange={onChange}
