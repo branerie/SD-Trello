@@ -20,13 +20,13 @@ import pic13 from '../../images/edit-card/pic13.svg'
 import pic14 from '../../images/edit-card/pic14.svg'
 import TaskMembers from '../task-members'
 import TaskDueDate from "../task-dueDate"
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import TaskHistory from '../task-history'
 
 
 export default function EditCard({ listId, initialCard, project, teamId, hideForm }) {
-    const dropdownRef = useRef(null);
-    const nameRef = useRef(null);
+    const nameRef = useRef(null)
+    const progressRef = useRef(null)
+    const descriptionRef = useRef(null)
     const [card, setCard] = useState(initialCard)
     const [name, setName] = useState(card.name)
     const [description, setDescription] = useState(card.description)
@@ -38,9 +38,6 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     const socket = useSocket()
     const [nameHeight, setNameHeight] = useState(null)
     const [currInput, setCurrInput] = useState(null)
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
-    const [isProgressActive, setIsProgressActive] = useDetectOutsideClick(dropdownRef)
-    const [isDescriptionActive, setIsDescriptionActive] = useState(false)
     const dueDate = useMemo(() => new Date(card.dueDate), [card.dueDate])
     const today = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), [])
     const cardId = card._id
@@ -49,7 +46,6 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     useEffect(() => {
         setCard(initialCard)
     }, [initialCard])
-
 
     const deleteCard = useCallback(async (event) => {
 
@@ -75,17 +71,10 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     }, [history, project, teamId, cardId, listId, socket, token, hideForm])
 
 
-    const handleSubmit = useCallback(async (event) => {
-        event.preventDefault()
-
-
-        if (Number(progress) > 100) {
-            setProgress(100)
-            return
-        } else if (Number(progress) < 0) {
-            setProgress(0)
-            return
-        }
+    const handleSubmit = useCallback(async () => {
+        console.log('??');
+        if (Number(progress) > 100) setProgress(100)
+        if (Number(progress) < 0) setProgress(0)
 
         let arr = [...taskHistory]
         if (progressChanged) {
@@ -117,13 +106,10 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
             setCard(updatedCard)
             socket.emit('project-update', project)
             socket.emit('task-team-update', teamId)
-            setIsActive(false)
-            setIsProgressActive(false)
-            setIsDescriptionActive(false)
             setProgressChanged(false)
         }
 
-    }, [history, name, description, dueDate, progress, listId, cardId, setIsActive, setIsProgressActive, progressChanged, taskHistory, today, socket, teamId, project, token])
+    }, [history, name, description, dueDate, progress, listId, cardId, progressChanged, taskHistory, today, socket, teamId, project, token])
 
 
 
@@ -151,6 +137,15 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
         setNameHeight(nameRef.current.scrollHeight + 2)
     }, [])
 
+    function onEscPressed(event, setElement, ref) {
+        if (event.keyCode === 27) {
+            setElement(currInput)
+            setTimeout(() => {
+                ref.current.blur()
+            }, 1);
+        }
+    }
+
     return (
         <div className={styles.container}>
 
@@ -160,18 +155,19 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                 </span>
                 <textarea
                     ref={nameRef}
-                    className={styles['name-input']}
+                    className={`${styles['name-input']} ${styles.text}`}
                     style={{ 'height': nameHeight }}
                     value={name}
+                    onFocus={() => setCurrInput(name)}
+                    onKeyDown={e => onEscPressed(e, setName, nameRef)}
                     onChange={(e) => {
                         setName(e.target.value)
                         setNameHeight(nameRef.current.scrollHeight + 2)
                     }}
-                    onBlur={e => {
+                    onBlur={() => {
                         if (currInput === name) return
-                        handleSubmit(e)
+                        handleSubmit()
                     }}
-                    onFocus={() => setCurrInput(name)}
                 />
             </div>
 
@@ -200,83 +196,88 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                         </div>
                         <div className={styles['progress-input-container']}>
                             <input
+                                ref={progressRef}
                                 id='progress'
                                 type={progressType}
-                                ref={dropdownRef}
-                                className={styles['progress-input']}
-                                value={progress}
-                                onChange={e => changeProgress(e.target.value)}
                                 min="0"
                                 max="100"
-                                onBlur={e => {
-                                    setProgressType('text')
-                                    if (currInput === progress) return
-                                    handleSubmit(e)
-                                }}
+                                className={styles['progress-input']}
+                                value={progress}
                                 onFocus={() => {
                                     setCurrInput(progress)
                                     setProgressType('number')
                                 }}
+                                onKeyDown={e => onEscPressed(e, setProgress, progressRef)}
+                                onChange={e => changeProgress(e.target.value)}
+                                onBlur={() => {
+                                    setProgressType('text')
+                                    if (currInput === progress) return
+                                    handleSubmit()
+                                }}
                             />%
                         </div>
-
                     </div>
 
-
-
-
-
-
-
-
-                    <div className={styles.thirdRow}>
-
-                        <div className={styles.descriptinTitle}>
-                            <p className={styles.text}>Description</p>
-                        </div>
-                        <textarea className={styles.descriptionInput}
-                            ref={dropdownRef}
+                    <div className={styles['task-component']}>
+                        <div className={styles.text}>Description</div>
+                        <textarea className={styles['description-input']}
+                            ref={descriptionRef}
                             value={description}
-                            onChange={(e) => { setDescription(e.target.value); setIsDescriptionActive(true) }}
+                            onFocus={() => setCurrInput(description)}
+                            onKeyDown={e => onEscPressed(e, setDescription, descriptionRef)}
+                            onChange={(e) => { setDescription(e.target.value) }}
+                            onBlur={() => {
+                                if (currInput === description) return
+                                handleSubmit()
+                            }}
                         />
-                        {
-                            isDescriptionActive ?
-
-                                <div className={styles.descriptionButtons}>
-                                    <span>
-                                        <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
-                                    </span>
-                                    <span>
-                                        <button onClick={(e) => { setDescription(card.description); setIsDescriptionActive(false) }} className={styles.editButton} >Cancel</button>
-                                    </span>
-
-                                </div>
-                                : null
-                        }
-
-
-
-
                     </div>
 
-
-                    <div className={styles.fourthRow}>
-
-                        <div className={styles.descriptinTitle}>
-                            <p className={styles.text}>History</p>
-                        </div>
+                    <div className={styles['task-component']}>
+                        <div className={styles.text}>History</div>
                         <TaskHistory taskHistory={taskHistory} />
                     </div>
                 </div>
 
-
-
                 <div className={styles['right-side']}>
 
 
-                    <div className={styles.membersDiv}>
-                        <div >
-                            <p className={styles.text}>Members</p>
+
+                    <div className={styles['task-component']}>
+                        <div className={styles.text}>Manage</div>
+                        {/* <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic3} alt="pic3" />
+                            Join
+                        </div> */}
+                        {/* <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic4} alt="pic4" />
+                            Stickers
+                        </div> */}
+                        <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic5} alt="pic5" />
+                            Due Date
+                        </div>
+                        <div className={styles['due-date']}>
+                            <TaskDueDate
+                                cardDueDate={dueDate}
+                                cardId={cardId}
+                                listId={listId}
+                                project={project}
+                                showEditCard={false}
+                                teamId={teamId}
+                            />
+                        </div>
+                        <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic6} alt="pic6" />
+                            Attach file
+                        </div>
+                        {/* <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic7} alt="pic7" />
+                            Reports
+                        </div> */}
+                        <div className={styles.smallButtons} >
+                            <img className={styles.picsSmallButtons} src={pic10} alt="pic10" />
+                            Add Teammate
                         </div>
                         <div className={styles.members}>
                             <TaskMembers
@@ -288,80 +289,35 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                                 teamId={teamId}
                             />
                         </div>
-                    </div>
-
-
-                    <div className={styles.secondRow}>
-                        <div >
-                            <div className={styles.dueDate} >
-                                <TaskDueDate
-                                    cardDueDate={dueDate}
-                                    cardId={cardId}
-                                    listId={listId}
-                                    project={project}
-                                    showEditCard={false}
-                                    teamId={teamId}
-                                />
-                            </div>
-
-                        </div>
-                    </div>
-
-
-                    <div className={styles.smallButtonsContainer}>
-                        <div>
-                            <p className={styles.text}>Add</p>
-                        </div>
-                        <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic3} alt="pic3" />
-                            Join</div>
-                        <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic4} alt="pic4" />
-                            Stickers</div>
-                        <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic5} alt="pic5" />
-                            Due Date</div>
-                        <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic6} alt="pic6" />
-                            Attach file</div>
-                        <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic7} alt="pic7" />
-                            Reports</div>
-                        <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic10} alt="pic10" />
-                            Add Teammate</div>
-                    </div>
-
-
-                    <div className={styles.smallButtonsContainer}>
-                        <div>
-                            <p className={styles.text}>Manage</p>
-                        </div>
-                        <div className={styles.smallButtons} >
+                        {/* <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic11} alt="pic11" />
-                            Make Template</div>
-                        <div className={styles.smallButtons} >
+                            Make Template
+                        </div> */}
+                        {/* <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic13} alt="pic13" />
-                            Remove List</div>
+                            Remove List
+                        </div> */}
                         <button className={styles.smallButtons} onClick={(e) => { deleteCard(e) }} title="Delete Task" >
                             <img className={styles.picsSmallButtons} src={pic12} alt="pic12" />
-                         Delete Task</button>
-                        <div className={styles.smallButtons} >
+                            Delete Task
+                        </button>
+                        {/* <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic8} alt="pic8" />
-                            Settings</div>
-                        <div className={styles.smallButtons} >
+                            Settings
+                        </div> */}
+                        {/* <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic9} alt="pic9" />
-                            View</div>
-                        <div className={styles.smallButtons} >
+                            View
+                        </div> */}
+                        {/* <div className={styles.smallButtons} >
                             <img className={styles.picsSmallButtons} src={pic14} alt="pic14" />
-                            Archive</div>
+                            Archive
+                        </div> */}
                     </div>
-
 
                 </div>
 
             </div>
         </div>
-
     )
 }

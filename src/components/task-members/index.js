@@ -203,6 +203,7 @@ export default function TaskMembers(props) {
                                                     name={m.username}
                                                     size={30}
                                                     round={true}
+                                                    maxInitials={2}
                                                     className={styles.avatar}
                                                 />
                                             </span>
@@ -243,6 +244,7 @@ export default function TaskMembers(props) {
                                                                     name={element.username}
                                                                     size={30}
                                                                     round={true}
+                                                                    maxInitials={2}
                                                                     className={styles.avatar}
                                                                 />
                                                             </span>

@@ -317,7 +317,8 @@ export default function EditTeam(props) {
                                                 <Avatar
                                                     key={index}
                                                     name={m.username}
-                                                    size={40} round={true} maxInitials={2}
+                                                    size={40} round={true}
+                                                    maxInitials={2}
                                                     onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeForInvite(m) }}
                                                 />
 
@@ -356,7 +357,8 @@ export default function EditTeam(props) {
                                                         <Avatar
                                                             key={index}
                                                             name={m.username}
-                                                            size={40} round={true} maxInitials={2}
+                                                            size={40} round={true}
+                                                            maxInitials={2}
                                                             onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeInvited(m) }}
                                                         />
 

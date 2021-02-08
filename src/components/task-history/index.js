@@ -1,19 +1,9 @@
 import React from 'react'
 import styles from './index.module.css'
 
+export default function TaskHistory({ taskHistory }) {
 
-
-
-export default function TaskHistory(props) {
-
-
-    const taskHistory = props.taskHistory
     let arr = []
-
-
-    
-
-
 
     if (taskHistory) {
         for (let i = 0; i < taskHistory.length; i++) {
@@ -37,8 +27,6 @@ export default function TaskHistory(props) {
         let date = (('0' + currDay.getDate())).slice(-2) + '.' + ('0' + (currDay.getMonth() + 1)).slice(-2) + '.' + currDay.getFullYear()
         return (date)
     }
- 
-
 
     return (
         <div className={styles.history}>
