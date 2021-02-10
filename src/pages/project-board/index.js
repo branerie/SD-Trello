@@ -17,6 +17,7 @@ import EditCard from '../../components/edit-card'
 import UserContext from '../../contexts/UserContext'
 import EditList from '../../components/edit-list'
 import userObject from '../../utils/userObject'
+import ButtonGrey from '../../components/button-grey'
 
 
 export default function ProjectBoard() {
@@ -338,7 +339,8 @@ export default function ProjectBoard() {
                     </Droppable>
                 </DragDropContext>
 
-                <button className={styles.navigateButtons} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} >View Project</button>
+                <ButtonGrey title={'View Project'} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} />
+                {/* <button className={styles.navigateButtons} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} >View Project</button> */}
 
                 {
                     IsVisibleEdit &&

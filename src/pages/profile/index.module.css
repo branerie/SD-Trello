@@ -10,32 +10,19 @@
   }
 
   .leftContainer{
-    display: flex;
-    justify-content: space-around;
+    /* display: flex; */
+    /* justify-content: space-around; */
     height: auto;
     flex-wrap: wrap;
-    min-width: 48%;
-  }
-  
-  
-  
-  .leftButtons{
-    width: 40%;
-    min-width: 150px;
-    margin-left: 5%;
-  }
-  .middleButtons{
-    width: 40%;
-    min-width: 200px;
-    /* margin-right: 5%; */
-
-  }
+    min-width: 40%;
+  } 
+    
 
   .picContainer{
-    width: auto; 
+    width: 50%; 
     min-width: 200px;
     max-width: 500px;
-    margin: 0 auto;
+    margin: 0 auto;    
   }
   
   .pic1{
@@ -74,31 +61,39 @@
   }
   
   .navigateButtons {
-    background: #DFE9EE;
-    color: black;
+    /* background: #DFE9EE; */
+    /* color: black; */
     padding: 10px;
-    min-width: 150px;
+    min-width: 170px;
     min-height: 50px;
-    border-radius: 10px;
+    /* border-radius: 10px; */
     display: block;
     margin: 0 auto;
     margin-bottom: 20px;
-    cursor: pointer;
-    border: 1px solid #707070;
+    margin-right: 10px;
+    /* cursor: pointer; */
+    /* border: 1px solid #707070; */
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+    text-align: left;
     outline: none;
+  }
+
+  .buttonInputDiv{
+    display: flex;
+    justify-content: space-between;
+    flex-wrap: wrap;
   }
 
   .inputFieldsProfile{
     padding: 3px;
     text-align: left;
-    min-width: 200px;
-    width: 100%;
+    min-width: 50%;
+    /* width: 100%; */
     min-height: 30px;
     border-radius: 14px;
     display: block;
     margin: 0 auto;
+    margin-left: 10px;
     margin-bottom: 28px;
     margin-top: 5px;
     margin-left: 0;
@@ -128,6 +123,8 @@
     border-radius: 14px;
     border: 1px solid #707070;
     margin-bottom: 1%;
+    overflow: hidden;
+    cursor: pointer;
   }
 
   .loadPicText{
@@ -136,8 +133,9 @@
   }
 
   .pen{
-    margin-top: 25%;
-    margin-left: 80%;
+    width: 12px;
+    height: auto;
+    margin-top: 5%;  
   }
 
   .profilePicContainer{
@@ -146,29 +144,41 @@
     text-align: center;
   }
 
+  .profile-picture{
+    width: 100%;
+    height: 100%;
+  }
+
   .saveButton{
-    color: #fff;
-    background-color: #363338;
+    color: #363338;
+    background-color: #F3981F;
     border-radius: 20px;
     width: 80%;
     min-width: 80px;
     max-width: 150px;
-    margin: 10%;
     height: 50px;
-    border: none; 
+    border: 1px solid #707070; 
     /* margin-top: 50px; */
     /* margin: 0 auto; */
     z-index: 1;
-    font-size: 1.5em;
+    font-size: 1.2rem;
     font-weight: 600;
     cursor: pointer;
     outline: none;
   }
 
   .buttonDivSave{
-    margin: 0 auto;
-    margin-top: 15%;
-    width: 63%;     
+    min-width: 200px;
+    /* width: 100%; */
+    min-height: 30px;
+    border-radius: 14px;
+    display: block;
+    margin: 0 auto;
+    margin-left: 10px;
+    margin-bottom: 28px;
+    margin-top: 5px;
+    margin-left: 0;
+    outline: none;
 }
 
 .alerts{
@@ -180,22 +190,11 @@
   max-width: 300px;
   height: auto; 
   padding: 5px;
-  margin: auto; 
+  margin: 0 auto;
+  margin-bottom: 20px; 
 }
 .myTeamButton {
-  /* height: 40px;
-  background: #DFE9EE;
-  color: black;
-  padding: 10px;
-  min-width: 150px;
-  border-radius: 10px;
-  display: block;
-  margin: 0 auto;
-  margin: 10px;
-  cursor: pointer;
-  border: 1px solid #707070;
-  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-  text-align: center; */
+  
   background: #DFE9EE;
   color: black;
   padding: 10px;
@@ -213,12 +212,15 @@
 }
 
 .myTeamsContainer{
-  display: flex;
-  height: 60px;
+  /* display: flex; */
+ 
 }
 
 .selectTeamContainer{
-  margin-left: 10px;
+  /* margin-left: 10px; */
+  /* height: 0; */
+  width: 0;
+  color: white;
 }
 
 .teamsHome{ 
@@ -240,7 +242,7 @@
 }
 
 .navigateButtonsTeams {
-  background: #DFE9EE;
+  background: #F7F7F2;
   color: black;
   padding: 10px;
   max-width: 150px;
@@ -257,4 +259,28 @@
   border: 1px solid #707070;
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
   
+}
+
+.edit {
+  border-radius: 10px 10px 0 0;
+  width: 100%;
+}
+
+.delete {
+  border-bottom: 1px solid #707070;
+  border-radius: 0 0 10px 10px;
+  width: 100%;
+}
+
+.relative {
+    position: absolute;
+}
+
+.menu {
+  background: #DFE9EE;
+  position: absolute;
+  border-radius: 10px;
+  top: 8px;
+  left: 205px;
+  top: -153px;
 }

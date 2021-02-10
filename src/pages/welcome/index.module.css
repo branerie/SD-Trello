@@ -73,21 +73,32 @@
   cursor: pointer;
 }
 
+.loginButton:hover{
+  background: #EDF5F9;
+  color: black; 
+}
+
 .signUpButton {
   width: 6em;
   height: 1.5em;
   border-radius: 15px;
   z-index: 1;
   margin: 0.5em;
-  color: black;  
-  background: #EDF5F9;
-  border: solid 1px #707070;
+  color: #F7F7F2;  
+  background: #363338;
+  border: solid 0px #707070;
   font-size: 1.5em;
   font-weight: 600;
   cursor: pointer;
   right: 35px;
   top: 40px;
+  outline: none;
 }
+.signUpButton:hover{
+  background: #EDF5F9;
+  color: black; 
+}
+
 
 .pic1 {     
   overflow: hidden;

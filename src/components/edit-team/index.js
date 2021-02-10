@@ -8,6 +8,10 @@ import ButtonClean from '../button-clean'
 import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
 import TeamMembers from '../team-members'
+import ButtonGrey from '../button-grey'
+import ConfirmDialog from '../confirmation-dialog'
+import Transparent from '../transparent'
+
 
 export default function EditTeam(props) {
     const [currTeam, setCurrTeam] = useState(props.currTeam)
@@ -20,7 +24,10 @@ export default function EditTeam(props) {
     const [showMembers, setShowMembers] = useState(false)
     const [allUsers, setAllUsers] = useState([])
     const [isAdmin, setIsAdmin] = useState(false)
-    const context = useContext(UserContext)
+    const [confirmOpen, setConfirmOpen] = useState(false)
+    const [confirmTitle, setConfirmTitle] = useState('')
+    const [currElement, setCurrElement] = useState('')
+
     const history = useHistory()
     const teamContext = useContext(TeamContext)
     const userContext = useContext(UserContext)
@@ -41,10 +48,10 @@ export default function EditTeam(props) {
         setInvited(currTeam.requests)
         setDescription(currTeam.description)
         setName(currTeam.name)
-        if (context.user.id === teamAuthor) {
+        if (userContext.user.id === teamAuthor) {
             setIsAdmin(true)
         }
-    }, [context.user.id, currTeam.author, currTeam.description, currTeam.members, currTeam.name, currTeam.requests, userContext.user.teams, teamId])
+    }, [userContext.user.id, currTeam.author, currTeam.description, currTeam.members, currTeam.name, currTeam.requests, userContext.user.teams, teamId])
 
 
     useEffect(() => {
@@ -89,8 +96,8 @@ export default function EditTeam(props) {
 
     const removeMember = async (input) => {
 
-
         const arr = await members.filter(u => u._id !== input._id)
+            .filter(u => u._id !== input.id)
 
 
         const token = getCookie("x-auth-token")
@@ -111,11 +118,13 @@ export default function EditTeam(props) {
             return
         } else {
             socket.emit('team-update', teamId)
+            if(input.id===userContext.user.id){
+                history.push("/")
+            }
         }
     }
 
     const removeInvited = async (input) => {
-
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/teams/${teamId}`, {
             method: "PUT",
@@ -142,8 +151,8 @@ export default function EditTeam(props) {
         setForInvite(arr)
     }
 
-    const handleSubmit = async (event) => {
-        event.preventDefault()
+    const handleSubmit = async () => {
+        // event.preventDefault()
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/teams/${teamId}`, {
             method: "PUT",
@@ -201,191 +210,249 @@ export default function EditTeam(props) {
         setTimeout(() => setShowMembers(false), 120)
     }
 
+    let confirmationObjectFunctions = {
+        'remove this member': removeForInvite,
+        'leave this team': removeMember,
+        'delete this member from team': removeMember,
+        'delete this member from invited': removeInvited,
+        'delete this team': deleteTeam
+    }
+
     return (
-        <div className={styles.form}>
-            <form className={styles.container} onSubmit={handleSubmit}>
+        <div>
+            {confirmOpen &&          
+                <ConfirmDialog
+                    title={confirmTitle}
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={() => confirmationObjectFunctions[confirmTitle](currElement)}
+                />                
+            }
 
 
+            <div className={styles.form}>
+                <div className={styles.container}>
 
-                <div className={styles.title} >Team</div>
+                    <div className={styles.title} >Team</div>
 
-                <div className={styles.inputContainer}>
-                    <span> Name</span>
-                    <input
-                        className={styles.inputName}
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        label="Name"
-                        id="name"
-                    />
-                </div>
-
-                <div className={styles.inputContainerDescr}>
-                    <span> Description</span>
-                    <textarea
-                        className={styles.textareaDescr}
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        label="Description"
-                        id="description"
-                    />
-                </div>
-                {
-                    isAdmin?
-                    <div className={styles.inputContainerInvite}>
-                    <span className={styles.textInvite}> Invite Members</span>
-
-                    <div className={styles.inviteInput}>
+                    <div className={styles.inputContainer}>
+                        <span> Name</span>
                         <input
-                            className={styles.inputInvite}
-                            autoComplete="off"
-                            value={member}
-                            onChange={inputMembers}
-                            label="Invite members"
-                            id="members"
-                            placeholder='username'
-                            onBlur={onBlur}
-
+                            className={styles.inputName}
+                            value={name}
+                            onChange={e => setName(e.target.value)}
+                            label="Name"
+                            id="name"
                         />
-
-                        <div className={styles.selectForInvite}>
-                            {
-                                showMembers ?
-                                    <div className={styles.members}>
-                                        {
-                                            allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
-                                                .filter((e) => {
-                                                    const found = members.find(element => element.username === e.username)
-                                                    if (found) {
-                                                        return false
-                                                    } else {
-                                                        return true
-                                                    }
-                                                })
-                                                .filter((e) => {
-                                                    const found = invited.find(element => element.username === e.username)
-                                                    if (found) {
-                                                        return false
-                                                    } else {
-                                                        return true
-                                                    }
-                                                })
-                                                .filter((e) => {
-                                                    const found = forInvite.find(element => element.username === e.username)
-                                                    if (found) {
-                                                        return false
-                                                    } else {
-                                                        return true
-                                                    }
-                                                })
-                                                .sort((a, b) => a.username.localeCompare(b.username))
-                                                .map((u, index) => {
-                                                    return (
-                                                        <ButtonClean
-                                                            key={index}
-                                                            className={styles.user}
-                                                            onClick={() => addMember(u)}
-                                                            title={<div>
-                                                                <div>{u.username}</div>
-                                                                <div className={styles.email}>{u.email}</div>
-                                                            </div>}
-                                                        />)
-                                                })
-                                        }
-                                    </div> : null
-                            }
-                        </div>
                     </div>
-                </div>
-                    :null
-                }
-                
-                {
-                    isAdmin ?
-                        <div className={styles.membersDiv}>
-                            
 
+                    <div className={styles.inputContainerDescr}>
+                        <span> Description</span>
+                        <textarea
+                            className={styles.textareaDescr}
+                            value={description}
+                            onChange={e => setDescription(e.target.value)}
+                            label="Description"
+                            id="description"
+                        />
+                    </div>
+                    {
+                        isAdmin ?
+                            <div className={styles.inputContainerInvite}>
+                                <span className={styles.textInvite}> Invite Members</span>
 
-                            <div className={styles.membersAvatars}>
-                                <span>
-                                    <div>
-                                        Send Invitation:
+                                <div className={styles.inviteInput}>
+                                    <input
+                                        className={styles.inputInvite}
+                                        autoComplete="off"
+                                        value={member}
+                                        onChange={inputMembers}
+                                        label="Invite members"
+                                        id="members"
+                                        placeholder='username'
+                                        onBlur={onBlur}
+
+                                    />
+
+                                    <div className={styles.selectForInvite}>
+                                        {
+                                            showMembers ?
+                                                <div className={styles.members}>
+                                                    {
+                                                        allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
+                                                            .filter((e) => {
+                                                                const found = members.find(element => element.username === e.username)
+                                                                if (found) {
+                                                                    return false
+                                                                } else {
+                                                                    return true
+                                                                }
+                                                            })
+                                                            .filter((e) => {
+                                                                const found = invited.find(element => element.username === e.username)
+                                                                if (found) {
+                                                                    return false
+                                                                } else {
+                                                                    return true
+                                                                }
+                                                            })
+                                                            .filter((e) => {
+                                                                const found = forInvite.find(element => element.username === e.username)
+                                                                if (found) {
+                                                                    return false
+                                                                } else {
+                                                                    return true
+                                                                }
+                                                            })
+                                                            .sort((a, b) => a.username.localeCompare(b.username))
+                                                            .map((u, index) => {
+                                                                return (
+                                                                    <ButtonClean
+                                                                        key={index}
+                                                                        className={styles.user}
+                                                                        onClick={() => addMember(u)}
+                                                                        title={<div>
+                                                                            <div>{u.username}</div>
+                                                                            <div className={styles.email}>{u.email}</div>
+                                                                        </div>}
+                                                                    />)
+                                                            })
+                                                    }
+                                                </div> : null
+                                        }
+                                    </div>
                                 </div>
-                                    {
-                                        forInvite.map((m, index) => {
-                                            return (
-                                                <Avatar
-                                                    key={index}
-                                                    name={m.username}
-                                                    size={40} round={true} maxInitials={2}
-                                                    onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeForInvite(m) }}
-                                                />
-
-                                            )
-                                        })
-                                    }
-                                </span>
                             </div>
-                            <div>
+                            : null
+                    }
+
+                    {
+                        isAdmin ?
+                            <div className={styles.membersDiv}>
+
+
+
                                 <div className={styles.membersAvatars}>
-                                    <div>
-                                        Team Members:
+                                    <span>
+                                        <div>
+                                            Send Invitation:
+                                </div>
+                                        {
+                                            forInvite.map((m, index) => {
+                                                return (
+                                                    <Avatar
+                                                        key={index}
+                                                        name={m.username}
+                                                        size={40} round={true} maxInitials={2}
+                                                        // onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeForInvite(m) }}
+                                                        onClick={() => {
+                                                            setConfirmOpen(true)
+                                                            setConfirmTitle('delete this member')
+                                                            setCurrElement(m)
+                                                        }}
+                                                    />
+
+                                                )
+                                            })
+                                        }
+                                    </span>
+                                </div>
+                                <div>
+                                    <div className={styles.membersAvatars}>
+                                        <div>
+                                            Team Members:
+                                    </div>
+                                        {
+                                            members.map((m, index) => {
+                                                return (
+                                                    <ButtonClean key={index}
+                                                        // onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeMember(m) }}
+                                                        onClick={() => {
+                                                            setConfirmOpen(true)
+                                                            setConfirmTitle('delete this member from team')
+                                                            setCurrElement(m)
+                                                        }}
+                                                        title={<Avatar key={m._id} name={m.username} size={40} round={true} maxInitials={2} />}
+                                                    />
+
+                                                )
+                                            })
+                                        }
                                     </div>
                                     {
-                                        members.map((m, index) => {
-                                            return (
-                                                <ButtonClean key={index}
-                                                    onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeMember(m) }}
-                                                    title={<Avatar key={m._id} name={m.username} size={40} round={true} maxInitials={2} />}
-                                                />
+                                        (invited.length !== 0) ?
 
-                                            )
-                                        })
+                                            <div className={styles.membersAvatars}>
+                                                <div>
+                                                    Invited Members:
+                                            </div>
+                                                {
+                                                    invited.map((m, index) => {
+                                                        return (
+                                                            <Avatar
+                                                                key={index}
+                                                                name={m.username}
+                                                                size={40} round={true} maxInitials={2}
+                                                                onClick={() => {
+                                                                    setConfirmOpen(true)
+                                                                    setConfirmTitle('delete this member from invited')
+                                                                    setCurrElement(m)
+                                                                }}
+
+                                                            // onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeInvited(m) }}
+                                                            />
+
+                                                        )
+                                                    })
+                                                }
+                                            </div>
+                                            :
+                                            null
                                     }
                                 </div>
-                                {
-                                    (invited.length !== 0) ?
 
-                                        <div className={styles.membersAvatars}>
-                                            <div>
-                                                Invited Members:
-                                            </div>
-                                            {
-                                                invited.map((m, index) => {
-                                                    return (
-                                                        <Avatar
-                                                            key={index}
-                                                            name={m.username}
-                                                            size={40} round={true} maxInitials={2}
-                                                            onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeInvited(m) }}
-                                                        />
+                                <div className={styles.buttonDiv}>
+                                    <ButtonGrey className={styles.createButton} onClick={() => handleSubmit()} title={'Submit Changes'} />
+                                    <ButtonGrey className={styles.createButton} title={'Delete Team'}
+                                        // onClick={() => {
+                                        //     if (window.confirm('Are you sure you wish to delete this team?')) deleteTeam()
+                                        // }}
+                                        onClick={() => {
+                                            setConfirmOpen(true)
+                                            setConfirmTitle('delete this team')
+                                            setCurrElement('')
+                                        }}
+                                    />
 
-                                                    )
-                                                })
-                                            }
-                                        </div>
-                                        :
-                                        null
-                                }
+
+                                </div>
                             </div>
+                            :
+                            <div>
+                                <TeamMembers
+                                    members={members} invited={invited}
+                                />
 
-                            <div className={styles.buttonDiv}>
-                                <button type='submit' className={styles.createButton}>Submit Changes</button>
-                                <button className={styles.createButton} onClick={() => { if (window.confirm('Are you sure you wish to delete this team?')) deleteTeam() }}  >Delete Team</button>
+                                <div className={styles.leaveTeamBtnDiv}>
 
+                                    {/* <button className={styles.leaveTeamBtn} onClick={() => {removeMember(userContext.user.id)}}  >Leave Team</button> */}
+                                    <ButtonGrey title={'Leave Team'} className={styles.leaveTeamBtn}
+                                        onClick={() => {
+                                            setConfirmOpen(true)
+                                            setConfirmTitle('leave this team')
+                                            setCurrElement(userContext.user)
+                                        }}
+
+                                    />
+
+                                </div>
                             </div>
-                        </div>
-                        :
-                        <div>
-                            <TeamMembers
-                                members={members} invited={invited}
-                            />
-                        </div>
-                }
+                    }
 
 
 
-            </form>
+                </div>
+            </div>
+
         </div>
     )
 }

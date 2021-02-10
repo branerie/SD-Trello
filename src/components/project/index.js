@@ -1,5 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import ButtonGrey from '../button-grey'
 import EditProject from '../edit-project'
 import Transparent from '../transparent'
 import styles from './index.module.css'
@@ -26,8 +27,10 @@ export default function Project(props) {
                     </div>
                 </div>
 
-                <div className={styles.info} onClick={() => setIsVisible(!isVisible)}>
-                    Info
+                
+                <div className={styles.info} >
+                <ButtonGrey className={styles.infoBtn} title={'Info'} onClick={() => setIsVisible(!isVisible)}/>
+                
             </div>
             </div>
         </div>

@@ -4,6 +4,8 @@ import Button from '../button'
 import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
+import ConfirmDialog from '../confirmation-dialog'
+
 
 
 
@@ -12,6 +14,9 @@ export default function AddMember(props) {
     const members = props.card.members
     const [users, setUsers] = useState([])
     const [selectedUser, setSelectedUser] = useState({})
+    const [confirmOpen, setConfirmOpen] = useState(false)
+    const [currElement, setCurrElement] = useState('')
+    const [confirmTitle, setConfirmTitle] = useState('')
 
     const history = useHistory()
 
@@ -50,8 +55,7 @@ export default function AddMember(props) {
         setSelectedUser(selected)
     }
 
-    const deleteMember = useCallback(async (event, member) => {
-        event.preventDefault()
+    const deleteMember = useCallback(async (member) => {
 
         var index = members.indexOf(member)
         if (index !== -1) {
@@ -103,13 +107,30 @@ export default function AddMember(props) {
 
     }, [history, listId, cardId, members, props, selectedUser])
 
+    let confirmationObjectFunctions = {        
+        'delete this member': deleteMember        
+    }
+
     return (
         <div className={styles.form}>
+            {confirmOpen &&
+                <ConfirmDialog
+                    title={'you wish to delete this member'}
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={() => confirmationObjectFunctions[confirmTitle](currElement)}
+                />
+            }
             <div className={styles.currentMembers}>
                 <Title title={"Card members"} />
                 {
                     members.map((element, index) => {
-                        return <Button key={index} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, element) }} title={element.username} />
+                        return <Button key={index} 
+                        onClick={() => {
+                            setConfirmOpen(true)
+                            setConfirmTitle('delete this member')
+                            setCurrElement(element)
+                        }}
+                        title={element.username} />
                     })
                 }
             </div>

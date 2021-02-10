@@ -6,7 +6,8 @@ function userObject(response) {
         inbox: response.user.inbox,
         confirmed: response.user.confirmed,
         newPasswordConfirmed: response.user.newPasswordConfirmed,
-        recentProjects: response.user.recentProjects
+        recentProjects: response.user.recentProjects,
+        imageUrl: response.user.imageUrl
     }
 }
 
