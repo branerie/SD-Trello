@@ -50,7 +50,6 @@ const Header = ({ asideOn }) => {
     const getData = useCallback(async () => {
         const id = params.projectid
         const token = getCookie("x-auth-token");
-
         const response = await fetch(`/api/projects/info/${id}`, {
             method: "GET",
             headers: {
@@ -123,6 +122,10 @@ const Header = ({ asideOn }) => {
     const onBlur = () => {
         setTimeout(() => (setShowSearchForm(false)), 120)
     }
+
+    const getFullImageUrl = (imagePath) => {
+        return `https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/${imagePath}`
+      }
 
     return (
         <header className={`${styles.navigation} ${asideOn ? styles.small : ''}`} >
@@ -280,7 +283,16 @@ const Header = ({ asideOn }) => {
                     <ButtonClean
                         className={styles.avatar}
                         onClick={() => setIsProfileActive(!isProfileActive)}
-                        title={<Avatar name={context.user.username} size={40} round={true} maxInitials={2} />}
+                        title={<Avatar 
+                            name={!context.user.imageUrl?context.user.username:null} 
+                            src={context.user.imageUrl?
+                                getFullImageUrl(context.user.imageUrl):null}
+                            alt={context.user.imageUrl?
+                                '':null}
+                            size={40}
+                             round={true} 
+                            maxInitials={2} 
+                            />}
                     />
                     {
                         isProfileActive ? <div

@@ -158,7 +158,7 @@ async function updateTeam(req, res, next) {
 
     const teamId = req.params.id
     const { name, description, members, requests, removeInvitation } = req.body
-
+    
     const team = { name, description, members }
     const obj = {}
     for (let key in team) {

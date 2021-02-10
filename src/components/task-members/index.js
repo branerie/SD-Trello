@@ -7,6 +7,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import Avatar from 'react-avatar'
 import TeamContext from "../../contexts/TeamContext"
 import pen from '../../images/pen.svg'
+import ConfirmDialog from '../confirmation-dialog'
 
 
 export default function TaskMembers(props) {
@@ -16,6 +17,9 @@ export default function TaskMembers(props) {
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [selectedUser, setSelectedUser] = useState('')
     const [showEachMember, setShowEachMember] = useState(false)
+    const [confirmOpen, setConfirmOpen] = useState(false)
+    const [confirmTitle, setConfirmTitle] = useState('')
+    const [currElement, setCurrElement] = useState('')
 
     const [users, setUsers] = useState([])
     const history = useHistory()
@@ -83,8 +87,7 @@ export default function TaskMembers(props) {
         setSelectedUser(selected)
     }
 
-    const deleteMember = useCallback(async (event, member) => {
-        event.preventDefault()
+    const deleteMember = useCallback(async (member) => {
 
         var index = cardMembers.indexOf(member)
         let arr = [...cardMembers]
@@ -187,9 +190,20 @@ export default function TaskMembers(props) {
     }, [history, props, cardId, listId, isActive, setIsActive, selectedUser, updateSocket, cardMembers, projectId, params.teamid, socket])
 
 
+    let confirmationObjectFunctions = {        
+        'delete this member': deleteMember        
+    }
+
 
     return (
         <div onMouseLeave={() => setShowEachMember(false)}>
+            {confirmOpen &&
+                <ConfirmDialog
+                    title={'you wish to delete this member'}
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={() => confirmationObjectFunctions[confirmTitle](currElement)}
+                />
+            }
             {
                 showEachMember ?
                     <div className={styles.containerMemb} >
@@ -197,7 +211,15 @@ export default function TaskMembers(props) {
                             {
                                 cardMembers.map((m, index) => {
                                     return (
-                                        <div key={index} className={styles.eachMember} onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, m) }}>
+                                        <div key={index} className={styles.eachMember} 
+                                        // onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, m) }}                                        
+                                            onClick={() => {
+                                                setConfirmOpen(true)
+                                                setConfirmTitle('delete this member')
+                                                setCurrElement(m)
+                                            }}                           
+                                        
+                                        >
                                             <span className={styles.avatar} key={m._id}>
                                                 <Avatar key={m._id}
                                                     name={m.username}

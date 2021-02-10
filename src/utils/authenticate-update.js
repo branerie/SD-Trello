@@ -17,7 +17,6 @@ const authenticateUpdate = async (url, method, body, onSuccess, onFailure) => {
         })
         
         const response = await promise.json()
-        
         if (response.user.username) {            
             onSuccess(userObject(response))
         } else {

@@ -243,14 +243,12 @@ async function confirmToken(req, res, next) {
 async function updateUser(req, res, next) {
     const id = req.params.id
     let user = { username, password, email, imageUrl } = req.body
-
     const obj = {}
     for (let key in user) {
         if (user[key] && key !== 'password') {
             obj[key] = user[key]
         }
     }
-
     if (password) {
 
         await bcrypt.genSalt(10, (err, salt) => {
@@ -283,6 +281,9 @@ async function updateUser(req, res, next) {
         })
     } else {
         await models.User.updateOne({ _id: id }, obj)
+        if(imageUrl==='delete'){
+        await models.User.updateOne({ _id: id }, {imageUrl:undefined})
+        }
         const updatedUser = await models.User.findOne({ _id: id }).select('-password')
         const teams = await getTeams(updatedUser._id)
         const response = {
