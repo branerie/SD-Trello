@@ -90,7 +90,7 @@ export default function TaskProgress(props) {
                 <div style={{
                     backgroundColor: getBackGroundColor(value),
                     padding: '5px',
-                    fontSize: "14px", border: 'solid black 1px',
+                    border: 'solid black 1px',
                     borderRadius: '5px',
                     minHeight: '2rem', 
                     width: '100%', 
@@ -152,8 +152,7 @@ export default function TaskProgress(props) {
                     // { 
                     //     (taskprogress!== null)?
 
-                    <div className={styles.taskProgress}
-                        onClick={() => setIsActive(!isActive)}                        >
+                    <div className={styles.taskProgress} onClick={() => setIsActive(!isActive)}>
                         {/* <button className={styles.taskProgressButton}  */}
                         {/* > */}
                         {showTaskProgress(taskprogress)}
