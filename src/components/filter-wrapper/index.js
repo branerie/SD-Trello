@@ -11,7 +11,6 @@ const FilterWrapper = ({ children, isVisible, legendContent }) => {
                     </blockquote>
                 }
             </legend>
-
             {children}
         </fieldset>
     )

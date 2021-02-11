@@ -1,6 +1,5 @@
 .pageContainer {
     width: 100%;
-    position: unset;    
     display: flex;
     flex-direction: column;
     /* border: 1px solid rgba(0,0,0,0.1); */
@@ -8,35 +7,31 @@
     height: auto;
 }
 
-
 .columns {
     width: 100%;
 }
 
-.task{
+.task {
     background-color: blue;
 }
-.buttoDiv{
+
+.buttoDiv {
     display: flex;
     justify-content: space-between;
 }
 
-
-
-.addTaskField{
+.addTaskField {
     background-color: rgb(201, 39, 39);
     color: white;
     display: flex;
     justify-content: flex-end;
 }
 
-
-
 .input {
-    border: 1px solid #000000; 
+    border: 1px solid #000000;
     background-color: #FFFFFF;
     border-radius: 10px;
-    margin: 10px;   
+    margin: 10px;
     padding: 6px;
     font-weight: normal;
     flex-grow: 1;
@@ -48,47 +43,22 @@
     padding: 5px;
     border-radius: 5px;
 }
+
 .addlist:hover {
     background-color: lemonchiffon;
 }
 
-
-.daylyProgress{
-    width: 100%;    
+.daylyProgress {
+    width: 100%;
     display: flex;
     justify-content: center;
 }
 
-.navigateButtons {
-    background: #DFE9EE;
-    color: black;
-    padding: 10px;
-    min-width: 150px;
-    border-radius: 10px;
-    display: block;
-    margin: 0 auto;
-    margin: 10px;
-    cursor: pointer;
-    border: 1px solid #707070;
-    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-    text-align: center;
+.header {
+    font-weight: bold;
 }
-  
-  .navigateButtons:hover{
-    background-color: #363338;
-    border: 1px solid #707070;
-    color: white;
-    font-style: italic;
-  }
 
-
-
-
-  .header{
-      font-weight: bold;
-  }
-
-  .listNameContainer{ 
+.listNameContainer {
     display: flex;
     flex-wrap: wrap;
     font-size: 100%;
@@ -103,7 +73,7 @@
     justify-content: space-between;
 }
 
-.listNameColor{   
+.listNameColor {
     position: absolute;
     left: 0;
     z-index: -1;
@@ -112,31 +82,9 @@
     margin-bottom: 0.5em;
 }
 
-.listNameText{   
+.listNameText {
     /* text-align: center; */
-    margin-bottom: 2%;   
-}
-
- 
- .daysButtons{
-     display: flex;
-     align-items: center;
- }
-
- .picContainer {
-    position: relative;
-    text-align: center;
-    color: black;
-    font-size: 13px;
-    min-width: 150px;
-    cursor: pointer;
-}
-
-  .centeredText {
-    position: absolute;
-    top: 45%;
-    left: 50%;
-    transform: translate(-50%, -50%);
+    margin-bottom: 2%;
 }
 
 .reactTable {
@@ -146,8 +94,8 @@
     width: auto;
     display: flex;
     height: 79vh;
-    height: calc(100vh - 6.7rem - 40px);
-    width: calc(100vw - 4rem);
+    height: calc(100vh - 7.3rem - 40px);
+    /* width: calc(100vw - 4rem); */
     font-size: 0.8rem;
 }
 
@@ -158,8 +106,10 @@
 }
 
 .reactTableBody {
-    -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
-    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+    -ms-overflow-style: none;
+    /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none;
+    /* Hide scrollbar for Firefox */
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

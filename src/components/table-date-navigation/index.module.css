@@ -1,0 +1,44 @@
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.navigateButtons {
+    background: #DFE9EE;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 10px;
+    display: block;
+    margin: 0 auto;
+    margin: 10px;
+    cursor: pointer;
+    border: 1px solid #707070;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Lato';
+    font-size: 1rem;
+    text-align: center;
+}
+
+.navigateButtons:hover {
+    background-color: #363338;
+    border: 1px solid #707070;
+    color: white;
+}
+
+.picContainer {
+    position: relative;
+    text-align: center;
+    color: black;
+    font-size: 14px;
+    min-width: 120px;
+    cursor: pointer;
+}
+
+.centeredText {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 80px;
+}
+

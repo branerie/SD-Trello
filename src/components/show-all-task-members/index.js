@@ -8,26 +8,26 @@ export default function ShowAllTaskMembers(props) {
 
     return (
         <div className={styles.containerMemb}>
-        <div className={styles.allCardMembers}>
-           {
-            members.map((m, index) => {
-                return (
-                    <div key={index} className={styles.eachMember}>
-                        <span className={styles.avatar} key={m._id}>
-                                            <Avatar key={m._id}
-                                                name={m.username}
-                                                size={30}
-                                                round={true}
-                                                maxInitials={2}
-                                                className={styles.avatar}
-                                            />
-                                        </span>
-                        <span>{m.username}</span>
-                        </div>
-                )
-            })
-        }
-        </div>
+            <div className={styles.allCardMembers}>
+            {
+                members.map((m, index) => {
+                    return (
+                        <div key={index} className={styles.eachMember}>
+                            <span className={styles.avatar} key={m._id}>
+                                                <Avatar key={m._id}
+                                                    name={m.username}
+                                                    size={30}
+                                                    round={true}
+                                                    maxInitials={2}
+                                                    className={styles.avatar}
+                                                />
+                                            </span>
+                            <span>{m.username}</span>
+                            </div>
+                    )
+                })
+            }
+            </div>
         </div>
     )
 }

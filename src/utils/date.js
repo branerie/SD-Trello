@@ -85,9 +85,21 @@ const getDateWithOffset = (initialDate, daysOffset) => {
     return new Date(initialTime + daysOffset * 86400000)
 }
 
+const getMonday = (date) => {
+    date = date || new Date()
+
+    // need to change to 7 in case date is Sunday (which in JS is 0, while Monday is 1)
+    const dateDay = date.getDay() || 7
+    const monday = new Date(date)
+    monday.setDate(date.getDate() - (dateDay - 1))
+
+    return monday
+}
+
 export {
     formatDate,
     checkDateEquality,
     compareDates,
-    getDateWithOffset
+    getDateWithOffset,
+    getMonday
 }

@@ -214,7 +214,9 @@
   background: #DFE9EE;
   color: black;
   padding: 10px;
-  min-width: 7rem;
+  width: 9.5rem;
+  min-height: 2.6em;
+  max-height: 2.6em;
   border-radius: 10px;
   display: block;
   margin: 0 auto;
@@ -224,16 +226,13 @@
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-family: 'Lato';
+  font-size: 1rem;
 }
 
 .filter:hover {
   background-color: #363338;
   color: white;
   border: 1px solid #707070;
-}
-
-.filter-off {
-  background: #b42f2f;
 }
 
 .filters {
@@ -252,16 +251,10 @@
 }
 
 .filters-container {
-  position: relative;
+  display: flex;
 }
 
 .filters-clicked {
   background-color: #363338;
   color: white;
-}
-
-.filter-option {
-  min-width: 10rem;
-  font-size: 1.25rem;
-  border-radius: 1.2rem;
 }

@@ -93,29 +93,18 @@ const parseCardHistory = (taskHistory) => {
     return historyArr
 }
 
-const getMonday = (date) => {
-    date = date || new Date()
-
-    // need to change to 7 in case date is Sunday (which in JS is 0, while Monday is 1)
-    const dateDay = date.getDay() || 7
-    const monday = new Date(date)
-    monday.setDate(date.getDate() - (dateDay - 1))
-
-    return monday
-}
-
 const applyCardFilters = (card, filters) => {
     let isCardFilterPassed = false
-    if (filters.bool.notStarted && 
+    if (filters.progress.notStarted && 
         (card.progress === 0 || card.progress === null)) {
         isCardFilterPassed = true
     }
 
-    if (filters.bool.inProgress && card.progress > 0 && card.progress < 100) {
+    if (filters.progress.inProgress && card.progress > 0 && card.progress < 100) {
         isCardFilterPassed = true
     }
     
-    if (filters.bool.done && card.progress === 100) {
+    if (filters.progress.done && card.progress === 100) {
         isCardFilterPassed = true
     }
 
@@ -133,7 +122,6 @@ const applyCardFilters = (card, filters) => {
 export {
     createTableEntry,
     parseCardHistory,
-    getMonday,
     applyCardFilters,
     getCardsSortMethod
 }

@@ -1,0 +1,31 @@
+.filter-used {
+    width: 5rem;
+    margin-right: 0;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    border-right: 0;
+    font-size: 0.8rem;
+    min-height: 2.6rem;
+    max-height: 2.6rem;
+}
+
+.filter-used:hover {
+    border-right: 0;
+}
+
+.filter-blank {
+    width: 6.5rem;
+}
+
+.filter-clear {
+    cursor: pointer;
+    margin-left: 0;
+    width: 1.5rem;
+    font-family: cursive;
+    background-color: #3633384f;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    display: flex;
+    justify-content: center;
+    padding: 7px 10px;
+}
