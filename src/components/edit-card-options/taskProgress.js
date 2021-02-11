@@ -22,7 +22,7 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
     useEffect(() => {
         setIsInputVisible(card.progress !== null)
         setProgress(card.progress)
-    }, [card.progress, progress])
+    }, [card.progress])
 
     const changeProgress = async () => {
         if (progress === null) {
@@ -114,7 +114,7 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
                             value={progress}
                             onKeyDown={e => onEscPressed(e)}
                             onKeyUp={onKeyUp}
-                            onChange={(e) => setProgress(e.target.value)}
+                            onChange={e => setProgress(e.target.value)}
                             onBlur={changeProgress}
                         /><span>%</span>
                         </span> : <div className={styles.progress} onClick={onClick}>{progress}%</div>}
