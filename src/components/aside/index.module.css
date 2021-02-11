@@ -14,7 +14,7 @@
     align-items: center;
     color: #F7F7F2;
     border: 1px solid #363338;
-    font-size: 20px;
+    font-size: 1.3rem;
     font-weight: bold;
 }
 
@@ -54,7 +54,7 @@
 .topright {
     display: flex;
     flex-direction: column;
-    font-size: 20px;
+    font-size: 1.3rem;
     font-weight: bold;
     border-bottom: 1px solid #363338;
     align-items: flex-start;
@@ -82,7 +82,7 @@
 .bottomright {
     display: flex;
     flex-direction: column;
-    font-size: 15px;
+    font-size: 1rem;
     font-weight: bold;
     margin-bottom: 50px;
     overflow: scroll;
