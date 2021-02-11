@@ -264,7 +264,7 @@ export default function ProjectBoard() {
                         <Transparent hideForm={() => setIsVisible(!isVisible)} >
                             <EditCard
                                 hideForm={() => setIsVisible(!isVisible)}
-                                card={currCard}
+                                initialCard={currCard}
                                 listId={currList}
                                 project={projectContext.project}
                                 teamId={teamId}
@@ -291,7 +291,6 @@ export default function ProjectBoard() {
                                             return (
                                                 <Draggable key={element._id} draggableId={element._id} index={index}>
                                                     {(provided) => (
-                                                        // <div>
                                                         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
                                                             <List list={element} project={projectContext.project} isAdmin={isAdmin}
                                                                 showEditList={() => {
@@ -304,7 +303,6 @@ export default function ProjectBoard() {
                                                                     setIsVisible(!isVisible)
                                                                 }} />
                                                         </div>
-                                                        // </div>
                                                     )}
                                                 </Draggable>
                                             )

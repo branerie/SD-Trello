@@ -18,7 +18,7 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
     const socket = useSocket()
     const days = Math.ceil((Date.parse(card.dueDate) - Date.now()) / 1000 / 3600 / 24)
 
-    useEffect (() => {
+    useEffect(() => {
         if (card.progress === null) {
             setProgress('Add')
             return
@@ -103,14 +103,14 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
                     onBlur={onBlur}
                     onKeyUp={onKeyUp}
                     onChange={e => setProgress(e.target.value)}
-                />                
+                />
             </div>
             <div className={styles.days}>
                 {
                     card.progress === 100 ? (<div>Done</div>) :
-                    Date.parse(card.dueDate) === 0 || card.dueDate === null ? (<div>No Deadline</div>) :
-                    days < 0 ? (<div className={styles.deadline}>Deadline Passed</div>) :
-                    <div>{days}</div>
+                        Date.parse(card.dueDate) === 0 || card.dueDate === null ? (<div>No Deadline</div>) :
+                            days < 0 ? (<div className={styles.deadline}>Deadline Passed</div>) :
+                                <div>{days}</div>
                 }
             </div>
             <ButtonClean
@@ -120,15 +120,17 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
             />
             {
                 showEditCard &&
-                <Transparent hideForm={() => setShowEditCard(!showEditCard)} >
-                    <EditCard
-                        hideForm={() => setShowEditCard(!showEditCard)}
-                        card={card}
-                        listId={list._id}
-                        project={project}
-                        teamId={currTeam._id}
-                    />
-                </Transparent>
+                <div className={styles.edit}>
+                    <Transparent hideForm={() => setShowEditCard(!showEditCard)} >
+                        <EditCard
+                            hideForm={() => setShowEditCard(!showEditCard)}
+                            initialCard={card}
+                            listId={list._id}
+                            project={project}
+                            teamId={currTeam._id}
+                        />
+                    </Transparent>
+                </div>
             }
         </div>
     )

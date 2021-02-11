@@ -89,7 +89,7 @@ export default function TaskDueDate(props) {
                         <Transparent hideForm={() => setIsVisible(!isVisible)} >
                             <EditCard
                                 hideForm={() => setIsVisible(!isVisible)}
-                                card={props.card}
+                                initialCard={props.card}
                                 listId={props.listId}
                                 project={props.project}
                                 teamId={teamId}
@@ -101,6 +101,7 @@ export default function TaskDueDate(props) {
                         <img className={styles.pen} src={pen} alt="..." width="13" height="13" onClick={() => setIsVisible(true)} />
                     </span>
                 }
+
 
 
             </span>
@@ -130,7 +131,7 @@ export default function TaskDueDate(props) {
                         <Transparent hideForm={() => setIsVisible(!isVisible)} >
                             <EditCard
                                 hideForm={() => setIsVisible(!isVisible)}
-                                card={props.card}
+                                initialCard={props.card}
                                 listId={props.listId}
                                 project={props.project}
                                 teamId={teamId}
@@ -148,6 +149,7 @@ export default function TaskDueDate(props) {
                     />
                 }
             </div>
+
         )
     }
 

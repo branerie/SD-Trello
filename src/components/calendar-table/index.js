@@ -125,8 +125,7 @@ const TableDndApp = (props) => {
                         (
                             <MembersList
                                 members={card.members}
-                                maxLength={3}
-                                maxDisplayLength={1}                                
+                                maxLength={2}
                             />
                         ),
                     monday: weekdayData,
