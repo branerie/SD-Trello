@@ -35,8 +35,8 @@ const TeamPage = () => {
 
     return (
         <PageLayout>
-            <div className={styles.teamContainer}>
-                <div className={styles.leftSide}>
+            <div className={styles.container}>
+                <div className={styles['left-side']}>
                     <div>
                         {projects.map((project, index) => {
                             return (
@@ -45,7 +45,6 @@ const TeamPage = () => {
                         })}
                     </div>
                     <ButtonGrey title={'New Project'} onClick={() => setIsVisible(true)} />
-                    {/* <button className={styles.newProjectButton} onClick={() => setIsVisible(true)} >New Project</button> */}
                     {
                         isVisible &&
                         <Transparent hideForm={() => setIsVisible(false)}>
@@ -54,14 +53,13 @@ const TeamPage = () => {
                     }
                 </div>
 
-                <div className={styles.rightSde}>
-                    <div className={styles.rightSideTeam}>
+                <div className={styles['right-side']}>
+                    <div className={styles['right-side-team']}>
                         <TeamMembers
                             members={members} invited={invited}
                         />
-                        <ButtonGrey className={styles.newProjectButton} title={'View Team'} onClick={() => setShowForm(true)} />
+                        <ButtonGrey className={styles['new-project-button']} title={'View Team'} onClick={() => setShowForm(true)} />
 
-                        {/* <button className={styles.newProjectButton} onClick={() => setShowForm(true)} >View Team</button> */}
                         {
                             showForm &&
                             <Transparent hideForm={() => setShowForm(false)}>

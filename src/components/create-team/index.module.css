@@ -175,7 +175,7 @@
     z-index: 25;  
     border: solid 1px #363338;
     border-radius: 27px;
-    font-size: 18px;
+    font-size: 1.2rem;
     /* width: 100%; */
     /* min-width: fit-content; */
     height: auto;
@@ -200,5 +200,5 @@
 }
 
 .email {
-    font-size: 13px;
+    font-size: 0.9rem;
 }

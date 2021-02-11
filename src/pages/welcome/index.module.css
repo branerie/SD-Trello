@@ -5,7 +5,7 @@
 
 
 
-.pageContainer {
+.container {
   width: 100%;
   height: auto;
   overflow: hidden;
@@ -13,7 +13,7 @@
   min-height: 100%;
 }
 
-.topContainer {
+.top-container {
   width: 100%;
   height: auto;
   min-height: 78vh;
@@ -22,7 +22,7 @@
   z-index: -10;
 }
 
-.topDivtopContainer{
+.top-div-container{
   width: 100%;
   height: auto;
   min-height: 30%;
@@ -30,7 +30,7 @@
   position: relative;
 }
 
-.headerNav{
+.header-nav{
   width: 100%;
   height: auto;
   display: flex;
@@ -48,7 +48,7 @@
 }
 
 
-.firstButtons{
+.first-buttons{
   flex-grow: 1;
   display: flex;
   flex-wrap: wrap;
@@ -59,7 +59,7 @@
   z-index: 5;
 }
 
-.loginButton{
+.login-button{
   color: #fff;
   background-color: #363338;
   border-radius: 15px;
@@ -73,12 +73,12 @@
   cursor: pointer;
 }
 
-.loginButton:hover{
+.login-button:hover{
   background: #EDF5F9;
   color: black; 
 }
 
-.signUpButton {
+.sign-up-button {
   width: 6em;
   height: 1.5em;
   border-radius: 15px;
@@ -94,7 +94,7 @@
   top: 40px;
   outline: none;
 }
-.signUpButton:hover{
+.sign-up-button:hover{
   background: #EDF5F9;
   color: black; 
 }
@@ -119,7 +119,7 @@
   width: 30vw;
 }
 
-.lowerDivtopContainer{
+.lower-div-container{
   height: auto;
   min-height: 55vh;
   /* max-height: 150px; */
@@ -127,7 +127,7 @@
   background: linear-gradient(180deg, rgba(237,245,249,1) 1%, rgba(166,164,142,1) 100%);
 }
 
-.firstText{
+.first-text{
   margin-left: 10%;
   margin-right: 45%;  
   z-index: 50;
@@ -158,7 +158,7 @@
   text-align: center;
 }
 
-.secondSignUpButton{
+.second-sign-up-button{
   width: 200px;
   height: 50px;
   border-radius: 34px;
@@ -169,15 +169,14 @@
   font-weight: 600;
   cursor: pointer;
   margin-top: 5%;
-  /* margin-bottom: 35%; */
 }
 
-.secondContainer {
+.second-container {
   width: 100%;
   height: auto;
 }
 
-.firstRow{
+.first-row{
   margin-top: 2%;
   margin-bottom: 5%;
   display: flex;
@@ -189,14 +188,14 @@
   width: 100%;
 }
 
-.secondText{
+.second-text{
   margin: 2%;
   margin-top: 3%;
   flex-grow: 1;
   text-align: center;
 }
 
-.thirdSignUpButton{
+.third-sign-up-button{
   width: 200px;
   height: 50px;
   border-radius: 34px;
@@ -210,7 +209,7 @@
   margin-bottom: 5%;
 }
 
-.pic3Container {  
+.pic3-container {  
   width: auto;
   margin: 2%;
   max-width: 90%;
@@ -227,7 +226,7 @@
 }
 
 
-.secondRow{
+.second-row{
   display: flex;
   justify-content: space-between;
   justify-content: center;
@@ -236,14 +235,14 @@
   width: 100%;
 }
 
-.thirdText{
+.third-text{
   margin: 5%;
   margin-top: 7%;
   margin-bottom: 2%;
   flex-grow: 1;
 }
 
-.pic4Container {  
+.pic4-container {  
   width: 615px;
   /* height: 593,1px; */
   margin:5%;
@@ -253,12 +252,8 @@
   justify-content: center;
 }
 
-.pic4 {  
-  /* width: 615px;
-  height: 593,1px;
-  margin:5%; */
-  max-width: 100%;
-  
+.pic4 { 
+  max-width: 100%;  
 }
 
 .pic5{
@@ -266,34 +261,29 @@
   max-width: 100%;
 }
 
-.thirdRow{
-  /* display: flex; */
-  /* flex-wrap: wrap; */
-  /* justify-content: center; */
+.third-row{  
   height: auto;
   width: 100%;
   margin-top: 2%;
   margin-bottom: 2%;
 }
 
-.lastText{
+.last-text{
   margin-top: 2%;
   width: 100%;
   height: auto;
 }
 
-.lastHeaders{
+.last-headers{
   text-align: center;
   z-index: 5;
   font-weight: 600;
-  /* font-style: italic; */
   font-size: 2.5em;
   font-family: 'Lato', sans-serif;
 }
 
-.lastParagraph{
+.last-paragraph{
   font-weight: lighter;
-  /* /* margin-left: 10%; */
   margin-top: 3%; 
   font-family: 'Merriweather Sans', sans-serif;
   font-size: 1.5em;
@@ -301,7 +291,7 @@
   
 }
 
-.lastSignUpButton{
+.last-sign-up-button{
   width: 200px;
   height: 50px;
   border-radius: 34px;
@@ -317,7 +307,7 @@
 
 }
 
-.pic6Container{
+.pic6-container{
   width: 100%;
   display: flex;
   justify-content: center;  
@@ -328,7 +318,7 @@
   max-width: 100%;
 }
 
-.contentWrap{
+.content-wrap{
   padding-bottom: 2.5rem
 }
 
@@ -337,7 +327,6 @@
   bottom: 0;
   width: 100%;
   height: auto;
-  /* height: 2.5rem; */
   background: #363338;
   color: white;
   display: flex;
@@ -346,7 +335,7 @@
 }
 
 
-.footerColumn{
+.footer-column{
   width: auto;
   margin-top: 2%;
   margin-bottom: 2%;
@@ -354,16 +343,16 @@
   justify-content: center;  
 }
 
-.footerHeaders{
+.footer-headers{
   font-size: 1em;
   width: auto;
 }
 
-.footerInfo{
+.footer-info{
   margin-left: 5%;
 }
 
-.lastColumn{
+.last-column{
   width: auto;
   margin-top: 2%;
   margin-bottom: 2%;
@@ -373,14 +362,14 @@
   /* align-items: stretch;  */
 }
 
-.socialMediaContainer{
+.social-media-container{
   width: 80%;
   display: flex;
   justify-content: space-around;
   align-items: flex-start;
 }
 
-.socialMedia{
+.social-media{
   width: auto;  
   max-width: 70%;
 }
