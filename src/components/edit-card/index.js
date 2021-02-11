@@ -1,60 +1,57 @@
-import React, { useCallback, useRef, useState, useMemo, useEffect } from 'react'
+import React, { useRef, useState, useMemo, useEffect } from 'react'
 import { useHistory } from "react-router-dom"
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import "react-datepicker/dist/react-datepicker.css"
 import { useSocket } from '../../contexts/SocketProvider'
 import pic1 from '../../images/edit-card/pic1.svg'
-import pic2 from '../../images/edit-card/pic2.svg'
-import pic3 from '../../images/edit-card/pic3.svg'
-import pic4 from '../../images/edit-card/pic4.svg'
-import pic5 from '../../images/edit-card/pic5.svg'
+// import pic2 from '../../images/edit-card/pic2.svg'
+// import pic3 from '../../images/edit-card/pic3.svg'
+// import pic4 from '../../images/edit-card/pic4.svg'
+// import pic5 from '../../images/edit-card/pic5.svg'
 import pic6 from '../../images/edit-card/pic6.svg'
-import pic7 from '../../images/edit-card/pic7.svg'
-import pic8 from '../../images/edit-card/pic8.svg'
-import pic9 from '../../images/edit-card/pic9.svg'
-import pic10 from '../../images/edit-card/pic10.svg'
-import pic11 from '../../images/edit-card/pic11.svg'
+// import pic7 from '../../images/edit-card/pic7.svg'
+// import pic8 from '../../images/edit-card/pic8.svg'
+// import pic9 from '../../images/edit-card/pic9.svg'
+// import pic10 from '../../images/edit-card/pic10.svg'
+// import pic11 from '../../images/edit-card/pic11.svg'
 import pic12 from '../../images/edit-card/pic12.svg'
-import pic13 from '../../images/edit-card/pic13.svg'
-import pic14 from '../../images/edit-card/pic14.svg'
-import TaskMembers from '../task-members'
-import TaskDueDate from "../task-dueDate"
-import TaskHistory from '../task-history'
+// import pic13 from '../../images/edit-card/pic13.svg'
+// import pic14 from '../../images/edit-card/pic14.svg'
+import TaskMembers from '../edit-card-options/taskMembers'
+import TaskDueDate from "../edit-card-options/taskDueDate"
+import TaskHistory from '../edit-card-options/taskHistory'
+import TaskProgress from '../edit-card-options/taskProgress'
 
 
 export default function EditCard({ listId, initialCard, project, teamId, hideForm }) {
     const nameRef = useRef(null)
-    const progressRef = useRef(null)
     const descriptionRef = useRef(null)
-    const [card, setCard] = useState(initialCard)
-    const [name, setName] = useState(card.name)
-    const [description, setDescription] = useState(card.description)
-    const [progress, setProgress] = useState(card.progress)
-    const [taskHistory, setTaskHistory] = useState(card.history)
-    const [progressChanged, setProgressChanged] = useState(false)
-    const [progressType, setProgressType] = useState('text')
+    const [card, setCard] = useState(null)
+    const [name, setName] = useState(null)
+    const [description, setDescription] = useState(null)
+    const [taskHistory, setTaskHistory] = useState(null)
     const history = useHistory()
     const socket = useSocket()
     const [nameHeight, setNameHeight] = useState(null)
     const [currInput, setCurrInput] = useState(null)
-    const dueDate = useMemo(() => new Date(card.dueDate), [card.dueDate])
-    const today = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), [])
-    const cardId = card._id
+    const dueDate = useMemo(() => new Date(initialCard.dueDate), [initialCard.dueDate])
     const token = getCookie("x-auth-token")
-
+    
     useEffect(() => {
         setCard(initialCard)
+        setName(initialCard.name)
+        setDescription(initialCard.description)
+        setTaskHistory(initialCard.history)
     }, [initialCard])
+    
 
-    const deleteCard = useCallback(async (event) => {
 
-        event.preventDefault()
+    const deleteCard = async () => {
 
-        if (!window.confirm('Are you sure you wish to delete this item?')) {
-            return
-        }
-        const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
+        if (!window.confirm('Are you sure you wish to delete this item?')) return
+
+        const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -68,24 +65,12 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
             socket.emit('task-team-update', teamId)
             hideForm()
         }
-    }, [history, project, teamId, cardId, listId, socket, token, hideForm])
+    }
 
 
-    const handleSubmit = useCallback(async () => {
-        console.log('??');
-        if (Number(progress) > 100) setProgress(100)
-        if (Number(progress) < 0) setProgress(0)
+    const handleSubmit = async () => {
 
-        let arr = [...taskHistory]
-        if (progressChanged) {
-            arr.push({
-                'event': `Progress ${progress}%`,
-                'date': today
-            })
-            setTaskHistory(arr)
-        }
-
-        const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
+        const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
             method: "PUT",
             headers: {
                 "Content-Type": "application/json",
@@ -94,47 +79,23 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
             body: JSON.stringify({
                 name,
                 description,
-                dueDate,
-                progress,
-                history: arr
             })
         })
         if (!response.ok) {
             history.push("/error")
         } else {
-            const updatedCard = await response.json()
-            setCard(updatedCard)
+            // const updatedCard = await response.json()
+            // setCard(updatedCard)
             socket.emit('project-update', project)
             socket.emit('task-team-update', teamId)
-            setProgressChanged(false)
+            // setProgressChanged(false)
         }
-
-    }, [history, name, description, dueDate, progress, listId, cardId, progressChanged, taskHistory, today, socket, teamId, project, token])
-
-
-
-    const progressColor = (progress) => {
-        if (Number(progress) <= 20) {
-            return 'red'
-        }
-        if (Number(progress) <= 40) {
-            return 'orange'
-        }
-        if (Number(progress) <= 80) {
-            return 'blue'
-        }
-        if (Number(progress) > 80) {
-            return 'green'
-        }
-    }
-
-    const changeProgress = (value) => {
-        setProgress(value)
-        setProgressChanged(true)
     }
 
     useEffect(() => {
-        setNameHeight(nameRef.current.scrollHeight + 2)
+        setTimeout(() => {
+            setNameHeight(nameRef.current.scrollHeight + 2)
+        }, 1);
     }, [])
 
     function onEscPressed(event, setElement, ref) {
@@ -160,7 +121,7 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                     value={name}
                     onFocus={() => setCurrInput(name)}
                     onKeyDown={e => onEscPressed(e, setName, nameRef)}
-                    onChange={(e) => {
+                    onChange={e => {
                         setName(e.target.value)
                         setNameHeight(nameRef.current.scrollHeight + 2)
                     }}
@@ -174,65 +135,20 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
             <div className={styles['task-body']} >
 
                 <div className={styles['left-side']}>
-
-                    <div className={styles['task-progress']} >
-                        <label for='progress'>
-                            <img src={pic2} alt="pic2" />
-                            <span className={styles['margin-left']}>Progress</span>
-                        </label>
-                        <div className={styles['progress-bar']} >
-                            {
-                                card.progress ?
-                                    <div className={styles.bar} >
-                                        <div
-                                            style={{
-                                                width: `${card.progress}%`,
-                                                backgroundColor: progressColor(card.progress)
-                                            }}
-                                            className={styles.progress}
-                                        />
-                                    </div> : null
-                            }
-                        </div>
-                        <div className={styles['progress-input-container']}>
-                            <input
-                                ref={progressRef}
-                                id='progress'
-                                type={progressType}
-                                min="0"
-                                max="100"
-                                className={styles['progress-input']}
-                                value={progress}
-                                onFocus={() => {
-                                    setCurrInput(progress)
-                                    setProgressType('number')
-                                }}
-                                onKeyDown={e => onEscPressed(e, setProgress, progressRef)}
-                                onChange={e => changeProgress(e.target.value)}
-                                onBlur={() => {
-                                    setProgressType('text')
-                                    if (currInput === progress) return
-                                    handleSubmit()
-                                }}
-                            />%
-                        </div>
-                    </div>
-
-                    <div className={styles['task-component']}>
+                    <div>
                         <div className={styles.text}>Description</div>
                         <textarea className={styles['description-input']}
                             ref={descriptionRef}
                             value={description}
                             onFocus={() => setCurrInput(description)}
                             onKeyDown={e => onEscPressed(e, setDescription, descriptionRef)}
-                            onChange={(e) => { setDescription(e.target.value) }}
+                            onChange={e => setDescription(e.target.value)}
                             onBlur={() => {
                                 if (currInput === description) return
                                 handleSubmit()
                             }}
                         />
                     </div>
-
                     <div className={styles['task-component']}>
                         <div className={styles.text}>History</div>
                         <TaskHistory taskHistory={taskHistory} />
@@ -241,82 +157,82 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
 
                 <div className={styles['right-side']}>
 
-
-
                     <div className={styles['task-component']}>
                         <div className={styles.text}>Manage</div>
-                        {/* <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic3} alt="pic3" />
-                            Join
-                        </div> */}
-                        {/* <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic4} alt="pic4" />
-                            Stickers
-                        </div> */}
-                        <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic5} alt="pic5" />
-                            Due Date
+                        <TaskMembers
+                            card={initialCard}
+                            listId={listId}
+                            project={project}
+                            teamId={teamId}
+                        />
+                        <TaskDueDate
+                            dueDate={dueDate}
+                            card={initialCard}
+                            listId={listId}
+                            project={project}
+                            teamId={teamId}
+                        />
+                        <TaskProgress
+                            card={initialCard}
+                            listId={listId}
+                            project={project}
+                            teamId={teamId}
+                            taskHistory={taskHistory}
+                            setTaskHistory={setTaskHistory}
+                        />
+                        <div className={styles['small-buttons']} >
+                            <img className={styles.pics} src={pic6} alt="pic6" />
+                            Attach File
                         </div>
-                        <div className={styles['due-date']}>
-                            <TaskDueDate
-                                cardDueDate={dueDate}
-                                cardId={cardId}
-                                listId={listId}
-                                project={project}
-                                showEditCard={false}
-                                teamId={teamId}
-                            />
-                        </div>
-                        <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic6} alt="pic6" />
-                            Attach file
-                        </div>
-                        {/* <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic7} alt="pic7" />
-                            Reports
-                        </div> */}
-                        <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic10} alt="pic10" />
-                            Add Teammate
-                        </div>
-                        <div className={styles.members}>
-                            <TaskMembers
-                                card={card}
-                                size={30}
-                                listId={listId}
-                                project={project}
-                                title={'Add'}
-                                teamId={teamId}
-                            />
-                        </div>
-                        {/* <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic11} alt="pic11" />
-                            Make Template
-                        </div> */}
-                        {/* <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic13} alt="pic13" />
-                            Remove List
-                        </div> */}
-                        <button className={styles.smallButtons} onClick={(e) => { deleteCard(e) }} title="Delete Task" >
-                            <img className={styles.picsSmallButtons} src={pic12} alt="pic12" />
+                        <button className={styles['small-buttons']} onClick={deleteCard} title="Delete Task" >
+                            <img className={styles.pics} src={pic12} alt="pic12" />
                             Delete Task
                         </button>
-                        {/* <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic8} alt="pic8" />
+
+
+                        {/* <div className={styles['small-buttons']} >
+                            <img className={styles.pics} src={pic3} alt="pic3" />
+                            Join
+                        </div> */}
+                        {/* <div className={styles['small-buttons']} >
+                            <img className={styles.pics} src={pic4} alt="pic4" />
+                            Stickers
+                        </div> */}
+                        {/* <div className={styles['small-buttons']} >
+                            <img className={styles.pics} src={pic5} alt="pic5" />
+                            Due Date
+                        </div> */}
+                        {/* <div className={styles['small-buttons']} >
+                            <img className={styles.pics} src={pic7} alt="pic7" />
+                            Reports
+                        </div> */}
+                        {/* <div className={styles['small-buttons']} >
+                            <img className={styles.pics} src={pic10} alt="pic10" />
+                            Add Teammate
+                        </div> */}
+                        {/* <div className={styles['small-buttons']} >
+                            <img className={styles.pics} src={pic11} alt="pic11" />
+                            Make Template
+                        </div> */}
+                        {/* <div className={styles['small-buttons']} >
+                            <img className={styles.pics} src={pic13} alt="pic13" />
+                            Remove List
+                        </div> */}
+                        {/* <div className={styles['small-buttons']} >
+                            <img className={styles.pics} src={pic8} alt="pic8" />
                             Settings
                         </div> */}
-                        {/* <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic9} alt="pic9" />
+                        {/* <div className={styles['small-buttons']} >
+                            <img className={styles.pics} src={pic9} alt="pic9" />
                             View
                         </div> */}
-                        {/* <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic14} alt="pic14" />
+                        {/* <div className={styles['small-buttons']} >
+                            <img className={styles.pics} src={pic14} alt="pic14" />
                             Archive
                         </div> */}
+
                     </div>
-
                 </div>
-
             </div>
         </div>
     )
