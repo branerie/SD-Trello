@@ -145,7 +145,16 @@
     border: 1px solid #707070;
     width: auto;
     display: flex;
-    height: 79vh;    
+    height: 79vh;
+    height: calc(100vh - 6.7rem - 40px);
+    width: calc(100vw - 4rem);
+    font-size: 0.8rem;
+}
+
+@media(min-width: 1600px) {
+    .reactTable {
+        font-size: 1rem;
+    }
 }
 
 .reactTableBody {

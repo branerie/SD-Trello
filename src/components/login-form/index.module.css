@@ -1,12 +1,22 @@
 .container {    
     position: absolute;
     left: 30%;
-    top: 15vh;
-    z-index: 20;
+    top: 15vh;    
     width: 45%;
+
+    z-index: 20;
+
+    /* position: fixed;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
+
     min-width: 500px;
     min-height: 70vh;
     height: auto;
+
+
     /* max-height: 90vh; */
     background-color:#EDF5F9;
     border: solid 2px #707070;

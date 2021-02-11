@@ -8,6 +8,7 @@ import TeamContext from "../../contexts/TeamContext"
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import UserContext from '../../contexts/UserContext'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
+import ConfirmDialog from '../confirmation-dialog'
 
 
 export default function AddMember(props) {
@@ -24,6 +25,9 @@ export default function AddMember(props) {
     const history = useHistory()
     const projectId = props.project._id
     const params = useParams()
+    const [confirmOpen, setConfirmOpen] = useState(false)
+    const [confirmTitle, setConfirmTitle] = useState('')
+    const [currElement, setCurrElement] = useState('')
 
 
     const updateProjectSocket = useCallback(() => {
@@ -101,15 +105,15 @@ export default function AddMember(props) {
             return
         }
 
-        if (!memberAdmin) {
-            if (!window.confirm(`Are you sure you wish to make ${member.username} admin ?`))
-                return
-        }
+        // if (!memberAdmin) {
+        //     if (!window.confirm(`Are you sure you wish to make ${member.username} admin ?`))
+        //         return
+        // }
 
-        if (memberAdmin) {
-            if (!window.confirm(`Are you sure you wish to remove ${member.username} from  admins ?`))
-                return
-        }
+        // if (memberAdmin) {
+        //     if (!window.confirm(`Are you sure you wish to remove ${member.username} from  admins ?`))
+        //         return
+        // }
 
         const token = getCookie("x-auth-token")
 
@@ -138,8 +142,7 @@ export default function AddMember(props) {
         setSelectedUser(result)
     }
 
-    const deleteMember = async (event, member) => {
-        event.preventDefault()
+    const deleteMember = async (member) => {
         const projectId = props.project._id
 
         if (member._id === context.user.id) {
@@ -200,9 +203,20 @@ export default function AddMember(props) {
         }
     }
 
+    let confirmationObjectFunctions = {        
+        'delete this member': deleteMember   
+    }
+
     return (
         <div className={styles.container}>
 
+            {confirmOpen &&
+                <ConfirmDialog
+                    title={confirmTitle}
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={() => confirmationObjectFunctions[confirmTitle](currElement)}
+                />
+            }
 
             <div className={styles.bigContainer} >
                 {isAdmin ?
@@ -278,7 +292,13 @@ export default function AddMember(props) {
 
                                                                 <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
                                                                     <Avatar key={index} name={element.memberId.username} size={40} round={true} maxInitials={2}
-                                                                        onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, element.memberId) }} />
+                                                                        // onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, element.memberId) }}
+                                                                        onClick={() => {
+                                                                            setConfirmOpen(true)
+                                                                            setConfirmTitle('delete this member')
+                                                                            setCurrElement(element.memberId)
+                                                                        }}
+                                                                        />
                                                                     {provided.placeholder}
                                                                 </span>
                                                             )}

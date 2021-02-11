@@ -88,7 +88,7 @@ export default function CreateProject({ hideForm }) {
     }
 
     const removeMember = (input) => {
-        const arr = members.filter(u => u.email !== input.email)
+        const arr = members.filter(u => u._id !== input._id)
         setMembers(arr)
     }
 

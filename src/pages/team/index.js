@@ -9,6 +9,7 @@ import EditTeam from "../../components/edit-team"
 import TeamMembers from "../../components/team-members"
 import pic1 from '../../images/team-page/pic1.svg'
 import UserContext from "../../contexts/UserContext"
+import ButtonGrey from "../../components/button-grey"
 
 const TeamPage = () => {
     const [isVisible, setIsVisible] = useState(false)
@@ -28,8 +29,9 @@ const TeamPage = () => {
                 setMembers(t.members)
                 setInvited(t.requests)
             }
-        })    
-    }, [userContext.user.teams, params.teamid])
+        })
+       
+    }, [userContext, params])
 
     return (
         <PageLayout>
@@ -42,7 +44,8 @@ const TeamPage = () => {
                             )
                         })}
                     </div>
-                    <button className={styles.newProjectButton} onClick={() => setIsVisible(true)} >New Project</button>
+                    <ButtonGrey title={'New Project'} onClick={() => setIsVisible(true)} />
+                    {/* <button className={styles.newProjectButton} onClick={() => setIsVisible(true)} >New Project</button> */}
                     {
                         isVisible &&
                         <Transparent hideForm={() => setIsVisible(false)}>
@@ -56,7 +59,9 @@ const TeamPage = () => {
                         <TeamMembers
                             members={members} invited={invited}
                         />
-                        <button className={styles.newProjectButton} onClick={() => setShowForm(true)} >View Team</button>
+                        <ButtonGrey className={styles.newProjectButton} title={'View Team'} onClick={() => setShowForm(true)} />
+
+                        {/* <button className={styles.newProjectButton} onClick={() => setShowForm(true)} >View Team</button> */}
                         {
                             showForm &&
                             <Transparent hideForm={() => setShowForm(false)}>

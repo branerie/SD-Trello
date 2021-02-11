@@ -7,6 +7,8 @@ import { useSocket } from '../../contexts/SocketProvider'
 import AddProjectMember from '../add-project-member'
 import UserContext from '../../contexts/UserContext'
 import isUserAdmin from '../../utils/isUserAdmin'
+import ButtonGrey from '../button-grey'
+import ConfirmDialog from '../confirmation-dialog'
 
 
 export default function EditProject(props) {
@@ -14,6 +16,8 @@ export default function EditProject(props) {
     const [description, setDescription] = useState(props.project.description)
     const members = props.project.membersRoles
     const [isAdmin, setIsAdmin] = useState(false)
+    const [confirmOpen, setConfirmOpen] = useState(false)
+
     const userContext = useContext(UserContext)
     const history = useHistory()
     const socket = useSocket()
@@ -78,7 +82,15 @@ export default function EditProject(props) {
 
     return (
         <div className={styles.form}>
-            <form className={styles.container} >
+            {confirmOpen &&
+                <ConfirmDialog
+                    title={'you wish to delete this project'}
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={() => deleteProject()}
+                />
+            }
+
+            <div className={styles.container} >
                 <div className={styles.title} >Project</div>
                 
                 <div className={styles.inputContainer}>
@@ -105,12 +117,20 @@ export default function EditProject(props) {
                 <div className={styles.editMembers}>
                     <AddProjectMember admin={isAdmin} project={props.project} members={props.project.membersRoles} />
                 </div>
-            </form>
+            </div>
             <div>
                 {isAdmin ?
                     <div className={styles.buttonsDiv}>
-                        <button className={styles.navigateButtons} onClick={handleSubmit}  >Edit</button>
-                        <button className={styles.navigateButtons} onClick={() => { if (window.confirm('Are you sure you wish to delete this project?')) deleteProject() }}  >Delete Project</button>
+                        <ButtonGrey className={styles.navigateButtons} title={'Edit'} onClick={handleSubmit}/>
+                        <ButtonGrey className={styles.navigateButtons} title={'Delete Project'} 
+                        // onClick={() => { if (window.confirm('Are you sure you wish to delete this project?')) deleteProject() }}
+                        onClick={() => {
+                            setConfirmOpen(true)                            
+                        }}
+                        />
+
+                        {/* <button className={styles.navigateButtons} onClick={handleSubmit}  >Edit</button> */}
+                        {/* <button className={styles.navigateButtons} onClick={() => { if (window.confirm('Are you sure you wish to delete this project?')) deleteProject() }}  >Delete Project</button> */}
                     </div>
                     : null
                 }

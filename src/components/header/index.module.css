@@ -50,15 +50,20 @@
 }
 
 .first-option {
+  background: #C1CBCF;
+  color:#363338;
   border-radius: 10px 10px 0 0;
 }
 
 .last-option {
+  background: #C1CBCF;
+  color:#363338;
   border-bottom: 1px solid #707070;
   border-radius: 0 0 10px 10px;
 }
 
 .logout {
+  background: #C1CBCF;
   color:#363338;
   text-decoration: none;
   display: inline-block;
@@ -72,7 +77,8 @@
 }
 
 .logout:hover {
-  background-color: #C1CBCF;
+  background: #363338;
+  color:#F7F7F2;
 }
 
 .input {
@@ -164,6 +170,8 @@
 }
 
 .overflow {
+  background: #C1CBCF;
+  color:#363338;
   width: 86.5%;
   white-space: nowrap; 
   overflow: hidden;
@@ -171,7 +179,8 @@
 }
 
 .hover:hover {
-  background-color: #C1CBCF;
+  background: #363338;
+  color:#F7F7F2;
 }
 
 .flex {

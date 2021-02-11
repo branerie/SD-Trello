@@ -9,6 +9,8 @@ import styles from './index.module.css'
 import dots from '../../images/dots.svg'
 import ButtonClean from '../button-clean'
 import ListColor from '../list-color'
+import ButtonGrey from '../button-grey'
+import ConfirmDialog from '../confirmation-dialog'
 
 
 export default function List(props) {
@@ -17,6 +19,7 @@ export default function List(props) {
     const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
     const [isEditListActive, setIsEditListActive] = useDetectOutsideClick(dropdownRef)
     const [cardName, setCardName] = useState('')
+    const [confirmOpen, setConfirmOpen] = useState(false)
     const history = useHistory()
     const socket = useSocket()
     const params = useParams()
@@ -84,7 +87,15 @@ export default function List(props) {
     }
 
     return (
+        
         <div key={props.list._id} className={styles.list}>
+            {confirmOpen &&
+                <ConfirmDialog
+                    title={'you wish to delete this list'}
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={() => deleteList()}
+                />
+            }
             <div className={styles.row}>
                 <div>
                     <div className={styles.name}>{props.list.name}</div>
@@ -101,13 +112,14 @@ export default function List(props) {
             </div>
             <div className={styles.relative}>
                 {isEditListActive && <div ref={dropdownRef} className={`${styles.menu}`} >
-                        <ButtonClean
+                        <ButtonGrey
                             onClick={editList}
                             title='Edit'
                             className={styles.edit}
                         />
-                        <ButtonClean
-                            onClick={() => { if (window.confirm('Are you sure you wish to delete this item?')) deleteList() }}
+                        <ButtonGrey
+                        
+                            onClick={() => setConfirmOpen(true)}
                             title='Delete'
                             className={styles.delete}
                         />

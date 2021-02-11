@@ -20,7 +20,7 @@ const assembleColumnData = (startDate) => {
             color: messageColor,
             width: '100%',
             padding: '5px', 
-            fontSize: '14px',
+            // fontSize: '14px',
             border: '1px solid #363338',
             borderRadius: '5px',
             display: 'flex',
@@ -170,86 +170,107 @@ const assembleColumnData = (startDate) => {
                     return <div className={styles.header}>Task</div>
                 },
                 accessor: "task",
-                minWidth: 450,
+                minWidth: 350,
                 Cell: ({ value }) => wrapCellData(value),
                 sortable: true,
+                resizable: false,
             },
             {
                 Header: () => {
                     return <div className={styles.header}>Progress</div>
                 },
                 accessor: "progress",
-                minWidth: 70,
+                minWidth: 65,
+                maxWidth: 75,
                 Cell: ({ value }) => wrapCellData(value),
                 sortable: true,
-                sortMethod: () => {}
+                resizable: false,
+                sortMethod: () => {}  // needed to override default sorting
             },
             {
                 Header: () => {
-                    return <div className={styles.header}>Teammates</div>
+                    return <div className={styles.header}>Team</div>
                 },
                 accessor: "assigned",
-                minWidth: 90,
+                minWidth: 75,
+                maxWidth: 80,
                 Cell: ({ value }) => wrapCellData(value),
-                sortable: false
+                sortable: false,
+                resizable: false
             },
             {
                 Header: getHeaderDateHtml(0),
                 accessor: "monday",
-                minWidth: 100,
+                minWidth: 95,
+                maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 0),
-                sortable: false
+                sortable: false,
+                resizable: false
             },
             {
                 Header: getHeaderDateHtml(1),
                 accessor: "tuesday",
-                minWidth: 100,
+                minWidth: 95,
+                maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 1),
-                sortable: false
+                sortable: false,
+                resizable: false
             },
             {
                 Header: getHeaderDateHtml(2),
                 accessor: "wednesday",
-                minWidth: 100,
+                minWidth: 95,
+                maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 2),
-                sortable: false
+                sortable: false,
+                resizable: false
             },
             {
                 Header: getHeaderDateHtml(3),
                 accessor: "thursday",
-                minWidth: 100,
+                minWidth: 95,
+                maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 3),
-                sortable: false
+                sortable: false,
+                resizable: false
             },
             {
                 Header: getHeaderDateHtml(4),
                 accessor: "friday",
-                minWidth: 100,
+                minWidth: 95,
+                maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 4),
-                sortable: false
+                sortable: false,
+                resizable: false
             },
             {
                 Header: getHeaderDateHtml(5),
                 accessor: "saturday",
-                minWidth: 100,
+                minWidth: 95,
+                maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 5),
-                sortable: false
+                sortable: false,
+                resizable: false
             },
             {
                 Header: getHeaderDateHtml(6),
                 accessor: "sunday",
-                minWidth: 100,
+                minWidth: 95,
+                maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 6),
-                sortable: false
+                sortable: false,
+                resizable: false
             },
             {
                 Header: () => {
                     return <div className={styles.header}>Due Date</div>
                 },
                 accessor: "dueDate",
-                minWidth: 110,
+                minWidth: 100,
+                maxWidth: 130,
                 sortable: true,
-                sortMethod: () => {}
+                resizable: false,
+                sortMethod: () => {} // needed to override default sorting
             }
         ]
     )

@@ -8,6 +8,7 @@ import UserContext from "../../contexts/UserContext"
 import styles from './index.module.css'
 import pic1 from '../../images/home-page-pic.svg'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import ButtonGrey from "../../components/button-grey"
 
 
 const Home = () => {
@@ -70,55 +71,60 @@ const Home = () => {
         <span className={styles.leftButtons}>
 
           <div>
-            <button className={styles.navigateButtons}
+            <ButtonGrey className={styles.navigateButtons} title={'My Tasks'} onClick={() => history.push(`/my-tasks/${userId}`)} />
+            {/* <button className={styles.navigateButtons}
               onClick={() => history.push(`/my-tasks/${userId}`)}
-            >My Tasks</button>
+            >My Tasks</button> */}
           </div>
 
           <div>
             <div className={styles.myTeamsContainer}>
-              < button onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)}
+              <ButtonGrey className={styles.navigateButtons} title={'My Teams'} onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
+
+              {/* < button onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)}
                 // title='Create Team' 
                 // className={styles.teamNames}
                 className={styles.myTeamButton}>
                   My Teams
-              </ button>
-              <div className={styles.teamsPopUp}>
-            <div className={styles.selectTeamContainer}>
-              {
-                showTeamsVisibleForm ?
-                  <div className={styles.teamsHome} ref={dropdownRef}>
-                    {
-                      userTeams.length > 0
-                      ? userTeams.map((t, index) => {
-                        return (
-                          <span key={index}>                            
-                            <div                              
-                              className={styles.navigateButtonsTeams}
-                              onClick={() => goToTeamPage(t._id)}
+              </ button> */}
 
-                            >{t.name}</div>
-                            
-                          </span>
-                        )
+            </div>
+            <div className={styles.teamsPopUp}>
+              <div className={styles.selectTeamContainer}>
+                {
+                  showTeamsVisibleForm ?
+                    <div className={styles.teamsHome} ref={dropdownRef}>
+                      {
+                        userTeams.length > 0
+                          ? userTeams.map((t, index) => {
+                            return (
+                              <span key={index}>
+                                <div
+                                  className={styles.navigateButtonsTeams}
+                                  onClick={() => goToTeamPage(t._id)}
+
+                                >{t.name}</div>
+
+                              </span>
+                            )
+                          }
+                          )
+                          : "You haven't joined any teams yet"
                       }
-                      )
-                      : "You haven't joined any teams yet"
-                    }
-                  </div>
-                  : null
-              }
-            </div>
-            </div>
+                    </div>
+                    : null
+                }
+              </div>
             </div>
           </div>
 
           <div>
-            < button onClick={() => setShowTeamForm(true)}
+            <ButtonGrey className={styles.navigateButtons} title={'Create New Team'} onClick={() => setShowTeamForm(true)} />
+            {/* < button onClick={() => setShowTeamForm(true)}
               // title='Create Team' 
               // className={styles.teamNames}
               className={styles.navigateButtons}
-            >Create New Team</ button>
+            >Create New Team</ button> */}
           </div>
 
         </span>
@@ -137,7 +143,8 @@ const Home = () => {
                   recentProjects.slice(0).reverse().map((p, index) => {
                     return (
                       <div key={p._id}>
-                        <button className={styles.navigateButtons} onClick={() => goToProject(p._id)}>{p.name}</button>
+                        <ButtonGrey className={styles.navigateButtons} title={p.name} onClick={() => goToProject(p._id)} />
+                        {/* <button className={styles.navigateButtons} onClick={() => goToProject(p._id)}>{p.name}</button> */}
                       </div>
                     )
                   })
