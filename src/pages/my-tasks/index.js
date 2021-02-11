@@ -125,7 +125,7 @@ const MyTasksPage = () => {
             {
                 (!currTeam || projects.length === 0) &&
                 <div className={styles.pic}>
-                    <img src={myTasks} alt="My tasks picture" width="30%"/>
+                    <img src={myTasks} alt=''/>
                 </div>
             }
         </PageLayout>

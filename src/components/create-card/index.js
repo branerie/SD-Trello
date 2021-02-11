@@ -18,10 +18,10 @@ import pic11 from '../../images/edit-card/pic11.svg'
 import pic12 from '../../images/edit-card/pic12.svg'
 import pic13 from '../../images/edit-card/pic13.svg'
 import pic14 from '../../images/edit-card/pic14.svg'
-import TaskMembers from '../task-members'
-import TaskDueDate from "../task-dueDate"
+import TaskMembers from '../edit-card-options/taskMembers'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import TaskHistory from '../task-history'
+import TaskHistory from '../edit-card-options/taskHistory'
+import TaskDueDate from '../edit-card-options/taskDueDate'
 
 
 export default function CreateCard(props) {
@@ -127,8 +127,6 @@ export default function CreateCard(props) {
             setProgressChanged(false)
 
         }
-
-
     }
 
     const createTask = async (event) => {
@@ -382,22 +380,22 @@ export default function CreateCard(props) {
                             <p className={styles.text}>Add</p>
                         </div>
                         <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic3} alt="pic3" />
+                            <img className={styles.pics} src={pic3} alt="pic3" />
                             Join</div>
                         <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic4} alt="pic4" />
+                            <img className={styles.pics} src={pic4} alt="pic4" />
                             Stickers</div>
                         <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic5} alt="pic5" />
+                            <img className={styles.pics} src={pic5} alt="pic5" />
                             Due Date</div>
                         <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic6} alt="pic6" />
+                            <img className={styles.pics} src={pic6} alt="pic6" />
                             Attach file</div>
                         <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic7} alt="pic7" />
+                            <img className={styles.pics} src={pic7} alt="pic7" />
                             Reports</div>
                         <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic10} alt="pic10" />
+                            <img className={styles.pics} src={pic10} alt="pic10" />
                             Add Teammate</div>
                     </div>
 
@@ -407,23 +405,23 @@ export default function CreateCard(props) {
                             <p className={styles.text}>Manage</p>
                         </div>
                         <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic11} alt="pic11" />
+                            <img className={styles.pics} src={pic11} alt="pic11" />
                             Make Template</div>
                         <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic13} alt="pic13" />
+                            <img className={styles.pics} src={pic13} alt="pic13" />
                             Remove List</div>
                         <button className={styles.smallButtons}
                             onClick={(e) => { deleteCard(e) }} title="Delete Task" >
-                            <img className={styles.picsSmallButtons} src={pic12} alt="pic12" />
+                            <img className={styles.pics} src={pic12} alt="pic12" />
                          Delete Task</button>
                         <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic8} alt="pic8" />
+                            <img className={styles.pics} src={pic8} alt="pic8" />
                             Settings</div>
                         <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic9} alt="pic9" />
+                            <img className={styles.pics} src={pic9} alt="pic9" />
                             View</div>
                         <div className={styles.smallButtons} >
-                            <img className={styles.picsSmallButtons} src={pic14} alt="pic14" />
+                            <img className={styles.pics} src={pic14} alt="pic14" />
                             Archive</div>
                     </div>
 

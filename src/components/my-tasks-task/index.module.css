@@ -1,19 +1,21 @@
 .card {
     display: flex;
     margin-left: 20px;
-    font-size: 20px;
-    height: 35px;
+    min-height: 35px;
+    font-size: 1.3rem;
 }
+
+
   
-.card > div {
-    white-space: nowrap; 
-    overflow: hidden;
-    text-overflow: ellipsis;
+.card > div {   
     color: #363338;
+    margin-bottom: 15px;
+    overflow-wrap: break-word;
 }
   
 .task {
-    width: 35%;
+    width: 34%;
+    margin-right: 1%;
 }
 
 .progress {
@@ -30,7 +32,8 @@
 
 .deadline {
     background-color:  rgb(245, 156, 156);
-    font-size: 16px;
+    font-size: 1rem;
+    max-height: 20px;
     align-self: center;
     border-radius: 5px;
     padding: 5px;
@@ -43,6 +46,7 @@
 .pen {
     width: 30px;
     border-radius: 5px;
+    height: 35px;
 }
   
 .pen:hover {
@@ -51,7 +55,7 @@
 
 .input {
     font-family: 'Lato';
-    font-size: 20px;
+    font-size: 1.3rem;
     font-weight: normal;
     height: 25px;
     width: 55px;
@@ -67,5 +71,9 @@
 }
 
 .no-border {
-    border: none;
+    border: 1px solid #F7F7F2;
+}
+
+.edit {
+    font-size: 1rem;
 }

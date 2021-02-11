@@ -165,7 +165,7 @@ const ProfilePage = () => {
 
       {confirmOpen &&
         <ConfirmDialog
-          title={'you wish to delete this picture'}
+          title={'delete this picture'}
           hideConfirm={() => setConfirmOpen(false)}
           onConfirm={() => deletePic()}
         />
@@ -187,6 +187,11 @@ const ProfilePage = () => {
             <ButtonGrey title={'Username:'} className={styles.navigateButtons}
               onClick={() => { setUserNameActive(!userNameActive) }} />
             < input
+              ref={function (input) {
+                if (input != null) {
+                  input.focus();
+                }
+              }}
               // onClick={() => setShowTeamForm(true)}
               // title='Create Team' 
               // className={styles.teamNames}
@@ -207,7 +212,7 @@ const ProfilePage = () => {
             <ButtonGrey title={'Change Password'} className={styles.navigateButtons}
               onClick={() => { setPaswordActive(!passwordActive) }} />
 
-            < input
+            < input              
               onChange={e => setPassword(e.target.value)}
               className={styles.inputFieldsProfile}
               placeholder={'********'}
@@ -234,7 +239,7 @@ const ProfilePage = () => {
             <ButtonGrey title={'Confirm Password'} className={styles.navigateButtons}
               onClick={() => { setPaswordActive(!passwordActive) }} />
 
-            < input
+            < input              
               onChange={e => setRePassword(e.target.value)}
               className={styles.inputFieldsProfile}
               placeholder={'********'}
@@ -315,8 +320,8 @@ const ProfilePage = () => {
             <div className={styles.profilePic}
               onClick={() => {
                 userContext.user.imageUrl ?
-                setIsEditListActive(!isEditListActive)
-                : widget.open()
+                  setIsEditListActive(!isEditListActive)
+                  : widget.open()
               }}
             >
               {userContext.user.imageUrl ?

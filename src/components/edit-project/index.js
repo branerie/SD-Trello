@@ -84,7 +84,7 @@ export default function EditProject(props) {
         <div className={styles.form}>
             {confirmOpen &&
                 <ConfirmDialog
-                    title={'you wish to delete this project'}
+                    title={'delete this project'}
                     hideConfirm={() => setConfirmOpen(false)}
                     onConfirm={() => deleteProject()}
                 />

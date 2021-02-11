@@ -2,7 +2,6 @@ import React from 'react'
 import styles from './index.module.css'
 import logo from '../../images/logo.svg'
 import ButtonGrey from '../button-grey'
-import Transparent from '../transparent'
 
 
 

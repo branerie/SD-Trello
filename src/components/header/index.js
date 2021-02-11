@@ -124,7 +124,7 @@ const Header = ({ asideOn }) => {
     }
 
     const getFullImageUrl = (imagePath) => {
-        return `https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/${imagePath}`
+        return `https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/${imagePath}`
       }
 
     return (
@@ -284,6 +284,7 @@ const Header = ({ asideOn }) => {
                         className={styles.avatar}
                         onClick={() => setIsProfileActive(!isProfileActive)}
                         title={<Avatar 
+
                             name={!context.user.imageUrl?context.user.username:null} 
                             src={context.user.imageUrl?
                                 getFullImageUrl(context.user.imageUrl):null}
@@ -292,7 +293,8 @@ const Header = ({ asideOn }) => {
                             size={40}
                              round={true} 
                             maxInitials={2} 
-                            />}
+                            />
+                        }
                     />
                     {
                         isProfileActive ? <div

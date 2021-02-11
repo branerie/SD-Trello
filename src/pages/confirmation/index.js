@@ -1,8 +1,11 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
-import { useHistory, useParams } from "react-router-dom";
-import Button from "../../components/button";
-import UserContext from "../../contexts/UserContext";
-import authenticate from "../../utils/authenticate";
+import { useHistory, useParams } from "react-router-dom"
+import styles from './index.module.css'
+import Button from "../../components/button"
+import UserContext from "../../contexts/UserContext"
+import authenticate from "../../utils/authenticate"
+import logo from '../../images/logo.svg'
+
 
 const ConfirmationPage = () => {
     const params = useParams()
@@ -16,11 +19,11 @@ const ConfirmationPage = () => {
 
     const confirmToken = useCallback(async () => {
         const token = params.token
-        if (params.token === 'not-confirmed') {           
+        if (params.token === 'not-confirmed') {
             return
         }
 
-        if (userContext.user.confirmed && userContext.user.newPasswordConfirmed) {            
+        if (userContext.user.confirmed && userContext.user.newPasswordConfirmed) {
             return
         }
 
@@ -33,7 +36,7 @@ const ConfirmationPage = () => {
         }, (response) => {
             console.log("Error", response)
         })
-       
+
     }, [params.token, userContext])
 
     useEffect(() => {
@@ -46,9 +49,27 @@ const ConfirmationPage = () => {
             <div>
                 {
                     firstRegistration ?
-                        <div> Please check your email to confirm your account</div >
+                        <div className={styles.container}>
+                            <div className={styles.logo}>
+                                <img src={logo} alt="logo" width='194' height='142' />
+                            </div>
+                            <div className={styles.title}> Confirm your email address</div >
+                            <div className={styles.text}>Please check your email to confirm your account</div>
+                            <div className={styles.text}>Once confirmed, this email address will be uniquely associated with your Smart Manager  account.</div>
+                            <div className={styles.cheers}> Cheers,</div >
+                            <div className={styles.team}>The Smart Manager Team</div>
+                        </div>
                         :
-                        <div>Please check your email to confirm your new password</div>
+                        <div className={styles.container}>
+                            <div className={styles.logo}>
+                                <img src={logo} alt="logo" width='194' height='142' />
+                            </div>
+                            <div className={styles.title}> Confirm your new password</div >
+                            <div className={styles.text}>Please check your email to confirm your new password</div>
+                            <div className={styles.text}>Once confirmed, your new password will be active for your Smart Manager  account.</div>
+                            <div className={styles.cheers}> Cheers,</div >
+                            <div className={styles.team}>The Smart Manager Team</div>
+                        </div>
                 }
             </div>
         )
@@ -58,13 +79,19 @@ const ConfirmationPage = () => {
         <div>
             {loading && <div>Validating your email.</div>}
             {!loading && success && <div>
-                {
-                    firstRegistration ?
-                        <div>Thank you. Your account has been verified.</div>
-                        :
-                        <div>Thank you. Your new password has been verified.</div>
-                }
-                <Button title='Proceed' onClick={() => history.push('/')} />
+                
+                        <div className={styles.container}>
+                            <div className={styles.logo}>
+                                <img src={logo} alt="logo" width='194' height='142' />
+                            </div>
+                            <div className={styles.title}> Thank you</div >
+                            <div className={styles.text}>You can continue to Smart Manager now</div>
+                            <Button title='Proceed' className={styles['proceed-button']} onClick={() => history.push('/')} />
+                            <div className={styles.cheers}> Cheers,</div >
+                            <div className={styles.team}>The Smart Manager Team</div>
+                        </div>
+                       
+
             </div>}
         </div>
     )
