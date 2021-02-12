@@ -108,6 +108,8 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     }
 
     return (
+        <div className={styles.menu}>
+
         <div className={styles.container}>
 
             <div className={styles['task-name']}>
@@ -131,7 +133,6 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                     }}
                 />
             </div>
-
             <div className={styles['task-body']} >
 
                 <div className={styles['left-side']}>
@@ -159,14 +160,14 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
 
                     <div className={styles['task-component']}>
                         <div className={styles.text}>Manage</div>
-                        <TaskMembers
+                        <TaskDueDate
+                            dueDate={dueDate}
                             card={initialCard}
                             listId={listId}
                             project={project}
                             teamId={teamId}
                         />
-                        <TaskDueDate
-                            dueDate={dueDate}
+                        <TaskMembers
                             card={initialCard}
                             listId={listId}
                             project={project}
@@ -234,6 +235,7 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     )
 }

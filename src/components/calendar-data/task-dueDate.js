@@ -81,7 +81,9 @@ export default function TaskDueDate(props) {
                     </div>}
                     onChange={async (date) => { await setCardDueDate(date); editCardDueDate(date) }}
                     label="Go to date"
-                    onBlur={() => setIsActive(!isActive)} 
+                    onBlur={() => setIsActive(!isActive)}
+                    popperPlacement='bottom-end'
+                    closeOnScroll={e => e.target === window}
                 />
 
                 {isVisible ?
@@ -113,11 +115,13 @@ export default function TaskDueDate(props) {
                 {/* {
                     isActive ? */}
                         <div className={styles.dueDateField}>
-                            <DatePicker 
+                            <DatePicker
+                                closeOnScroll={true}
                                 customInput={<span>Select date</span>}
                                 selected={today} 
                                 onChange={(date) => { setCardDueDate(date); editCardDueDate(date) }} 
-                                label="Go to date" 
+                                label="Go to date"
+                                popperPlacement='bottom-end'
                             />
                         </div>
                         {/* :
