@@ -7,7 +7,6 @@ import { useParams } from "react-router-dom"
 import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress"
 import TaskDueDate from "../calendar-data/task-dueDate"
-import AddList from "../calendar-data/add-list"
 import AddTask from "../calendar-data/add-task"
 import ProjectContext from "../../contexts/ProjectContext"
 import assembleColumnData from "../calendar-data/column-data"
@@ -19,6 +18,7 @@ import MembersList from "../members-list"
 import TableDateNavigation from "../table-date-navigation";
 import { formatDate, getDateWithOffset, getMonday } from '../../utils/date'
 import { createTableEntry, parseCardHistory, applyCardFilters, getCardsSortMethod } from './utils'
+import AddList from "../calendar-data/add-list";
 
 const TableDndApp = (props) => {
     const projectContext = useContext(ProjectContext)
@@ -144,12 +144,6 @@ const TableDndApp = (props) => {
             return data
         })
 
-        data.push(createTableEntry({
-            task: (
-                <AddList props={props} project={props.project} />
-            )
-        }))
-
         /* 
         Rows need to be reversed if descending sort as by default ReactTable simply reverses 
         the data if descending sort is selected, expecting the data to already be sorted in 
@@ -186,6 +180,7 @@ const TableDndApp = (props) => {
                     setStartDate={setStartDate}
                     changeStartDate={changeStartDate}
                 />
+                <AddList props={props} project={props.project} />
             </div>
             <div>
                 {/* <DragDropContext onDragEnd={handleDragEnd} > */}
@@ -204,9 +199,7 @@ const TableDndApp = (props) => {
                         'white'
                     }
                     className={`${styles.reactTable} -highlight`}
-                    getTbodyProps={() => ({
-                        className: styles.reactTableBody
-                    })}
+                    getTbodyProps={() => ({ className: styles.reactTableBody })}
                     onSortedChange={(sortInfo) => {
                         const { id: columnName, desc: isDescending } = sortInfo[0]
                         setSortCriteria({ columnName, isDescending })

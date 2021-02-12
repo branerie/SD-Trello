@@ -58,9 +58,8 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
     }
 
     return (
-        <div className={styles.containerMemb}>
         <div className={styles.allCardMembers}>
-           {
+        {
             members.map((m, index) => {
                 return (
                     <div key={index} className={styles.eachMember} onClick={() => onClick(m)} >
@@ -79,8 +78,7 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
             })
         }
         </div>
-        </div>
-    )
+)
 }
 
 

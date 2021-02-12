@@ -70,6 +70,7 @@
   margin: 10px;
   border-radius: 5px;
   color: black;
+  cursor: pointer;
 }
 
 .dueDateField {
@@ -242,4 +243,9 @@
 .filters-clicked {
   background-color: #363338;
   color: white;
+}
+
+.list {
+  display: flex;
+  align-items: center;
 }

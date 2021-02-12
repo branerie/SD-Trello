@@ -57,12 +57,28 @@ export default function AddList(props) {
 
 
         <div className={styles.list} >
-            {
-                isActive ?
-                    <form ref={listRef} className={styles.container} >
-                        <input className={styles.inputList} type={'text'} value={listName} onChange={e => setListName(e.target.value)} />
-                        <ButtonClean type='submit' className={styles.addListButton} onClick={addList} title='+ Add' />
-                    </form> : <ButtonClean className={styles.addListButton} onClick={() => setIsActive(!isActive)} title='+ Add List' />
+            { isActive 
+                ?   
+                <form ref={listRef} className={styles.container} >
+                    <input 
+                        className={styles.inputList} 
+                        type={'text'} 
+                        value={listName} 
+                        onChange={e => setListName(e.target.value)} 
+                    />
+                    <ButtonClean 
+                        type='submit' 
+                        className={styles.addListButton}
+                        onClick={addList} 
+                        title='+ Add' 
+                    />
+                </form> 
+                :   
+                <ButtonClean   
+                    className={styles.addListButton} 
+                    onClick={() => setIsActive(!isActive)} 
+                    title='+ Add List'
+                />
             }
 
         </div>
