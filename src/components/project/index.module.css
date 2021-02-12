@@ -1,10 +1,7 @@
 .container {
     width: 80%; 
     min-width: 500px;  
-    background-color:#F7F7F2;
-    /* margin: 40px; */
-    /* margin-left: 30px; */
-    /* margin-top: 20px; */
+    background-color:#F7F7F2;    
     margin-bottom: 20px;
     height: 100px;
     border-radius: 19px;
@@ -29,12 +26,6 @@
     scrollbar-width: none;  /* Firefox */
   }
 
-.leftSide{
-    /* margin-top: 1%; */
-    /* max-width: 500px; */
-    /* display: flex; */
-    /* align-items: stretch; */
-}
 
 .key {
     padding: 10px;
@@ -43,7 +34,7 @@
     font-weight: 600;
     color: black;
     margin-top: 2%;
-    /* width: 70%; */
+
 }
 
 .value {
@@ -53,41 +44,17 @@
     font-weight: 400;
     color: black;
     margin-top: 10%;
-    /* width: 70%; */
+ 
 }
 
 
 
 
 
-.info {
-    /* font-size: 16px; */
-    /* font-weight: 500; */
-    /* background: #DFE9EE; */
-    /* color: black; */
-    /* padding: 5px; */
-    /* width: 60px;
-    height: 20px;
-    border-radius: 19px; */
-    /* display: block; */
-    /* margin: 0 auto; */
-    /* margin: 10px; */
-    /* margin-left: 25px; */
-    /* cursor: pointer; */
-    /* border: 1px solid #707070; */
-    /* box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-    cursor: pointer; */
-    /* margin: 3px; */
-    margin-top: auto;
-    /* margin-left: 70%; */
-    /* font-size: 1em; */
+.info {    
+    margin-top: auto;    
     margin-right: 1%;
-    margin-bottom: 1%;
-    /* padding: 2px; */
-    /* border-radius: 5px; */
-    /* text-align: center; */
-    /* width: 20%; */
-    
+    margin-bottom: 1%;    
 }
 
 .infoBtn{
@@ -98,7 +65,7 @@
 
 
   .newProjectButton {
-    font-size: 16px;
+    font-size: 1rem;
     font-weight: 500;
     background: #DFE9EE;
     color: black;

@@ -3,7 +3,7 @@ import styles from './index.module.css'
 import ReactTable from "react-table"
 import "react-table/react-table.css"
 import "react-datepicker/dist/react-datepicker.css"
-import DatePicker from "react-datepicker"
+import { useParams } from "react-router-dom"
 import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress"
 import TaskDueDate from "../calendar-data/task-dueDate"
@@ -14,19 +14,11 @@ import assembleColumnData from "../calendar-data/column-data"
 import Transparent from "../transparent"
 import EditList from "../edit-list"
 import UserContext from '../../contexts/UserContext'
-import { useParams } from "react-router-dom"
-import previous from '../../images/project-list/previous-day.svg'
-import next from '../../images/project-list/next-day.svg'
-import MembersList from "../members-list"
-import { formatDate, getDateWithOffset } from '../../utils/date'
-import { 
-    createTableEntry, 
-    getMonday, 
-    parseCardHistory, 
-    applyCardFilters, 
-    getCardsSortMethod  
-} from './utils'
 import TaskFilters from "../calendar-data/task-filters";
+import MembersList from "../members-list"
+import TableDateNavigation from "../table-date-navigation";
+import { formatDate, getDateWithOffset, getMonday } from '../../utils/date'
+import { createTableEntry, parseCardHistory, applyCardFilters, getCardsSortMethod } from './utils'
 
 const TableDndApp = (props) => {
     const projectContext = useContext(ProjectContext)
@@ -37,7 +29,7 @@ const TableDndApp = (props) => {
     const [currList, setCurrList] = useState('')
     const [sortCriteria, setSortCriteria] = useState({ columnName: null, isDescending: false })
     const [filter, setFilter] = useState({
-        bool: { notStarted: true, inProgress: true, done: true },
+        progress: { notStarted: true, inProgress: true, done: true },
         member: null,
         dueBefore: null,
         isUsed: false
@@ -188,51 +180,12 @@ const TableDndApp = (props) => {
                     </div >
             }
             <div className={styles.buttoDiv}>
-                <div style={{ display: 'flex' }}>
-                    <DatePicker
-                        selected={startDate}
-                        customInput={
-                            <div className={styles.navigateButtons}>
-                                Choose Week
-                            </div>
-                        }
-                        // className={styles.reactDatepicker}
-                        showWeekNumbers
-                        onChange={date => setStartDate(getMonday(date))} 
-                    />
-                    <TaskFilters filter={filter} setFilter={setFilter} />
-                </div>
-                <span className={styles.daysButtons}>
-
-                    <button className={styles.navigateButtons} onClick={() => changeStartDate(-7)}>
-                        Previous week
-                    </button>
-                    
-                    <div className={styles.picContainer} onClick={() => changeStartDate(-1)}>
-                        <img 
-                            className={styles.buttonPreviousDay} 
-                            src={previous} alt="..." width="126" height="27"
-                        />
-                        <div className={styles.centeredText}>Previous day</div>
-                    </div>
-
-                    <div className={styles.picContainer} onClick={() => changeStartDate(1)}>
-                        <img 
-                            className={styles.buttonPreviousDay} 
-                            src={next} alt="..." width="126"
-                            height="27" 
-                        />
-                        <div className={styles.centeredText}>Next day</div>
-                    </div>
-
-                    <button 
-                        className={styles.navigateButtons}
-                        onClick={() => changeStartDate(7)}
-                    >
-                        Next week
-                    </button>
-                </span>
-                
+                <TaskFilters filter={filter} setFilter={setFilter} />
+                <TableDateNavigation 
+                    startDate={startDate}
+                    setStartDate={setStartDate}
+                    changeStartDate={changeStartDate}
+                />
             </div>
             <div>
                 {/* <DragDropContext onDragEnd={handleDragEnd} > */}

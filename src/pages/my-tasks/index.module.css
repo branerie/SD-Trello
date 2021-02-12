@@ -2,7 +2,7 @@
   padding: 30px;
   color: #363338;
   text-decoration: underline;
-  font-size: 30px;
+  font-size: 2rem;
   text-align: center;
   height: 80px;
 }
@@ -24,7 +24,7 @@
   cursor: pointer;
   border: 1px solid #707070;
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-  font-size: 22px;
+  font-size: 1.5rem;
   font-weight: bold;
   white-space: nowrap; 
   overflow: hidden;
@@ -61,7 +61,7 @@
 }
 
 .project-name {
-  font-size: 27px;
+  font-size: 1.8rem;
   color: #363338;
   margin: 15px;
   margin-left: 20px;
@@ -85,7 +85,7 @@
 .card {
   display: flex;
   margin-left: 20px;
-  font-size: 20px;
+  font-size: 1.3rem;
   height: 35px;
 }
 

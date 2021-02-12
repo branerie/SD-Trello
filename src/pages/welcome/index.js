@@ -25,7 +25,7 @@ const WelcomePage = () => {
 
   return (
 
-    <div className={styles.pageContainer}>
+    <div className={styles.container}>
       <div>
         {isVisible ?
           < div >
@@ -56,18 +56,18 @@ const WelcomePage = () => {
         }
       </div>
 
-      <div className={styles.contentWrap}>
+      <div className={styles['content-wrap']}>
 
-        <div className={styles.topContainer}>
+        <div className={styles['top-container']}>
           
-          <div className={styles.topDivtopContainer}>
-            <div className={styles.headerNav}>
+          <div className={styles['top-div-container']}>
+            <div className={styles['header-nav']}>
               <span className={styles.logo}>
                 <img src={logo} alt="logo" width='194' height='142' />
               </span>
-              <span className={styles.firstButtons}>
-                <button className={styles.loginButton} onClick={()=>setIsVisible(!isVisible)}  >Log In</button>
-                <button className={styles.signUpButton} onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Sign Up</button>
+              <span className={styles['first-buttons']}>
+                <button className={styles['login-button']} onClick={()=>setIsVisible(!isVisible)}  >Log In</button>
+                <button className={styles['sign-up-button']} onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Sign Up</button>
               </span>
             </div>
             <div className={styles.topright}>
@@ -83,42 +83,42 @@ const WelcomePage = () => {
             </div>
           </div>
 
-          <div className={styles.lowerDivtopContainer}>
-            <div className={styles.firstText}>
+          <div className={styles['lower-div-container']}>
+            <div className={styles['first-text']}>
               <p className={styles.headers}>Manage your work in a <span className={styles.lucida}>Smart</span> way! </p>
               <div className={styles.paragraph}>
                 <p >The ideas get more clear, organized and focused on.</p>
                 <p >Flexible and time saving for the whole team. </p>
               </div>
               <div className={styles.paragraph}>
-                <button className={styles.secondSignUpButton}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Free Sign Up</button>
+                <button className={styles['second-sign-up-button']}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Free Sign Up</button>
               </div>
             </div>
           </div>
         </div>
 
-        <div className={styles.secondContainer}>
-          <div className={styles.firstRow}>
-            <div className={styles.secondText}>
+        <div className={styles['second-container']}>
+          <div className={styles['first-row']}>
+            <div className={styles['second-text']}>
               <p className={styles.headers}>Work and participate in different teams </p>
               <div className={styles.paragraph}>
                 <p >Follow who and when is doing tasks. Be always</p>
                 <p >informed with the accomplishment of the projects. </p>
               </div>
               <div className={styles.paragraph}>
-                <button className={styles.thirdSignUpButton}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Try It Now</button>
+                <button className={styles['third-sign-up-button']}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Try It Now</button>
               </div>
             </div>
-            <div className={styles.pic3Container}>
+            <div className={styles['pic3-container']}>
               <img className={styles.pic3} src={pic3} alt="" />
             </div>
           </div>
 
-          <div className={styles.secondRow}>
-            <div className={styles.pic4Container}>
+          <div className={styles['second-row']}>
+            <div className={styles['pic4-container']}>
               <img className={styles.pic4} src={pic4} alt="" />
             </div>
-            <div className={styles.thirdText}>
+            <div className={styles['third-text']}>
               <p className={styles.headers}>Еаsy to manage all the information</p>
               <div className={styles.paragraph}>
                 <p >Add stickers, notes, comments, attachments in your</p>
@@ -129,16 +129,16 @@ const WelcomePage = () => {
             </div>
           </div>
 
-          <div className={styles.thirdRow}>
-            <div className={styles.lastText}>
-              <p className={styles.lastHeaders}>Start your <span className={styles.lucida}>Smart Manager</span> Now </p>
-              <div className={styles.lastParagraph}>
+          <div className={styles['third-row']}>
+            <div className={styles['last-text']}>
+              <p className={styles['last-headers']}>Start your <span className={styles.lucida}>Smart Manager</span> Now </p>
+              <div className={styles['last-paragraph']}>
                 <p >Connect with other teams from <span className={styles.lucida}>The Smart Family</span>,</p>
                 <p > save time with more work done.</p>
-                <button className={styles.lastSignUpButton}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Get Started</button>
+                <button className={styles['last-sign-up-button']}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Get Started</button>
               </div>
             </div>
-            <div className={styles.pic6Container}>
+            <div className={styles['pic6-container']}>
               <img className={styles.pic6} src={pic6} alt="" />
             </div>
           </div>
@@ -148,31 +148,31 @@ const WelcomePage = () => {
 
       <footer className={styles.footer}>
 
-        <div className={styles.footerColumn}>
-          <div className={styles.footerHeaders}>
+        <div className={styles['footer-column']}>
+          <div className={styles['footer-headers']}>
             <p>Contact Us</p>
           </div>
-          <div className={styles.footerInfo}>
+          <div className={styles['footer-info']}>
             <p>+359 52 317 395</p>
             <p>smartmanager@gmail.com</p>
           </div>
         </div>
 
-        <div className={styles.footerColumn}>
-          <div className={styles.footerHeaders}>
+        <div className={styles['footer-column']}>
+          <div className={styles['footer-headers']}>
             <p>SERVICES</p>
           </div>
-          <div className={styles.footerInfo}>
+          <div className={styles['footer-info']}>
             <p>Contact Us</p>
             <p>Ordering & Payment FAQ</p>
           </div>
         </div>
 
-        <div className={styles.footerColumn}>
-          <div className={styles.footerHeaders}>
+        <div className={styles['footer-column']}>
+          <div className={styles['footer-headers']}>
             <p>INFORMATION</p>
           </div>
-          <div className={styles.footerInfo}>
+          <div className={styles['footer-info']}>
             <p>About SMART MANAGER</p>
             <p>Work With US</p>
             <p>Privacy Policy</p>
@@ -180,16 +180,16 @@ const WelcomePage = () => {
           </div>
         </div>
 
-        <div className={styles.lastColumn}>
-          <div className={styles.socialMediaContainer}>
+        <div className={styles['last-column']}>
+          <div className={styles['social-media-container']}>
             <span>
-              <img className={styles.socialMedia} src={instagram} alt="" />
+              <img className={styles['social-media']} src={instagram} alt="" />
             </span>
             <span>
-              <img className={styles.socialMedia} src={twitter} alt="" />
+              <img className={styles['social-media']} src={twitter} alt="" />
             </span>
             <span>
-              <img className={styles.socialMedia} src={facebook} alt="" />
+              <img className={styles['social-media']} src={facebook} alt="" />
             </span>
           </div>
           <div className={styles.sd2006}>SD2006</div>

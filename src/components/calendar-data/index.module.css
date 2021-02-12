@@ -26,7 +26,6 @@
 }
 
 .nameContainer {
-  /* height: 50px; */
   width: 100%;
   display: flex;
   align-items: center;
@@ -54,9 +53,8 @@
 }
 
 .addlist {
-  font-size: 15px;
+  font-size: 1rem;
   margin: 10px;
-  /* padding: 5px; */
   border-radius: 5px;
   color: white;
 }
@@ -65,19 +63,11 @@
   background-color: lemonchiffon;
 }
 
-/* .progressInput{
-  width: 30%;    
-} */
-
-/* .progressInput::placeholder {
-  color: white;  
-} */
 
 .addListButton {
-  font-size: 15px;
+  font-size: 1rem;
   font-weight: bold;
   margin: 10px;
-  /* padding: 5px; */
   border-radius: 5px;
   color: black;
 }
@@ -117,16 +107,14 @@
 }
 
 .taskProgress {
-  /* color: white; */
   display: flex;
   align-items: flex-start;
   justify-content: center;
-  /* height: 33px; */
 
   cursor: pointer;
   width: 100%;
   height: 100%;
-  /* padding: 2px; */
+  font-size: 1rem;
   font-family: inherit;
   border: none;
   border-radius: 5px;
@@ -139,7 +127,7 @@
   cursor: pointer;
   width: 100%;
   height: 100%;
-  /* font-size: 16px; */
+  font-size: 1rem;
   padding: 2px;
   font-family: inherit;
   border: none;
@@ -153,7 +141,7 @@
   cursor: pointer;
   width: 100%;
   height: 100%;
-  /* font-size: 14px; */
+  font-size: 1rem;
   padding: 5px;
   font-family: inherit;
   border: solid black 1px;
@@ -161,7 +149,6 @@
   background-color: inherit;
   font-weight: inherit;
   outline: none;
-  /* display: flex; */
 }
 
 .tableText {
@@ -183,8 +170,6 @@
 .membersDiv {
   margin: 3%;
   display: flex;
-  /* flex-wrap: wrap; */
-  /* justify-content: space-between; */
 }
 
 .membersContainer {
@@ -214,7 +199,9 @@
   background: #DFE9EE;
   color: black;
   padding: 10px;
-  min-width: 7rem;
+  width: 9.5rem;
+  min-height: 2.6em;
+  max-height: 2.6em;
   border-radius: 10px;
   display: block;
   margin: 0 auto;
@@ -224,16 +211,13 @@
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
   text-align: center;
   font-family: 'Lato';
+  font-size: 1rem;
 }
 
 .filter:hover {
   background-color: #363338;
   color: white;
   border: 1px solid #707070;
-}
-
-.filter-off {
-  background: #b42f2f;
 }
 
 .filters {
@@ -252,16 +236,10 @@
 }
 
 .filters-container {
-  position: relative;
+  display: flex;
 }
 
 .filters-clicked {
   background-color: #363338;
   color: white;
-}
-
-.filter-option {
-  min-width: 10rem;
-  font-size: 1.25rem;
-  border-radius: 1.2rem;
 }

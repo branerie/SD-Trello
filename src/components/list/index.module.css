@@ -5,7 +5,7 @@
     margin: 10px;
     width: 350px;
     box-shadow: 10px 10px 10px rgba(0,0,0,0.16);
-    font-size: 15px;
+    font-size: 1rem;
     font-weight: bold;
     display: flex;
     flex-wrap: wrap;
@@ -70,7 +70,7 @@
 }
 
 .add-task {
-    font-size: 15px;
+    font-size: 1rem;
     margin: 5px;
     padding: 5px;
     border-radius: 5px;
