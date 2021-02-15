@@ -1,5 +1,6 @@
-.members{
-    overflow-y: scroll;
+.members {
+    position: relative;
+    /* overflow-y: scroll; */
     -ms-overflow-style: none; 
     scrollbar-width: none;
     cursor: pointer;  

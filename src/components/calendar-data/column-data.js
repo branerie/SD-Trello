@@ -195,6 +195,7 @@ const assembleColumnData = (startDate) => {
                 minWidth: 75,
                 maxWidth: 80,
                 Cell: ({ value }) => wrapCellData(value),
+                getProps: (state, rowInfo, column) => ({ style: { overflow: 'visible' } }),
                 sortable: false,
                 resizable: false
             },
