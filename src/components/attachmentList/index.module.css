@@ -1,0 +1,55 @@
+.container {
+    box-sizing: border-box;
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+    z-index: 20;
+    background-color: blanchedalmond;
+    width: 680px;
+    height: fit-content;
+    max-height: 70%;
+    padding: 4%;
+    background-color:#EDF5F9;
+    border: solid 2px #707070;
+    border-radius: 27px;
+    overflow: scroll;
+    -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
+    scrollbar-width: none;  /* Hide scrollbar for Firefox */
+}
+
+/* Hide scrollbar for Chrome, Safari and Opera */
+.container::-webkit-scrollbar {
+    display: none;
+}
+
+.attachment {
+    display: flex;
+    justify-content: space-between;
+    font-size: 1rem;
+    margin-bottom: 0.5rem;
+}
+
+.title {
+    font-size: 1.8rem;
+    text-decoration: underline;
+    margin-bottom: 3%;
+    width: 100%;
+    text-align: center;
+}
+
+.name {
+    width: 90%;
+}
+
+.button {
+    width: 20px;
+    margin-left: 0.1rem;
+    padding: 2px;
+    border-radius: 5px;
+}
+
+.button:hover {
+    background-color: #C1CBCF;
+}

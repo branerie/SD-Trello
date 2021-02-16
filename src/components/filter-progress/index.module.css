@@ -1,0 +1,30 @@
+.container {
+    position: relative;
+}
+
+.dropdown {
+    position: absolute;
+    left: 0.65rem;
+    top: 3.6rem;
+    z-index: 3;
+    background-color: #DFE9EE;
+    width: 9.5rem;
+    border-radius: 10px;
+}
+
+.progress-switch {
+    padding: 0.6rem;
+    border: 1px solid #707070;
+    border-bottom: 0;
+}
+
+.progress-switch-top {
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
+}
+
+.progress-switch-bottom {
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
+    border-bottom: 1px solid #707070;
+}

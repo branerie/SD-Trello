@@ -45,11 +45,6 @@ export default function TaskMembers({ card, listId, project, teamId }) {
 
     }
 
-    const updateSocket = useCallback(() => {
-        socket.emit('project-update', project)
-        socket.emit('task-team-update', teamId)
-    }, [socket, project, teamId])
-
     const handleSelect = async (id) => {
 
         if (id === 'select') return
@@ -101,7 +96,8 @@ export default function TaskMembers({ card, listId, project, teamId }) {
         } else {
             setIsActive(!isActive)
             setCardMembers(arr)
-            updateSocket()
+            socket.emit('project-update', project)
+            socket.emit('task-team-update', teamId)
             socket.emit('message-sent', selectedUser._id)
         }
     }

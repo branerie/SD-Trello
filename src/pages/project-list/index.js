@@ -44,7 +44,7 @@ export default function ProjectList() {
     }
 
     return (
-        <PageLayout contentStyle={{ margin: '5rem 0.2rem 0 3.5rem', padding: 0 }}>
+        <PageLayout contentStyle={{ margin: '5.6rem 0.2rem 0 3.5rem', padding: 0 }}>
             <div className={styles.calendarPageContainer}>
                 <div>
                     <div className={styles.calendarContainer}>

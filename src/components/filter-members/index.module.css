@@ -2,19 +2,6 @@
     position: relative;
 }
 
-.filter {
-    background: #DFE9EE;
-    color: black;
-    padding: 10px;
-    min-width: 110px;
-    border-radius: 10px;
-    margin: 0 auto;
-    margin: 10px;
-    cursor: pointer;
-    border: 1px solid #707070;
-    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-}
-
 .filter:hover {
     background-color: #fff;
 }
@@ -26,11 +13,11 @@
     background: #DFE9EE;
     border-bottom: 1px solid #707070;
     border-top: none;
-    border-radius: 1.5rem;
+    border-radius: 10px;
     z-index: 3;
     overflow-y: auto;
-    left: 14.2rem;
-    top: -16.45rem;
+    left: 0.5rem;
+    top: 3.5rem;
 }
 
 .option {
@@ -46,14 +33,14 @@
 }
 
 .option:first-of-type {
-    border-top-left-radius: 1.5rem;
-    border-top-right-radius: 1.5rem;
+    border-top-left-radius: 10px;
+    border-top-right-radius: 10px;
     padding-top: 0.3rem;
 }
 
 .option:last-of-type {
-    border-bottom-left-radius: 1.5rem;
-    border-bottom-right-radius: 1.5rem;
+    border-bottom-left-radius: 10px;
+    border-bottom-right-radius: 10px;
 }
 
 .option:hover {
@@ -67,4 +54,35 @@
 .btn-clicked {
     background-color: #363338;
     color: white;
+}
+
+.btn-partial {
+    width: 8rem;
+    min-height: 2.6rem;
+    max-height: 2.6rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-right: 0;
+    border-right: 0;
+    font-size: 0.8rem;
+}
+
+.btn-partial:hover {
+    border: 0;
+}
+
+.btn-clear {
+    background-color: #3633384f;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    margin-left: 0;
+    width: 1.5rem;
+    font-family: cursive;
+    display: flex;
+    justify-content: center;
+    align-items: center;
+}
+
+.btn-container {
+    display: flex;
 }

@@ -2,11 +2,12 @@
     width: 0;
     height: 0;
     position: absolute;
+    z-index: 3;
 }
 
 .allCardMembers{
-    position: relative;
-    top: 15px;
+    position: absolute;
+    top: 1rem;
     /* text-align: end; */
     /* margin-right: 10%; */
     /* min-height: 50px;   */
