@@ -12,7 +12,7 @@ import UserContext from "../../contexts/UserContext"
 import Alert from "../../components/alert"
 import ButtonGrey from '../../components/button-grey'
 import ConfirmDialog from "../../components/confirmation-dialog"
-
+import { Image, Transformation } from 'cloudinary-react';
 
 
 const ProfilePage = () => {
@@ -28,7 +28,6 @@ const ProfilePage = () => {
   const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useDetectOutsideClick(dropdownRef)
   const [isEditListActive, setIsEditListActive] = useDetectOutsideClick(dropdownRef)
   const [confirmOpen, setConfirmOpen] = useState(false)
-
 
 
   const params = useParams()
@@ -110,19 +109,24 @@ const ProfilePage = () => {
     history.push(`/team/${teamId}`)
   }
 
-  const getFullImageUrl = (imagePath) => {
-    return `https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/${imagePath}`
-  }
+  // const getFullImageUrl = (imagePath) => {
+  //   return `https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/${imagePath}`
+  // }
 
   const widget = window.cloudinary.createUploadWidget({
     cloudName: process.env.REACT_APP_CLOUD_NAME,
     uploadPreset: process.env.REACT_APP_UPLOAD_PRESET
   }, (error, result) => {
     if (result.event === 'success') {
-      const imagePath = result.info.path
-
-      authenticateUpdate(`/api/user/${id}`, 'PUT', {
-        imageUrl: imagePath
+      const path = result.info.path
+      const publicId = result.info.public_id
+      const newImage = {
+        path,
+        publicId
+      }
+      authenticateUpdate(`/api/user/image/${id}`, 'PUT', {
+        newImage,
+        oldImage: userContext.user.image
       }, (user) => {
         userContext.logIn(user)
       }, (e) => {
@@ -130,14 +134,6 @@ const ProfilePage = () => {
       })
       getData()
 
-      // socket.emit('update-profile-data', { picture: imagePath }, newData => {
-      //     dispatchUserData({
-      //         type: 'update-profile-data',
-      //         payload: {
-      //             newData
-      //         }
-      //     })
-      // })
     }
 
     if (error) {
@@ -148,8 +144,9 @@ const ProfilePage = () => {
   })
 
   const deletePic = async () => {
-    await authenticateUpdate(`/api/user/${id}`, 'PUT', {
-      imageUrl: 'delete'
+
+    await authenticateUpdate(`/api/user/image/${id}`, 'PUT', {
+      oldImage: userContext.user.image
     }, (user) => {
       userContext.logIn(user)
     }, (e) => {
@@ -158,7 +155,8 @@ const ProfilePage = () => {
     getData()
   }
 
-
+  console.log(userContext.user.image);
+  // console.log(cloudinary);
 
   return (
     <PageLayout>
@@ -176,15 +174,12 @@ const ProfilePage = () => {
 
       <div className={styles.container}>
 
-        <div className={styles.leftContainer}>
+        <div className={styles['left-container']}>
 
 
 
-          <div className={styles.buttonInputDiv}>
-            {/* <button className={styles.navigateButtons}
-              onClick={() => { setUserNameActive(!userNameActive) }}
-            >Username:</button> */}
-            <ButtonGrey title={'Username:'} className={styles.navigateButtons}
+          <div className={styles['button-input-div']}>
+            <ButtonGrey title={'Username:'} className={styles['navigate-buttons']}
               onClick={() => { setUserNameActive(!userNameActive) }} />
             < input
               ref={function (input) {
@@ -192,12 +187,9 @@ const ProfilePage = () => {
                   input.focus();
                 }
               }}
-              // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
               value={username}
               onChange={e => setUsername(e.target.value)}
-              className={styles.inputFieldsProfile}
+              className={styles['input-fields-profile']}
               placeholder={userName}
               disabled={!userNameActive}
             />
@@ -205,16 +197,12 @@ const ProfilePage = () => {
 
           </div>
 
-          <div className={styles.buttonInputDiv}>
-            {/* <button className={styles.navigateButtons}
-              onClick={() => { setPaswordActive(!passwordActive) }}
-            >Change Password</button> */}
-            <ButtonGrey title={'Change Password'} className={styles.navigateButtons}
+          <div className={styles['button-input-div']}>
+            <ButtonGrey title={'Change Password'} className={styles['navigate-buttons']}
               onClick={() => { setPaswordActive(!passwordActive) }} />
-
-            < input              
+            < input
               onChange={e => setPassword(e.target.value)}
-              className={styles.inputFieldsProfile}
+              className={styles['input-fields-profile']}
               placeholder={'********'}
               disabled={!passwordActive}
               type="password"
@@ -227,21 +215,18 @@ const ProfilePage = () => {
           </div>
 
           {passwordActive ?
-            <div className={styles.newPassAlert}>
+            <div className={styles['new-pass-alert']}>
               Important!!! You have to activate your new password by following the link sent to your email. You have to do this in the next hour in order for your new password to be activated
             </div> : null
           }
 
-          <div className={styles.buttonInputDiv}>
-            {/* <button className={styles.navigateButtons}
-              onClick={() => { setPaswordActive(!passwordActive) }}
-            >Confirm Password</button> */}
-            <ButtonGrey title={'Confirm Password'} className={styles.navigateButtons}
+          <div className={styles['button-input-div']}>
+            <ButtonGrey title={'Confirm Password'} className={styles['navigate-buttons']}
               onClick={() => { setPaswordActive(!passwordActive) }} />
 
-            < input              
+            < input
               onChange={e => setRePassword(e.target.value)}
-              className={styles.inputFieldsProfile}
+              className={styles['input-fields-profile']}
               placeholder={'********'}
               disabled={!passwordActive}
               type="password"
@@ -249,17 +234,13 @@ const ProfilePage = () => {
 
           </div>
 
-          <div className={styles.buttonInputDiv}>
-            {/* <button className={styles.navigateButtons}
-            >Email:</button> */}
-            <ButtonGrey title={'Email:'} className={styles.navigateButtons}
+          <div className={styles['button-input-div']}>
+
+            <ButtonGrey title={'Email:'} className={styles['navigate-buttons']}
             />
 
             < input
-              // onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
-              className={styles.inputFieldsProfile}
+              className={styles['input-fields-profile']}
               value={userEmail}
               disabled={true}
             // type="password"
@@ -267,33 +248,27 @@ const ProfilePage = () => {
 
           </div>
 
-          <div className={styles.buttonInputDiv}>
-            {/* <button className={styles.navigateButtons}
-              onClick={() => history.push(`/my-tasks/${id}`)}
-            >My Tasks</button> */}
-            <ButtonGrey title={'My Tasks'} className={styles.navigateButtons}
+          <div className={styles['button-input-div']}>
+            <ButtonGrey title={'My Tasks'} className={styles['navigate-buttons']}
               onClick={() => history.push(`/my-tasks/${id}`)} />
           </div>
 
-          <div className={styles.buttonInputDiv}>
+          <div className={styles['button-input-div']}>
             <div className={styles.myTeamsContainer}>
-              {/* < button onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)}
-                className={styles.myTeamButton}
-              >My Teams</ button> */}
-              <ButtonGrey title={'My Teams'} className={styles.navigateButtons}
+
+              <ButtonGrey title={'My Teams'} className={styles['navigate-buttons']}
                 onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
-              <div className={styles.selectTeamContainer}>
+              <div className={styles['select-team-container']}>
                 {
                   showTeamsVisibleForm ?
-                    <div className={styles.teamsHome} ref={dropdownRef}>
+                    <div className={styles['teams-home']} ref={dropdownRef}>
                       {userTeams.length > 0 ?
                         userTeams.map((t, index) => {
                           return (
                             <span key={index}>
                               <div
-                                className={styles.navigateButtonsTeams}
+                                className={styles['navigate-buttons-teams']}
                                 onClick={() => goToTeamPage(t._id)}
-
                               >{t.name}</div>
                             </span>
                           )
@@ -306,30 +281,38 @@ const ProfilePage = () => {
                 }
               </div>
             </div>
-            <div className={styles.buttonDivSave}>
-              <button type='submit' className={styles.saveButton} onClick={(e) => handleSubmit(e)}>SAVE</button>
+            <div className={styles['button-div-save']}>
+              <button type='submit' className={styles['save-button']} onClick={(e) => handleSubmit(e)}>SAVE</button>
             </div>
           </div>
         </div>
 
 
-        <div className={styles.picContainer}>
+        <div className={styles['pic-container']}>
 
 
-          <div className={styles.profilePicContainer}>
-            <div className={styles.profilePic}
+          <div className={styles['profile-pic-container']}>
+            <div className={styles['profile-pic']}
               onClick={() => {
-                userContext.user.imageUrl ?
+                userContext.user.image ?
                   setIsEditListActive(!isEditListActive)
                   : widget.open()
               }}
             >
-              {userContext.user.imageUrl ?
+              {userContext.user.image ?
+
                 <div className={styles['profile-picture']}>
-                  <img
-                    src={getFullImageUrl(userContext.user.imageUrl)}
+                  {/* <img
+                    src={getFullImageUrl(userContext.user.image.path)}
                     className={styles['profile-picture']} alt=''
-                  />
+                  /> */}
+                  <Image publicId={userContext.user.image.publicId} className={styles['profile-picture']} >
+                    <Transformation width="250" height="250"
+                    //  gravity="faces" crop="fill"
+                    />
+                  </Image>
+
+
                   <div className={styles.relative}>
                     {isEditListActive && <div ref={dropdownRef} className={`${styles.menu}`} >
                       <ButtonGrey
@@ -349,7 +332,7 @@ const ProfilePage = () => {
                 </div>
                 :
                 <div>
-                  <p className={styles.loadPicText}>Load a profile picture</p>
+                  <p className={styles['load-pic-text']}>Load a profile picture</p>
                   <img className={styles.pen}
                     src={pen} alt="" />
                 </div>

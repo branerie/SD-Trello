@@ -20,6 +20,8 @@ const Home = () => {
   const userName = userContext.user.username
   const userTeams = userContext.user.teams
   const userId = userContext.user._id
+  const recentProjects = userContext.user.recentProjects
+
 
   const goToTeamPage = (teamId) => {
     history.push(`/team/${teamId}`)
@@ -37,23 +39,8 @@ const Home = () => {
 
   }
 
+  
 
-
-
-  const recentProjects = userContext.user.recentProjects
-
-  // const goToProjectPage = (projectId, teamId) => {
-  //   history.push(`/project-board/${teamId}/${projectId}`)
-  // }
-
-  // const showTeamProjects = (team) => {
-  //   console.log(team);
-  //   team.projects.map((p, index) => {
-  //     return (
-  //       <div key={index} onClick={() => goToProjectPage(p._id, team._id)}>{p.name}</div>
-  //     )
-  //   })
-  // }
 
   return (
     <PageLayout>
@@ -68,39 +55,31 @@ const Home = () => {
       <Title title='Home' />
       <div className={styles.container}>
 
-        <span className={styles.leftButtons}>
+        <span className={styles['left-buttons']}>
 
           <div>
-            <ButtonGrey className={styles.navigateButtons} title={'My Tasks'} onClick={() => history.push(`/my-tasks/${userId}`)} />
-            {/* <button className={styles.navigateButtons}
-              onClick={() => history.push(`/my-tasks/${userId}`)}
-            >My Tasks</button> */}
+            <ButtonGrey className={styles['navigate-buttons']} title={'My Tasks'} onClick={() => history.push(`/my-tasks/${userId}`)} />
+
           </div>
 
           <div>
-            <div className={styles.myTeamsContainer}>
-              <ButtonGrey className={styles.navigateButtons} title={'My Teams'} onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
+            <div className={styles['my-teams-container']}>
+              <ButtonGrey className={styles['navigate-buttons']} title={'My Teams'} onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
 
-              {/* < button onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)}
-                // title='Create Team' 
-                // className={styles.teamNames}
-                className={styles.myTeamButton}>
-                  My Teams
-              </ button> */}
 
             </div>
-            <div className={styles.teamsPopUp}>
-              <div className={styles.selectTeamContainer}>
+            <div>
+              <div className={styles['select-team-container']}>
                 {
                   showTeamsVisibleForm ?
-                    <div className={styles.teamsHome} ref={dropdownRef}>
+                    <div className={styles['teams-home']} ref={dropdownRef}>
                       {
                         userTeams.length > 0
                           ? userTeams.map((t, index) => {
                             return (
                               <span key={index}>
                                 <div
-                                  className={styles.navigateButtonsTeams}
+                                  className={styles['navigate-buttons-teams']}
                                   onClick={() => goToTeamPage(t._id)}
 
                                 >{t.name}</div>
@@ -119,22 +98,18 @@ const Home = () => {
           </div>
 
           <div>
-            <ButtonGrey className={styles.navigateButtons} title={'Create New Team'} onClick={() => setShowTeamForm(true)} />
-            {/* < button onClick={() => setShowTeamForm(true)}
-              // title='Create Team' 
-              // className={styles.teamNames}
-              className={styles.navigateButtons}
-            >Create New Team</ button> */}
+            <ButtonGrey className={styles['navigate-buttons']} title={'Create New Team'} onClick={() => setShowTeamForm(true)} />
+           
           </div>
 
         </span>
 
-        <div className={styles.picContainer}>
+        <div className={styles['pic-container']}>
           <img className={styles.pic1} src={pic1} alt="" />
-          <div className={styles.welcomeUser}>{`Welcome ${userName}!`}</div>
+          <div className={styles['welcome-user']}>{`Welcome ${userName}!`}</div>
         </div>
 
-        <span className={styles.rightButtons}>
+        <span className={styles['right-buttons']}>
           {
             (recentProjects) ?
               <div>
@@ -143,8 +118,7 @@ const Home = () => {
                   recentProjects.slice(0).reverse().map((p, index) => {
                     return (
                       <div key={p._id}>
-                        <ButtonGrey className={styles.navigateButtons} title={p.name} onClick={() => goToProject(p._id)} />
-                        {/* <button className={styles.navigateButtons} onClick={() => goToProject(p._id)}>{p.name}</button> */}
+                        <ButtonGrey className={styles['navigate-buttons']} title={p.name} onClick={() => goToProject(p._id)} />
                       </div>
                     )
                   })

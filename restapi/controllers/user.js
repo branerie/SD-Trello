@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
 const { auth, isAdmin, userInbox, googleAuth } = require('../utils')
 const { decode } = require('jsonwebtoken')
 const getTeams = require('../utils/getTeams')
+const cloudinary = require('../utils/cloudinary')
 
 
 router.get('/verify', verifyLogin);
@@ -33,6 +34,8 @@ router.post('/inbox', auth, moveMessageToHistory)
 
 router.put('/:id', auth, updateUser)
 
+router.put('/image/:id', auth, updateUserImage)
+
 router.put('/addNewPassword/:id', addNewPassword)
 
 router.put('/recentProjects/:id', auth, updateUserRecentProjects)
@@ -40,6 +43,8 @@ router.put('/recentProjects/:id', auth, updateUserRecentProjects)
 router.delete('/message/:messageid', auth, deleteUserMessage)
 
 router.delete('/:id', deleteUser)
+
+
 
 
 async function getUser(req, res, next) {
@@ -178,7 +183,7 @@ async function loginUser(req, res, next) {
 
 async function googleLoginUser(req, res, next) {
     const { tokenId } = req.body
-    const { email, username, imageUrl, email_verified } = await googleAuth(tokenId)
+    const { email, username, image, email_verified } = await googleAuth(tokenId)
     if (!email_verified) {
         res.send('Google verification failed')
         return
@@ -187,7 +192,7 @@ async function googleLoginUser(req, res, next) {
     try {
         let user = await models.User.findOne({ email }).select('-password')
         if (user === null) {
-            user = await models.User.create({ email, username, imageUrl })
+            user = await models.User.create({ email, username, image })
         }
 
         const token = utils.jwt.createToken({ id: user._id })
@@ -242,7 +247,7 @@ async function confirmToken(req, res, next) {
 
 async function updateUser(req, res, next) {
     const id = req.params.id
-    let user = { username, password, email, imageUrl } = req.body
+    let user = { username, password, email } = req.body
     const obj = {}
 
     for (let key in user) {
@@ -282,9 +287,6 @@ async function updateUser(req, res, next) {
         })
     } else {
         await models.User.updateOne({ _id: id }, obj)
-        if (imageUrl === 'delete') {
-            await models.User.updateOne({ _id: id }, { imageUrl: undefined })
-        }
         const updatedUser = await models.User.findOne({ _id: id }).select('-password')
         const teams = await getTeams(updatedUser._id)
         const response = {
@@ -293,6 +295,32 @@ async function updateUser(req, res, next) {
         }
         res.send(response)
     }
+}
+
+async function updateUserImage(req, res, next) {
+    const id = req.params.id
+    let user = { newImage, oldImage } = req.body  
+ 
+
+    if (newImage) {
+        await models.User.updateOne({ _id: id }, { image: newImage })
+
+    } else {
+        await models.User.updateOne({ _id: id }, { image: undefined })
+    }
+
+    if (oldImage) {
+        cloudinary.api.delete_resources([oldImage.publicId], (error, result) => { console.log(result, error) })
+    }
+
+    const updatedUser = await models.User.findOne({ _id: id }).select('-password')
+    const teams = await getTeams(updatedUser._id)
+    const response = {
+        user: updatedUser,
+        teams
+    }
+    res.send(response)
+
 }
 
 async function addNewPassword(req, res, next) {

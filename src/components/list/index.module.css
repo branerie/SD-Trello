@@ -118,7 +118,7 @@
     flex-grow: 1;
 }
 
-.taskInput {
+.task-input {
     border: 1px solid #000000; 
     background-color: #FFFFFF;
     border-radius: 10px;

@@ -89,12 +89,12 @@ const SignupForm = (props) => {
 
 
 
-            <div className={styles.innerContainer}>
+            <div className={styles['inner-container']}>
                 <div className={styles.logo}>
                     <img src={logo} alt="logo" width='110' height='100' />
                 </div>
 
-                <div className={styles.rightSide}>
+                <div className={styles['right-side']}>
 
                     <div className={styles.alerts}>
                         <Alert alert={alert} message={'Passwords do not match'} />
@@ -104,11 +104,11 @@ const SignupForm = (props) => {
                     </div>
                     <div className={styles.title}  >Sign Up with E-mail</div>
 
-                    <div className={styles.inputContainer}>
+                    <div className={styles['input-container']}>
                         <div> Username:</div>
                         <input
                             placeholder='John Smith'
-                            className={styles.signUpInput}
+                            className={styles['sign-up-input']}
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
                             label="Username"
@@ -116,11 +116,11 @@ const SignupForm = (props) => {
                         />
                     </div>
 
-                    <div className={styles.inputContainer}>
+                    <div className={styles['input-container']}>
                         <div> Email:</div>
                         <input
                             placeholder='John@example.com'
-                            className={styles.signUpInput}
+                            className={styles['sign-up-input']}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
                             label="Email"
@@ -128,28 +128,28 @@ const SignupForm = (props) => {
                         />
                     </div>
 
-                    <div className={styles.inputContainer}>
+                    <div className={styles['input-container']}>
                         <div> Password:</div>
                         <input
                             placeholder='********'
-                            className={styles.signUpInput}
+                            className={styles['sign-up-input']}
                             type="password"
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
                             label="Password"
                             id="password"
                         />
-                        <div className={styles.passInstructions}>
+                        <div className={styles['pass-instructions']}>
                             <p>Use 8 or more characters with a</p>
                             <p>mix of letters, numbers & symbols. </p>
                         </div>
                     </div>
 
-                    <div className={styles.inputContainer}>
+                    <div className={styles['input-container']}>
                         <div> Re-type Password:</div>
                         <input
                             placeholder='********'
-                            className={styles.signUpInput}
+                            className={styles['sign-up-input']}
                             type="password"
                             value={rePassword}
                             onChange={(e) => setRePassword(e.target.value)}
@@ -158,22 +158,22 @@ const SignupForm = (props) => {
                         />
                     </div>
 
-                    <div className={styles.buttonDivLogin}>
-                        <button type='submit' className={styles.signUpButton}>Get Started</button>
+                    <div className={styles['button-div-login']}>
+                        <button type='submit' className={styles['sign-up-button']}>Get Started</button>
                     </div>
 
-                    <div className={styles.textDiv}>
+                    <div className={styles['text-div']}>
                         <h3>
                             or
                         </h3>
                     </div>
 
 
-                    <div className={styles.buttonDivGoogleLogin}>
+                    <div className={styles['button-div-google-login']}>
                         <GoogleLogin
                             render={renderProps => (
                                 <button onClick={renderProps.onClick}
-                                    className={styles.googleLoginBtn}
+                                    className={styles['google-login-btn']}
                                 >
                                     <img src={google} alt="logo" width='25' height='25' />Sign Up with Google</button>
                             )}
@@ -185,10 +185,10 @@ const SignupForm = (props) => {
                         />
                     </div>
 
-                    <div className={styles.textDiv}>
-                        <p className={styles.alreadySignUp}>
+                    <div className={styles['text-div']}>
+                        <p className={styles['already-sign-up']}>
                             Already Sign Up?
-                        <button className={styles.signUpBtn} onClick={() => { props.goToLogin(); props.hideForm() }}>Log In</button>
+                        <button className={styles['sign-up-btn']} onClick={() => { props.goToLogin(); props.hideForm() }}>Log In</button>
                         </p>
 
                     </div>

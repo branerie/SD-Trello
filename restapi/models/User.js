@@ -26,7 +26,10 @@ const userSchema = new Schema({
     
     newPassword: { type: String },      
 
-    imageUrl: { type: String },
+    image: {
+        path: {type: String},
+        publicId: {type: String}
+    },
 
     projects: [{ type: ObjectId, ref: "ProjectUserRole" }],
 
