@@ -102,3 +102,43 @@
     align-items: center;
     box-sizing: border-box;
 }
+
+/* Attachments */
+
+.att-container {
+    display: flex;
+}
+
+.attachment {
+    width: 2rem;
+    height: 2rem;
+    border-radius: 0.2rem;
+    text-align: center;
+    margin-top: 0.5rem;
+    margin-left: 0.5rem;
+    cursor: pointer;
+}
+
+.att-picture {
+    height: 100%;
+}
+
+.format {
+    position: relative;
+    top: -1.4rem;
+    font-size: 0.7rem;
+    text-transform: uppercase;
+    background-color: rgb(200, 200, 200);
+    height: 0.9rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.remaining {
+    background-color: rgb(200, 200, 200);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    border-radius: 1rem;
+}

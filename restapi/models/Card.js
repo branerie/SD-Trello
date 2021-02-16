@@ -32,8 +32,13 @@ const cardSchema = new Schema({
         type: Number
     },
 
-    history: [{
-        
+    history: [{}],
+
+    attachments: [{
+        path: { type: String },
+        name: { type: String },
+        format: { type: String },
+        publicId: { type: String },
     }]
 
 })
