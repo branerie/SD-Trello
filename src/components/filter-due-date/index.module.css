@@ -1,5 +1,5 @@
 .filter-used {
-    width: 5rem;
+    width: 6rem;
     margin-right: 0;
     border-top-right-radius: 0;
     border-bottom-right-radius: 0;
@@ -14,7 +14,7 @@
 }
 
 .filter-blank {
-    width: 6.5rem;
+    width: 7.5rem;
 }
 
 .filter-clear {

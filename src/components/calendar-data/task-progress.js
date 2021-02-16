@@ -138,14 +138,14 @@ export default function TaskProgress(props) {
                     <div ref={dropdownRef} className={styles.taskProgress} onBlur={editCardProgress}>
                         <input
                             className={styles.taskProgressButtonInput}
-                            style={{
-                                backgroundColor: [getBackGroundColor(cardProgress)],
-                            }}
+                            style={{ backgroundColor: getBackGroundColor(cardProgress) }}
                             type={'number'}
                             value={cardProgress}
                             // placeholder={'%'}
                             onChange={e => setCardProgress(e.target.value)}
-                            min="0" max="100" />
+                            min="0" max="100"
+                            autoFocus
+                        />
                     </div >
                     :
                     // <div>
