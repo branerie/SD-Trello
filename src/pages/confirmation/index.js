@@ -56,8 +56,7 @@ const ConfirmationPage = () => {
                             <div className={styles.title}> Confirm your email address</div >
                             <div className={styles.text}>Please check your email to confirm your account</div>
                             <div className={styles.text}>Once confirmed, this email address will be uniquely associated with your Smart Manager  account.</div>
-                            <div className={styles.cheers}> Cheers,</div >
-                            <div className={styles.team}>The Smart Manager Team</div>
+                            
                         </div>
                         :
                         <div className={styles.container}>
@@ -67,8 +66,7 @@ const ConfirmationPage = () => {
                             <div className={styles.title}> Confirm your new password</div >
                             <div className={styles.text}>Please check your email to confirm your new password</div>
                             <div className={styles.text}>Once confirmed, your new password will be active for your Smart Manager  account.</div>
-                            <div className={styles.cheers}> Cheers,</div >
-                            <div className={styles.team}>The Smart Manager Team</div>
+                            
                         </div>
                 }
             </div>

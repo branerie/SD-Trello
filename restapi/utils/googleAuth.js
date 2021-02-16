@@ -12,7 +12,7 @@ const googleAuth = async (token) => {
 
     const { email, name, picture, email_verified } = payload
 
-    return { email, username: name, imageUrl: picture, email_verified }
+    return { email, username: name, email_verified }
 
 }
 

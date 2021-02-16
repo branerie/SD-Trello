@@ -97,7 +97,7 @@ export default function ProjectBoard() {
         let updatedUser = { ...context.user }
         let oldArr = [...updatedUser.recentProjects]
 
-        if (oldArr[2]._id === params.projectid) return
+        if (oldArr.length > 2 && oldArr[2]._id === params.projectid) return
 
         const arr = oldArr.filter(p => p._id !== params.projectid)
         arr.push({ _id: params.projectid, name: projectContext.project.name })

@@ -43,9 +43,10 @@
 }
 
 .options > div {
-  border-top: 1px solid #707070;
+  border: 1px solid #707070;
+  /* border-top: 1px solid #707070;
   border-left: 1px solid #707070;
-  border-right: 1px solid #707070;
+  border-right: 1px solid #707070; */
   height: 38px;
 }
 
@@ -58,14 +59,14 @@
 .last-option {
   background: #C1CBCF;
   color:#363338;
-  border-bottom: 1px solid #707070;
+  border-bottom: 2px solid #707070;
   border-radius: 0 0 10px 10px;
 }
 
 .logout {
   background: #C1CBCF;
   color:#363338;
-  border: 1px solid #707070;
+  border-bottom: 1px solid #707070;
   text-decoration: none;
   display: inline-block;
   height: auto;
@@ -141,7 +142,7 @@
 .view-position {
   width: 100px;
   top: 65px;
-  left: 567px;
+  left: 563px;
 }
 
 .teams {
@@ -157,13 +158,13 @@
 
 .teams-position {
   width: 150px;
-  top: 65px;
-  left: 90px;
+  top: 70px;
+  left: 82px;
 }
 
 .team-options {
-  border: 1px solid #707070;
-  border-bottom: none;
+  /* border: 1px solid #707070; */
+  /* border-bottom: team-options; */
 }
 
 .team-options:nth-child(1) {
@@ -173,7 +174,6 @@
 .overflow {
   background: #C1CBCF;
   color:#363338;
-  border: 1px solid #363338;
   width: 86.5%;
   white-space: nowrap; 
   overflow: hidden;
@@ -192,6 +192,10 @@
 
 .projects-position {
   width: 150px;
-  top: 65px;
-  left: 338px;
+  top: 70px;
+  left: 332px;
+}
+
+.profile-picture{
+  border-radius: 50%;
 }

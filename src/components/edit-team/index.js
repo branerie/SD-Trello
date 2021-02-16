@@ -3,14 +3,13 @@ import { useHistory, useParams } from "react-router-dom"
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import TeamContext from '../../contexts/TeamContext'
-import Avatar from 'react-avatar'
 import ButtonClean from '../button-clean'
 import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
 import TeamMembers from '../team-members'
 import ButtonGrey from '../button-grey'
 import ConfirmDialog from '../confirmation-dialog'
-import Transparent from '../transparent'
+import AvatarUser from '../avatar-user'
 
 
 export default function EditTeam(props) {
@@ -118,7 +117,7 @@ export default function EditTeam(props) {
             return
         } else {
             socket.emit('team-update', teamId)
-            if(input.id===userContext.user.id){
+            if (input.id === userContext.user.id) {
                 history.push("/")
             }
         }
@@ -220,12 +219,12 @@ export default function EditTeam(props) {
 
     return (
         <div>
-            {confirmOpen &&          
+            {confirmOpen &&
                 <ConfirmDialog
                     title={confirmTitle}
                     hideConfirm={() => setConfirmOpen(false)}
                     onConfirm={() => confirmationObjectFunctions[confirmTitle](currElement)}
-                />                
+                />
             }
 
 
@@ -339,18 +338,14 @@ export default function EditTeam(props) {
                                         {
                                             forInvite.map((m, index) => {
                                                 return (
-                                                    <Avatar
+                                                    <AvatarUser user={m}
+                                                    size={40}
                                                         key={index}
-                                                        name={m.username}
-                                                        size={40} round={true} maxInitials={2}
-                                                        // onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeForInvite(m) }}
                                                         onClick={() => {
                                                             setConfirmOpen(true)
-                                                            setConfirmTitle('delete this member')
+                                                            setConfirmTitle('remove this member')
                                                             setCurrElement(m)
-                                                        }}
-                                                    />
-
+                                                        }} />
                                                 )
                                             })
                                         }
@@ -364,14 +359,12 @@ export default function EditTeam(props) {
                                         {
                                             members.map((m, index) => {
                                                 return (
-                                                    <ButtonClean key={index}
-                                                        // onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeMember(m) }}
+                                                    <AvatarUser user={m} key={index} size={40}
                                                         onClick={() => {
                                                             setConfirmOpen(true)
                                                             setConfirmTitle('delete this member from team')
                                                             setCurrElement(m)
                                                         }}
-                                                        title={<Avatar key={m._id} name={m.username} size={40} round={true} maxInitials={2} />}
                                                     />
 
                                                 )
@@ -388,17 +381,14 @@ export default function EditTeam(props) {
                                                 {
                                                     invited.map((m, index) => {
                                                         return (
-                                                            <Avatar
+                                                            <AvatarUser user={m}
                                                                 key={index}
-                                                                name={m.username}
-                                                                size={40} round={true} maxInitials={2}
+                                                                size={40}
                                                                 onClick={() => {
                                                                     setConfirmOpen(true)
                                                                     setConfirmTitle('delete this member from invited')
                                                                     setCurrElement(m)
                                                                 }}
-
-                                                            // onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeInvited(m) }}
                                                             />
 
                                                         )
@@ -413,9 +403,6 @@ export default function EditTeam(props) {
                                 <div className={styles.buttonDiv}>
                                     <ButtonGrey className={styles.createButton} onClick={() => handleSubmit()} title={'Submit Changes'} />
                                     <ButtonGrey className={styles.createButton} title={'Delete Team'}
-                                        // onClick={() => {
-                                        //     if (window.confirm('Are you sure you wish to delete this team?')) deleteTeam()
-                                        // }}
                                         onClick={() => {
                                             setConfirmOpen(true)
                                             setConfirmTitle('delete this team')
@@ -433,8 +420,6 @@ export default function EditTeam(props) {
                                 />
 
                                 <div className={styles.leaveTeamBtnDiv}>
-
-                                    {/* <button className={styles.leaveTeamBtn} onClick={() => {removeMember(userContext.user.id)}}  >Leave Team</button> */}
                                     <ButtonGrey title={'Leave Team'} className={styles.leaveTeamBtn}
                                         onClick={() => {
                                             setConfirmOpen(true)

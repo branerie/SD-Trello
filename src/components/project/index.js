@@ -29,7 +29,7 @@ export default function Project(props) {
 
                 
                 <div className={styles.info} >
-                <ButtonGrey className={styles.infoBtn} title={'Info'} onClick={() => setIsVisible(!isVisible)}/>
+                <ButtonGrey className={styles['info-btn']} title={'Info'} onClick={() => setIsVisible(!isVisible)}/>
                 
             </div>
             </div>

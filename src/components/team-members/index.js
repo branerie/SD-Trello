@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './index.module.css'
-import Avatar from 'react-avatar'
 import ButtonClean from "../../components/button-clean"
+import AvatarUser from '../avatar-user'
 
 
 export default function TeamMembers(props) {
@@ -11,7 +11,7 @@ export default function TeamMembers(props) {
 
     return (
         <div>
-            <div className={styles.membersAvatars}>
+            <div className={styles['members-avatars']}>
                 <div>
                     Team Members:
                 </div>
@@ -20,12 +20,10 @@ export default function TeamMembers(props) {
                         return (
                             <ButtonClean
                                 key={index}
-                                title={<Avatar
+                                title={
+                                <AvatarUser user={m}
                                     key={m._id}
-                                    name={m.username}
                                     size={40}
-                                    round={true}
-                                    maxInitials={2}
                                 />}
                             />
                         )
@@ -34,19 +32,16 @@ export default function TeamMembers(props) {
             </div>
             {
                 invited.length !== 0 &&
-                <div className={styles.membersAvatars}>
+                <div className={styles['members-avatars']}>
                     <div>
                         Invited Members:
                         </div>
                     {
                         invited.map((m, index) => {
                             return (
-                                <Avatar
+                                <AvatarUser user={m}
                                     key={index}
-                                    name={m.username}
                                     size={40}
-                                    round={true}
-                                    maxInitials={2}
                                 // onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeMember(m) }}
                                 />
                             )

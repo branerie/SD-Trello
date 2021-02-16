@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useRef, useState } from 'react'
 import { useHistory, useParams } from "react-router-dom"
 import styles from './index.module.css'
-import Avatar from 'react-avatar'
 import getCookie from '../../utils/cookie'
 import { useSocket } from '../../contexts/SocketProvider'
 import TeamContext from "../../contexts/TeamContext"
@@ -9,6 +8,7 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import UserContext from '../../contexts/UserContext'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import ConfirmDialog from '../confirmation-dialog'
+import AvatarUser from '../avatar-user'
 
 
 export default function AddMember(props) {
@@ -262,8 +262,9 @@ export default function AddMember(props) {
                                                     return (
                                                         <Draggable key={element.memberId._id} draggableId={element._id} index={index}>
                                                             {(provided) => (
-                                                                <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                                    <Avatar name={element.memberId.username} size={40} round={true} maxInitials={2} />
+                                                                <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >                                                                   
+                                                                    <AvatarUser user={element.memberId} 
+                                                                      size={40}  />
                                                                     {provided.placeholder}
                                                                 </span>
                                                             )}
@@ -291,8 +292,7 @@ export default function AddMember(props) {
                                                             {(provided) => (
 
                                                                 <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                                    <Avatar key={index} name={element.memberId.username} size={40} round={true} maxInitials={2}
-                                                                        // onClick={(e) => { if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(e, element.memberId) }}
+                                                                    <AvatarUser user={element.memberId}  key={index}  size={40} round={true}                                                                       
                                                                         onClick={() => {
                                                                             setConfirmOpen(true)
                                                                             setConfirmTitle('delete this member')
@@ -314,7 +314,7 @@ export default function AddMember(props) {
                             </div>
 
 
-                        </DragDropContext>
+                            </DragDropContext>
                         
                         }
                     </span >
@@ -327,7 +327,7 @@ export default function AddMember(props) {
                                     members.filter(a => a.admin === true).map((element, index) => {
                                         return (
                                             <span key={index} >
-                                                <Avatar name={element.memberId.username} size={40} round={true} maxInitials={2} />
+                                                <AvatarUser user={element.memberId}  size={40}  />
                                             </span>
                                         )
                                     })
@@ -342,8 +342,7 @@ export default function AddMember(props) {
                                 {
                                     members.filter(a => a.admin !== true).map((element, index) => {
                                         return (
-                                            <span key={index} >
-                                                <Avatar name={element.memberId.username} size={40} round={true} maxInitials={2} />
+                                            <span key={index}>                                                                                                <AvatarUser user={element.memberId}  size={40}  />
                                             </span>
                                         )
                                     })

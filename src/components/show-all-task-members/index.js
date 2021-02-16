@@ -1,21 +1,26 @@
-import React from 'react'
-import Avatar from 'react-avatar'
+import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
+import ConfirmDialog from '../confirmation-dialog'
+import AvatarUser from '../avatar-user'
 
 
 export default function ShowAllTaskMembers({ members, deleteMemberOption, deleteMemberObj }) {
     const token = getCookie("x-auth-token")
     const history = useHistory()
     const socket = useSocket()
+    const [confirmOpen, setConfirmOpen] = useState(false)
+    const [currElement, setCurrElement] = useState('')
 
     function onClick(m) {
         if (deleteMemberOption) {
-            if (window.confirm('Are you sure you wish to delete this member?')) deleteMember(m)
+            setConfirmOpen(true)
+            setCurrElement(m)
         }
     }
+
 
     const updateSocket = () => {
         const project = deleteMemberObj.project
@@ -58,27 +63,33 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
     }
 
     return (
+
         <div className={styles.allCardMembers}>
-        {
-            members.map((m, index) => {
-                return (
-                    <div key={index} className={styles.eachMember} onClick={() => onClick(m)} >
-                        <span className={styles.avatar} key={m._id}>
-                                            <Avatar key={m._id}
-                                                name={m.username}
-                                                size={30}
-                                                round={true}
-                                                maxInitials={2}
-                                                className={styles.avatar}
-                                            />
-                                        </span>
-                        <span>{m.username}</span>
+            {confirmOpen &&
+                <ConfirmDialog
+                    title={'delete this member'}
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={() => deleteMember(currElement)}
+                />
+            }
+            {
+                members.map((m, index) => {
+                    return (
+                        <div key={index} className={styles.eachMember} onClick={() => onClick(m)} >
+                            <span className={styles.avatar} key={m._id}>
+                                <AvatarUser user={m}
+                                    size={30}
+                                    className={styles.avatar}
+                                />
+                            </span>
+                            <span>{m.username}</span>
                         </div>
-                )
-            })
-        }
+                    )
+                })
+            }
         </div>
-)
+    )
+
 }
 
 

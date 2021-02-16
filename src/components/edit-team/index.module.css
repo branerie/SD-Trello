@@ -101,7 +101,7 @@
     padding: 1%;
     height: 5em;
     width: 100%;
-    /* min-width: 150px; */
+    min-width: 100px;
     margin-left: 4%;  
     background-color: #DFE9EE; 
     resize: none; 

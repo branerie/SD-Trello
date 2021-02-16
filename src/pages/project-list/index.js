@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useContext } from 'react'
+import React, { useCallback, useEffect, useContext } from 'react'
 import { useParams } from "react-router-dom"
 import PageLayout from '../../components/page-layout'
 import { useSocket } from '../../contexts/SocketProvider'
@@ -47,7 +47,7 @@ export default function ProjectList() {
         <PageLayout contentStyle={{ margin: '5.6rem 0.2rem 0 3.5rem', padding: 0 }}>
             <div className={styles.calendarPageContainer}>
                 <div>
-                    <div className={styles.calendarContainer}>
+                    <div className={styles['calendar-container']}>
                         <TableDndApp project={projectContext.project} />
                         {/* <TableDndApp2 filter={filter} /> */}
                     </div>

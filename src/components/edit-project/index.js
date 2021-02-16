@@ -123,14 +123,10 @@ export default function EditProject(props) {
                     <div className={styles.buttonsDiv}>
                         <ButtonGrey className={styles.navigateButtons} title={'Edit'} onClick={handleSubmit}/>
                         <ButtonGrey className={styles.navigateButtons} title={'Delete Project'} 
-                        // onClick={() => { if (window.confirm('Are you sure you wish to delete this project?')) deleteProject() }}
                         onClick={() => {
                             setConfirmOpen(true)                            
                         }}
                         />
-
-                        {/* <button className={styles.navigateButtons} onClick={handleSubmit}  >Edit</button> */}
-                        {/* <button className={styles.navigateButtons} onClick={() => { if (window.confirm('Are you sure you wish to delete this project?')) deleteProject() }}  >Delete Project</button> */}
                     </div>
                     : null
                 }

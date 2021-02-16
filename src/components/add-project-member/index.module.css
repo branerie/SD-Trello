@@ -1,6 +1,6 @@
 .container {
-    margin-top: 5%;    
-    height: 200px;
+    margin: 5%;    
+    /* height: 200px; */
 }
 
 .form {
@@ -54,7 +54,7 @@
 }
 
 .title{
-    width: 20%;
+    width: fit-content;
     margin-right: 1%;
 }
 

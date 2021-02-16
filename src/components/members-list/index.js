@@ -1,6 +1,7 @@
 import React, { useRef } from 'react'
 import Avatar from 'react-avatar'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import AvatarUser from '../avatar-user'
 import ShowAllTaskMembers from '../show-all-task-members'
 import styles from './index.module.css'
 
@@ -27,13 +28,11 @@ const MembersList = ({ members, maxLength, deleteMemberOption, deleteMemberObj }
                 <>
                     {members.slice(0, maxLength - 1).map(member => {
                         return (
-                            <span className={styles.avatar} key={member._id}>
-                                <Avatar
-                                    key={member._id}
-                                    name={member.username}
+                            <span 
+                            className={styles.avatar} 
+                            key={member._id}>
+                                <AvatarUser user={member}
                                     size={30}
-                                    round={true}
-                                    maxInitials={2}
                                     className={styles.avatar}
                                 />
                             </span>
@@ -57,12 +56,10 @@ const MembersList = ({ members, maxLength, deleteMemberOption, deleteMemberObj }
                     {members.map(element => {
                         return (
                             <span className={styles.avatar} key={element._id}>
-                                <Avatar
+                                <AvatarUser
+                                user={element}
                                     key={element._id}
-                                    name={element.username}
-                                    size={30}
-                                    round={true}
-                                    maxInitials={2}
+                                    size={30}                                  
                                 />
                             </span>
                         )

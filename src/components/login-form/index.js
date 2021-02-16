@@ -29,7 +29,7 @@ const LoginForm = (props) => {
 
     const handleSubmit = async (event) => {
         event.preventDefault();
-        
+
         setFillAlert(false)
         setWrongPassAllert(false)
         setWrongUserAllert(false)
@@ -42,7 +42,7 @@ const LoginForm = (props) => {
         await authenticate("/api/user/login", 'POST', {
             email,
             password
-        }, (user) => {            
+        }, (user) => {
             context.logIn(user)
             history.push("/")
         }, (response) => {
@@ -61,7 +61,7 @@ const LoginForm = (props) => {
     }
 
     const handleGoogle = (googleResponse) => {
-        responseGoogle(googleResponse, (user) => {            
+        responseGoogle(googleResponse, (user) => {
             context.logIn(user)
             history.push("/")
         }, (response) => {
@@ -80,32 +80,33 @@ const LoginForm = (props) => {
                 showForm ?
                     <div>
                         <Transparent hideForm={hideForm}>
-                            <AddPassword hideForm={hideForm} userId={userId} email={email}/>
+                            <AddPassword hideForm={hideForm} userId={userId} email={email} />
                         </Transparent>
                     </div> : null
             }
             <form className={styles.container} onSubmit={handleSubmit}>
-                
 
-                <div className={styles.innerContainer}>
+
+                <div className={styles['inner-container']}>
+
                     <div className={styles.logo}>
                         <img src={logo} alt="logo" width='110' height='100' />
                     </div>
 
-                    <div className={styles.rightSide}>
-                    <div className={styles.alerts}>
-                    <Alert alert={fillAlert} message={'Please fill all fileds'} />
-                    <Alert alert={wrongPassAllert} message={'Wrong Password'} />
-                    <Alert alert={wrongUserAllert} message={'Please fill valid email address'} />
-                </div>
+                    <div className={styles['right-side']}>
+                        <div className={styles.alerts}>
+                            <Alert alert={fillAlert} message={'Please fill all fileds'} />
+                            <Alert alert={wrongPassAllert} message={'Wrong Password'} />
+                            <Alert alert={wrongUserAllert} message={'Please fill valid email address'} />
+                        </div>
 
                         <div className={styles.title} >Log In with E-mail</div>
 
 
-                        <div className={styles.inputContainer}>
+                        <div className={styles['input-container']}>
                             <div> Email:</div>
                             <input
-                                className={styles.emailInput}
+                                className={styles['email-input']}
                                 placeholder='John@example.com'
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
@@ -114,10 +115,10 @@ const LoginForm = (props) => {
                             />
                         </div>
 
-                        <div className={styles.inputContainer}>
+                        <div className={styles['input-container']}>
                             <div> Password:</div>
                             <input
-                                className={styles.passInput}
+                                className={styles['pass-input']}
                                 placeholder='********'
                                 type="password"
                                 value={password}
@@ -127,19 +128,19 @@ const LoginForm = (props) => {
                             />
                         </div>
 
-                        <div className={styles.buttonDivLogin}>
-                            <button type='submit' className={styles.loginButton}>Log In</button>
+                        <div className={styles['button-div-login']}>
+                            <button type='submit' className={styles['login-button']}>Log In</button>
                         </div>
 
 
-                        <div className={styles.textDiv}>
-                            <p className={styles.forgotPass}
-                            onClick={() => { props.goToForgotPassword(); props.hideForm() }}>
+                        <div className={styles['text-div']}>
+                            <p className={styles['forgot-pass']}
+                                onClick={() => { props.goToForgotPassword(); props.hideForm() }}>
                                 Forgot Password?
                         </p>
-                            <p className={styles.newToSmM}>
+                            <p className={styles['new-to-sm']}>
                                 New to Smart Manager?
-                        <button className={styles.signUpBtn}
+                        <button className={styles['sign-up-btn']}
                                     onClick={() => { props.goToSignUp(); props.hideForm() }}
                                 >Sign Up</button>
                             </p>
@@ -149,11 +150,11 @@ const LoginForm = (props) => {
                         </div>
 
 
-                        <div className={styles.buttonDivGoogleLogin}>
+                        <div className={styles['button-div-google-login']}>
                             <GoogleLogin
                                 render={renderProps => (
                                     <button onClick={renderProps.onClick}
-                                        className={styles.googleLoginBtn}
+                                        className={styles['google-login-btn']}
                                     >
                                         <img src={google} alt="logo" width='25' height='25' />
                                     Log In with Google</button>

@@ -94,17 +94,17 @@ const ForgotPasswordForm = (props) => {
                     <Alert alert={wrongUserAllert} message={'Please fill valid email address'} />
                 </div>
 
-                <div className={styles.innerContainer}>
+                <div className={styles['inner-container']}>
                     <div className={styles.logo}>
                         <img src={logo} alt="logo" width='110' height='100' />
                     </div>
 
-                    <div className={styles.rightSide}>
+                    <div className={styles['right-side']}>
 
                         <div className={styles.title} >Forgot Password Form</div>
 
 
-                        <div className={styles.inputContainer}>
+                        <div className={styles['input-container']}>
                             <div> Email:</div>
                             <input
                                 className={styles.emailInput}
@@ -116,7 +116,7 @@ const ForgotPasswordForm = (props) => {
                             />
                         </div>
 
-                        <div className={styles.inputContainer}>
+                        <div className={styles['input-container']}>
                             <div>New Password:</div>
                             <input
                                 className={styles.passInput}
@@ -129,7 +129,7 @@ const ForgotPasswordForm = (props) => {
                             />
                         </div>
 
-                        <div className={styles.inputContainer}>
+                        <div className={styles['input-container']}>
                             <div>Re-type New Password:</div>
                             <input
                                 className={styles.passInput}
