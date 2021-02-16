@@ -13,9 +13,30 @@ export default function TaskDueDate({ dueDate, card, listId, project, teamId }) 
 
     const [cardDueDate, setCardDueDate] = useState(null)
     const [taskDueDate, setTaskDueDate] = useState(null)
+    const [width, setWindowWidth] = useState(0)
     const history = useHistory()
     const socket = useSocket()
     const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
+
+
+    useEffect( () => {
+      updateDimensions()
+      window.addEventListener("resize", updateDimensions)
+      return () => window.removeEventListener("resize", updateDimensions)
+    }, [])
+  
+    const updateDimensions = () => {
+      const innerWidth = window.innerWidth
+      setWindowWidth(innerWidth)
+    }
+
+    function datePickerPosition(w) {
+        if (w > 750) {
+            return 'bottom-end'
+        } else {
+            return 'bottom-start'
+        }
+    }
 
     useEffect(() => {
         setCardDueDate(dueDate)
@@ -68,6 +89,7 @@ export default function TaskDueDate({ dueDate, card, listId, project, teamId }) 
                 selected={taskDueDate ? cardDueDate : today}
                 onChange={(date) => { setCardDueDate(date); editCardDueDate(date) }}
                 label="Go to date"
+                popperPlacement={datePickerPosition(width)}
             />
             {
                 taskDueDate && <div className={styles.date}>{taskDueDate}</div>
