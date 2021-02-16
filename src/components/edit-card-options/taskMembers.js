@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
@@ -44,11 +44,6 @@ export default function TaskMembers({ card, listId, project, teamId }) {
         setUsers(filtered)
 
     }
-
-    const updateSocket = useCallback(() => {
-        socket.emit('project-update', project)
-        socket.emit('task-team-update', teamId)
-    }, [socket, project, teamId])
 
     const handleSelect = async (id) => {
 
@@ -101,7 +96,8 @@ export default function TaskMembers({ card, listId, project, teamId }) {
         } else {
             setIsActive(!isActive)
             setCardMembers(arr)
-            updateSocket()
+            socket.emit('project-update', project)
+            socket.emit('task-team-update', teamId)
             socket.emit('message-sent', selectedUser._id)
         }
     }

@@ -4,9 +4,9 @@ import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import "react-datepicker/dist/react-datepicker.css"
 import ButtonClean from '../button-clean'
-import Avatar from 'react-avatar'
 import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
+import AvatarUser from '../avatar-user'
 
 export default function CreateProject({ hideForm }) {
     const [name, setName] = useState("")
@@ -177,9 +177,9 @@ export default function CreateProject({ hideForm }) {
 
             <div className={styles.membersAvatars}>
                 {
-                    members.map(m => {
+                    members.map((m,index) => {
                         return (
-                            <Avatar onClick={() => removeMember(m)} key={m._id} name={m.username} size={40} round={true} maxInitials={2} />
+                            <AvatarUser key={index} user={m} onClick={() => removeMember(m)} size={40}/>
                         )
                     })
                 }

@@ -1,6 +1,3 @@
-
-
-
 .container{
     display: flex;
     justify-content: space-between;
@@ -9,16 +6,14 @@
     flex-wrap: wrap;
   }
 
-  .leftContainer{
-    /* display: flex; */
-    /* justify-content: space-around; */
+  .left-container{
     height: auto;
     flex-wrap: wrap;
     min-width: 40%;
   } 
     
 
-  .picContainer{
+  .pic-container{
     width: 50%; 
     min-width: 200px;
     max-width: 500px;
@@ -30,22 +25,16 @@
     width: 90%;
     height: auto;
   }
-  
-  .topright{
-    margin-left: 75%;
-  }
+    
   
   .teams{  
     width: auto;
-    /* height: 7em; */
     height: auto;
     max-height: 25em;
     border: 1px solid #000000; 
     background-color: #E6E6E6;
     border: solid 1px #363338;
-    border-radius: 10px;       
-    /* display: flex;    */
-    /* justify-content: space-between;  */
+    border-radius: 10px;
     padding: 15px;
     font-weight: normal;
     overflow-y: auto;  
@@ -56,39 +45,31 @@
     display: none;
   }
   
-  .teamNames {
-    cursor: pointer;
-  }
+
   
-  .navigateButtons {
-    /* background: #DFE9EE; */
-    /* color: black; */
+  .navigate-buttons {
     padding: 10px;
     min-width: 170px;
     min-height: 50px;
-    /* border-radius: 10px; */
     display: block;
     margin: 0 auto;
     margin-bottom: 20px;
     margin-right: 10px;
-    /* cursor: pointer; */
-    /* border: 1px solid #707070; */
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
     text-align: left;
     outline: none;
   }
 
-  .buttonInputDiv{
+  .button-input-div{
     display: flex;
     justify-content: space-between;
     flex-wrap: wrap;
   }
 
-  .inputFieldsProfile{
+  .input-fields-profile{
     padding: 3px;
     text-align: left;
     min-width: 50%;
-    /* width: 100%; */
     min-height: 30px;
     border-radius: 14px;
     display: block;
@@ -116,7 +97,7 @@
     text-align: left; 
  }
 
-  .profilePic{
+  .profile-pic{
     width: 200px;
     height: 150px;
     background-color:white;
@@ -127,7 +108,7 @@
     cursor: pointer;
   }
 
-  .loadPicText{
+  .load-pic-text{
     margin:0, auto;
     margin-top: 30%;
   }
@@ -138,9 +119,8 @@
     margin-top: 5%;  
   }
 
-  .profilePicContainer{
+  .profile-pic-container{
     width: 200px;
-    /* height: 150px; */
     text-align: center;
   }
 
@@ -149,7 +129,7 @@
     height: 100%;
   }
 
-  .saveButton{
+  .save-button{
     color: #363338;
     background-color: #F3981F;
     border-radius: 20px;
@@ -158,8 +138,6 @@
     max-width: 150px;
     height: 50px;
     border: 1px solid #707070; 
-    /* margin-top: 50px; */
-    /* margin: 0 auto; */
     z-index: 1;
     font-size: 1.2rem;
     font-weight: 600;
@@ -167,9 +145,8 @@
     outline: none;
   }
 
-  .buttonDivSave{
+  .button-div-save{
     min-width: 200px;
-    /* width: 100%; */
     min-height: 30px;
     border-radius: 14px;
     display: block;
@@ -185,7 +162,8 @@
   width: 300px;
   height: auto;  
 }
-.newPassAlert{
+
+.new-pass-alert{
   background-color: rgb(219, 88, 88);  
   max-width: 300px;
   height: auto; 
@@ -193,37 +171,15 @@
   margin: 0 auto;
   margin-bottom: 20px; 
 }
-.myTeamButton {
-  
-  background: #DFE9EE;
-  color: black;
-  padding: 10px;
-  min-width: 150px;
-  min-height: 50px;
-  border-radius: 10px;
-  display: block;
-  margin: 0 auto;
-  margin-bottom: 20px;
-  cursor: pointer;
-  border: 1px solid #707070;
-  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  outline: none;
-}
 
-.myTeamsContainer{
-  /* display: flex; */
- 
-}
 
-.selectTeamContainer{
-  /* margin-left: 10px; */
-  /* height: 0; */
+
+.select-team-container{
   width: 0;
   color: white;
 }
 
-.teamsHome{ 
+.teams-home{ 
   width: 11em;  
   height: auto;
   max-height: 180px;
@@ -241,7 +197,7 @@
   display: none;
 }
 
-.navigateButtonsTeams {
+.navigate-buttons-teams {
   background: #F7F7F2;
   color: black;
   padding: 10px;

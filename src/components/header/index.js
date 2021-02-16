@@ -1,7 +1,6 @@
 import React, { useContext, useRef, useState, useEffect, useCallback } from "react"
 import styles from "./index.module.css"
 import UserContext from "../../contexts/UserContext"
-import Avatar from "react-avatar"
 import { useDetectOutsideClick } from "../../utils/useDetectOutsideClick"
 import LinkComponent from "../link"
 import ButtonClean from "../button-clean"
@@ -14,6 +13,7 @@ import CreateProject from "../create-project"
 import getCookie from "../../utils/cookie"
 import SearchResults from "../search-results"
 import { useSocket } from "../../contexts/SocketProvider"
+import AvatarUser from "../avatar-user"
 
 const Header = ({ asideOn }) => {
     const dropdownRefProfile = useRef(null)
@@ -123,9 +123,9 @@ const Header = ({ asideOn }) => {
         setTimeout(() => (setShowSearchForm(false)), 120)
     }
 
-    const getFullImageUrl = (imagePath) => {
-        return `https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/${imagePath}`
-      }
+    // const getFullImageUrl = (imagePath) => {
+    //     return `https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/w_400,h_400,c_crop,g_face,r_max/w_200/${imagePath}`
+    // }
 
     return (
         <header className={`${styles.navigation} ${asideOn ? styles.small : ''}`} >
@@ -272,28 +272,19 @@ const Header = ({ asideOn }) => {
                         {
                             (
                                 searchInput.length > 0
-                                 && 
-                                 showSearchForm) ?                                
-                                    <div ref={dropdownRefSearch}>
-                                        <SearchResults searchInput={searchInput} hideForm={() => { setShowSearchForm(!showSearchForm); setSearchInput('') }} />
-                                    </div>
-                                 : null
+                                &&
+                                showSearchForm) ?
+                                <div ref={dropdownRefSearch}>
+                                    <SearchResults searchInput={searchInput} hideForm={() => { setShowSearchForm(!showSearchForm); setSearchInput('') }} />
+                                </div>
+                                : null
                         }
                     </span>
                     <ButtonClean
                         className={styles.avatar}
                         onClick={() => setIsProfileActive(!isProfileActive)}
-                        title={<Avatar 
-
-                            name={!context.user.imageUrl?context.user.username:null} 
-                            src={context.user.imageUrl?
-                                getFullImageUrl(context.user.imageUrl):null}
-                            alt={context.user.imageUrl?
-                                '':null}
-                            size={40}
-                             round={true} 
-                            maxInitials={2} 
-                            />
+                        title={
+                            <AvatarUser user={context.user} size={40}/>                            
                         }
                     />
                     {

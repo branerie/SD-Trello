@@ -1,23 +1,20 @@
 .container {    
-    position: absolute;
+    /* position: absolute;
     left: 30%;
-    top: 15vh;    
-    width: 45%;
-
-    z-index: 20;
-
-    /* position: fixed;
+    top: 15vh;   */
+    
+    position: fixed;
     top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%); */
+    transform: translate(-50%, -50%);
 
-    min-width: 500px;
-    min-height: 70vh;
+
+    width: 45%;
+    z-index: 20;
+    min-width: 300px;
+    min-height: 50vh;
     height: auto;
-
-
-    /* max-height: 90vh; */
     background-color:#EDF5F9;
     border: solid 2px #707070;
     border-radius: 27px;  
@@ -30,10 +27,11 @@
     height: 5%;    
 }
 
-.innerContainer{
-    width: 100%;
+.inner-container{
+    width: auto;
     height: 95%;
     display: flex;
+    flex-wrap: wrap;
 }
 
 .logo{
@@ -41,40 +39,36 @@
     margin-top: 0%;
     margin-right: 2%;
     height: 90%;
-    width: 10%;
+    /* width: 10%; */
 }
-.rightSide{
-    width: 80%;
-   height: 90%;
-   /* margin-right: 25%; */
-   /* margin: 0 auto; */
-   /* margin-top: 10%;   */
+.right-side{
+    /* width: 80%; */
+   height: 90%;  
    display: block;
    align-items: center; 
-   justify-content: center;   
+   justify-content: center; 
+   flex: auto;  
 }
 
 .title {
     width: 80%;
-    /* text-align: center; */
     color: black;
     text-decoration: underline;
     margin: 0 auto;
     margin-bottom: 2%;
-    /* margin-left: 15%;   */
     font-size: 1.8em;
     font-weight: 600;
     text-align: center;
 }
 
-.inputContainer{
+.input-container{
     align-items: center;
     width: 40%; 
     margin: 3% auto;    
     margin-bottom: 2%;
 }
 
-.emailInput{
+.email-input{
     border: solid 1px #363338;
     border-radius: 5px;
     height: 1.5em;
@@ -84,7 +78,7 @@
     text-align: left;
     outline: none;
 }
-.passInput{
+.pass-input{
     border: solid 1px #363338;
     border-radius: 5px;
     height: 1.5em;
@@ -95,11 +89,11 @@
     outline: none;
 }
 
-.loginButton{
+.login-button{
     color: #fff;
     background-color: #363338;
     border-radius: 15px;
-    width: 100%;
+    width: 100%;    
     height: 1.9em;
     border: none; 
     margin: 0 auto;
@@ -110,21 +104,22 @@
     outline: none;
   }
 
-  .buttonDivLogin{
+  .button-div-login{
       margin: 5% auto;
-      width: 25%;     
+      width: 25%;
+      min-width: 80px;     
   }
 
-  .textDiv{      
+  .text-div{      
       text-align: center;      
   }
 
-  .buttonDivGoogleLogin{
+  .button-div-google-login{
     margin: 5% auto;
-    width: 55%;    
+    width: 200px; 
 }
 
-  .forgotPass{
+  .forgot-pass{
     text-decoration: underline;
     font-weight: lighter;
     margin-bottom: 5%;
@@ -132,13 +127,13 @@
     cursor: pointer;
   }
 
-  .newToSmM{    
+  .new-to-sm{    
     font-weight: lighter;
     margin-bottom: 5%;
     color: #363338;
   }
 
-  .signUpBtn{
+  .sign-up-btn{
       border: none;
       text-decoration: underline;
       color: #F3981F;
@@ -149,17 +144,15 @@
       background-color: #EDF5F9;
   }
 
-  .googleLoginBtn{     
+  .google-login-btn{     
     color: #363338;
     background-color: #F7F7F2;
     border-radius: 10px;
     border: solid 1px #707070 ;
-    width: 65%;
+    width: 100%;
     height: auto;
-    /* margin: 2%; */
     margin: 5% auto;
     padding: 2%;
-    /* margin-left: 15%; */
     z-index: 1;
     font-size: 1.1em;
     font-weight: 600;

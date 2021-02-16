@@ -9,10 +9,7 @@ export default function SearchResults(props) {
     const userContext = useContext(UserContext)
     const history = useHistory()
     const teamContext = useContext(TeamContext)
-
-
     const teams = userContext.user.teams
-
     const searchInput = props.searchInput
 
     let resultArr = []
@@ -48,18 +45,8 @@ export default function SearchResults(props) {
     }
 
 
-    // teams.filter(u => u.name.toLowerCase().includes(searchInput.toLowerCase()))
-    //                         .filter((e) => {
-    //                             const found = members.find(element => element.username === e.username)
-    //                             if (found) {
-    //                                 return false
-    //                             } else {
-    //                                 return true
-    //                             }
-    //                         })
-
     return (
-        <div className={styles.searchContainer}>
+        <div className={styles['search-container']}>
             {
                 resultArr.filter(u => u.name.toLowerCase().includes(searchInput.toLowerCase()))
                     .map((t, index) => {

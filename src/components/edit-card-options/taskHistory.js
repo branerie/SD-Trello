@@ -31,7 +31,7 @@ export default function TaskHistory({ taskHistory }) {
     return (
         <div className={styles.history}>
             { taskHistory ?
-                arr.map((m, index) => (
+                arr.reverse().map((m, index) => (
                     <div key={index} >
                         {`${showDate(m['date'])} - ${m['event']}`}
                     </div>

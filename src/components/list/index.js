@@ -164,7 +164,7 @@ export default function List(props) {
                                         input.focus();
                                     }
                                 }}
-                                className={styles.taskInput}
+                                className={styles['task-input']}
                                 type={'text'}
                                 value={cardName}
                                 onChange={e => setCardName(e.target.value)}

@@ -1,11 +1,8 @@
-.searchContainer{
+.search-container{
     width: 250px;
     max-height: 200px;
     height: auto;
     min-height: 30px;
-    /* position: relative; */
-    /* top: 80%; */
-    /* left: 75%; */
     color: black;
     padding: 10px;
     border: solid 1px #363338;

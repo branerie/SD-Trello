@@ -3,10 +3,10 @@ import { useHistory } from "react-router-dom"
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import TeamContext from '../../contexts/TeamContext'
-import Avatar from 'react-avatar'
 import ButtonClean from '../button-clean'
 import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
+import AvatarUser from '../avatar-user'
 
 export default function CreateTeam(props) {
     const [name, setName] = useState("")
@@ -106,55 +106,55 @@ export default function CreateTeam(props) {
     return (
         // <div className={styles.form}>
 
-            <form className={styles.container} onSubmit={handleSubmit}>
+        <form className={styles.container} onSubmit={handleSubmit}>
 
 
-                <div className={styles.title} >Create New Team</div>
+            <div className={styles.title} >Create New Team</div>
 
-                <div className={styles.inputContainer}>
-                    <span> Name</span>
+            <div className={styles.inputContainer}>
+                <span> Name</span>
+                <input
+                    className={styles.inputName}
+                    value={name}
+                    onChange={e => setName(e.target.value)}
+                    label="Name"
+                    id="name"
+                    placeholder='Team Name'
+                />
+            </div>
+
+            <div className={styles.inputContainerDescr}>
+                <span className={styles.descriptionText}> Description</span>
+                <textarea
+                    className={styles.textareaDescr}
+                    value={description}
+                    onChange={e => setDescription(e.target.value)}
+                    label="Description"
+                    id="description"
+                    placeholder='Team Description'
+                />
+            </div>
+
+            <div className={styles.inputContainerMembers}>
+                <span className={styles.membersText}> Invite Members</span>
+
+                <div className={styles.inviteInput}>
                     <input
-                        className={styles.inputName}
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        label="Name"
-                        id="name"
-                        placeholder='Team Name'
+                        className={styles.inputMembers}
+                        autoComplete="off"
+                        value={member}
+                        onChange={inputMembers}
+                        label="Invite members"
+                        id="members"
+                        placeholder='username'
+                        onBlur={onBlur}
+
                     />
-                </div>
 
-                <div className={styles.inputContainerDescr}>
-                    <span className={styles.descriptionText}> Description</span>
-                    <textarea
-                        className={styles.textareaDescr}
-                        value={description}
-                        onChange={e => setDescription(e.target.value)}
-                        label="Description"
-                        id="description"
-                        placeholder='Team Description'
-                    />
-                </div>
-
-                <div className={styles.inputContainerMembers}>
-                    <span className={styles.membersText}> Invite Members</span>
-
-                    <div className={styles.inviteInput}>
-                        <input
-                            className={styles.inputMembers}
-                            autoComplete="off"
-                            value={member}
-                            onChange={inputMembers}
-                            label="Invite members"
-                            id="members"
-                            placeholder='username'
-                            onBlur={onBlur}
-
-                        />
-
-                        <div className={styles.selectForInvite}>
-                            {
-                               showMembers && 
-                                <div className={styles.membersPopUp}>
+                    <div className={styles.selectForInvite}>
+                        {
+                            showMembers &&
+                            <div className={styles.membersPopUp}>
                                 <div className={styles.members}>
                                     {
                                         allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
@@ -181,33 +181,35 @@ export default function CreateTeam(props) {
                                             })
                                     }
                                 </div>
-                                    </div>
-                            }
-                        </div>
+                            </div>
+                        }
                     </div>
                 </div>
+            </div>
 
 
-                <div className={styles.membersAvatars}>
-                    {
-                        members.map(m => {
-                            return (
-                                <ButtonClean
-                                    onClick={() => removeMember(m)}
-                                    title={<Avatar key={m._id} name={m.username} size={40} round={true} maxInitials={2} />}
-                                />
+            <div className={styles.membersAvatars}>
+                {
+                    members.map(m => {
+                        return (
+                            <ButtonClean
+                                onClick={() => removeMember(m)}
+                                title={
+                                <AvatarUser user={m} size={40}/>
+                                }
+                            />
 
-                            )
-                        })
-                    }
-                </div>
+                        )
+                    })
+                }
+            </div>
 
-                <div className={styles.buttonDiv}>
-                    <button type='submit' className={styles.createButton}>Create</button>
-                </div>
+            <div className={styles.buttonDiv}>
+                <button type='submit' className={styles.createButton}>Create</button>
+            </div>
 
 
-            </form>
+        </form>
         // </div>
     )
 }

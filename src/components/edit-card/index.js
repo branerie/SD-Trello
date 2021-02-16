@@ -9,7 +9,7 @@ import pic1 from '../../images/edit-card/pic1.svg'
 // import pic3 from '../../images/edit-card/pic3.svg'
 // import pic4 from '../../images/edit-card/pic4.svg'
 // import pic5 from '../../images/edit-card/pic5.svg'
-import pic6 from '../../images/edit-card/pic6.svg'
+// import pic6 from '../../images/edit-card/pic6.svg'
 // import pic7 from '../../images/edit-card/pic7.svg'
 // import pic8 from '../../images/edit-card/pic8.svg'
 // import pic9 from '../../images/edit-card/pic9.svg'
@@ -22,14 +22,15 @@ import TaskMembers from '../edit-card-options/taskMembers'
 import TaskDueDate from "../edit-card-options/taskDueDate"
 import TaskHistory from '../edit-card-options/taskHistory'
 import TaskProgress from '../edit-card-options/taskProgress'
+import TaskAttach from '../edit-card-options/taskAttach'
 
 
 export default function EditCard({ listId, initialCard, project, teamId, hideForm }) {
     const nameRef = useRef(null)
     const descriptionRef = useRef(null)
     const [card, setCard] = useState(null)
-    const [name, setName] = useState(null)
-    const [description, setDescription] = useState(null)
+    const [name, setName] = useState('')
+    const [description, setDescription] = useState('')
     const [taskHistory, setTaskHistory] = useState(null)
     const history = useHistory()
     const socket = useSocket()
@@ -44,7 +45,6 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
         setDescription(initialCard.description)
         setTaskHistory(initialCard.history)
     }, [initialCard])
-    
 
 
     const deleteCard = async () => {
@@ -108,6 +108,8 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     }
 
     return (
+        <div className={styles.menu}>
+
         <div className={styles.container}>
 
             <div className={styles['task-name']}>
@@ -131,7 +133,6 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                     }}
                 />
             </div>
-
             <div className={styles['task-body']} >
 
                 <div className={styles['left-side']}>
@@ -159,14 +160,14 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
 
                     <div className={styles['task-component']}>
                         <div className={styles.text}>Manage</div>
-                        <TaskMembers
+                        <TaskDueDate
+                            dueDate={dueDate}
                             card={initialCard}
                             listId={listId}
                             project={project}
                             teamId={teamId}
                         />
-                        <TaskDueDate
-                            dueDate={dueDate}
+                        <TaskMembers
                             card={initialCard}
                             listId={listId}
                             project={project}
@@ -180,10 +181,11 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                             taskHistory={taskHistory}
                             setTaskHistory={setTaskHistory}
                         />
-                        <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic6} alt="pic6" />
-                            Attach File
-                        </div>
+                        <TaskAttach
+                            card={initialCard}
+                            project={project}
+                            teamId={teamId}
+                        />
                         <button className={styles['small-buttons']} onClick={deleteCard} title="Delete Task" >
                             <img className={styles.pics} src={pic12} alt="pic12" />
                             Delete Task
@@ -234,6 +236,7 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                     </div>
                 </div>
             </div>
+        </div>
         </div>
     )
 }
