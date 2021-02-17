@@ -19,8 +19,14 @@ export default function TaskAttach({ card, project, teamId }) {
     function addAttachment() {
         const widget = window.cloudinary.createUploadWidget({
             cloudName: process.env.REACT_APP_CLOUD_NAME,
-            uploadPreset: process.env.REACT_APP_UPLOAD_PRESET
+            uploadPreset: process.env.REACT_APP_UPLOAD_PRESET,
+            resourceType: 'raw'
+
         }, async (error, result) => {
+            if (result.event === "upload-added") {
+                console.log(widget);
+                console.log(result);
+            }
             if (result.event === 'success') {
                 const path = result.info.path
                 const name = result.info.original_filename
@@ -71,11 +77,11 @@ export default function TaskAttach({ card, project, teamId }) {
             </div>
             { attachments && <div className={styles['att-container']}>
                 {attachments.length <= 4 ? attachments.map(att => (
-                    <Attachment key={att._id} att={att} attachments={attachments} card={card} />
+                    <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} />
                 )) :
                 <>
                 {attachments.slice(0, 3).map(att => (
-                    <Attachment key={att._id} att={att} attachments={attachments} card={card} />
+                    <Attachment key={att._id} att={att} attachments={attachments} card={card} teamId={teamId} />
                 ))}
                 <div className={`${styles.remaining} ${styles.attachment}`}>
                     +{attachments.length - 3}

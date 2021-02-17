@@ -6,8 +6,8 @@
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     z-index: 20;
-    background-color: blanchedalmond;
-    width: 680px;
+    background-color: rgb(236, 156, 34);
+    width: 95%;
     height: fit-content;
     max-height: 70%;
     padding: 4%;
@@ -41,10 +41,13 @@
 
 .name {
     width: 90%;
+    white-space: normal;
+    overflow-wrap: break-word;
 }
 
 .button {
-    width: 20px;
+    box-sizing: border-box;
+    width: 24px;
     margin-left: 0.1rem;
     padding: 2px;
     border-radius: 5px;
