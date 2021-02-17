@@ -129,10 +129,10 @@ async function deleteAttachment(req, res, next) {
     try {
         const card = await models.Card.findOne({ _id: cardId })
         const attachment = card.attachments.filter(att => att.id === attachmentId)[0]
-        const updatedCard = await models.Card.updateOne({ _id: cardId }, { $pull: { attachments: { publicId: attachment.publicId } } })
+        const updatedCard = await models.Card.findOneAndUpdate({ _id: cardId }, { $pull: { attachments: { publicId: attachment.publicId } } }, { new: true })
 
-        cloudinary.api.delete_resources([attachment.publicId], (error, result) => { console.log(result, error) })
-        
+        cloudinary.api.delete_resources([attachment.publicId], (error, result) => { if (error) console.log(error) })
+
         res.send(updatedCard)
 
     } catch (error) {
