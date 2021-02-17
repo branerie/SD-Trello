@@ -83,7 +83,7 @@ export default function TaskDueDate(props) {
                     label="Go to date"
                     onBlur={() => setIsActive(!isActive)}
                     popperPlacement='bottom-end'
-                    closeOnScroll={e => e.target === window}
+                    closeOnScroll={e => e.target === document.getElementsByClassName('rt-tbody')[0]}
                 />
 
                 {isVisible ?

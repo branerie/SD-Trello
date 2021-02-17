@@ -59,7 +59,7 @@ export default function AddList(props) {
         <div className={styles.list} >
             { isActive 
                 ?   
-                <form ref={listRef} className={styles.container} >
+                <form ref={listRef} className={styles.container}>
                     <input 
                         className={styles.inputList} 
                         type={'text'} 
