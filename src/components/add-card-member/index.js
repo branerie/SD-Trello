@@ -120,7 +120,7 @@ export default function AddMember(props) {
                     onConfirm={() => confirmationObjectFunctions[confirmTitle](currElement)}
                 />
             }
-            <div className={styles.currentMembers}>
+            <div className={styles['current-members']}>
                 <Title title={"Card members"} />
                 {
                     members.map((element, index) => {

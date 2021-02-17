@@ -42,6 +42,7 @@
     top: 8px;
     left: 230px;
     width: 100px;
+    z-index: 5;
 }
 
 .menu > button {

@@ -43,7 +43,7 @@ export default function Aside({ asideOn, setAsideOn }) {
     return (
         <div className={styles.aside}>
             <aside className={styles.container}>
-                <div className={styles.topleft}>
+                <div className={styles['top-left']}>
                     <ButtonClean
                         onClick={() => setAsideOn(!asideOn)}
                         title={<img className={styles.options} src={menu} alt="menu" width="32" height="24" />}
@@ -77,7 +77,7 @@ export default function Aside({ asideOn, setAsideOn }) {
             {
                 asideOn &&
                     <div className={styles.menu}>
-                        <div className={styles.topright}>
+                        <div className={styles['top-right']}>
                             <div className={styles.logo}>
                                 <img src={logo} alt="logo" width="87" height="65" />
                             </div>
@@ -102,7 +102,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                                 className={styles.link}
                             /> */}
                         </div>
-                        {listVisibility && <div className={styles.bottomright}>
+                        {listVisibility && <div className={styles['bottom-right']}>
                             {
                                 projectContext.lists.map((element) => {
                                     return (

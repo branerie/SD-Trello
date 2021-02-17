@@ -218,7 +218,7 @@ export default function AddMember(props) {
                 />
             }
 
-            <div className={styles.bigContainer} >
+            <div className={styles['big-container']} >
                 {isAdmin ?
                     <span>
                         {isActive ?
@@ -230,7 +230,7 @@ export default function AddMember(props) {
                                                 Add Member to Project
                                 
                                             <div>
-                                                <select className={styles.memberSelect}
+                                                <select className={styles['member-select']}
                                                     onChange={(e) => { handleSelect(e.target.value) }}>
                                                     <option >Select user</option>
                                                     {
@@ -240,7 +240,7 @@ export default function AddMember(props) {
 
                                                     }
                                                 </select>
-                                            <span className={styles.addButton} onClick={handleAdd} >Add</span>
+                                            <span className={styles['add-button']} onClick={handleAdd} >Add</span>
                                             </div>
                                         </div>
                                         :
@@ -252,7 +252,7 @@ export default function AddMember(props) {
                             <DragDropContext onDragEnd={handleOnDragEnd}>
 
 
-                            <div className={styles.adminsContainer}>
+                            <div className={styles['admins-container']}>
                                 <span className={styles.title}>Admins:</span>
                                 <Droppable droppableId={"admins"}>
                                     {(provided) => (
@@ -280,11 +280,11 @@ export default function AddMember(props) {
 
 
 
-                            <div className={styles.membersContainer}>
+                            <div className={styles['members-container']}>
                                 <span className={styles.title}>Members:</span>
                                 <Droppable droppableId={"members"}>
                                     {(provided) => (
-                                        <div className={styles.droppableMembers} ref={provided.innerRef} {...provided.droppableProps}>
+                                        <div className={styles['droppable-members']} ref={provided.innerRef} {...provided.droppableProps}>
                                             {
                                                 members.filter(a => a.admin !== true).map((element, index) => {
                                                     return (
@@ -310,7 +310,7 @@ export default function AddMember(props) {
                                         </div>
                                     )}
                                 </Droppable>
-                                <span className={styles.addButton} onClick={() => { setIsActive(!isActive); getTeamUsers() }} >Add</span>
+                                <span className={styles['add-button']} onClick={() => { setIsActive(!isActive); getTeamUsers() }} >Add</span>
                             </div>
 
 
@@ -320,7 +320,7 @@ export default function AddMember(props) {
                     </span >
                     :
                     <div>
-                        <div className={styles.adminsContainer}>
+                        <div className={styles['admins-container']}>
                             <span className={styles.title}>Admins:</span>
                             <div className={styles.droppable}>
                                 {
@@ -335,7 +335,7 @@ export default function AddMember(props) {
                             </div>
                         </div>
 
-                        <div className={styles.adminsContainer}>
+                        <div className={styles['admins-container']}>
                             <span className={styles.title}>Members:</span>
                             <div className={styles.droppable}>
 

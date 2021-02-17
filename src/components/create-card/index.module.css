@@ -14,8 +14,6 @@
 
 .form{
     display: grid;
-    /* grid-template-columns: 25% 25% 25% 25%;
-    grid-template-rows: auto;    */
 }
 
 .clean {
@@ -27,7 +25,7 @@
     outline: none;
 }
 
-.editButton{
+.edit-button{
     cursor: pointer;
     width: 100%;
     height: 100%;
@@ -48,13 +46,13 @@
     text-align: center;
 }
 
-.leftSide{
+.left-side{
     width: 50%;
     height: 100%;
     margin: 5%;
 } 
 
- .rightSide{
+ .right-side{
     position: absolute;
     width: 35%;
     right: 0;    
@@ -62,7 +60,7 @@
     margin: 5%;
 }
 
-.inputTitles{  
+.input-titles{  
     display: flex;
     text-align: center;
 }
@@ -71,11 +69,11 @@
    margin-right: 5%; 
 }
 
- .firstRow{ 
+ .first-row{ 
     height: 10%;
 }
 
-.nameInput{
+.name-input{
     min-width: 80%;
     width: auto;
     margin-right: 10%;
@@ -89,7 +87,7 @@
     font-weight: normal;
 }
 
-.progressInput{
+.progress-input{
     width: auto;
     margin-right: 10%;
     border: 1px solid #000000; 
@@ -102,9 +100,8 @@
     font-weight: normal;
 }
 
-.createNameInput{
-    min-width: 80%;
-    
+.create-name-input{
+    min-width: 80%;    
     width: auto;
     margin-right: 10%;
     border: 1px solid #000000; 
@@ -117,34 +114,32 @@
     font-weight: normal;
 }
 
-.createNameInput::placeholder { 
+.create-name-input::placeholder { 
     color: red;
     opacity: 1; 
 }
 
-.nameContainer{
-    
+.name-container{    
     width: 100%;
     display: flex;
     align-items: center;     
     text-align: center; 
 }
 
-.textName{
-    font-family: 'Lato', sans-serif;
-    
+.text-name{
+    font-family: 'Lato', sans-serif;    
     font-size: 1.2em;
     text-align: center;
     margin-right: 10%;
     cursor: pointer;
 }
 
-.secondRow{
+.second-row{
     margin-top: 15%;
     height: 10%;
 }
 
-.secondRowProgress{
+.second-row-progress{
     margin-top: 15%;
     height: 10%;
     cursor: pointer;
@@ -170,7 +165,7 @@
 }
 
 
-.progressInputContainer{
+.progress-input-container{
     margin-top: 3%;
     width: 80%;
     display: flex;
@@ -178,7 +173,7 @@
     text-align: center; 
 }
 
-.progressDiv{
+.progress-div{
     height: 30%;
     display: flex;
     align-items: center;
@@ -188,8 +183,7 @@
 
 
 
-.membersDiv{
-    /* margin-left: 30%; */
+.members-div{
     margin-right: 5%;
     margin-right: 10%;
     min-height: 10%;
@@ -205,42 +199,38 @@
     flex-wrap: nowrap;
     height: 65px;
     width: 100%;
-    /* overflow-x: scroll; */
 }
 
-.dueDate{
+.due-date{
     margin-top: 2%;
     margin-left: 30%;
     align-self: center;
 }
 
-.thirdRow{
+.third-row{
     margin-top: 15%;
     height: 25%;
 }
 
-.descriptinTitle{
+.description-title{
     width: 20%;
     margin-bottom: 2%;
 }
 
-.descriptionInput{  
+.description-input{  
     width: 15em;
     height: 8em;
     border: 1px solid #000000; 
     background-color: #E6E6E6;
     border: solid 1px #363338;
-    border-radius: 10px;       
-    /* display: flex;    */
-    /* justify-content: space-between;  */
+    border-radius: 10px;
     padding: 4px;
     font-weight: normal;
     resize: none;
 }
 
-.descriptionButtons{
+.description-buttons{
     height: 10%;
-    /* width: 30%; */
     margin-left: 38%;
     margin-right: 35%;
     display: flex;
@@ -249,19 +239,13 @@
 }
 
 
-.lasRow{
+.last-row{
     margin-top: 15%;
     display: flex;
     height: auto;
 }
 
-.lasRowRight{
-    margin-top: 15%;
-    height: 25%;
-}
-
-
-.smallButtons{
+.small-buttons{
     display: flex;
     margin: 2%;
     margin-left: 20%;
@@ -279,68 +263,13 @@
 }
 
 .pics{   
-    /* margin-top:4%; */
     margin-left: 5%;
     margin-right: 5%; 
- }
-
- .smallButtonsNoPic{
-    display: flex;
-    margin: 2%;
-    margin-left: 20%;
-    cursor: pointer;
-    width: 60%;
-    height: 17%;
-    font-size: 80%;
-    align-items: center;
-    justify-content: center;
-    /* text-align: center; */
-    font-family: inherit;
-    border: none;
-    border-radius: 8px;
-    background-color: #E6E6E6;
-    font-weight: inherit;
-    outline: none;
 }
 
-.smallButtonsContainer{
+.small-buttons-container{
     margin-top: 5%;
     height: 30%;
     margin-bottom: 10%;
 }
 
-/* .editMembers {
-    padding: 3%;
-}
-.membersList {
-    display: flex;
-    justify-content: space-between;
-} */
-/* .editMembersButton {
-    background: #70133a;
-    color: #fff;
-    padding: 10px;
-    width: 110px;
-    border-radius: 5px;
-    display: block;
-    margin: 0 auto;
-    margin: 10px;
-    cursor: pointer;
-    border: 2px solid #234465;
-}
-
-.editMembersButton:hover{
-    background-color: #fff;
-    border: 2px solid #234465;
-    color: #234465;
-    font-style: italic;
-  }
-  .membersNames{
-      border: rgb(0, 102, 255) solid 1px;
-      padding: 1%;
-      border-radius: 1%;
-      margin: 2%;
-  }
-  .editCardButtons{
-      margin: 2%;
-  } */
