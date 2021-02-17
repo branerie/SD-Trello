@@ -193,36 +193,36 @@ export default function CreateCard(props) {
             <form className={styles.form} >
 
 
-                <div className={styles.leftSide}>
+                <div className={styles['left-side']}>
 
-                    <div className={styles.firstRow}>
-                        <div className={styles.inputTitles}>
+                    <div className={styles['first-row']}>
+                        <div className={styles['input-titles']}>
                             <span className={styles.pic1}>
                                 <img src={pic1} alt="pic1" />
                             </span>
                             <span>
                                 {
                                     (card === '') ?
-                                        <span className={styles.nameContainer}>
-                                            <input className={styles.createNameInput} placeholder={"Add Task Name"}
+                                        <span className={styles['name-container']}>
+                                            <input className={styles['create-name-input']} placeholder={"Add Task Name"}
                                                 onChange={e => setName(e.target.value)}
 
                                             />
-                                            <button onClick={createTask} className={styles.editButton} >Create</button>
+                                            <button onClick={createTask} className={styles['edit-button']} >Create</button>
                                         </span>
                                         :
                                         <span>
                                             {
                                                 isActive ?
                                                     <div ref={dropdownRef}>
-                                                        <span className={styles.nameContainer}>
-                                                            <input className={styles.nameInput} value={name} onChange={e => setName(e.target.value)} />
-                                                            <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
+                                                        <span className={styles['name-container']}>
+                                                            <input className={styles['name-input']} value={name} onChange={e => setName(e.target.value)} />
+                                                            <button onClick={handleSubmit} className={styles['edit-button']} >Edit</button>
                                                         </span>
                                                     </div>
                                                     :
-                                                    <span className={styles.nameContainer}>
-                                                        <p className={styles.textName} onClick={() => setIsActive(!isActive)}>{card.name}</p>
+                                                    <span className={styles['name-container']}>
+                                                        <p className={styles['text-name']} onClick={() => setIsActive(!isActive)}>{card.name}</p>
                                                     </span>
                                             }
                                         </span>
@@ -231,12 +231,12 @@ export default function CreateCard(props) {
                         </div >
                     </div>
 
-                    <div className={styles.secondRowProgress} onClick={() => setIsProgressActive(true)}>
+                    <div className={styles['second-row-progress']} onClick={() => setIsProgressActive(true)}>
                         <div className={styles.inputTitles}>
                             <span className={styles.pic2}>
                                 <img src={pic2} alt="pic2" />
                             </span>
-                            <span className={styles.nameContainer}>
+                            <span className={styles['name-container']}>
                                 <p  >Progress</p>
                             </span>
                         </div>
@@ -249,12 +249,12 @@ export default function CreateCard(props) {
                                         {
                                             isProgressActive ?
                                                 <div ref={dropdownRef}>
-                                                    <span className={styles.progressInputContainer}>
-                                                        <input type='number' className={styles.progressInput} value={progress} onChange={e => { setProgress(e.target.value); setProgressChanged(true) }} />
-                                                        <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
+                                                    <span className={styles['progress-input-container']}>
+                                                        <input type='number' className={styles['progress-input']} value={progress} onChange={e => { setProgress(e.target.value); setProgressChanged(true) }} />
+                                                        <button onClick={handleSubmit} className={styles['edit-button']} >Edit</button>
                                                     </span></div>
                                                 :
-                                                <div className={styles.progressDiv} >
+                                                <div className={styles['progress-div']} >
                                                     {
                                                         card.progress ?
                                                             <div className={styles.bar} >
@@ -267,7 +267,7 @@ export default function CreateCard(props) {
                                                                 />
                                                             </div> : null
                                                     }
-                                                    <span className={styles.textName} >{card.progress} %</span>
+                                                    <span className={styles['text-name']} >{card.progress} %</span>
                                                 </div>
 
                                         }
@@ -278,12 +278,12 @@ export default function CreateCard(props) {
                     </div>
 
 
-                    <div className={styles.thirdRow}>
+                    <div className={styles['third-row']}>
 
-                        <div className={styles.descriptinTitle}>
+                        <div className={styles['description-title']}>
                             <p className={styles.text}>Description</p>
                         </div>
-                        <textarea className={styles.descriptionInput}
+                        <textarea className={styles['description-input']}
                             ref={dropdownRef}
                             value={description}
                             onChange={(e) => { setDescription(e.target.value); setIsDescriptionActive(true) }}
@@ -297,12 +297,12 @@ export default function CreateCard(props) {
                                         {
                                             isDescriptionActive ?
 
-                                                <div className={styles.descriptionButtons}>
+                                                <div className={styles['description-buttons']}>
                                                     <span>
-                                                        <button onClick={handleSubmit} className={styles.editButton} >Edit</button>
+                                                        <button onClick={handleSubmit} className={styles['edit-button']} >Edit</button>
                                                     </span>
                                                     <span>
-                                                        <button onClick={(e) => { setDescription(card.description); setIsDescriptionActive(false) }} className={styles.editButton} >Cancel</button>
+                                                        <button onClick={(e) => { setDescription(card.description); setIsDescriptionActive(false) }} className={styles['edit-button']} >Cancel</button>
                                                     </span>
 
                                                 </div>
@@ -318,22 +318,22 @@ export default function CreateCard(props) {
 
                     <div className={styles.thirdRow}>
 
-                        <div className={styles.descriptinTitle}>
+                        <div className={styles['description-title']}>
                             <p className={styles.text}>History</p>
                         </div>
                         <TaskHistory taskHistory={taskHistory} />
                     </div>
 
-                    <div className={styles.lasRow}>
+                    <div className={styles['last-row']}>
 
                     </div>
 
                 </div>
 
-                <div className={styles.rightSide}>
+                <div className={styles['right-side']}>
 
 
-                    <div className={styles.membersDiv}>
+                    <div className={styles['members-div']}>
                         <div >
                             <p className={styles.text}>Members</p>
                         </div>
@@ -354,9 +354,9 @@ export default function CreateCard(props) {
                     </div>
 
 
-                    <div className={styles.secondRow}>
+                    <div className={styles['second-row']}>
                         <div >
-                            <div className={styles.dueDate} >
+                            <div className={styles['due-date']} >
                                 {(card === '') ?
                                     null
                                     :
@@ -375,52 +375,52 @@ export default function CreateCard(props) {
                     </div>
 
 
-                    <div className={styles.smallButtonsContainer}>
+                    <div className={styles['small-buttons-container']}>
                         <div>
                             <p className={styles.text}>Add</p>
                         </div>
-                        <div className={styles.smallButtons} >
+                        <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic3} alt="pic3" />
                             Join</div>
-                        <div className={styles.smallButtons} >
+                        <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic4} alt="pic4" />
                             Stickers</div>
-                        <div className={styles.smallButtons} >
+                        <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic5} alt="pic5" />
                             Due Date</div>
-                        <div className={styles.smallButtons} >
+                        <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic6} alt="pic6" />
                             Attach file</div>
-                        <div className={styles.smallButtons} >
+                        <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic7} alt="pic7" />
                             Reports</div>
-                        <div className={styles.smallButtons} >
+                        <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic10} alt="pic10" />
                             Add Teammate</div>
                     </div>
 
 
-                    <div className={styles.smallButtonsContainer}>
+                    <div className={styles['small-buttons-container']}>
                         <div>
                             <p className={styles.text}>Manage</p>
                         </div>
-                        <div className={styles.smallButtons} >
+                        <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic11} alt="pic11" />
                             Make Template</div>
-                        <div className={styles.smallButtons} >
+                        <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic13} alt="pic13" />
                             Remove List</div>
-                        <button className={styles.smallButtons}
+                        <button className={styles['small-buttons']}
                             onClick={(e) => { deleteCard(e) }} title="Delete Task" >
                             <img className={styles.pics} src={pic12} alt="pic12" />
                          Delete Task</button>
-                        <div className={styles.smallButtons} >
+                        <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic8} alt="pic8" />
                             Settings</div>
-                        <div className={styles.smallButtons} >
+                        <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic9} alt="pic9" />
                             View</div>
-                        <div className={styles.smallButtons} >
+                        <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic14} alt="pic14" />
                             Archive</div>
                     </div>

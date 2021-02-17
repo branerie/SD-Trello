@@ -1,6 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useHistory, useParams } from "react-router-dom"
-import Button from '../button'
 import Title from '../title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
@@ -11,9 +10,17 @@ import { SketchPicker } from 'react-color'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import UserContext from '../../contexts/UserContext'
 import isUserAdmin from '../../utils/isUserAdmin'
+import ButtonGrey from '../button-grey'
 
 
 export default function EditList(props) {
+    const nameRef = useRef(null)
+    const [nameHeight, setNameHeight] = useState(null)
+    const [currInput, setCurrInput] = useState(null)
+
+
+
+
     const [name, setName] = useState(props.list.name)
     const history = useHistory()
     const socket = useSocket()
@@ -29,11 +36,11 @@ export default function EditList(props) {
     const teamId = params.teamid
 
     useEffect(() => {
-        setIsAdmin(isUserAdmin(userContext.user.id ,members))
+        setIsAdmin(isUserAdmin(userContext.user.id, members))
     }, [members, userContext.user.id])
 
-    async function handleSubmit(event) {
-        event.preventDefault()
+    async function handleSubmit(e) {
+        e.preventDefault()
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/projects/lists/${projectId}/${listId}`, {
             method: "PUT",
@@ -56,24 +63,56 @@ export default function EditList(props) {
         setColor(color.hex)
     }
 
+
+    useEffect(() => {
+        setTimeout(() => {
+            setNameHeight(nameRef.current.scrollHeight + 2)
+        }, 1);
+    }, [])
+
+    function onEscPressed(event, setElement, ref) {
+        if (event.keyCode === 27) {
+            setElement(currInput)
+            setTimeout(() => {
+                ref.current.blur()
+            }, 1);
+        }
+    }
+
     return (
         <div className={styles.form}>
             <form className={styles.container} >
-                <Title title="Edit List" />
+                <Title className={styles.title} title="Edit List" />
 
                 <div className={styles.inputContainer}>
-                    <span> Name</span>
-                <input
-                    className={styles.inputListName}
-                    value={name}
-                    onChange={e => setName(e.target.value)}
-                    label="Name"
-                    id="name"
-                />
+                    <span className={styles.name}> Name</span>
+                    {/* <input
+                        className={styles.inputListName}
+                        value={name}
+                        onChange={e => setName(e.target.value)}
+                        label="Name"
+                        id="name"
+                    /> */}
+                    <textarea
+                        ref={nameRef}
+                        className={`${styles['name-input']} ${styles.text}`}
+                        style={{ 'height': nameHeight }}
+                        value={name}
+                        onFocus={() => setCurrInput(name)}
+                        onKeyDown={e => onEscPressed(e, setName, nameRef)}
+                        onChange={e => {
+                            setName(e.target.value)
+                            setNameHeight(nameRef.current.scrollHeight + 2)
+                        }}
+                        onBlur={(e) => {
+                            if (currInput === name) return
+                            handleSubmit(e)
+                        }}
+                    />
                 </div>
                 <div className={styles.changeColor}>
                     <span>
-                        Change Color:
+                        Color
                     </span>
                     <span className={styles.listColor}>
                         <ButtonClean
@@ -83,11 +122,14 @@ export default function EditList(props) {
                         />
                     </span>
                 </div>
-                { isColorActive && <div ref={dropdownRef } >
+                {isColorActive && <div ref={dropdownRef} >
                     <SketchPicker className={styles['color-pick']} color={color} onChangeComplete={onColorChange} />
                 </div>}
                 <div className={styles.editListButton}>
-                { isAdmin && <Button onClick={handleSubmit} title="Edit List" /> }
+                    {isAdmin &&
+                        <ButtonGrey onClick={(e)=>handleSubmit(e)} title="Edit List" />
+
+                    }
 
                 </div>
             </form>

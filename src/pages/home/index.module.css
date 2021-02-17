@@ -5,6 +5,12 @@
 
 }
 
+@media (max-width: 1150px) {
+  .container {
+    display: block;
+  }
+}
+
 
 
 .pic-container{
@@ -33,6 +39,7 @@
   width: auto;
   margin-left: 2%;
   margin-top: 2%;
+  text-align: center;
 }
 
 .right-buttons{
@@ -63,7 +70,8 @@
 }
 
 .select-team-container{
-  margin-left: 0;
+  margin: 0 auto;
+  width: 200px;
   color: white;
 }
 

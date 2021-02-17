@@ -7,6 +7,8 @@ import ButtonClean from '../button-clean'
 import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
 import AvatarUser from '../avatar-user'
+import ButtonGrey from '../button-grey'
+
 
 export default function CreateTeam(props) {
     const [name, setName] = useState("")
@@ -106,7 +108,7 @@ export default function CreateTeam(props) {
     return (
         // <div className={styles.form}>
 
-        <form className={styles.container} onSubmit={handleSubmit}>
+        <div className={styles.container}>
 
 
             <div className={styles.title} >Create New Team</div>
@@ -205,11 +207,13 @@ export default function CreateTeam(props) {
             </div>
 
             <div className={styles.buttonDiv}>
-                <button type='submit' className={styles.createButton}>Create</button>
+                {/* <button type='submit' className={styles.createButton}>Create</button> */}
+                <ButtonGrey onClick={(e)=>handleSubmit(e)} title="Create" className={styles.createButton}/>
+                
             </div>
 
 
-        </form>
+        </div>
         // </div>
     )
 }

@@ -155,8 +155,7 @@ const ProfilePage = () => {
     getData()
   }
 
-  console.log(userContext.user.image);
-  // console.log(cloudinary);
+  
 
   return (
     <PageLayout>

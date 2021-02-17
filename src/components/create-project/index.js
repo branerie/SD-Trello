@@ -7,6 +7,7 @@ import ButtonClean from '../button-clean'
 import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
 import AvatarUser from '../avatar-user'
+import ButtonGrey from '../button-grey'
 
 export default function CreateProject({ hideForm }) {
     const [name, setName] = useState("")
@@ -94,16 +95,16 @@ export default function CreateProject({ hideForm }) {
 
     return (
         // <div className={styles.form}>
-        <form className={styles.container} onSubmit={handleSubmit}>
+        <div className={styles.container} >
 
 
 
             <div className={styles.title} >Create New Project</div>
 
-            <div className={styles.inputContainer}>
+            <div className={styles['input-container']}>
                 <span> Name</span>
                 <input
-                    className={styles.inputName}
+                    className={styles['input-name']}
                     value={name}
                     onChange={e => setName(e.target.value)}
                     label="Name"
@@ -112,10 +113,10 @@ export default function CreateProject({ hideForm }) {
                 />
             </div>
 
-            <div className={styles.inputContainerDescr}>
+            <div className={styles['input-container-descr']}>
                 <span> Description</span>
                 <textarea
-                    className={styles.textareaDescr}
+                    className={styles['text-area-descr']}
                     value={description}
                     onChange={e => setDescription(e.target.value)}
                     label="Description"
@@ -125,12 +126,12 @@ export default function CreateProject({ hideForm }) {
                 />
             </div>
 
-            <div className={styles.inputContainer}>
-                <span className={styles.textInvite}> Invite Members</span>
+            <div className={styles['input-container']}>
+                <span className={styles['text-invite']}> Invite Members</span>
 
-                <div className={styles.inviteInput}>
+                <div className={styles['invite-input']}>
                     <input
-                        className={styles.membersInput}
+                        className={styles['members-input']}
                         autoComplete="off"
                         value={member}
                         onFocus={onFocus}
@@ -141,7 +142,7 @@ export default function CreateProject({ hideForm }) {
                         placeholder='Teammate Username'
                     />
 
-                    <div className={styles.selectForInvite}>
+                    <div className={styles['select-for-invite']}>
                         {
                             showMembers &&
                             <div className={styles.members}>
@@ -175,7 +176,7 @@ export default function CreateProject({ hideForm }) {
                 </div>
             </div>
 
-            <div className={styles.membersAvatars}>
+            <div className={styles['members-avatars']}>
                 {
                     members.map((m,index) => {
                         return (
@@ -185,11 +186,12 @@ export default function CreateProject({ hideForm }) {
                 }
             </div>
 
-            <div className={styles.buttonDiv}>
-                <button type='submit' className={styles.createButton}>Create</button>
+            <div className={styles['button-div']}>
+            <ButtonGrey onClick={(e)=>handleSubmit(e)} title="Create" className={styles['create-button']}/>
+                {/* <button type='submit' className={styles['create-button']}>Create</button> */}
             </div>
 
-        </form>
+        </div>
         // </div>
     )
 }

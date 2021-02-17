@@ -63,12 +63,12 @@ const Home = () => {
           </div>
 
           <div>
-            <div className={styles['my-teams-container']}>
+            {/* <div className={styles['my-teams-container']}> */}
               <ButtonGrey className={styles['navigate-buttons']} title={'My Teams'} onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
 
 
-            </div>
-            <div>
+            {/* </div> */}
+            <span>
               <div className={styles['select-team-container']}>
                 {
                   showTeamsVisibleForm ?
@@ -94,7 +94,7 @@ const Home = () => {
                     : null
                 }
               </div>
-            </div>
+            </span>
           </div>
 
           <div>

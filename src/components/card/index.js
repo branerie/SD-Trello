@@ -24,8 +24,8 @@ export default function Card({ card, showEditCard }) {
     return (
 
         <div className={styles.card}>
-            <div className={styles.leftSide}>
-                <div className={styles.cardName}>{card.name}</div>
+            <div className={styles['left-side']}>
+                <div className={styles['card-name']}>{card.name}</div>
                 {
                     card.progress ?
                         <div className={styles.bar} >
