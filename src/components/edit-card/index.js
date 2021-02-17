@@ -201,16 +201,8 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                             Stickers
                         </div> */}
                         {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic5} alt="pic5" />
-                            Due Date
-                        </div> */}
-                        {/* <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic7} alt="pic7" />
                             Reports
-                        </div> */}
-                        {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic10} alt="pic10" />
-                            Add Teammate
                         </div> */}
                         {/* <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic11} alt="pic11" />
@@ -232,7 +224,6 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                             <img className={styles.pics} src={pic14} alt="pic14" />
                             Archive
                         </div> */}
-
                     </div>
                 </div>
             </div>
