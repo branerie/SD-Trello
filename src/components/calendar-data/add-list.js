@@ -8,8 +8,7 @@ import ButtonClean from '../button-clean'
 
 
 
-export default function AddList(props) {
-
+export default function AddList({ project }) {
     const history = useHistory()     
     const [listName, setListName] = useState('')
     const listRef = useRef(null);
@@ -19,13 +18,13 @@ export default function AddList(props) {
 
 
     const updateProjectSocket = useCallback(() => {
-        socket.emit('project-update', props.project)
-    }, [socket, props.project])
+        socket.emit('project-update', project)
+    }, [socket, project])
 
 
     const addList = useCallback(async (event) => {
         event.preventDefault()
-        const projectId = props.project._id
+        const projectId = project._id
 
         if (listName === "") {
             console.log('return');
@@ -49,7 +48,7 @@ export default function AddList(props) {
             updateProjectSocket()
         }
 
-    }, [history, listName, updateProjectSocket, setIsActive, isActive,props.project._id])
+    }, [history, listName, updateProjectSocket, setIsActive, isActive,project._id])
 
 
 

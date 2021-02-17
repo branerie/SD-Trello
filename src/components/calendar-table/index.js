@@ -20,7 +20,7 @@ import { formatDate, getDateWithOffset, getMonday } from '../../utils/date'
 import { createTableEntry, parseCardHistory, applyCardFilters, getCardsSortMethod } from './utils'
 import AddList from "../calendar-data/add-list";
 
-const TableDndApp = (props) => {
+const TableDndApp = ({ project }) => {
     const projectContext = useContext(ProjectContext)
     const userContext = useContext(UserContext)
     const params = useParams()
@@ -46,13 +46,9 @@ const TableDndApp = (props) => {
         projectContext.setLists(projectContext.project.lists)
     }, [projectContext, userContext.user.id])
 
-    useEffect(() => {
-        updateTableData()
-    }, [filter, props.project, projectContext.hiddenLists, sortCriteria])
-
-    function updateTableData() {
+    const updateTableData = useCallback(() => {
         const data = []
-        const lists = props.project.lists
+        const lists = project.lists
         projectContext.setLists(lists)
         const cardsSortMethod = getCardsSortMethod(sortCriteria.columnName, sortCriteria.isDescending)
 
@@ -76,7 +72,7 @@ const TableDndApp = (props) => {
                 ),
                 dueDate: (
                     <div>
-                        <AddTask listId={list._id} project={props.project} />
+                        <AddTask listId={list._id} project={project} />
                     </div>
                 )
             }))
@@ -104,14 +100,14 @@ const TableDndApp = (props) => {
                             <TaskName
                                 // value={card.name + '/' + card._id + '/' + list._id}
                                 card={card} listId={list._id}
-                                project={props.project} />
+                                project={project} />
                         ),
                     progress:
                         (
                             <TaskProgress
                                 value={card.progress + '/' + card._id + '/' + list._id}
                                 listId={list._id}
-                                project={props.project} card={card} />
+                                project={project} card={card} />
                         ),
                     assigned:
                         (
@@ -133,8 +129,7 @@ const TableDndApp = (props) => {
                             cardDueDate={cardDueDate}
                             cardId={card._id}
                             listId={list._id}
-                            props={props}
-                            project={props.project}
+                            project={project}
                             card={card}
                             teamId={params.teamid}
                         />
@@ -153,7 +148,11 @@ const TableDndApp = (props) => {
         and make each list a subtable. Then the sort should act per-subcomponent 
         */
         setTableData(sortCriteria.isDescending ? data.reverse() : data)
-    }
+    }, [filter, onListClick, params.teamid, projectContext, project, sortCriteria.columnName, sortCriteria.isDescending])
+
+    useEffect(() => {
+        updateTableData()
+    }, [filter, project, projectContext.hiddenLists, sortCriteria, updateTableData])
 
     const changeStartDate = (dayDiff) => {
         const newStartDate = getDateWithOffset(startDate, dayDiff)
@@ -168,7 +167,7 @@ const TableDndApp = (props) => {
                             <EditList 
                                 hideForm={() => setCurrList('')} 
                                 list={currList}
-                                 project={props.project} 
+                                 project={project} 
                             />
                         </Transparent >
                     </div >
@@ -180,7 +179,7 @@ const TableDndApp = (props) => {
                     setStartDate={setStartDate}
                     changeStartDate={changeStartDate}
                 />
-                <AddList props={props} project={props.project} />
+                <AddList project={project} />
             </div>
             <div>
                 {/* <DragDropContext onDragEnd={handleDragEnd} > */}
@@ -200,6 +199,7 @@ const TableDndApp = (props) => {
                     }
                     className={`${styles.reactTable} -highlight`}
                     getTbodyProps={() => ({ className: styles.reactTableBody })}
+                    getTrGroupProps={() => ({ className: styles.reactTableTrGroup })}
                     onSortedChange={(sortInfo) => {
                         const { id: columnName, desc: isDescending } = sortInfo[0]
                         setSortCriteria({ columnName, isDescending })
