@@ -6,7 +6,7 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Transparent from '../transparent'
 
 
-export default function Attachment({ att, attachments, card }) {
+export default function Attachment({ att, attachments, card, project, teamId }) {
     const ref = useRef(null)
     const nameRef = useRef(null)
     const listRef = useRef(null)
@@ -15,7 +15,7 @@ export default function Attachment({ att, attachments, card }) {
     const [isListVisible, setIsListVisible] = useDetectOutsideClick(listRef)
 
     // hover is equal to 'hidden' only if mouse is still over the attachment
-    function onMouseEnter() {
+    const onMouseEnter = () => {
         setTimeout(() => {
             if (ref.current) {
                 const hover = window.getComputedStyle(ref.current).getPropertyValue('border-top-style')
@@ -48,7 +48,7 @@ export default function Attachment({ att, attachments, card }) {
                 }
             </div>
             {isListVisible && <Transparent hideForm={() => setIsListVisible(false)} >
-                <AttachmentList ref={listRef} attachments={attachments} card={card} />
+                <AttachmentList listRef={listRef} attachments={attachments} card={card} project={project} teamId={teamId} />
             </Transparent >
 
             }
