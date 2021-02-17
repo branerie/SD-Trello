@@ -31,7 +31,7 @@
     padding: 15px;
 }
 
-.topleft {
+.top-left {
     border-bottom: 1px solid #707070;
     height: 40px;
     padding: 8px;
@@ -51,7 +51,7 @@
     border: 1px solid #363338;
 }
 
-.topright {
+.top-right {
     display: flex;
     flex-direction: column;
     font-size: 1.3rem;
@@ -79,7 +79,7 @@
     border: 1px solid #707070;
 }
 
-.bottomright {
+.bottom-right {
     display: flex;
     flex-direction: column;
     font-size: 1rem;
@@ -89,12 +89,12 @@
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.bottomright::-webkit-scrollbar {
+.bottom-right::-webkit-scrollbar {
     display: none;
 }
   
 /* Hide scrollbar for IE, Edge and Firefox */
-.bottomright {
+.bottom-right {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
 }

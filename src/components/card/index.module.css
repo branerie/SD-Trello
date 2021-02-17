@@ -12,25 +12,25 @@
     max-height: 200px; 
 }
 
-.leftSide{
+.left-side{
     width: 68%;
     height: fit-content;
     overflow-x: hidden;    
 }
 
-.cardName{
+.card-name{
     max-height: 180px;
     overflow-wrap:break-word;
     overflow-y: scroll;  
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.cardName::-webkit-scrollbar {
+.card-name::-webkit-scrollbar {
     display: none;
   }
   
   /* Hide scrollbar for IE, Edge and Firefox */
-  .cardName {
+  .card-name {
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
   }

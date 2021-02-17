@@ -23,6 +23,7 @@ import TaskDueDate from "../edit-card-options/taskDueDate"
 import TaskHistory from '../edit-card-options/taskHistory'
 import TaskProgress from '../edit-card-options/taskProgress'
 import TaskAttach from '../edit-card-options/taskAttach'
+import ConfirmDialog from '../confirmation-dialog'
 
 
 export default function EditCard({ listId, initialCard, project, teamId, hideForm }) {
@@ -38,7 +39,8 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     const [currInput, setCurrInput] = useState(null)
     const dueDate = useMemo(() => new Date(initialCard.dueDate), [initialCard.dueDate])
     const token = getCookie("x-auth-token")
-    
+    const [confirmOpen, setConfirmOpen] = useState(false)
+
     useEffect(() => {
         setCard(initialCard)
         setName(initialCard.name)
@@ -49,7 +51,7 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
 
     const deleteCard = async () => {
 
-        if (!window.confirm('Are you sure you wish to delete this item?')) return
+        // if (!window.confirm('Are you sure you wish to delete this item?')) return
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
             method: "DELETE",
@@ -110,124 +112,139 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     return (
         <div className={styles.menu}>
 
-        <div className={styles.container}>
-
-            <div className={styles['task-name']}>
-                <span>
-                    <img src={pic1} alt="pic1" />
-                </span>
-                <textarea
-                    ref={nameRef}
-                    className={`${styles['name-input']} ${styles.text}`}
-                    style={{ 'height': nameHeight }}
-                    value={name}
-                    onFocus={() => setCurrInput(name)}
-                    onKeyDown={e => onEscPressed(e, setName, nameRef)}
-                    onChange={e => {
-                        setName(e.target.value)
-                        setNameHeight(nameRef.current.scrollHeight + 2)
-                    }}
-                    onBlur={() => {
-                        if (currInput === name) return
-                        handleSubmit()
-                    }}
+            {confirmOpen &&
+                <ConfirmDialog
+                    title={'delete this task'}
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={() => deleteCard()}
                 />
-            </div>
-            <div className={styles['task-body']} >
+            }
 
-                <div className={styles['left-side']}>
-                    <div>
-                        <div className={styles.text}>Description</div>
-                        <textarea className={styles['description-input']}
-                            ref={descriptionRef}
-                            value={description}
-                            onFocus={() => setCurrInput(description)}
-                            onKeyDown={e => onEscPressed(e, setDescription, descriptionRef)}
-                            onChange={e => setDescription(e.target.value)}
-                            onBlur={() => {
-                                if (currInput === description) return
-                                handleSubmit()
-                            }}
-                        />
-                    </div>
-                    <div className={styles['task-component']}>
-                        <div className={styles.text}>History</div>
-                        <TaskHistory taskHistory={taskHistory} />
-                    </div>
+            <div className={styles.container}>
+
+                <div className={styles['task-name']}>
+                    <span>
+                        <img src={pic1} alt="pic1" />
+                    </span>
+                    <textarea
+                        ref={nameRef}
+                        className={`${styles['name-input']} ${styles.text}`}
+                        style={{ 'height': nameHeight }}
+                        value={name}
+                        onFocus={() => setCurrInput(name)}
+                        onKeyDown={e => onEscPressed(e, setName, nameRef)}
+                        onChange={e => {
+                            setName(e.target.value)
+                            setNameHeight(nameRef.current.scrollHeight + 2)
+                        }}
+                        onBlur={() => {
+                            if (currInput === name) return
+                            handleSubmit()
+                        }}
+                    />
                 </div>
+                <div className={styles['task-body']} >
 
-                <div className={styles['right-side']}>
+                    <div className={styles['left-side']}>
+                        <div>
+                            <div className={styles.text}>Description</div>
+                            <textarea className={styles['description-input']}
+                                ref={descriptionRef}
+                                value={description}
+                                onFocus={() => setCurrInput(description)}
+                                onKeyDown={e => onEscPressed(e, setDescription, descriptionRef)}
+                                onChange={e => setDescription(e.target.value)}
+                                onBlur={() => {
+                                    if (currInput === description) return
+                                    handleSubmit()
+                                }}
+                            />
+                        </div>
+                        <div className={styles['task-component']}>
+                            <div className={styles.text}>History</div>
+                            <TaskHistory taskHistory={taskHistory} />
+                        </div>
+                    </div>
 
-                    <div className={styles['task-component']}>
-                        <div className={styles.text}>Manage</div>
-                        <TaskDueDate
-                            dueDate={dueDate}
-                            card={initialCard}
-                            listId={listId}
-                            project={project}
-                            teamId={teamId}
-                        />
-                        <TaskMembers
-                            card={initialCard}
-                            listId={listId}
-                            project={project}
-                            teamId={teamId}
-                        />
-                        <TaskProgress
-                            card={initialCard}
-                            listId={listId}
-                            project={project}
-                            teamId={teamId}
-                            taskHistory={taskHistory}
-                            setTaskHistory={setTaskHistory}
-                        />
-                        <TaskAttach
-                            card={initialCard}
-                            project={project}
-                            teamId={teamId}
-                        />
-                        <button className={styles['small-buttons']} onClick={deleteCard} title="Delete Task" >
-                            <img className={styles.pics} src={pic12} alt="pic12" />
+                    <div className={styles['right-side']}>
+
+                        <div className={styles['task-component']}>
+                            <div className={styles.text}>Manage</div>
+                            <TaskDueDate
+                                dueDate={dueDate}
+                                card={initialCard}
+                                listId={listId}
+                                project={project}
+                                teamId={teamId}
+                            />
+                            <TaskMembers
+                                card={initialCard}
+                                listId={listId}
+                                project={project}
+                                teamId={teamId}
+                            />
+                            <TaskProgress
+                                card={initialCard}
+                                listId={listId}
+                                project={project}
+                                teamId={teamId}
+                                taskHistory={taskHistory}
+                                setTaskHistory={setTaskHistory}
+                            />
+                            <TaskAttach
+                                card={initialCard}
+                                project={project}
+                                teamId={teamId}
+                            />
+                            <button className={styles['small-buttons']} 
+                            // onClick={deleteCard} 
+                            onClick={() => {
+                                setConfirmOpen(true)                            
+                            }}
+                            title="Delete Task" >
+                                <img className={styles.pics} src={pic12} alt="pic12" />
                             Delete Task
                         </button>
 
 
-                        {/* <div className={styles['small-buttons']} >
+                            {/* <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic3} alt="pic3" />
                             Join
                         </div> */}
-                        {/* <div className={styles['small-buttons']} >
+                            {/* <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic4} alt="pic4" />
                             Stickers
                         </div> */}
+
                         {/* <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic7} alt="pic7" />
                             Reports
                         </div> */}
                         {/* <div className={styles['small-buttons']} >
+
                             <img className={styles.pics} src={pic11} alt="pic11" />
                             Make Template
                         </div> */}
-                        {/* <div className={styles['small-buttons']} >
+                            {/* <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic13} alt="pic13" />
                             Remove List
                         </div> */}
-                        {/* <div className={styles['small-buttons']} >
+                            {/* <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic8} alt="pic8" />
                             Settings
                         </div> */}
-                        {/* <div className={styles['small-buttons']} >
+                            {/* <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic9} alt="pic9" />
                             View
                         </div> */}
-                        {/* <div className={styles['small-buttons']} >
+                            {/* <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic14} alt="pic14" />
                             Archive
                         </div> */}
+
                     </div>
                 </div>
             </div>
-        </div>
         </div>
     )
 }

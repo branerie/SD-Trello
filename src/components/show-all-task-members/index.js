@@ -63,8 +63,7 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
     }
 
     return (
-
-        <div className={styles.allCardMembers}>
+        <div>
             {confirmOpen &&
                 <ConfirmDialog
                     title={'delete this member'}
@@ -72,21 +71,27 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
                     onConfirm={() => deleteMember(currElement)}
                 />
             }
-            {
-                members.map((m, index) => {
-                    return (
-                        <div key={index} className={styles.eachMember} onClick={() => onClick(m)} >
-                            <span className={styles.avatar} key={m._id}>
-                                <AvatarUser user={m}
-                                    size={30}
-                                    className={styles.avatar}
-                                />
-                            </span>
-                            <span>{m.username}</span>
-                        </div>
-                    )
-                })
-            }
+
+            <div className={styles.allCardMembers}>
+
+                {
+                    members.map((m, index) => {
+                        return (
+                            <div key={index} className={styles.eachMember} onClick={() => onClick(m)} >
+                                <span className={styles.avatar} key={m._id}>
+                                    <AvatarUser user={m}
+                                        size={30}
+                                        className={styles.avatar}
+                                    />
+                                </span>
+                                <span>{m.username}</span>
+                            </div>
+                        )
+                    })
+                }
+            </div>
+
+
         </div>
     )
 

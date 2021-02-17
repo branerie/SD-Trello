@@ -5,16 +5,24 @@
 }
 
 .left-side{
- width: 60%;
+  position: relative;
+ /* width: 60%; */
  margin-top: 40px;
  min-width: 400px;
+max-width: 800px;
+ margin-right: 50px;
+ flex-grow: 1;
 }
 
 .right-side{
+  position: relative;
   width: 40%;
+  height: fit-content;
   min-width: 300px;
+  max-width: 700px;
   margin: 0, auto;
-  margin-top: 40px;   
+  margin-top: 40px;
+  flex-grow: 1;
 }
 
 
@@ -45,6 +53,8 @@
     position: fixed;
     bottom: 20px;
     right: 6%;
-    z-index: -1;   
   }
 
+  .picture{
+    z-index: 0;
+  }

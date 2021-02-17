@@ -19,7 +19,7 @@
     color: white;
 }
 
-.adminsContainer{
+.admins-container{
     margin: 5%; 
     width: 80%;
     height: auto; 
@@ -32,19 +32,17 @@
     margin: 2%;
 }
 
-.bigContainer{   
-    /* margin: 5%;  */
+.big-container{   
     width: 90%;
     margin: 0 auto;
     margin-left: 5%;
     height: auto; 
     min-height: 100%;   
-    /* display: flex;  */
     justify-content: space-between;
     align-items: center; 
 }
 
-.membersContainer{   
+.members-container{   
     margin: 5%; 
     width: 100%;
     height: auto;    
@@ -62,11 +60,9 @@
     width: 70%;
     margin: 0, auto;
     margin-left: 23%;
-    /* height: 90%; */
-    /* min-height: 45px; */
 }
 
-.memberSelect {
+.member-select {
     min-width: 80%;
     width: auto;
     min-width: 180px;
@@ -78,7 +74,7 @@
     border-radius: 10px;
 }
 
-.addButton{
+.add-button{
     cursor: pointer;
     margin:5%;
     width: 10%;
@@ -94,7 +90,7 @@
     flex-grow: 1;
 }
 
-.droppableMembers {
+.droppable-members {
     min-height: 40px;
     height: auto;
     width: 100%;

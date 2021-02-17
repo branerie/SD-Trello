@@ -30,12 +30,18 @@ const TeamPage = () => {
                 setInvited(t.requests)
             }
         })
-       
+
     }, [userContext, params])
 
     return (
         <PageLayout>
             <div className={styles.container}>
+
+                <div className={styles.pic1}>
+                    <img className={styles.picture} src={pic1} alt="" />
+                </div>
+
+
                 <div className={styles['left-side']}>
                     <div>
                         {projects.map((project, index) => {
@@ -68,12 +74,13 @@ const TeamPage = () => {
                         }
                     </div>
 
-                    <div className={styles.pic1}>
-                        <img src={pic1} alt="" />
-                    </div>
+
 
                 </div>
+
+
             </div>
+
         </PageLayout>
     )
 }

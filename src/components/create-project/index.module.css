@@ -2,10 +2,14 @@
 .container {    
     position: fixed;
     /* position: absolute; */
-    left: 30%;
-    top: 15%;
+    left: 50%;
+    top: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     z-index: 20;
-    width: 600px;
+    width: 50%;
+    min-width: 400px;
+    max-width: 600px;
     height: auto;
     background-color:#F7F7F2;
     border: solid 2px #707070;
@@ -15,9 +19,9 @@
 }
 
 .title {
-    width: 50%;
+    width: 70%;
     margin: 2%; 
-    margin-left: 25%;
+    margin-left: 15%;
     margin-bottom: 5%;
     text-align: center;
     color: black;
@@ -26,22 +30,20 @@
     font-weight: 500;
 }
 
-.inputContainer{
+.input-container{
     align-items: center;
-    width: 50%;
-    margin-left: 25%;
+    width: 70%;
+    margin-left: 15%;
     margin-bottom: 2%;
+    font-weight: normal;
     display: flex;
-    /* flex-wrap: wrap; */
-    justify-content: space-between;
 }
 
-.inputName{
+.input-name{
     border: solid 1px #363338;
     border-radius: 10px;
     padding: 1%;
     height: 1.8em;
-    /* min-width: 34.5%; */
     width: 100%;
     margin-left: 4%;
     text-align: left;
@@ -50,17 +52,17 @@
 
 }
 
-.inviteInput{
-    width: 53%;
+.invite-input{
+    width: 62%;
     z-index: 20;
 }
 
-.selectForInvite{
+.select-for-invite{
     width: 100%;
     height: 0;
 }
 
-.membersInput{
+.members-input{
     border: solid 1px #363338;
     border-radius: 10px;
     padding: 0.5%;
@@ -74,15 +76,15 @@
     padding-right: 1%;
 }
 
-.inputContainerDescr{    
-    width: 50%;    
-    margin-left: 25%;
+.input-container-descr{    
+    width: 70%;    
+    margin-left: 15%;
     margin-bottom: 2%;
     display: flex;
-    
+    font-weight: normal;
 }
 
-.textareaDescr{
+.text-area-descr{
     border: solid 1px #363338;
     border-radius: 15px;
     padding: 1%;
@@ -94,62 +96,47 @@
     outline: none; 
 }
 
-.textInvite{
-    width: 45%;
+.text-invite{
+    width: 38%;
 }
 
 
-.buttonDiv{
+.button-div{
     width: 30%;
     margin: 0 auto;
     margin-top: 5%;
     margin-bottom: 2%;
 }
 
-.createButton{
-    color: #fff;
-    background-color: #363338;
-    border-radius: 15px;
-    width: 6em;
-    height: 1.4em;
-    border: none; 
+.create-button{
+    width: 100%;
+    /* height: 1.4em; */
+    /* border: none;  */
     margin: 0.5em;
+    margin: 0 auto;
     z-index: 1;
-    font-size: 1.3em;
-    font-weight: 600;
+    /* font-size: 1.3rem; */
+    /* font-weight: 600; */
     cursor: pointer;
     outline: none;
-  }
+}
 
-  .membersAvatars{
+  .members-avatars{
       margin-left: 30%;
       margin-right: 30%;
   }
 
-/* .form {
-    position: fixed;
-    left: 25%;
-    top: 25%;
-    z-index: 20;
-    width: 50%;
-    height: 25%;
-} */
 
-.members {  
-    /* position: fixed; */
-    /* top: 47%; */
-    /* left: 5%;   */
+
+.members {
     z-index: 25;  
     border: solid 1px #363338;
     border-radius: 27px;
     font-size: 1.2rem;
-    /* width: 100%; */
-    /* min-width: fit-content; */
     height: auto;
     max-height: 150px;
     padding: 10px;
     overflow-y: auto;
-    /* margin-left: 46%; */
     background-color:#DFE9EE;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none; 

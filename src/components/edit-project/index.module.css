@@ -1,18 +1,18 @@
 
 
-.form {
+.form{
     position: fixed;
-    top: 50%;
-    left: 50%;
-    -ms-transform: translate(-50%, -50%);
-    transform: translate(-50%, -50%);
+    top: 10%;
+    left: 25%;
+    /* -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%); */
     
     width: 50%;
     min-width: 350px;
     max-width: 600px;
     height: auto;
     min-height: 450px;
-
+    /* max-height: 75%; */
 
 
     /* position: absolute; */
@@ -60,8 +60,8 @@
 
 .inputContainer{
     /* align-items: center; */
-    width: 50%;
-    margin-left: 25%;
+    width: 70%;
+    margin-left: 15%;
     margin-bottom: 2%;
     display: flex;
 }
@@ -79,8 +79,8 @@
 }
 
 .inputContainerDescr{    
-    width: 50%;    
-    margin-left: 25%;
+    width: 70%;    
+    margin-left: 15%;
     margin-bottom: 1%;
     display: flex;
 }

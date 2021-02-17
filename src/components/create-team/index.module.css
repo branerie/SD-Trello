@@ -1,10 +1,14 @@
 .container {    
     position: fixed;
     /* position: absolute; */
-    left: 30%;
-    top: 15%;
+    left: 50%;
+    top: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
     z-index: 20;
-    width: 600px;
+    width: 50%;
+    min-width: 400px;
+    max-width: 600px;
     height: auto;
     background-color:#F7F7F2;
     border: solid 2px #707070;
@@ -31,9 +35,9 @@
 
 
 .title {
-    width: 50%;
+    width: 70%;
     margin: 2%; 
-    margin-left: 25%;
+    margin-left: 15%;
     margin-bottom: 5%;
     text-align: center;
     color: black;
@@ -44,8 +48,8 @@
 
 .inputContainer{
     align-items: center;
-    width: 50%;
-    margin-left: 25%;
+    width: 70%;
+    margin-left: 15%;
     margin-bottom: 2%;
     font-weight: normal;
     display: flex;
@@ -65,16 +69,16 @@
 }
 
 .inputContainerDescr{    
-    width: 50%;    
-    margin-left: 25%;
+    width: 70%;    
+    margin-left: 15%;
     margin-bottom: 2%;
     display: flex;
 }
 
 .inputContainerMembers{    
     align-items: center;
-    width: 50%;
-    margin-left: 25%;
+    width: 70%;
+    margin-left: 15%;
     margin-bottom: 2%;
     display: flex;   
     justify-content: space-between;
@@ -101,7 +105,7 @@
 
 .membersText{
     font-weight: normal;
-    width: 45%;
+    width: 38%;
 }
 
 .inputMembers{
@@ -121,23 +125,24 @@
     width: 30%;
     margin: 0 auto;
     margin-top: 5%;
-    margin-bottom: 2%;
+    margin-bottom: 3%;
 }
 
 .createButton{
-    color: #fff;
-    background-color: #363338;
-    border-radius: 15px;
-    width: 6em;
-    height: 1.4em;
-    border: none; 
+    /* color: #fff; */
+    /* background-color: #363338; */
+    /* border-radius: 15px; */
+    width: 100%;
+    /* height: 1.4em; */
+    /* border: none;  */
     margin: 0.5em;
+    margin: 0 auto;
     z-index: 1;
-    font-size: 1.3em;
+    font-size: 1.3rem;
     font-weight: 600;
     cursor: pointer;
     outline: none;
-  }
+}
 
   .membersAvatars{
       margin-left: 30%;
@@ -154,7 +159,7 @@
 } */
 
 .inviteInput{
-    width: 53%;
+    width: 68%;
     z-index: 20;
 }
 .selectForInvite{
