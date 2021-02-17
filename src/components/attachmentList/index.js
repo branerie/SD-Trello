@@ -18,7 +18,7 @@ export default function AttachmentList({ attachments, listRef, card, project, te
     }, [attachments])
 
     const getFullDocumentUrl = (att) => {
-        return `https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/fl_attachment/${att.path}`
+        return `https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/raw/upload/fl_attachment/${att.path}`
     }
 
     async function deteleAttachment(att) {
@@ -39,6 +39,8 @@ export default function AttachmentList({ attachments, listRef, card, project, te
             socket.emit('task-team-update', teamId)
         }
     }
+
+    console.log(attachmentsArr)
 
     return (
         <div ref={listRef} className={styles.container}>

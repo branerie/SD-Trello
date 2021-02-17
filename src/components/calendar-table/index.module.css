@@ -116,3 +116,7 @@
 .reactTableBody::-webkit-scrollbar {
     display: none;
 }
+
+.reactTableTrGroup {
+    flex: unset !important;
+}

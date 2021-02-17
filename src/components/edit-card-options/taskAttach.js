@@ -23,10 +23,6 @@ export default function TaskAttach({ card, project, teamId }) {
             resourceType: 'raw'
 
         }, async (error, result) => {
-            if (result.event === "upload-added") {
-                console.log(widget);
-                console.log(result);
-            }
             if (result.event === 'success') {
                 const path = result.info.path
                 const name = result.info.original_filename
