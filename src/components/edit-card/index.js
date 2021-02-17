@@ -240,8 +240,8 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                             {/* <div className={styles['small-buttons']} >
                             <img className={styles.pics} src={pic14} alt="pic14" />
                             Archive
-                        </div> */}
-
+                        */}
+                        </div>
                     </div>
                 </div>
             </div>
