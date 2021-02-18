@@ -299,8 +299,8 @@ async function updateUser(req, res, next) {
 
 async function updateUserImage(req, res, next) {
     const id = req.params.id
-    let user = { newImage, oldImage } = req.body  
- 
+    let user = { newImage, oldImage } = req.body
+
 
     if (newImage) {
         await models.User.updateOne({ _id: id }, { image: newImage })
@@ -403,7 +403,7 @@ async function getUserTasks(req, res, next) {
     const team = await models.Team.findOne({ _id: teamId })
         .populate({
             path: 'projects',
-            populate: {
+            populate: [{
                 path: 'lists',
                 populate: {
                     path: 'cards',
@@ -412,7 +412,13 @@ async function getUserTasks(req, res, next) {
                         select: '-password'
                     }
                 }
-            }
+            }, {
+                path: 'membersRoles',
+                populate: {
+                    path: 'memberId',
+                    select: '-password'
+                }
+            }]
         })
 
     let projects = team.projects

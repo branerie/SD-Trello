@@ -19,3 +19,12 @@ html {
 
 :focus {outline:none;}
 ::-moz-focus-inner {border:0;}
+
+@media (max-width: 900px) {
+  html {
+    font-size: 14px;
+  }
+  body {
+    font-size: 14px;
+  }
+}
