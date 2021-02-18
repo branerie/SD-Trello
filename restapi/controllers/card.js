@@ -124,7 +124,6 @@ async function deleteCard(req, res, next) {
 async function deleteAttachment(req, res, next) {
     cardId = req.params.idcard
     attachmentId = req.params.idattachment
-    console.log('???');
 
     try {
         const card = await models.Card.findOne({ _id: cardId })

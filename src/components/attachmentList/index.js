@@ -40,8 +40,6 @@ export default function AttachmentList({ attachments, listRef, card, project, te
         }
     }
 
-    console.log(attachmentsArr)
-
     return (
         <div ref={listRef} className={styles.container}>
             <div className={styles.title}>Task Attachments</div>
@@ -49,7 +47,6 @@ export default function AttachmentList({ attachments, listRef, card, project, te
                 <div className={styles.attachment}>
                     <div className={styles.name}>{att.name}.{att.format}</div>
                     <div>
-                        {/* <a href={`https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/fl_attachment/${att.path}`} download>download</a> */}
                         <ButtonClean title={<img className={styles.button} src={download} alt="Download" />} onClick={() => window.open(getFullDocumentUrl(att), "_blank")} />
                         <ButtonClean title={<img className={styles.button} src={remove} alt="Remove" />} onClick={() => deteleAttachment(att)} />
                     </div>

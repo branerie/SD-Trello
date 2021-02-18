@@ -27,7 +27,6 @@ export default function TaskAttach({ card, project, teamId }) {
                 const path = result.info.path
                 const name = result.info.original_filename
                 let format = result.info.format
-                console.log(result.info);
                 if (!format) {
                     format = path.split('.')[1]
                 }
@@ -73,11 +72,11 @@ export default function TaskAttach({ card, project, teamId }) {
             </div>
             { attachments && <div className={styles['att-container']}>
                 {attachments.length <= 4 ? attachments.map(att => (
-                    <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} />
+                    <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} teamId={teamId} />
                 )) :
                 <>
                 {attachments.slice(0, 3).map(att => (
-                    <Attachment key={att._id} att={att} attachments={attachments} card={card} teamId={teamId} />
+                    <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} teamId={teamId} />
                 ))}
                 <div className={`${styles.remaining} ${styles.attachment}`}>
                     +{attachments.length - 3}

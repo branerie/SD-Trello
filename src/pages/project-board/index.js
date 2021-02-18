@@ -292,7 +292,10 @@ export default function ProjectBoard() {
                                                 <Draggable key={element._id} draggableId={element._id} index={index}>
                                                     {(provided) => (
                                                         <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                            <List list={element} project={projectContext.project} isAdmin={isAdmin}
+                                                            <List
+                                                                list={element}
+                                                                project={projectContext.project}
+                                                                isAdmin={isAdmin}
                                                                 showEditList={() => {
                                                                     setCurrList(element)
                                                                     setIsVisibleEditList(!isVisibleEditList)

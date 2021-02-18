@@ -78,6 +78,7 @@ function sockets(socket) {
 
     socket.on('task-team-update', async (teamId) => {
         console.log(username, 'task-team-update')
+        console.log(teamId, '???');
         const updatedTeamProjects = await taskTeamUpdate(teamId, userId)
         socket.to(`task-${teamId}`).emit('task-update-team', teamId)
         socket.emit('task-team-updated', updatedTeamProjects)
@@ -171,15 +172,22 @@ async function taskTeamUpdate(teamId, userId) {
     const team = await models.Team.findOne({ _id: teamId })
         .populate({
             path: 'projects',
-            populate: {
+            populate: [{
                 path: 'lists',
                 populate: {
                     path: 'cards',
                     populate: {
-                        path: 'members'
+                        path: 'members',
+                        select: '-password'
                     }
                 }
-            }
+            }, {
+                path: 'membersRoles',
+                populate: {
+                    path: 'memberId',
+                    select: '-password'
+                }
+            }]
         })
 
     let projects = team.projects

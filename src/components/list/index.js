@@ -13,7 +13,7 @@ import ButtonGrey from '../button-grey'
 import ConfirmDialog from '../confirmation-dialog'
 
 
-export default function List(props) {
+export default function List( { isAdmin, project, list, showEditList, showCurrentCard }) {
     const dropdownRef = useRef(null);
     const cardRef = useRef(null);
     const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
@@ -24,17 +24,16 @@ export default function List(props) {
     const socket = useSocket()
     const params = useParams()
     const teamId = params.teamid
-    const isAdmin = props.isAdmin
 
 
 
     const updateSocket = useCallback(() => {
-        socket.emit('project-update', props.project)
-    }, [socket, props.project])
+        socket.emit('project-update', project)
+    }, [socket, project])
 
     async function deleteList() {
         const token = getCookie("x-auth-token")
-        const response = await fetch(`/api/projects/lists/${props.project._id}/${props.list._id}`, {
+        const response = await fetch(`/api/projects/lists/${project._id}/${list._id}`, {
             method: "DELETE",
             headers: {
                 "Content-Type": "application/json",
@@ -55,7 +54,7 @@ export default function List(props) {
             return
         }
         const token = getCookie("x-auth-token")
-        const response = await fetch(`/api/projects/lists/cards/${props.list._id}`, {
+        const response = await fetch(`/api/projects/lists/cards/${list._id}`, {
             method: "POST",
             headers: {
                 "Content-Type": "application/json",
@@ -79,16 +78,16 @@ export default function List(props) {
             updateSocket()
         }
 
-    }, [history, cardName, props, updateSocket, isVisible, setIsVisible])
+    }, [history, cardName, list._id, updateSocket, isVisible, setIsVisible])
 
     function editList() {
-        props.showEditList()
+        showEditList()
         setIsEditListActive(!isEditListActive)
     }
 
     return (
         
-        <div key={props.list._id} className={styles.list}>
+        <div key={list._id} className={styles.list}>
             {confirmOpen &&
                 <ConfirmDialog
                     title={'you wish to delete this list'}
@@ -98,8 +97,8 @@ export default function List(props) {
             }
             <div className={styles.row}>
                 <div>
-                    <div className={styles.name}>{props.list.name}</div>
-                    <ListColor color={props.list.color || '#A6A48E'} type={'list'} />
+                    <div className={styles.name}>{list.name}</div>
+                    <ListColor color={list.color || '#A6A48E'} type={'list'} />
                 </div>
                 {
                     isAdmin &&
@@ -125,11 +124,11 @@ export default function List(props) {
                         />
                 </div>}
             </div>
-            <Droppable droppableId={props.list._id} type='droppableSubItem'>
+            <Droppable droppableId={list._id} type='droppableSubItem'>
                 {(provided) => (
                     <div className={styles.droppable} ref={provided.innerRef}>
                         {
-                            props.list.cards.map((element, index) => {
+                            list.cards.map((element, index) => {
                                 return (
                                     <Draggable key={element._id} draggableId={element._id}
                                         index={index}
@@ -137,9 +136,9 @@ export default function List(props) {
                                         {(provided) => (
                                             <div>
                                                 <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                    <Card card={element} listId={props.list._id} project={props.project}
+                                                    <Card card={element} listId={list._id} project={project}
                                                         showEditCard={() => {
-                                                            props.showCurrentCard(element)
+                                                            showCurrentCard(element)
                                                         }}
                                                     />
                                                 </div>
@@ -169,7 +168,7 @@ export default function List(props) {
                                 value={cardName}
                                 onChange={e => setCardName(e.target.value)}
                             />
-                            <ButtonClean type='submit' className={styles.addlist} onClick={addCard} title='+ Add Task' project={props.project} />
+                            <ButtonClean type='submit' className={styles.addlist} onClick={addCard} title='+ Add Task' project={project} />
                         </form> : <ButtonClean className={styles['add-task']} onClick={() => setIsVisible(!isVisible)} title='+ Add Task' />
 
                 }
