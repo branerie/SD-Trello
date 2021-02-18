@@ -56,3 +56,9 @@
 .button:hover {
     background-color: #C1CBCF;
 }
+
+@media (max-width: 750px) {
+    .name {
+        width: 80%;
+    }
+}

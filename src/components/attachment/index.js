@@ -24,19 +24,21 @@ export default function Attachment({ att, attachments, card, project, teamId }) 
         }, 700);
     }
 
-    function onMouseLeave() {
-        setIsNameVisible(false)
-    }
-
     useEffect(() => {
         if (nameRef.current) {
             setNameWidth(window.getComputedStyle(nameRef.current).getPropertyValue('width'))
         }
-    }, [onMouseEnter])
+    }, [isNameVisible])
 
     return (
         <div>
-            <div className={styles.attachment} ref={ref} onMouseEnter={onMouseEnter} onMouseLeave={onMouseLeave} onClick={() => setIsListVisible(true)}>
+            <div
+                className={styles.attachment}
+                ref={ref}
+                onMouseEnter={onMouseEnter}
+                onMouseLeave={() => setIsNameVisible(false)}
+                onClick={() => setIsListVisible(true)}
+            >
                 <img src={pic1} alt="" className={styles['att-picture']} />
                 <div className={styles.format}>{att.format}</div>
                 {isNameVisible &&
@@ -48,7 +50,13 @@ export default function Attachment({ att, attachments, card, project, teamId }) 
                 }
             </div>
             {isListVisible && <Transparent hideForm={() => setIsListVisible(false)} >
-                <AttachmentList listRef={listRef} attachments={attachments} card={card} project={project} teamId={teamId} />
+                <AttachmentList
+                    listRef={listRef}
+                    attachments={attachments}
+                    card={card}
+                    project={project}
+                    teamId={teamId}
+                />
             </Transparent >
 
             }

@@ -66,66 +66,58 @@ const MyTasksPage = () => {
             <Title title='My Tasks' />
             <div>
                 <span className={styles.title}>Teams:</span>
-                {
-                    userContext.user.teams.map(team => {
-                        return (
-                            <ButtonClean
-                                key={team._id}
-                                title={team.name}
-                                onClick={() => selectTeam(team)}
-                                className={`${styles.filter} ${currTeam._id === team._id && styles.selected}`}
-                            />
-                        )
-                    })
-                }
+                {userContext.user.teams.map(team => {
+                    return (<ButtonClean
+                        key={team._id}
+                        title={team.name}
+                        onClick={() => selectTeam(team)}
+                        className={`${styles.filter} ${currTeam._id === team._id && styles.selected}`}
+                    />)
+                })}
             </div>
-            {
-                !currTeam ? <div className={styles.title}>Select a team</div> :
-                    <div>
-                        {
-                            projects.length === 0 ? <div className={styles.title}>There is no current tasks</div> :
-                                projects.map(project => {
-                                    return (
-                                        <div key={project._id} className={styles.project}>
-                                            <div className={styles['project-name']}>
-                                                <Link to={`/project-board/${currTeam._id}/${project._id}`} className={styles.link}>
-                                                    <span className={styles.bold}>Project:</span> {project.name}
-                                                </Link>
-                                            </div>
-                                            <div className={`${styles.header} ${styles.card}`}>
-                                                <div className={styles.task}>Task:</div>
-                                                <div className={styles.list}>List:</div>
-                                                <div className={styles.progress}>Progress (%):</div>
-                                                <div className={styles.days}>Days Till End:</div>
-                                            </div>
-                                            {
-                                                project.lists.map(list => {
+            {!currTeam ? <div className={styles.title}>Select a team</div> :
+                <div>
+                    {projects.length === 0 ? <div className={styles.title}>There is no current tasks</div> :
+                        projects.map(project => {
+                            return (
+                                <div key={project._id} className={styles.project}>
+                                    <div className={styles['project-name']}>
+                                        <Link to={`/project-board/${currTeam._id}/${project._id}`} className={styles.link}>
+                                            <span className={styles.bold}>Project:</span> {project.name}
+                                        </Link>
+                                    </div>
+                                    <div className={`${styles.header} ${styles.card}`}>
+                                        <div className={styles.task}>Task:</div>
+                                        <div className={styles.list}>List:</div>
+                                        <div className={styles.progress}>Progress (%):</div>
+                                        <div className={styles.days}>Days Till End:</div>
+                                    </div>
+                                    {project.lists.map(list => {
+                                        return (
+                                            <div key={list._id}>
+                                                {list.cards.map(card => {
                                                     return (
-                                                        <div key={list._id}>
-                                                            {list.cards.map(card => {
-                                                                return (
-                                                                    <MyTasksTask
-                                                                        key={card._id}
-                                                                        currTeam={currTeam}
-                                                                        project={project}
-                                                                        list={list}
-                                                                        card={card}
-                                                                    />
-                                                                )
-                                                            })}
-                                                        </div>)
-                                                })
-                                            }
-                                        </div>
-                                    )
-                                })
-                        }
-                    </div>
+                                                        <MyTasksTask
+                                                            key={card._id}
+                                                            currTeam={currTeam}
+                                                            project={project}
+                                                            list={list}
+                                                            card={card}
+                                                        />
+                                                    )
+                                                })}
+                                            </div>
+                                        )
+                                    })}
+                                </div>
+                            )
+                        })
+                    }
+                </div>
             }
-            {
-                (!currTeam || projects.length === 0) &&
+            {(!currTeam || projects.length === 0) &&
                 <div className={styles.pic}>
-                    <img src={myTasks} alt=''/>
+                    <img src={myTasks} alt='' />
                 </div>
             }
         </PageLayout>
