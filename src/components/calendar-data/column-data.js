@@ -7,7 +7,8 @@ const CELL_COLORS = {
     DUE_DATE: '#EF2D2D',
     DELAYED: '#EF2D2D',
     FINISHED: '#0E8D27',
-    PROGRESS: '#5E9DDC'
+    PROGRESS: '#5E9DDC',
+    PROGRESS_OLD: '#A2A7B0',
 }
 
 const assembleColumnData = (startDate) => {
@@ -50,17 +51,18 @@ const assembleColumnData = (startDate) => {
         if (history) {
             if (history.length > 0) {
                 taskStartDate = new Date(history[0].date)
-            } 
+
+                const lastHistoryRecord = history[history.length - 1]
+                if (lastHistoryRecord.event === 'Progress 100%') {
+                    finishedDate = new Date(lastHistoryRecord.date)
+                }
+            }
 
             for (let event of history) {
                 const eventDate = new Date(event.date)
                 if (compareDates(eventDate, startDate) >= 0 && 
                     compareDates(eventDate, endDate) <= 0) {
                     eventsInWeek.push(event)
-                }
-
-                if (event.event === 'Progress 100%') {
-                    finishedDate = eventDate
                 }
             }
         }
@@ -73,21 +75,24 @@ const assembleColumnData = (startDate) => {
 
         const dueDate = date ? new Date(date) : null
         const isAfterDueDate = dueDate && compareDates(cellDate, dueDate) > 0
+        const isBeforeToday = compareDates(cellDate, currentDate) < 0
         if (eventInCell) {
             const [eventType, eventValue] = eventInCell.event.split(' ')
 
             if (eventType === 'Created') {
                 return getWeekdayCellHtml(eventType, CELL_COLORS.CREATED)
-            } else {
-                if (eventType === 'Progress' && eventValue && eventValue === '100%') {
-                    return getWeekdayCellHtml('Finished', CELL_COLORS.FINISHED)
-                }
-
-                const cellBackgroundColor = isAfterDueDate 
-                                            ? CELL_COLORS.DELAYED
-                                            : CELL_COLORS.PROGRESS
-                return getWeekdayCellHtml(eventInCell.event, cellBackgroundColor)
             }
+
+            if (eventType === 'Progress' && eventValue && eventValue === '100%') {
+                return getWeekdayCellHtml('Finished', CELL_COLORS.FINISHED)
+            }
+
+            if (isBeforeToday) {
+                return getWeekdayCellHtml(eventInCell.event, CELL_COLORS.PROGRESS_OLD)
+            }
+
+            const cellBackgroundColor = isAfterDueDate ? CELL_COLORS.DELAYED : CELL_COLORS.PROGRESS
+            return getWeekdayCellHtml(eventInCell.event, cellBackgroundColor)
         }
 
         // if we get to here, we know that there are no new events on the day of the cell
@@ -108,7 +113,9 @@ const assembleColumnData = (startDate) => {
             }
 
             if (compareDates(cellDate, dueDate) > 0) {
+                // cell date is after due date
                 if (isMonday && compareDates(currentDate, cellDate) > 0) {
+                    // cell is first shown column (usually Monday) and today is later than that
                     return getWeekdayCellHtml('Delayed', CELL_COLORS.DELAYED)
                 }
 
@@ -129,7 +136,8 @@ const assembleColumnData = (startDate) => {
             // task is neither Finished, nor Delayed, but has a Due Date
             // therefore, it's In Progress
             const cellText = isMonday ? 'In Progress' : ''
-            return getWeekdayCellHtml(cellText, CELL_COLORS.PROGRESS)
+            const cellColor = isBeforeToday ? CELL_COLORS.PROGRESS_OLD : CELL_COLORS.PROGRESS
+            return getWeekdayCellHtml(cellText, cellColor)
         }
 
         return ''

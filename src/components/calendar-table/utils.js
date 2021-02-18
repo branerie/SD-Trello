@@ -96,7 +96,7 @@ const parseCardHistory = (taskHistory) => {
 const applyCardFilters = (card, filters) => {
     let isCardFilterPassed = false
     if (filters.progress.notStarted && 
-        (card.progress === 0 || card.progress === null)) {
+        (card.progress === 0 || !card.progress)) {
         isCardFilterPassed = true
     }
 

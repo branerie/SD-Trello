@@ -48,6 +48,13 @@
     background-color: lemonchiffon;
 }
 
+.addTask {
+    cursor: pointer;
+    height: 100%;
+    display: flex;
+    align-items: center;
+}
+
 .daylyProgress {
     width: 100%;
     display: flex;
@@ -120,3 +127,12 @@
 .reactTableTrGroup {
     flex: unset !important;
 }
+
+.addListButton {
+    font-size: 1rem;
+    font-weight: bold;
+    margin: 10px;
+    border-radius: 5px;
+    color: black;
+    cursor: pointer;
+  }
