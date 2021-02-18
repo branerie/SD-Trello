@@ -26,7 +26,7 @@ import TaskAttach from '../edit-card-options/taskAttach'
 import ConfirmDialog from '../confirmation-dialog'
 
 
-export default function EditCard({ listId, initialCard, project, teamId, hideForm }) {
+export default function EditCard({ listId, initialCard, project, teamId, hideForm, setCurrCard }) {
     const nameRef = useRef(null)
     const descriptionRef = useRef(null)
     const [card, setCard] = useState(null)
@@ -176,12 +176,14 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                                 listId={listId}
                                 project={project}
                                 teamId={teamId}
+                                setCurrCard={setCurrCard}
                             />
                             <TaskMembers
                                 card={initialCard}
                                 listId={listId}
                                 project={project}
                                 teamId={teamId}
+                                setCurrCard={setCurrCard}
                             />
                             <TaskProgress
                                 card={initialCard}
@@ -190,11 +192,13 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                                 teamId={teamId}
                                 taskHistory={taskHistory}
                                 setTaskHistory={setTaskHistory}
+                                setCurrCard={setCurrCard}
                             />
                             <TaskAttach
                                 card={initialCard}
                                 project={project}
                                 teamId={teamId}
+                                setCurrCard={setCurrCard}
                             />
                             <button className={styles['small-buttons']} 
                             // onClick={deleteCard} 

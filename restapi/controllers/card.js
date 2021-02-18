@@ -85,6 +85,10 @@ async function updateCard(req, res, next) {
         session.endSession()
 
         const updatedCard = await models.Card.findOne({ _id: id })
+            .populate({
+                path: 'members',
+                select: '-password'
+            })
         res.send(updatedCard)
 
     } catch (err) {
@@ -129,6 +133,10 @@ async function deleteAttachment(req, res, next) {
         const card = await models.Card.findOne({ _id: cardId })
         const attachment = card.attachments.filter(att => att.id === attachmentId)[0]
         const updatedCard = await models.Card.findOneAndUpdate({ _id: cardId }, { $pull: { attachments: { publicId: attachment.publicId } } }, { new: true })
+            .populate({
+                path: 'members',
+                select: '-password'
+            })
 
         cloudinary.api.delete_resources([attachment.publicId], (error, result) => { if (error) console.log(error) })
 

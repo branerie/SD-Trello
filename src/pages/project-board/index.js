@@ -258,8 +258,7 @@ export default function ProjectBoard() {
     return (
         <PageLayout>
             <div style={{ position: 'absolute' }}>
-                {
-                    isVisible &&
+                {isVisible &&
                     < div >
                         <Transparent hideForm={() => setIsVisible(!isVisible)} >
                             <EditCard
@@ -268,12 +267,12 @@ export default function ProjectBoard() {
                                 listId={currList}
                                 project={projectContext.project}
                                 teamId={teamId}
+                                setCurrCard={setCurrCard}
                             />
                         </Transparent >
                     </div >
                 }
-                {
-                    isVisibleEditList &&
+                {isVisibleEditList &&
                     < div >
                         <Transparent hideForm={() => setIsVisibleEditList(!isVisibleEditList)} >
                             <EditList hideForm={() => setIsVisibleEditList(!isVisibleEditList)} list={currList} project={projectContext.project} />
@@ -284,55 +283,48 @@ export default function ProjectBoard() {
                     <Droppable droppableId='droppable' direction='horizontal' type='droppableItem'>
                         {(provided) => (
                             <div className={styles['container-droppable']} ref={provided.innerRef} >
-                                {
-                                    projectContext.lists
-                                        .filter(element => !(projectContext.hiddenLists.includes(element._id)))
-                                        .map((element, index) => {
-                                            return (
-                                                <Draggable key={element._id} draggableId={element._id} index={index}>
-                                                    {(provided) => (
-                                                        <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                            <List
-                                                                list={element}
-                                                                project={projectContext.project}
-                                                                isAdmin={isAdmin}
-                                                                showEditList={() => {
-                                                                    setCurrList(element)
-                                                                    setIsVisibleEditList(!isVisibleEditList)
-                                                                }}
-                                                                showCurrentCard={(card) => {
-                                                                    setCurrCard(card);
-                                                                    setCurrList(element._id);
-                                                                    setIsVisible(!isVisible)
-                                                                }} />
-                                                        </div>
-                                                    )}
-                                                </Draggable>
-                                            )
-                                        })
+                                {projectContext.lists
+                                    .filter(element => !(projectContext.hiddenLists.includes(element._id)))
+                                    .map((element, index) => {
+                                        return (
+                                            <Draggable key={element._id} draggableId={element._id} index={index}>
+                                                {(provided) => (
+                                                    <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+                                                        <List
+                                                            list={element}
+                                                            project={projectContext.project}
+                                                            isAdmin={isAdmin}
+                                                            showEditList={() => {
+                                                                setCurrList(element)
+                                                                setIsVisibleEditList(!isVisibleEditList)
+                                                            }}
+                                                            showCurrentCard={() => {
+                                                                setCurrList(element._id)
+                                                                setIsVisible(!isVisible)
+                                                            }}
+                                                            setCurrCard={setCurrCard}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        )
+                                    })
                                 }
                                 {provided.placeholder}
-                                {
-                                    isAdmin &&
+                                {isAdmin &&
                                     <div className={styles.list} >
-                                        {
-                                            isActive ?
-                                                <form ref={listRef} className={styles.container} >
-                                                    <input
-                                                        ref={function (input) {
-                                                            if (input != null) {
-                                                                input.focus();
-                                                            }
-                                                        }}
-                                                        className={styles.input}
-                                                        type={'text'}
-                                                        value={listName}
-                                                        onChange={e => setListName(e.target.value)}
-                                                    />
-                                                    <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
-                                                </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
+                                        {isActive ?
+                                            <form ref={listRef} className={styles.container} >
+                                                <input
+                                                    autoFocus
+                                                    className={styles.input}
+                                                    type={'text'}
+                                                    value={listName}
+                                                    onChange={e => setListName(e.target.value)}
+                                                />
+                                                <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
+                                            </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
                                         }
-
                                     </div>
                                 }
                             </div>
@@ -343,8 +335,7 @@ export default function ProjectBoard() {
                 <ButtonGrey title={'View Project'} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} />
                 {/* <button className={styles.navigateButtons} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} >View Project</button> */}
 
-                {
-                    IsVisibleEdit &&
+                {IsVisibleEdit &&
                     < div >
                         <Transparent hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} >
                             <EditProject hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} project={projectContext.project} members={members} />

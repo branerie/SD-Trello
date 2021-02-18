@@ -6,7 +6,7 @@ import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import Attachment from '../attachment'
 
-export default function TaskAttach({ card, project, teamId }) {
+export default function TaskAttach({ card, project, teamId, setCurrCard }) {
     const token = getCookie("x-auth-token")
     const history = useHistory()
     const socket = useSocket()
@@ -72,11 +72,11 @@ export default function TaskAttach({ card, project, teamId }) {
             </div>
             { attachments && <div className={styles['att-container']}>
                 {attachments.length <= 4 ? attachments.map(att => (
-                    <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} teamId={teamId} />
+                    <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} teamId={teamId} setCurrCard={setCurrCard} />
                 )) :
                 <>
                 {attachments.slice(0, 3).map(att => (
-                    <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} teamId={teamId} />
+                    <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} teamId={teamId} setCurrCard={setCurrCard} />
                 ))}
                 <div className={`${styles.remaining} ${styles.attachment}`}>
                     +{attachments.length - 3}

@@ -7,7 +7,7 @@ import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
-export default function TaskProgress({ card, listId, project, teamId, taskHistory, setTaskHistory }) {
+export default function TaskProgress({ card, listId, project, teamId, taskHistory, setTaskHistory, setCurrCard }) {
     const token = getCookie("x-auth-token")
     const history = useHistory()
     const socket = useSocket()
@@ -58,6 +58,8 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
         if (!response.ok) {
             history.push("/error")
         } else {
+            const updatedCard = await response.json()
+            if (setCurrCard) setCurrCard(updatedCard)
             socket.emit('project-update', project)
             socket.emit('task-team-update', teamId)
         }
@@ -102,7 +104,6 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
                         <input
                             ref={function (input) {
                                 if (input != null) {
-                                    console.log('refff');
                                     input.focus();
                                 }
                             }}

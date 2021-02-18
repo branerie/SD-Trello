@@ -78,7 +78,6 @@ function sockets(socket) {
 
     socket.on('task-team-update', async (teamId) => {
         console.log(username, 'task-team-update')
-        console.log(teamId, '???');
         const updatedTeamProjects = await taskTeamUpdate(teamId, userId)
         socket.to(`task-${teamId}`).emit('task-update-team', teamId)
         socket.emit('task-team-updated', updatedTeamProjects)

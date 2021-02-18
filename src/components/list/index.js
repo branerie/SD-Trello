@@ -13,7 +13,7 @@ import ButtonGrey from '../button-grey'
 import ConfirmDialog from '../confirmation-dialog'
 
 
-export default function List( { isAdmin, project, list, showEditList, showCurrentCard }) {
+export default function List( { isAdmin, project, list, showEditList, showCurrentCard, setCurrCard }) {
     const dropdownRef = useRef(null);
     const cardRef = useRef(null);
     const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
@@ -136,10 +136,12 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
                                         {(provided) => (
                                             <div>
                                                 <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                    <Card card={element} listId={list._id} project={project}
-                                                        showEditCard={() => {
-                                                            showCurrentCard(element)
-                                                        }}
+                                                    <Card
+                                                        card={element}
+                                                        listId={list._id}
+                                                        project={project}
+                                                        showCurrentCard={showCurrentCard}
+                                                        setCurrCard={setCurrCard}
                                                     />
                                                 </div>
                                                 {provided.placeholder}
@@ -158,11 +160,7 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
                     isVisible ?
                         <form ref={cardRef} className={styles.container} >
                             <input
-                                ref={function (input) {
-                                    if (input != null) {
-                                        input.focus();
-                                    }
-                                }}
+                                autoFocus
                                 className={styles['task-input']}
                                 type={'text'}
                                 value={cardName}

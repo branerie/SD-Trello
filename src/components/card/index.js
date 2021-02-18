@@ -4,7 +4,7 @@ import pen from '../../images/pen.svg'
 import ButtonClean from '../button-clean'
 import MembersList from '../members-list'
 
-export default function Card({ card, showEditCard }) {
+export default function Card({ card, showCurrentCard, setCurrCard }) {
 
     const progressColor = (progress) => {
         if (Number(progress) <= 20) {
@@ -47,7 +47,10 @@ export default function Card({ card, showEditCard }) {
                 />
                 <ButtonClean
                     className={styles.pen}
-                    onClick={() => showEditCard()}
+                    onClick={() => {
+                        showCurrentCard()
+                        setCurrCard(card)
+                    }}
                     title={<img src={pen} alt="" width="11.5" height="11.5" />}
                 />
             </div>
