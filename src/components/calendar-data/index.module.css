@@ -160,7 +160,6 @@
 
 .tableText {
   cursor: pointer;
-  display: flex;
   margin: 2%;
 }
 
@@ -254,4 +253,11 @@
 .list {
   display: flex;
   align-items: center;
+}
+
+.attachments-container {
+  float: right;
+  height: 1.5rem;
+  display: flex;
+  align-items: flex-end;
 }

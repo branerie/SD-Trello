@@ -9,6 +9,7 @@ import AttachmentList from '../attachmentList'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import attPic from '../../images/edit-card/pic6.svg'
 import { useParams } from 'react-router-dom'
+import AttachmentsLink from '../attachmentsLink'
 
 export default function Card({ card, project, showCurrentCard, setCurrCard }) {
     const listRef = useRef(null)
@@ -23,11 +24,9 @@ export default function Card({ card, project, showCurrentCard, setCurrCard }) {
                     <div className={styles.container}>
                         {card.progress ? <div className={styles.progress}><ProgressBar progress={card.progress} /></div> : <div></div>}
                         <div className={styles.container}>
-                            {card.attachments.length > 0 && <ButtonClean
-                                className={`${styles.attachments} ${styles.button}`}
-                                onClick={() => setIsListVisible(true)}
-                                title={<img src={attPic} alt="" width='14px' />}
-                            />}
+                            {card.attachments.length > 0 && 
+                                <AttachmentsLink card={card} project={project} teamId={teamId} />
+                            }
                             <MembersList
                                 members={card.members}
                                 maxLength={2}
