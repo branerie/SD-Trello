@@ -58,9 +58,7 @@ export default function Attachment({ att, attachments, card, project, teamId, se
                     teamId={teamId}
                     setCurrCard={setCurrCard}
                 />
-            </Transparent >
-
-            }
+            </Transparent >}
         </div>
     )
 }
