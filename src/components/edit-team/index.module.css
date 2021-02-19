@@ -39,7 +39,7 @@
     font-weight: 500;
 }
 
-.inputContainer{
+.input-container{
     align-items: center;
     width: 70%;
     margin-left: 15%;
@@ -47,7 +47,7 @@
     display: flex;
 }
 
-.inputContainerInvite{
+.input-container-invite{
     align-items: top;
     width: 70%;
     margin-left: 15%;
@@ -55,7 +55,7 @@
     display: flex;
 }
 
-.inputName{
+.input-name{
     border: solid 1px #363338;
     border-radius: 10px;
     height: 1.8em;
@@ -68,13 +68,13 @@
     outline: none;
 }
 
-.textInvite{
+.text-invite{
     font-weight: normal;
     width: 38%;
     margin-right: 2%;
 }
 
-.inputInvite{
+.input-invite{
     border: solid 1px #363338;
     border-radius: 10px;
     height: 1.8em;
@@ -87,7 +87,7 @@
     outline: none;
 }
 
-.inputContainerDescr{    
+.input-container-descr{    
     width: 70%;
     min-width: 200px;    
     margin-left: 15%;
@@ -95,7 +95,7 @@
     display: flex;
 }
 
-.textareaDescr{
+.text-area-descr{
     border: solid 1px #363338;
     border-radius: 10px;
     padding: 1%;
@@ -109,7 +109,7 @@
 }
 
 
-.buttonDiv{
+.button-div{
     margin: 5%;
     margin-bottom: 2%;
     width: 70%;
@@ -118,7 +118,7 @@
     justify-content: center;
 }
 
-.createButton{
+.create-button{
     /* background: #DFE9EE; */
     /* color: black; */
     /* padding: 10px; */
@@ -134,24 +134,24 @@
     outline: none; */
   }
 
-  .membersAvatars{
-      margin-left: 30%;
+  .members-avatars{
+      /* margin-left: 30%;
       margin-right: 30%;
-      margin: 2%;
+      margin: 2%; */
       /* display: flex; */
   }
 
-.membersDiv{
+.members-div{
     margin: 5%;
     margin-top: 0%;
 }
 
-.inviteInput{
+.invite-input{
     width: 68%;
     min-width: 150px;
     z-index: 20;
 }
-.selectForInvite{
+.select-for-invite{
     width: 100%;
     height: 0;
 }
@@ -190,12 +190,12 @@
     font-size: 0.9rem;
 }
 
-.leaveTeamBtnDiv{
+.leave-team-btn-div{
     display: flex;
     justify-content: flex-end;
 }
 
-.leaveTeamBtn{
+.leave-team-btn{
     /* color: #fff; */
     /* background-color: #363338; */
     border-radius: 15px;

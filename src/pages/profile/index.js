@@ -247,9 +247,16 @@ const ProfilePage = () => {
 
           </div>
 
-          <div className={styles['button-input-div']}>
+          <div className={styles['button-input-div-tasks']}>
             <ButtonGrey title={'My Tasks'} className={styles['navigate-buttons']}
               onClick={() => history.push(`/my-tasks/${id}`)} />
+          < input
+              className={styles['input-fields-tasks']}
+              value={''}
+              disabled={true}
+            // type="password"
+            />
+          
           </div>
 
           <div className={styles['button-input-div']}>
@@ -281,7 +288,9 @@ const ProfilePage = () => {
               </div>
             </div>
             <div className={styles['button-div-save']}>
-              <button type='submit' className={styles['save-button']} onClick={(e) => handleSubmit(e)}>SAVE</button>
+            <ButtonGrey title={'SAVE'} className={styles['save-button']}
+               onClick={(e) => handleSubmit(e)}/>
+              {/* <button type='submit' className={styles['save-button']} onClick={(e) => handleSubmit(e)}>SAVE</button> */}
             </div>
           </div>
         </div>

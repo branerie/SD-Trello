@@ -71,9 +71,8 @@ async function getProjectInfo(req, res, next) {
 }
 
 async function createProject(req, res, next) {
-    const { name, description, teamId } = req.body
+    const { name, description, teamId, members } = req.body
     const { _id } = req.user
-
     const session = await mongoose.startSession()
     session.startTransaction()
 
@@ -81,11 +80,21 @@ async function createProject(req, res, next) {
         const projectCreationResult = await models.Project.create([{ name, description, author: _id }], { session })
         const createdProject = projectCreationResult[0]
 
+
         await models.ProjectUserRole.create([{ admin: true, projectId: createdProject, memberId: _id }], { session })
 
-        const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session)
+        const membersArr = []
 
-        const updatedProject = await models.Project.findByIdAndUpdate({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { new: true })
+        for (let member of members) {
+            const projectUserRoleCreation = await models.ProjectUserRole.create([{ admin: false, projectId: createdProject._id, memberId: member._id }], { session })
+            const currProjectUserRole = projectUserRoleCreation[0]
+            membersArr.push(currProjectUserRole)
+            await models.User.updateOne({ _id: member._id }, { $push: { projects: currProjectUserRole } }, { session })            
+        }
+
+        const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session)
+        membersArr.push(projectUserRole)
+        const updatedProject = await models.Project.findByIdAndUpdate({ _id: projectUserRole.projectId }, { $push: { membersRoles: membersArr } }, { new: true })
             .populate({
                 path: 'lists',
                 populate: {
@@ -104,6 +113,9 @@ async function createProject(req, res, next) {
                 }
             }).session(session)
         await models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
+
+
+
         await models.Team.updateOne({ _id: teamId }, { $push: { projects: createdProject } }, { session })
 
         await session.commitTransaction()
@@ -112,6 +124,7 @@ async function createProject(req, res, next) {
 
         res.send(updatedProject)
     } catch (error) {
+        console.log(error);
         await session.abortTransaction()
         session.endSession()
         res.send(error)
