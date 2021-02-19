@@ -96,7 +96,6 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
     return (
         <div key={card._id} className={styles.card}>
             <div className={styles.task}>{card.name}</div>
-            {/* <div className={styles.list}>{list.name}</div> */}
             <div className={styles.progress}>
                 <input
                     ref={inputRef}
