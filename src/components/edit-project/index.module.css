@@ -43,7 +43,7 @@
     font-weight: 500;
 }
 
-.buttonsDiv{
+.buttons-div{
     margin: 5%;
     margin-bottom: 2%;
     width: 70%;
@@ -52,13 +52,13 @@
     justify-content: center;
 }
 
-.navigateButtons {
+.navigate-buttons {
     min-width: 150px;
     margin: 0 auto;
     margin: 10px;
 }
 
-.inputContainer{
+.input-container{
     /* align-items: center; */
     width: 70%;
     margin-left: 15%;
@@ -66,7 +66,7 @@
     display: flex;
 }
 
-.inputPrName{
+.input-pr-name{
     border: solid 1px #363338;
     border-radius: 10px;
     height: 1.8em;
@@ -78,14 +78,14 @@
     outline: none;
 }
 
-.inputContainerDescr{    
+.input-container-descr{    
     width: 70%;    
     margin-left: 15%;
     margin-bottom: 1%;
     display: flex;
 }
 
-.textareaDescr{
+.text-area-descr{
     border: solid 1px #363338;
     border-radius: 10px;
     padding: 1%;
@@ -97,6 +97,6 @@
     outline: none;
 }
 
-.editMembers{
+.edit-members{
     height: 30%;
 }

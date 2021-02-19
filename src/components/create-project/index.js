@@ -39,7 +39,8 @@ export default function CreateProject({ hideForm }) {
             body: JSON.stringify({
                 name,
                 description,
-                teamId
+                teamId,
+                members
             })
         })
         if (!response.ok) {

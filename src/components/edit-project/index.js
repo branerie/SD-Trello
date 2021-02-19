@@ -93,20 +93,20 @@ export default function EditProject(props) {
             <div className={styles.container} >
                 <div className={styles.title} >Project</div>
                 
-                <div className={styles.inputContainer}>
+                <div className={styles['input-container']}>
                     <span> Name</span>
                     <input
-                        className={styles.inputPrName}
+                        className={styles['input-pr-name']}
                         value={name}
                         onChange={e => setName(e.target.value)}
                         label="Name"
                         id="name"
                     />
                 </div>
-                <div className={styles.inputContainerDescr}>
+                <div className={styles['input-container-descr']}>
                     <span> Description</span>
                     <textarea
-                        className={styles.textareaDescr}
+                        className={styles['text-area-descr']}
                         value={description}
                         onChange={e => setDescription(e.target.value)}
                         label="Description"
@@ -114,15 +114,15 @@ export default function EditProject(props) {
                         placeholder='Project Description'
                     />
                 </div>
-                <div className={styles.editMembers}>
+                <div className={styles['edit-members']}>
                     <AddProjectMember admin={isAdmin} project={props.project} members={props.project.membersRoles} />
                 </div>
             </div>
             <div>
                 {isAdmin ?
-                    <div className={styles.buttonsDiv}>
-                        <ButtonGrey className={styles.navigateButtons} title={'Edit'} onClick={handleSubmit}/>
-                        <ButtonGrey className={styles.navigateButtons} title={'Delete Project'} 
+                    <div className={styles['buttons-div']}>
+                        <ButtonGrey className={styles['navigate-buttons']} title={'Edit'} onClick={handleSubmit}/>
+                        <ButtonGrey className={styles['navigate-buttons']} title={'Delete Project'} 
                         onClick={() => {
                             setConfirmOpen(true)                            
                         }}

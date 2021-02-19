@@ -47,10 +47,10 @@
     margin-top: 5%;
 }
 
-.inputContainer{
+.input-container{
     /* align-items: center; */
     width: 70%;
-    margin-left: 12%;
+    margin-left: 15%;
     margin-bottom: 2%;
     display: flex;
 }
@@ -70,19 +70,23 @@
     padding: 2px;
 }
 
-.changeColor{
+.change-color{
     margin: 2%;
-    margin-left: 12%;
+    margin-left: 15%;
     width: 70%;
     display: flex;
     /* justify-content: space-between; */
 }
 
-.listColor{   
+.color-title{
+    width: 20%;
+}
+
+.list-color{   
     border-radius: 10px;
     height: 1.8em;
-    width: 100%;
-    margin-left: 4%;
+    width: 20%;
+    margin-left: 20%;
 }
 
 .color-pick {
@@ -91,12 +95,13 @@
 }
 
 .color-button {
-    width: 40px;
+    width: 100%;
+    margin: 0 auto;
     height: 20px;
     border-radius: 5px;
 }
 
-.editListButton{
+.edit-list-button{
     /* width: 14%; */
     margin: 0 auto;
     margin-top: 5%;
@@ -104,7 +109,7 @@
 
 .name-input {
     border: solid 1px #363338;
-    border: 1px solid #F7F7F2; 
+    /* border: 1px solid #F7F7F2;  */
     background-color:#F7F7F2;
     border-radius: 10px;       
     padding: 4px;
@@ -117,17 +122,17 @@
     overflow: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
-    text-align: center;
+    text-align: left;
 }
 
 .name-input::-webkit-scrollbar {
     display: none;
 }
 
-.name-input:focus {
+/* .name-input:focus {
     border: 1px solid #363338; 
     background-color: #E6E6E6;
-}
+} */
 
 .text {
     font-family: 'Lato', sans-serif;

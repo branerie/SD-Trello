@@ -113,10 +113,10 @@ export default function CreateTeam(props) {
 
             <div className={styles.title} >Create New Team</div>
 
-            <div className={styles.inputContainer}>
+            <div className={styles['input-container']}>
                 <span> Name</span>
                 <input
-                    className={styles.inputName}
+                    className={styles['input-name']}
                     value={name}
                     onChange={e => setName(e.target.value)}
                     label="Name"
@@ -125,10 +125,10 @@ export default function CreateTeam(props) {
                 />
             </div>
 
-            <div className={styles.inputContainerDescr}>
-                <span className={styles.descriptionText}> Description</span>
+            <div className={styles['input-container-descr']}>
+                <span className={styles['description-text']}> Description</span>
                 <textarea
-                    className={styles.textareaDescr}
+                    className={styles['text-area-descr']}
                     value={description}
                     onChange={e => setDescription(e.target.value)}
                     label="Description"
@@ -137,12 +137,12 @@ export default function CreateTeam(props) {
                 />
             </div>
 
-            <div className={styles.inputContainerMembers}>
-                <span className={styles.membersText}> Invite Members</span>
+            <div className={styles['input-container-members']}>
+                <span className={styles['members-text']}> Invite Members</span>
 
-                <div className={styles.inviteInput}>
+                <div className={styles['invite-input']}>
                     <input
-                        className={styles.inputMembers}
+                        className={styles['input-members']}
                         autoComplete="off"
                         value={member}
                         onChange={inputMembers}
@@ -153,10 +153,10 @@ export default function CreateTeam(props) {
 
                     />
 
-                    <div className={styles.selectForInvite}>
+                    <div className={styles['select-for-invite']}>
                         {
                             showMembers &&
-                            <div className={styles.membersPopUp}>
+                            <div className={styles['members-pop-up']}>
                                 <div className={styles.members}>
                                     {
                                         allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
@@ -190,7 +190,7 @@ export default function CreateTeam(props) {
             </div>
 
 
-            <div className={styles.membersAvatars}>
+            <div className={styles['members-avatars']}>
                 {
                     members.map(m => {
                         return (
@@ -206,9 +206,9 @@ export default function CreateTeam(props) {
                 }
             </div>
 
-            <div className={styles.buttonDiv}>
-                {/* <button type='submit' className={styles.createButton}>Create</button> */}
-                <ButtonGrey onClick={(e)=>handleSubmit(e)} title="Create" className={styles.createButton}/>
+            <div className={styles['button-div']}>
+                {/* <button type='submit' className={styles['create-button']}>Create</button> */}
+                <ButtonGrey onClick={(e)=>handleSubmit(e)} title="Create" className={styles['create-button']}/>
                 
             </div>
 

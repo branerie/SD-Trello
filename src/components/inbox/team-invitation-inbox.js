@@ -82,6 +82,7 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
     }
 
     return (
+        
         <div className={styles.message}>
             <div className={styles.container}>
                 <div className={styles.bold}>{message.subject}</div>
@@ -131,5 +132,6 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
                 </Transparent>
             }
         </div>
+        
     )
 }
