@@ -83,7 +83,8 @@
 .progress-bar {
     width: 10rem;
     display: flex;
-    justify-content: center;     
+    justify-content: center;
+    margin-top: 5%;
 }
 
 .bad-input:focus {

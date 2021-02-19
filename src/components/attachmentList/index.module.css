@@ -8,9 +8,10 @@
     z-index: 20;
     background-color: rgb(236, 156, 34);
     width: 95%;
+    max-width: 700px;
     height: fit-content;
     max-height: 70%;
-    padding: 4%;
+    padding: 2rem;
     background-color:#EDF5F9;
     border: solid 2px #707070;
     border-radius: 27px;

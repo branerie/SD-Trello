@@ -6,7 +6,7 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Transparent from '../transparent'
 
 
-export default function Attachment({ att, attachments, card, project, teamId }) {
+export default function Attachment({ att, attachments, card, project, teamId, setCurrCard }) {
     const ref = useRef(null)
     const nameRef = useRef(null)
     const listRef = useRef(null)
@@ -56,10 +56,9 @@ export default function Attachment({ att, attachments, card, project, teamId }) 
                     card={card}
                     project={project}
                     teamId={teamId}
+                    setCurrCard={setCurrCard}
                 />
-            </Transparent >
-
-            }
+            </Transparent >}
         </div>
     )
 }

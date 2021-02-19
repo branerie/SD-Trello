@@ -26,7 +26,6 @@ const WelcomePage = () => {
   return (
 
     <div className={styles.container}>
-      <div>
         {isVisible ?
           < div >
             <Transparent hideForm={() => setIsVisible(!isVisible)} >
@@ -35,9 +34,6 @@ const WelcomePage = () => {
             </Transparent >
           </div > : null
         }
-      </div>
-
-      <div>
         {isVisibleSignUp ?
           < div >
             <Transparent hideForm={() => setIsVisibleSignUp(!isVisibleSignUp)} >
@@ -45,8 +41,6 @@ const WelcomePage = () => {
             </Transparent >
           </div > : null
         }
-      </div>
-      <div>
         {isVisibleForgot ?
           < div >
             <Transparent hideForm={() => setIsVisibleForgot(!isVisibleForgot)} >
@@ -54,49 +48,37 @@ const WelcomePage = () => {
             </Transparent >
           </div > : null
         }
-      </div>
 
       <div className={styles['content-wrap']}>
-
         <div className={styles['top-container']}>
-          
           <div className={styles['top-div-container']}>
             <div className={styles['header-nav']}>
               <span className={styles.logo}>
-                <img src={logo} alt="logo" width='194' height='142' />
+                <img src={logo} alt="logo" width='100%' height='100%' />
               </span>
               <span className={styles['first-buttons']}>
                 <button className={styles['login-button']} onClick={()=>setIsVisible(!isVisible)}  >Log In</button>
                 <button className={styles['sign-up-button']} onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Sign Up</button>
               </span>
             </div>
-            <div className={styles.topright}>
-
               <div className={styles.pic1}>
                 <img src={pic1} alt="" width='100%' />
-                
               </div>
               <div className={styles.pic2}>
                 <img src={pic2} alt="" width='100%' />
               </div>
-
-            </div>
           </div>
-
           <div className={styles['lower-div-container']}>
             <div className={styles['first-text']}>
               <p className={styles.headers}>Manage your work in a <span className={styles.lucida}>Smart</span> way! </p>
               <div className={styles.paragraph}>
                 <p >The ideas get more clear, organized and focused on.</p>
                 <p >Flexible and time saving for the whole team. </p>
-              </div>
-              <div className={styles.paragraph}>
                 <button className={styles['second-sign-up-button']}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Free Sign Up</button>
               </div>
             </div>
           </div>
         </div>
-
         <div className={styles['second-container']}>
           <div className={styles['first-row']}>
             <div className={styles['second-text']}>
@@ -104,46 +86,45 @@ const WelcomePage = () => {
               <div className={styles.paragraph}>
                 <p >Follow who and when is doing tasks. Be always</p>
                 <p >informed with the accomplishment of the projects. </p>
-              </div>
-              <div className={styles.paragraph}>
                 <button className={styles['third-sign-up-button']}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Try It Now</button>
               </div>
             </div>
             <div className={styles['pic3-container']}>
-              <img className={styles.pic3} src={pic3} alt="" />
+              <img className={styles.picture} src={pic3} alt="" />
             </div>
           </div>
-
           <div className={styles['second-row']}>
             <div className={styles['pic4-container']}>
-              <img className={styles.pic4} src={pic4} alt="" />
+              <img className={styles.picture} src={pic4} alt="" />
             </div>
-            <div className={styles['third-text']}>
-              <p className={styles.headers}>Еаsy to manage all the information</p>
-              <div className={styles.paragraph}>
-                <p >Add stickers, notes, comments, attachments in your</p>
-                <p >  Smart Manager.</p>
-                <p >Collaborate with others in your Team.</p>
-                <img className={styles.pic5} src={pic5} alt="" />
+            <div className={styles['second-row-colum']}>
+              <div className={styles['second-text']}>
+                <p className={styles.headers}>Еаsy to manage all the information</p>
+                <div className={styles.paragraph}>
+                  <p >Add stickers, notes, comments, attachments in your</p>
+                  <p >  Smart Manager.</p>
+                  <p >Collaborate with others in your Team.</p>
+                </div>
+              </div>
+              <div className={styles['second-row-pic']} >
+                <img className={styles.picture} src={pic5} alt="" />
               </div>
             </div>
           </div>
-
           <div className={styles['third-row']}>
-            <div className={styles['last-text']}>
-              <p className={styles['last-headers']}>Start your <span className={styles.lucida}>Smart Manager</span> Now </p>
-              <div className={styles['last-paragraph']}>
+            <div className={styles['second-text']}>
+              <p className={styles.headers}>Start your <span className={styles.lucida}>Smart Manager</span> Now </p>
+              <div className={styles.paragraph}>
                 <p >Connect with other teams from <span className={styles.lucida}>The Smart Family</span>,</p>
                 <p > save time with more work done.</p>
-                <button className={styles['last-sign-up-button']}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Get Started</button>
+                <button className={styles['second-sign-up-button']}  onClick={() => setIsVisibleSignUp(!isVisibleSignUp)} >Get Started</button>
               </div>
             </div>
             <div className={styles['pic6-container']}>
-              <img className={styles.pic6} src={pic6} alt="" />
+              <img className={styles.picture} src={pic6} alt="" />
             </div>
           </div>
         </div>
-
       </div>
 
       <footer className={styles.footer}>
