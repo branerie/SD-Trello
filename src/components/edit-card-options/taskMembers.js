@@ -8,7 +8,7 @@ import pic10 from '../../images/edit-card/pic10.svg'
 import MembersList from '../members-list'
 
 
-export default function TaskMembers({ card, listId, project, teamId }) {
+export default function TaskMembers({ card, listId, project, teamId, setCurrCard }) {
     const ref = useRef(null);
     const [cardMembers, setCardMembers] = useState(null)
     const [isActive, setIsActive] = useDetectOutsideClick(ref)
@@ -94,6 +94,8 @@ export default function TaskMembers({ card, listId, project, teamId }) {
         if (!response.ok) {
             history.push("/error")
         } else {
+            const updatedCard = await response.json()
+            if (setCurrCard) setCurrCard(updatedCard)
             setIsActive(!isActive)
             setCardMembers(arr)
             socket.emit('project-update', project)

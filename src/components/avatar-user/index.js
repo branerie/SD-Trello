@@ -7,9 +7,6 @@ import Avatar from "react-avatar"
 
 export default function AvatarUser({ user, onClick, className, key, size }) {
 
-    console.log(size);
-
-
     return (
 
         user.image ?

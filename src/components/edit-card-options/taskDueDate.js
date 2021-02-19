@@ -9,7 +9,7 @@ import pic5 from '../../images/edit-card/pic5.svg'
 
 
 
-export default function TaskDueDate({ dueDate, card, listId, project, teamId }) {
+export default function TaskDueDate({ dueDate, card, listId, project, teamId, setCurrCard }) {
 
     const [cardDueDate, setCardDueDate] = useState(null)
     const [taskDueDate, setTaskDueDate] = useState(null)
@@ -73,6 +73,8 @@ export default function TaskDueDate({ dueDate, card, listId, project, teamId }) 
             history.push("/error")
             return
         } else {
+            const updatedCard = await response.json()
+            if (setCurrCard) setCurrCard(updatedCard)
             updateProjectSocket()
         }
     }

@@ -171,15 +171,22 @@ async function taskTeamUpdate(teamId, userId) {
     const team = await models.Team.findOne({ _id: teamId })
         .populate({
             path: 'projects',
-            populate: {
+            populate: [{
                 path: 'lists',
                 populate: {
                     path: 'cards',
                     populate: {
-                        path: 'members'
+                        path: 'members',
+                        select: '-password'
                     }
                 }
-            }
+            }, {
+                path: 'membersRoles',
+                populate: {
+                    path: 'memberId',
+                    select: '-password'
+                }
+            }]
         })
 
     let projects = team.projects
