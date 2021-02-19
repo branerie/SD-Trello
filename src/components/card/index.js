@@ -1,60 +1,61 @@
-import React from 'react'
+import React, { useRef } from 'react'
 import styles from './index.module.css'
 import pen from '../../images/pen.svg'
 import ButtonClean from '../button-clean'
 import MembersList from '../members-list'
+import ProgressBar from '../progress-bar'
+import Transparent from '../transparent'
+import AttachmentList from '../attachmentList'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import attPic from '../../images/edit-card/pic6.svg'
+import { useParams } from 'react-router-dom'
 
-export default function Card({ card, showCurrentCard, setCurrCard }) {
-
-    const progressColor = (progress) => {
-        if (Number(progress) <= 20) {
-            return 'red'
-        }
-        if (Number(progress) <= 40) {
-            return 'orange'
-        }
-        if (Number(progress) <= 80) {
-            return 'blue'
-        }
-        if (Number(progress) > 80) {
-            return 'green'
-        }
-    }
+export default function Card({ card, project, showCurrentCard, setCurrCard }) {
+    const listRef = useRef(null)
+    const [isListVisible, setIsListVisible] = useDetectOutsideClick(listRef)
+    const params = useParams()
+    const teamId = params.teamid
 
     return (
-
         <div className={styles.card}>
-            <div className={styles['left-side']}>
-                <div className={styles['card-name']}>{card.name}</div>
-                {
-                    card.progress ?
-                        <div className={styles.bar} >
-                            <div
-                                style={{
-                                    width: `${card.progress}%`,
-                                    backgroundColor: progressColor(card.progress)
-                                }}
-                                className={styles.progress}
+            <div>
+                {((card.progress && card.progress !== 0) || card.members.length > 0 || card.attachments.length > 0) ?
+                    <div className={styles.container}>
+                        {card.progress ? <div className={styles.progress}><ProgressBar progress={card.progress} /></div> : <div></div>}
+                        <div className={styles.container}>
+                            {card.attachments.length > 0 && <ButtonClean
+                                className={`${styles.attachments} ${styles.button}`}
+                                onClick={() => setIsListVisible(true)}
+                                title={<img src={attPic} alt="" width='14px' />}
+                            />}
+                            <MembersList
+                                members={card.members}
+                                maxLength={2}
                             />
-                        </div> : null
+                        </div>
+                    </div> : null
                 }
+                <div className={styles['card-name']}>
+                    {card.name}
+                </div>
             </div>
-
-            <div className={styles.flex}>
-                <MembersList 
-                    members={card.members} 
-                    maxLength={2}
+            <ButtonClean
+                className={styles.button}
+                onClick={() => {
+                    showCurrentCard()
+                    setCurrCard(card)
+                }}
+                title={<img src={pen} alt="" width="11.5" height="11.5" />}
+            />
+            {isListVisible && <Transparent hideForm={() => setIsListVisible(false)} >
+                <AttachmentList
+                    listRef={listRef}
+                    attachments={card.attachments}
+                    card={card}
+                    project={project}
+                    teamId={teamId}
                 />
-                <ButtonClean
-                    className={styles.pen}
-                    onClick={() => {
-                        showCurrentCard()
-                        setCurrCard(card)
-                    }}
-                    title={<img src={pen} alt="" width="11.5" height="11.5" />}
-                />
-            </div>
+            </Transparent >}
         </div >
-
     )
 }

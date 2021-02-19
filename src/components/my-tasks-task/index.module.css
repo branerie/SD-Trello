@@ -2,29 +2,32 @@
     display: flex;
     margin-left: 20px;
     min-height: 35px;
-    font-size: 1.3rem;
+    font-size: 1rem;
+    width: 70%;
 }
 
-
-  
 .card > div {   
     color: #363338;
     margin-bottom: 15px;
     overflow-wrap: break-word;
 }
-  
+
+/* .list {
+    width: 35%;
+} */
+
 .task {
-    width: 34%;
+    width: 50%;
     margin-right: 1%;
 }
 
 .progress {
-    width: 13%;
+    width: 20%;
     text-align: center;
 }
-  
+
 .days {
-    width: 13%;
+    width: 20%;
     text-align: center;
     display: flex;
     justify-content: center;
@@ -38,24 +41,26 @@
     border-radius: 5px;
     padding: 5px;
 }
-  
-.list {
-    width: 35%;
+
+.buttons-container {
+    width: 60px;
+    display: flex;
+    justify-content: flex-end;
 }
 
-.pen {
+.button {
     width: 30px;
     border-radius: 5px;
     height: 35px;
 }
-  
-.pen:hover {
+
+.button:hover {
     background-color: #C1CBCF;
 }
 
 .input {
     font-family: 'Lato';
-    font-size: 1.3rem;
+    font-size: 1rem;
     font-weight: normal;
     height: 25px;
     width: 55px;

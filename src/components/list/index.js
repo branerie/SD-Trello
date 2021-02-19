@@ -87,7 +87,7 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
 
     return (
         
-        <div key={list._id} className={styles.list}>
+        <div className={styles.list}>
             {confirmOpen &&
                 <ConfirmDialog
                     title={'you wish to delete this list'}
@@ -138,7 +138,6 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
                                                 <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
                                                     <Card
                                                         card={element}
-                                                        listId={list._id}
                                                         project={project}
                                                         showCurrentCard={showCurrentCard}
                                                         setCurrCard={setCurrCard}
