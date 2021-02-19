@@ -75,7 +75,7 @@
   cursor: pointer;
 }
 
-.inputTaskName {
+.inputElementName {
   border: 1px solid #000000;
   background-color: #EDF5F9;
   border-radius: 4px;
@@ -85,6 +85,23 @@
   font-family: 'Lato';
   min-height: 1rem;
   flex-grow: 1;
+}
+
+.inputElementName::-webkit-input-placeholder { /* Chrome/Opera/Safari */
+  font-family: 'Lato';
+  font-size: 0.8rem;
+}
+.inputElementName::-moz-placeholder { /* Firefox 19+ */
+  font-family: 'Lato';
+  font-size: 0.8rem;
+}
+.inputElementName:-ms-input-placeholder { /* IE 10+ */
+  font-family: 'Lato';
+  font-size: 0.8rem;
+}
+.inputElementName:-moz-placeholder { /* Firefox 18- */
+  font-family: 'Lato';
+  font-size: 0.8rem;
 }
 
 .clean {

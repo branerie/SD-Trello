@@ -87,11 +87,13 @@ const TableDndApp = ({ project }) => {
 
             listCards.forEach(card => {
                 const cardDueDate = card.dueDate ? new Date(card.dueDate) : ''
-                const historyArr2 = parseCardHistory(card.history)
+                // const historyArr2 = parseCardHistory(card.history)
+                const historyByDate = parseCardHistory(card.history)
 
                 const cellData = {
                     date: cardDueDate,
-                    history: historyArr2,
+                    // history: historyArr2,
+                    history: historyByDate,
                     progress: card.progress
                 }
 
@@ -151,8 +153,6 @@ const TableDndApp = ({ project }) => {
                     )
                 }))
             }
-
-            return data
         })
 
         if (newEntries && newEntries.newList) {

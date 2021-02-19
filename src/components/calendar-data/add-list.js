@@ -1,15 +1,13 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
-import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
+import AddProjectElement from './add-project-element'
 
 export default function AddList({ project, handleInputRemove }) {
-    const history = useHistory()     
     const [listName, setListName] = useState('')
-    const [nameHeight, setNameHeight] = useState(null)
-    const inputRef = useRef(null)
     const socket = useSocket()
+    const history = useHistory()     
 
 
     const handleSubmit = useCallback(async () => {
@@ -38,34 +36,13 @@ export default function AddList({ project, handleInputRemove }) {
             
     }, [history, listName, project._id])
 
-    const handleChange = (event) => {
-        setListName(event.target.value)
-        setNameHeight(inputRef.current.scrollHeight + 2)
-    }
-
-    const handleKeyDown = (event) => {
-        const ESCAPE_KEY_CODE = 27
-        if (event.keyCode === ESCAPE_KEY_CODE) {
-            return handleInputRemove()
-        }
-
-        const ENTER_KEY_CODE = 13
-        if (event.keyCode === ENTER_KEY_CODE) {
-            return handleSubmit()
-        }
-    }
-
     return (
-        <textarea
-            value={listName}
-            ref={inputRef}
-            placeholder='Enter new task name:'
-            className={styles.inputTaskName}
-            style={{ 'height': nameHeight, width: '100%' }}
-            onKeyDown={handleKeyDown}
-            onChange={handleChange}
-            onBlur={handleSubmit}
-            autoFocus
+        <AddProjectElement
+            elementName={listName}
+            setElementName={setListName}
+            handleSubmit={handleSubmit}
+            handleInputRemove={handleInputRemove}
+            placeholder='Enter new list name:'
         />
     )
 }

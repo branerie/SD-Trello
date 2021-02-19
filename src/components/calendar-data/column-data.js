@@ -13,7 +13,7 @@ const CELL_COLORS = {
 
 const assembleColumnData = (startDate) => {
     const currentDate = new Date()
-    const endDate = getDateWithOffset(startDate, 6)
+    let cardData = null
 
     const getWeekdayCellHtml = (message, color, messageColor = 'black') => {
         const progressStyle = { 
@@ -43,35 +43,16 @@ const assembleColumnData = (startDate) => {
             return ''
         }
 
-        const { date, history, progress } = JSON.parse(dataString)
-        const cellDate = getDateWithOffset(startDate, numDaysOffset)
-        const eventsInWeek = []
-        let taskStartDate = null
-        let finishedDate = null
-        if (history) {
-            if (history.length > 0) {
-                taskStartDate = new Date(history[0].date)
-
-                const lastHistoryRecord = history[history.length - 1]
-                if (lastHistoryRecord.event === 'Progress 100%') {
-                    finishedDate = new Date(lastHistoryRecord.date)
-                }
-            }
-
-            for (let event of history) {
-                const eventDate = new Date(event.date)
-                if (compareDates(eventDate, startDate) >= 0 && 
-                    compareDates(eventDate, endDate) <= 0) {
-                    eventsInWeek.push(event)
-                }
-            }
+        // if cell is first to be displayed for this card, parse the incoming data
+        // else, it should already have been parsed so we can use it directly
+        if (numDaysOffset === 0) {
+            cardData = JSON.parse(dataString)
         }
 
-        // gets last event that occurred on this date for this task (if any occurred)
-        const eventInCell = history && eventsInWeek.reverse().find(event => {
-            const eventDate = new Date(event.date)
-            return checkDateEquality(eventDate, cellDate)
-        })
+        const { date, history, progress } = cardData
+        const cellDate = getDateWithOffset(startDate, numDaysOffset)
+        
+        const eventInCell = history && history.events[formatDate(cellDate, '%d/%m/%y')]
 
         const dueDate = date ? new Date(date) : null
         const isAfterDueDate = dueDate && compareDates(cellDate, dueDate) > 0
@@ -97,7 +78,8 @@ const assembleColumnData = (startDate) => {
 
         // if we get to here, we know that there are no new events on the day of the cell
         const isMonday = numDaysOffset === 0
-        if (isMonday && progress && progress === 100 && eventsInWeek.length === 0) {
+        const eventsInWeek = history && history.hasEventsInWeek[formatDate(cellDate, '%w/%y')]
+        if (isMonday && progress && progress === 100 && eventsInWeek) {
             // progress for task is 100% and no new events happen during the week
             return getWeekdayCellHtml('Finished', CELL_COLORS.FINISHED)
         }
@@ -121,6 +103,10 @@ const assembleColumnData = (startDate) => {
 
                 return ''
             }
+
+            let { finishedDate, startDate: taskStartDate } = history
+            finishedDate = finishedDate && new Date(finishedDate)
+            taskStartDate = taskStartDate && new Date(taskStartDate)
 
             if (finishedDate && compareDates(cellDate, finishedDate) > 0) {
                 // task has finished in the past and cell date is later than date of finish
@@ -148,7 +134,7 @@ const assembleColumnData = (startDate) => {
         const color = checkDateEquality(currentDate, headerDate) ? "#CFE2EC" : ''
 
         const displayedDate = formatDate(headerDate, '%d.%m')
-        const displayedDayOfWeek = formatDate(headerDate, '%W')
+        const displayedDayOfWeek = formatDate(headerDate, '%A')
 
         return (
             <div style={{ backgroundColor: color, color: 'black' }}>

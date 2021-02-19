@@ -56,9 +56,9 @@ export default function TaskName(props) {
       {
         isActive ?
           < div ref={dropdownRef} className={styles.nameContainer} onBlur={editCardName} >
-            {/* <input className={styles.inputTaskName} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} /> */}
+            {/* <input className={styles.inputElementName} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} /> */}
             <textarea 
-              className={styles.inputTaskName} 
+              className={styles.inputElementName} 
               value={cardName}
               onChange={e => setCardName(e.target.value)}
               rows={2}

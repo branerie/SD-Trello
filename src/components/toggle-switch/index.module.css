@@ -10,12 +10,14 @@
     border: 1px solid black;
     display: flex;
     align-items: center;
-    justify-content: space-between;
+    justify-content: flex-start;
     background-color: rgba(105, 105, 105, 0.274);
+    cursor: pointer;
 }
 
 .container-active {
     background-color: rgba(32, 107, 247, 0.65);
+    justify-content: flex-end;
 }
 
 .state-circle {
@@ -25,17 +27,4 @@
     border: 1px solid black;
     border-radius: 50%;
     background-color: rgb(83, 102, 83);
-    cursor: pointer;
-}
-
-.toggle-circle {
-    margin: 0 0.1rem;
-    width: 0.9rem;
-    height: 0.9rem;
-    cursor: pointer;
-    opacity: 0;
-}
-
-.active {
-    order: 2
 }
