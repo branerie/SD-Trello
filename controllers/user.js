@@ -7,6 +7,7 @@ const bcrypt = require('bcrypt')
 const { auth, isAdmin, userInbox, googleAuth } = require('../utils')
 const { decode } = require('jsonwebtoken')
 const getTeams = require('../utils/getTeams')
+const cloudinary = require('../utils/cloudinary')
 
 
 router.get('/verify', verifyLogin);
@@ -31,7 +32,11 @@ router.post('/confirmation', confirmToken)
 
 router.post('/inbox', auth, moveMessageToHistory)
 
-router.put('/:id', updateUser)
+router.put('/:id', auth, updateUser)
+
+router.put('/image/:id', auth, updateUserImage)
+
+router.put('/addNewPassword/:id', addNewPassword)
 
 router.put('/recentProjects/:id', auth, updateUserRecentProjects)
 
@@ -40,13 +45,15 @@ router.delete('/message/:messageid', auth, deleteUserMessage)
 router.delete('/:id', deleteUser)
 
 
+
+
 async function getUser(req, res, next) {
     const user = await models.User.findById(req.params.id)
     res.send(user)
 }
 
 async function getAllUsers(req, res, next) {
-    const users = await models.User.find({})
+    const users = await models.User.find({}).select('-password')
     res.send(users)
 }
 
@@ -57,10 +64,20 @@ async function registerUser(req, res, next) {
         return
     }
 
+
     models.User.findOne({ email }, async function (err, user) {
+        if (user !== null) {
+            let userExist = {}
+            userExist.error = true
+            userExist.exist = true
+            res.send(userExist)
+            return
+        }
 
         if (user === null) {
             const newUser = new models.User({ email, username, password, confirmed: false })
+
+
             newUser.setConfirmationToken()
             const createdUser = await newUser.save()
 
@@ -71,14 +88,11 @@ async function registerUser(req, res, next) {
                 user: createdUser,
                 teams
             }
-            utils.sendConfirmationEmail(newUser)
+            utils.sendConfirmationEmail(newUser, 'account')
             res.header("Authorization", token).send(response)
             return
         }
-        let userExist = {}
-        userExist.error = true
-        userExist.exist = true
-        res.send(userExist)
+
 
         if (err) {
             console.log(err)
@@ -97,7 +111,7 @@ function verifyLogin(req, res, next) {
         .then(([data, blacklistToken]) => {
 
             if (blacklistToken) { return Promise.reject(new Error('blacklisted token')) }
-            models.User.findById(data.id)
+            models.User.findById(data.id).select('-password')
                 .then(async (user) => {
                     const teams = await getTeams(user._id)
                     return res.send({
@@ -123,33 +137,38 @@ async function loginUser(req, res, next) {
     const { email, password } = req.body
 
     try {
-        const user = await models.User.findOne({ email })
+        const foundUser = await models.User.findOne({ email })
 
 
-        if (!user) {
+        if (!foundUser) {
             let response = {}
             response.wrongUser = true
             res.send(response)
             return
         }
 
-        if (!user.password) {
+        const token = utils.jwt.createToken({ id: foundUser._id })
+
+        if (!foundUser.password) {
             let response = {}
             response.needPassword = true
-            response.userId = user._id
-            res.send(response)
+            response.userId = foundUser._id
+            res.header("Authorization", token).send(response)
+
+            return
         }
-        const match = await user.matchPassword(password)
+        const match = await foundUser.matchPassword(password)
 
         if (!match) {
             let response = {}
             response.wrongPassword = true
-            res.send(response)
+            response.userId = foundUser._id
+            res.header("Authorization", token).send(response)
+
             return
         }
 
-        const token = utils.jwt.createToken({ id: user._id })
-
+        const user = await models.User.findOne({ email }).select('-password')
         const teams = await getTeams(user._id)
         const response = {
             user,
@@ -164,16 +183,16 @@ async function loginUser(req, res, next) {
 
 async function googleLoginUser(req, res, next) {
     const { tokenId } = req.body
-    const { email, username, imageUrl, email_verified } = await googleAuth(tokenId)
+    const { email, username, image, email_verified } = await googleAuth(tokenId)
     if (!email_verified) {
         res.send('Google verification failed')
         return
     }
 
     try {
-        let user = await models.User.findOne({ email })
+        let user = await models.User.findOne({ email }).select('-password')
         if (user === null) {
-            user = await models.User.create({ email, username, imageUrl })
+            user = await models.User.create({ email, username, image })
         }
 
         const token = utils.jwt.createToken({ id: user._id })
@@ -200,45 +219,75 @@ async function logoutUser(req, res, next) {
 
 async function confirmToken(req, res, next) {
     const { token } = req.body
-
     try {
-        const user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }, { new: true })
+        const foundUser = await models.User.findOne({ confirmationToken: token })
+        let user
+        if (foundUser.confirmed) {
+            user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', password: foundUser.newPassword, newPassword: '', newPasswordConfirmed: true }, { new: true }).select('-password')
+        } else {
+            user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }
+                , { new: true }
+            ).select('-password')
+        }
+        const newToken = utils.jwt.createToken({ id: user._id })
+        const teams = await getTeams(user._id)
+        const response = {
+            user,
+            teams
+        }
+        res.header("Authorization", newToken).send(response)
 
-        res.send(user)
     } catch (error) {
         console.log(error)
     }
+
 }
+
+
 
 async function updateUser(req, res, next) {
     const id = req.params.id
-    let user = { username, password, email, imageUrl } = req.body
+    let user = { username, password, email } = req.body
     const obj = {}
+
     for (let key in user) {
         if (user[key] && key !== 'password') {
             obj[key] = user[key]
         }
     }
-
     if (password) {
+
         await bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, async (err, hash) => {
                 if (err) { next(err); return }
 
-                const result = await models.User.updateOne({ _id: id }, { ...obj, password: hash })
-                const updatedUser = await models.User.findOne({ _id: id })
+                const updatedUser = await models.User.findOneAndUpdate({ _id: id }, { ...obj, newPassword: hash, newPasswordConfirmed: false }
+                    , { new: true }
+                ).select('-password')
+
+
+                updatedUser.setConfirmationToken() // test
+                await updatedUser.save()
+
+
                 const teams = await getTeams(updatedUser._id)
                 const response = {
                     user: updatedUser,
                     teams
                 }
+
+                utils.sendConfirmationEmail(updatedUser, 'pass') //test
+
+
                 res.send(response)
                 return
+
+
             })
         })
     } else {
-        const result = await models.User.updateOne({ _id: id }, obj)
-        const updatedUser = await models.User.findOne({ _id: id })
+        await models.User.updateOne({ _id: id }, obj)
+        const updatedUser = await models.User.findOne({ _id: id }).select('-password')
         const teams = await getTeams(updatedUser._id)
         const response = {
             user: updatedUser,
@@ -248,13 +297,71 @@ async function updateUser(req, res, next) {
     }
 }
 
+async function updateUserImage(req, res, next) {
+    const id = req.params.id
+    let user = { newImage, oldImage } = req.body
+
+
+    if (newImage) {
+        await models.User.updateOne({ _id: id }, { image: newImage })
+
+    } else {
+        await models.User.updateOne({ _id: id }, { image: undefined })
+    }
+
+    if (oldImage) {
+        cloudinary.api.delete_resources([oldImage.publicId], (error, result) => { console.log(result, error) })
+    }
+
+    const updatedUser = await models.User.findOne({ _id: id }).select('-password')
+    const teams = await getTeams(updatedUser._id)
+    const response = {
+        user: updatedUser,
+        teams
+    }
+    res.send(response)
+
+}
+
+async function addNewPassword(req, res, next) {
+    const id = req.params.id
+
+    const { password } = req.body
+    await bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, async (err, hash) => {
+            if (err) { next(err); return }
+
+            const updatedUser = await models.User.findOneAndUpdate({ _id: id }, { newPassword: hash, newPasswordConfirmed: false }
+                , { new: true }
+            ).select('-password')
+
+
+            updatedUser.setConfirmationToken() // test
+            await updatedUser.save()
+
+            const teams = await getTeams(updatedUser._id)
+            const response = {
+                user: updatedUser,
+                teams
+            }
+
+            utils.sendConfirmationEmail(updatedUser, 'pass') //test
+
+
+            res.send(response)
+            return
+
+        })
+    })
+}
+
 async function updateUserRecentProjects(req, res, next) {
     const id = req.params.id
     const { recentProjects } = req.body
 
 
-    const result = await models.User.updateOne({ _id: id }, { recentProjects })
-    const updatedUser = await models.User.findOne({ _id: id })
+    await models.User.updateOne({ _id: id }, { recentProjects })
+    const updatedUser = await models.User.findOne({ _id: id }).select('-password')
     const teams = await getTeams(updatedUser._id)
     const response = {
         user: updatedUser,
@@ -296,15 +403,22 @@ async function getUserTasks(req, res, next) {
     const team = await models.Team.findOne({ _id: teamId })
         .populate({
             path: 'projects',
-            populate: {
+            populate: [{
                 path: 'lists',
                 populate: {
                     path: 'cards',
                     populate: {
-                        path: 'members'
+                        path: 'members',
+                        select: '-password'
                     }
                 }
-            }
+            }, {
+                path: 'membersRoles',
+                populate: {
+                    path: 'memberId',
+                    select: '-password'
+                }
+            }]
         })
 
     let projects = team.projects
@@ -337,7 +451,12 @@ async function deleteUserMessage(req, res, next) {
 
     try {
         await models.User.updateOne({ _id: userId }, { $pull: { inboxHistory: messageId } }).session(session)
-        await models.Message.deleteOne({ _id: messageId }).session(session)
+        const message = await models.Message.findOneAndUpdate({ _id: messageId }, { $pull: { recievers: userId } }, { new: true }).session(session)
+
+        if (message.recievers.length === 0) {
+            await models.Message.deleteOne({ _id: messageId }).session(session)
+        }
+
         await session.commitTransaction()
 
         session.endSession()

@@ -1,7 +1,7 @@
 const mongoose = require('mongoose')
 const Schema = mongoose.Schema
 const Model = mongoose.model
-const { String, ObjectId } = Schema.Types
+const { String, ObjectId, Boolean } = Schema.Types
 
 
 const messageSchema = new Schema({
@@ -12,24 +12,20 @@ const messageSchema = new Schema({
     },
 
     team: {
-        type: ObjectId,
-        ref: "Team",
+        id: String,
+        name: String,
+        isDeleted: Boolean
     },
 
     project: {
-        type: ObjectId,
-        ref: "Project",
+        id: String,
+        name: String,
+        isDeleted: Boolean
     },
 
-    list: {
-        type: ObjectId,
-        ref: "List",
-    },
+    list: {},
 
-    card: {
-        type: ObjectId,
-        ref: "Card",
-    },
+    card: {},
 
     sendFrom: {
         type: ObjectId,
@@ -37,10 +33,6 @@ const messageSchema = new Schema({
     },
 
     accepted: {
-        type: Boolean
-    },
-
-    canceled: {
         type: Boolean
     },
 

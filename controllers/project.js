@@ -33,11 +33,15 @@ async function getUserProjects(req, res, next) {
 async function getAllProjects(req, res, next) {
 
     const projects = await models.Project.find({})
-        .populate('author')
+        .populate({
+            path: 'author',
+            select: '-password'
+        })
         .populate({
             path: 'membersRoles',
             populate: {
                 path: 'memberId',
+                select: '-password'
             }
         })
     res.send(projects)
@@ -51,7 +55,8 @@ async function getProjectInfo(req, res, next) {
             populate: {
                 path: 'cards',
                 populate: {
-                    path: 'members'
+                    path: 'members',
+                    select: '-password'
                 }
             }
         })
@@ -59,15 +64,15 @@ async function getProjectInfo(req, res, next) {
             path: 'membersRoles',
             populate: {
                 path: 'memberId',
+                select: '-password'
             }
         })
     res.send(project)
 }
 
 async function createProject(req, res, next) {
-    const { name, description, teamId } = req.body
+    const { name, description, teamId, members } = req.body
     const { _id } = req.user
-
     const session = await mongoose.startSession()
     session.startTransaction()
 
@@ -75,17 +80,28 @@ async function createProject(req, res, next) {
         const projectCreationResult = await models.Project.create([{ name, description, author: _id }], { session })
         const createdProject = projectCreationResult[0]
 
+
         await models.ProjectUserRole.create([{ admin: true, projectId: createdProject, memberId: _id }], { session })
 
-        const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session)
+        const membersArr = []
 
-        const updatedProject = await models.Project.findByIdAndUpdate({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } }, { new: true })
+        for (let member of members) {
+            const projectUserRoleCreation = await models.ProjectUserRole.create([{ admin: false, projectId: createdProject._id, memberId: member._id }], { session })
+            const currProjectUserRole = projectUserRoleCreation[0]
+            membersArr.push(currProjectUserRole)
+            await models.User.updateOne({ _id: member._id }, { $push: { projects: currProjectUserRole } }, { session })            
+        }
+
+        const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session)
+        membersArr.push(projectUserRole)
+        const updatedProject = await models.Project.findByIdAndUpdate({ _id: projectUserRole.projectId }, { $push: { membersRoles: membersArr } }, { new: true })
             .populate({
                 path: 'lists',
                 populate: {
                     path: 'cards',
                     populate: {
-                        path: 'members'
+                        path: 'members',
+                        select: '-password'
                     }
                 }
             })
@@ -93,9 +109,13 @@ async function createProject(req, res, next) {
                 path: 'membersRoles',
                 populate: {
                     path: 'memberId',
+                    select: '-password'
                 }
             }).session(session)
         await models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
+
+
+
         await models.Team.updateOne({ _id: teamId }, { $push: { projects: createdProject } }, { session })
 
         await session.commitTransaction()
@@ -104,6 +124,7 @@ async function createProject(req, res, next) {
 
         res.send(updatedProject)
     } catch (error) {
+        console.log(error);
         await session.abortTransaction()
         session.endSession()
         res.send(error)
@@ -147,33 +168,50 @@ async function updateUserRoles(req, res, next) {
 }
 
 async function deleteProject(req, res, next) {
+    const userId = req.user._id
     const idProject = req.params.id
     const session = await mongoose.startSession()
     session.startTransaction()
 
     try {
-        const searchedLists = await models.Project.findOne({ _id: idProject }).select('lists -_id').populate('lists')
+        const projectForDelete = await models.Project.findOne({ _id: idProject }).populate('lists')
 
         let cardsArray = []
-        searchedLists.lists.map(a => cardsArray = cardsArray.concat(a.cards))
+        projectForDelete.lists.map(a => cardsArray = cardsArray.concat(a.cards))
 
         await models.Card.deleteMany({ _id: { $in: cardsArray } }).session(session)
 
         let listsArray = []
-        searchedLists.lists.map(a => listsArray.push(a._id))
+        projectForDelete.lists.map(a => listsArray.push(a._id))
 
         await models.List.deleteMany({ _id: { $in: listsArray } }).session(session)
 
         const projectUserRoles = await models.Project.findOne({ _id: idProject }).select('membersRoles -_id')
 
-        const members = await models.ProjectUserRole.find({ _id: { $in: projectUserRoles.membersRoles } }).select('memberId')
+        const members = await models.ProjectUserRole.find({ _id: { $in: projectUserRoles.membersRoles } })
 
-        members.forEach(async (element) => {
+        const membersArr = []
+
+        for (let element of members) {
             await models.User.updateOne({ _id: element.memberId }, { $pull: { projects: element._id } }).session(session)
             await models.ProjectUserRole.deleteOne({ _id: element._id }).session(session)
-        })
+            membersArr.push(element.memberId)
+        }
+
 
         await models.Team.updateOne({ projects: idProject }, { $pull: { projects: idProject } }).session(session)
+
+        const projectObj = { name: projectForDelete.name, id: idProject, isDeleted: true }
+        const messages = await models.Message.find({ "project.id": idProject })
+
+        for (let m of messages) {
+            await models.Message.updateOne({ _id: m._id }, { project: projectObj }).session(session)
+        }
+
+        const messageCreationResult = await models.Message.create([{ subject: 'Project deleted', project: projectObj, sendFrom: userId, recievers: membersArr }], { session })
+        const createdMessage = messageCreationResult[0]
+
+        await models.User.updateMany({ _id: { $in: membersArr } }, { $push: { inbox: createdMessage } }, { session })
 
         const removedProjectResult = await models.Project.deleteOne({ _id: idProject }).session(session)
 
@@ -223,8 +261,6 @@ async function addMember(req, res, next) {
 async function removeMember(req, res, next) {
     const { memberId } = req.body
     const projectId = req.params.id
-    const { _id } = req.user
-
 
     const session = await mongoose.startSession()
     session.startTransaction()

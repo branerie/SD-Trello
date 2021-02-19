@@ -20,6 +20,7 @@
   "homepage": "https://github.com/smartdesign2006/SD-Trello#readme",
   "dependencies": {
     "bcrypt": "^5.0.0",
+    "cloudinary": "^1.24.0",
     "cookie-parser": "^1.4.5",
     "cors": "^2.8.5",
     "dotenv": "^8.2.0",

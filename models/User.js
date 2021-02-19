@@ -19,13 +19,17 @@ const userSchema = new Schema({
 
     username: {
         type: String,
-        required: true,
-        unique: false
+        required: true
     },
 
-    password: { type: String },  
+    password: { type: String },
+    
+    newPassword: { type: String },      
 
-    imageUrl: { type: String },
+    image: {
+        path: {type: String},
+        publicId: {type: String}
+    },
 
     projects: [{ type: ObjectId, ref: "ProjectUserRole" }],
 
@@ -33,7 +37,9 @@ const userSchema = new Schema({
 
     inboxHistory: [{ type: ObjectId, ref: 'Message' }],
 
-    confirmed: { type: Boolean, default: true }, 
+    confirmed: { type: Boolean, default: true },
+
+    newPasswordConfirmed: { type: Boolean, default: true }, 
 
     confirmationToken: { type: String, default: '' },
 
@@ -50,7 +56,7 @@ userSchema.methods.setConfirmationToken = function () {
 }
 
 userSchema.methods.generateConfirmationUrl = function () {
-    return `${process.env.HOST}/confirmation/${this.confirmationToken}`
+    return `${process.env.HOST}confirmation/${this.confirmationToken}`
 }
 
 userSchema.pre('save', function (next) {

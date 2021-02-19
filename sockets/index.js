@@ -18,6 +18,26 @@ function sockets(socket) {
         socket.emit('team-updated', updatedTeam)
     })
 
+    socket.on('team-deleted', async (team) => {
+        console.log(username, 'team-deleted')
+        socket.to(team.id).emit('team-deleted', team.id)
+        team.recievers.map(async r => {
+            const user = await models.User.findOne({ _id: r }).select('-password')
+            const teams = await getTeams(r)
+            const inboxUser = await userInbox(r)
+            const response = {
+                user,
+                teams,
+                inboxUser
+            }
+            if (r === userId) {
+                socket.emit('message-sent', response)
+            }
+            socket.to(`${r}`).emit('message-sent', response)
+        })
+
+    })
+
     socket.on('project-join', (projectId) => {
         console.log(`${username} joined ${projectId}`)
         socket.join(projectId)
@@ -28,6 +48,27 @@ function sockets(socket) {
         const updatedProject = await projectUpdate(project._id)
         socket.to(project._id).emit('project-updated', updatedProject)
         socket.emit('project-updated', updatedProject)
+    })
+
+    socket.on('project-deleted', async (obj) => {
+        console.log(username, 'team-deleted')
+        socket.to(obj.teamId).emit('project-deleted', obj.projectId)
+        const team = await models.Team.findOne({ _id: obj.teamId }).select('members')
+        team.members.map(async m => {
+            const user = await models.User.findOne({ _id: m }).select('-password')
+            const teams = await getTeams(m)
+            const inboxUser = await userInbox(m)
+            const response = {
+                user,
+                teams,
+                inboxUser
+            }
+            if (user.id === userId) {
+                socket.emit('message-sent', response)
+            }
+            socket.to(`${m}`).emit('message-sent', response)
+        })
+
     })
 
     socket.on('task-team-join', (teamId) => {
@@ -130,15 +171,22 @@ async function taskTeamUpdate(teamId, userId) {
     const team = await models.Team.findOne({ _id: teamId })
         .populate({
             path: 'projects',
-            populate: {
+            populate: [{
                 path: 'lists',
                 populate: {
                     path: 'cards',
                     populate: {
-                        path: 'members'
+                        path: 'members',
+                        select: '-password'
                     }
                 }
-            }
+            }, {
+                path: 'membersRoles',
+                populate: {
+                    path: 'memberId',
+                    select: '-password'
+                }
+            }]
         })
 
     let projects = team.projects
