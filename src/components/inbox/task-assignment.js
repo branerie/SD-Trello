@@ -1,8 +1,9 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import Button from '../button'
+import ConfirmDialog from '../confirmation-dialog'
 
 import styles from './index.module.css'
 
@@ -11,6 +12,8 @@ export default function TaskAssignment({ message, setInboxHistory, options, isIn
     const token = getCookie("x-auth-token")
     const socket = useSocket()
     const params = useParams()
+    const [confirmOpen, setConfirmOpen] = useState(false)
+    const [currElement, setCurrElement] = useState('')
     const userId = params.userid
 
     async function moveToHistory() {
@@ -52,6 +55,14 @@ export default function TaskAssignment({ message, setInboxHistory, options, isIn
     }
 
     return (
+        <>
+        {confirmOpen &&
+            <ConfirmDialog
+                title='delete this message'
+                hideConfirm={() => setConfirmOpen(false)}
+                onConfirm={() => deleteMessage(currElement)}
+            />
+        }
         <div className={styles.message}>
             <div className={styles.container}>
                 <div className={styles.bold}>{message.subject}</div>
@@ -91,11 +102,16 @@ export default function TaskAssignment({ message, setInboxHistory, options, isIn
                     /> :
                     <Button
                         className={styles.button}
-                        onClick={() => { if (window.confirm('Are you sure you wish to delete this message?')) deleteMessage(message) }}
+                        // onClick={() => { if (window.confirm('Are you sure you wish to delete this message?')) deleteMessage(message) }}
+                        onClick={() => {
+                            setConfirmOpen(true)                            
+                            setCurrElement(message)
+                        }} 
                         title='Delete Message'
                     />
                 }
             </div>
         </div>
+        </>
     )
 }

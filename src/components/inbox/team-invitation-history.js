@@ -2,6 +2,7 @@ import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import getCookie from '../../utils/cookie'
 import Button from '../button'
+import ConfirmDialog from '../confirmation-dialog'
 import EditTeam from '../edit-team'
 import Transparent from '../transparent'
 import styles from './index.module.css'
@@ -11,6 +12,8 @@ export default function TeamInvitationHistory({ message, options, setInboxHistor
     const [currTeam, setCurrTeam] = useState({})
     const history = useHistory()
     const token = getCookie("x-auth-token")
+    const [confirmOpen, setConfirmOpen] = useState(false)
+    const [currElement, setCurrElement] = useState('')
 
     async function deleteMessage() {
         const response = await fetch(`/api/user/message/${message._id}`, {
@@ -49,6 +52,14 @@ export default function TeamInvitationHistory({ message, options, setInboxHistor
     }
 
     return (
+        <>
+        {confirmOpen &&
+            <ConfirmDialog
+                title='delete this message'
+                hideConfirm={() => setConfirmOpen(false)}
+                onConfirm={() => deleteMessage(currElement)}
+            />
+        }
         <div className={styles.message}>
             <div className={styles.container}>
                 {
@@ -86,7 +97,11 @@ export default function TeamInvitationHistory({ message, options, setInboxHistor
                 }
                 <Button
                     className={styles.button}
-                    onClick={() => { if (window.confirm('Are you sure you wish to delete this message?')) deleteMessage() }}
+                    // onClick={() => { if (window.confirm('Are you sure you wish to delete this message?')) deleteMessage() }}
+                    onClick={() => {
+                        setConfirmOpen(true)                            
+                        setCurrElement(message)
+                    }} 
                     title='Delete Message'
                 />
                 {
@@ -97,5 +112,6 @@ export default function TeamInvitationHistory({ message, options, setInboxHistor
                 }
             </div>
         </div>
+        </>
     )
 }

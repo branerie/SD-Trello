@@ -84,7 +84,7 @@ export default function EditList(props) {
             <form className={styles.container} >
                 <Title className={styles.title} title="Edit List" />
 
-                <div className={styles.inputContainer}>
+                <div className={styles['input-container']}>
                     <span className={styles.name}> Name</span>
                     {/* <input
                         className={styles.inputListName}
@@ -110,11 +110,11 @@ export default function EditList(props) {
                         }}
                     />
                 </div>
-                <div className={styles.changeColor}>
-                    <span>
+                <div className={styles['change-color']}>
+                    <span className={styles['color-title']}>
                         Color
                     </span>
-                    <span className={styles.listColor}>
+                    <span className={styles['list-color']}>
                         <ButtonClean
                             className={styles['color-button']}
                             style={{ background: `${color}` }}
@@ -125,7 +125,7 @@ export default function EditList(props) {
                 {isColorActive && <div ref={dropdownRef} >
                     <SketchPicker className={styles['color-pick']} color={color} onChangeComplete={onColorChange} />
                 </div>}
-                <div className={styles.editListButton}>
+                <div className={styles['edit-list-button']}>
                     {isAdmin &&
                         <ButtonGrey onClick={(e)=>handleSubmit(e)} title="Edit List" />
 

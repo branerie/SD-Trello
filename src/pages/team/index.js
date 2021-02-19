@@ -36,7 +36,18 @@ const TeamPage = () => {
     return (
         <PageLayout>
             <div className={styles.container}>
-
+                {
+                    isVisible &&
+                    <Transparent hideForm={() => setIsVisible(false)}>
+                        <CreateProject />
+                    </Transparent>
+                }
+                {
+                    showForm &&
+                    <Transparent hideForm={() => setShowForm(false)}>
+                        <EditTeam currTeam={currTeam} hideForm={() => { setShowForm(false) }} />
+                    </Transparent>
+                }
                 <div className={styles.pic1}>
                     <img className={styles.picture} src={pic1} alt="" />
                 </div>
@@ -50,13 +61,7 @@ const TeamPage = () => {
                             )
                         })}
                     </div>
-                    <ButtonGrey title={'New Project'} onClick={() => setIsVisible(true)} />
-                    {
-                        isVisible &&
-                        <Transparent hideForm={() => setIsVisible(false)}>
-                            <CreateProject />
-                        </Transparent>
-                    }
+
                 </div>
 
                 <div className={styles['right-side']}>
@@ -65,13 +70,9 @@ const TeamPage = () => {
                             members={members} invited={invited}
                         />
                         <ButtonGrey className={styles['new-project-button']} title={'View Team'} onClick={() => setShowForm(true)} />
+                        <ButtonGrey title={'New Project'} onClick={() => setIsVisible(true)} />
 
-                        {
-                            showForm &&
-                            <Transparent hideForm={() => setShowForm(false)}>
-                                <EditTeam currTeam={currTeam} hideForm={() => { setShowForm(false) }} />
-                            </Transparent>
-                        }
+
                     </div>
 
 
