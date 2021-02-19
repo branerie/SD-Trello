@@ -21,19 +21,17 @@ export default function Card({ card, project, showCurrentCard, setCurrCard }) {
             <div>
                 {((card.progress && card.progress !== 0) || card.members.length > 0 || card.attachments.length > 0) ?
                     <div className={styles.container}>
-                        {card.progress ? <ProgressBar progress={card.progress} /> : <div></div>}
+                        {card.progress ? <div className={styles.progress}><ProgressBar progress={card.progress} /></div> : <div></div>}
                         <div className={styles.container}>
                             {card.attachments.length > 0 && <ButtonClean
                                 className={`${styles.attachments} ${styles.button}`}
                                 onClick={() => setIsListVisible(true)}
                                 title={<img src={attPic} alt="" width='14px' />}
                             />}
-                            <div className={styles.members}>
-                                <MembersList
-                                    members={card.members}
-                                    maxLength={2}
-                                />
-                            </div>
+                            <MembersList
+                                members={card.members}
+                                maxLength={2}
+                            />
                         </div>
                     </div> : null
                 }

@@ -71,7 +71,7 @@ const MyTasksPage = () => {
                         key={team._id}
                         title={team.name}
                         onClick={() => selectTeam(team)}
-                        className={`${styles.filter} ${currTeam._id === team._id && styles.selected}`}
+                        className={`${styles.teams} ${currTeam._id === team._id && styles.selected}`}
                     />)
                 })}
             </div>
@@ -87,25 +87,28 @@ const MyTasksPage = () => {
                                         </Link>
                                     </div>
                                     <div className={`${styles.header} ${styles.card}`}>
-                                        <div className={styles.task}>Task:</div>
                                         <div className={styles.list}>List:</div>
+                                        <div className={styles.task}>Task:</div>
                                         <div className={styles.progress}>Progress (%):</div>
                                         <div className={styles.days}>Days Till End:</div>
                                     </div>
                                     {project.lists.map(list => {
                                         return (
-                                            <div key={list._id}>
-                                                {list.cards.map(card => {
-                                                    return (
-                                                        <MyTasksTask
-                                                            key={card._id}
-                                                            currTeam={currTeam}
-                                                            project={project}
-                                                            list={list}
-                                                            card={card}
-                                                        />
-                                                    )
-                                                })}
+                                            <div key={list._id} className={styles['list-container']}>
+                                                <div className={styles.list}>{list.name}</div>
+                                                <div>
+                                                    {list.cards.map(card => {
+                                                        return (
+                                                            <MyTasksTask
+                                                                key={card._id}
+                                                                currTeam={currTeam}
+                                                                project={project}
+                                                                list={list}
+                                                                card={card}
+                                                            />
+                                                        )
+                                                    })}
+                                                </div>
                                             </div>
                                         )
                                     })}

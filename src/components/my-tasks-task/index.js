@@ -1,17 +1,22 @@
 import React, { useState, useRef, useEffect } from 'react'
 import ButtonClean from '../button-clean'
 import pen from '../../images/pen.svg'
+import attPic from '../../images/edit-card/pic6.svg'
 import styles from "./index.module.css"
 import Transparent from '../transparent'
 import EditCard from '../edit-card'
 import getCookie from '../../utils/cookie'
 import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
+import AttachmentList from '../attachmentList'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 export default function MyTasksTask({ currTeam, project, list, card }) {
     const inputRef = useRef(null)
+    const listRef = useRef(null)
     const [isInputActive, setIsInputActive] = useState(false)
     const [showEditCard, setShowEditCard] = useState(false)
+    const [showAttachments, setShowAttachments] = useDetectOutsideClick(listRef)
     const [progress, setProgress] = useState('')
     const [isInputOk, setIsInputOk] = useState(true)
     const history = useHistory()
@@ -91,7 +96,7 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
     return (
         <div key={card._id} className={styles.card}>
             <div className={styles.task}>{card.name}</div>
-            <div className={styles.list}>{list.name}</div>
+            {/* <div className={styles.list}>{list.name}</div> */}
             <div className={styles.progress}>
                 <input
                     ref={inputRef}
@@ -113,25 +118,38 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
                                 <div>{days}</div>
                 }
             </div>
-            <ButtonClean
-                className={styles.pen}
-                onClick={() => setShowEditCard(true)}
-                title={<img src={pen} alt="..." width="11.5" height="11.5" />}
-            />
-            {
-                showEditCard &&
-                <div className={styles.edit}>
-                    <Transparent hideForm={() => setShowEditCard(!showEditCard)} >
-                        <EditCard
-                            hideForm={() => setShowEditCard(!showEditCard)}
-                            initialCard={card}
-                            listId={list._id}
-                            project={project}
-                            teamId={currTeam._id}
-                        />
-                    </Transparent>
-                </div>
-            }
+            <div className={styles['buttons-container']}>
+                {card.attachments.length > 0 && <ButtonClean
+                    className={styles.button}
+                    onClick={() => setShowAttachments(true)}
+                    title={<img src={attPic} alt="" width="14" />}
+                />}
+                <ButtonClean
+                    className={styles.button}
+                    onClick={() => setShowEditCard(true)}
+                    title={<img src={pen} alt="" width="14" />}
+                />
+            </div>
+            {showAttachments && <Transparent hideForm={() => setShowAttachments(false)} >
+                <AttachmentList
+                    listRef={listRef}
+                    attachments={card.attachments}
+                    card={card}
+                    project={project}
+                    teamId={currTeam._id}
+                />
+            </Transparent >}
+            {showEditCard && <div className={styles.edit}>
+                <Transparent hideForm={() => setShowEditCard(!showEditCard)} >
+                    <EditCard
+                        hideForm={() => setShowEditCard(!showEditCard)}
+                        initialCard={card}
+                        listId={list._id}
+                        project={project}
+                        teamId={currTeam._id}
+                    />
+                </Transparent>
+            </div>}
         </div>
     )
 }

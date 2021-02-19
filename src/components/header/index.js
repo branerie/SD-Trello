@@ -31,8 +31,6 @@ const Header = ({ asideOn }) => {
     const [showTeamForm, setShowTeamForm] = useState(false)
     const [showSearchForm, setShowSearchForm] = useDetectOutsideClick(dropdownRefSearch)
     const [searchInput, setSearchInput] = useState('')
-
-
     const [showProjectForm, setShowProjectForm] = useState(false)
     const context = useContext(UserContext)
     const projectContext = useContext(ProjectContext)
