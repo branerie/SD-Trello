@@ -44,7 +44,7 @@ export default function TaskProgress(props) {
         
         const cardProgressNum = Number(cardProgress)
         const newCardProgress = Math.max(Math.min(cardProgressNum, 100), 0)
-        if (isNaN(cardProgressNum) || newCardProgress === cardProgress) {
+        if (isNaN(cardProgressNum) || newCardProgress === Number(card.progress)) {
             return
         } 
 

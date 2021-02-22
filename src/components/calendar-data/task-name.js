@@ -6,10 +6,11 @@ import { useHistory, useParams } from 'react-router-dom';
 import { useSocket } from '../../contexts/SocketProvider';
 
 import AttachmentsLink from '../attachmentsLink';
+import ResponsiveTextArea from '../responsive-textarea';
 
 export default function TaskName({ card, listId, project }) {
 
-	const dropdownRef = useRef(null);
+	const dropdownRef = useRef(null)
 	const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
 	const [cardName, setCardName] = useState(card.name)
 	const history = useHistory()
@@ -48,17 +49,23 @@ export default function TaskName({ card, listId, project }) {
 
 	}, [history, cardName, isActive, setIsActive, card._id, listId, project, socket, teamId])
 
-
 	return (
 		<div>
 			{ isActive ?
 				< div ref={dropdownRef} className={styles.nameContainer} onBlur={editCardName} >
 					{/* <input className={styles.inputElementName} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} /> */}
-					<textarea
+					{/* <textarea
 						className={styles.inputElementName}
 						value={cardName}
 						onChange={e => setCardName(e.target.value)}
 						rows={2}
+					/> */}
+					<ResponsiveTextArea
+						value={cardName}
+						setValue={setCardName}
+						className={styles.inputElementName}
+						onSubmit={editCardName}
+						toggleActive={() => setIsActive(!isActive)}
 					/>
 				</div>
 				:
@@ -66,9 +73,9 @@ export default function TaskName({ card, listId, project }) {
 					<span className={styles['attachments-container']}>
 						{(card.attachments && card.attachments.length > 0 && !isActive) &&
 							<AttachmentsLink
-							card={card}
-							project={project}
-							teamId={teamId}
+								card={card}
+								project={project}
+								teamId={teamId}
 							/>
 						}
 					</span>

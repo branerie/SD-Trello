@@ -12,7 +12,7 @@ const ProgressFilters = ({ buttonStyle, filters, toggleFilter }) => {
         <div class={styles.container}>
             <ButtonClean 
                 title='Filter By Progress:' 
-                className={buttonStyle}
+                className={`${buttonStyle} ${styles['btn-progress']}`}
                 onClick={() => setIsActive(!isActive)}
             />
             { isActive &&
