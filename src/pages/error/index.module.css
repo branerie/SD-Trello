@@ -1,0 +1,17 @@
+.title{
+    font-weight: 600;
+    position: fixed;
+    top: 20%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+
+}
+
+.text{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+}

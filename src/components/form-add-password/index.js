@@ -56,13 +56,13 @@ export default function AddPassword(props) {
 
         <form className={styles.container} >
 
-            <div className={styles.innerContainer}>
+            <div className={styles['inner-container']}>
 
                 <div className={styles.logo}>
                     <img src={logo} alt="logo" width='110' height='100' />
                 </div>
 
-                <div className={styles.rightSide}>
+                <div className={styles['right-side']}>
                     <div className={styles.alerts}>
                         <Alert alert={alert} message={'Passwords do not match'} />
                         <Alert alert={fillAlert} message={'Please fill all fileds'} />
@@ -70,11 +70,11 @@ export default function AddPassword(props) {
 
                     <div className={styles.title} >Add password to user</div>
 
-                    <div className={styles.inputContainer}>
+                    <div className={styles['input-container']}>
                         <div> Password:</div>
                         <input
                             placeholder='********'
-                            className={styles.passInput}
+                            className={styles['pass-input']}
                             type="password"
                             value={password}
                             onChange={e => setPassword(e.target.value)}
@@ -84,17 +84,17 @@ export default function AddPassword(props) {
 
 
 
-                        <div className={styles.passInstructions}>
+                        <div className={styles['pass-instructions']}>
                             <p>Use 8 or more characters with a mix </p>
                             <p>of letters, numbers & symbols. </p>
                         </div>
                     </div>
 
-                    <div className={styles.inputContainer}>
+                    <div className={styles['input-container']}>
                         <div> Confirm Password:</div>
                         <input
                             placeholder='********'
-                            className={styles.passInput}
+                            className={styles['pass-input']}
                             type="password"
                             value={rePassword}
                             onChange={e => setRePassword(e.target.value)}
@@ -104,15 +104,15 @@ export default function AddPassword(props) {
 
                     </div>
 
-                    <div className={styles.newPassAlert}>
+                    <div className={styles['new-pass-alert']}>
                         Important!!! You have to activate your new password by following the link sent to your email. You have to do this in the next hour in order for your new password to be activated
                         </div>
 
-                    <div className={styles.buttonDivLogin}>
-                        <button type='submit' className={styles.loginButton} onClick={handleSubmit}>Submit</button>
+                    <div className={styles['button-div-login']}>
+                        <button type='submit' className={styles['login-button']} onClick={handleSubmit}>Submit</button>
                     </div>
 
-                    <div className={styles.textLogin}>User was registered with Google. Please add password for this Website</div>
+                    <div className={styles['text-login']}>User was registered with Google. Please add password for this Website</div>
                 </div>
 
             </div>
