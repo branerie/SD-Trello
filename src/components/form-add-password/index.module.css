@@ -21,7 +21,7 @@
     height: 5%;    
 }
 
-.innerContainer{
+.inner-container{
     width: 100%;
     height: 95%;
     display: flex;
@@ -34,7 +34,7 @@
     height: 100%;
     width: 10%;
 }
-.rightSide{
+.right-side{
     width: 80%;
    height: 100%;
    /* margin-right: 25%; */
@@ -55,19 +55,19 @@
     text-align: center;
 }
 
-.inputContainer{
+.input-container{
     align-items: center;
     width: 30%;
     margin: 5% auto;    
     margin-bottom: 2%;
 }
 
-.passInstructions{
+.pass-instructions{
     font-size: 0.7em;
     
 }
 
-.passInput{
+.pass-input{
     border: solid 1px #363338;
     border-radius: 5px;
     height: 1.5em;
@@ -76,7 +76,7 @@
     outline: none;
 }
 
-.loginButton{
+.login-button{
     color: #fff;
     background-color: #363338;
     border-radius: 15px;
@@ -91,45 +91,19 @@
     outline: none;
   }
 
-  .buttonDivLogin{
+  .button-div-login{
     margin: 5% auto;
     width: 25%;     
 }
 
-.textLogin{
+.text-login{
     margin: 5% auto;
     width: 45%;  
     text-align: center;   
 }
 
-  .textDiv{      
-    text-align: center; 
-  }
 
-  .forgotPass{
-    text-decoration: underline;
-    font-weight: lighter;
-    margin-bottom: 5%;
-    color: #363338;
-  }
-
-  .newToSmM{    
-    font-weight: lighter;
-    margin-bottom: 5%;
-    color: #363338;
-  }
-
-  .signUpBtn{
-      border: none;
-      text-decoration: underline;
-      color: #F3981F;
-      margin: 2%;
-      cursor: pointer;
-      font-weight: 500;
-      font-size: 1em;
-  }
-
-  .newPassAlert{
+  .new-pass-alert{
     background-color: rgb(219, 88, 88);  
     max-width: 300px;
     height: auto; 
