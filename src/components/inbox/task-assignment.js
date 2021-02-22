@@ -2,7 +2,8 @@ import React from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
-import Button from '../button'
+import ButtonGrey from '../button-grey'
+import ConfirmDialog from '../confirmation-dialog'
 
 import styles from './index.module.css'
 
@@ -58,12 +59,13 @@ export default function TaskAssignment({ message, setInboxHistory, options, isIn
                 <div>{new Date(message.createdAt).toLocaleDateString("en-US", options)}</div>
             </div>
             <div>
-                <div className={`${styles.bold} ${styles.inline}`}>Project:</div>
-                <div className={styles.inline}>{message.project.name}</div>
-                <div className={`${styles.bold} ${styles.inline} ${styles.margin}`}>List:</div>
-                <div className={styles.inline}>{message.list.name}</div>
-                <div className={`${styles.bold} ${styles.inline} ${styles.margin}`}>Task:</div>
-                <div className={styles.inline}>{message.card.name}</div>
+
+                {/* <div className={`${styles.bold} ${styles.inline}`}>Project:</div> */}
+                <div className={`${styles.inline} ${styles.margin}`}><span className={styles.bold}>Project:</span>{message.project.name}</div>
+                {/* <div className={`${styles.bold} ${styles.inline}`}>List:</div> */}
+                <div className={`${styles.inline} ${styles.margin}`}><span className={styles.bold}>List:</span>{message.list.name}</div>
+                {/* <div className={`${styles.bold} ${styles.inline}`}>Task:</div> */}
+                <div className={`${styles.inline} ${styles.margin}`}><span className={styles.bold}>Task:</span>{message.card.name}</div>
             </div>
             <div>
                 <div className={`${styles.bold} ${styles.inline}`}>Assigned by:</div>
@@ -76,7 +78,7 @@ export default function TaskAssignment({ message, setInboxHistory, options, isIn
             <div>
                 {
                     !message.team.isDeleted && !message.project.isDeleted &&
-                    <Button
+                    <ButtonGrey
                         className={styles.button}
                         onClick={() => history.push(`/project-board/${message.team.id}/${message.project.id}`)}
                         title='Go to Project'
@@ -84,14 +86,17 @@ export default function TaskAssignment({ message, setInboxHistory, options, isIn
                 }
                 {
                     isInbox ?
-                    <Button
+                    <ButtonGrey
                         className={styles.button}
                         onClick={moveToHistory}
                         title='Move to History'
                     /> :
-                    <Button
+                    <ButtonGrey
                         className={styles.button}
-                        onClick={() => { if (window.confirm('Are you sure you wish to delete this message?')) deleteMessage(message) }}
+                        onClick={() => {
+                            setConfirmOpen(true)                            
+                            setCurrElement(message)
+                        }} 
                         title='Delete Message'
                     />
                 }

@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
-import Button from '../button'
+import ButtonGrey from '../button-grey'
 import EditTeam from '../edit-team'
 import Transparent from '../transparent'
 import styles from './index.module.css'
@@ -99,24 +99,24 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
                 message.team.isDeleted ?
                     <div>
                         <div className={styles.bold}>Team deleted</div>
-                        <Button
+                        <ButtonGrey
                             className={styles.button}
                             onClick={moveToHistory}
                             title='Move to History'
                         />
                     </div> :
                     <div>
-                        <Button
+                        <ButtonGrey
                             className={styles.button}
                             onClick={() => acceptInvitation(message, true)}
                             title='Accept'
                         />
-                        <Button
+                        <ButtonGrey
                             className={styles.button}
                             onClick={() => acceptInvitation(message, false)}
                             title='Decline'
                         />
-                        <Button
+                        <ButtonGrey
                             className={styles.button}
                             onClick={viewTeam}
                             title='View Team'

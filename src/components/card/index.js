@@ -7,7 +7,6 @@ import ProgressBar from '../progress-bar'
 import Transparent from '../transparent'
 import AttachmentList from '../attachmentList'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import attPic from '../../images/edit-card/pic6.svg'
 import { useParams } from 'react-router-dom'
 
 export default function Card({ card, project, showCurrentCard, setCurrCard }) {

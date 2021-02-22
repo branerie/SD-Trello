@@ -1,22 +1,18 @@
 import React, { useState, useRef, useEffect } from 'react'
 import ButtonClean from '../button-clean'
 import pen from '../../images/pen.svg'
-import attPic from '../../images/edit-card/pic6.svg'
 import styles from "./index.module.css"
 import Transparent from '../transparent'
 import EditCard from '../edit-card'
 import getCookie from '../../utils/cookie'
 import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
-import AttachmentList from '../attachmentList'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import AttachmentsLink from '../attachmentsLink'
 
 export default function MyTasksTask({ currTeam, project, list, card }) {
     const inputRef = useRef(null)
-    const listRef = useRef(null)
     const [isInputActive, setIsInputActive] = useState(false)
     const [showEditCard, setShowEditCard] = useState(false)
-    const [showAttachments, setShowAttachments] = useDetectOutsideClick(listRef)
     const [progress, setProgress] = useState('')
     const [isInputOk, setIsInputOk] = useState(true)
     const history = useHistory()
@@ -118,27 +114,14 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
                 }
             </div>
             <div className={styles['buttons-container']}>
-                {card.attachments.length > 0 && <ButtonClean
-                    className={styles.button}
-                    onClick={() => setShowAttachments(true)}
-                    title={<img src={attPic} alt="" width="14" />}
-                />}
+                { card.attachments.length > 0 && <AttachmentsLink card={card} project={project} teamId={currTeam._id} /> }
                 <ButtonClean
                     className={styles.button}
                     onClick={() => setShowEditCard(true)}
                     title={<img src={pen} alt="" width="14" />}
                 />
             </div>
-            {showAttachments && <Transparent hideForm={() => setShowAttachments(false)} >
-                <AttachmentList
-                    listRef={listRef}
-                    attachments={card.attachments}
-                    card={card}
-                    project={project}
-                    teamId={currTeam._id}
-                />
-            </Transparent >}
-            {showEditCard && <div className={styles.edit}>
+            { showEditCard && <div className={styles.edit}>
                 <Transparent hideForm={() => setShowEditCard(!showEditCard)} >
                     <EditCard
                         hideForm={() => setShowEditCard(!showEditCard)}
