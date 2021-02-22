@@ -9,7 +9,7 @@ import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import AttachmentsLink from '../attachmentsLink'
 
-export default function MyTasksTask({ currTeam, project, list, card }) {
+export default function MyTasksTask({ teamId, project, list, card }) {
     const inputRef = useRef(null)
     const [isInputActive, setIsInputActive] = useState(false)
     const [showEditCard, setShowEditCard] = useState(false)
@@ -68,7 +68,7 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
             return
         } else {
             socket.emit('project-update', project)
-            socket.emit('task-team-update', currTeam._id)
+            socket.emit('task-team-update', teamId)
         }
     }
 
@@ -114,7 +114,7 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
                 }
             </div>
             <div className={styles['buttons-container']}>
-                { card.attachments.length > 0 && <AttachmentsLink card={card} project={project} teamId={currTeam._id} /> }
+                { card.attachments.length > 0 && <AttachmentsLink card={card} project={project} teamId={teamId} /> }
                 <ButtonClean
                     className={styles.button}
                     onClick={() => setShowEditCard(true)}
@@ -128,7 +128,7 @@ export default function MyTasksTask({ currTeam, project, list, card }) {
                         initialCard={card}
                         listId={list._id}
                         project={project}
-                        teamId={currTeam._id}
+                        teamId={teamId}
                     />
                 </Transparent>
             </div>}

@@ -421,6 +421,8 @@ async function getUserTasks(req, res, next) {
             }]
         })
 
+        await models.User.updateOne({ _id: userId }, { lastTeamSelected: teamId })
+
     let projects = team.projects
 
     projects.forEach(p => p.lists.forEach(l => l.cards = l.cards.filter(c => {
