@@ -22,3 +22,10 @@
     border-radius: 10px;
     cursor: pointer;
 }
+
+@media screen and (max-width:800px) {
+    .search-container {
+        background: #363338;
+        color: white;
+    }
+}
