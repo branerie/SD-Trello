@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
@@ -11,6 +11,8 @@ export default function TeamDeleted({ message, setInboxHistory, options, isInbox
     const token = getCookie("x-auth-token")
     const socket = useSocket()
     const params = useParams()
+    const [confirmOpen, setConfirmOpen] = useState(false)
+    const [currElement, setCurrElement] = useState('')
     const userId = params.userid
 
     async function moveToHistory() {
@@ -52,6 +54,14 @@ export default function TeamDeleted({ message, setInboxHistory, options, isInbox
     }
 
     return (
+        <>
+        {confirmOpen &&
+            <ConfirmDialog
+                title='delete this message'
+                hideConfirm={() => setConfirmOpen(false)}
+                onConfirm={() => deleteMessage(currElement)}
+            />
+        }
         <div className={styles.message}>
             <div className={styles.container}>
                 <div className={styles.container}>
@@ -85,5 +95,6 @@ export default function TeamDeleted({ message, setInboxHistory, options, isInbox
                 }
             </div>
         </div>
+        </>
     )
 }

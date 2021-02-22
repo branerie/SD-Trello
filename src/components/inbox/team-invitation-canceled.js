@@ -15,6 +15,8 @@ export default function TeamInvitationCanceled({ message, setInboxHistory, optio
     const token = getCookie("x-auth-token")
     const socket = useSocket()
     const params = useParams()
+    const [confirmOpen, setConfirmOpen] = useState(false)
+    const [currElement, setCurrElement] = useState('')
     const userId = params.userid
 
     async function moveToHistory() {
@@ -75,6 +77,14 @@ export default function TeamInvitationCanceled({ message, setInboxHistory, optio
     }
 
     return (
+        <>
+        {confirmOpen &&
+            <ConfirmDialog
+                title='delete this message'
+                hideConfirm={() => setConfirmOpen(false)}
+                onConfirm={() => deleteMessage(currElement)}
+            />
+        }
         <div className={styles.message}>
             <div className={styles.container}>
                 <div className={styles.bold}>{message.subject}</div>
@@ -123,5 +133,6 @@ export default function TeamInvitationCanceled({ message, setInboxHistory, optio
                 </Transparent>
             }
         </div>
+        </>
     )
 }

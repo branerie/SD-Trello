@@ -5,12 +5,11 @@ const ToggleSwitch = ({ isActive, toggleStatus, label, containerStyle }) => {
     return (
         <div className={`${styles.container} ${containerStyle}`}>
             <label>{label}</label>
-            <span className={`${styles['switch-container']} ${isActive && styles['container-active']}`}>
-                <span 
-                    className={`${styles['state-circle']} ${isActive && styles.active}`} 
-                    onClick={toggleStatus}
-                ></span>
-                <span className={styles['toggle-circle']} onClick={toggleStatus}></span>
+            <span 
+                className={`${styles['switch-container']} ${isActive && styles['container-active']}`}
+                onClick={toggleStatus}
+            >
+                <span className={styles['state-circle']}></span>
             </span>
         </div>
     )

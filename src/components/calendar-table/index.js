@@ -1,4 +1,4 @@
-import React, { useCallback, useEffect, useState, useContext } from "react";
+import React, { useCallback, useEffect, useState, useContext } from "react"
 import styles from './index.module.css'
 import ReactTable from "react-table"
 import "react-table/react-table.css"
@@ -8,17 +8,18 @@ import TaskName from '../calendar-data/task-name'
 import TaskProgress from "../calendar-data/task-progress"
 import TaskDueDate from "../calendar-data/task-dueDate"
 import AddTask from "../calendar-data/add-task"
+import AddList from "../calendar-data/add-list"
 import ProjectContext from "../../contexts/ProjectContext"
 import assembleColumnData from "../calendar-data/column-data"
 import Transparent from "../transparent"
 import EditList from "../edit-list"
 import UserContext from '../../contexts/UserContext'
-import TaskFilters from "../calendar-data/task-filters";
-import MembersList from "../members-list"
-import TableDateNavigation from "../table-date-navigation";
+import TaskFilters from '../calendar-data/task-filters'
+import MembersList from '../members-list'
+import TableDateNavigation from '../table-date-navigation'
+import ButtonClean from '../button-clean'
 import { formatDate, getDateWithOffset, getMonday } from '../../utils/date'
 import { createTableEntry, parseCardHistory, applyCardFilters, getCardsSortMethod } from './utils'
-import AddList from "../calendar-data/add-list";
 
 const TableDndApp = ({ project }) => {
     const projectContext = useContext(ProjectContext)
@@ -27,6 +28,7 @@ const TableDndApp = ({ project }) => {
     const [startDate, setStartDate] = useState(getMonday())
     const [tableData, setTableData] = useState([])
     const [currList, setCurrList] = useState('')
+    const [newEntries, setNewEntries] = useState(null)
     const [sortCriteria, setSortCriteria] = useState({ columnName: null, isDescending: false })
     const [filter, setFilter] = useState({
         progress: { notStarted: true, inProgress: true, done: true },
@@ -71,8 +73,9 @@ const TableDndApp = ({ project }) => {
                     </div>
                 ),
                 dueDate: (
-                    <div>
-                        <AddTask listId={list._id} project={project} />
+                    <div onClick={() => setNewEntries({ newTask: list._id })} className={styles.addTask}>
+                        {/* <AddTask listId={list._id} project={project} /> */}
+                        + Add Task
                     </div>
                 )
             }))
@@ -84,11 +87,13 @@ const TableDndApp = ({ project }) => {
 
             listCards.forEach(card => {
                 const cardDueDate = card.dueDate ? new Date(card.dueDate) : ''
-                const historyArr2 = parseCardHistory(card.history)
+                // const historyArr2 = parseCardHistory(card.history)
+                const historyByDate = parseCardHistory(card.history)
 
                 const cellData = {
                     date: cardDueDate,
-                    history: historyArr2,
+                    // history: historyArr2,
+                    history: historyByDate,
                     progress: card.progress
                 }
 
@@ -136,8 +141,27 @@ const TableDndApp = ({ project }) => {
                     )
                 }))
             })
-            return data
+
+            if (newEntries && newEntries.newTask && newEntries.newTask === list._id) {
+                data.push(createTableEntry({
+                    task: (
+                        <AddTask
+                            listId={list._id}
+                            project={project}
+                            handleInputRemove={() => setNewEntries(null)}
+                        />
+                    )
+                }))
+            }
         })
+
+        if (newEntries && newEntries.newList) {
+            data.push(createTableEntry({
+                task: (
+                    <AddList project={project} handleInputRemove={() => setNewEntries(null)} />
+                )
+            }))
+        }
 
         /* 
         Rows need to be reversed if descending sort as by default ReactTable simply reverses 
@@ -148,7 +172,7 @@ const TableDndApp = ({ project }) => {
         and make each list a subtable. Then the sort should act per-subcomponent 
         */
         setTableData(sortCriteria.isDescending ? data.reverse() : data)
-    }, [filter, onListClick, params.teamid, projectContext, project, sortCriteria.columnName, sortCriteria.isDescending])
+    }, [filter, onListClick, params.teamid, projectContext, project, newEntries, sortCriteria.columnName, sortCriteria.isDescending])
 
     useEffect(() => {
         updateTableData()
@@ -179,7 +203,12 @@ const TableDndApp = ({ project }) => {
                     setStartDate={setStartDate}
                     changeStartDate={changeStartDate}
                 />
-                <AddList project={project} />
+                {/* <AddList project={project} /> */}
+                <ButtonClean   
+                    className={styles.addListButton} 
+                    onClick={() => setNewEntries({ newList: true })} 
+                    title='+ Add List'
+                />
             </div>
             <div>
                 {/* <DragDropContext onDragEnd={handleDragEnd} > */}

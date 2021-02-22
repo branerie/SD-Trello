@@ -12,7 +12,7 @@ const responseGoogle = async (googleResponse, onSuccess, onFailure) => {
             }
         })
         const authToken = promise.headers.get("Authorization")
-        document.cookie = `x-auth-token=${authToken}`
+        document.cookie = `x-auth-token=${authToken};path=/`
 
         const response = await promise.json()
 

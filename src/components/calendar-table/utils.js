@@ -1,4 +1,4 @@
-import { compareDates } from "../../utils/date"
+import { compareDates, formatDate } from "../../utils/date"
 
 const sortByTask = (cardOne, cardTwo) => cardOne.name.localeCompare(cardTwo.name)
 
@@ -64,39 +64,58 @@ const parseCardHistory = (taskHistory) => {
     if (!taskHistory) {
         return null
     }
-    
-    const historyArr = []
-    for (let histIndex = 0; histIndex < taskHistory.length; histIndex++) {
-        const currElement = taskHistory[histIndex]
-        const nextElement = taskHistory[histIndex + 1]
-        
-        const currEventType = currElement.event.split(' ')[0]
-        
-        let shouldIncludeEvent = true
-        if (nextElement) {
-            const nextEventType = nextElement.event.split(' ')[0]
 
-            if (nextEventType === currEventType && 
-                currElement.date === nextElement.date) {
-                shouldIncludeEvent = false
-            }
+    const historyByDate = { events: {}, hasEventsInWeek: {} }
+    for (let element of taskHistory) {
+        const elementDate = new Date(element.date)
+
+        if (element.event === 'Created') {
+            historyByDate.startDate = elementDate
         }
 
-        if (shouldIncludeEvent) {
-            historyArr.push({
-                event: currElement.event,
-                date: currElement.date
-            })
-        }
+        historyByDate.events[formatDate(elementDate, '%d/%m/%y')] = element
+        historyByDate.hasEventsInWeek[formatDate(elementDate, '%w/%y')] = true
     }
 
-    return historyArr
+    const lastHistoryEvent = taskHistory[taskHistory.length - 1]
+    if (lastHistoryEvent && lastHistoryEvent.event === 'Progress 100%') {
+        historyByDate.finishedDate = new Date(lastHistoryEvent.date)
+    }
+    
+    return historyByDate
+
+    // const historyArr = []
+    // for (let histIndex = 0; histIndex < taskHistory.length; histIndex++) {
+    //     const currElement = taskHistory[histIndex]
+    //     const nextElement = taskHistory[histIndex + 1]
+        
+    //     const currEventType = currElement.event.split(' ')[0]
+        
+    //     let shouldIncludeEvent = true
+    //     if (nextElement) {
+    //         const nextEventType = nextElement.event.split(' ')[0]
+
+    //         if (nextEventType === currEventType && 
+    //             currElement.date === nextElement.date) {
+    //             shouldIncludeEvent = false
+    //         }
+    //     }
+
+    //     if (shouldIncludeEvent) {
+    //         historyArr.push({
+    //             event: currElement.event,
+    //             date: currElement.date
+    //         })
+    //     }
+    // }
+
+    // return historyArr
 }
 
 const applyCardFilters = (card, filters) => {
     let isCardFilterPassed = false
     if (filters.progress.notStarted && 
-        (card.progress === 0 || card.progress === null)) {
+        (card.progress === 0 || !card.progress)) {
         isCardFilterPassed = true
     }
 

@@ -38,24 +38,20 @@ export default function TaskProgress(props) {
         const listId = props.listId
 
 
-        if (cardProgress === "") {
-            console.log('return');
+        if (!cardProgress) {
             return
-        } else if (Number(cardProgress) > 100) {
-            setCardProgress(100)
+        } 
+        
+        const cardProgressNum = Number(cardProgress)
+        const newCardProgress = Math.max(Math.min(cardProgressNum, 100), 0)
+        if (isNaN(cardProgressNum) || newCardProgress === Number(card.progress)) {
             return
-        } else if (Number(cardProgress) < 0) {
-            setCardProgress(0)
-            return
-        }
+        } 
 
-        let arr = [...taskHistory]
+        setCardProgress(newCardProgress)
 
-        arr.push({
-            'event': `Progress ${cardProgress}%`,
-            'date': today
-        })
-        setTaskHistory(arr)
+        const newTaskHistory = [...taskHistory,  { event: `Progress ${cardProgress}%`, date: today }]
+        setTaskHistory(newTaskHistory)
 
 
         const token = getCookie("x-auth-token")
@@ -67,18 +63,18 @@ export default function TaskProgress(props) {
             },
             body: JSON.stringify({
                 progress: cardProgress,
-                history: arr
+                history: newTaskHistory
             })
         })
+
         if (!response.ok) {
             history.push("/error")
             return
-        } else {
-            // setCardProgress('')
-            setIsActive(!isActive)
-            socket.emit('project-update', props.project)
-            socket.emit('task-team-update', teamId)
         }
+
+        setIsActive(!isActive)
+        socket.emit('project-update', props.project)
+        socket.emit('task-team-update', teamId)
 
     }, [history, cardProgress, isActive, setIsActive, taskHistory, today, card._id, props.listId, props.project, socket, teamId])
 
@@ -103,8 +99,8 @@ export default function TaskProgress(props) {
 
         }
         return (
-            <div>
-                Add Progress
+            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+                + Add
             </div>
         )
     }

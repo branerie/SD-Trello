@@ -233,10 +233,10 @@ export default function EditTeam(props) {
 
                     <div className={styles.title} >Team</div>
 
-                    <div className={styles.inputContainer}>
+                    <div className={styles['input-container']}>
                         <span> Name</span>
                         <input
-                            className={styles.inputName}
+                            className={styles['input-name']}
                             value={name}
                             onChange={e => setName(e.target.value)}
                             label="Name"
@@ -244,10 +244,10 @@ export default function EditTeam(props) {
                         />
                     </div>
 
-                    <div className={styles.inputContainerDescr}>
+                    <div className={styles['input-container-descr']}>
                         <span> Description</span>
                         <textarea
-                            className={styles.textareaDescr}
+                            className={styles['text-area-descr']}
                             value={description}
                             onChange={e => setDescription(e.target.value)}
                             label="Description"
@@ -256,12 +256,12 @@ export default function EditTeam(props) {
                     </div>
                     {
                         isAdmin ?
-                            <div className={styles.inputContainerInvite}>
-                                <span className={styles.textInvite}> Invite Members</span>
+                            <div className={styles['input-container-invite']}>
+                                <span className={styles['text-invite']}> Invite Members</span>
 
-                                <div className={styles.inviteInput}>
+                                <div className={styles['invite-input']}>
                                     <input
-                                        className={styles.inputInvite}
+                                        className={styles['input-invite']}
                                         autoComplete="off"
                                         value={member}
                                         onChange={inputMembers}
@@ -272,7 +272,7 @@ export default function EditTeam(props) {
 
                                     />
 
-                                    <div className={styles.selectForInvite}>
+                                    <div className={styles['select-for-invite']}>
                                         {
                                             showMembers ?
                                                 <div className={styles.members}>
@@ -326,11 +326,11 @@ export default function EditTeam(props) {
 
                     {
                         isAdmin ?
-                            <div className={styles.membersDiv}>
+                            <div className={styles['members-div']}>
 
 
 
-                                <div className={styles.membersAvatars}>
+                                <div className={styles['members-avatars']}>
                                     <span>
                                         <div>
                                             Send Invitation:
@@ -400,9 +400,9 @@ export default function EditTeam(props) {
                                     }
                                 </div>
 
-                                <div className={styles.buttonDiv}>
-                                    <ButtonGrey className={styles.createButton} onClick={() => handleSubmit()} title={'Submit Changes'} />
-                                    <ButtonGrey className={styles.createButton} title={'Delete Team'}
+                                <div className={styles['button-div']}>
+                                    <ButtonGrey className={styles['create-button']} onClick={() => handleSubmit()} title={'Submit Changes'} />
+                                    <ButtonGrey className={styles['create-button']} title={'Delete Team'}
                                         onClick={() => {
                                             setConfirmOpen(true)
                                             setConfirmTitle('delete this team')
@@ -419,8 +419,8 @@ export default function EditTeam(props) {
                                     members={members} invited={invited}
                                 />
 
-                                <div className={styles.leaveTeamBtnDiv}>
-                                    <ButtonGrey title={'Leave Team'} className={styles.leaveTeamBtn}
+                                <div className={styles['leave-team-btn-div']}>
+                                    <ButtonGrey title={'Leave Team'} className={styles['leave-team-btn']}
                                         onClick={() => {
                                             setConfirmOpen(true)
                                             setConfirmTitle('leave this team')

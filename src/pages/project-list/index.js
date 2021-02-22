@@ -44,7 +44,7 @@ export default function ProjectList() {
     }
 
     return (
-        <PageLayout contentStyle={{ margin: '5.6rem 0.2rem 0 3.5rem', padding: 0 }}>
+        <PageLayout contentClassName={styles['layout-container']}>
             <div className={styles.calendarPageContainer}>
                 <div>
                     <div className={styles['calendar-container']}>
@@ -53,6 +53,6 @@ export default function ProjectList() {
                     </div>
                 </div>
             </div>
-        </PageLayout >
+        </PageLayout>
     )
 }

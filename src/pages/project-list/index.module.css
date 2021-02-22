@@ -8,6 +8,12 @@
     display: grid;
 }
 
+.layout-container {
+    margin: 90px 0 0 56px;
+    padding: 0 4px 4px 0;
+    width: calc(100vw - 56px);
+}
+
 .table {
     border: solid red 1px;
     width: 1000px;

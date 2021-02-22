@@ -28,3 +28,8 @@
     border-bottom-right-radius: 10px;
     border-bottom: 1px solid #707070;
 }
+
+.btn-progress {
+    /* Hacky - simply to align the button with the other (fieldset) buttons in project-list */
+    margin-top: 11.6px;
+}

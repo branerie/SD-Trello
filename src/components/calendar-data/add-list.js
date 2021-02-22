@@ -1,86 +1,48 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-import ButtonClean from '../button-clean'
+import AddProjectElement from './add-project-element'
 
-
-
-export default function AddList({ project }) {
-    const history = useHistory()     
+export default function AddList({ project, handleInputRemove }) {
     const [listName, setListName] = useState('')
-    const listRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(listRef)
     const socket = useSocket()
+    const history = useHistory()     
 
 
-
-    const updateProjectSocket = useCallback(() => {
-        socket.emit('project-update', project)
-    }, [socket, project])
-
-
-    const addList = useCallback(async (event) => {
-        event.preventDefault()
+    const handleSubmit = useCallback(async () => {
         const projectId = project._id
-
-        if (listName === "") {
-            console.log('return');
-            return
+        if (!listName) {
+            return handleInputRemove()
         }
-        const token = getCookie("x-auth-token")
+
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/projects/lists/${projectId}`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({ name: listName })
         })
+
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
-        } else {
-            setIsActive(!isActive)
-            setListName('')
-            updateProjectSocket()
         }
 
-    }, [history, listName, updateProjectSocket, setIsActive, isActive,project._id])
-
-
+        socket.emit('project-update', project)
+        handleInputRemove()
+            
+    }, [history, listName, project._id])
 
     return (
-
-
-        <div className={styles.list} >
-            { isActive 
-                ?   
-                <form ref={listRef} className={styles.container}>
-                    <input 
-                        className={styles.inputList} 
-                        type={'text'} 
-                        value={listName} 
-                        onChange={e => setListName(e.target.value)} 
-                    />
-                    <ButtonClean 
-                        type='submit' 
-                        className={styles.addListButton}
-                        onClick={addList} 
-                        title='+ Add' 
-                    />
-                </form> 
-                :   
-                <ButtonClean   
-                    className={styles.addListButton} 
-                    onClick={() => setIsActive(!isActive)} 
-                    title='+ Add List'
-                />
-            }
-
-        </div>
-
+        <AddProjectElement
+            elementName={listName}
+            setElementName={setListName}
+            handleSubmit={handleSubmit}
+            handleInputRemove={handleInputRemove}
+            placeholder='Enter new list name:'
+        />
     )
 }
