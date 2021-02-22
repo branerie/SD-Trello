@@ -2,7 +2,7 @@ import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
-import Button from '../button'
+import ButtonGrey from '../button-grey'
 import ConfirmDialog from '../confirmation-dialog'
 import styles from './index.module.css'
 
@@ -76,7 +76,7 @@ export default function TeamDeleted({ message, setInboxHistory, options, isInbox
             <div>
                 {
                     isInbox &&
-                    <Button
+                    <ButtonGrey
                         className={styles.button}
                         onClick={moveToHistory}
                         title='Move to History'
@@ -84,9 +84,8 @@ export default function TeamDeleted({ message, setInboxHistory, options, isInbox
                 }
                 {
                     !isInbox &&
-                    <Button
+                    <ButtonGrey
                     className={styles.button}
-                    // onClick={() => { if (window.confirm('Are you sure you wish to delete this message?')) deleteMessage(message) }}
                     onClick={() => {
                         setConfirmOpen(true)                            
                         setCurrElement(message)

@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import getCookie from '../../utils/cookie'
-import Button from '../button'
+import ButtonGrey from '../button-grey'
 import ConfirmDialog from '../confirmation-dialog'
 import EditTeam from '../edit-team'
 import Transparent from '../transparent'
@@ -89,15 +89,14 @@ export default function TeamInvitationHistory({ message, options, setInboxHistor
             <div>
                 {
                     !message.team.isDeleted &&
-                    <Button
+                    <ButtonGrey
                         className={styles.button}
                         onClick={viewTeam}
                         title='View Team'
                     />
                 }
-                <Button
+                <ButtonGrey
                     className={styles.button}
-                    // onClick={() => { if (window.confirm('Are you sure you wish to delete this message?')) deleteMessage() }}
                     onClick={() => {
                         setConfirmOpen(true)                            
                         setCurrElement(message)

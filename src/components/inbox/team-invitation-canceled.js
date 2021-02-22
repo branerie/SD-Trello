@@ -2,13 +2,13 @@ import React, { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
-import Button from '../button'
+import ButtonGrey from '../button-grey'
 import ConfirmDialog from '../confirmation-dialog'
 import EditTeam from '../edit-team'
 import Transparent from '../transparent'
 import styles from './index.module.css'
 
-export default function TeamInvitationCanceled({ message, setInbox, setInboxHistory, options, isInbox }) {
+export default function TeamInvitationCanceled({ message, setInboxHistory, options, isInbox }) {
     const [showEditTeamForm, setShowEditTeamForm] = useState(false)
     const [currTeam, setCurrTeam] = useState({})
     const history = useHistory()
@@ -104,7 +104,7 @@ export default function TeamInvitationCanceled({ message, setInbox, setInboxHist
             }
             {
                 !message.team.isDeleted &&
-                <Button
+                <ButtonGrey
                     className={styles.button}
                     onClick={viewTeam}
                     title='View Team'
@@ -112,14 +112,13 @@ export default function TeamInvitationCanceled({ message, setInbox, setInboxHist
             }
             {
                 isInbox ?
-                    <Button
+                    <ButtonGrey
                         className={styles.button}
                         onClick={moveToHistory}
                         title='Move to History'
                     /> :
-                    <Button
+                    <ButtonGrey
                         className={styles.button}
-                        // onClick={() => { if (window.confirm('Are you sure you wish to delete this message?')) deleteMessage() }}
                         onClick={() => {
                             setConfirmOpen(true)                            
                             setCurrElement(message)
