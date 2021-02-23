@@ -14,6 +14,7 @@ import ConfirmDialog from '../confirmation-dialog'
 export default function EditProject(props) {
     const [name, setName] = useState(props.project.name)
     const [description, setDescription] = useState(props.project.description)
+    const [isFinished, setIsFinished] = useState(props.project.isFinished)
     const members = props.project.membersRoles
     const [isAdmin, setIsAdmin] = useState(false)
     const [confirmOpen, setConfirmOpen] = useState(false)
@@ -33,10 +34,14 @@ export default function EditProject(props) {
         setIsAdmin(isUserAdmin(userContext.user.id, members))
     }, [members, userContext.user.id, props])
 
+    console.log(props.project);
+    console.log('isFinished', isFinished);
 
+    async function handleSubmit(e) {
+        e.preventDefault()
 
-    async function handleSubmit(event) {
-        event.preventDefault()
+       
+        console.log('handle', isFinished);
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/projects/${projectId}`, {
             method: "PUT",
@@ -46,7 +51,8 @@ export default function EditProject(props) {
             },
             body: JSON.stringify({
                 name,
-                description
+                description,
+                isFinished
             })
         })
         if (!response.ok) {
@@ -92,7 +98,7 @@ export default function EditProject(props) {
 
             <div className={styles.container} >
                 <div className={styles.title} >Project</div>
-                
+
                 <div className={styles['input-container']}>
                     <span> Name</span>
                     <input
@@ -121,11 +127,15 @@ export default function EditProject(props) {
             <div>
                 {isAdmin ?
                     <div className={styles['buttons-div']}>
-                        <ButtonGrey className={styles['navigate-buttons']} title={'Edit'} onClick={handleSubmit}/>
-                        <ButtonGrey className={styles['navigate-buttons']} title={'Delete Project'} 
-                        onClick={() => {
-                            setConfirmOpen(true)                            
-                        }}
+                        <ButtonGrey className={styles['navigate-buttons']} title={'Edit'} onClick={(e)=>handleSubmit(e)} />
+                        <ButtonGrey className={styles['navigate-buttons']}
+                            title={isFinished ?
+                                'Set Current' : 'Set Finished'}
+                            onClick={()=>setIsFinished(!isFinished)} />
+                        <ButtonGrey className={styles['navigate-buttons']} title={'Delete Project'}
+                            onClick={() => {
+                                setConfirmOpen(true)
+                            }}
                         />
                     </div>
                     : null
