@@ -15,7 +15,6 @@ const MyTasksPage = () => {
     const [projects, setProjects] = useState([])
     const history = useHistory()
     const socket = useSocket()
-    console.log(userContext.user.lastTeamSelected);
     
     const selectTeam = useCallback(async (teamId) => {
         
