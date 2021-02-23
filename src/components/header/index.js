@@ -131,7 +131,7 @@ const Header = ({ asideOn }) => {
         <header className={`${styles.navigation} ${asideOn ? styles.small : ''}`} >
             <div className={styles.container}>
                 <div className={styles.links}>
-                    <div className={styles.flex}>
+                    <div className={`${styles['team-container']} ${styles.flex}`}>
                         <div className={styles.margin}>
                             Team:
                         </div>
@@ -177,42 +177,43 @@ const Header = ({ asideOn }) => {
 
 
 
-                    {isProjectVisibble && <div className={styles.flex}>
-                        <div className={styles.margin}>
-                            Project:
-                        </div>
-                        <div className={styles['list-container']}>
-                            <ButtonClean
-                                className={styles.teams}
-                                onClick={() => setIsProjectActive(!isProjectActive)}
-                                title={projectContext.project.name}
-                            />
-                            {
-                                isProjectActive ? <div
-                                    ref={dropdownRefProject}
-                                    className={styles.options}
-                                >
-                                    {
-                                        teamContext.currentProjects.map(p => (
-                                            <div key={p._id} className={styles['team-options']}>
-                                                <LinkComponent
-                                                    href={`/project-board/${params.teamid}/${p._id}`}
-                                                    title={p.name}
-                                                    onClick={() => { setIsProjectActive(false) }}
-                                                    className={`${styles.overflow} ${styles.hover}`}
-                                                />
-                                            </div>
-                                        ))
-                                    }
-                                    <div className={styles['last-option']}>
-                                        <ButtonClean
-                                            onClick={() => setShowProjectForm(true)}
-                                            title='Create Project'
-                                            className={styles.logout}
-                                        />
-                                    </div>
-                                </div> : null
-                            }
+                    {isProjectVisibble && 
+                        <div className={`${styles['project-container']} ${styles.flex}`}>
+                            <div className={styles.margin}>
+                                Project:
+                            </div>
+                            <div className={styles['list-container']}>
+                                <ButtonClean
+                                    className={styles.teams}
+                                    onClick={() => setIsProjectActive(!isProjectActive)}
+                                    title={projectContext.project.name}
+                                />
+                                {
+                                    isProjectActive ? <div
+                                        ref={dropdownRefProject}
+                                        className={styles.options}
+                                    >
+                                        {
+                                            teamContext.currentProjects.map(p => (
+                                                <div key={p._id} className={styles['team-options']}>
+                                                    <LinkComponent
+                                                        href={`/project-board/${params.teamid}/${p._id}`}
+                                                        title={p.name}
+                                                        onClick={() => { setIsProjectActive(false) }}
+                                                        className={`${styles.overflow} ${styles.hover}`}
+                                                    />
+                                                </div>
+                                            ))
+                                        }
+                                        <div className={styles['last-option']}>
+                                            <ButtonClean
+                                                onClick={() => setShowProjectForm(true)}
+                                                title='Create Project'
+                                                className={styles.logout}
+                                            />
+                                        </div>
+                                    </div> : null
+                                }
                         </div>
                         {
                             showProjectForm && <Transparent hideForm={() => setShowProjectForm(false)}>

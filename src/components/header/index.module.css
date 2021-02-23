@@ -139,7 +139,7 @@
 
 .logout-position {
   width: 100px;
-  top: 65px;
+  top: 15px;
   right: 10px;
 }
 
@@ -217,4 +217,16 @@
     padding-left: 10px;
   }
   
+  }
+
+  @media screen and (max-width:555px) {
+    .team-container{
+      display: none;
+    }
+  }
+
+  @media screen and (max-width:425px) {
+    .project-container{
+      display: none;
+    }
   }

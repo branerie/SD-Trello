@@ -13,7 +13,7 @@ const SearchField = () => {
 
     const onBlur = () => {
         setTimeout(() => (setShowSearchForm(false)), 120)
-        setShowSearchInput(!showSearchInput)
+        setTimeout(() => (setShowSearchInput(!showSearchInput)),120)
 
     }
 
