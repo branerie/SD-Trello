@@ -36,11 +36,25 @@
   margin-right: 8px;
 }
 
+.list-container {
+  display: flex;
+  flex-direction: column;
+}
+
 .options {
   background: #DFE9EE;
   position: absolute;
+  width: 150px;
+  margin-top: 50px;
   border-radius: 10px;
+  font-size: 1rem;
 }
+
+/* .teams-position {
+  width: 150px;
+  top: 70px;
+  left: 82px;
+} */
 
 .options > div {
   border: 1px solid #707070;
@@ -83,7 +97,7 @@
   color:#F7F7F2;
 }
 
-.input {
+/* .input {
   height: 25px;
   border-radius: 10px;
   width: 250px;
@@ -94,7 +108,7 @@
   text-align: left;
   background-color: #EDF5F9;
   outline: none
-}
+} */
 
 .avatar {
   margin-right: 20px;
@@ -103,6 +117,7 @@
 
 .font {
   font-size: 1rem;
+  position: relative;
 }
 
 .select {
@@ -122,20 +137,9 @@
   color: #363338;
 }
 
-.view {
-  display: block;
-  padding: .2em .5em;
-  margin: 0;
-  width: 100px;
-  border-radius: 1.5em;
-  background-color: #EDF5F9;
-  color: #363338;
-  cursor: pointer;
-}
-
 .logout-position {
   width: 100px;
-  top: 65px;
+  top: 15px;
   right: 10px;
 }
 
@@ -154,12 +158,6 @@
   background-color: #EDF5F9;
   color: #363338;
   cursor: pointer;
-}
-
-.teams-position {
-  width: 150px;
-  top: 70px;
-  left: 82px;
 }
 
 .team-options {
@@ -199,3 +197,36 @@
 .profile-picture{
   border-radius: 50%;
 }
+
+@media screen and (max-width:900px) {
+  .teams{
+    width: auto;
+    min-width: 9rem;
+    max-width: 15rem;
+  }
+
+  .flex {
+    flex-direction: column;
+    margin: 0 5px;
+    align-items: flex-start;
+  }
+
+  .margin {
+    font-size: 1rem;
+    margin: 0;
+    padding-left: 10px;
+  }
+  
+  }
+
+  @media screen and (max-width:555px) {
+    .team-container{
+      display: none;
+    }
+  }
+
+  @media screen and (max-width:425px) {
+    .project-container{
+      display: none;
+    }
+  }
