@@ -7,7 +7,8 @@ function userObject(response) {
         confirmed: response.user.confirmed,
         newPasswordConfirmed: response.user.newPasswordConfirmed,
         recentProjects: response.user.recentProjects,
-        image: response.user.image
+        image: response.user.image,
+        lastTeamSelected: response.user.lastTeamSelected
     }
 }
 

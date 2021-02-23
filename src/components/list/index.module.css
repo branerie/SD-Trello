@@ -96,6 +96,11 @@
 .name {
     position: relative;
     z-index: 2;
+    padding-left: 8px;
+    width: 220px;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .container {

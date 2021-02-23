@@ -18,6 +18,7 @@ import UserContext from '../../contexts/UserContext'
 import EditList from '../../components/edit-list'
 import userObject from '../../utils/userObject'
 import ButtonGrey from '../../components/button-grey'
+import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
 
 
 export default function ProjectBoard() {
@@ -39,6 +40,8 @@ export default function ProjectBoard() {
     const context = useContext(UserContext)
     const teamId = params.teamid
     const token = getCookie("x-auth-token")
+
+    useUpdateUserLastTeam(params.teamid)
 
     const projectUpdate = useCallback((project) => {
 

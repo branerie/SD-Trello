@@ -12,17 +12,14 @@ import MyTasksTask from "../../components/my-tasks-task"
 
 const MyTasksPage = () => {
     const userContext = useContext(UserContext)
-    const [currTeam, setCurrTeam] = useState('')
     const [projects, setProjects] = useState([])
     const history = useHistory()
     const socket = useSocket()
-
-    const selectTeam = useCallback(async (team) => {
-        setCurrTeam(team)
-
+    
+    const selectTeam = useCallback(async (teamId) => {
+        
         const token = getCookie("x-auth-token")
-
-        const response = await fetch(`/api/user/tasks/${team._id}`, {
+        const response = await fetch(`/api/user/tasks/${teamId}`, {
             method: "GET",
             headers: {
                 "Content-Type": "application/json",
@@ -34,19 +31,26 @@ const MyTasksPage = () => {
         } else {
             const data = await response.json()
             setProjects(data)
+            if (teamId !== userContext.user.lastTeamSelected) {
+                const user = {...userContext.user}
+                user.lastTeamSelected = teamId
+                userContext.setUser({
+                    ...user,
+                    loggedIn: true
+                })
+            }
         }
-    }, [history])
+    }, [history, userContext])
 
     useEffect(() => {
-        if (!currTeam || socket == null) return
+        if (!userContext.user.lastTeamSelected || socket == null) return
 
-        const id = currTeam._id
+        const id = userContext.user.lastTeamSelected
 
         socket.on('task-team-updated', taskTeamUpdate)
         socket.on('task-update-team', (teamId) => {
             if (teamId === id) {
-                const team = { ...currTeam }
-                selectTeam(team)
+                selectTeam(teamId)
             }
         })
 
@@ -55,7 +59,13 @@ const MyTasksPage = () => {
             socket.off('task-team-updated')
             socket.off('task-update-team')
         }
-    }, [currTeam, socket, selectTeam])
+    }, [socket, selectTeam, userContext.user.lastTeamSelected])
+
+    useEffect(() => {
+        if (userContext.user.lastTeamSelected) {
+            selectTeam(userContext.user.lastTeamSelected)
+        }
+    }, [selectTeam, userContext.user.lastTeamSelected])
 
     function taskTeamUpdate(projects) {
         setProjects(projects)
@@ -66,23 +76,23 @@ const MyTasksPage = () => {
             <Title title='My Tasks' />
             <div>
                 <span className={styles.title}>Teams:</span>
-                {userContext.user.teams.map(team => {
+                { userContext.user.teams.map(team => {
                     return (<ButtonClean
                         key={team._id}
                         title={team.name}
-                        onClick={() => selectTeam(team)}
-                        className={`${styles.teams} ${currTeam._id === team._id && styles.selected}`}
+                        onClick={() => selectTeam(team._id)}
+                        className={`${styles.teams} ${userContext.user.lastTeamSelected === team._id && styles.selected}`}
                     />)
                 })}
             </div>
-            {!currTeam ? <div className={styles.title}>Select a team</div> :
+            { !userContext.user.lastTeamSelected ? <div className={styles.title}>Select a team</div> :
                 <div className={styles.box}>
-                    {projects.length === 0 ? <div className={styles.title}>There is no current tasks</div> :
+                    { projects.length === 0 ? <div className={styles.title}>There is no current tasks</div> :
                         projects.map(project => {
                             return (
                                 <div key={project._id} className={styles.project}>
                                     <div className={styles['project-name']}>
-                                        <Link to={`/project-board/${currTeam._id}/${project._id}`} className={styles.link}>
+                                        <Link to={`/project-board/${userContext.user.lastTeamSelected}/${project._id}`} className={styles.link}>
                                             <span className={styles.bold}>Project:</span> {project.name}
                                         </Link>
                                     </div>
@@ -94,7 +104,7 @@ const MyTasksPage = () => {
                                             <div className={styles.days}>Days Till End:</div>
                                         </div>
                                     </div>
-                                    {project.lists.map(list => {
+                                    { project.lists.map(list => {
                                         return (
                                             <div key={list._id} className={styles.raw}>
                                                 <div className={styles.list}>{list.name}</div>
@@ -103,7 +113,7 @@ const MyTasksPage = () => {
                                                         return (
                                                             <MyTasksTask
                                                                 key={card._id}
-                                                                currTeam={currTeam}
+                                                                teamId={userContext.user.lastTeamSelected}
                                                                 project={project}
                                                                 list={list}
                                                                 card={card}
@@ -120,7 +130,7 @@ const MyTasksPage = () => {
                     }
                 </div>
             }
-            {(!currTeam || projects.length === 0) &&
+            { (!userContext.user.lastTeamSelected || projects.length === 0) &&
                 <div className={styles.pic}>
                     <img src={myTasks} alt='' />
                 </div>
