@@ -9,6 +9,7 @@
     min-width: 350px;
     max-width: 600px;
     height: auto;
+    max-height: 100%;
     min-height: 450px;
 
     z-index: 20;
@@ -20,6 +21,20 @@
     overflow-y: unset;
     overflow-x: hidden;
     font-size: 1.3rem;
+}
+
+@media (max-width: 550px) {
+    .form {
+        left: 10%;
+        top: 5%;
+    }   
+}
+@media (max-width: 400px) {
+    .form {
+        left: 2%;
+        top: 2%;
+    }
+   
 }
 
 .title {
@@ -35,10 +50,11 @@
 .buttons-div{
     margin: 5%;
     margin-bottom: 2%;
-    width: 70%;
-    margin-left: 15%;
+    width: auto;
+    /* margin-left: 15%; */
     display: flex;
     justify-content: center;
+    flex-wrap: wrap;
 }
 
 .navigate-buttons {

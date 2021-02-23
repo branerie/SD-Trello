@@ -15,6 +15,7 @@ import useUpdateUserLastTeam from "../../utils/useUpdateUserLastTeam"
 const TeamPage = () => {
     const [isVisible, setIsVisible] = useState(false)
     const [showForm, setShowForm] = useState(false)
+    const [showOldProjects, setShowOldProjects] = useState(false)
     const [currTeam, setCurrTeam] = useState({})
     const [projects, setProjects] = useState([])
     const [members, setMembers] = useState([])
@@ -31,7 +32,7 @@ const TeamPage = () => {
                 setInvited(t.requests)
             }
         })
-
+        console.log('useefect');
     }, [userContext, params])
     
     useUpdateUserLastTeam(params.teamid)
@@ -57,13 +58,27 @@ const TeamPage = () => {
 
 
                 <div className={styles['left-side']}>
+                    { !showOldProjects?
                     <div>
-                        {projects.map((project, index) => {
+                        Current Projects:
+                        {projects.filter(p => (p.isFinished === false)||(p.isFinished === undefined))
+                        .map((project, index) => {
                             return (
                                 <Project key={project._id} index={index} project={project} />
                             )
                         })}
                     </div>
+                    :
+                    <div>
+                        Old Projects:
+                        {projects.filter(p => p.isFinished === true)
+                        .map((project, index) => {
+                            return (
+                                <Project key={project._id} index={index} project={project} />
+                            )
+                        })}
+                    </div>
+                    }
 
                 </div>
 
@@ -72,8 +87,14 @@ const TeamPage = () => {
                         <TeamMembers
                             members={members} invited={invited}
                         />
+                        <div className={styles['button-div']}>
                         <ButtonGrey className={styles['new-project-button']} title={'View Team'} onClick={() => setShowForm(true)} />
-                        <ButtonGrey title={'New Project'} onClick={() => setIsVisible(true)} />
+                        <ButtonGrey className={styles['new-project-button']} title={'New Project'} onClick={() => setIsVisible(true)} />
+                        <ButtonGrey className={styles['new-project-button']}
+                        title={!showOldProjects? 
+                            'Old Projects': 'Current Projects'} 
+                        onClick={() => setShowOldProjects(!showOldProjects)} />
+                        </div>
 
 
                     </div>
