@@ -10,6 +10,7 @@ import TeamMembers from "../../components/team-members"
 import pic1 from '../../images/team-page/pic1.svg'
 import UserContext from "../../contexts/UserContext"
 import ButtonGrey from "../../components/button-grey"
+import useUpdateUserLastTeam from "../../utils/useUpdateUserLastTeam"
 
 const TeamPage = () => {
     const [isVisible, setIsVisible] = useState(false)
@@ -33,6 +34,8 @@ const TeamPage = () => {
         })
         console.log('useefect');
     }, [userContext, params])
+    
+    useUpdateUserLastTeam(params.teamid)
 
     return (
         <PageLayout>

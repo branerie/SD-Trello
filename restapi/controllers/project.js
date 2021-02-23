@@ -134,7 +134,7 @@ async function createProject(req, res, next) {
 async function updateProject(req, res, next) {
     const projectId = req.params.id;
     const project = req.body;
-  
+
     try {
         const updatedProject = await models.Project.updateOne({ _id: projectId }, { ...project })
 
