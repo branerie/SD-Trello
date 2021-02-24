@@ -1,16 +1,27 @@
 .title{
     font-weight: 600;
     position: fixed;
-    top: 20%;
+    top: 15%;
     left: 50%;
     transform: translate(-50%,-50%);
     text-align: center;
+    z-index: 20;
+}
 
+.pic1{
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    width: 50%;
+    transform: translate(-50%,-50%);
+    text-align: center;
+    border-radius: 2rem;
 }
 
 .text{
+    font-weight: 600;
     position: fixed;
-    top: 50%;
+    bottom: 10%;
     left: 50%;
     transform: translate(-50%,-50%);
     text-align: center;

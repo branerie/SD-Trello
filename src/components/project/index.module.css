@@ -23,6 +23,12 @@
     display: none;
 } 
 
+.left-side{
+    max-width: 80%;
+    max-height: 180px;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+}
 
 .key {
     padding: 10px;
