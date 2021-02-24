@@ -22,3 +22,16 @@
     border-radius: 10px;
     cursor: pointer;
 }
+
+.search-container > div {
+    min-height: 20px;
+}
+
+@media screen and (max-width:800px) {
+    .search-container {
+        margin-top: 10px;
+        margin-left: 5px;
+        background-color: #363338;
+        color: white;
+    }
+}

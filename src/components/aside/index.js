@@ -45,6 +45,7 @@ export default function Aside({ asideOn, setAsideOn }) {
             <aside className={styles.container}>
                 <div className={styles['top-left']}>
                     <ButtonClean
+                        className={styles.hamburger}
                         onClick={() => setAsideOn(!asideOn)}
                         title={<img className={styles.options} src={menu} alt="menu" width="32" height="24" />}
                     />

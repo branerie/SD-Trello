@@ -1,13 +1,12 @@
 .container {    
     position: fixed;
-    /* position: absolute; */
     left: 50%;
     top: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
     z-index: 20;
     width: 50%;
-    min-width: 400px;
+    min-width: 350px;
     max-width: 600px;
     height: auto;
     background-color:#F7F7F2;
@@ -21,15 +20,12 @@
     left: 30%;
     top: 15vh;
     z-index: 20;
-    /* width: auto; */
     width: 600px;
     height: auto;
-    /* max-height: 90%; */
     background-color:#F7F7F2;
     border: solid 2px#707070;
     border-radius: 27px;
     color: black;
-    /* overflow-y: auto; */
     overflow-x: hidden;
 }
 
@@ -113,7 +109,6 @@
     border-radius: 10px;
     height: 1.8em;
     width: 96%;
-    /* margin-left: 1%; */
     text-align: left;
     background-color: #DFE9EE;
     outline: none;
@@ -129,12 +124,7 @@
 }
 
 .create-button{
-    /* color: #fff; */
-    /* background-color: #363338; */
-    /* border-radius: 15px; */
     width: 100%;
-    /* height: 1.4em; */
-    /* border: none;  */
     margin: 0.5em;
     margin: 0 auto;
     z-index: 1;
@@ -149,14 +139,7 @@
       margin-right: 30%;
   }
 
-/* .form {
-    position: fixed;
-    left: 25%;
-    top: 25%;
-    z-index: 20;
-    width: 50%;
-    height: 25%;
-} */
+
 
 .invite-input{
     width: 68%;
@@ -174,20 +157,14 @@
 }
 
 .members {  
-    /* position: fixed; */
-    /* top: 47%; */
-    /* left: 5%;   */
     z-index: 25;  
     border: solid 1px #363338;
     border-radius: 27px;
     font-size: 1.2rem;
-    /* width: 100%; */
-    /* min-width: fit-content; */
     height: auto;
     max-height: 150px;
     padding: 10px;
     overflow-y: auto;
-    /* margin-left: 46%; */
     background-color:#DFE9EE;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none; 

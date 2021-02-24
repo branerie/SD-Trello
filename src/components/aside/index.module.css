@@ -99,10 +99,23 @@
     scrollbar-width: none;  /* Firefox */
 }
 
-
-
-
 .bell {
     position: relative;
     bottom: 57px;
+}
+
+.hamburger{
+    cursor: pointer;
+}
+
+@media screen and (max-width:700px) {
+    .container{
+        margin-top: 80px;
+    }
+    .top-left{
+      display: none;
+    }
+    .menu{
+      display: none;   
+    }
 }

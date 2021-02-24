@@ -77,7 +77,7 @@ async function createProject(req, res, next) {
     session.startTransaction()
 
     try {
-        const projectCreationResult = await models.Project.create([{ name, description, author: _id }], { session })
+        const projectCreationResult = await models.Project.create([{ name, description, isFinished: false, author: _id }], { session })
         const createdProject = projectCreationResult[0]
 
 
@@ -89,7 +89,7 @@ async function createProject(req, res, next) {
             const projectUserRoleCreation = await models.ProjectUserRole.create([{ admin: false, projectId: createdProject._id, memberId: member._id }], { session })
             const currProjectUserRole = projectUserRoleCreation[0]
             membersArr.push(currProjectUserRole)
-            await models.User.updateOne({ _id: member._id }, { $push: { projects: currProjectUserRole } }, { session })            
+            await models.User.updateOne({ _id: member._id }, { $push: { projects: currProjectUserRole } }, { session })
         }
 
         const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session)
@@ -135,16 +135,8 @@ async function updateProject(req, res, next) {
     const projectId = req.params.id;
     const project = req.body;
 
-
-    const obj = {}
-    for (let key in project) {
-        if (project[key]) {
-            obj[key] = project[key]
-        }
-    }
-
     try {
-        const updatedProject = await models.Project.updateOne({ _id: projectId }, { ...obj })
+        const updatedProject = await models.Project.updateOne({ _id: projectId }, { ...project })
 
         res.send(updatedProject)
     } catch (error) {

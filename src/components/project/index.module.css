@@ -1,6 +1,6 @@
 .container {
     /* width: 80%;  */
-    min-width: 300px;  
+    min-width: 200px;  
     background-color:#F7F7F2;    
     margin-bottom: 20px;
     height: auto;
@@ -23,6 +23,12 @@
     display: none;
 } 
 
+.left-side{
+    max-width: 80%;
+    max-height: 180px;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+}
 
 .key {
     padding: 10px;
