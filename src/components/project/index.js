@@ -19,7 +19,7 @@ export default function Project(props) {
                 </div > : null
             }
             <div className={styles.container}>
-                <div className={styles.leftSide}>
+                <div className={styles['left-side']}>
                     <Link to={`/project-board/${params.teamid}/${props.project._id}`} className={styles.key}>Name: <span className={styles.value}>{props.project.name}</span></Link>
 
                     <div className={styles.key}>

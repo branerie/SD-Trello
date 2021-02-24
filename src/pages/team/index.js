@@ -60,7 +60,9 @@ const TeamPage = () => {
                 <div className={styles['left-side']}>
                     { !showOldProjects?
                     <div>
+                        <div className={styles.title}>
                         Current Projects:
+                        </div>
                         {projects.filter(p => (p.isFinished === false)||(p.isFinished === undefined))
                         .map((project, index) => {
                             return (
@@ -70,7 +72,9 @@ const TeamPage = () => {
                     </div>
                     :
                     <div>
+                        <div className={styles.title}>
                         Old Projects:
+                        </div>
                         {projects.filter(p => p.isFinished === true)
                         .map((project, index) => {
                             return (
