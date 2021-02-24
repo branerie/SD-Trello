@@ -1,69 +1,29 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
-import getCookie from '../../utils/cookie'
 import ButtonGrey from '../button-grey'
 import ConfirmDialog from '../confirmation-dialog'
 import EditTeam from '../edit-team'
 import Transparent from '../transparent'
 import styles from './index.module.css'
+import useInboxUtils from './useInboxUtils'
 
 export default function TeamInvitationHistory({ message, options, setInboxHistory }) {
     const [showEditTeamForm, setShowEditTeamForm] = useState(false)
     const [currTeam, setCurrTeam] = useState({})
-    const history = useHistory()
-    const token = getCookie("x-auth-token")
     const [confirmOpen, setConfirmOpen] = useState(false)
-    const [currElement, setCurrElement] = useState('')
-
-    async function deleteMessage() {
-        const response = await fetch(`/api/user/message/${message._id}`, {
-            method: "DELETE",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            }
-        })
-        if (!response.ok) {
-            history.push("/error")
-            return
-        } else {
-            const user = await response.json()
-            setInboxHistory(user.inboxHistory)
-        }
-    }
-
-    async function viewTeam() {
-        const response = await fetch(`/api/teams/${message.team.id}`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            }
-        })
-
-        if (!response.ok) {
-            history.push("/error")
-            return
-        } else {
-            const team = await response.json()
-            setCurrTeam(team)
-        }
-        setShowEditTeamForm(true)
-    }
+    const utils = useInboxUtils()
 
     return (
         <>
-        {confirmOpen &&
-            <ConfirmDialog
-                title='delete this message'
-                hideConfirm={() => setConfirmOpen(false)}
-                onConfirm={() => deleteMessage(currElement)}
-            />
-        }
-        <div className={styles.message}>
-            <div className={styles.container}>
-                {
-                    message.accepted === undefined ?
+            {confirmOpen &&
+                <ConfirmDialog
+                    title='delete this message'
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={() => utils.deleteMessage(message, setInboxHistory)}
+                />
+            }
+            <div className={styles.message}>
+                <div className={styles.container}>
+                    {message.accepted === undefined ?
                         <div className={styles.container}>
                             <div className={styles.bold}>{message.subject}</div>
                         </div> :
@@ -71,46 +31,43 @@ export default function TeamInvitationHistory({ message, options, setInboxHistor
                             <div className={styles.bold}>{message.subject}:</div>
                             {message.accepted ? <div>Accepted</div> : <div>Declined</div>}
                         </div>
-                }
-                <div>{new Date(message.createdAt).toLocaleDateString("en-US", options)}</div>
-            </div>
-            <div>
-                <div className={`${styles.bold} ${styles.inline}`}>Team name:</div>
-                <div className={styles.inline}>{message.team.name}</div>
-            </div>
-            <div>
-                <div className={`${styles.bold} ${styles.inline}`}>Invited by:</div>
-                <div className={styles.inline}>{message.sendFrom.username}</div>
-            </div>
-            {
-                message.team.isDeleted &&
-                <div className={`${styles.bold} ${styles.inline}`}>Team deleted</div>
-            }
-            <div>
+                    }
+                    <div>{new Date(message.createdAt).toLocaleDateString("en-US", options)}</div>
+                </div>
+                <div>
+                    <div className={`${styles.bold} ${styles.inline}`}>Team name:</div>
+                    <div className={styles.inline}>{message.team.name}</div>
+                </div>
+                <div>
+                    <div className={`${styles.bold} ${styles.inline}`}>Invited by:</div>
+                    <div className={styles.inline}>{message.sendFrom.username}</div>
+                </div>
                 {
-                    !message.team.isDeleted &&
+                    message.team.isDeleted &&
+                    <div className={`${styles.bold} ${styles.inline}`}>Team deleted</div>
+                }
+                <div>
+                    {
+                        !message.team.isDeleted &&
+                        <ButtonGrey
+                            className={styles.button}
+                            onClick={() => utils.viewTeam(message, setCurrTeam, setShowEditTeamForm)}
+                            title='View Team'
+                        />
+                    }
                     <ButtonGrey
                         className={styles.button}
-                        onClick={viewTeam}
-                        title='View Team'
+                        onClick={() => setConfirmOpen(true)}
+                        title='Delete Message'
                     />
-                }
-                <ButtonGrey
-                    className={styles.button}
-                    onClick={() => {
-                        setConfirmOpen(true)                            
-                        setCurrElement(message)
-                    }} 
-                    title='Delete Message'
-                />
-                {
-                    showEditTeamForm &&
-                    <Transparent hideForm={() => setShowEditTeamForm(false)}>
-                        <EditTeam currTeam={currTeam} hideForm={() => { setShowEditTeamForm(false) }} />
-                    </Transparent>
-                }
+                    {
+                        showEditTeamForm &&
+                        <Transparent hideForm={() => setShowEditTeamForm(false)}>
+                            <EditTeam currTeam={currTeam} hideForm={() => { setShowEditTeamForm(false) }} />
+                        </Transparent>
+                    }
+                </div>
             </div>
-        </div>
         </>
     )
 }

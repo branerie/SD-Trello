@@ -129,7 +129,8 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
                         cardId: card._id,
                         listId,
                         project,
-                        teamId
+                        teamId,
+                        setCurrCard
                     }}
                 />
             </div>}
