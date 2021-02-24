@@ -419,7 +419,7 @@ export default function EditTeam(props) {
                                     members={members} invited={invited}
                                 />
 
-                                <div className={styles['leave-team-btn-div']}>
+                                { !props.isMessage && <div className={styles['leave-team-btn-div']}>
                                     <ButtonGrey title={'Leave Team'} className={styles['leave-team-btn']}
                                         onClick={() => {
                                             setConfirmOpen(true)
@@ -429,7 +429,7 @@ export default function EditTeam(props) {
 
                                     />
 
-                                </div>
+                                </div>}
                             </div>
                     }
 

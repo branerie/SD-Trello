@@ -63,7 +63,7 @@ export default function TeamInvitationHistory({ message, options, setInboxHistor
                     {
                         showEditTeamForm &&
                         <Transparent hideForm={() => setShowEditTeamForm(false)}>
-                            <EditTeam currTeam={currTeam} hideForm={() => { setShowEditTeamForm(false) }} />
+                            <EditTeam currTeam={currTeam} isMessage={true} hideForm={() => { setShowEditTeamForm(false) }} />
                         </Transparent>
                     }
                 </div>
