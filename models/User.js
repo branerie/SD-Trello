@@ -43,7 +43,9 @@ const userSchema = new Schema({
 
     confirmationToken: { type: String, default: '' },
 
-    recentProjects: []
+    recentProjects: [],
+
+    lastTeamSelected: { type: String }
 
 });
 
