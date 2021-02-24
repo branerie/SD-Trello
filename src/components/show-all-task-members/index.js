@@ -56,6 +56,8 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
         if (!response.ok) {
             history.push("/error")
         } else {
+            const updatedCard = await response.json()
+            deleteMemberObj.setCurrCard(updatedCard)
             updateSocket()
             setCardMembers(arr)
         }

@@ -22,6 +22,7 @@ const MembersList = ({ members, maxLength, deleteMemberOption, deleteMemberObj }
                     members={members}
                     deleteMemberOption={deleteMemberOption}
                     deleteMemberObj={deleteMemberObj}
+                    setCurrCard
                 />
             }
             {(members.length > maxLength) ?

@@ -6,6 +6,7 @@ import ButtonGrey from '../button-grey'
 import EditTeam from '../edit-team'
 import Transparent from '../transparent'
 import styles from './index.module.css'
+import useInboxUtils from './useInboxUtils'
 
 export default function TeamInvitationInbox({ message, setInbox, setInboxHistory, options }) {
     const [showEditTeamForm, setShowEditTeamForm] = useState(false)
@@ -15,6 +16,7 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
     const socket = useSocket()
     const params = useParams()
     const userId = params.userid
+    const utils = useInboxUtils()
 
     async function acceptInvitation(message, accepted) {
         const response = await fetch(`/api/teams/invitations/${message.team.id}`, {
@@ -41,46 +43,6 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
         }
     }
 
-    async function moveToHistory() {
-        const response = await fetch('/api/user/inbox', {
-            method: "POST",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            },
-            body: JSON.stringify({
-                message
-            })
-        })
-        if (!response.ok) {
-            history.push("/error")
-            return
-        } else {
-            await response.json()
-            socket.emit('message-sent', userId)
-        }
-    }
-
-    async function viewTeam() {
-
-        const response = await fetch(`/api/teams/${message.team.id}`, {
-            method: 'GET',
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            }
-        })
-
-        if (!response.ok) {
-            history.push("/error")
-            return
-        } else {
-            const team = await response.json()
-            setCurrTeam(team)
-        }
-        setShowEditTeamForm(true)
-    }
-
     return (
         
         <div className={styles.message}>
@@ -102,7 +64,7 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
                         <div className={styles.bold}>Team deleted</div>
                         <ButtonGrey
                             className={styles.button}
-                            onClick={moveToHistory}
+                            onClick={() => utils.moveToHistory(message)}
                             title='Move to History'
                         />
                     </div> :
@@ -119,7 +81,7 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
                         />
                         <ButtonGrey
                             className={styles.button}
-                            onClick={viewTeam}
+                            onClick={() => utils.viewTeam(message, setCurrTeam, setShowEditTeamForm)}
                             title='View Team'
                         />
                     </div>
