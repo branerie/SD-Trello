@@ -1,11 +1,4 @@
-.containerMemb{
-    width: 0;
-    height: 0;
-    position: absolute;
-    z-index: 3;
-}
-
-.allCardMembers{
+.all-card-members {
     box-sizing: border-box;
     position: absolute;
     top: 1rem;
@@ -16,30 +9,24 @@
     margin: 20px 10px 10px 0;  
     padding: 5px; 
     z-index: 10;
-    width: fit-content;
-    min-width: 200px;
+    width: 190px;
+    max-height: 180px;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
-
-.allCardMembers::-webkit-scrollbar {
+.all-card-members::-webkit-scrollbar {
   display: none;
 }
 
-
-.allCardMembers {
-  -ms-overflow-style: none; 
-  scrollbar-width: none;  
-}
-
-.eachMember{
+.each-member {
     margin: 3px;
     display: block;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.avatar{
+.avatar {
     margin-right: 5px;   
 }
-
-/* #allCardMembers:hover .hide{
-    visibility: visible;
-} */

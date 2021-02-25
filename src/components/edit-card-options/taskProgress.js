@@ -95,32 +95,32 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
                 <img className={styles.pics} src={pic2} alt="" />
                 Progress
             </div>
-            <div className={styles['progress-bar']} >
-                {card.progress !== null ? <ProgressBar progress={card.progress} /> : null}
-            </div>
-            <div className={styles['progress-input-container']}>
-                {isInputVisible && <>
-                    {isInputActive ? <span ref={ref}>
-                        <input
-                            ref={function (input) {
-                                if (input != null) {
-                                    input.focus();
-                                }
-                            }}
-                            id='progress'
-                            type='number'
-                            min="0"
-                            max="100"
-                            className={`${styles['progress-input']} ${!isInputOk && styles['bad-input']}`}
-                            value={progress}
-                            onKeyDown={e => onEscPressed(e)}
-                            onKeyUp={onKeyUp}
-                            onChange={e => setProgress(e.target.value)}
-                            onBlur={changeProgress}
-                        /><span>%</span>
-                        </span> : <div className={styles.progress} onClick={onClick}>{progress}%</div>}
-                </>}
+            {card.progress !== null &&
+                <div className={styles['progress-bar']} >
+                    <ProgressBar progress={card.progress} />
                 </div>
+            }
+            {isInputVisible && <div className={styles['progress-input-container']}>
+                {isInputActive ? <span ref={ref}>
+                    <input
+                        ref={function (input) {
+                            if (input != null) {
+                                input.focus();
+                            }
+                        }}
+                        id='progress'
+                        type='number'
+                        min="0"
+                        max="100"
+                        className={`${styles['progress-input']} ${!isInputOk && styles['bad-input']}`}
+                        value={progress}
+                        onKeyDown={e => onEscPressed(e)}
+                        onKeyUp={onKeyUp}
+                        onChange={e => setProgress(e.target.value)}
+                        onBlur={changeProgress}
+                    /><span>%</span>
+                </span> : <div className={styles.progress} onClick={onClick}>{progress}%</div>}
+            </div>}
         </>
     )
 }

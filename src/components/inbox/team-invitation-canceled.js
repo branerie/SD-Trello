@@ -59,7 +59,7 @@ export default function TeamInvitationCanceled({ message, setInboxHistory, optio
                 }
                 {showEditTeamForm &&
                     <Transparent hideForm={() => setShowEditTeamForm(false)}>
-                        <EditTeam currTeam={currTeam} hideForm={() => { setShowEditTeamForm(false) }} />
+                        <EditTeam currTeam={currTeam} isMessage={true} hideForm={() => { setShowEditTeamForm(false) }} />
                     </Transparent>
                 }
             </div>

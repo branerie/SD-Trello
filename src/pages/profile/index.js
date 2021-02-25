@@ -109,39 +109,40 @@ const ProfilePage = () => {
     history.push(`/team/${teamId}`)
   }
 
-  // const getFullImageUrl = (imagePath) => {
-  //   return `https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/image/upload/${imagePath}`
-  // }
 
-  const widget = window.cloudinary.createUploadWidget({
-    cloudName: process.env.REACT_APP_CLOUD_NAME,
-    uploadPreset: process.env.REACT_APP_UPLOAD_PRESET
-  }, (error, result) => {
-    if (result.event === 'success') {
-      const path = result.info.path
-      const publicId = result.info.public_id
-      const newImage = {
-        path,
-        publicId
+  function changeProfilePicture() {
+    const widget = window.cloudinary.createUploadWidget({
+      cloudName: process.env.REACT_APP_CLOUD_NAME,
+      uploadPreset: process.env.REACT_APP_UPLOAD_PRESET
+    }, (error, result) => {
+      if (result.event === 'success') {
+        const path = result.info.path
+        const publicId = result.info.public_id
+        const newImage = {
+          path,
+          publicId
+        }
+        authenticateUpdate(`/api/user/image/${id}`, 'PUT', {
+          newImage,
+          oldImage: userContext.user.image
+        }, (user) => {
+          userContext.logIn(user)
+        }, (e) => {
+          console.log("Error", e);
+        })
+        getData()
+  
       }
-      authenticateUpdate(`/api/user/image/${id}`, 'PUT', {
-        newImage,
-        oldImage: userContext.user.image
-      }, (user) => {
-        userContext.logIn(user)
-      }, (e) => {
-        console.log("Error", e);
-      })
-      getData()
+  
+      if (error) {
+        //TODO: Handle errors
+  
+        return
+      }
+    })
 
-    }
-
-    if (error) {
-      //TODO: Handle errors
-
-      return
-    }
-  })
+    widget.open()
+  }
 
   const deletePic = async () => {
 
@@ -306,7 +307,7 @@ const ProfilePage = () => {
               onClick={() => {
                 userContext.user.image ?
                   setIsEditListActive(!isEditListActive)
-                  : widget.open()
+                  : changeProfilePicture()
               }}
             >
               {userContext.user.image ?
@@ -326,7 +327,7 @@ const ProfilePage = () => {
                   <div className={styles.relative}>
                     {isEditListActive && <div ref={dropdownRef} className={`${styles.menu}`} >
                       <ButtonGrey
-                        onClick={() => widget.open()}
+                        onClick={changeProfilePicture}
                         title='Edit'
                         className={styles.edit}
                       />

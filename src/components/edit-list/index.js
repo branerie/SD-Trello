@@ -17,10 +17,6 @@ export default function EditList(props) {
     const nameRef = useRef(null)
     const [nameHeight, setNameHeight] = useState(null)
     const [currInput, setCurrInput] = useState(null)
-
-
-
-
     const [name, setName] = useState(props.list.name)
     const history = useHistory()
     const socket = useSocket()
@@ -39,8 +35,7 @@ export default function EditList(props) {
         setIsAdmin(isUserAdmin(userContext.user.id, members))
     }, [members, userContext.user.id])
 
-    async function handleSubmit(e) {
-        e.preventDefault()
+    async function handleSubmit() {
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/projects/lists/${projectId}/${listId}`, {
             method: "PUT",
@@ -63,7 +58,6 @@ export default function EditList(props) {
         setColor(color.hex)
     }
 
-
     useEffect(() => {
         setTimeout(() => {
             setNameHeight(nameRef.current.scrollHeight + 2)
@@ -80,60 +74,41 @@ export default function EditList(props) {
     }
 
     return (
-        <div className={styles.form}>
-            <form className={styles.container} >
-                <Title className={styles.title} title="Edit List" />
+        <div className={styles.container} >
+            <Title title="Edit List" />
+            <div className={styles['input-container']}>
+                <span className={styles.name}> Name</span>
+                <textarea
+                    ref={nameRef}
+                    className={`${styles['name-input']} ${styles.text}`}
+                    style={{ 'height': nameHeight }}
+                    value={name}
+                    onFocus={() => setCurrInput(name)}
+                    onKeyDown={e => onEscPressed(e, setName, nameRef)}
+                    onChange={e => {
+                        setName(e.target.value)
+                        setNameHeight(nameRef.current.scrollHeight + 2)
+                    }}
+                />
+            </div>
+            <div className={styles['change-color']}>
+                <span className={styles['color-title']}>Color</span>
+                <ButtonClean
+                    className={styles['color-button']}
+                    style={{ background: `${color}` }}
+                    onClick={() => setIsColorActive(!isColorActive)}
+                />
+            </div>
+            {isColorActive && <div ref={dropdownRef} >
+                <SketchPicker className={styles['color-pick']} color={color} onChangeComplete={onColorChange} />
+            </div>}
+            <div className={styles['edit-list-button']}>
+                {isAdmin &&
+                    <ButtonGrey onClick={handleSubmit} title="Edit List" />
 
-                <div className={styles['input-container']}>
-                    <span className={styles.name}> Name</span>
-                    {/* <input
-                        className={styles.inputListName}
-                        value={name}
-                        onChange={e => setName(e.target.value)}
-                        label="Name"
-                        id="name"
-                    /> */}
-                    <textarea
-                        ref={nameRef}
-                        className={`${styles['name-input']} ${styles.text}`}
-                        style={{ 'height': nameHeight }}
-                        value={name}
-                        onFocus={() => setCurrInput(name)}
-                        onKeyDown={e => onEscPressed(e, setName, nameRef)}
-                        onChange={e => {
-                            setName(e.target.value)
-                            setNameHeight(nameRef.current.scrollHeight + 2)
-                        }}
-                        // onBlur={(e) => {
-                        //     if (currInput === name) return
-                        //     handleSubmit(e)
-                        // }}
-                    />
-                </div>
-                <div className={styles['change-color']}>
-                    <span className={styles['color-title']}>
-                        Color
-                    </span>
-                    <span className={styles['list-color']}>
-                        <ButtonClean
-                            className={styles['color-button']}
-                            style={{ background: `${color}` }}
-                            onClick={() => setIsColorActive(!isColorActive)}
-                        />
-                    </span>
-                </div>
-                {isColorActive && <div ref={dropdownRef} >
-                    <SketchPicker className={styles['color-pick']} color={color} onChangeComplete={onColorChange} />
-                </div>}
-                <div className={styles['edit-list-button']}>
-                    {isAdmin &&
-                        <ButtonGrey onClick={(e)=>handleSubmit(e)} title="Edit List" />
+                }
 
-                    }
-
-                </div>
-            </form>
+            </div>
         </div>
-
     )
 }
