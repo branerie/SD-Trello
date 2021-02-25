@@ -328,13 +328,12 @@ export default function ProjectBoard() {
                                         }
                                     </div>
                                 }
+                                <ButtonGrey className={styles.button} title={'View Project'} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} />
                             </div>
                         )}
                     </Droppable>
                 </DragDropContext>
 
-                <ButtonGrey title={'View Project'} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} />
-                {/* <button className={styles.navigateButtons} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} >View Project</button> */}
 
                 {IsVisibleEdit &&
                     < div >
