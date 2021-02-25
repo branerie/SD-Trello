@@ -1,99 +1,41 @@
 .container {
+    box-sizing: border-box;
     text-align: center;
-    background-color:#DFE9EE;
-    height: 100%;
+    background-color:#EDF5F9;
     border: solid 2px #707070;
     border-radius: 27px;
-    background-color:#F7F7F2;
-
     position: fixed;
     left: 30%;
     top: 30%;
     z-index: 20;
-    width: 40%;
-    min-width: 300px;
+    width: 80%;
+    min-width: 340px;
+    max-width: 700px;
     max-height: 600px;
     height: auto;
-
-    padding: 2%;
-
-
-
+    padding: 1.5rem 3rem;
     position: fixed;
     top: 50%;
     left: 50%;
     -ms-transform: translate(-50%, -50%);
     transform: translate(-50%, -50%);
-    
-
-}
-
-
-
-.title{
-    margin-top: 5%;
 }
 
 .input-container{
-    width: 70%;
-    margin-left: 15%;
     margin-bottom: 2%;
     display: flex;
 }
 
-.name{
-    margin-top: 2%;
-}
-
-.inputListName{
-    border: solid 1px #363338;
-    border-radius: 10px;
-    height: 1.8em;
-    width: 100%;
-    margin-left: 4%;
+.name {
+    width: 50px;
+    margin-top: 0.5rem;
+    font-size: 1.2rem;
     text-align: left;
-    background-color:#DFE9EE;
-    padding: 2px;
-}
-
-.change-color{
-    margin: 2%;
-    margin-left: 15%;
-    width: 70%;
-    display: flex;
-}
-
-.color-title{
-    width: 20%;
-}
-
-.list-color{   
-    border-radius: 10px;
-    height: 1.8em;
-    width: 20%;
-    margin-left: 20%;
-}
-
-.color-pick {
-    position: absolute;
-    left: 60%;
-}
-
-.color-button {
-    width: 100%;
-    margin: 0 auto;
-    height: 20px;
-    border-radius: 5px;
-}
-
-.edit-list-button{
-    margin: 0 auto;
-    margin-top: 5%;
 }
 
 .name-input {
     border: solid 1px #363338;
-    background-color:#F7F7F2;
+    background-color:#E6E6E6;
     border-radius: 10px;       
     padding: 4px;
     resize: vertical;
@@ -112,8 +54,47 @@
     display: none;
 }
 
+.change-color{
+    display: flex;
+}
+
+.color-title{
+    width: 50px;
+    text-align: left;
+    font-size: 1.2rem;
+}
+
+.color-pick {
+    position: absolute;
+    left: 3rem;
+    margin-top: 0.5rem;
+}
+
+.color-button {
+    width: 80px;
+    height: 20px;
+    border-radius: 5px;
+    margin-left: 2%;
+    margin-top: 0.2rem;
+    border: solid 1px #363338;
+}
+
+.edit-list-button{
+    margin: 0 auto;
+    margin-top: 5%;
+}
 
 .text {
     font-family: 'Lato', sans-serif;
     font-size: 1.03rem;
+}
+
+@media (max-height: 800px) {
+    .color-pick {
+        position: absolute;
+        top: 50%;
+        left: 50%;
+        -ms-transform: translate(-50%, -50%);
+        transform: translate(-50%, -50%);
+    }    
 }
