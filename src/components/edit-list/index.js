@@ -104,10 +104,10 @@ export default function EditList(props) {
                             setName(e.target.value)
                             setNameHeight(nameRef.current.scrollHeight + 2)
                         }}
-                        onBlur={(e) => {
-                            if (currInput === name) return
-                            handleSubmit(e)
-                        }}
+                        // onBlur={(e) => {
+                        //     if (currInput === name) return
+                        //     handleSubmit(e)
+                        // }}
                     />
                 </div>
                 <div className={styles['change-color']}>

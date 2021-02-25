@@ -28,6 +28,12 @@
     max-height: 180px;
     overflow-y: scroll;
     overflow-wrap: break-word;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none;  
+}
+
+.left-side::-webkit-scrollbar {
+    display: none;
 }
 
 .key {

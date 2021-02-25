@@ -44,6 +44,7 @@
     overflow: scroll;
     -ms-overflow-style: none;
     scrollbar-width: none;
+    font-family: sans-serif;
 }
 
 .name-input::-webkit-scrollbar {
@@ -98,6 +99,8 @@
     overflow: scroll;
     -ms-overflow-style: none;  /* Hide scrollbar for IE and Edge */
     scrollbar-width: none;  /* Hide scrollbar for Firefox */
+    font-family: sans-serif;
+    font-size: revert;
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */

@@ -148,7 +148,7 @@ const Header = ({ asideOn }) => {
                                 >
                                     {
                                         teamContext.teams.map(t => (
-                                            <div key={t._id} className={styles['team-options']}>
+                                            <div key={t._id} className={`${styles['team-options']} ${styles.hover}`}>
                                                 <LinkComponent
                                                     href={`/team/${t._id}`}
                                                     title={t.name}
@@ -158,11 +158,11 @@ const Header = ({ asideOn }) => {
                                             </div>
                                         ))
                                     }
-                                    <div className={styles['last-option']}>
+                                    <div className={`${styles['last-option']} ${styles.hover}`}>
                                         <ButtonClean
                                             onClick={() => setShowTeamForm(true)}
                                             title='Create Team'
-                                            className={styles.logout}
+                                            className={`${styles.logout} ${styles.hover}`}
                                         />
                                     </div>
                                 </div> : null
@@ -195,7 +195,7 @@ const Header = ({ asideOn }) => {
                                     >
                                         {
                                             teamContext.currentProjects.map(p => (
-                                                <div key={p._id} className={styles['team-options']}>
+                                                <div key={p._id} className={`${styles['team-options']} ${styles.hover}`}>
                                                     <LinkComponent
                                                         href={`/project-board/${params.teamid}/${p._id}`}
                                                         title={p.name}
@@ -205,7 +205,7 @@ const Header = ({ asideOn }) => {
                                                 </div>
                                             ))
                                         }
-                                        <div className={styles['last-option']}>
+                                        <div className={`${styles['last-option']} ${styles.hover}`}>
                                             <ButtonClean
                                                 onClick={() => setShowProjectForm(true)}
                                                 title='Create Project'
@@ -239,7 +239,7 @@ const Header = ({ asideOn }) => {
                                     ref={dropdownRefView}
                                     className={styles.options}
                                 >
-                                    <div className={styles['first-option']}>
+                                    <div className={`${styles['first-option']} ${styles.hover}`}>
                                         <LinkComponent
                                             href={`/project-board/${params.teamid}/${projectContext.project._id}`}
                                             title='Board'
@@ -247,7 +247,7 @@ const Header = ({ asideOn }) => {
                                             onClick={() => { setIsViewActive(false) }}
                                         />
                                     </div>
-                                    <div className={styles['last-option']}>
+                                    <div className={`${styles['last-option']} ${styles.hover}`}>
                                         <LinkComponent
                                             href={`/project-list/${params.teamid}/${projectContext.project._id}`}
                                             title='List'
