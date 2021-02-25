@@ -73,30 +73,23 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
                     onConfirm={() => deleteMember(currElement)}
                 />
             }
-
-            <div className={styles.allCardMembers}>
-
-                {
-                    members.map((m, index) => {
-                        return (
-                            <div key={index} className={styles.eachMember} onClick={() => onClick(m)} >
-                                <span className={styles.avatar} key={m._id}>
-                                    <AvatarUser user={m}
-                                        size={30}
-                                        className={styles.avatar}
-                                    />
-                                </span>
-                                <span>{m.username}</span>
-                            </div>
-                        )
-                    })
-                }
+            <div className={styles['all-card-members']}>
+                {members.map((m, index) => {
+                    return (
+                        <div key={index} className={styles['each-member']} onClick={() => onClick(m)} >
+                            <span className={styles.avatar} key={m._id}>
+                                <AvatarUser user={m}
+                                    size={30}
+                                    className={styles.avatar}
+                                />
+                            </span>
+                            <span>{m.username}</span>
+                        </div>
+                    )
+                })}
             </div>
-
-
         </div>
     )
-
 }
 
 
