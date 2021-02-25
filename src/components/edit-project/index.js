@@ -118,6 +118,7 @@ export default function EditProject(props) {
                         label="Description"
                         id="description"
                         placeholder='Project Description'
+                        spellcheck="false"
                     />
                 </div>
                 <div className={styles['edit-members']}>

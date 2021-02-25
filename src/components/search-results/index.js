@@ -51,7 +51,7 @@ export default function SearchResults(props) {
                 resultArr.filter(u => u.name.toLowerCase().includes(searchInput.toLowerCase()))
                     .map((t, index) => {
                         return (
-                            <div key={index} onClick={() => { gotToPage(t.id) }}>{t.name}</div>
+                            <div key={index} className={styles.result} onClick={() => { gotToPage(t.id) }}>{t.name}</div>
                         )
                     })
             }

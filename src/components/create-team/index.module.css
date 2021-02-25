@@ -62,6 +62,7 @@
     background-color: #DFE9EE;
     outline: none;
     padding: 1%;
+    font-size: 1rem;
 }
 
 .input-container-descr{    
@@ -97,7 +98,7 @@
     padding: 1%;
     outline: none;
     font-family: sans-serif;
-    font-size: revert;
+    font-size: 1rem;
 }
 
 .members-text{
@@ -115,6 +116,7 @@
     outline: none;
     padding: 2%;
     padding-right: 1%;
+    font-size: 1rem;
 }
 
 .button-div{
@@ -187,6 +189,12 @@
     white-space: nowrap;
     /* padding: 9px; */
 }
+
+.user:hover{
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.05);
+}
+
 
 .email {
     font-size: 0.9rem;

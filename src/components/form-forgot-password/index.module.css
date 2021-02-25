@@ -118,7 +118,7 @@ flex: auto;
   .buttonDivGoogleLogin{
     margin: 5% auto;
     margin-bottom: 1%;
-    width: 180px;;    
+    /* width: 180px;;     */
 }
 
   .forgotPass{

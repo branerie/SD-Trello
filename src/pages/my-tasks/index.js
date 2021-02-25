@@ -15,9 +15,9 @@ const MyTasksPage = () => {
     const [projects, setProjects] = useState([])
     const history = useHistory()
     const socket = useSocket()
-    
+
     const selectTeam = useCallback(async (teamId) => {
-        
+
         const token = getCookie("x-auth-token")
         const response = await fetch(`/api/user/tasks/${teamId}`, {
             method: "GET",
@@ -32,7 +32,7 @@ const MyTasksPage = () => {
             const data = await response.json()
             setProjects(data)
             if (teamId !== userContext.user.lastTeamSelected) {
-                const user = {...userContext.user}
+                const user = { ...userContext.user }
                 user.lastTeamSelected = teamId
                 userContext.setUser({
                     ...user,
@@ -76,7 +76,7 @@ const MyTasksPage = () => {
             <Title title='My Tasks' />
             <div>
                 <span className={styles.title}>Teams:</span>
-                { userContext.user.teams.map(team => {
+                {userContext.user.teams.map(team => {
                     return (<ButtonClean
                         key={team._id}
                         title={team.name}
@@ -87,46 +87,48 @@ const MyTasksPage = () => {
             </div>
             { !userContext.user.lastTeamSelected ? <div className={styles.title}>Select a team</div> :
                 <div className={styles.box}>
-                    { projects.length === 0 ? <div className={styles.title}>There is no current tasks</div> :
-                        projects.map(project => {
-                            return (
-                                <div key={project._id} className={styles.project}>
-                                    <div className={styles['project-name']}>
-                                        <Link to={`/project-board/${userContext.user.lastTeamSelected}/${project._id}`} className={styles.link}>
-                                            <span className={styles.bold}>Project:</span> {project.name}
-                                        </Link>
-                                    </div>
-                                    <div className={`${styles.header} ${styles.raw}`}>
-                                        <div className={styles.list}>List:</div>
-                                        <div className={styles.container}>
-                                            <div className={styles.task}>Task:</div>
-                                            <div className={styles.progress}>Progress (%):</div>
-                                            <div className={styles.days}>Days Till End:</div>
+                    {projects.length === 0 ? <div className={styles.title}>There is no current tasks</div> :
+                        projects.filter(p => (p.isFinished === false) || (p.isFinished === undefined))
+                            .reverse()
+                            .map(project => {
+                                return (
+                                    <div key={project._id} className={styles.project}>
+                                        <div className={styles['project-name']}>
+                                            <Link to={`/project-board/${userContext.user.lastTeamSelected}/${project._id}`} className={styles.link}>
+                                                <span className={styles.bold}>Project:</span> {project.name}
+                                            </Link>
                                         </div>
-                                    </div>
-                                    { project.lists.map(list => {
-                                        return (
-                                            <div key={list._id} className={styles.raw}>
-                                                <div className={styles.list}>{list.name}</div>
-                                                <div className={styles['task-container']}>
-                                                    {list.cards.map(card => {
-                                                        return (
-                                                            <MyTasksTask
-                                                                key={card._id}
-                                                                teamId={userContext.user.lastTeamSelected}
-                                                                project={project}
-                                                                list={list}
-                                                                card={card}
-                                                            />
-                                                        )
-                                                    })}
-                                                </div>
+                                        <div className={`${styles.header} ${styles.raw}`}>
+                                            <div className={styles.list}>List:</div>
+                                            <div className={styles.container}>
+                                                <div className={styles.task}>Task:</div>
+                                                <div className={styles.progress}>Progress (%):</div>
+                                                <div className={styles.days}>Days Till End:</div>
                                             </div>
-                                        )
-                                    })}
-                                </div>
-                            )
-                        })
+                                        </div>
+                                        { project.lists.map(list => {
+                                            return (
+                                                <div key={list._id} className={styles.raw}>
+                                                    <div className={styles.list}>{list.name}</div>
+                                                    <div className={styles['task-container']}>
+                                                        {list.cards.map(card => {
+                                                            return (
+                                                                <MyTasksTask
+                                                                    key={card._id}
+                                                                    teamId={userContext.user.lastTeamSelected}
+                                                                    project={project}
+                                                                    list={list}
+                                                                    card={card}
+                                                                />
+                                                            )
+                                                        })}
+                                                    </div>
+                                                </div>
+                                            )
+                                        })}
+                                    </div>
+                                )
+                            })
                     }
                 </div>
             }

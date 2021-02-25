@@ -111,6 +111,7 @@ export default function CreateProject({ hideForm }) {
                     label="Name"
                     id="name"
                     placeholder='Project Name'
+                    autocomplete="off"
                 />
             </div>
 
@@ -123,7 +124,7 @@ export default function CreateProject({ hideForm }) {
                     label="Description"
                     id="description"
                     placeholder='Project Description'
-
+                    spellcheck="false"
                 />
             </div>
 

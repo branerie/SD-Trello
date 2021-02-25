@@ -64,7 +64,7 @@ const TeamPage = () => {
                         Current Projects:
                         </div>
                         {projects.filter(p => (p.isFinished === false)||(p.isFinished === undefined))
-                        .map((project, index) => {
+                        .reverse().map((project, index) => {
                             return (
                                 <Project key={project._id} index={index} project={project} />
                             )
@@ -76,7 +76,7 @@ const TeamPage = () => {
                         Old Projects:
                         </div>
                         {projects.filter(p => p.isFinished === true)
-                        .map((project, index) => {
+                        .reverse().map((project, index) => {
                             return (
                                 <Project key={project._id} index={index} project={project} />
                             )

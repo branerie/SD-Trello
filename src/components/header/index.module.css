@@ -57,7 +57,7 @@
 } */
 
 .options > div {
-  border: 1.5px solid #707070;
+  border: 1.5px solid #363338;
   /* border-top: 1px solid #707070;
   border-left: 1px solid #707070;
   border-right: 1px solid #707070; */
@@ -75,14 +75,14 @@
 .last-option {
   background: #A6A48E;
   color:#363338;
-  border-bottom: 2px solid #707070;
+  border-bottom: 2px solid #363338;
   border-radius: 0 0 10px 10px;
 }
 
 .logout {
   background: #A6A48E;
-  color:#363338;
-  border-bottom: 1px solid #707070;
+  /* color:#363338; */
+  border-bottom: 1px solid #363338;
   text-decoration: none;
   display: inline-block;
   height: auto;
@@ -181,7 +181,7 @@
 
 .overflow {
   background: #A6A48E;
-  color:#363338;
+  color:black;
   width: 86.5%;
   white-space: nowrap; 
   overflow: hidden;
@@ -206,9 +206,25 @@
   left: 332px;
 }
 
+.list-button{
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  border-radius: 0 0 10px 10px;
+}
+
 .profile-picture{
   border-radius: 50%;
 }
+
+.profile-button{
+  cursor: pointer;
+  width: 100%;
+  height: 100%;
+  border-radius: 10px 10px 0 0;
+}
+
+
 
 @media screen and (max-width:1140px) {
   .teams{

@@ -177,7 +177,7 @@ const Header = ({ asideOn }) => {
 
 
 
-                    {isProjectVisibble && 
+                    {isProjectVisibble &&
                         <div className={`${styles['project-container']} ${styles.flex}`}>
                             <div className={styles.margin}>
                                 Project:
@@ -194,16 +194,18 @@ const Header = ({ asideOn }) => {
                                         className={styles.options}
                                     >
                                         {
-                                            teamContext.currentProjects.map(p => (
-                                                <div key={p._id} className={`${styles['team-options']} ${styles.hover}`}>
-                                                    <LinkComponent
-                                                        href={`/project-board/${params.teamid}/${p._id}`}
-                                                        title={p.name}
-                                                        onClick={() => { setIsProjectActive(false) }}
-                                                        className={`${styles.overflow} ${styles.hover}`}
-                                                    />
-                                                </div>
-                                            ))
+                                            teamContext.currentProjects.filter(p => (p.isFinished === false)||(p.isFinished === undefined))
+                                            .reverse()
+                                                .map(p => (
+                                                    <div key={p._id} className={`${styles['team-options']} ${styles.hover}`}>
+                                                        <LinkComponent
+                                                            href={`/project-board/${params.teamid}/${p._id}`}
+                                                            title={p.name}
+                                                            onClick={() => { setIsProjectActive(false) }}
+                                                            className={`${styles.overflow} ${styles.hover}`}
+                                                        />
+                                                    </div>
+                                                ))
                                         }
                                         <div className={`${styles['last-option']} ${styles.hover}`}>
                                             <ButtonClean
@@ -214,13 +216,13 @@ const Header = ({ asideOn }) => {
                                         </div>
                                     </div> : null
                                 }
-                        </div>
-                        {
-                            showProjectForm && <Transparent hideForm={() => setShowProjectForm(false)}>
-                                <CreateProject hideForm={() => setShowProjectForm(false)} />
-                            </Transparent>
-                        }
-                    </div>}
+                            </div>
+                            {
+                                showProjectForm && <Transparent hideForm={() => setShowProjectForm(false)}>
+                                    <CreateProject hideForm={() => setShowProjectForm(false)} />
+                                </Transparent>
+                            }
+                        </div>}
 
 
 
@@ -240,19 +242,19 @@ const Header = ({ asideOn }) => {
                                     className={styles.options}
                                 >
                                     <div className={`${styles['first-option']} ${styles.hover}`}>
-                                        <LinkComponent
-                                            href={`/project-board/${params.teamid}/${projectContext.project._id}`}
+                                        <ButtonClean
+                                            className={`${styles['profile-button']} ${styles.hover}`}
+                                            onClick={() => { history.push(`/project-board/${params.teamid}/${projectContext.project._id}`); setIsViewActive(false) }}
                                             title='Board'
-                                            className={styles.hover}
-                                            onClick={() => { setIsViewActive(false) }}
+
                                         />
                                     </div>
                                     <div className={`${styles['last-option']} ${styles.hover}`}>
-                                        <LinkComponent
-                                            href={`/project-list/${params.teamid}/${projectContext.project._id}`}
+                                        <ButtonClean
+                                            // href={`/project-list/${params.teamid}/${projectContext.project._id}`}
                                             title='List'
-                                            className={styles.hover}
-                                            onClick={() => { setIsViewActive(false) }}
+                                            className={`${styles['list-button']} ${styles.hover}`}
+                                            onClick={() => { history.push(`/project-list/${params.teamid}/${projectContext.project._id}`); setIsViewActive(false) }}
                                         />
                                     </div>
                                 </div> : null
@@ -292,7 +294,7 @@ const Header = ({ asideOn }) => {
                         className={styles.avatar}
                         onClick={() => setIsProfileActive(!isProfileActive)}
                         title={
-                            <AvatarUser user={context.user} size={40}/>                            
+                            <AvatarUser user={context.user} size={40} />
                         }
                     />
                     {
@@ -300,14 +302,14 @@ const Header = ({ asideOn }) => {
                             ref={dropdownRefProfile}
                             className={`${styles.options} ${styles['logout-position']}`}
                         >
-                            <div className={styles['first-option']}>
-                                <LinkComponent
-                                    href={`/profile/${context.user && context.user.id}`}
+                            <div className={`${styles['first-option']} ${styles.hover}`}>
+                                <ButtonClean
                                     title='Profile'
-                                    className={styles.hover}
+                                    className={`${styles['profile-button']} ${styles.hover}`}
+                                    onClick={() => history.push(`/profile/${context.user && context.user.id}`)}
                                 />
                             </div>
-                            <div className={styles['last-option']}>
+                            <div className={`${styles['last-option']} ${styles.hover}`}>
                                 <ButtonClean
                                     onClick={context.logOut}
                                     title='Log Out'

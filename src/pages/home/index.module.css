@@ -116,5 +116,10 @@
   white-space: nowrap;
 }
 
+.navigate-buttons-teams:hover{
+  cursor: pointer;
+  background: #DFE9EE;
+}
+
 
 
