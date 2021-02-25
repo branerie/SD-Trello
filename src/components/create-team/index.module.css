@@ -96,7 +96,8 @@
     resize: none; 
     padding: 1%;
     outline: none;
-     
+    font-family: sans-serif;
+    font-size: revert;
 }
 
 .members-text{
@@ -159,7 +160,7 @@
 .members {  
     z-index: 25;  
     border: solid 1px #363338;
-    border-radius: 27px;
+    border-radius: 10px;
     font-size: 1.2rem;
     height: auto;
     max-height: 150px;
@@ -167,7 +168,8 @@
     overflow-y: auto;
     background-color:#DFE9EE;
     -ms-overflow-style: none;  /* IE and Edge */
-    scrollbar-width: none; 
+    scrollbar-width: none;
+    text-align: left; 
 }
 
 .members::-webkit-scrollbar {
@@ -177,8 +179,13 @@
 .user {
     width: 100%;
     margin-bottom: 0.5%;
-    border-radius: 27px;
+    /* border-radius: 27px; */
     font-weight: normal;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+    /* padding: 9px; */
 }
 
 .email {
