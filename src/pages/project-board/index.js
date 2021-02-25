@@ -109,8 +109,6 @@ export default function ProjectBoard() {
             arr.shift()
         }
 
-        // updatedUser.recentProjects = arr
-
         const response = await fetch(`/api/user/recentProjects/${userId}`, {
             method: "PUT",
             headers: {
@@ -292,7 +290,7 @@ export default function ProjectBoard() {
                                         return (
                                             <Draggable key={element._id} draggableId={element._id} index={index}>
                                                 {(provided) => (
-                                                    <div {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+                                                    <div className={styles.droppable} {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
                                                         <List
                                                             list={element}
                                                             project={projectContext.project}
