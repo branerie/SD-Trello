@@ -95,6 +95,8 @@
     background-color: #DFE9EE;  
     resize: none; 
     outline: none; 
+    font-family: sans-serif;
+    font-size: revert;
 }
 
 .text-invite{
@@ -128,7 +130,7 @@
 .members {
     z-index: 25;  
     border: solid 1px #363338;
-    border-radius: 27px;
+    border-radius: 10px;
     font-size: 1.2rem;
     height: auto;
     max-height: 150px;
@@ -146,7 +148,10 @@
 .user {
     width: 100%;
     margin-bottom: 0.5%;
-    border-radius: 27px;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .email {

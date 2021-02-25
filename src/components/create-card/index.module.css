@@ -227,6 +227,8 @@
     padding: 4px;
     font-weight: normal;
     resize: none;
+    font-family: sans-serif;
+    font-size: revert;
 }
 
 .description-buttons{

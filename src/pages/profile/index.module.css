@@ -9,7 +9,7 @@
     flex-wrap: wrap;
   }
 
-  @media (max-width: 1050px) {
+  @media (max-width: 1120px) {
     .container {
       display: block;
     }
@@ -69,7 +69,8 @@
     min-width: 170px;
     min-height: 50px;
     display: block;
-    margin: 0 auto;
+    margin: 15px;
+    margin-top: 0;
     margin-bottom: 20px;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
     text-align: left;
@@ -227,7 +228,8 @@
 
 
 .select-team-container{
-  width: 0;
+  width: 200px;
+  margin: 0 auto;
   height: 0;
   color: white;
 }
@@ -266,7 +268,7 @@
   flex-wrap: wrap;
   text-align: center;
   margin: 0 auto;
-  margin: 10px;
+  margin: 15px;
   cursor: pointer;
   border: 1px solid #707070;
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);

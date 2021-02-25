@@ -7,7 +7,8 @@
 
 @media (max-width: 1150px) {
   .container {
-    display: block;
+    flex-flow: column;
+    align-items: center;
   }
  
 }
@@ -90,6 +91,10 @@
   max-height: 60px;
   overflow-y: scroll;
   overflow-wrap: break-word;
+
+  overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .navigate-buttons-teams {
@@ -100,16 +105,15 @@
   min-height: 20px;
   height: auto;
   border-radius: 10px;
-  display:flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  text-align: center;
   margin: 0 auto;
   margin: 10px;
   cursor: pointer;
   border: 1px solid #707070;
   box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
   outline: none;
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
 }
 
 

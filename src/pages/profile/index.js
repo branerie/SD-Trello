@@ -265,6 +265,7 @@ const ProfilePage = () => {
 
               <ButtonGrey title={'My Teams'} className={styles['navigate-buttons']}
                 onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
+                <span>
               <div className={styles['select-team-container']}>
                 {
                   showTeamsVisibleForm ?
@@ -287,6 +288,7 @@ const ProfilePage = () => {
                     : null
                 }
               </div>
+              </span>
             </div>
             <div className={styles['button-div-save']}>
             <ButtonGrey title={'SAVE'} className={styles['save-button']}
