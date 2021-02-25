@@ -20,6 +20,19 @@
     background: #DFE9EE;
     position: absolute;
     border-radius: 10px;
+}
+
+.result{
+    margin-bottom: 0.5%;
+    font-weight: normal;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.result:hover{
+    background-color: rgba(0,0,0,0.05);
     cursor: pointer;
 }
 

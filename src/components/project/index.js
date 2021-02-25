@@ -19,19 +19,19 @@ export default function Project(props) {
                 </div > : null
             }
             <div className={styles.container}>
-                <div className={styles['left-side']}>
+                <div className={styles['top-side']}>
                     <Link to={`/project-board/${params.teamid}/${props.project._id}`} className={styles.key}>Name: <span className={styles.value}>{props.project.name}</span></Link>
 
-                    <div className={styles.key}>
+                </div >
+                <div className={styles['lower-side']}>
+                    <div className={styles['key-lower']}>
                         Creator: <span className={styles.value}>{props.project.author.username}</span>
+                    </div>
+                    <div className={styles.info} >
+                        <ButtonGrey className={styles['info-btn']} title={'Info'} onClick={() => setIsVisible(!isVisible)} />
                     </div>
                 </div>
 
-                
-                <div className={styles.info} >
-                <ButtonGrey className={styles['info-btn']} title={'Info'} onClick={() => setIsVisible(!isVisible)}/>
-                
-            </div>
             </div>
         </div>
     )

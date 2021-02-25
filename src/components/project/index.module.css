@@ -1,18 +1,13 @@
 .container {
-    /* width: 80%;  */
     min-width: 200px;  
     background-color:#F7F7F2;    
     margin-bottom: 20px;
     height: auto;
-    min-height: 100px;
     border-radius: 19px;
     border: solid 1px #707070;
     box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-    display: flex;
-    flex-wrap: wrap;
-    justify-content: space-between;
-    padding: 1%;
-    overflow-y: scroll;
+   
+    padding: 2%;
     flex-grow: 1;
     -ms-overflow-style: none;  /* IE and Edge */
     scrollbar-width: none;  /* Firefox */
@@ -23,8 +18,7 @@
     display: none;
 } 
 
-.left-side{
-    max-width: 80%;
+.top-side{
     max-height: 180px;
     overflow-y: scroll;
     overflow-wrap: break-word;
@@ -32,22 +26,26 @@
     scrollbar-width: none;  
 }
 
-.left-side::-webkit-scrollbar {
+.top-side::-webkit-scrollbar {
     display: none;
 }
 
 .key {
-    padding: 10px;
     text-decoration: none;
     font-size: 1.6em;
     font-weight: 600;
     color: black;
     margin-top: 2%;
+}
 
+.key-lower {
+    text-decoration: none;
+    font-size: 1.6em;
+    font-weight: 600;
+    color: black;
 }
 
 .value {
-    padding: 10px;
     text-decoration: none;
     font-size: 1em;
     font-weight: 400;
@@ -58,12 +56,18 @@
 
 
 .info {    
-    margin-top: auto;    
+    /* margin-top: auto;    
     margin-right: 1%;
-    margin-bottom: 1%;    
+    margin-bottom: 1%;     */
 }
 
 .info-btn{
   padding: 6px 20px 4px;
 }
 
+.lower-side{
+    display: flex;
+    justify-content: space-between;
+    margin-top: 2%;
+    align-items: center;
+}

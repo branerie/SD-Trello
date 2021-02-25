@@ -122,6 +122,7 @@ export default function CreateTeam(props) {
                     label="Name"
                     id="name"
                     placeholder='Team Name'
+                    autocomplete="off"
                 />
             </div>
 
@@ -134,6 +135,7 @@ export default function CreateTeam(props) {
                     label="Description"
                     id="description"
                     placeholder='Team Description'
+                    spellcheck="false"
                 />
             </div>
 

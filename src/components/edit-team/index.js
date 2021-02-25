@@ -252,6 +252,8 @@ export default function EditTeam(props) {
                             onChange={e => setDescription(e.target.value)}
                             label="Description"
                             id="description"
+                            spellcheck="false"
+
                         />
                     </div>
                     {

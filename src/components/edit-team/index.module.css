@@ -55,6 +55,7 @@
     background-color:#DFE9EE;
     padding: 1%;
     outline: none;
+    font-size: 1rem;
 }
 
 .text-invite{
@@ -74,6 +75,7 @@
     padding: 2%;
     padding-right: 1%;
     outline: none;
+    font-size: 1rem;
 }
 
 .input-container-descr{    
@@ -96,7 +98,7 @@
     resize: none; 
     outline: none;
     font-family: sans-serif;
-    font-size: revert;
+    font-size: 1rem;
 }
 
 
@@ -156,6 +158,11 @@
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
+}
+
+.user:hover{
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.05);
 }
 
 .email {
