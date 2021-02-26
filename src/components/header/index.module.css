@@ -81,15 +81,16 @@
 
 .logout {
   background: #A6A48E;
-  /* color:#363338; */
+  color:#363338;
   border-bottom: 1px solid #363338;
   text-decoration: none;
   display: inline-block;
-  height: auto;
+  height: 41px;
   cursor: pointer;
   margin: 0.1%;
   vertical-align: center;
   width: 100%;
+  width: -moz-available;
   padding: 10px;
   border-radius: 0 0 10px 10px;
 }
@@ -141,7 +142,7 @@
 
 .logout-position {
   width: 100px;
-  top: 15px;
+  top: 1px;
   right: 10px;
 }
 
@@ -181,7 +182,7 @@
 
 .overflow {
   background: #A6A48E;
-  color:black;
+  color:#363338;
   width: 86.5%;
   white-space: nowrap; 
   overflow: hidden;
@@ -207,6 +208,7 @@
 }
 
 .list-button{
+  color: #363338;
   cursor: pointer;
   width: 100%;
   height: 100%;
@@ -218,8 +220,10 @@
 }
 
 .profile-button{
+  color: #363338;
   cursor: pointer;
-  width: 100%;
+  width: -webkit-fill-available;
+  width: -moz-available;
   height: 100%;
   border-radius: 10px 10px 0 0;
 }
@@ -244,6 +248,9 @@
     margin: 0;
     padding-left: 10px;
   }  
+  .logout-position{
+    top: 15px;
+  }
 }
 
 @media screen and (max-width:700px) {
