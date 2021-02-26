@@ -5,7 +5,7 @@ import styles from './index.module.css'
 import searchImg from '../../images/search.svg'
 
 
-const SearchField = () => {
+const SearchField = ({ asideOn }) => {
     const dropdownRefSearch = useRef(null)
     const [searchInput, setSearchInput] = useState('')
     const [showSearchForm, setShowSearchForm] = useDetectOutsideClick(dropdownRefSearch)
@@ -22,7 +22,11 @@ const SearchField = () => {
             <div className={styles['search-button']} onClick={() => setShowSearchInput(!showSearchInput)} >
                 <img className={styles['search-icon']} src={searchImg} alt="search" />
             </div>
-            <div className={showSearchInput ? `${styles['new-line']} ${styles['search-fields']}` : styles['search-fields']} >
+            <div className={showSearchInput ? 
+                ( asideOn? 
+                    (`${styles['new-line']} ${styles['search-fields']} ${styles['small']} `)
+                    :(`${styles['new-line']} ${styles['search-fields']}`)) 
+                : styles['search-fields']} >
                 <input 
                     className={styles.input} 
                     type='text'

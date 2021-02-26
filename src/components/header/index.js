@@ -273,7 +273,7 @@ const Header = ({ asideOn }) => {
                 </div>
 
                 <div className={`${styles.links} ${styles.font}`}>
-                    <SearchField />
+                    <SearchField asideOn={asideOn}/>
                     {/* <span>
                         <input className={styles.input} type='text'
                             placeholder={!showSearchForm ? 'Search...' : 'Enter Project or Team name'}

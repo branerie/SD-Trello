@@ -40,7 +40,7 @@ const Home = () => {
 
   }
 
-  
+
 
 
   return (
@@ -59,13 +59,13 @@ const Home = () => {
         <span className={styles['left-buttons']}>
 
           <div>
-            <ButtonGrey className={styles['navigate-buttons']} title={'My Tasks'} onClick={() => history.push(`/my-tasks/${userId}`)} />
+            <ButtonGreyTitle className={styles['navigate-buttons']} title={'My Tasks'} onClick={() => history.push(`/my-tasks/${userId}`)} />
 
           </div>
 
           <div>
             {/* <div className={styles['my-teams-container']}> */}
-              <ButtonGrey className={styles['navigate-buttons']} title={'My Teams'} onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
+            <ButtonGreyTitle className={styles['navigate-buttons']} title={'My Teams'} onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
 
 
             {/* </div> */}
@@ -83,7 +83,8 @@ const Home = () => {
                                   className={styles['navigate-buttons-teams']}
                                   onClick={() => goToTeamPage(t._id)}
                                   title={t.name}
-                                >{t.name}</div>
+                                >
+                                  {t.name}</div>
 
                               </span>
                             )
@@ -99,8 +100,8 @@ const Home = () => {
           </div>
 
           <div>
-            <ButtonGrey className={styles['navigate-buttons']} title={'Create New Team'} onClick={() => setShowTeamForm(true)} />
-           
+            <ButtonGreyTitle className={styles['navigate-buttons']} title={'Create New Team'} onClick={() => setShowTeamForm(true)} />
+
           </div>
 
         </span>
