@@ -21,7 +21,7 @@ const ButtonHideList = ( { list, type } ) => {
     return (
     <button onClick={onClick} className={`${styles.submit} ${projectContext.hiddenLists.includes(list._id) && styles.opacity}`} >
         <ListColor color={list.color || '#A6A48E'} type={type} />
-        <div className={styles.name}>{list.name}</div>
+        <div className={styles.name} title={list.name} >{list.name}</div>
     </button>
     )
 }

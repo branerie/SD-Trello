@@ -9,6 +9,7 @@ import styles from './index.module.css'
 import pic1 from '../../images/home-page-pic.svg'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import ButtonGrey from "../../components/button-grey"
+import ButtonGreyTitle from "../../components/button-grey-title"
 
 
 const Home = () => {
@@ -81,7 +82,7 @@ const Home = () => {
                                 <div
                                   className={styles['navigate-buttons-teams']}
                                   onClick={() => goToTeamPage(t._id)}
-
+                                  title={t.name}
                                 >{t.name}</div>
 
                               </span>
@@ -118,7 +119,7 @@ const Home = () => {
                   recentProjects.slice(0).reverse().map((p, index) => {
                     return (
                       <div key={p._id}>
-                        <ButtonGrey className={styles['navigate-buttons']} title={p.name} onClick={() => goToProject(p._id)} />
+                        <ButtonGreyTitle className={styles['navigate-buttons']} title={p.name} onClick={() => goToProject(p._id)} />
                       </div>
                     )
                   })

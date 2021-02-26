@@ -2,7 +2,6 @@ import React, { useContext, useRef, useState, useEffect, useCallback } from "rea
 import styles from "./index.module.css"
 import UserContext from "../../contexts/UserContext"
 import { useDetectOutsideClick } from "../../utils/useDetectOutsideClick"
-import LinkComponent from "../link"
 import ButtonClean from "../button-clean"
 import TeamContext from "../../contexts/TeamContext"
 import Transparent from "../transparent"
@@ -15,6 +14,8 @@ import getCookie from "../../utils/cookie"
 import { useSocket } from "../../contexts/SocketProvider"
 import AvatarUser from "../avatar-user"
 import SearchField from "../searchField"
+import ButtonCleanTitle from "../button-clean-title"
+import LinkComponentTitle from "../link-title"
 
 const Header = ({ asideOn }) => {
     const dropdownRefProfile = useRef(null)
@@ -142,7 +143,7 @@ const Header = ({ asideOn }) => {
                             Team:
                         </div>
                         <div className={styles['list-container']}>
-                            <ButtonClean
+                            <ButtonCleanTitle
                                 className={styles.teams}
                                 onClick={() => setIsTeamActive(!isTeamActive)}
                                 title={teamContext.selectedTeam}
@@ -155,7 +156,7 @@ const Header = ({ asideOn }) => {
                                     {
                                         teamContext.teams.map(t => (
                                             <div key={t._id} className={`${styles['team-options']} ${styles.hover}`}>
-                                                <LinkComponent
+                                                <LinkComponentTitle
                                                     href={`/team/${t._id}`}
                                                     title={t.name}
                                                     onClick={() => { selectTeam(t._id, t.name) }}
@@ -189,7 +190,7 @@ const Header = ({ asideOn }) => {
                                 Project:
                             </div>
                             <div className={styles['list-container']}>
-                                <ButtonClean
+                                <ButtonCleanTitle
                                     className={styles.teams}
                                     onClick={() => setIsProjectActive(!isProjectActive)}
                                     title={projectContext.project.name}
@@ -200,11 +201,13 @@ const Header = ({ asideOn }) => {
                                         className={styles.options}
                                     >
                                         {
+
                                             teamContext.currentProjects.filter(!showOldProjects ? (p => (p.isFinished === false) || (p.isFinished === undefined)) : (p => (p.isFinished === true)))
+
                                                 .reverse()
                                                 .map(p => (
                                                     <div key={p._id} className={`${styles['team-options']} ${styles.hover}`}>
-                                                        <LinkComponent
+                                                        <LinkComponentTitle
                                                             href={`/project-board/${params.teamid}/${p._id}`}
                                                             title={p.name}
                                                             onClick={() => { setIsProjectActive(false) }}

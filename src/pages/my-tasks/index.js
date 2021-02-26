@@ -1,6 +1,5 @@
 import React, { useState, useContext, useEffect, useCallback } from "react"
 import { Link, useHistory } from "react-router-dom"
-import ButtonClean from "../../components/button-clean"
 import PageLayout from "../../components/page-layout"
 import Title from "../../components/title"
 import UserContext from "../../contexts/UserContext"
@@ -9,6 +8,7 @@ import styles from './index.module.css'
 import myTasks from '../../images/my-tasks/my-tasks.svg'
 import { useSocket } from "../../contexts/SocketProvider"
 import MyTasksTask from "../../components/my-tasks-task"
+import ButtonCleanTitle from "../../components/button-clean-title"
 import ButtonGrey from "../../components/button-grey"
 
 const MyTasksPage = () => {
@@ -81,7 +81,7 @@ const MyTasksPage = () => {
             <div className={styles['team-buttons']}>
                 <span className={styles.title}>Teams:</span>
                 {userContext.user.teams.map(team => {
-                    return (<ButtonClean
+                    return (<ButtonCleanTitle
                         key={team._id}
                         title={team.name}
                         onClick={() => selectTeam(team._id)}

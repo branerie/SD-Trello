@@ -170,10 +170,10 @@
   white-space: nowrap;
 }
 
-.team-options {
-  /* border: 1px solid #707070; */
-  /* border-bottom: team-options; */
-}
+/* .team-options {
+  border: 1px solid #707070;
+  border-bottom: team-options;
+} */
 
 .team-options:nth-child(1) {
   border-radius: 10px 10px 0 0 ;

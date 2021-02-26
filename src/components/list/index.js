@@ -97,7 +97,7 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
             }
             <div className={styles.row}>
                 <div>
-                    <div className={styles.name}>{list.name}</div>
+                    <div className={styles.name} title={list.name} >{list.name}</div>
                     <ListColor color={list.color || '#A6A48E'} type={'list'} />
                 </div>
                 {

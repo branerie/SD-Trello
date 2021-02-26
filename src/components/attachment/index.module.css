@@ -26,26 +26,3 @@
     align-items: center;
     justify-content: center;
 }
-
-.name {
-    background-color: white;
-    width: fit-content;
-    max-width: 9rem;
-    padding: 4px;
-    text-align: left;
-    text-overflow: ellipsis;
-    white-space: nowrap;
-    overflow: hidden;
-    position: relative;
-    top: -1rem;
-    right: calc(var(--width) - 2rem);
-    border: 0.5px solid #363338;
-    font-size: 0.7rem;
-    box-sizing: border-box;
-}
-
-@media (max-width: 750px) {
-    .name {
-        right: 0;
-    }
-}
