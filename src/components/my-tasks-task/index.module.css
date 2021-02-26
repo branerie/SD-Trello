@@ -46,9 +46,10 @@
 }
 
 .button {
-    width: 30px;
+    width: 2rem;
+    height: 2rem;
+    min-width: 2rem;
     border-radius: 5px;
-    height: 35px;
 }
 
 .button:hover {
