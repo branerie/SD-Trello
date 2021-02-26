@@ -38,19 +38,19 @@ export default function TaskProgress(props) {
         const listId = props.listId
 
 
-        if (!cardProgress) {
+        if (!cardProgress || (cardProgress > 100) || (cardProgress < 0)) {
             return
-        } 
-        
+        }
+
         const cardProgressNum = Number(cardProgress)
         const newCardProgress = Math.max(Math.min(cardProgressNum, 100), 0)
         if (isNaN(cardProgressNum) || newCardProgress === Number(card.progress)) {
             return
-        } 
+        }
 
         setCardProgress(newCardProgress)
 
-        const newTaskHistory = [...taskHistory,  { event: `Progress ${cardProgress}%`, date: today }]
+        const newTaskHistory = [...taskHistory, { event: `Progress ${cardProgress}%`, date: today }]
         setTaskHistory(newTaskHistory)
 
 
@@ -80,7 +80,7 @@ export default function TaskProgress(props) {
 
 
     function showTaskProgress(value) {
-        
+
         if (value && value !== 'null') {
             return (
                 <div style={{
@@ -88,8 +88,8 @@ export default function TaskProgress(props) {
                     padding: '5px',
                     border: 'solid black 1px',
                     borderRadius: '5px',
-                    minHeight: '2rem', 
-                    width: '100%', 
+                    minHeight: '2rem',
+                    width: '100%',
                     textAlign: 'center',
                     display: 'flex',
                     alignItems: 'center',
@@ -154,9 +154,9 @@ export default function TaskProgress(props) {
                         {showTaskProgress(taskprogress)}
                         {/* </button> */}
                     </div >
-                    // : <span>Add Progress</span>
-                    // }
-                    // </div>
+                // : <span>Add Progress</span>
+                // }
+                // </div>
             }
         </>
     )
