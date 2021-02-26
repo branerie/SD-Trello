@@ -40,6 +40,8 @@ const Header = ({ asideOn }) => {
     const params = useParams()
     const history = useHistory()
     const socket = useSocket()
+    const [showOldProjects, setShowOldProjects] = useState(false)
+
 
     function selectTeam(teamId, teamName) {
         teamContext.getCurrentProjects(teamId)
@@ -80,6 +82,10 @@ const Header = ({ asideOn }) => {
 
             if (projectContext.project === null || projectContext.project._id !== params.projectid) {
                 getData()
+            } else if (projectContext.project.isFinished === true) {
+                setShowOldProjects(true)
+            } else if(projectContext.project.isFinished === false){
+                setShowOldProjects(false)
             }
 
             if (window.location.href.includes('board')) {
@@ -194,8 +200,8 @@ const Header = ({ asideOn }) => {
                                         className={styles.options}
                                     >
                                         {
-                                            teamContext.currentProjects.filter(p => (p.isFinished === false)||(p.isFinished === undefined))
-                                            .reverse()
+                                            teamContext.currentProjects.filter(!showOldProjects ? (p => (p.isFinished === false) || (p.isFinished === undefined)) : (p => (p.isFinished === true)))
+                                                .reverse()
                                                 .map(p => (
                                                     <div key={p._id} className={`${styles['team-options']} ${styles.hover}`}>
                                                         <LinkComponent
