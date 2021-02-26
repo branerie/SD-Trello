@@ -10,11 +10,19 @@ body {
   font-size: 16px;
 }
 
+
 html {
   margin: 0;
   background-color: #EDF5F9;
   font-family: 'Lato';
   font-size: 16px;
+  overflow: auto;
+  -ms-overflow-style: none;
+  scrollbar-width: none;
+}
+
+html::-webkit-scrollbar {
+  display: none;
 }
 
 :focus {outline:none;}
