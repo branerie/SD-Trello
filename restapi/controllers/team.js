@@ -285,7 +285,7 @@ async function deleteTeam(req, res, next) {
 
         await models.Team.deleteOne({ _id: idTeam }).session(session)
 
-        await models.User.updateMany({ lastTeamSelected: idTeam }, { lastTeamSelected: '' }).session(session)
+        const test = await models.User.updateMany({ lastTeamSelected: idTeam }, { lastTeamSelected: '' }).session(session)
 
         await session.commitTransaction()
 

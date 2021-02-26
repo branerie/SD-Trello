@@ -400,7 +400,7 @@ async function deleteUser(req, res, next) {
 async function getUserTasks(req, res, next) {
     const userId = req.user._id
     const teamId = req.params.teamid
-    const team = await models.Team.findOne({ _id: teamId })
+    const team = await models.Team.findById(teamId)
         .populate({
             path: 'projects',
             populate: [{
@@ -421,8 +421,11 @@ async function getUserTasks(req, res, next) {
             }]
         })
 
-        await models.User.updateOne({ _id: userId }, { lastTeamSelected: teamId })
-
+    if (team === null) {
+        res.send('Team not found')
+        return
+    }
+    await models.User.updateOne({ _id: userId }, { lastTeamSelected: teamId })
     let projects = team.projects
 
     projects.forEach(p => p.lists.forEach(l => l.cards = l.cards.filter(c => {

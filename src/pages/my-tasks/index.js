@@ -30,6 +30,7 @@ const MyTasksPage = () => {
             history.push("/error")
         } else {
             const data = await response.json()
+            if (data === 'Team not found') return
             setProjects(data)
             if (teamId !== userContext.user.lastTeamSelected) {
                 const user = { ...userContext.user }
@@ -77,12 +78,12 @@ const MyTasksPage = () => {
             <div>
                 <span className={styles.title}>Teams:</span>
                 {userContext.user.teams.map(team => {
-                    return (<ButtonCleanTitle
+                    return <ButtonCleanTitle
                         key={team._id}
                         title={team.name}
                         onClick={() => selectTeam(team._id)}
                         className={`${styles.teams} ${userContext.user.lastTeamSelected === team._id && styles.selected}`}
-                    />)
+                    />
                 })}
             </div>
             { !userContext.user.lastTeamSelected ? <div className={styles.title}>Select a team</div> :
