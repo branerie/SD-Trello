@@ -16,6 +16,7 @@
     flex-direction: column;
 }
 
+
   
 .search-button {
     display: none;
@@ -38,8 +39,11 @@
         opacity: 0;
     }
 
+  
+
     .search-fields.new-line{
       position: absolute;
+      z-index: -1;
       right: 0;
       top: 60px;
       width: calc(100vw - 50px);
@@ -49,7 +53,21 @@
       display: flex;
     }
 
+    .search-fields.new-line.small{
+      margin-left: 121px;
+      width: calc(100vw - 171px);
+  }  
+
     .input {
       margin-left: 5px;
-    }
+    }  
 }
+
+@media screen and (max-width:700px) {
+  .search-fields.new-line.small{
+    margin-left: 0;
+    width: calc(100vw - 50px)
+  }
+
+}
+
