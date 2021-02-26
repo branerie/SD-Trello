@@ -276,6 +276,7 @@ const ProfilePage = () => {
                               <div
                                 className={styles['navigate-buttons-teams']}
                                 onClick={() => goToTeamPage(t._id)}
+                                title={t.name}
                               >{t.name}</div>
                             </span>
                           )
