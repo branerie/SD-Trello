@@ -9,10 +9,13 @@ import myTasks from '../../images/my-tasks/my-tasks.svg'
 import { useSocket } from "../../contexts/SocketProvider"
 import MyTasksTask from "../../components/my-tasks-task"
 import ButtonCleanTitle from "../../components/button-clean-title"
+import ButtonGrey from "../../components/button-grey"
 
 const MyTasksPage = () => {
     const userContext = useContext(UserContext)
     const [projects, setProjects] = useState([])
+    const [showOldProjects, setShowOldProjects] = useState(false)
+
     const history = useHistory()
     const socket = useSocket()
 
@@ -74,7 +77,8 @@ const MyTasksPage = () => {
     return (
         <PageLayout>
             <Title title='My Tasks' />
-            <div>
+            <div className={styles['button-container']}>
+            <div className={styles['team-buttons']}>
                 <span className={styles.title}>Teams:</span>
                 {userContext.user.teams.map(team => {
                     return (<ButtonCleanTitle
@@ -85,10 +89,14 @@ const MyTasksPage = () => {
                     />)
                 })}
             </div>
+            <div className={styles['projects-btn-div']}>
+                <ButtonClean className={`${styles.teams} ${styles['projects-button']}`}  title={showOldProjects? 'Current Projects': "Old Projects"} onClick={()=> setShowOldProjects(!showOldProjects)} />
+            </div>
+            </div>
             { !userContext.user.lastTeamSelected ? <div className={styles.title}>Select a team</div> :
                 <div className={styles.box}>
                     {projects.length === 0 ? <div className={styles.title}>There is no current tasks</div> :
-                        projects.filter(p => (p.isFinished === false) || (p.isFinished === undefined))
+                        projects.filter(!showOldProjects?(p => (p.isFinished === false) || (p.isFinished === undefined)):(p => (p.isFinished === true)))
                             .reverse()
                             .map(project => {
                                 return (
