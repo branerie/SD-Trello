@@ -106,7 +106,15 @@ const Header = ({ asideOn }) => {
         return () => socket.off('project-deleted')
     })
 
-    function goToHomePage(deletedTeamId) {
+    async function goToHomePage(deletedTeamId) {
+        const user = { ...context.user }
+        if (deletedTeamId === user.lastTeamSelected) {
+            user.lastTeamSelected = ''
+            context.setUser({
+                ...user
+            })
+        }
+
         if (deletedTeamId !== params.teamid) return
         history.push('/')
     }
