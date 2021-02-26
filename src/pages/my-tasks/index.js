@@ -10,6 +10,7 @@ import { useSocket } from "../../contexts/SocketProvider"
 import MyTasksTask from "../../components/my-tasks-task"
 import ButtonCleanTitle from "../../components/button-clean-title"
 import ButtonGrey from "../../components/button-grey"
+import ButtonClean from "../../components/button-clean"
 
 const MyTasksPage = () => {
     const userContext = useContext(UserContext)
