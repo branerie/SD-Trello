@@ -9,18 +9,20 @@ import UserContext from '../../contexts/UserContext'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import ConfirmDialog from '../confirmation-dialog'
 import AvatarUser from '../avatar-user'
+import ButtonClean from '../button-clean'
 
 
 export default function AddMember(props) {
 
     const socket = useSocket()
-    const members = props.members
     const [users, setUsers] = useState([])
-    const [selectedUser, setSelectedUser] = useState('')
     const context = useContext(UserContext)
     const teamContext = useContext(TeamContext)
     const dropdownRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
+    const [showMembers, setShowMembers] = useState(false)
+    const [member, setMember] = useState('')
+    const [members, setMembers] = useState(props.project.membersRoles)
     const isAdmin = props.admin
     const history = useHistory()
     const projectId = props.project._id
@@ -33,51 +35,8 @@ export default function AddMember(props) {
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
         socket.emit('team-update', params.teamid)
-    }, [socket, props.project, params.teamid])
+    }, [socket, props, params.teamid])
 
-
-    const getTeamUsers = async () => {
-        let currentTeamId = ''
-
-        teamContext.teams.map(t => {
-            return (
-                t.projects.map(p => {
-                    if (p._id === projectId) {
-                        currentTeamId = t._id
-                    }
-                    return currentTeamId
-                })
-            )
-        })
-
-        const token = getCookie("x-auth-token")
-        const response = await fetch(`/api/teams/get-users/${currentTeamId}`, {
-            method: "GET",
-            headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
-            }
-        })
-
-        if (!response.ok) {
-            history.push("/error")
-        }
-        const data = await response.json()
-
-        let teamUsers = data.members
-
-        const filtered = teamUsers.filter((e) => {
-            const found = members.find(element => element.memberId.username === e.username)
-            if (found) {
-                return false
-            } else {
-                return true
-            }
-        })
-
-        setUsers(filtered)
-
-    }
 
     async function handleOnDragEnd(result) {
 
@@ -105,15 +64,12 @@ export default function AddMember(props) {
             return
         }
 
-        // if (!memberAdmin) {
-        //     if (!window.confirm(`Are you sure you wish to make ${member.username} admin ?`))
-        //         return
-        // }
-
-        // if (memberAdmin) {
-        //     if (!window.confirm(`Are you sure you wish to remove ${member.username} from  admins ?`))
-        //         return
-        // }
+        let arr = [...members]
+        let newArr = arr.filter(m => m._id !== memberRoleId)
+        let updatedUser = members.filter(a => a._id === memberRoleId)[0]
+        updatedUser.admin = !memberAdmin
+        newArr.push(updatedUser)
+        setMembers(newArr)
 
         const token = getCookie("x-auth-token")
 
@@ -135,12 +91,6 @@ export default function AddMember(props) {
         }
     }
 
-    const handleSelect = (id) => {
-        const result = users.filter(obj => {
-            return obj._id === id
-        })[0]
-        setSelectedUser(result)
-    }
 
     const deleteMember = async (member) => {
         const projectId = props.project._id
@@ -164,24 +114,23 @@ export default function AddMember(props) {
             history.push("/error")
         } else {
             updateProjectSocket()
+            let arr = [...members]
+            let newArr = arr.filter(m => m.memberId._id !== memberId)
+            setMembers(newArr)
         }
 
     }
 
 
-    const handleAdd = async (event) => {
-        event.preventDefault()
+    const handleAdd = async (member) => {
 
-
-        if (!selectedUser) {
+        if (!member) {
             setIsActive(!isActive)
-
             return
         }
 
         const token = getCookie("x-auth-token")
 
-        const member = selectedUser
 
         const response = await fetch(`/api/projects/${projectId}/user`, {
             method: "POST",
@@ -197,14 +146,73 @@ export default function AddMember(props) {
         if (!response.ok) {
             history.push("/error")
         } else {
+            const memberRole = await response.json()
             updateProjectSocket()
+            memberRole.memberId = member
             setIsActive(!isActive)
-            setSelectedUser('')
+            let arr = [...members]
+            arr.push(memberRole)
+            setMembers(arr)
+            setUsers([])
         }
     }
 
-    let confirmationObjectFunctions = {        
-        'delete this member': deleteMember   
+
+    const onFocus = async () => {
+        setShowMembers(true)
+
+        if (users.length === 0) {
+            let currentTeamId = ''
+
+            teamContext.teams.map(t => {
+                return (
+                    t.projects.map(p => {
+                        if (p._id === projectId) {
+                            currentTeamId = t._id
+                        }
+                        return currentTeamId
+                    })
+                )
+            })
+
+            const token = getCookie("x-auth-token")
+            const response = await fetch(`/api/teams/get-users/${currentTeamId}`, {
+                method: "GET",
+                headers: {
+                    "Content-Type": "application/json",
+                    "Authorization": token
+                }
+            })
+
+            if (!response.ok) {
+                history.push("/error")
+            }
+            const data = await response.json()
+
+            let teamUsers = data.members
+
+            const filtered = teamUsers.filter((e) => {
+                const found = members.find(element => element.memberId.username === e.username)
+                if (found) {
+                    return false
+                } else {
+                    return true
+                }
+            })
+
+            setUsers(filtered)
+        }
+    }
+
+    const onBlur = () => {
+        setTimeout(() => setShowMembers(false), 120)
+    }
+
+
+
+
+    let confirmationObjectFunctions = {
+        'delete this member': deleteMember
     }
 
     return (
@@ -220,133 +228,162 @@ export default function AddMember(props) {
 
             <div className={styles['big-container']}>
                 {isAdmin ?
-                <span>
-                    {isActive ?
-                        <div className={styles.members} ref={dropdownRef}>
-                            {
-                                (users.length > 0) ?
-                                
-                                    <div>
-                                            Add Member to Project
-                            
-                                        <div>
-                                            <select className={styles['member-select']}
-                                                onChange={(e) => { handleSelect(e.target.value) }}>
-                                                <option >Select user</option>
-                                                {
-                                                    users.map((element) => (
-                                                        <option key={element._id} value={element._id}>{element.username}</option>
-                                                    ))
+                    <div>
+                        <div className={styles['input-container']}>
+                            <span className={styles['text-invite']}> Invite Members</span>
 
-                                                }
-                                            </select>
-                                        <span className={styles['add-button']} onClick={handleAdd} >Add</span>
+                            <div className={styles['invite-input']}>
+                                <input
+                                    className={styles['members-input']}
+                                    autoComplete="off"
+                                    value={member}
+                                    onFocus={onFocus}
+                                    onBlur={onBlur}
+                                    onChange={(e) => setMember(e.target.value)}
+                                    label="Invite members"
+                                    id="members"
+                                    placeholder='Teammate Username'
+                                />
+                                <div className={styles['select-for-invite']}>
+                                    {
+                                        showMembers &&
+                                        <div className={styles.members}>
+                                            {
+                                                users.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(context.user.username))
+                                                    .filter((e) => {
+                                                        const found = members.find(element => element.username === e.username)
+                                                        if (found) {
+                                                            return false
+                                                        } else {
+                                                            return true
+                                                        }
+                                                    })
+                                                    .sort((a, b) => a.username.localeCompare(b.username))
+                                                    .map(u => {
+                                                        return (
+                                                            <ButtonClean
+                                                                key={u._id}
+                                                                className={styles.user}
+                                                                onClick={() => { handleAdd(u) }}
+                                                                title={<div>
+                                                                    <div>{u.username}</div>
+                                                                    <div className={styles.email}>{u.email}</div>
+                                                                </div>}
+                                                            />)
+                                                    })
+                                            }
                                         </div>
-                                    </div>
-                                    :
-                                    <div>There are no more members in your team</div>                                      
-                                
-                            }
+                                    }
+                                </div>
+
+
+                            </div>
                         </div>
-                        :
+
+
+
+
                         <DragDropContext onDragEnd={handleOnDragEnd}>
 
 
-                        <div className={styles['admins-container']}>
-                            <span className={styles.title}>Admins:</span>
-                            <Droppable droppableId={"admins"}>
-                                {(provided) => (
-                                    <div className={styles.droppable} ref={provided.innerRef}  {...provided.droppableProps} >
-                                        {
-                                            members.filter(a => a.admin === true).map((element, index) => {
-                                                return (
-                                                    <Draggable key={element.memberId._id} draggableId={element._id} index={index}>
-                                                        {(provided) => (
-                                                            <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >                                                                   
-                                                                <AvatarUser user={element.memberId} 
-                                                                    size={40}  />
-                                                                {provided.placeholder}
-                                                            </span>
-                                                        )}
-                                                    </Draggable>
-                                                )
-                                            })
-                                        }
-                                        {provided.placeholder}
-                                    </div>
-                                )}
-                            </Droppable>
-                        </div>
+                            <div className={styles['admins-container']}>
+                                <span className={styles.title}>Admins:</span>
+                                <Droppable droppableId={"admins"}>
+                                    {(provided) => (
+                                        <div className={styles.droppable} ref={provided.innerRef}  {...provided.droppableProps} >
+                                            {
+                                                members.filter(a => a.admin === true).map((element, index) => {
+                                                    return (
+                                                        <Draggable key={element.memberId._id} draggableId={element._id} index={index}>
+                                                            {(provided) => (
+                                                                <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+                                                                    <AvatarUser user={element.memberId}
+                                                                        size={40} />
+                                                                    {provided.placeholder}
+                                                                </span>
+                                                            )}
+                                                        </Draggable>
+                                                    )
+                                                })
+                                            }
+                                            {provided.placeholder}
+                                        </div>
+                                    )}
+                                </Droppable>
+                            </div>
 
-                        <div className={styles['members-container']}>
-                            <span className={styles.title}>Members:</span>
-                            <Droppable droppableId={"members"}>
-                                {(provided) => (
-                                    <div className={styles['droppable-members']} ref={provided.innerRef} {...provided.droppableProps}>
-                                        {
-                                            members.filter(a => a.admin !== true).map((element, index) => {
-                                                return (
-                                                    <Draggable key={element.memberId._id} draggableId={element._id} index={index} >
-                                                        {(provided) => (
+                            <div className={styles['members-container']}>
+                                <span className={styles.title}>Members:</span>
+                                <Droppable droppableId={"members"}>
+                                    {(provided) => (
+                                        <div className={styles['droppable-members']} ref={provided.innerRef} {...provided.droppableProps}>
+                                            {
+                                                members.filter(a => a.admin !== true).map((element, index) => {
+                                                    return (
+                                                        <Draggable key={element.memberId._id} draggableId={element._id} index={index} >
+                                                            {(provided) => (
 
-                                                            <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                                <AvatarUser user={element.memberId}  key={index}  size={40} round={true}                                                                       
-                                                                    onClick={() => {
-                                                                        setConfirmOpen(true)
-                                                                        setConfirmTitle('delete this member')
-                                                                        setCurrElement(element.memberId)
-                                                                    }}
+                                                                <span {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
+                                                                    <AvatarUser user={element.memberId}
+                                                                        // key={index} 
+                                                                        size={40} round={true}
+                                                                        onClick={() => {
+                                                                            setConfirmOpen(true)
+                                                                            setConfirmTitle('delete this member')
+                                                                            setCurrElement(element.memberId)
+                                                                        }}
                                                                     />
-                                                                {provided.placeholder}
-                                                            </span>
-                                                        )}
-                                                    </Draggable>
-                                                )
-                                            })
-                                        }
-                                        {provided.placeholder}
-                                    </div>
-                                )}
-                            </Droppable>
-                            <span className={styles['add-button']} onClick={() => { setIsActive(!isActive); getTeamUsers() }} >Add</span>
-                        </div>
+                                                                    {provided.placeholder}
+                                                                </span>
+                                                            )}
+                                                        </Draggable>
+                                                    )
+                                                })
+                                            }
+                                            {provided.placeholder}
+                                        </div>
+                                    )}
+                                </Droppable>
+                                {/* <span className={styles['add-button']} onClick={() => { setIsActive(!isActive); getTeamUsers() }} >Add</span> */}
+                            </div>
 
 
                         </DragDropContext>
-                    
-                    }
-                </span >
-                :
-                <div>
-                    <div className={styles['admins-container']}>
-                        <span className={styles.title}>Admins:</span>
-                        <div className={styles.droppable}>
-                            {
-                                members.filter(a => a.admin === true).map((element, index) => {
-                                    return (
-                                        <span key={index} >
-                                            <AvatarUser user={element.memberId}  size={40}  />
-                                        </span>
-                                    )
-                                })
-                            }
-                        </div>
+
                     </div>
 
-                    <div className={styles['admins-container']}>
-                        <span className={styles.title}>Members:</span>
-                        <div className={styles.droppable}>
-                        { 
-                            members.filter(a => a.admin !== true).map((element, index) => {
-                                return (
-                                    <span key={index}>                                                                                                <AvatarUser user={element.memberId}  size={40}  />
-                                    </span>
-                                )
-                            })
-                        }
+
+                    :
+                    <div>
+                        <div className={styles['admins-container']}>
+                            <span className={styles.title}>Admins:</span>
+                            <div className={styles.droppable}>
+                                {
+                                    members.filter(a => a.admin === true).map((element, index) => {
+                                        return (
+                                            <span key={index} >
+                                                <AvatarUser user={element.memberId} size={40} />
+                                            </span>
+                                        )
+                                    })
+                                }
+                            </div>
+                        </div>
+
+                        <div className={styles['admins-container']}>
+                            <span className={styles.title}>Members:</span>
+                            <div className={styles.droppable}>
+                                {
+                                    members.filter(a => a.admin !== true).map((element, index) => {
+                                        return (
+                                            <span key={index}>                                                                                                <AvatarUser user={element.memberId} size={40} />
+                                            </span>
+                                        )
+                                    })
+                                }
+                            </div>
                         </div>
                     </div>
-                </div>
                 }
             </div>
         </div>

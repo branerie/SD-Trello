@@ -15,7 +15,7 @@ const MembersFilter = ({ membersFilter, setMembersFilter, handleFilterClear, but
             value: mr.memberId._id,
             displayValue: mr.memberId.username
         }))
-    }, [project.memberRoles])
+    }, [project.membersRoles])
 
     const handleOptionClick = (optionValue, optionDisplay) => {
         setMembersFilter(optionValue, optionDisplay)

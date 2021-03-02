@@ -124,7 +124,7 @@ export default function CreateProject({ hideForm }) {
                     label="Description"
                     id="description"
                     placeholder='Project Description'
-                    spellcheck="false"
+                    spellCheck="false"
                 />
             </div>
 
@@ -182,7 +182,9 @@ export default function CreateProject({ hideForm }) {
                 {
                     members.map((m,index) => {
                         return (
-                            <AvatarUser key={index} user={m} onClick={() => removeMember(m)} size={40}/>
+                            <span key={index}>
+                            <AvatarUser  user={m} onClick={() => removeMember(m)} size={40}/>
+                            </span>
                         )
                     })
                 }

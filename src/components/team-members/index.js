@@ -21,10 +21,9 @@ export default function TeamMembers(props) {
                             <ButtonClean
                                 key={index}
                                 title={
-                                <AvatarUser user={m}
-                                    key={m._id}
-                                    size={40}
-                                />}
+                                    <AvatarUser user={m}
+                                        size={40}
+                                    />}
                             />
                         )
                     })
@@ -39,11 +38,13 @@ export default function TeamMembers(props) {
                     {
                         invited.map((m, index) => {
                             return (
+                                <span key={index}>
                                 <AvatarUser user={m}
-                                    key={index}
+                                   
                                     size={40}
                                 // onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeMember(m) }}
                                 />
+                                </span>
                             )
                         })
                     }

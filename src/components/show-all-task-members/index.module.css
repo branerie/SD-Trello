@@ -21,11 +21,32 @@
 
 .each-member {
     margin: 3px;
-    display: block;
+    /* display: block; */
+    display: flex;
+    justify-content: space-between;    
+}
+
+.name{
+    width: 94%;
     overflow: hidden;
     text-overflow: ellipsis;
     white-space: nowrap;
 }
+
+
+.each-member .delete-icon{
+    visibility: hidden;
+}
+
+.each-member:hover .delete-icon{
+    visibility: visible;
+}
+
+.each-member:hover{
+    background-color: rgba(0,0,0,0.05);
+}
+
+
 
 .avatar {
     margin-right: 5px;   

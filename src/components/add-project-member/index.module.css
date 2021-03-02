@@ -1,6 +1,5 @@
 .container {
-    margin: 5%;    
-    /* height: 200px; */
+    margin-top: 2%;    
 }
 
 .form {
@@ -21,7 +20,7 @@
 
 .admins-container{
     margin: 5%; 
-    width: 80%;
+    width: 90%;
     height: auto; 
     display: flex; 
     justify-self: start; 
@@ -32,10 +31,7 @@
     margin: 2%;
 }
 
-.big-container{   
-    width: 90%;
-    margin: 0 auto;
-    margin-left: 5%;
+.big-container{ 
     height: auto; 
     min-height: 100%;   
     justify-content: space-between;
@@ -44,7 +40,7 @@
 
 .members-container{   
     margin: 5%; 
-    width: 100%;
+    width: 90%;
     height: auto;    
     display: flex;     
     justify-content: space-between;
@@ -56,10 +52,22 @@
     margin-right: 1%;
 }
 
-.members{
-    width: 70%;
-    margin: 0, auto;
-    margin-left: 23%;
+.select-for-invite{
+    height: 0;
+}
+
+.members {
+    z-index: 25;  
+    border: solid 1px #363338;
+    border-radius: 10px;
+    font-size: 1.2rem;
+    height: auto;
+    max-height: 150px;
+    padding: 10px;
+    overflow-y: auto;
+    background-color:#DFE9EE;
+    -ms-overflow-style: none;  /* IE and Edge */
+    scrollbar-width: none; 
 }
 
 .member-select {
@@ -95,4 +103,54 @@
     height: auto;
     width: 100%;
     flex-grow: 1;
+}
+
+.input-container{
+    align-items: center;
+    width: 70%;
+    margin-left: 15%;
+    margin-bottom: 2%;
+    font-weight: normal;
+    display: flex;
+}
+
+.text-invite{
+    width: 38%;
+}
+
+.invite-input{
+    width: 62%;
+    z-index: 20;
+}
+
+.members-input{
+    border: solid 1px #363338;
+    border-radius: 10px;
+    padding: 0.5%;
+    height: 1.8em;
+    width: 96%;
+    margin-left: 0%;
+    text-align: left;
+    background-color: #DFE9EE;
+    outline: none;
+    padding: 2%;
+    padding-right: 1%;
+    font-size: 1rem;
+}
+
+.user {
+    width: 100%;
+    margin-bottom: 0.5%;
+    text-align: left;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+}
+
+.user:hover{
+    cursor: pointer;
+    background-color: rgba(0,0,0,0.05);
+}
+.email {
+    font-size: 0.9rem;
 }
