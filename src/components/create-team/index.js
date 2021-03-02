@@ -135,7 +135,7 @@ export default function CreateTeam(props) {
                     label="Description"
                     id="description"
                     placeholder='Team Description'
-                    spellcheck="false"
+                    spellCheck="false"
                 />
             </div>
 

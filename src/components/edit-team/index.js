@@ -252,7 +252,7 @@ export default function EditTeam(props) {
                             onChange={e => setDescription(e.target.value)}
                             label="Description"
                             id="description"
-                            spellcheck="false"
+                            spellCheck="false"
 
                         />
                     </div>
@@ -340,14 +340,15 @@ export default function EditTeam(props) {
                                         {
                                             forInvite.map((m, index) => {
                                                 return (
+                                                    <span key={index}>
                                                     <AvatarUser user={m}
-                                                    size={40}
-                                                        key={index}
+                                                    size={40}                                                       
                                                         onClick={() => {
                                                             setConfirmOpen(true)
                                                             setConfirmTitle('remove this member')
                                                             setCurrElement(m)
                                                         }} />
+                                                        </span>
                                                 )
                                             })
                                         }
@@ -361,13 +362,15 @@ export default function EditTeam(props) {
                                         {
                                             members.map((m, index) => {
                                                 return (
-                                                    <AvatarUser user={m} key={index} size={40}
+                                                    <span key={index}>
+                                                    <AvatarUser user={m}  size={40}
                                                         onClick={() => {
                                                             setConfirmOpen(true)
                                                             setConfirmTitle('delete this member from team')
                                                             setCurrElement(m)
                                                         }}
                                                     />
+                                                    </span>
 
                                                 )
                                             })
@@ -383,8 +386,8 @@ export default function EditTeam(props) {
                                                 {
                                                     invited.map((m, index) => {
                                                         return (
-                                                            <AvatarUser user={m}
-                                                                key={index}
+                                                            <span key={index}>
+                                                            <AvatarUser user={m}                                                                
                                                                 size={40}
                                                                 onClick={() => {
                                                                     setConfirmOpen(true)
@@ -392,7 +395,7 @@ export default function EditTeam(props) {
                                                                     setCurrElement(m)
                                                                 }}
                                                             />
-
+                                                            </span>
                                                         )
                                                     })
                                                 }

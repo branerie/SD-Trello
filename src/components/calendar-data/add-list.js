@@ -34,7 +34,7 @@ export default function AddList({ project, handleInputRemove }) {
         socket.emit('project-update', project)
         handleInputRemove()
             
-    }, [history, listName, project._id])
+    }, [history, listName, project, handleInputRemove, socket])
 
     return (
         <AddProjectElement
