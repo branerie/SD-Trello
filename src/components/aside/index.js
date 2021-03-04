@@ -70,7 +70,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                 />
                 {editProjectButtonVisibility &&
                     <ButtonClean
-                        className={styles.hamburger}
+                        className={styles.settings}
                         onClick={() => setEditProjectVisibility(!editProjectVisibility)}
                         title={<img className={styles.options} src={projectInfo} alt="" width="40" />}
                     />
@@ -110,9 +110,9 @@ export default function Aside({ asideOn, setAsideOn }) {
                         />
                         {editProjectButtonVisibility &&
                             <ButtonClean
-                                className={styles.hamburger}
+                                className={styles.link}
                                 onClick={() => setEditProjectVisibility(!editProjectVisibility)}
-                                title={'View Project'}
+                                title={'Settings'}
                             />
                         }
                         {/* <LinkComponent

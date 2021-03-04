@@ -34,10 +34,11 @@
     margin: 15px;
     padding: 5px;
     border-radius: 5px;
+    cursor: pointer;
 }
 
 .addlist:hover {
-    background-color: lemonchiffon;
+    background-color: #C1CBCF;
 }
 
 .input {

@@ -6,6 +6,7 @@
   background-color: inherit;
   font-weight: inherit;
   outline: none;
+  cursor: pointer;
 }
 
 .name {
