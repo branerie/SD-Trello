@@ -129,7 +129,7 @@ export default function CreateProject({ hideForm }) {
             </div>
 
             <div className={styles['input-container']}>
-                <span className={styles['text-invite']}> Invite Members</span>
+                <span className={styles['text-invite']}>Add Members</span>
 
                 <div className={styles['invite-input']}>
                     <input

@@ -37,7 +37,6 @@ export default function AddMember(props) {
         socket.emit('team-update', params.teamid)
     }, [socket, props, params.teamid])
 
-
     async function handleOnDragEnd(result) {
 
         if (!result.destination) {
@@ -91,7 +90,6 @@ export default function AddMember(props) {
         }
     }
 
-
     const deleteMember = async (member) => {
         const projectId = props.project._id
 
@@ -120,7 +118,6 @@ export default function AddMember(props) {
         }
 
     }
-
 
     const handleAdd = async (member) => {
 
@@ -157,9 +154,7 @@ export default function AddMember(props) {
         }
     }
 
-
     const onFocus = async () => {
-        setShowMembers(true)
 
         if (users.length === 0) {
             let currentTeamId = ''
@@ -202,13 +197,15 @@ export default function AddMember(props) {
 
             setUsers(filtered)
         }
+
+        setShowMembers(true)
+
+
     }
 
     const onBlur = () => {
         setTimeout(() => setShowMembers(false), 120)
     }
-
-
 
 
     let confirmationObjectFunctions = {
@@ -217,7 +214,6 @@ export default function AddMember(props) {
 
     return (
         <div className={styles.container}>
-
             {confirmOpen &&
                 <ConfirmDialog
                     title={confirmTitle}
@@ -225,13 +221,11 @@ export default function AddMember(props) {
                     onConfirm={() => confirmationObjectFunctions[confirmTitle](currElement)}
                 />
             }
-
             <div className={styles['big-container']}>
                 {isAdmin ?
                     <div>
                         <div className={styles['input-container']}>
-                            <span className={styles['text-invite']}> Invite Members</span>
-
+                            <span className={styles['text-invite']}>Add Members</span>
                             <div className={styles['invite-input']}>
                                 <input
                                     className={styles['members-input']}
@@ -275,17 +269,10 @@ export default function AddMember(props) {
                                         </div>
                                     }
                                 </div>
-
-
                             </div>
                         </div>
 
-
-
-
                         <DragDropContext onDragEnd={handleOnDragEnd}>
-
-
                             <div className={styles['admins-container']}>
                                 <span className={styles.title}>Admins:</span>
                                 <Droppable droppableId={"admins"}>
@@ -344,15 +331,9 @@ export default function AddMember(props) {
                                         </div>
                                     )}
                                 </Droppable>
-                                {/* <span className={styles['add-button']} onClick={() => { setIsActive(!isActive); getTeamUsers() }} >Add</span> */}
                             </div>
-
-
                         </DragDropContext>
-
                     </div>
-
-
                     :
                     <div>
                         <div className={styles['admins-container']}>

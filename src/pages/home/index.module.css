@@ -16,6 +16,9 @@
 
 
 .pic-container{
+  display: flex;
+  flex-flow: column;
+  align-items: center;
   width: auto;
   justify-content: center;
   height: auto;

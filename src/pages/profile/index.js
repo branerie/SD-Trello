@@ -176,14 +176,12 @@ const ProfilePage = () => {
 
         <div className={styles['left-container']}>
 
-
-
           <div className={styles['button-input-div']}>
             <ButtonGrey title={'Username:'} className={styles['navigate-buttons']}
               onClick={() => { setUserNameActive(!userNameActive) }} />
             < input
               ref={function (input) {
-                if (input != null) {
+                if (input !== null) {
                   input.focus();
                 }
               }}
@@ -243,7 +241,6 @@ const ProfilePage = () => {
               className={styles['input-fields-profile']}
               value={userEmail}
               disabled={true}
-            // type="password"
             />
 
           </div>
@@ -255,7 +252,6 @@ const ProfilePage = () => {
               className={styles['input-fields-tasks']}
               value={''}
               disabled={true}
-            // type="password"
             />
           
           </div>
@@ -264,7 +260,6 @@ const ProfilePage = () => {
             <div className={styles.myTeamsContainer}>
               <ButtonGrey title={'My Teams'} className={styles['navigate-buttons']}
                 onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
-                {/* <span> */}
               <div className={styles['select-team-container']}>
                 {
                   showTeamsVisibleForm ?
@@ -288,7 +283,6 @@ const ProfilePage = () => {
                     : null
                 }
               </div>
-              {/* </span> */}
             </div>
             <div className={styles['button-div-save']}>
             <ButtonGrey title={'SAVE'} className={styles['save-button']}
@@ -300,8 +294,6 @@ const ProfilePage = () => {
 
 
         <div className={styles['pic-container']}>
-
-
           <div className={styles['profile-pic-container']}>
             <div className={styles['profile-pic']}
               onClick={() => {
@@ -313,13 +305,9 @@ const ProfilePage = () => {
               {userContext.user.image ?
 
                 <div className={styles['profile-picture']}>
-                  {/* <img
-                    src={getFullImageUrl(userContext.user.image.path)}
-                    className={styles['profile-picture']} alt=''
-                  /> */}
+                 
                   <Image publicId={userContext.user.image.publicId} className={styles['profile-picture']} >
                     <Transformation width="250" height="250"
-                    //  gravity="faces" crop="fill"
                     />
                   </Image>
 
