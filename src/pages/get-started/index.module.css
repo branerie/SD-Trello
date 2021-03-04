@@ -1,6 +1,6 @@
 .container{
-    border: 2px solid black;
-    border-radius: 1.5rem;
+    /* border: 2px solid black; */
+    /* border-radius: 1.5rem; */
     padding: 5%;
 }
 
@@ -20,6 +20,9 @@
     justify-content: center;
     margin: 2%;
     font-size: 1.2rem;
+    border: 2px solid black;
+    border-radius: 1rem;
+    padding: 2%;
 }
 
 .logo-div{
@@ -36,9 +39,17 @@
     width: 100%;
 }
 
+.navigate-buttons{
+    margin-top: 15%;
+}
+
 .pic{
     width: 50%;
     margin-left: 25%;
+}
+
+.pic3{
+    width: 100%;
 }
 
 .greeting{
