@@ -46,7 +46,7 @@ const GetStarted = () => {
             </div>
 
                 <div className={styles.paragraph}>
-                    1. - In order to start using Smart Manager you have to be part of a team - you can create your own and work by yourself,  invite your colleagues and friends or can be invited in others by another smart manager user.
+                    1. - In order to start using Smart Manager you have to be part of a team - you can create your own and work by yourself,  invite your colleagues and friends or can be invited in others by another smart manager users.
                     You can create and join as many teams you want.
 
                     <div className={styles['pic-div']}>
@@ -66,7 +66,7 @@ const GetStarted = () => {
                     3. - In each project you can organize your tasks by separating them into different lists - for example - To Do, Doing and Done or any other way. You can create as many lists you need. The tasks can be moved from one list to another or within the lists.
 
                     <div className={styles['pic-div']}>
-                        <img className={styles.pic} src={pic3} alt="" />
+                        <img className={styles.pic3} src={pic3} alt="" />
                     </div>
                 </div>
 
@@ -82,12 +82,14 @@ const GetStarted = () => {
 
                 <div className={styles.paragraph}>
                     5. - Great! You are all set. Start your Smart experience and continue exploring countless opportunities by creating your first team.
-                </div>
 
-                <div className={styles.paragraph}>
+                    <div>
                     <ButtonGreyTitle className={styles['navigate-buttons']} title={'Create New Team'} onClick={() => setShowTeamForm(true)} />
 
                 </div>
+                </div>
+
+                
 
                 <div className={styles.greeting}>
                     Enjoy!

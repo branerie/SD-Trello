@@ -307,7 +307,7 @@ const ProfilePage = () => {
                 <div className={styles['profile-picture']}>
                  
                   <Image publicId={userContext.user.image.publicId} className={styles['profile-picture']} >
-                    <Transformation width="250" height="250"
+                    <Transformation width="250" height="250" gravity="faces" crop="fill"
                     />
                   </Image>
 
