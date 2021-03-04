@@ -9,7 +9,7 @@ const ProgressFilters = ({ buttonStyle, filters, toggleFilter }) => {
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
 
     return (
-        <div class={styles.container}>
+        <div className={styles.container}>
             <ButtonClean 
                 title='Filter By Progress:' 
                 className={`${buttonStyle} ${styles['btn-progress']}`}

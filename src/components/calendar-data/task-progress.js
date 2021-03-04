@@ -76,7 +76,7 @@ export default function TaskProgress(props) {
         socket.emit('project-update', props.project)
         socket.emit('task-team-update', teamId)
 
-    }, [history, cardProgress, isActive, setIsActive, taskHistory, today, card._id, props.listId, props.project, socket, teamId])
+    }, [history, cardProgress, isActive, setIsActive, taskHistory, today, card._id, props.listId, props.project, socket, teamId, card.progress])
 
 
     function showTaskProgress(value) {

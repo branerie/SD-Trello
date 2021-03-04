@@ -3,7 +3,7 @@ import Image from "cloudinary-react/lib/components/Image"
 import Transformation from "cloudinary-react/lib/components/Transformation"
 import Avatar from "react-avatar"
 
-export default function AvatarUser({ user, onClick, className, key, size }) {
+export default function AvatarUser({ user, onClick, className, size }) {
 
     return (
 
@@ -11,7 +11,6 @@ export default function AvatarUser({ user, onClick, className, key, size }) {
                 <Image
                     publicId={user.image.publicId}
                     onClick={onClick}
-                    key={key}
                     className={`${styles['profile-picture']} ${className}`}
                     title={user.username}
                 >
@@ -21,7 +20,6 @@ export default function AvatarUser({ user, onClick, className, key, size }) {
             :
 
             <Avatar
-                key={key}
                 className={className}
                 onClick={onClick}
                 name={user.username}

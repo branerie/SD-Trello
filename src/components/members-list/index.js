@@ -59,7 +59,6 @@ const MembersList = ({ members, maxLength, deleteMemberOption, deleteMemberObj }
                             <span className={styles.avatar} key={element._id}>
                                 <AvatarUser
                                 user={element}
-                                    key={element._id}
                                     size={30}                                  
                                 />
                             </span>

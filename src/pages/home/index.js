@@ -8,7 +8,6 @@ import UserContext from "../../contexts/UserContext"
 import styles from './index.module.css'
 import pic1 from '../../images/home-page-pic.svg'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import ButtonGrey from "../../components/button-grey"
 import ButtonGreyTitle from "../../components/button-grey-title"
 
 

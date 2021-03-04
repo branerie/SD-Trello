@@ -77,13 +77,20 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
                 {members.map((m, index) => {
                     return (
                         <div key={index} className={styles['each-member']} onClick={() => onClick(m)} >
-                            <span className={styles.avatar} key={m._id}>
-                                <AvatarUser user={m}
-                                    size={30}
-                                    className={styles.avatar}
-                                />
-                            </span>
-                            <span>{m.username}</span>
+                            <div className={styles.name}>
+                                <span className={styles.avatar} key={m._id}>
+                                    <AvatarUser user={m}
+                                        size={30}
+                                        className={styles.avatar}
+                                    />
+                                </span>
+                                <span>{m.username}</span>
+                            </div>
+                            {
+                                deleteMemberOption ?
+                                    <span className={styles['delete-icon']}>x</span>
+                                    : null
+                            }
                         </div>
                     )
                 })}

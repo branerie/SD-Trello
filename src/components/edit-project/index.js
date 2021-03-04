@@ -28,14 +28,13 @@ export default function EditProject(props) {
 
     const updateProjectSocket = useCallback(() => {
         socket.emit('project-update', props.project)
-    }, [socket, props.project])
+    }, [socket, props])
 
     useEffect(() => {
         setIsAdmin(isUserAdmin(userContext.user.id, members))
     }, [members, userContext.user.id, props])
 
-    console.log(props.project);
-    console.log('isFinished', isFinished);
+    
 
     async function handleSubmit(e) {
         e.preventDefault()
@@ -118,11 +117,11 @@ export default function EditProject(props) {
                         label="Description"
                         id="description"
                         placeholder='Project Description'
-                        spellcheck="false"
+                        spellCheck="false"
                     />
                 </div>
                 <div className={styles['edit-members']}>
-                    <AddProjectMember admin={isAdmin} project={props.project} members={props.project.membersRoles} />
+                    <AddProjectMember admin={isAdmin} project={props.project} members={members} />
                 </div>
             </div>
             <div>
