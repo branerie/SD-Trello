@@ -4,11 +4,7 @@
   display: inline-block;
   height: auto;
   cursor: pointer;
-  margin: 0.1%;
   vertical-align: center;
-  width: -webkit-fill-available;
-  width: -moz-available;
   padding: 10px;
-  border-radius: inherit;
   text-align: center;
 }

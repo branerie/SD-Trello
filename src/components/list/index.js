@@ -165,7 +165,7 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
                                 value={cardName}
                                 onChange={e => setCardName(e.target.value)}
                             />
-                            <ButtonClean type='submit' className={styles.addlist} onClick={addCard} title='+ Add Task' project={project} />
+                            <ButtonClean type='submit' className={styles['add-task']} onClick={addCard} title='+ Add Task' project={project} />
                         </form> : <ButtonClean className={styles['add-task']} onClick={() => setIsVisible(!isVisible)} title='+ Add Task' />
 
                 }
