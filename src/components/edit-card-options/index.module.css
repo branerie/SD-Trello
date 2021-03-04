@@ -1,4 +1,4 @@
-.small-buttons{
+.small-buttons {
     display: flex;
     align-items: center;
     margin-top: 0.5rem;
@@ -12,7 +12,7 @@
     outline: none;
 }
  
-.pics{   
+.pics {   
     margin-left: 5%;
     margin-right: 5%;
     height: 15px;
@@ -24,7 +24,7 @@
 }
 
 /* Members */
-.select{
+.select {
     width: 10rem;
     height: 2rem;
     background-color: #E6E6E6;
