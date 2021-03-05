@@ -46,7 +46,7 @@ const GetStarted = () => {
             </div>
 
                 <div className={styles.paragraph}>
-                    1. - In order to start using Smart Manager you have to be part of a team - you can create your own and work by yourself,  invite your colleagues and friends or can be invited in others by another smart manager users.
+                    1. - In order to start using Smart Manager you have to be part of a team - you can create your own and work by yourself,  invite your colleagues and friends or can be invited in others by other smart manager users.
                     You can create and join as many teams you want.
 
                     <div className={styles['pic-div']}>
