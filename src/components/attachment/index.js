@@ -1,9 +1,9 @@
 import React, { useRef } from 'react'
 import styles from './index.module.css'
 import pic1 from '../../images/edit-card/pic1.svg'
-import AttachmentList from '../attachmentList'
+import AttachmentList from '../AttachmentList'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import Transparent from '../transparent'
+import Transparent from '../Transparent'
 
 export default function Attachment({ att, attachments, card, project, teamId, setCurrCard }) {
     const listRef = useRef(null)

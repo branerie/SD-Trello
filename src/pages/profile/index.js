@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useCallback, useContext, useRef } from "react"
 import Loader from "react-loader-spinner"
 import { useParams, useHistory } from "react-router-dom"
-import PageLayout from "../../components/page-layout"
+import PageLayout from "../../components/PageLayout"
 import styles from './index.module.css'
 import pic1 from '../../images/profile-page-pic.svg'
 import pen from '../../images/pen.svg'
 import authenticateUpdate from '../../utils/authenticate-update';
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import Title from "../../components/title"
+import Title from "../../components/Title"
 import UserContext from "../../contexts/UserContext"
-import Alert from "../../components/alert"
-import ButtonGrey from '../../components/button-grey'
-import ConfirmDialog from "../../components/confirmation-dialog"
+import Alert from "../../components/Alert"
+import ButtonGrey from '../../components/ButtonGrey'
+import ConfirmDialog from "../../components/ConfirmationDialog"
 import { Image, Transformation } from 'cloudinary-react';
 
 

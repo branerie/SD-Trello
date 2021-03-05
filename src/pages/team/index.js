@@ -1,15 +1,15 @@
 import React, { useState, useContext, useEffect } from "react"
 import styles from './index.module.css'
-import PageLayout from "../../components/page-layout"
-import Project from '../../components/project'
-import Transparent from "../../components/transparent"
-import CreateProject from '../../components/create-project'
+import PageLayout from "../../components/PageLayout"
+import Project from '../../components/Project'
+import Transparent from "../../components/Transparent"
+import CreateProject from '../../components/CreateProject'
 import { useParams } from "react-router-dom"
-import EditTeam from "../../components/edit-team"
-import TeamMembers from "../../components/team-members"
+import EditTeam from "../../components/EditTeam"
+import TeamMembers from "../../components/TeamMembers"
 import pic1 from '../../images/team-page/pic1.svg'
 import UserContext from "../../contexts/UserContext"
-import ButtonGrey from "../../components/button-grey"
+import ButtonGrey from "../../components/ButtonGrey"
 import useUpdateUserLastTeam from "../../utils/useUpdateUserLastTeam"
 
 const TeamPage = () => {

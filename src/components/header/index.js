@@ -5,11 +5,11 @@ import ProjectContext from "../../contexts/ProjectContext"
 import { useHistory, useParams } from "react-router-dom"
 import getCookie from "../../utils/cookie"
 import { useSocket } from "../../contexts/SocketProvider"
-import SearchField from "../searchField"
-import TeamDropdown from "../header-dropdowns/team-dropdown"
-import ProjectDropdown from "../header-dropdowns/project-dropdown"
-import ViewDropdown from "../header-dropdowns/view-dropdown"
-import ProfileDropdown from "../header-dropdowns/profile-dropdown"
+import SearchField from "../SearchField"
+import TeamDropdown from "../HeaderDropdowns/TeamDropdown"
+import ProjectDropdown from "../HeaderDropdowns/ProjectDropdown"
+import ViewDropdown from "../HeaderDropdowns/ViewDropdown"
+import ProfileDropdown from "../HeaderDropdowns/ProfileDropdown"
 
 const Header = ({ asideOn }) => {
     const [isProjectVisibble, setIsProjectVisibble] = useState(false)
@@ -51,7 +51,10 @@ const Header = ({ asideOn }) => {
     useEffect(() => {
         if (!(window.location.href.includes('team') || window.location.href.includes('project'))) {
             teamContext.setSelectedTeam('Select')
-        } else if (teamContext.selectedTeam === 'Select') {
+            return
+        } 
+
+        if (teamContext.selectedTeam === 'Select') {
             const teamId = params.teamid
             teamContext.updateSelectedTeam(teamId)
         }
@@ -69,14 +72,18 @@ const Header = ({ asideOn }) => {
 
     useEffect(() => {
         if (!(window.location.href.includes('team') || window.location.href.includes('project'))) return
+
         if (socket == null) return
+
         socket.on('team-deleted', goToHomePage)
         return () => socket.off('team-deleted')
     }, [goToHomePage, socket])
 
     useEffect(() => {
         if (!window.location.href.includes('project')) return
+
         if (socket == null) return
+
         socket.on('project-deleted', goToTeamPage)
         return () => socket.off('project-deleted')
     }, [goToTeamPage, socket])

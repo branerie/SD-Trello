@@ -1,6 +1,6 @@
 import React, { useRef, useState } from 'react'
 import { useDetectOutsideClick } from "../../utils/useDetectOutsideClick"
-import SearchResults from "../search-results"
+import SearchResults from "../SearchResults"
 import styles from './index.module.css'
 import searchImg from '../../images/search.svg'
 

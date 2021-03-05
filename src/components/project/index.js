@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
-import ButtonGrey from '../button-grey'
-import EditProject from '../edit-project'
-import Transparent from '../transparent'
+import ButtonGrey from '../ButtonGrey'
+import EditProject from '../EditProject'
+import Transparent from '../Transparent'
 import styles from './index.module.css'
 
 export default function Project(props) {

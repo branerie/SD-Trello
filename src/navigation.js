@@ -6,21 +6,21 @@ import {
     Redirect
 } from "react-router-dom"
 
-import Home from "./pages/home"
-import WelcomePage from "./pages/welcome"
-import ProfilePage from "./pages/profile"
-import InboxPage from "./pages/inbox"
-import MyTasksPage from "./pages/my-tasks"
-import ErrorPage from "./pages/error"
-import GetStarted from "./pages/get-started"
+import Home from "./pages/Home"
+import WelcomePage from "./pages/Welcome"
+import ProfilePage from "./pages/Profile"
+import InboxPage from "./pages/Inbox"
+import MyTasksPage from "./pages/MyTasks"
+import ErrorPage from "./pages/Error"
+import GetStarted from "./pages/GetStarted"
 import UserContext from "./contexts/UserContext"
-import ProjectBoard from "./pages/project-board"
-import ProjectList from "./pages/project-list"
+import ProjectBoard from "./pages/ProjectBoard"
+import ProjectList from "./pages/ProjectList"
 import { SocketProvider } from "./contexts/SocketProvider"
 import ProjectProvider from "./contexts/ProjectProvider"
 import TeamProvider from "./contexts/TeamProvider"
-import TeamPage from "./pages/team"
-import ConfirmationPage from "./pages/confirmation"
+import TeamPage from "./pages/Team"
+import ConfirmationPage from "./pages/Confirmation"
 import {CloudinaryContext} from 'cloudinary-react'
 
 const Navigation = () => {

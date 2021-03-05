@@ -1,14 +1,14 @@
 import React, { useContext, useState, useRef } from "react"
 import { useHistory } from "react-router-dom"
-import CreateTeam from "../../components/create-team"
-import PageLayout from "../../components/page-layout"
-import Title from "../../components/title"
-import Transparent from "../../components/transparent"
+import CreateTeam from "../../components/CreateTeam"
+import PageLayout from "../../components/PageLayout"
+import Title from "../../components/Title"
+import Transparent from "../../components/Transparent"
 import UserContext from "../../contexts/UserContext"
 import styles from './index.module.css'
 import pic1 from '../../images/home-page-pic.svg'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import ButtonGreyTitle from "../../components/button-grey-title"
+import ButtonGreyTitle from "../../components/ButtonGreyTitle"
 
 
 const Home = () => {

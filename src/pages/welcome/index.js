@@ -10,10 +10,10 @@ import pic6 from '../../images/welcome-page/welcome-page-6.svg'
 import instagram from '../../images/welcome-page/instagram-icon.svg'
 import twitter from '../../images/welcome-page/twitter-icon.svg'
 import facebook from '../../images/welcome-page/facebook-icon.svg'
-import LoginForm from "../../components/login-form"
-import Transparent from "../../components/transparent"
-import SignupForm from "../../components/signup-form"
-import ForgotPasswordForm from "../../components/form-forgot-password"
+import LoginForm from "../../components/LoginForm"
+import Transparent from "../../components/Transparent"
+import SignupForm from "../../components/SignupForm"
+import ForgotPasswordForm from "../../components/FormForgotPassword"
 
 
 const WelcomePage = () => {
