@@ -32,7 +32,6 @@ const TeamPage = () => {
                 setInvited(t.requests)
             }
         })
-        console.log('useefect');
     }, [userContext, params])
     
     useUpdateUserLastTeam(params.teamid)
