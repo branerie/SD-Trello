@@ -108,6 +108,7 @@ const Home = () => {
         <div className={styles['pic-container']}>
           <img className={styles.pic1} src={pic1} alt="" />
           <div className={styles['welcome-user']}>{`Welcome ${userName}!`}</div>
+          <ButtonGreyTitle className={styles['navigate-buttons']} title={'Get Started'} onClick={() => history.push(`/get-started/`)} />
         </div>
 
         <span className={styles['right-buttons']}>

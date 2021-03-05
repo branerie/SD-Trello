@@ -12,6 +12,7 @@ import ProfilePage from "./pages/profile"
 import InboxPage from "./pages/inbox"
 import MyTasksPage from "./pages/my-tasks"
 import ErrorPage from "./pages/error"
+import GetStarted from "./pages/get-started"
 import UserContext from "./contexts/UserContext"
 import ProjectBoard from "./pages/project-board"
 import ProjectList from "./pages/project-list"
@@ -40,6 +41,9 @@ const Navigation = () => {
                                 ) && <Redirect to="/confirmation/not-confirmed" />}
                                 <Route exact path="/" >
                                     {loggedIn ? (<Home />) : (<WelcomePage />)}
+                                </Route>
+                                <Route path="/get-started/">
+                                    {loggedIn ? (<GetStarted />) : (<Redirect to="/" />)}
                                 </Route>
                                 <Route path="/profile/:userid">
                                     {loggedIn ? (<ProfilePage />) : (<Redirect to="/" />)}
