@@ -111,7 +111,7 @@ export default function CreateProject({ hideForm }) {
                     label="Name"
                     id="name"
                     placeholder='Project Name'
-                    autocomplete="off"
+                    autoComplete="off"
                 />
             </div>
 

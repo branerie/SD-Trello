@@ -84,7 +84,7 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
                                         className={styles.avatar}
                                     />
                                 </span>
-                                <span>{m.username}</span>
+                                <span className={styles.username}>{m.username}</span>
                             </div>
                             {
                                 deleteMemberOption ?
