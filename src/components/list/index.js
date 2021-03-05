@@ -4,13 +4,13 @@ import { useHistory, useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import Card from '../card'
+import Card from '../Card'
 import styles from './index.module.css'
 import dots from '../../images/dots.svg'
-import ButtonClean from '../button-clean'
-import ListColor from '../list-color'
-import ButtonGrey from '../button-grey'
-import ConfirmDialog from '../confirmation-dialog'
+import ButtonClean from '../ButtonClean'
+import ListColor from '../ListColor'
+import ButtonGrey from '../ButtonGrey'
+import ConfirmDialog from '../ConfirmationDialog'
 
 
 export default function List( { isAdmin, project, list, showEditList, showCurrentCard, setCurrCard }) {

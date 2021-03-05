@@ -1,17 +1,17 @@
 import React, { useState, useEffect, useCallback } from "react"
 import { useHistory } from "react-router-dom"
-import TeamInvitationInbox from "../../components/inbox/team-invitation-inbox"
-import TeamInvitationHistory from "../../components/inbox/team-invitation-history"
-import TeamInvitationResponse from "../../components/inbox/team-invitation-response"
-import TaskAssignment from "../../components/inbox/task-assignment"
-import PageLayout from "../../components/page-layout"
-import Title from "../../components/title"
+import TeamInvitationInbox from "../../components/Inbox/TeamInvitationInbox"
+import TeamInvitationHistory from "../../components/Inbox/TeamInvitationHistory"
+import TeamInvitationResponse from "../../components/Inbox/TeamInvitationResponse"
+import TaskAssignment from "../../components/Inbox/TaskAssignment"
+import PageLayout from "../../components/PageLayout"
+import Title from "../../components/Title"
 import { useSocket } from "../../contexts/SocketProvider"
 import getCookie from "../../utils/cookie"
 import styles from './index.module.css'
-import TeamDeleted from "../../components/inbox/team-deleted"
-import ProjectDeleted from "../../components/inbox/project-deleted"
-import TeamInvitationCanceled from "../../components/inbox/team-invitation-canceled"
+import TeamDeleted from "../../components/Inbox/TeamDeleted"
+import ProjectDeleted from "../../components/Inbox/ProjectDeleted"
+import TeamInvitationCanceled from "../../components/Inbox/TeamInvitationCanceled"
 
 const InboxPage = () => {
     const [inbox, setInbox] = useState([])

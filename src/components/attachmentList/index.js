@@ -1,12 +1,12 @@
 import React, { useState, useEffect } from 'react'
-import ButtonClean from '../button-clean'
+import ButtonClean from '../ButtonClean'
 import styles from './index.module.css'
 import download from '../../images/edit-card/download.svg'
 import remove from '../../images/edit-card/remove.svg'
 import { useHistory } from 'react-router-dom'
 import getCookie from '../../utils/cookie'
 import { useSocket } from '../../contexts/SocketProvider'
-import ConfirmDialog from '../confirmation-dialog'
+import ConfirmDialog from '../ConfirmationDialog'
 
 export default function AttachmentList({ attachments, listRef, card, project, teamId, setCurrCard }) {
     const socket = useSocket()

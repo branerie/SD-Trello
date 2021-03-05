@@ -1,7 +1,7 @@
 import React, { useState, useEffect, useContext, useCallback } from "react";
 import { useHistory, useParams } from "react-router-dom"
 import styles from './index.module.css'
-import Button from "../../components/button"
+import Button from "../../components/Button"
 import UserContext from "../../contexts/UserContext"
 import authenticate from "../../utils/authenticate"
 import logo from '../../images/logo.svg'

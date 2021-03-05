@@ -1,11 +1,11 @@
 import React, { useRef } from 'react'
-import ButtonClean from '../button-clean'
+import ButtonClean from '../ButtonClean'
 import styles from './index.module.css'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 import attPic from '../../images/edit-card/pic6.svg'
-import Transparent from '../transparent'
-import AttachmentList from '../attachmentList'
+import Transparent from '../Transparent'
+import AttachmentList from '../AttachmentList'
 
 const AttachmentsLink = ({ card, project, teamId }) => {
     const listRef = useRef(null)

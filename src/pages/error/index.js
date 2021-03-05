@@ -1,5 +1,5 @@
 import React from "react";
-import PageLayout from "../../components/page-layout";
+import PageLayout from "../../components/PageLayout";
 import styles from './index.module.css'
 import pic1 from '../../images/error-page.svg'
 

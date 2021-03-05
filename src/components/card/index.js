@@ -1,14 +1,14 @@
 import React, { useRef } from 'react'
 import styles from './index.module.css'
 import pen from '../../images/pen.svg'
-import ButtonClean from '../button-clean'
-import MembersList from '../members-list'
-import ProgressBar from '../progress-bar'
-import Transparent from '../transparent'
-import AttachmentList from '../attachmentList'
+import ButtonClean from '../ButtonClean'
+import MembersList from '../MembersList'
+import ProgressBar from '../ProgressBar'
+import Transparent from '../Transparent'
+import AttachmentList from '../AttachmentList'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import { useParams } from 'react-router-dom'
-import AttachmentsLink from '../attachmentsLink'
+import AttachmentsLink from '../AttachmentsLink'
 
 export default function Card({ card, project, showCurrentCard, setCurrCard }) {
     const listRef = useRef(null)
