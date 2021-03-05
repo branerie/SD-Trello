@@ -7,7 +7,7 @@ const ResponsiveTextArea = ({ value, setValue, onBlur, onKeyDown, onSubmit, clas
     const inputRef = useRef(null)
     const [areaHeight, setAreaHeight] = useState(null)
 
-    const initValue = useMemo(() => value, [])
+    const initValue = useMemo(() => value, [value])
 
     useEffect(() => {
         if (inputRef.current) {

@@ -1,6 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState, useRef } from 'react'
 import { useParams, useHistory } from "react-router-dom"
-import EditProject from '../../components/edit-project'
 import List from '../../components/list'
 import PageLayout from '../../components/page-layout'
 import Transparent from '../../components/transparent'
@@ -17,15 +16,12 @@ import EditCard from '../../components/edit-card'
 import UserContext from '../../contexts/UserContext'
 import EditList from '../../components/edit-list'
 import userObject from '../../utils/userObject'
-import ButtonGrey from '../../components/button-grey'
 import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
 
 
 export default function ProjectBoard() {
     const params = useParams()
     const history = useHistory()
-    const [members, setMembers] = useState([])
-    const [IsVisibleEdit, setIsVisibleEdit] = useState(false)
     const [isVisibleEditList, setIsVisibleEditList] = useState(false)
     const [listName, setListName] = useState('')
     const listRef = useRef(null);
@@ -46,13 +42,6 @@ export default function ProjectBoard() {
     const projectUpdate = useCallback((project) => {
 
         projectContext.setProject(project)
-
-        const memberArr = []
-        project.membersRoles.map(element => {
-            return memberArr.push({ admin: element.admin, username: element.memberId.username })
-
-        })
-        setMembers(memberArr)
         projectContext.setLists(project.lists)
     }, [projectContext])
 
@@ -84,7 +73,6 @@ export default function ProjectBoard() {
             return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
 
         })
-        setMembers(memberArr)
         projectContext.setLists(projectContext.project.lists)
         const member = memberArr.find(m => m.id === context.user.id)
 
@@ -328,22 +316,11 @@ export default function ProjectBoard() {
                                         }
                                     </div>
                                 }
-                                <ButtonGrey className={styles.button} title={'View Project'} onClick={() => setIsVisibleEdit(!IsVisibleEdit)} />
                             </div>
                         )}
                     </Droppable>
                 </DragDropContext>
-
-
-                {IsVisibleEdit &&
-                    < div >
-                        <Transparent hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} >
-                            <EditProject hideForm={() => setIsVisibleEdit(!IsVisibleEdit)} project={projectContext.project} members={members} />
-                        </Transparent >
-                    </div >
-                }
-
-                <img className={styles.pic} src={pic} alt="" width="373" height="312" />
+                <img className={styles.pic} src={pic} alt="" width="340"/>
             </div>
         </PageLayout>
     )
