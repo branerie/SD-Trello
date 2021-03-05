@@ -1,25 +1,19 @@
-import React, { useContext, useRef, useState, useEffect, useCallback } from "react"
+import React, { useContext, useState, useEffect, useCallback } from "react"
 import styles from "./index.module.css"
-import UserContext from "../../contexts/UserContext"
-import { useDetectOutsideClick } from "../../utils/useDetectOutsideClick"
-import ButtonClean from "../button-clean"
 import TeamContext from "../../contexts/TeamContext"
 import ProjectContext from "../../contexts/ProjectContext"
 import { useHistory, useParams } from "react-router-dom"
 import getCookie from "../../utils/cookie"
 import { useSocket } from "../../contexts/SocketProvider"
-import AvatarUser from "../avatar-user"
 import SearchField from "../searchField"
 import TeamDropdown from "../header-dropdowns/team-dropdown"
 import ProjectDropdown from "../header-dropdowns/project-dropdown"
 import ViewDropdown from "../header-dropdowns/view-dropdown"
+import ProfileDropdown from "../header-dropdowns/profile-dropdown"
 
 const Header = ({ asideOn }) => {
-    const dropdownRefProfile = useRef(null)
     const [isProjectVisibble, setIsProjectVisibble] = useState(false)
     const [isViewVisibble, setIsViewVisibble] = useState(false)
-    const [isProfileActive, setIsProfileActive] = useDetectOutsideClick(dropdownRefProfile)
-    const context = useContext(UserContext)
     const projectContext = useContext(ProjectContext)
     const teamContext = useContext(TeamContext)
     const params = useParams()
@@ -102,35 +96,7 @@ const Header = ({ asideOn }) => {
 
                 <div className={`${styles.links} ${styles.font}`}>
                     <SearchField asideOn={asideOn} />
-
-                    <ButtonClean
-                        className={styles.avatar}
-                        onClick={() => setIsProfileActive(!isProfileActive)}
-                        title={
-                            <AvatarUser user={context.user} size={40} />
-                        }
-                    />
-                    {isProfileActive &&
-                        <div
-                            ref={dropdownRefProfile}
-                            className={`${styles.options} ${styles['logout-position']}`}
-                        >
-                            <div className={`${styles['first-option']} ${styles.hover}`}>
-                                <ButtonClean
-                                    title='Profile'
-                                    className={`${styles['profile-button']} ${styles.hover}`}
-                                    onClick={() => history.push(`/profile/${context.user && context.user.id}`)}
-                                />
-                            </div>
-                            <div className={`${styles['last-option']} ${styles.hover}`}>
-                                <ButtonClean
-                                    onClick={context.logOut}
-                                    title='Log Out'
-                                    className={styles.logout}
-                                />
-                            </div>
-                        </div>
-                    }
+                    <ProfileDropdown/>
                 </div>
             </div>
         </header>
