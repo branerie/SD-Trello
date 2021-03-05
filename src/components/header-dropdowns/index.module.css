@@ -61,6 +61,7 @@
     text-overflow: ellipsis;
     width: 10rem;
     min-height: 2.5rem;
+    cursor: pointer;
 }
 
 .options:nth-child(1) {

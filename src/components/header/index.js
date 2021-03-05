@@ -37,6 +37,16 @@ const Header = ({ asideOn }) => {
             projectContext.setProject(data)
         }
     }, [history, params, projectContext])
+    
+    const goToHomePage = useCallback((deletedTeamId) => {
+        if (deletedTeamId !== params.teamid) return
+        history.push('/')
+    }, [history, params.teamid])
+
+    const goToTeamPage = useCallback((deletedProjectId) => {
+        if (deletedProjectId !== params.projectid) return
+        history.push(`/team/${params.teamid}`)
+    }, [history, params.projectid, params.teamid])
 
     useEffect(() => {
         if (!(window.location.href.includes('team') || window.location.href.includes('project'))) {
@@ -62,24 +72,14 @@ const Header = ({ asideOn }) => {
         if (socket == null) return
         socket.on('team-deleted', goToHomePage)
         return () => socket.off('team-deleted')
-    })
+    }, [goToHomePage, socket])
 
     useEffect(() => {
         if (!window.location.href.includes('project')) return
         if (socket == null) return
         socket.on('project-deleted', goToTeamPage)
         return () => socket.off('project-deleted')
-    })
-
-    async function goToHomePage(deletedTeamId) {
-        if (deletedTeamId !== params.teamid) return
-        history.push('/')
-    }
-
-    function goToTeamPage(deletedProjectId) {
-        if (deletedProjectId !== params.projectid) return
-        history.push(`/team/${params.teamid}`)
-    }
+    }, [goToTeamPage, socket])
 
     if (window.location.href.includes('project') && !projectContext.project) {
         return null

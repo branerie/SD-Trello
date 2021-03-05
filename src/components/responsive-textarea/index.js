@@ -1,4 +1,4 @@
-import React, { useEffect, useMemo, useRef, useState } from 'react'
+import React, { useEffect, useRef, useState } from 'react'
 
 const ESCAPE_KEY_CODE = 27
 const ENTER_KEY_CODE = 13
@@ -6,22 +6,23 @@ const ENTER_KEY_CODE = 13
 const ResponsiveTextArea = ({ value, setValue, onBlur, onKeyDown, onSubmit, className, toggleActive }) => {
     const inputRef = useRef(null)
     const [areaHeight, setAreaHeight] = useState(null)
-
-    const initValue = useMemo(() => value, [value])
+    const [currValue, setCurrValue] = useState(null)
 
     useEffect(() => {
         if (inputRef.current) {
             setAreaHeight(inputRef.current.scrollHeight + 2)
-
         }
-    }, [inputRef.current && inputRef.current.scrollHeight])
+        if(inputRef) {
+            inputRef.current.focus()
+        }
+    }, [])
 
     const handleBlur = (event) => {
         if (onBlur) {
             return onBlur(event)
         }
 
-        if (value === initValue) {
+        if (value === currValue) {
             return
         }
 
@@ -34,12 +35,18 @@ const ResponsiveTextArea = ({ value, setValue, onBlur, onKeyDown, onSubmit, clas
         }
 
         if (event.keyCode === ESCAPE_KEY_CODE && toggleActive) {
+            setValue(currValue)
             return toggleActive()
         }
 
         if (event.keyCode === ENTER_KEY_CODE) {
             onSubmit(event)
         }
+    }
+
+    const onChange = (event) => {
+        setAreaHeight(inputRef.current.scrollHeight + 2)
+        setValue(event.target.value)
     }
 
     return (
@@ -49,8 +56,9 @@ const ResponsiveTextArea = ({ value, setValue, onBlur, onKeyDown, onSubmit, clas
             style={{ 'height': areaHeight }}
             value={value}
             onKeyDown={handleKeyDown}
-            onChange={e => setValue(e.target.value)}
+            onChange={onChange}
             onBlur={handleBlur}
+            onFocus={() => setCurrValue(value)}
         />
     )
 }

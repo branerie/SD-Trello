@@ -1,32 +1,29 @@
 import React, { useCallback, useRef, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
-import { useHistory, useParams } from 'react-router-dom';
-import { useSocket } from '../../contexts/SocketProvider';
-
-import AttachmentsLink from '../attachmentsLink';
-import ResponsiveTextArea from '../responsive-textarea';
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import { useHistory, useParams } from 'react-router-dom'
+import { useSocket } from '../../contexts/SocketProvider'
+import AttachmentsLink from '../attachmentsLink'
+import ResponsiveTextArea from '../responsive-textarea'
 
 export default function TaskName({ card, listId, project }) {
 
-	const dropdownRef = useRef(null)
-	const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
+	const inputRef = useRef(null)
+	const [isActive, setIsActive] = useDetectOutsideClick(inputRef)
 	const [cardName, setCardName] = useState(card.name)
 	const history = useHistory()
 	const socket = useSocket()
 	const params = useParams()
 	const teamId = params.teamid
 
-	const editCardName = useCallback(async (event) => {
-		event.preventDefault()
-
+	const editCardName = useCallback(async () => {
 		const cardId = card._id
 
 		if (cardName === "") {
-			console.log('return');
 			return
 		}
+
 		const token = getCookie("x-auth-token")
 		const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
 			method: "PUT",
@@ -52,14 +49,7 @@ export default function TaskName({ card, listId, project }) {
 	return (
 		<div>
 			{ isActive ?
-				< div ref={dropdownRef} className={styles.nameContainer} onBlur={editCardName} >
-					{/* <input className={styles.inputElementName} type={'text'} value={cardName} onChange={e => setCardName(e.target.value)} /> */}
-					{/* <textarea
-						className={styles.inputElementName}
-						value={cardName}
-						onChange={e => setCardName(e.target.value)}
-						rows={2}
-					/> */}
+				< div ref={inputRef} className={styles.nameContainer}>
 					<ResponsiveTextArea
 						value={cardName}
 						setValue={setCardName}
