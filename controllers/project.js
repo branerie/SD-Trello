@@ -237,7 +237,7 @@ async function addMember(req, res, next) {
 
         await session.commitTransaction()
 
-        session.endSession()
+        session.endSession()        
 
         res.send(projectUserRole)
     } catch (error) {
