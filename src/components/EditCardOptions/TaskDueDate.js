@@ -3,7 +3,7 @@ import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
-import DatePicker from "react-datepicker"
+import DatePicker from 'react-datepicker'
 import { formatDate } from '../../utils/date'
 import pic5 from '../../images/edit-card/pic5.svg'
 
@@ -21,8 +21,8 @@ export default function TaskDueDate({ dueDate, card, listId, project, teamId, se
 
     useEffect( () => {
       updateDimensions()
-      window.addEventListener("resize", updateDimensions)
-      return () => window.removeEventListener("resize", updateDimensions)
+      window.addEventListener('resize', updateDimensions)
+      return () => window.removeEventListener('resize', updateDimensions)
     }, [])
   
     const updateDimensions = () => {
@@ -53,16 +53,16 @@ export default function TaskDueDate({ dueDate, card, listId, project, teamId, se
 
     const editCardDueDate = async (date) => {
 
-        if (cardDueDate === "" && date === '') {
+        if (cardDueDate === '' && date === '') {
             console.log('return');
             return
         }
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 dueDate: date,
@@ -70,7 +70,7 @@ export default function TaskDueDate({ dueDate, card, listId, project, teamId, se
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
             const updatedCard = await response.json()
@@ -84,13 +84,13 @@ export default function TaskDueDate({ dueDate, card, listId, project, teamId, se
             <DatePicker
                 customInput={
                     <div className={styles['small-buttons']} >
-                        <img className={styles.pics} src={pic5} alt="pic5" />
+                        <img className={styles.pics} src={pic5} alt='pic5' />
                         Due Date
                     </div>
                 }
                 selected={taskDueDate ? cardDueDate : today}
                 onChange={(date) => { setCardDueDate(date); editCardDueDate(date) }}
-                label="Go to date"
+                label='Go to date'
                 popperPlacement={datePickerPosition(width)}
             />
             {

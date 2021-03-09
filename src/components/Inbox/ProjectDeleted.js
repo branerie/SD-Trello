@@ -22,7 +22,7 @@ export default function ProjectDeleted({ message, setInboxHistory, options, isIn
                     <div className={styles.container}>
                         <div className={styles.bold}>Project {message.project.name} deleted</div>
                     </div>
-                    <div>{new Date(message.createdAt).toLocaleDateString("en-US", options)}</div>
+                    <div>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</div>
                 </div>
                 <div>
                     <div className={`${styles.bold} ${styles.inline}`}>Deleted by:</div>

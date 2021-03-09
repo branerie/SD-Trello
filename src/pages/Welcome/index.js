@@ -1,4 +1,4 @@
-import React, { useState } from "react"
+import React, { useState } from 'react'
 import styles from './index.module.css'
 import logo from '../../images/logo.svg'
 import pic1 from '../../images/welcome-page/welcome-page-1.svg'
@@ -10,10 +10,10 @@ import pic6 from '../../images/welcome-page/welcome-page-6.svg'
 import instagram from '../../images/welcome-page/instagram-icon.svg'
 import twitter from '../../images/welcome-page/twitter-icon.svg'
 import facebook from '../../images/welcome-page/facebook-icon.svg'
-import LoginForm from "../../components/LoginForm"
-import Transparent from "../../components/Transparent"
-import SignupForm from "../../components/SignupForm"
-import ForgotPasswordForm from "../../components/FormForgotPassword"
+import LoginForm from '../../components/LoginForm'
+import Transparent from '../../components/Transparent'
+import SignupForm from '../../components/SignupForm'
+import ForgotPasswordForm from '../../components/FormForgotPassword'
 
 
 const WelcomePage = () => {
@@ -54,7 +54,7 @@ const WelcomePage = () => {
           <div className={styles['top-div-container']}>
             <div className={styles['header-nav']}>
               <span className={styles.logo}>
-                <img src={logo} alt="logo" width='100%' height='100%' />
+                <img src={logo} alt='logo' width='100%' height='100%' />
               </span>
               <span className={styles['first-buttons']}>
                 <button className={styles['login-button']} onClick={()=>setIsVisible(!isVisible)}  >Log In</button>
@@ -62,10 +62,10 @@ const WelcomePage = () => {
               </span>
             </div>
               <div className={styles.pic1}>
-                <img src={pic1} alt="" width='100%' />
+                <img src={pic1} alt='' width='100%' />
               </div>
               <div className={styles.pic2}>
-                <img src={pic2} alt="" width='100%' />
+                <img src={pic2} alt='' width='100%' />
               </div>
           </div>
           <div className={styles['lower-div-container']}>
@@ -90,12 +90,12 @@ const WelcomePage = () => {
               </div>
             </div>
             <div className={styles['pic3-container']}>
-              <img className={styles.picture} src={pic3} alt="" />
+              <img className={styles.picture} src={pic3} alt='' />
             </div>
           </div>
           <div className={styles['second-row']}>
             <div className={styles['pic4-container']}>
-              <img className={styles.picture} src={pic4} alt="" />
+              <img className={styles.picture} src={pic4} alt='' />
             </div>
             <div className={styles['second-row-colum']}>
               <div className={styles['second-text']}>
@@ -107,7 +107,7 @@ const WelcomePage = () => {
                 </div>
               </div>
               <div className={styles['second-row-pic']} >
-                <img className={styles.picture} src={pic5} alt="" />
+                <img className={styles.picture} src={pic5} alt='' />
               </div>
             </div>
           </div>
@@ -121,7 +121,7 @@ const WelcomePage = () => {
               </div>
             </div>
             <div className={styles['pic6-container']}>
-              <img className={styles.picture} src={pic6} alt="" />
+              <img className={styles.picture} src={pic6} alt='' />
             </div>
           </div>
         </div>
@@ -164,13 +164,13 @@ const WelcomePage = () => {
         <div className={styles['last-column']}>
           <div className={styles['social-media-container']}>
             <span>
-              <img className={styles['social-media']} src={instagram} alt="" />
+              <img className={styles['social-media']} src={instagram} alt='' />
             </span>
             <span>
-              <img className={styles['social-media']} src={twitter} alt="" />
+              <img className={styles['social-media']} src={twitter} alt='' />
             </span>
             <span>
-              <img className={styles['social-media']} src={facebook} alt="" />
+              <img className={styles['social-media']} src={facebook} alt='' />
             </span>
           </div>
           <div className={styles.sd2006}>SD2006</div>

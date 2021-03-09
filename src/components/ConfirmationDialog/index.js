@@ -17,7 +17,7 @@ const ConfirmDialog = (props) => {
 
 
           <div className={styles.logo}>
-            <img src={logo} alt="logo" width='194' height='142' />
+            <img src={logo} alt='logo' width='194' height='142' />
           </div>
 
           <div className={styles.title}>{`Are you sure you want to ${props.title}?`}</div>

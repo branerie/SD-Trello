@@ -1,20 +1,20 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext } from 'react'
 import GoogleLogin from 'react-google-login'
-import { useHistory } from "react-router-dom"
-import styles from "./index.module.css"
-import UserContext from "../../contexts/UserContext"
-import responseGoogle from "../../utils/responseGoogle"
+import { useHistory } from 'react-router-dom'
+import styles from './index.module.css'
+import UserContext from '../../contexts/UserContext'
+import responseGoogle from '../../utils/responseGoogle'
 import logo from '../../images/logo.svg'
 import google from '../../images/welcome-page/google.svg'
-import Alert from "../Alert"
-import authenticateUpdate from "../../utils/authenticate-update"
+import Alert from '../Alert'
+import authenticateUpdate from '../../utils/authenticate-update'
 
 
 
 const ForgotPasswordForm = (props) => {
-    const [password, setPassword] = useState("")
-    const [email, setEmail] = useState("")
-    const [rePassword, setRePassword] = useState("")
+    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
+    const [rePassword, setRePassword] = useState('')
     const context = useContext(UserContext)
     const history = useHistory()
     const [fillAlert, setFillAlert] = useState(false)
@@ -40,14 +40,14 @@ const ForgotPasswordForm = (props) => {
             return
         }
 
-        const promise = await fetch("/api/user/login", {
-            method: "POST",
+        const promise = await fetch('/api/user/login', {
+            method: 'POST',
             body: JSON.stringify({
                 email,
                 password
             }),
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
             }
         })
 
@@ -58,7 +58,7 @@ const ForgotPasswordForm = (props) => {
             return
         }
         let userId
-        console.log("Error", response)
+        console.log('Error', response)
         if (response.user) {
             userId = response.user._id
         } else if (response.userId) {
@@ -69,16 +69,16 @@ const ForgotPasswordForm = (props) => {
             password
         }, (response) => {
             context.logIn(response.user)
-            history.push("/")
+            history.push('/')
         })
     }
 
     const handleGoogle = (googleResponse) => {
         responseGoogle(googleResponse, (user) => {
             context.logIn(user)
-            history.push("/")
+            history.push('/')
         }, (response) => {
-            console.log("Error", response)
+            console.log('Error', response)
         })
     }
 
@@ -96,7 +96,7 @@ const ForgotPasswordForm = (props) => {
 
                 <div className={styles['inner-container']}>
                     <div className={styles.logo}>
-                        <img src={logo} alt="logo" width='110' height='100' />
+                        <img src={logo} alt='logo' width='110' height='100' />
                     </div>
 
                     <div className={styles['right-side']}>
@@ -111,8 +111,8 @@ const ForgotPasswordForm = (props) => {
                                 placeholder='John@example.com'
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
-                                label="Email"
-                                id="email"
+                                label='Email'
+                                id='email'
                             />
                         </div>
 
@@ -121,11 +121,11 @@ const ForgotPasswordForm = (props) => {
                             <input
                                 className={styles.passInput}
                                 placeholder='********'
-                                type="password"
+                                type='password'
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
-                                label="Password"
-                                id="password"
+                                label='Password'
+                                id='password'
                             />
                         </div>
 
@@ -134,11 +134,11 @@ const ForgotPasswordForm = (props) => {
                             <input
                                 className={styles.passInput}
                                 placeholder='********'
-                                type="password"
+                                type='password'
                                 value={rePassword}
                                 onChange={e => setRePassword(e.target.value)}
-                                label="Confirm Password"
-                                id="rePassword"
+                                label='Confirm Password'
+                                id='rePassword'
                             />
                         </div>
 
@@ -167,11 +167,11 @@ const ForgotPasswordForm = (props) => {
                                     <button onClick={renderProps.onClick}
                                         className={styles.googleLoginBtn}
                                     >
-                                        <img src={google} alt="logo" width='25' height='25' />
+                                        <img src={google} alt='logo' width='25' height='25' />
                                     Log In with Google</button>
                                 )}
                                 clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
-                                buttonText="Login"
+                                buttonText='Login'
                                 onSuccess={handleGoogle}
                                 cookiePolicy={'single_host_origin'}
                             />

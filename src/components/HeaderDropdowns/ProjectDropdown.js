@@ -1,5 +1,5 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import styles from "./index.module.css"
+import styles from './index.module.css'
 import TeamContext from '../../contexts/TeamContext'
 import ProjectContext from '../../contexts/ProjectContext'
 import LinkComponentTitle from '../LinkTitle'

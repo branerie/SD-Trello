@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useContext, useCallback } from "react";
-import { useHistory, useParams } from "react-router-dom"
+import React, { useState, useEffect, useContext, useCallback } from 'react'
+import { useHistory, useParams } from 'react-router-dom'
 import styles from './index.module.css'
-import Button from "../../components/Button"
-import UserContext from "../../contexts/UserContext"
-import authenticate from "../../utils/authenticate"
+import Button from '../../components/Button'
+import UserContext from '../../contexts/UserContext'
+import authenticate from '../../utils/authenticate'
 import logo from '../../images/logo.svg'
 
 
@@ -34,7 +34,7 @@ const ConfirmationPage = () => {
             setIsLoading(false)
             setSuccess(true)
         }, (response) => {
-            console.log("Error", response)
+            console.log('Error', response)
         })
 
     }, [params.token, userContext])
@@ -51,7 +51,7 @@ const ConfirmationPage = () => {
                     isFirstRegistration ?
                         <div className={styles.container}>
                             <div className={styles.logo}>
-                                <img src={logo} alt="logo" width='194' height='142' />
+                                <img src={logo} alt='logo' width='194' height='142' />
                             </div>
                             <div className={styles.title}>
                                 Confirm your email address
@@ -66,7 +66,7 @@ const ConfirmationPage = () => {
                         :
                         <div className={styles.container}>
                             <div className={styles.logo}>
-                                <img src={logo} alt="logo" width='194' height='142' />
+                                <img src={logo} alt='logo' width='194' height='142' />
                             </div>
                             <div className={styles.title}>
                                 Confirm your new password
@@ -96,7 +96,7 @@ const ConfirmationPage = () => {
                 <div>
                     <div className={styles.container}>
                         <div className={styles.logo}>
-                            <img src={logo} alt="logo" width='194' height='142' />
+                            <img src={logo} alt='logo' width='194' height='142' />
                         </div>
                         <div className={styles.title}>
                             Thank you

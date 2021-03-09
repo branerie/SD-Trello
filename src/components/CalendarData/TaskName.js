@@ -20,23 +20,23 @@ export default function TaskName({ card, listId, project }) {
 	const editCardName = useCallback(async () => {
 		const cardId = card._id
 
-		if (cardName === "") {
+		if (cardName === '') {
 			return
 		}
 
-		const token = getCookie("x-auth-token")
+		const token = getCookie('x-auth-token')
 		const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
-			method: "PUT",
+			method: 'PUT',
 			headers: {
-				"Content-Type": "application/json",
-				"Authorization": token
+				'Content-Type': 'application/json',
+				'Authorization': token
 			},
 			body: JSON.stringify({
 				name: cardName
 			})
 		})
 		if (!response.ok) {
-			history.push("/error")
+			history.push('/error')
 			return
 		} else {
 			setIsActive(!isActive)

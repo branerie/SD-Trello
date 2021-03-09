@@ -10,7 +10,7 @@ export default function ErrorPage() {
         <PageLayout>
             <div className={styles.title}>Error Page</div>
 
-            <img className={styles.pic1} src={pic1} alt="" />
+            <img className={styles.pic1} src={pic1} alt='' />
 
             <div className={styles.text}>Something went wrong.</div>
         </PageLayout>

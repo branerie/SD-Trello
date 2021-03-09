@@ -54,12 +54,12 @@ export default function TaskProgress(props) {
         setTaskHistory(newTaskHistory)
 
 
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 progress: cardProgress,
@@ -68,7 +68,7 @@ export default function TaskProgress(props) {
         })
 
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         }
 
@@ -139,7 +139,7 @@ export default function TaskProgress(props) {
                             value={cardProgress}
                             // placeholder={'%'}
                             onChange={e => setCardProgress(e.target.value)}
-                            min="0" max="100"
+                            min='0' max='100'
                             autoFocus
                         />
                     </div >

@@ -1,7 +1,7 @@
-import styles from "./index.module.css"
-import Image from "cloudinary-react/lib/components/Image"
-import Transformation from "cloudinary-react/lib/components/Transformation"
-import Avatar from "react-avatar"
+import styles from './index.module.css'
+import Image from 'cloudinary-react/lib/components/Image'
+import Transformation from 'cloudinary-react/lib/components/Transformation'
+import Avatar from 'react-avatar'
 
 export default function AvatarUser({ user, onClick, className, size }) {
 
@@ -14,7 +14,7 @@ export default function AvatarUser({ user, onClick, className, size }) {
                     className={`${styles['profile-picture']} ${className}`}
                     title={user.username}
                 >
-                    <Transformation width={size} height={size} gravity="faces" crop="fill" />
+                    <Transformation width={size} height={size} gravity='faces' crop='fill' />
                 </Image>
 
             :

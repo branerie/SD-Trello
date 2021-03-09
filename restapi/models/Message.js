@@ -29,7 +29,7 @@ const messageSchema = new Schema({
 
     sendFrom: {
         type: ObjectId,
-        ref: "User"
+        ref: 'User'
     },
 
     accepted: {
@@ -38,7 +38,7 @@ const messageSchema = new Schema({
 
     recievers: [{
         type: ObjectId,
-        ref: "User"
+        ref: 'User'
     }]
 },
 {

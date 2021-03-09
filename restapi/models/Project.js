@@ -13,7 +13,7 @@ const projectSchema = new Schema({
 
     author: {
         type: ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true
     },
 
@@ -25,9 +25,9 @@ const projectSchema = new Schema({
         type: Boolean
     },
 
-    membersRoles: [{ type: ObjectId, ref: "ProjectUserRole" }],
+    membersRoles: [{ type: ObjectId, ref: 'ProjectUserRole' }],
 
-    lists: [{ type: ObjectId, ref: "List" }]
+    lists: [{ type: ObjectId, ref: 'List' }]
 
 })
 

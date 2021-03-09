@@ -43,7 +43,7 @@ export default function Card({ card, project, showCurrentCard, setCurrCard }) {
                     showCurrentCard()
                     setCurrCard(card)
                 }}
-                title={<img src={pen} alt="" width="11.5" height="11.5" />}
+                title={<img src={pen} alt='' width='11.5' height='11.5' />}
             />
             {isListVisible && <Transparent hideForm={() => setIsListVisible(false)} >
                 <AttachmentList

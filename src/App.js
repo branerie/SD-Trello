@@ -1,5 +1,5 @@
-import React from "react"
-import UserProvider from "./contexts/UserProvider"
+import React from 'react'
+import UserProvider from './contexts/UserProvider'
 
 const App = (props) => {
 

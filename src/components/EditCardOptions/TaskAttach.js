@@ -7,7 +7,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import Attachment from '../Attachment'
 
 export default function TaskAttach({ card, project, teamId, setCurrCard }) {
-    const token = getCookie("x-auth-token")
+    const token = getCookie('x-auth-token')
     const history = useHistory()
     const socket = useSocket()
     const [attachments, setAttachments] = useState(null)
@@ -35,17 +35,17 @@ export default function TaskAttach({ card, project, teamId, setCurrCard }) {
 
 
                 const response = await fetch(`/api/projects/lists/cards/attachments/${card._id}`, {
-                    method: "PUT",
+                    method: 'PUT',
                     headers: {
-                        "Content-Type": "application/json",
-                        "Authorization": token
+                        'Content-Type': 'application/json',
+                        'Authorization': token
                     },
                     body: JSON.stringify({
                         attachment
                     })
                 })
                 if (!response.ok) {
-                    history.push("/error")
+                    history.push('/error')
                 } else {
                     const updatedCard = await response.json()
                     setAttachments(updatedCard.attachments)
@@ -67,7 +67,7 @@ export default function TaskAttach({ card, project, teamId, setCurrCard }) {
     return (
         <div>
             <div className={styles['small-buttons']} onClick={addAttachment}>
-                <img className={styles.pics} src={pic6} alt="pic6" />
+                <img className={styles.pics} src={pic6} alt='pic6' />
                 Attach File
             </div>
             { attachments && <div className={styles['att-container']}>

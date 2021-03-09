@@ -131,7 +131,7 @@ const assembleColumnData = (startDate) => {
         
     const getHeaderDateHtml = (numDaysOffset) => {
         const headerDate = getDateWithOffset(startDate, numDaysOffset)
-        const color = checkDateEquality(currentDate, headerDate) ? "#CFE2EC" : ''
+        const color = checkDateEquality(currentDate, headerDate) ? '#CFE2EC' : ''
 
         const displayedDate = formatDate(headerDate, '%d.%m')
         const displayedDayOfWeek = formatDate(headerDate, '%A')
@@ -163,7 +163,7 @@ const assembleColumnData = (startDate) => {
                 Header: () => {
                     return <div className={styles.header}>Task</div>
                 },
-                accessor: "task",
+                accessor: 'task',
                 minWidth: 350,
                 Cell: ({ value }) => wrapCellData(value),
                 sortable: true,
@@ -173,7 +173,7 @@ const assembleColumnData = (startDate) => {
                 Header: () => {
                     return <div className={styles.header}>Progress</div>
                 },
-                accessor: "progress",
+                accessor: 'progress',
                 minWidth: 65,
                 maxWidth: 75,
                 Cell: ({ value }) => wrapCellData(value),
@@ -185,7 +185,7 @@ const assembleColumnData = (startDate) => {
                 Header: () => {
                     return <div className={styles.header}>Team</div>
                 },
-                accessor: "assigned",
+                accessor: 'assigned',
                 minWidth: 75,
                 maxWidth: 80,
                 Cell: ({ value }) => wrapCellData(value),
@@ -195,7 +195,7 @@ const assembleColumnData = (startDate) => {
             },
             {
                 Header: getHeaderDateHtml(0),
-                accessor: "monday",
+                accessor: 'monday',
                 minWidth: 95,
                 maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 0),
@@ -204,7 +204,7 @@ const assembleColumnData = (startDate) => {
             },
             {
                 Header: getHeaderDateHtml(1),
-                accessor: "tuesday",
+                accessor: 'tuesday',
                 minWidth: 95,
                 maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 1),
@@ -213,7 +213,7 @@ const assembleColumnData = (startDate) => {
             },
             {
                 Header: getHeaderDateHtml(2),
-                accessor: "wednesday",
+                accessor: 'wednesday',
                 minWidth: 95,
                 maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 2),
@@ -222,7 +222,7 @@ const assembleColumnData = (startDate) => {
             },
             {
                 Header: getHeaderDateHtml(3),
-                accessor: "thursday",
+                accessor: 'thursday',
                 minWidth: 95,
                 maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 3),
@@ -231,7 +231,7 @@ const assembleColumnData = (startDate) => {
             },
             {
                 Header: getHeaderDateHtml(4),
-                accessor: "friday",
+                accessor: 'friday',
                 minWidth: 95,
                 maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 4),
@@ -240,7 +240,7 @@ const assembleColumnData = (startDate) => {
             },
             {
                 Header: getHeaderDateHtml(5),
-                accessor: "saturday",
+                accessor: 'saturday',
                 minWidth: 95,
                 maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 5),
@@ -249,7 +249,7 @@ const assembleColumnData = (startDate) => {
             },
             {
                 Header: getHeaderDateHtml(6),
-                accessor: "sunday",
+                accessor: 'sunday',
                 minWidth: 95,
                 maxWidth: 125,
                 Cell: ({ value }) => getWeekdayCellData(value, 6),
@@ -260,7 +260,7 @@ const assembleColumnData = (startDate) => {
                 Header: () => {
                     return <div className={styles.header}>Due Date</div>
                 },
-                accessor: "dueDate",
+                accessor: 'dueDate',
                 minWidth: 100,
                 maxWidth: 130,
                 sortable: true,

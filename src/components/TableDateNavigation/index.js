@@ -26,7 +26,7 @@ const TableDateNavigation = ({ startDate, changeStartDate, setStartDate }) => {
             <div className={styles.picContainer} onClick={() => changeStartDate(-1)}>
                 <img
                     className={styles.buttonPreviousDay}
-                    src={previous} alt="..."
+                    src={previous} alt='...'
                 />
                 <div className={styles.centeredText}>Previous day</div>
             </div>
@@ -34,7 +34,7 @@ const TableDateNavigation = ({ startDate, changeStartDate, setStartDate }) => {
             <div className={styles.picContainer} onClick={() => changeStartDate(1)}>
                 <img
                     className={styles.buttonPreviousDay}
-                    src={next} alt="..."
+                    src={next} alt='...'
                 />
                 <div className={styles.centeredText}>Next day</div>
             </div>
