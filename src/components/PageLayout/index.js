@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
 import Aside from '../Aside'
-import Header from "../Header"
-import styles from "./index.module.css"
+import Header from '../Header'
+import styles from './index.module.css'
 
 const PageLayout = ({ children, contentClassName }) => {
   const [asideOn, setAsideOn] = useState(false)

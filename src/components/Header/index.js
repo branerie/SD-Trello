@@ -1,15 +1,15 @@
-import React, { useContext, useState, useEffect, useCallback } from "react"
-import styles from "./index.module.css"
-import TeamContext from "../../contexts/TeamContext"
-import ProjectContext from "../../contexts/ProjectContext"
-import { useHistory, useParams } from "react-router-dom"
-import getCookie from "../../utils/cookie"
-import { useSocket } from "../../contexts/SocketProvider"
-import SearchField from "../SearchField"
-import TeamDropdown from "../HeaderDropdowns/TeamDropdown"
-import ProjectDropdown from "../HeaderDropdowns/ProjectDropdown"
-import ViewDropdown from "../HeaderDropdowns/ViewDropdown"
-import ProfileDropdown from "../HeaderDropdowns/ProfileDropdown"
+import React, { useContext, useState, useEffect, useCallback } from 'react'
+import styles from './index.module.css'
+import TeamContext from '../../contexts/TeamContext'
+import ProjectContext from '../../contexts/ProjectContext'
+import { useHistory, useParams } from 'react-router-dom'
+import getCookie from '../../utils/cookie'
+import { useSocket } from '../../contexts/SocketProvider'
+import SearchField from '../SearchField'
+import TeamDropdown from '../HeaderDropdowns/TeamDropdown'
+import ProjectDropdown from '../HeaderDropdowns/ProjectDropdown'
+import ViewDropdown from '../HeaderDropdowns/ViewDropdown'
+import ProfileDropdown from '../HeaderDropdowns/ProfileDropdown'
 
 const Header = ({ asideOn }) => {
     const [isProjectVisibble, setIsProjectVisibble] = useState(false)
@@ -22,16 +22,16 @@ const Header = ({ asideOn }) => {
 
     const getData = useCallback(async () => {
         const id = params.projectid
-        const token = getCookie("x-auth-token");
+        const token = getCookie('x-auth-token');
         const response = await fetch(`/api/projects/info/${id}`, {
-            method: "GET",
+            method: 'GET',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             }
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             const data = await response.json()
             projectContext.setProject(data)

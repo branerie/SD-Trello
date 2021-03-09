@@ -1,14 +1,14 @@
-import React, { useContext, useState, useRef } from "react"
-import { useHistory } from "react-router-dom"
-import CreateTeam from "../../components/CreateTeam"
-import PageLayout from "../../components/PageLayout"
-import Title from "../../components/Title"
-import Transparent from "../../components/Transparent"
-import UserContext from "../../contexts/UserContext"
+import React, { useContext, useState, useRef } from 'react'
+import { useHistory } from 'react-router-dom'
+import CreateTeam from '../../components/CreateTeam'
+import PageLayout from '../../components/PageLayout'
+import Title from '../../components/Title'
+import Transparent from '../../components/Transparent'
+import UserContext from '../../contexts/UserContext'
 import styles from './index.module.css'
 import pic1 from '../../images/home-page-pic.svg'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import ButtonGreyTitle from "../../components/ButtonGreyTitle"
+import ButtonGreyTitle from '../../components/ButtonGreyTitle'
 
 
 const Home = () => {
@@ -89,7 +89,7 @@ const Home = () => {
                             )
                           }
                           )
-                          : "You haven't joined any teams yet"
+                          : 'You have not joined any teams yet'
                       }
                     </div>
                     : null
@@ -106,7 +106,7 @@ const Home = () => {
         </span>
 
         <div className={styles['pic-container']}>
-          <img className={styles.pic1} src={pic1} alt="" />
+          <img className={styles.pic1} src={pic1} alt='' />
           <div className={styles['welcome-user']}>{`Welcome ${userName}!`}</div>
           <ButtonGreyTitle className={styles['navigate-buttons']} title={'Get Started'} onClick={() => history.push(`/get-started/`)} />
         </div>

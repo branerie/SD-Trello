@@ -1,11 +1,11 @@
-import React, { useContext, useState } from "react"
+import React, { useContext, useState } from 'react'
 import GoogleLogin from 'react-google-login'
-import styles from "./index.module.css"
-import authenticate from "../../utils/authenticate"
-import UserContext from "../../contexts/UserContext"
-import { useHistory } from "react-router-dom"
-import Alert from "../Alert"
-import responseGoogle from "../../utils/responseGoogle"
+import styles from './index.module.css'
+import authenticate from '../../utils/authenticate'
+import UserContext from '../../contexts/UserContext'
+import { useHistory } from 'react-router-dom'
+import Alert from '../Alert'
+import responseGoogle from '../../utils/responseGoogle'
 import logo from '../../images/logo.svg'
 import google from '../../images/welcome-page/google.svg'
 
@@ -58,13 +58,13 @@ const SignupForm = (props) => {
             return
         }
 
-        await authenticate("/api/user/register", 'POST', {
+        await authenticate('/api/user/register', 'POST', {
             email,
             username,
             password
         }, (user) => {
             context.logIn(user);
-            history.push("/");
+            history.push('/');
         }, (response) => {
             if (response.exist) {
                 setUserExist(true)
@@ -75,10 +75,10 @@ const SignupForm = (props) => {
     const handleGoogle = (googleResponse) => {
         responseGoogle(googleResponse, (user) => {
             context.logIn(user)
-            history.push("/")
+            history.push('/')
         }, (response) => {
 
-            console.log("Error", response)
+            console.log('Error', response)
         })
     }
 
@@ -91,7 +91,7 @@ const SignupForm = (props) => {
 
             <div className={styles['inner-container']}>
                 <div className={styles.logo}>
-                    <img src={logo} alt="logo" width='110' height='100' />
+                    <img src={logo} alt='logo' width='110' height='100' />
                 </div>
 
                 <div className={styles['right-side']}>
@@ -111,8 +111,8 @@ const SignupForm = (props) => {
                             className={styles['sign-up-input']}
                             value={username}
                             onChange={(e) => setUsername(e.target.value)}
-                            label="Username"
-                            id="username"
+                            label='Username'
+                            id='username'
                         />
                     </div>
 
@@ -123,8 +123,8 @@ const SignupForm = (props) => {
                             className={styles['sign-up-input']}
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
-                            label="Email"
-                            id="email"
+                            label='Email'
+                            id='email'
                         />
                     </div>
 
@@ -133,11 +133,11 @@ const SignupForm = (props) => {
                         <input
                             placeholder='********'
                             className={styles['sign-up-input']}
-                            type="password"
+                            type='password'
                             value={password}
                             onChange={(e) => setPassword(e.target.value)}
-                            label="Password"
-                            id="password"
+                            label='Password'
+                            id='password'
                         />
                         <div className={styles['pass-instructions']}>
                             <p>Use 8 or more characters with a</p>
@@ -150,11 +150,11 @@ const SignupForm = (props) => {
                         <input
                             placeholder='********'
                             className={styles['sign-up-input']}
-                            type="password"
+                            type='password'
                             value={rePassword}
                             onChange={(e) => setRePassword(e.target.value)}
-                            label="Re-Password"
-                            id="re-password"
+                            label='Re-Password'
+                            id='re-password'
                         />
                     </div>
 
@@ -175,10 +175,10 @@ const SignupForm = (props) => {
                                 <button onClick={renderProps.onClick}
                                     className={styles['google-login-btn']}
                                 >
-                                    <img src={google} alt="logo" width='25' height='25' />Sign Up with Google</button>
+                                    <img src={google} alt='logo' width='25' height='25' />Sign Up with Google</button>
                             )}
                             clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
-                            buttonText="Sign up with Google"
+                            buttonText='Sign up with Google'
                             onSuccess={handleGoogle}
                             // onFailure={errorGoogle}
                             cookiePolicy={'single_host_origin'}

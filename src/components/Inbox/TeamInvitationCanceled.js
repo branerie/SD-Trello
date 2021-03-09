@@ -24,7 +24,7 @@ export default function TeamInvitationCanceled({ message, setInboxHistory, optio
             <div className={styles.message}>
                 <div className={styles.container}>
                     <div className={styles.bold}>{message.subject}</div>
-                    <div>{new Date(message.createdAt).toLocaleDateString("en-US", options)}</div>
+                    <div>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</div>
                 </div>
                 <div>
                     <div className={`${styles.bold} ${styles.inline}`}>Team name:</div>

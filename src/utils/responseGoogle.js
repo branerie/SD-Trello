@@ -1,17 +1,17 @@
-import userObject from "./userObject"
+import userObject from './userObject'
 
 const responseGoogle = async (googleResponse, onSuccess, onFailure) => {
 
     try {
         const tokenId = googleResponse.tokenId
-        const promise = await fetch("/api/user/google-login", {
+        const promise = await fetch('/api/user/google-login', {
             method: 'POST',
             body: JSON.stringify({tokenId}),
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
             }
         })
-        const authToken = promise.headers.get("Authorization")
+        const authToken = promise.headers.get('Authorization')
         document.cookie = `x-auth-token=${authToken};path=/`
 
         const response = await promise.json()

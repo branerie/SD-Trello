@@ -8,7 +8,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 export default function TaskProgress({ card, listId, project, teamId, taskHistory, setTaskHistory, setCurrCard }) {
-    const token = getCookie("x-auth-token")
+    const token = getCookie('x-auth-token')
     const history = useHistory()
     const socket = useSocket()
     const ref = useRef(null)
@@ -45,10 +45,10 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
         setTaskHistory(arr)
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 progress,
@@ -56,7 +56,7 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             const updatedCard = await response.json()
             if (setCurrCard) setCurrCard(updatedCard)
@@ -92,7 +92,7 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
     return (
         <>
             <div className={styles['small-buttons']} onClick={onClick} >
-                <img className={styles.pics} src={pic2} alt="" />
+                <img className={styles.pics} src={pic2} alt='' />
                 Progress
             </div>
             {card.progress !== null &&
@@ -110,8 +110,8 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
                         }}
                         id='progress'
                         type='number'
-                        min="0"
-                        max="100"
+                        min='0'
+                        max='100'
                         className={`${styles['progress-input']} ${!isInputOk && styles['bad-input']}`}
                         value={progress}
                         onKeyDown={e => onEscPressed(e)}

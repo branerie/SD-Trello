@@ -54,7 +54,7 @@ const getWeekNumber = (date) => {
 /*  Receives a Javascript date as a first parameter and a format string 
 as a second parameter and returns a string representing the date in 
 the desired format. The format string has several options which can be
-seen in the "FORMAT_OPTIONS" constant above. 
+seen in the 'FORMAT_OPTIONS' constant above. 
 !!! Every format option must be preceded by a percentage sign (%)
 Examples: 
     In: (date: new Date('2021-01-28'), formatString: '%y_%B_%d')

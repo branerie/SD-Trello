@@ -1,8 +1,8 @@
 import React, { useRef, useState, useMemo, useEffect } from 'react'
-import { useHistory } from "react-router-dom"
+import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-import "react-datepicker/dist/react-datepicker.css"
+import 'react-datepicker/dist/react-datepicker.css'
 import { useSocket } from '../../contexts/SocketProvider'
 import pic1 from '../../images/edit-card/pic1.svg'
 // import pic2 from '../../images/edit-card/pic2.svg'
@@ -19,7 +19,7 @@ import pic12 from '../../images/edit-card/pic12.svg'
 // import pic13 from '../../images/edit-card/pic13.svg'
 // import pic14 from '../../images/edit-card/pic14.svg'
 import TaskMembers from '../EditCardOptions/TaskMembers'
-import TaskDueDate from "../EditCardOptions/TaskDueDate"
+import TaskDueDate from '../EditCardOptions/TaskDueDate'
 import TaskHistory from '../EditCardOptions/TaskHistory'
 import TaskProgress from '../EditCardOptions/TaskProgress'
 import TaskAttach from '../EditCardOptions/TaskAttach'
@@ -38,7 +38,7 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     const [nameHeight, setNameHeight] = useState(null)
     const [currInput, setCurrInput] = useState(null)
     const dueDate = useMemo(() => new Date(initialCard.dueDate), [initialCard.dueDate])
-    const token = getCookie("x-auth-token")
+    const token = getCookie('x-auth-token')
     const [confirmOpen, setConfirmOpen] = useState(false)
 
     useEffect(() => {
@@ -54,14 +54,14 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
         // if (!window.confirm('Are you sure you wish to delete this item?')) return
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
-            method: "DELETE",
+            method: 'DELETE',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             }
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             socket.emit('project-update', project)
             socket.emit('task-team-update', teamId)
@@ -73,10 +73,10 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     const handleSubmit = async () => {
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 name,
@@ -84,7 +84,7 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             // const updatedCard = await response.json()
             // setCard(updatedCard)
@@ -124,7 +124,7 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
 
                 <div className={styles['task-name']}>
                     <span>
-                        <img src={pic1} alt="pic1" />
+                        <img src={pic1} alt='pic1' />
                     </span>
                     <textarea
                         ref={nameRef}
@@ -205,50 +205,50 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                             onClick={() => {
                                 setConfirmOpen(true)                            
                             }}
-                            title="Delete Task" >
-                                <img className={styles.pics} src={pic12} alt="pic12" />
+                            title='Delete Task' >
+                                <img className={styles.pics} src={pic12} alt='pic12' />
                             Delete Task
                         </button>
 
 
                             {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic3} alt="pic3" />
+                            <img className={styles.pics} src={pic3} alt='pic3' />
                             Join
                         </div> */}
                             {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic4} alt="pic4" />
+                            <img className={styles.pics} src={pic4} alt='pic4' />
                             Stickers
                         </div> */}
                             {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic5} alt="pic5" />
+                            <img className={styles.pics} src={pic5} alt='pic5' />
                             Due Date
                         </div> */}
                             {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic7} alt="pic7" />
+                            <img className={styles.pics} src={pic7} alt='pic7' />
                             Reports
                         </div> */}
                             {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic10} alt="pic10" />
+                            <img className={styles.pics} src={pic10} alt='pic10' />
                             Add Teammate
                         </div> */}
                             {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic11} alt="pic11" />
+                            <img className={styles.pics} src={pic11} alt='pic11' />
                             Make Template
                         </div> */}
                             {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic13} alt="pic13" />
+                            <img className={styles.pics} src={pic13} alt='pic13' />
                             Remove List
                         </div> */}
                             {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic8} alt="pic8" />
+                            <img className={styles.pics} src={pic8} alt='pic8' />
                             Settings
                         </div> */}
                             {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic9} alt="pic9" />
+                            <img className={styles.pics} src={pic9} alt='pic9' />
                             View
                         </div> */}
                             {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic14} alt="pic14" />
+                            <img className={styles.pics} src={pic14} alt='pic14' />
                             Archive
                         </div> */}
 

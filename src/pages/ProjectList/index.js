@@ -1,5 +1,5 @@
 import React, { useCallback, useEffect, useContext } from 'react'
-import { useParams } from "react-router-dom"
+import { useParams } from 'react-router-dom'
 import PageLayout from '../../components/PageLayout'
 import { useSocket } from '../../contexts/SocketProvider'
 import styles from './index.module.css'
@@ -33,8 +33,8 @@ export default function ProjectList() {
         return (
             <PageLayout>
                 <Loader
-                    type="TailSpin"
-                    color="#363338"
+                    type='TailSpin'
+                    color='#363338'
                     height={100}
                     width={100}
                     timeout={3000} //3 secs

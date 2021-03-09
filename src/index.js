@@ -2,7 +2,7 @@ import React from 'react'
 import ReactDOM from 'react-dom'
 import App from './App'
 import './index.css';
-import Navigation from "./navigation"
+import Navigation from './navigation'
 
 
 ReactDOM.render(

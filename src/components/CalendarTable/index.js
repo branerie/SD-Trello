@@ -1,18 +1,18 @@
-import React, { useCallback, useEffect, useState, useContext } from "react"
+import React, { useCallback, useEffect, useState, useContext } from 'react'
 import styles from './index.module.css'
-import ReactTable from "react-table"
-import "react-table/react-table.css"
-import "react-datepicker/dist/react-datepicker.css"
-import { useParams } from "react-router-dom"
+import ReactTable from 'react-table'
+import 'react-table/react-table.css'
+import 'react-datepicker/dist/react-datepicker.css'
+import { useParams } from 'react-router-dom'
 import TaskName from '../CalendarData/TaskName'
-import TaskProgress from "../CalendarData/TaskProgress"
-import TaskDueDate from "../CalendarData/TaskDueDate"
-import AddTask from "../CalendarData/AddTask"
-import AddList from "../CalendarData/AddList"
-import ProjectContext from "../../contexts/ProjectContext"
-import assembleColumnData from "../CalendarData/columnData"
-import Transparent from "../Transparent"
-import EditList from "../EditList"
+import TaskProgress from '../CalendarData/TaskProgress'
+import TaskDueDate from '../CalendarData/TaskDueDate'
+import AddTask from '../CalendarData/AddTask'
+import AddList from '../CalendarData/AddList'
+import ProjectContext from '../../contexts/ProjectContext'
+import assembleColumnData from '../CalendarData/columnData'
+import Transparent from '../Transparent'
+import EditList from '../EditList'
 import UserContext from '../../contexts/UserContext'
 import TaskFilters from '../CalendarData/TaskFilters'
 import MembersList from '../MembersList'
@@ -168,7 +168,7 @@ const TableDndApp = ({ project }) => {
         the data if descending sort is selected, expecting the data to already be sorted in 
         ascending order. However, this puts the list names below their respective tasks, 
         so we need to do this terrible hack of pre-reversing the data in that case.
-        Possible solution to avoid this "hack" is to switch to subcomponents in ReactTable
+        Possible solution to avoid this 'hack' is to switch to subcomponents in ReactTable
         and make each list a subtable. Then the sort should act per-subcomponent 
         */
         setTableData(sortCriteria.isDescending ? data.reverse() : data)

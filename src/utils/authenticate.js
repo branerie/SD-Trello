@@ -1,4 +1,4 @@
-import userObject from "./userObject"
+import userObject from './userObject'
 
 const authenticate = async (url, method, body, onSuccess, onFailure) => {
     try {
@@ -7,12 +7,12 @@ const authenticate = async (url, method, body, onSuccess, onFailure) => {
             method,
             body: JSON.stringify(body),
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
             }
         })
 
         
-        const authToken = promise.headers.get("Authorization")
+        const authToken = promise.headers.get('Authorization')
         const response = await promise.json()
         
         if (response.needPassword) {

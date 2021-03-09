@@ -1,4 +1,4 @@
-import { compareDates, formatDate } from "../../utils/date"
+import { compareDates, formatDate } from '../../utils/date'
 
 const sortByTask = (cardOne, cardTwo) => cardOne.name.localeCompare(cardTwo.name)
 

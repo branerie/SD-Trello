@@ -32,7 +32,7 @@ export default function TeamInvitationHistory({ message, options, setInboxHistor
                             {message.accepted ? <div>Accepted</div> : <div>Declined</div>}
                         </div>
                     }
-                    <div>{new Date(message.createdAt).toLocaleDateString("en-US", options)}</div>
+                    <div>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</div>
                 </div>
                 <div>
                     <div className={`${styles.bold} ${styles.inline}`}>Team name:</div>

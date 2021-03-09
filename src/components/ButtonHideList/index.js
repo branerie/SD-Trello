@@ -1,7 +1,7 @@
-import React, { useContext } from "react";
-import ProjectContext from "../../contexts/ProjectContext";
+import React, { useContext } from 'react';
+import ProjectContext from '../../contexts/ProjectContext';
 import ListColor from '../ListColor'
-import styles from "./index.module.css";
+import styles from './index.module.css';
 
 const ButtonHideList = ( { list, type } ) => {
     const projectContext = useContext(ProjectContext)

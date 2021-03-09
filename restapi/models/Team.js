@@ -17,23 +17,23 @@ const teamSchema = new Schema({
 
     author: {
         type: ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true
     },
 
     members: [{
         type: ObjectId,
-        ref: "User"
+        ref: 'User'
     }],
 
     requests: [{
         type: ObjectId,
-        ref: "User"
+        ref: 'User'
     }],
 
     projects: [{
         type: ObjectId,
-        ref: "Project"
+        ref: 'Project'
     }]
 })
 

@@ -1,9 +1,9 @@
-import React, { useState, useEffect, useCallback } from "react"
-import Loader from "react-loader-spinner"
-import { useHistory } from "react-router-dom"
-import getCookie from "../utils/cookie"
-import userObject from "../utils/userObject"
-import UserContext from "./UserContext"
+import React, { useState, useEffect, useCallback } from 'react'
+import Loader from 'react-loader-spinner'
+import { useHistory } from 'react-router-dom'
+import getCookie from '../utils/cookie'
+import userObject from '../utils/userObject'
+import UserContext from './UserContext'
 
 const UserProvider = (props) => {
     const [user, setUser] = useState(null)
@@ -18,18 +18,18 @@ const UserProvider = (props) => {
     }
 
     const logOut = useCallback(() => {
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         fetch('/api/user/logout', {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             }
         }).then(response => {
             if (!response.ok) {
-                history.push("/error")
+                history.push('/error')
             } else {
-                document.cookie = "x-auth-token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; path=/;"
+                document.cookie = 'x-auth-token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; path=/;'
 
                 setUser({
                     loggedIn: false
@@ -39,7 +39,7 @@ const UserProvider = (props) => {
     }, [history])
 
     const verifyLogin = useCallback(() => {
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         if (!token) {
 
             setUser({
@@ -50,11 +50,11 @@ const UserProvider = (props) => {
             return;
         }
 
-        fetch("/api/user/verify", {
-            method: "GET",
+        fetch('/api/user/verify', {
+            method: 'GET',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             }
         }).then(promise => {
             return promise.json()
@@ -76,8 +76,8 @@ const UserProvider = (props) => {
     if (loading) {
         return (
             <Loader
-                type="TailSpin"
-                color="#363338"
+                type='TailSpin'
+                color='#363338'
                 height={100}
                 width={100}
                 timeout={3000} //3 secs

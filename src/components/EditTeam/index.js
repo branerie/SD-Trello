@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory, useParams } from 'react-router-dom'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import TeamContext from '../../contexts/TeamContext'
@@ -63,17 +63,17 @@ export default function EditTeam(props) {
         setShowMembers(false)
 
         if (allUsers.length === 0) {
-            const token = getCookie("x-auth-token")
+            const token = getCookie('x-auth-token')
             const response = await fetch('/api/user/get-all', {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": token
+                    'Content-Type': 'application/json',
+                    'Authorization': token
                 }
             })
 
             if (!response.ok) {
-                history.push("/error")
+                history.push('/error')
             }
             const users = await response.json()
             setAllUsers(users)
@@ -99,12 +99,12 @@ export default function EditTeam(props) {
             .filter(u => u._id !== input.id)
 
 
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/teams/${teamId}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 name,
@@ -113,30 +113,30 @@ export default function EditTeam(props) {
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
             socket.emit('team-update', teamId)
             if (input.id === userContext.user.id) {
-                history.push("/")
+                history.push('/')
             }
         }
     }
 
     const removeInvited = async (input) => {
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/teams/${teamId}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 removeInvitation: input
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
             getData()
@@ -152,12 +152,12 @@ export default function EditTeam(props) {
 
     const handleSubmit = async () => {
         // event.preventDefault()
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/teams/${teamId}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 name,
@@ -167,7 +167,7 @@ export default function EditTeam(props) {
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
             teamContext.setSelectedTeam(name)
@@ -186,21 +186,21 @@ export default function EditTeam(props) {
         }
 
 
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/teams/${teamId}`, {
-            method: "DELETE",
+            method: 'DELETE',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             }
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             const deletedTeam = await response.json()
             const recievers = [...deletedTeam.members, ...deletedTeam.requests]
             socket.emit('team-deleted', { id: teamId, recievers })
-            history.push("/")
+            history.push('/')
             props.hideForm()
         }
     }
@@ -239,8 +239,8 @@ export default function EditTeam(props) {
                             className={styles['input-name']}
                             value={name}
                             onChange={e => setName(e.target.value)}
-                            label="Name"
-                            id="name"
+                            label='Name'
+                            id='name'
                         />
                     </div>
 
@@ -250,9 +250,9 @@ export default function EditTeam(props) {
                             className={styles['text-area-descr']}
                             value={description}
                             onChange={e => setDescription(e.target.value)}
-                            label="Description"
-                            id="description"
-                            spellCheck="false"
+                            label='Description'
+                            id='description'
+                            spellCheck='false'
 
                         />
                     </div>
@@ -264,11 +264,11 @@ export default function EditTeam(props) {
                                 <div className={styles['invite-input']}>
                                     <input
                                         className={styles['input-invite']}
-                                        autoComplete="off"
+                                        autoComplete='off'
                                         value={member}
                                         onChange={inputMembers}
-                                        label="Invite members"
-                                        id="members"
+                                        label='Invite members'
+                                        id='members'
                                         placeholder='username'
                                         onBlur={onBlur}
 

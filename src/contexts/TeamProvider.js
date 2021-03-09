@@ -32,12 +32,12 @@ function TeamProvider({ children }) {
   }, [userContext.user.teams])
 
   const teamUpdate = useCallback(async () => {
-    const token = getCookie("x-auth-token")
-    const promise = await fetch("/api/teams", {
-      method: "GET",
+    const token = getCookie('x-auth-token')
+    const promise = await fetch('/api/teams', {
+      method: 'GET',
       headers: {
-        "Content-Type": "application/json",
-        "Authorization": token
+        'Content-Type': 'application/json',
+        'Authorization': token
       }
     })
 

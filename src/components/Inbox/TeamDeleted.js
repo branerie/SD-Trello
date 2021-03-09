@@ -22,7 +22,7 @@ export default function TeamDeleted({ message, setInboxHistory, options, isInbox
                     <div className={styles.container}>
                         <div className={styles.bold}>Team {message.team.name} deleted</div>
                     </div>
-                    <div>{new Date(message.createdAt).toLocaleDateString("en-US", options)}</div>
+                    <div>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</div>
                 </div>
                 <div>
                     <div className={`${styles.bold} ${styles.inline}`}>Deleted by:</div>
