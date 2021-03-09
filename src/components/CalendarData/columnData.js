@@ -52,11 +52,18 @@ const assembleColumnData = (startDate) => {
         const { date, history, progress } = cardData
         const cellDate = getDateWithOffset(startDate, numDaysOffset)
         
-        const eventInCell = history && history.events[formatDate(cellDate, '%d/%m/%y')]
+        const taskStartDate = history.startDate && new Date(history.startDate)
+        if (!taskStartDate || compareDates(cellDate, taskStartDate) < 0) {
+            return ''
+        }
 
+        const eventInCell = history && history.events[formatDate(cellDate, '%d/%m/%y')]
+        
         const dueDate = date ? new Date(date) : null
         const isAfterDueDate = dueDate && compareDates(cellDate, dueDate) > 0
         const isBeforeToday = compareDates(cellDate, currentDate) < 0
+
+
         if (eventInCell) {
             const [eventType, eventValue] = eventInCell.event.split(' ')
 
@@ -65,7 +72,17 @@ const assembleColumnData = (startDate) => {
             }
 
             if (eventType === 'Progress' && eventValue && eventValue === '100%') {
-                return getWeekdayCellHtml('Finished', CELL_COLORS.FINISHED)
+                let cellText = 'Finished'
+                let cellColor = CELL_COLORS.FINISHED
+                
+                const lastEventDate = new Date(history.lastEventDate)
+                if (compareDates(lastEventDate, cellDate) > 0) {
+                    // Task was put at 100% progress at the time, but was later changed again
+                    cellText = 'Progress 100%'
+                    cellColor = isBeforeToday ? CELL_COLORS.PROGRESS_OLD : CELL_COLORS.PROGRESS
+                }
+
+                return getWeekdayCellHtml(cellText, cellColor)
             }
 
             if (isBeforeToday) {
@@ -79,7 +96,7 @@ const assembleColumnData = (startDate) => {
         // if we get to here, we know that there are no new events on the day of the cell
         const isMonday = numDaysOffset === 0
         const eventsInWeek = history && history.hasEventsInWeek[formatDate(cellDate, '%w/%y')]
-        if (isMonday && progress && progress === 100 && eventsInWeek) {
+        if (isMonday && progress && progress === 100 && !eventsInWeek) {
             // progress for task is 100% and no new events happen during the week
             return getWeekdayCellHtml('Finished', CELL_COLORS.FINISHED)
         }
@@ -96,7 +113,7 @@ const assembleColumnData = (startDate) => {
 
             if (compareDates(cellDate, dueDate) > 0) {
                 // cell date is after due date
-                if (isMonday && compareDates(currentDate, cellDate) > 0) {
+                if (isMonday && compareDates(currentDate, dueDate) > 0) {
                     // cell is first shown column (usually Monday) and today is later than that
                     return getWeekdayCellHtml('Delayed', CELL_COLORS.DELAYED)
                 }
@@ -104,17 +121,11 @@ const assembleColumnData = (startDate) => {
                 return ''
             }
 
-            let { finishedDate, startDate: taskStartDate } = history
+            let { finishedDate } = history
             finishedDate = finishedDate && new Date(finishedDate)
-            taskStartDate = taskStartDate && new Date(taskStartDate)
 
             if (finishedDate && compareDates(cellDate, finishedDate) > 0) {
                 // task has finished in the past and cell date is later than date of finish
-                return ''
-            }
-
-            if (isMonday && taskStartDate && compareDates(taskStartDate, startDate) > 0) {
-                // task has started, but first displayed date is earlier than task start date
                 return ''
             }
 

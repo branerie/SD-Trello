@@ -1,13 +1,30 @@
 const nodemailer = require('nodemailer')
+const { google } = require('googleapis')
+const OAuth2 = google.auth.OAuth2
+const oauth2Client = new OAuth2(
+    process.env.EMAIL_CLIENT_ID,
+    process.env.EMAIL_CLIENT_SECRET,
+    'https://developers.google.com/oauthplayground' // Redirect URL
+)
+
+oauth2Client.setCredentials({ refresh_token: process.env.EMAIL_CLIENT_REFRESH })
 
 const from = 'Smart Manager <info@smart-manager.com>'
 
 function setup() {
+    const accessToken = oauth2Client.getAccessToken()
+
     return nodemailer.createTransport({
-        service: 'gmail',
+        host: 'smtp.gmail.com',
+        port: 465,
+        secure: true,
         auth: {
-            user: process.env.EMAIL_USER,
-            pass: process.env.EMAIL_PASS
+            type: 'OAuth2',
+            user: 'smtest36@gmail.com',
+            clientId: process.env.EMAIL_CLIENT_ID,
+            clientSecret: process.env.EMAIL_CLIENT_SECRET,
+            refreshToken: process.env.EMAIL_CLIENT_REFRESH,
+            accessToken: accessToken
         }
     })
 }
