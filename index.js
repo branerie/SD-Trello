@@ -1,12 +1,12 @@
 const sockets = require('./sockets')
 const dbConnection = require('./config/database')
-const dotEnv = require("dotenv")
+const dotEnv = require('dotenv')
 dotEnv.config()
 
 require('express-async-errors')
-const express = require("express");
-const http = require("http");
-const socketIo = require("socket.io");
+const express = require('express');
+const http = require('http');
+const socketIo = require('socket.io');
 const app = express();
 
 dbConnection().then(() => {

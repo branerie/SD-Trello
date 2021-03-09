@@ -60,7 +60,7 @@ async function getAllUsers(req, res, next) {
 async function registerUser(req, res, next) {
     const { email, username, password } = req.body
     if (!password) {
-        res.send("Missing password")
+        res.send('Missing password')
         return
     }
 
@@ -89,7 +89,7 @@ async function registerUser(req, res, next) {
                 teams
             }
             utils.sendConfirmationEmail(newUser, 'account')
-            res.header("Authorization", token).send(response)
+            res.header('Authorization', token).send(response)
             return
         }
 
@@ -153,7 +153,7 @@ async function loginUser(req, res, next) {
             let response = {}
             response.needPassword = true
             response.userId = foundUser._id
-            res.header("Authorization", token).send(response)
+            res.header('Authorization', token).send(response)
 
             return
         }
@@ -163,7 +163,7 @@ async function loginUser(req, res, next) {
             let response = {}
             response.wrongPassword = true
             response.userId = foundUser._id
-            res.header("Authorization", token).send(response)
+            res.header('Authorization', token).send(response)
 
             return
         }
@@ -174,7 +174,7 @@ async function loginUser(req, res, next) {
             user,
             teams
         }
-        res.header("Authorization", token).send(response)
+        res.header('Authorization', token).send(response)
 
     } catch (error) {
         console.log(error)
@@ -203,7 +203,7 @@ async function googleLoginUser(req, res, next) {
             user,
             teams
         }
-        res.header("Authorization", token).send(response)
+        res.header('Authorization', token).send(response)
 
     } catch (error) {
         console.log(error)
@@ -235,7 +235,7 @@ async function confirmToken(req, res, next) {
             user,
             teams
         }
-        res.header("Authorization", newToken).send(response)
+        res.header('Authorization', newToken).send(response)
 
     } catch (error) {
         console.log(error)

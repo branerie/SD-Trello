@@ -13,13 +13,13 @@ const listSchema = new Schema({
 
     author: {
         type: ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true
     },
 
     cards: [{
         type: ObjectId,
-        ref: "Card"
+        ref: 'Card'
     }],
 
     color: {

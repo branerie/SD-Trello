@@ -11,12 +11,12 @@ const projectUserRoleSchema = new Schema({
     },
     projectId: {
         type: ObjectId,
-        ref: "Project",
+        ref: 'Project',
         required: true
     },
     memberId: {
         type: ObjectId,
-        ref: "User",
+        ref: 'User',
         required: true
     }
 })
