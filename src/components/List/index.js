@@ -11,9 +11,10 @@ import ButtonClean from '../ButtonClean'
 import ListColor from '../ListColor'
 import ButtonGrey from '../ButtonGrey'
 import ConfirmDialog from '../ConfirmationDialog'
+import useListsServices from '../../services/useListsServices'
 
 
-export default function List( { isAdmin, project, list, showEditList, showCurrentCard, setCurrCard }) {
+export default function List({ isAdmin, project, list, showEditList, showCurrentCard, setCurrCard }) {
     const dropdownRef = useRef(null);
     const cardRef = useRef(null);
     const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
@@ -24,30 +25,14 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
     const socket = useSocket()
     const params = useParams()
     const teamId = params.teamid
-
-
-
-    const updateSocket = useCallback(() => {
+    const { deleteList } = useListsServices()
+    
+    async function handleDeleteList() {
+        await deleteList(project._id, list._id)
         socket.emit('project-update', project)
-    }, [socket, project])
-
-    async function deleteList() {
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/projects/lists/${project._id}/${list._id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            updateSocket()
-            socket.emit('task-team-update', teamId)
-        }
+        socket.emit('task-team-update', teamId)
     }
-
+    
     const addCard = useCallback(async (event) => {
         event.preventDefault()
         if (cardName === '') {
@@ -66,7 +51,7 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
                 dueDate: '',
                 progress: '',
                 members: []
-
+                
             })
         })
         if (!response.ok) {
@@ -75,10 +60,10 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
         } else {
             setIsVisible(!isVisible)
             setCardName('')
-            updateSocket()
+            socket.emit('project-update', project)
         }
 
-    }, [history, cardName, list._id, updateSocket, isVisible, setIsVisible])
+    }, [history, cardName, list._id, isVisible, setIsVisible, project , socket])
 
     function editList() {
         showEditList()
@@ -86,13 +71,13 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
     }
 
     return (
-        
+
         <div className={styles.list}>
             {confirmOpen &&
                 <ConfirmDialog
                     title={'you wish to delete this list'}
                     hideConfirm={() => setConfirmOpen(false)}
-                    onConfirm={() => deleteList()}
+                    onConfirm={() => handleDeleteList()}
                 />
             }
             <div className={styles.row}>
@@ -111,17 +96,17 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
             </div>
             <div className={styles.relative}>
                 {isEditListActive && <div ref={dropdownRef} className={`${styles.menu}`} >
-                        <ButtonGrey
-                            onClick={editList}
-                            title='Edit'
-                            className={styles.edit}
-                        />
-                        <ButtonGrey
-                        
-                            onClick={() => setConfirmOpen(true)}
-                            title='Delete'
-                            className={styles.delete}
-                        />
+                    <ButtonGrey
+                        onClick={editList}
+                        title='Edit'
+                        className={styles.edit}
+                    />
+                    <ButtonGrey
+
+                        onClick={() => setConfirmOpen(true)}
+                        title='Delete'
+                        className={styles.delete}
+                    />
                 </div>}
             </div>
             <Droppable droppableId={list._id} type='droppableSubItem'>

@@ -43,7 +43,7 @@ export default function EditProject(props) {
         socket.emit('team-update', params.teamid)
     }
 
-    async function projectDelete() {
+    async function handleDeleteProject() {
         await deleteProject(projectId)
         props.hideForm()
         const deletedProject = {
@@ -60,7 +60,7 @@ export default function EditProject(props) {
                 <ConfirmDialog
                     title={'delete this project'}
                     hideConfirm={() => setConfirmOpen(false)}
-                    onConfirm={() => projectDelete()}
+                    onConfirm={() => handleDeleteProject()}
                 />
             }
 

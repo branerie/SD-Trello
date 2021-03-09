@@ -1,5 +1,5 @@
 import { useHistory } from 'react-router'
-import getCookie from "../utils/cookie"
+import getCookie from '../utils/cookie'
 
 const PROJECTS_URL = '/api/projects'
 
@@ -121,5 +121,4 @@ export default function useProjectsServices() {
         addProjectMember,
         removeProjectMember
     }
-
 }

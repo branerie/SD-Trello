@@ -1,8 +1,7 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import Title from '../Title'
 import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useSocket } from '../../contexts/SocketProvider'
 import ButtonClean from '../ButtonClean'
@@ -11,6 +10,7 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import UserContext from '../../contexts/UserContext'
 import isUserAdmin from '../../utils/isUserAdmin'
 import ButtonGrey from '../ButtonGrey'
+import useListsServices from '../../services/useListsServices'
 
 
 export default function EditList(props) {
@@ -18,7 +18,6 @@ export default function EditList(props) {
     const [nameHeight, setNameHeight] = useState(null)
     const [currInput, setCurrInput] = useState(null)
     const [name, setName] = useState(props.list.name)
-    const history = useHistory()
     const socket = useSocket()
     const dropdownRef = useRef(null)
     const [isColorActive, setIsColorActive] = useDetectOutsideClick(dropdownRef)
@@ -26,36 +25,19 @@ export default function EditList(props) {
     const [isAdmin, setIsAdmin] = useState(false)
     const members = props.project.membersRoles
     const userContext = useContext(UserContext)
-    const projectId = props.project._id
-    const listId = props.list._id
     const params = useParams()
     const teamId = params.teamid
-
+    const { editList } = useListsServices()
+    
     useEffect(() => {
         setIsAdmin(isUserAdmin(userContext.user.id, members))
     }, [members, userContext.user.id])
-
+    
     async function handleSubmit() {
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/projects/lists/${projectId}/${listId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({ name, color })
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            socket.emit('project-update', props.project)
-            socket.emit('task-team-update', teamId)
-            props.hideForm()
-        }
-    }
-
-    const onColorChange = (color) => {
-        setColor(color.hex)
+        await editList(props.project._id, props.list._id, name, color)
+        socket.emit('project-update', props.project)
+        socket.emit('task-team-update', teamId)
+        props.hideForm()
     }
 
     useEffect(() => {
@@ -100,7 +82,10 @@ export default function EditList(props) {
                 />
             </div>
             {isColorActive && <div ref={dropdownRef} >
-                <SketchPicker className={styles['color-pick']} color={color} onChangeComplete={onColorChange} />
+                <SketchPicker
+                    className={styles['color-pick']}
+                    color={color} onChangeComplete={color => setColor(color.hex)}
+                />
             </div>}
             <div className={styles['edit-list-button']}>
                 {isAdmin &&
