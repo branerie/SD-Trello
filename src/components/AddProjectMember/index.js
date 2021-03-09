@@ -31,7 +31,7 @@ export default function AddMember(props) {
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [confirmTitle, setConfirmTitle] = useState('')
     const [currElement, setCurrElement] = useState('')
-    const { changeUserRole, removeProjectMember } = useProjectsServices()
+    const { changeUserRole, addProjectMember, removeProjectMember } = useProjectsServices()
 
 
     const updateProjectSocket = useCallback(() => {
@@ -83,7 +83,7 @@ export default function AddMember(props) {
             return
         }
 
-        await removeProjectMember(props.project._id, member._id)
+        await removeProjectMember(projectId, member._id)
 
         updateProjectSocket()
         let arr = [...members]
@@ -98,32 +98,14 @@ export default function AddMember(props) {
             return
         }
 
-        const token = getCookie('x-auth-token')
-
-
-        const response = await fetch(`/api/projects/${projectId}/user`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                member,
-                admin: false
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            const memberRole = await response.json()
-            updateProjectSocket()
-            memberRole.memberId = member
-            setIsActive(!isActive)
-            let arr = [...members]
-            arr.push(memberRole)
-            setMembers(arr)
-            setUsers([])
-        }
+        const memberRole = await addProjectMember(projectId, member)
+        updateProjectSocket()
+        memberRole.memberId = member
+        setIsActive(!isActive)
+        let arr = [...members]
+        arr.push(memberRole)
+        setMembers(arr)
+        setUsers([])
     }
 
     const onFocus = async () => {

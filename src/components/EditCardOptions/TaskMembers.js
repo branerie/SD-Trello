@@ -6,6 +6,7 @@ import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import pic10 from '../../images/edit-card/pic10.svg'
 import MembersList from '../MembersList'
+import useProjectsServices from '../../services/useProjectsServices'
 
 
 export default function TaskMembers({ card, listId, project, teamId, setCurrCard }) {
@@ -16,6 +17,7 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
     const history = useHistory()
     const socket = useSocket()
     const token = getCookie('x-auth-token')
+    const { addProjectMember } = useProjectsServices()
 
     useEffect(() => {
         setCardMembers(card.members)
@@ -56,20 +58,7 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
         if (!result) {
             if (!window.confirm(`Do you want to add ${selectedUser.username} to project?`)) return
 
-            const responseAdd = await fetch(`/api/projects/${project._id}/user`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                },
-                body: JSON.stringify({
-                    member: selectedUser,
-                    admin: false
-                })
-            })
-            if (!responseAdd.ok) {
-                history.push('/error')
-            }
+            await addProjectMember(project._id, selectedUser)
         }
 
         let arr = [...cardMembers]

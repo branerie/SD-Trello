@@ -3,13 +3,13 @@ import styles from './index.module.css'
 import TeamContext from '../../contexts/TeamContext'
 import ProjectContext from '../../contexts/ProjectContext'
 import { useHistory, useParams } from 'react-router-dom'
-import getCookie from '../../utils/cookie'
 import { useSocket } from '../../contexts/SocketProvider'
 import SearchField from '../SearchField'
 import TeamDropdown from '../HeaderDropdowns/TeamDropdown'
 import ProjectDropdown from '../HeaderDropdowns/ProjectDropdown'
 import ViewDropdown from '../HeaderDropdowns/ViewDropdown'
 import ProfileDropdown from '../HeaderDropdowns/ProfileDropdown'
+import useProjectsServices from '../../services/useProjectsServices'
 
 const Header = ({ asideOn }) => {
     const [isProjectVisibble, setIsProjectVisibble] = useState(false)
@@ -19,25 +19,13 @@ const Header = ({ asideOn }) => {
     const params = useParams()
     const history = useHistory()
     const socket = useSocket()
+    const { getProjectInfo } = useProjectsServices()
 
     const getData = useCallback(async () => {
-        const id = params.projectid
-        const token = getCookie('x-auth-token');
-        const response = await fetch(`/api/projects/info/${id}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            const data = await response.json()
-            projectContext.setProject(data)
-        }
-    }, [history, params, projectContext])
-    
+        const data = await getProjectInfo(params.projectid)
+        projectContext.setProject(data)
+    }, [getProjectInfo, params, projectContext])
+
     const goToHomePage = useCallback((deletedTeamId) => {
         if (deletedTeamId !== params.teamid) return
         history.push('/')
@@ -52,7 +40,7 @@ const Header = ({ asideOn }) => {
         if (!(window.location.href.includes('team') || window.location.href.includes('project'))) {
             teamContext.setSelectedTeam('Select')
             return
-        } 
+        }
 
         if (teamContext.selectedTeam === 'Select') {
             const teamId = params.teamid
@@ -96,14 +84,14 @@ const Header = ({ asideOn }) => {
         <header className={`${styles.navigation} ${asideOn ? styles.small : ''}`} >
             <div className={styles.container}>
                 <div className={styles.links}>
-                    <TeamDropdown/>
-                    {isProjectVisibble && <ProjectDropdown/>}
-                    {isViewVisibble && <ViewDropdown/>}
+                    <TeamDropdown />
+                    {isProjectVisibble && <ProjectDropdown />}
+                    {isViewVisibble && <ViewDropdown />}
                 </div>
 
                 <div className={`${styles.links} ${styles.font}`}>
                     <SearchField asideOn={asideOn} />
-                    <ProfileDropdown/>
+                    <ProfileDropdown />
                 </div>
             </div>
         </header>
