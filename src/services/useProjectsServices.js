@@ -27,6 +27,26 @@ export default function useProjectsServices() {
         return await response.json()
     }
 
+    const createProject = async (name, description, teamId, members) => {
+        const response = await fetch(`${PROJECTS_URL}`, {
+            method: 'POST',
+            headers: getHeaders(),
+            body: JSON.stringify({
+                name,
+                description,
+                teamId,
+                members
+            })
+        })
+        
+        if (!response.ok) {
+            history.push('/error')
+            return
+        }
+
+        return await response.json()
+    }
+
     const editProject = async (projectId, name, description, isFinished) => {
         const response = await fetch(`${PROJECTS_URL}/${projectId}`, {
             method: 'PUT',
@@ -115,6 +135,7 @@ export default function useProjectsServices() {
 
     return {
         getProjectInfo,
+        createProject,
         editProject,
         deleteProject,
         changeUserRole,

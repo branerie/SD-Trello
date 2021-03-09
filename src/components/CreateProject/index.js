@@ -8,6 +8,7 @@ import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
 import AvatarUser from '../AvatarUser'
 import ButtonGrey from '../ButtonGrey'
+import useProjectsServices from '../../services/useProjectsServices'
 
 export default function CreateProject({ hideForm }) {
     const [name, setName] = useState('')
@@ -20,6 +21,7 @@ export default function CreateProject({ hideForm }) {
     const history = useHistory()
     const params = useParams()
     const socket = useSocket()
+    const { createProject } = useProjectsServices()
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -28,30 +30,11 @@ export default function CreateProject({ hideForm }) {
             return
         }
 
-        const teamId = params.teamid
-        const token = getCookie('x-auth-token')
-        const response = await fetch('/api/projects', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                name,
-                description,
-                teamId,
-                members
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-            return
-        } else {
-            const project = await response.json()
-            hideForm && hideForm()
-            socket.emit('team-update', teamId)
-            history.push(`/project-board/${teamId}/${project._id}`)
-        }
+        const project = await createProject(name, description, params.teamid, members)
+                
+        hideForm && hideForm()
+        socket.emit('team-update', params.teamid)
+        history.push(`/project-board/${params.teamid}/${project._id}`)
     }
 
     const onFocus = async () => {
@@ -180,10 +163,10 @@ export default function CreateProject({ hideForm }) {
 
             <div className={styles['members-avatars']}>
                 {
-                    members.map((m,index) => {
+                    members.map((m, index) => {
                         return (
                             <span key={index}>
-                            <AvatarUser  user={m} onClick={() => removeMember(m)} size={40}/>
+                                <AvatarUser user={m} onClick={() => removeMember(m)} size={40} />
                             </span>
                         )
                     })
@@ -191,7 +174,7 @@ export default function CreateProject({ hideForm }) {
             </div>
 
             <div className={styles['button-div']}>
-            <ButtonGrey onClick={(e)=>handleSubmit(e)} title='Create' className={styles['create-button']}/>
+                <ButtonGrey onClick={(e) => handleSubmit(e)} title='Create' className={styles['create-button']} />
                 {/* <button type='submit' className={styles['create-button']}>Create</button> */}
             </div>
 
