@@ -52,11 +52,23 @@ const assembleColumnData = (startDate) => {
         const { date, history, progress } = cardData
         const cellDate = getDateWithOffset(startDate, numDaysOffset)
         
-        const eventInCell = history && history.events[formatDate(cellDate, '%d/%m/%y')]
+        let taskStartDate = history.startDate && new Date(history.startDate)
+        if (!taskStartDate) {
+            const taskEventKeys = Object.keys(history.events)
+            taskStartDate = taskEventKeys.length > 0 ? new Date(taskEventKeys[0]) : null
+        }
+        
+        if (!taskStartDate || compareDates(cellDate, taskStartDate) < 0) {
+            return ''
+        }
 
+        const eventInCell = history && history.events[formatDate(cellDate, '%d/%m/%y')]
+        
         const dueDate = date ? new Date(date) : null
         const isAfterDueDate = dueDate && compareDates(cellDate, dueDate) > 0
         const isBeforeToday = compareDates(cellDate, currentDate) < 0
+
+
         if (eventInCell) {
             const [eventType, eventValue] = eventInCell.event.split(' ')
 
@@ -79,7 +91,7 @@ const assembleColumnData = (startDate) => {
         // if we get to here, we know that there are no new events on the day of the cell
         const isMonday = numDaysOffset === 0
         const eventsInWeek = history && history.hasEventsInWeek[formatDate(cellDate, '%w/%y')]
-        if (isMonday && progress && progress === 100 && eventsInWeek) {
+        if (isMonday && progress && progress === 100 && !eventsInWeek) {
             // progress for task is 100% and no new events happen during the week
             return getWeekdayCellHtml('Finished', CELL_COLORS.FINISHED)
         }
@@ -104,17 +116,12 @@ const assembleColumnData = (startDate) => {
                 return ''
             }
 
-            let { finishedDate, startDate: taskStartDate } = history
+            let { finishedDate } = history
             finishedDate = finishedDate && new Date(finishedDate)
-            taskStartDate = taskStartDate && new Date(taskStartDate)
 
-            if (finishedDate && compareDates(cellDate, finishedDate) > 0) {
+            if (finishedDate && compareDates(cellDate, finishedDate) > 0 || !isBeforeToday) {
                 // task has finished in the past and cell date is later than date of finish
-                return ''
-            }
-
-            if (isMonday && taskStartDate && compareDates(taskStartDate, startDate) > 0) {
-                // task has started, but first displayed date is earlier than task start date
+                // or cell is later than today
                 return ''
             }
 
