@@ -10,6 +10,7 @@ import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import ConfirmDialog from '../ConfirmationDialog'
 import AvatarUser from '../AvatarUser'
 import ButtonClean from '../ButtonClean'
+import useProjectsServices from '../../services/useProjectsServices'
 
 
 export default function AddMember(props) {
@@ -30,6 +31,7 @@ export default function AddMember(props) {
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [confirmTitle, setConfirmTitle] = useState('')
     const [currElement, setCurrElement] = useState('')
+    const { changeUserRole, removeProjectMember } = useProjectsServices()
 
 
     const updateProjectSocket = useCallback(() => {
@@ -55,10 +57,10 @@ export default function AddMember(props) {
 
         const memberAdmin = members.filter(a => a._id === memberRoleId)[0]['admin']
 
-
         if (result.destination.droppableId === 'admins' && memberAdmin) {
             return
         }
+
         if (result.destination.droppableId === 'members' && !memberAdmin) {
             return
         }
@@ -70,53 +72,23 @@ export default function AddMember(props) {
         newArr.push(updatedUser)
         setMembers(newArr)
 
-        const token = getCookie('x-auth-token')
+        await changeUserRole(projectId, memberRoleId, memberAdmin)
 
-        const response = await fetch(`/api/projects/${projectId}/user-roles`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                userRole: memberRoleId,
-                isAdmin: !memberAdmin
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            updateProjectSocket()
-        }
+        updateProjectSocket()
+
     }
 
     const deleteMember = async (member) => {
-        const projectId = props.project._id
-
         if (member._id === context.user.id) {
             return
         }
-        const memberId = member._id
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/projects/${projectId}/user-remove`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                memberId
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            updateProjectSocket()
-            let arr = [...members]
-            let newArr = arr.filter(m => m.memberId._id !== memberId)
-            setMembers(newArr)
-        }
 
+        await removeProjectMember(props.project._id, member._id)
+
+        updateProjectSocket()
+        let arr = [...members]
+        let newArr = arr.filter(m => m.memberId._id !== member._id)
+        setMembers(newArr)
     }
 
     const handleAdd = async (member) => {

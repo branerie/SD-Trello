@@ -16,7 +16,7 @@ export default function useInboxUtils() {
         moveToHistory: async function (message) {
             if (isMoveActive) return
             setIsMoveActive(true)
-    
+
             const response = await fetch('/api/user/inbox', {
                 method: 'POST',
                 headers: {
@@ -27,13 +27,13 @@ export default function useInboxUtils() {
                     message
                 })
             })
+
             if (!response.ok) {
                 history.push('/error')
                 return
-            } else {
-                await response.json()
-                socket.emit('message-sent', userId)
             }
+
+            socket.emit('message-sent', userId)
         },
 
         deleteMessage: async function (message, setInboxHistory) {
@@ -44,13 +44,14 @@ export default function useInboxUtils() {
                     'Authorization': token
                 }
             })
+
             if (!response.ok) {
                 history.push('/error')
                 return
-            } else {
-                const user = await response.json()
-                setInboxHistory(user.inboxHistory)
             }
+
+            const user = await response.json()
+            setInboxHistory(user.inboxHistory)
         },
 
         viewTeam: async function viewTeam(message, setCurrTeam, setShowEditTeamForm) {
@@ -61,14 +62,15 @@ export default function useInboxUtils() {
                     'Authorization': token
                 }
             })
+
             if (!response.ok) {
                 history.push('/error')
                 return
-            } else {
-                const team = await response.json()
-                setCurrTeam(team)
-                setShowEditTeamForm(true)
             }
+
+            const team = await response.json()
+            setCurrTeam(team)
+            setShowEditTeamForm(true)
         }
 
     }
