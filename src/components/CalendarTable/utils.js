@@ -69,47 +69,19 @@ const parseCardHistory = (taskHistory) => {
     for (let element of taskHistory) {
         const elementDate = new Date(element.date)
 
-        if (element.event === 'Created') {
-            historyByDate.startDate = elementDate
-        }
-
         historyByDate.events[formatDate(elementDate, '%d/%m/%y')] = element
         historyByDate.hasEventsInWeek[formatDate(elementDate, '%w/%y')] = true
     }
 
+    historyByDate.startDate = taskHistory[0] && taskHistory[0].date
+    
     const lastHistoryEvent = taskHistory[taskHistory.length - 1]
+    historyByDate.lastEventDate = lastHistoryEvent && lastHistoryEvent.date
     if (lastHistoryEvent && lastHistoryEvent.event === 'Progress 100%') {
-        historyByDate.finishedDate = new Date(lastHistoryEvent.date)
+        historyByDate.finishedDate = lastHistoryEvent.date
     }
     
     return historyByDate
-
-    // const historyArr = []
-    // for (let histIndex = 0; histIndex < taskHistory.length; histIndex++) {
-    //     const currElement = taskHistory[histIndex]
-    //     const nextElement = taskHistory[histIndex + 1]
-        
-    //     const currEventType = currElement.event.split(' ')[0]
-        
-    //     let shouldIncludeEvent = true
-    //     if (nextElement) {
-    //         const nextEventType = nextElement.event.split(' ')[0]
-
-    //         if (nextEventType === currEventType && 
-    //             currElement.date === nextElement.date) {
-    //             shouldIncludeEvent = false
-    //         }
-    //     }
-
-    //     if (shouldIncludeEvent) {
-    //         historyArr.push({
-    //             event: currElement.event,
-    //             date: currElement.date
-    //         })
-    //     }
-    // }
-
-    // return historyArr
 }
 
 const applyCardFilters = (card, filters) => {

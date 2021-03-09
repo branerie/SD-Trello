@@ -52,12 +52,7 @@ const assembleColumnData = (startDate) => {
         const { date, history, progress } = cardData
         const cellDate = getDateWithOffset(startDate, numDaysOffset)
         
-        let taskStartDate = history.startDate && new Date(history.startDate)
-        if (!taskStartDate) {
-            const taskEventKeys = Object.keys(history.events)
-            taskStartDate = taskEventKeys.length > 0 ? new Date(taskEventKeys[0]) : null
-        }
-        
+        const taskStartDate = history.startDate && new Date(history.startDate)
         if (!taskStartDate || compareDates(cellDate, taskStartDate) < 0) {
             return ''
         }
@@ -77,7 +72,17 @@ const assembleColumnData = (startDate) => {
             }
 
             if (eventType === 'Progress' && eventValue && eventValue === '100%') {
-                return getWeekdayCellHtml('Finished', CELL_COLORS.FINISHED)
+                let cellText = 'Finished'
+                let cellColor = CELL_COLORS.FINISHED
+                
+                const lastEventDate = new Date(history.lastEventDate)
+                if (compareDates(lastEventDate, cellDate) > 0) {
+                    // Task was put at 100% progress at the time, but was later changed again
+                    cellText = 'Progress 100%'
+                    cellColor = isBeforeToday ? CELL_COLORS.PROGRESS_OLD : CELL_COLORS.PROGRESS
+                }
+
+                return getWeekdayCellHtml(cellText, cellColor)
             }
 
             if (isBeforeToday) {
@@ -108,7 +113,7 @@ const assembleColumnData = (startDate) => {
 
             if (compareDates(cellDate, dueDate) > 0) {
                 // cell date is after due date
-                if (isMonday && compareDates(currentDate, cellDate) > 0) {
+                if (isMonday && compareDates(currentDate, dueDate) > 0) {
                     // cell is first shown column (usually Monday) and today is later than that
                     return getWeekdayCellHtml('Delayed', CELL_COLORS.DELAYED)
                 }
@@ -119,9 +124,8 @@ const assembleColumnData = (startDate) => {
             let { finishedDate } = history
             finishedDate = finishedDate && new Date(finishedDate)
 
-            if (finishedDate && compareDates(cellDate, finishedDate) > 0 || !isBeforeToday) {
+            if (finishedDate && compareDates(cellDate, finishedDate) > 0) {
                 // task has finished in the past and cell date is later than date of finish
-                // or cell is later than today
                 return ''
             }
 
