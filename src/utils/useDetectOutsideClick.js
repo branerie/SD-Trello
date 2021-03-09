@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react"
+import { useState, useEffect } from 'react'
 
 export const useDetectOutsideClick = (el) => {
   const [isActive, setIsActive] = useState(false)
@@ -13,11 +13,11 @@ export const useDetectOutsideClick = (el) => {
 
     // If the item is active (ie open) then listen for clicks outside
     if (isActive) {
-      window.addEventListener("click", onClick)
+      window.addEventListener('click', onClick)
     }
 
     return () => {
-      window.removeEventListener("click", onClick)
+      window.removeEventListener('click', onClick)
     }
   }, [isActive, el])
 

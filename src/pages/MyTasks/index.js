@@ -1,15 +1,15 @@
-import React, { useState, useContext, useEffect, useCallback } from "react"
-import { Link, useHistory } from "react-router-dom"
-import PageLayout from "../../components/PageLayout"
-import Title from "../../components/Title"
-import UserContext from "../../contexts/UserContext"
-import getCookie from "../../utils/cookie"
+import React, { useState, useContext, useEffect, useCallback } from 'react'
+import { Link, useHistory } from 'react-router-dom'
+import PageLayout from '../../components/PageLayout'
+import Title from '../../components/Title'
+import UserContext from '../../contexts/UserContext'
+import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
 import myTasks from '../../images/my-tasks/my-tasks.svg'
-import { useSocket } from "../../contexts/SocketProvider"
-import MyTasksTask from "../../components/MyTasksTask"
-import ButtonCleanTitle from "../../components/ButtonCleanTitle"
-import ButtonClean from "../../components/ButtonClean"
+import { useSocket } from '../../contexts/SocketProvider'
+import MyTasksTask from '../../components/MyTasksTask'
+import ButtonCleanTitle from '../../components/ButtonCleanTitle'
+import ButtonClean from '../../components/ButtonClean'
 
 const MyTasksPage = () => {
     const userContext = useContext(UserContext)
@@ -21,16 +21,16 @@ const MyTasksPage = () => {
 
     const selectTeam = useCallback(async (teamId) => {
 
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/user/tasks/${teamId}`, {
-            method: "GET",
+            method: 'GET',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             }
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             const data = await response.json()
             if (data === 'Team not found') return
@@ -90,7 +90,7 @@ const MyTasksPage = () => {
                         />
                     })}
                 </div>
-                <ButtonClean className={`${styles.teams} ${styles['projects-button']}`} title={showOldProjects ? 'Current Projects' : "Old Projects"} onClick={() => setShowOldProjects(!showOldProjects)} />
+                <ButtonClean className={`${styles.teams} ${styles['projects-button']}`} title={showOldProjects ? 'Current Projects' : 'Old Projects'} onClick={() => setShowOldProjects(!showOldProjects)} />
             </div>
             {!userContext.user.lastTeamSelected ? <div className={styles.title}>Select a team</div> :
                 <div className={styles.box}>

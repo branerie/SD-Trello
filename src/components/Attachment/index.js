@@ -16,7 +16,7 @@ export default function Attachment({ att, attachments, card, project, teamId, se
                 onClick={() => setIsListVisible(true)}
                 title={att.name}
             >
-                <img src={pic1} alt="" className={styles['att-picture']} />
+                <img src={pic1} alt='' className={styles['att-picture']} />
                 <div className={styles.format}>{att.format}</div>
             </div>
             {isListVisible && <Transparent hideForm={() => setIsListVisible(false)} >

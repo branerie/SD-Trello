@@ -3,14 +3,14 @@ import styles from './index.module.css'
 import logo from '../../images/logo.svg'
 import { useHistory } from 'react-router-dom'
 import Alert from '../Alert'
-import UserContext from "../../contexts/UserContext"
+import UserContext from '../../contexts/UserContext'
 import authenticateUpdate from '../../utils/authenticate-update'
 
 
 
 export default function AddPassword(props) {
-    const [password, setPassword] = useState("")
-    const [rePassword, setRePassword] = useState("")
+    const [password, setPassword] = useState('')
+    const [rePassword, setRePassword] = useState('')
     const [alert, setAlert] = useState(false)
     const [fillAlert, setFillAlert] = useState(false)
 
@@ -45,7 +45,7 @@ export default function AddPassword(props) {
         }, (response) => {
             userContext.logIn(response.user)
             console.log(userContext.user);
-            history.push("/")
+            history.push('/')
         })        
 
     }, [history, userContext, password, rePassword, userId])
@@ -59,7 +59,7 @@ export default function AddPassword(props) {
             <div className={styles['inner-container']}>
 
                 <div className={styles.logo}>
-                    <img src={logo} alt="logo" width='110' height='100' />
+                    <img src={logo} alt='logo' width='110' height='100' />
                 </div>
 
                 <div className={styles['right-side']}>
@@ -75,11 +75,11 @@ export default function AddPassword(props) {
                         <input
                             placeholder='********'
                             className={styles['pass-input']}
-                            type="password"
+                            type='password'
                             value={password}
                             onChange={e => setPassword(e.target.value)}
-                            label="New Password"
-                            id="password"
+                            label='New Password'
+                            id='password'
                         />
 
 
@@ -95,11 +95,11 @@ export default function AddPassword(props) {
                         <input
                             placeholder='********'
                             className={styles['pass-input']}
-                            type="password"
+                            type='password'
                             value={rePassword}
                             onChange={e => setRePassword(e.target.value)}
-                            label="Confirm Password"
-                            id="rePassword"
+                            label='Confirm Password'
+                            id='rePassword'
                         />
 
                     </div>

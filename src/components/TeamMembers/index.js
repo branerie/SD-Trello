@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './index.module.css'
-import ButtonClean from "../ButtonClean"
+import ButtonClean from '../ButtonClean'
 import AvatarUser from '../AvatarUser'
 
 

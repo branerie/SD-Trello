@@ -1,5 +1,5 @@
 import React, { useCallback, useContext, useEffect, useState, useRef } from 'react'
-import { useParams, useHistory } from "react-router-dom"
+import { useParams, useHistory } from 'react-router-dom'
 import List from '../../components/List'
 import PageLayout from '../../components/PageLayout'
 import Transparent from '../../components/Transparent'
@@ -35,7 +35,7 @@ export default function ProjectBoard() {
     const [dndActive, setDndActive] = useState(false)
     const context = useContext(UserContext)
     const teamId = params.teamid
-    const token = getCookie("x-auth-token")
+    const token = getCookie('x-auth-token')
 
     useUpdateUserLastTeam(params.teamid)
 
@@ -98,16 +98,16 @@ export default function ProjectBoard() {
         }
 
         const response = await fetch(`/api/user/recentProjects/${userId}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             }, body: JSON.stringify({
                 recentProjects: arr
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             const data = await response.json()
             const user = userObject(data)
@@ -128,8 +128,8 @@ export default function ProjectBoard() {
         return (
             <PageLayout>
                 <Loader
-                    type="TailSpin"
-                    color="#363338"
+                    type='TailSpin'
+                    color='#363338'
                     height={100}
                     width={100}
                     timeout={3000} //3 secs
@@ -157,10 +157,10 @@ export default function ProjectBoard() {
             projectContext.setLists(newListsArr)
 
             const response = await fetch(`/api/projects/lists/${projectContext.project._id}/${result.draggableId}/dnd-update`, {
-                method: "PUT",
+                method: 'PUT',
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": token
+                    'Content-Type': 'application/json',
+                    'Authorization': token
                 },
                 body: JSON.stringify({
                     position,
@@ -168,7 +168,7 @@ export default function ProjectBoard() {
                 })
             })
             if (!response.ok) {
-                history.push("/error")
+                history.push('/error')
             } else {
                 const updatedProject = await response.json()
                 projectContext.setProject(updatedProject)
@@ -195,10 +195,10 @@ export default function ProjectBoard() {
             projectContext.setLists(newListsArr)
 
             const response = await fetch(`/api/projects/lists/${projectContext.project._id}/${result.draggableId}/dnd-update`, {
-                method: "PUT",
+                method: 'PUT',
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": token
+                    'Content-Type': 'application/json',
+                    'Authorization': token
                 },
                 body: JSON.stringify({
                     position,
@@ -208,7 +208,7 @@ export default function ProjectBoard() {
                 })
             })
             if (!response.ok) {
-                history.push("/error")
+                history.push('/error')
             }
         }
 
@@ -220,19 +220,19 @@ export default function ProjectBoard() {
     const addList = async (e) => {
         e.preventDefault()
 
-        if (listName === "") {
+        if (listName === '') {
             return
         }
         const response = await fetch(`/api/projects/lists/${projectContext.project._id}`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({ name: listName })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
             setIsActive(!isActive)
@@ -320,7 +320,7 @@ export default function ProjectBoard() {
                         )}
                     </Droppable>
                 </DragDropContext>
-                <img className={styles.pic} src={pic} alt="" width="340"/>
+                <img className={styles.pic} src={pic} alt='' width='340'/>
             </div>
         </PageLayout>
     )

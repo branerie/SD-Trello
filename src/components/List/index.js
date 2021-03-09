@@ -32,16 +32,16 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
     }, [socket, project])
 
     async function deleteList() {
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/projects/lists/${project._id}/${list._id}`, {
-            method: "DELETE",
+            method: 'DELETE',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             }
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             updateSocket()
             socket.emit('task-team-update', teamId)
@@ -53,12 +53,12 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
         if (cardName === '') {
             return
         }
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/projects/lists/cards/${list._id}`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 name: cardName,
@@ -70,7 +70,7 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
             setIsVisible(!isVisible)
@@ -105,7 +105,7 @@ export default function List( { isAdmin, project, list, showEditList, showCurren
                     <ButtonClean
                         className={styles.button}
                         onClick={() => setIsEditListActive(!isEditListActive)}
-                        title={<img className={styles.dots} src={dots} alt="..." width="20" height="6" />}
+                        title={<img className={styles.dots} src={dots} alt='...' width='20' height='6' />}
                     />
                 }
             </div>

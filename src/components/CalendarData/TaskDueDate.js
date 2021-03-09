@@ -5,8 +5,8 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import { useHistory, useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import pen from '../../images/pen.svg'
-import DatePicker from "react-datepicker"
-import Transparent from "../Transparent"
+import DatePicker from 'react-datepicker'
+import Transparent from '../Transparent'
 import EditCard from '../EditCard'
 
 
@@ -28,23 +28,23 @@ export default function TaskDueDate(props) {
         let cardId = props.cardId
         let listId = props.listId
 
-        if (cardDueDate === "" && date === '') {
+        if (cardDueDate === '' && date === '') {
             console.log('return');
             return
         }
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 dueDate: date
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
             setIsActive(!isActive)
@@ -73,7 +73,7 @@ export default function TaskDueDate(props) {
                     :   <span>Select date</span>
                 }
                 onChange={changeCardDueDate}
-                label="Go to date"
+                label='Go to date'
                 onBlur={value ? () => setIsActive(!isActive) : null}
                 popperPlacement='bottom-end'
                 closeOnScroll={e => e.target === document.getElementsByClassName('rt-tbody')[0]}
@@ -96,9 +96,9 @@ export default function TaskDueDate(props) {
                     <img 
                         className={styles.pen} 
                         src={pen} 
-                        alt="..." 
-                        width="13" 
-                        height="13" 
+                        alt='...' 
+                        width='13' 
+                        height='13' 
                         onClick={() => setIsVisible(true)} 
                     />
                 </span>

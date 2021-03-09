@@ -178,7 +178,7 @@ async function updateTeam(req, res, next) {
             const updatedTeam = await models.Team.findOneAndUpdate({ _id: teamId }, { $pull: { requests: userForRemove } }, { new: true }).session(session)
             const teamObj = { name: updatedTeam.name, id: teamId }
 
-            const oldMessage = await models.Message.findOneAndUpdate({ 'team.id': teamId, recievers: { "$in": [userForRemove] } }, { $pull: { recievers: userForRemove } }, { new: true }).session(session)
+            const oldMessage = await models.Message.findOneAndUpdate({ 'team.id': teamId, recievers: { '$in': [userForRemove] } }, { $pull: { recievers: userForRemove } }, { new: true }).session(session)
 
             const messageCreationResult = await models.Message.create([{ subject: 'Team invitation canceled', team: teamObj, sendFrom: req.user._id, recievers: [userForRemove] }], { session })
             const createdMessage = messageCreationResult[0]
@@ -272,7 +272,7 @@ async function deleteTeam(req, res, next) {
         }
 
         const teamObj = { name: teamForDelete.name, id: idTeam, isDeleted: true }
-        const messages = await models.Message.find({ "team.id": idTeam })
+        const messages = await models.Message.find({ 'team.id': idTeam })
 
         for (let m of messages) {
             await models.Message.updateOne({ _id: m._id }, { team: teamObj }).session(session)

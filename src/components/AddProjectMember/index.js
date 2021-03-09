@@ -1,9 +1,9 @@
 import React, { useCallback, useContext, useRef, useState } from 'react'
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory, useParams } from 'react-router-dom'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useSocket } from '../../contexts/SocketProvider'
-import TeamContext from "../../contexts/TeamContext"
+import TeamContext from '../../contexts/TeamContext'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import UserContext from '../../contexts/UserContext'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
@@ -70,13 +70,13 @@ export default function AddMember(props) {
         newArr.push(updatedUser)
         setMembers(newArr)
 
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
 
         const response = await fetch(`/api/projects/${projectId}/user-roles`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 userRole: memberRoleId,
@@ -84,7 +84,7 @@ export default function AddMember(props) {
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             updateProjectSocket()
         }
@@ -97,19 +97,19 @@ export default function AddMember(props) {
             return
         }
         const memberId = member._id
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/projects/${projectId}/user-remove`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 memberId
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             updateProjectSocket()
             let arr = [...members]
@@ -126,14 +126,14 @@ export default function AddMember(props) {
             return
         }
 
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
 
 
         const response = await fetch(`/api/projects/${projectId}/user`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 member,
@@ -141,7 +141,7 @@ export default function AddMember(props) {
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             const memberRole = await response.json()
             updateProjectSocket()
@@ -170,17 +170,17 @@ export default function AddMember(props) {
                 )
             })
 
-            const token = getCookie("x-auth-token")
+            const token = getCookie('x-auth-token')
             const response = await fetch(`/api/teams/get-users/${currentTeamId}`, {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": token
+                    'Content-Type': 'application/json',
+                    'Authorization': token
                 }
             })
 
             if (!response.ok) {
-                history.push("/error")
+                history.push('/error')
             }
             const data = await response.json()
 
@@ -229,13 +229,13 @@ export default function AddMember(props) {
                             <div className={styles['invite-input']}>
                                 <input
                                     className={styles['members-input']}
-                                    autoComplete="off"
+                                    autoComplete='off'
                                     value={member}
                                     onFocus={onFocus}
                                     onBlur={onBlur}
                                     onChange={(e) => setMember(e.target.value)}
-                                    label="Invite members"
-                                    id="members"
+                                    label='Invite members'
+                                    id='members'
                                     placeholder='Teammate Username'
                                 />
                                 <div className={styles['select-for-invite']}>
@@ -275,7 +275,7 @@ export default function AddMember(props) {
                         <DragDropContext onDragEnd={handleOnDragEnd}>
                             <div className={styles['admins-container']}>
                                 <span className={styles.title}>Admins:</span>
-                                <Droppable droppableId={"admins"}>
+                                <Droppable droppableId={'admins'}>
                                     {(provided) => (
                                         <div className={styles.droppable} ref={provided.innerRef}  {...provided.droppableProps} >
                                             {
@@ -301,7 +301,7 @@ export default function AddMember(props) {
 
                             <div className={styles['members-container']}>
                                 <span className={styles.title}>Members:</span>
-                                <Droppable droppableId={"members"}>
+                                <Droppable droppableId={'members'}>
                                     {(provided) => (
                                         <div className={styles['droppable-members']} ref={provided.innerRef} {...provided.droppableProps}>
                                             {

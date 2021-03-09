@@ -194,7 +194,7 @@ async function deleteProject(req, res, next) {
         await models.Team.updateOne({ projects: idProject }, { $pull: { projects: idProject } }).session(session)
 
         const projectObj = { name: projectForDelete.name, id: idProject, isDeleted: true }
-        const messages = await models.Message.find({ "project.id": idProject })
+        const messages = await models.Message.find({ 'project.id': idProject })
 
         for (let m of messages) {
             await models.Message.updateOne({ _id: m._id }, { project: projectObj }).session(session)

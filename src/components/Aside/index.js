@@ -53,36 +53,36 @@ export default function Aside({ asideOn, setAsideOn }) {
                     <ButtonClean
                         className={styles.hamburger}
                         onClick={() => setAsideOn(!asideOn)}
-                        title={<img className={styles.options} src={menu} alt="menu" width="32" height="24" />}
+                        title={<img className={styles.options} src={menu} alt='menu' width='32' height='24' />}
                     />
                 </div>
                 <LinkComponent
                     href='/'
-                    title={<img src={home} alt="home" width="34" height="32" />}
+                    title={<img src={home} alt='home' width='34' height='32' />}
                 />
                 <LinkComponent
                     href={`/my-tasks/${userContext.user.id}`}
-                    title={<img src={tasks} alt="my-tasks" width="30" height="25" />}
+                    title={<img src={tasks} alt='my-tasks' width='30' height='25' />}
                 />
                 <LinkComponent
                     href={`/inbox/${userContext.user.id}`}
-                    title={<img src={inbox} alt="inbox" width="33" height="34" />}
+                    title={<img src={inbox} alt='inbox' width='33' height='34' />}
                 />
                 {editProjectButtonVisibility &&
                     <ButtonClean
                         className={styles.settings}
                         onClick={() => setEditProjectVisibility(!editProjectVisibility)}
-                        title={<img className={styles.options} src={projectInfo} alt="" width="40" />}
+                        title={<img className={styles.options} src={projectInfo} alt='' width='40' />}
                     />
                 }
                 {/* <LinkComponent
                     href={`/profile/${userContext.user.id}`}
-                    title={<img src={settings} alt="settings" width="25" height="25" />}
+                    title={<img src={settings} alt='settings' width='25' height='25' />}
                 /> */}
                 {userContext.user.inbox.length !== 0 &&
                     <LinkComponent
                         href={`/inbox/${userContext.user.id}`}
-                        title={<img src={bell} alt="inbox" width="33" height="34" />}
+                        title={<img src={bell} alt='inbox' width='33' height='34' />}
                         className={styles.bell}
                     />
                 }
@@ -91,7 +91,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                 <div className={styles.menu}>
                     <div className={styles['top-right']}>
                         <div className={styles.logo}>
-                            <img src={logo} alt="logo" width="87" height="65" />
+                            <img src={logo} alt='logo' width='87' height='65' />
                         </div>
                         <LinkComponent
                             href='/'

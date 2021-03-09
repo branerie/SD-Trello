@@ -1,8 +1,8 @@
 import React, { useState, useContext } from 'react'
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory, useParams } from 'react-router-dom'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-import "react-datepicker/dist/react-datepicker.css"
+import 'react-datepicker/dist/react-datepicker.css'
 import ButtonClean from '../ButtonClean'
 import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
@@ -10,8 +10,8 @@ import AvatarUser from '../AvatarUser'
 import ButtonGrey from '../ButtonGrey'
 
 export default function CreateProject({ hideForm }) {
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
+    const [name, setName] = useState('')
+    const [description, setDescription] = useState('')
     const [member, setMember] = useState('')
     const [members, setMembers] = useState([])
     const [showMembers, setShowMembers] = useState(false)
@@ -29,12 +29,12 @@ export default function CreateProject({ hideForm }) {
         }
 
         const teamId = params.teamid
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch('/api/projects', {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 name,
@@ -60,17 +60,17 @@ export default function CreateProject({ hideForm }) {
         const teamId = params.teamid
 
         if (allUsers.length === 0) {
-            const token = getCookie("x-auth-token")
+            const token = getCookie('x-auth-token')
             const response = await fetch(`/api/teams/get-users/${teamId}`, {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": token
+                    'Content-Type': 'application/json',
+                    'Authorization': token
                 }
             })
 
             if (!response.ok) {
-                history.push("/error")
+                history.push('/error')
             }
             const users = await response.json()
             setAllUsers(users.members)
@@ -108,10 +108,10 @@ export default function CreateProject({ hideForm }) {
                     className={styles['input-name']}
                     value={name}
                     onChange={e => setName(e.target.value)}
-                    label="Name"
-                    id="name"
+                    label='Name'
+                    id='name'
                     placeholder='Project Name'
-                    autoComplete="off"
+                    autoComplete='off'
                 />
             </div>
 
@@ -121,10 +121,10 @@ export default function CreateProject({ hideForm }) {
                     className={styles['text-area-descr']}
                     value={description}
                     onChange={e => setDescription(e.target.value)}
-                    label="Description"
-                    id="description"
+                    label='Description'
+                    id='description'
                     placeholder='Project Description'
-                    spellCheck="false"
+                    spellCheck='false'
                 />
             </div>
 
@@ -134,13 +134,13 @@ export default function CreateProject({ hideForm }) {
                 <div className={styles['invite-input']}>
                     <input
                         className={styles['members-input']}
-                        autoComplete="off"
+                        autoComplete='off'
                         value={member}
                         onFocus={onFocus}
                         onBlur={onBlur}
                         onChange={(e) => setMember(e.target.value)}
-                        label="Invite members"
-                        id="members"
+                        label='Invite members'
+                        id='members'
                         placeholder='Teammate Username'
                     />
 
@@ -191,7 +191,7 @@ export default function CreateProject({ hideForm }) {
             </div>
 
             <div className={styles['button-div']}>
-            <ButtonGrey onClick={(e)=>handleSubmit(e)} title="Create" className={styles['create-button']}/>
+            <ButtonGrey onClick={(e)=>handleSubmit(e)} title='Create' className={styles['create-button']}/>
                 {/* <button type='submit' className={styles['create-button']}>Create</button> */}
             </div>
 

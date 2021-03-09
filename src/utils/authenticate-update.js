@@ -1,5 +1,5 @@
-import getCookie from "./cookie"
-import userObject from "./userObject"
+import getCookie from './cookie'
+import userObject from './userObject'
 
 const authenticateUpdate = async (url, method, body, onSuccess, onFailure) => {
 
@@ -11,8 +11,8 @@ const authenticateUpdate = async (url, method, body, onSuccess, onFailure) => {
             method,
             body: JSON.stringify(body),
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": cookie
+                'Content-Type': 'application/json',
+                'Authorization': cookie
             }
         })
         

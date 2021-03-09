@@ -1,5 +1,5 @@
 import React, { useContext, useState } from 'react'
-import { useHistory } from "react-router-dom"
+import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import TeamContext from '../../contexts/TeamContext'
@@ -11,8 +11,8 @@ import ButtonGrey from '../ButtonGrey'
 
 
 export default function CreateTeam(props) {
-    const [name, setName] = useState("")
-    const [description, setDescription] = useState("")
+    const [name, setName] = useState('')
+    const [description, setDescription] = useState('')
     const [member, setMember] = useState('')
     const [members, setMembers] = useState([])
     const [showMembers, setShowMembers] = useState(false)
@@ -27,17 +27,17 @@ export default function CreateTeam(props) {
         setShowMembers(false)
 
         if (allUsers.length === 0) {
-            const token = getCookie("x-auth-token")
+            const token = getCookie('x-auth-token')
             const response = await fetch('/api/user/get-all', {
-                method: "GET",
+                method: 'GET',
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": token
+                    'Content-Type': 'application/json',
+                    'Authorization': token
                 }
             })
 
             if (!response.ok) {
-                history.push("/error")
+                history.push('/error')
             }
             const users = await response.json()
             setAllUsers(users)
@@ -69,12 +69,12 @@ export default function CreateTeam(props) {
             return
         }
 
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch('/api/teams', {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 name,
@@ -83,7 +83,7 @@ export default function CreateTeam(props) {
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
             const team = await response.json()
@@ -119,10 +119,10 @@ export default function CreateTeam(props) {
                     className={styles['input-name']}
                     value={name}
                     onChange={e => setName(e.target.value)}
-                    label="Name"
-                    id="name"
+                    label='Name'
+                    id='name'
                     placeholder='Team Name'
-                    autocomplete="off"
+                    autocomplete='off'
                 />
             </div>
 
@@ -132,10 +132,10 @@ export default function CreateTeam(props) {
                     className={styles['text-area-descr']}
                     value={description}
                     onChange={e => setDescription(e.target.value)}
-                    label="Description"
-                    id="description"
+                    label='Description'
+                    id='description'
                     placeholder='Team Description'
-                    spellCheck="false"
+                    spellCheck='false'
                 />
             </div>
 
@@ -145,11 +145,11 @@ export default function CreateTeam(props) {
                 <div className={styles['invite-input']}>
                     <input
                         className={styles['input-members']}
-                        autoComplete="off"
+                        autoComplete='off'
                         value={member}
                         onChange={inputMembers}
-                        label="Invite members"
-                        id="members"
+                        label='Invite members'
+                        id='members'
                         placeholder='username'
                         onBlur={onBlur}
 
@@ -210,7 +210,7 @@ export default function CreateTeam(props) {
 
             <div className={styles['button-div']}>
                 {/* <button type='submit' className={styles['create-button']}>Create</button> */}
-                <ButtonGrey onClick={(e)=>handleSubmit(e)} title="Create" className={styles['create-button']}/>
+                <ButtonGrey onClick={(e)=>handleSubmit(e)} title='Create' className={styles['create-button']}/>
                 
             </div>
 

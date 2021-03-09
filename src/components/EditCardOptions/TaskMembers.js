@@ -15,7 +15,7 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
     const [users, setUsers] = useState([])
     const history = useHistory()
     const socket = useSocket()
-    const token = getCookie("x-auth-token")
+    const token = getCookie('x-auth-token')
 
     useEffect(() => {
         setCardMembers(card.members)
@@ -24,15 +24,15 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
     const getTeamUsers = async () => {
 
         const response = await fetch(`/api/teams/get-users/${teamId}`, {
-            method: "GET",
+            method: 'GET',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             }
         })
 
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         }
         const data = await response.json()
 
@@ -57,10 +57,10 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
             if (!window.confirm(`Do you want to add ${selectedUser.username} to project?`)) return
 
             const responseAdd = await fetch(`/api/projects/${project._id}/user`, {
-                method: "POST",
+                method: 'POST',
                 headers: {
-                    "Content-Type": "application/json",
-                    "Authorization": token
+                    'Content-Type': 'application/json',
+                    'Authorization': token
                 },
                 body: JSON.stringify({
                     member: selectedUser,
@@ -68,7 +68,7 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
                 })
             })
             if (!responseAdd.ok) {
-                history.push("/error")
+                history.push('/error')
             }
         }
 
@@ -77,10 +77,10 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
         arr.push(selectedUser)
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 members: arr,
@@ -92,7 +92,7 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             const updatedCard = await response.json()
             if (setCurrCard) setCurrCard(updatedCard)
@@ -107,7 +107,7 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
     return (
         <div>
             <div className={styles['small-buttons']} onClick={() => { getTeamUsers(); setIsActive(!isActive) }} >
-                <img className={styles.pics} src={pic10} alt="pic10" />
+                <img className={styles.pics} src={pic10} alt='pic10' />
                 Add Teammate
             </div>
             { isActive && <form ref={ref} >

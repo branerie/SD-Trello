@@ -31,7 +31,7 @@ const userSchema = new Schema({
         publicId: {type: String}
     },
 
-    projects: [{ type: ObjectId, ref: "ProjectUserRole" }],
+    projects: [{ type: ObjectId, ref: 'ProjectUserRole' }],
 
     inbox: [{ type: ObjectId, ref: 'Message' }],
 
