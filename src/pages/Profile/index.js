@@ -1,17 +1,17 @@
-import React, { useState, useEffect, useCallback, useContext, useRef } from "react"
-import Loader from "react-loader-spinner"
-import { useParams, useHistory } from "react-router-dom"
-import PageLayout from "../../components/PageLayout"
+import React, { useState, useEffect, useCallback, useContext, useRef } from 'react'
+import Loader from 'react-loader-spinner'
+import { useParams, useHistory } from 'react-router-dom'
+import PageLayout from '../../components/PageLayout'
 import styles from './index.module.css'
 import pic1 from '../../images/profile-page-pic.svg'
 import pen from '../../images/pen.svg'
 import authenticateUpdate from '../../utils/authenticate-update';
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import Title from "../../components/Title"
-import UserContext from "../../contexts/UserContext"
-import Alert from "../../components/Alert"
+import Title from '../../components/Title'
+import UserContext from '../../contexts/UserContext'
+import Alert from '../../components/Alert'
 import ButtonGrey from '../../components/ButtonGrey'
-import ConfirmDialog from "../../components/ConfirmationDialog"
+import ConfirmDialog from '../../components/ConfirmationDialog'
 import { Image, Transformation } from 'cloudinary-react';
 
 
@@ -44,7 +44,7 @@ const ProfilePage = () => {
 
     const response = await fetch(`/api/user/${id}`)
     if (!response.ok) {
-      history.push("/error")
+      history.push('/error')
     } else {
       const user = await response.json()
       setUserEmail(user.email)
@@ -82,7 +82,7 @@ const ProfilePage = () => {
     }, (user) => {
       userContext.logIn(user)
     }, (e) => {
-      console.log("Error", e);
+      console.log('Error', e);
     })
     getData()
   }
@@ -95,8 +95,8 @@ const ProfilePage = () => {
     return (
       <PageLayout>
         <Loader
-          type="TailSpin"
-          color="#363338"
+          type='TailSpin'
+          color='#363338'
           height={100}
           width={100}
           timeout={3000} //3 secs
@@ -128,7 +128,7 @@ const ProfilePage = () => {
         }, (user) => {
           userContext.logIn(user)
         }, (e) => {
-          console.log("Error", e);
+          console.log('Error', e);
         })
         getData()
   
@@ -151,7 +151,7 @@ const ProfilePage = () => {
     }, (user) => {
       userContext.logIn(user)
     }, (e) => {
-      console.log("Error", e);
+      console.log('Error', e);
     })
     getData()
   }
@@ -203,7 +203,7 @@ const ProfilePage = () => {
               className={styles['input-fields-profile']}
               placeholder={'********'}
               disabled={!passwordActive}
-              type="password"
+              type='password'
             />
           </div>
 
@@ -227,7 +227,7 @@ const ProfilePage = () => {
               className={styles['input-fields-profile']}
               placeholder={'********'}
               disabled={!passwordActive}
-              type="password"
+              type='password'
             />
 
           </div>
@@ -277,7 +277,7 @@ const ProfilePage = () => {
                           )
                         }
                         )
-                        : "You haven't joined any teams yet"
+                        : 'You have not joined any teams yet'
                       }
                     </div>
                     : null
@@ -307,7 +307,7 @@ const ProfilePage = () => {
                 <div className={styles['profile-picture']}>
                  
                   <Image publicId={userContext.user.image.publicId} className={styles['profile-picture-pic']} >
-                    <Transformation width="200" height="200" gravity="faces" crop="fill"
+                    <Transformation width='200' height='200' gravity='faces' crop='fill'
                     />
                   </Image>
 
@@ -333,7 +333,7 @@ const ProfilePage = () => {
                 <div>
                   <p className={styles['load-pic-text']}>Load a profile picture</p>
                   <img className={styles.pen}
-                    src={pen} alt="" />
+                    src={pen} alt='' />
                 </div>
               }
 
@@ -344,8 +344,8 @@ const ProfilePage = () => {
 
 
 
-          <img className={styles.pic1} src={pic1} alt=""
-          // width="80%" height="80%"
+          <img className={styles.pic1} src={pic1} alt=''
+          // width='80%' height='80%'
           />
 
         </div>

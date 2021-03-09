@@ -1,8 +1,8 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory, useParams } from 'react-router-dom'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-import "react-datepicker/dist/react-datepicker.css"
+import 'react-datepicker/dist/react-datepicker.css'
 import { useSocket } from '../../contexts/SocketProvider'
 import AddProjectMember from '../AddProjectMember'
 import UserContext from '../../contexts/UserContext'
@@ -41,12 +41,12 @@ export default function EditProject(props) {
 
        
         console.log('handle', isFinished);
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/projects/${projectId}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 name,
@@ -55,7 +55,7 @@ export default function EditProject(props) {
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             updateProjectSocket()
             props.hideForm()
@@ -64,16 +64,16 @@ export default function EditProject(props) {
     }
 
     async function deleteProject() {
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/projects/${props.project._id}`, {
-            method: "DELETE",
+            method: 'DELETE',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             }
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             props.hideForm()
             const obj = {
@@ -104,8 +104,8 @@ export default function EditProject(props) {
                         className={styles['input-pr-name']}
                         value={name}
                         onChange={e => setName(e.target.value)}
-                        label="Name"
-                        id="name"
+                        label='Name'
+                        id='name'
                     />
                 </div>
                 <div className={styles['input-container-descr']}>
@@ -114,10 +114,10 @@ export default function EditProject(props) {
                         className={styles['text-area-descr']}
                         value={description}
                         onChange={e => setDescription(e.target.value)}
-                        label="Description"
-                        id="description"
+                        label='Description'
+                        id='description'
                         placeholder='Project Description'
-                        spellCheck="false"
+                        spellCheck='false'
                     />
                 </div>
                 <div className={styles['edit-members']}>

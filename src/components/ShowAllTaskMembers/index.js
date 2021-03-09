@@ -8,7 +8,7 @@ import AvatarUser from '../AvatarUser'
 
 
 export default function ShowAllTaskMembers({ members, deleteMemberOption, deleteMemberObj }) {
-    const token = getCookie("x-auth-token")
+    const token = getCookie('x-auth-token')
     const history = useHistory()
     const socket = useSocket()
     const [confirmOpen, setConfirmOpen] = useState(false)
@@ -44,17 +44,17 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
         }
 
         const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 members: arr
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             const updatedCard = await response.json()
             deleteMemberObj.setCurrCard(updatedCard)

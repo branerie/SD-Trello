@@ -12,7 +12,7 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
     const [showEditTeamForm, setShowEditTeamForm] = useState(false)
     const [currTeam, setCurrTeam] = useState({})
     const history = useHistory()
-    const token = getCookie("x-auth-token")
+    const token = getCookie('x-auth-token')
     const socket = useSocket()
     const params = useParams()
     const userId = params.userid
@@ -20,10 +20,10 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
 
     async function acceptInvitation(message, accepted) {
         const response = await fetch(`/api/teams/invitations/${message.team.id}`, {
-            method: "POST",
+            method: 'POST',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 message,
@@ -31,7 +31,7 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
             const user = await response.json()
@@ -48,7 +48,7 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
         <div className={styles.message}>
             <div className={styles.container}>
                 <div className={styles.bold}>{message.subject}</div>
-                <div>{new Date(message.createdAt).toLocaleDateString("en-US", options)}</div>
+                <div>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</div>
             </div>
             <div>
                 <div className={`${styles.bold} ${styles.inline}`}>Team name:</div>

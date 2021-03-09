@@ -22,7 +22,7 @@ export default function TaskAssignment({ message, setInboxHistory, options, isIn
         <div className={styles.message}>
             <div className={styles.container}>
                 <div className={styles.bold}>{message.subject}</div>
-                <div>{new Date(message.createdAt).toLocaleDateString("en-US", options)}</div>
+                <div>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</div>
             </div>
             <div>
                 <div className={`${styles.inline} ${styles.margin}`}><span className={styles.bold}>Project:</span>{message.project.name}</div>

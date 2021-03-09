@@ -1,11 +1,11 @@
-<svg id="outline-brightness_low-24px" xmlns="http://www.w3.org/2000/svg" width="15.186" height="15.186" viewBox="0 0 15.186 15.186">
-  <g id="Bounding_Boxes">
-    <path id="Path_2840" data-name="Path 2840" d="M0,0H15.186V15.186H0Z" fill="none"/>
+<svg id='outline-brightness_low-24px' xmlns='http://www.w3.org/2000/svg' width='15.186' height='15.186' viewBox='0 0 15.186 15.186'>
+  <g id='Bounding_Boxes'>
+    <path id='Path_2840' data-name='Path 2840' d='M0,0H15.186V15.186H0Z' fill='none'/>
   </g>
-  <g id="Outline" transform="translate(0.437 0.437)">
-    <g id="Group_212" data-name="Group 212">
-      <path id="Path_2841" data-name="Path 2841" d="M12.908,5.752V2.784H9.941L7.846.69,5.752,2.784H2.784V5.752L.69,7.846,2.784,9.941v2.968H5.752L7.846,15l2.094-2.094h2.968V9.941L15,7.846ZM11.643,9.416v2.227H9.416L7.846,13.212,6.277,11.643H4.05V9.416L2.481,7.846,4.05,6.277V4.05H6.277L7.846,2.481,9.416,4.05h2.227V6.277l1.569,1.569Z" transform="translate(-0.69 -0.69)" fill="#363338"/>
-      <path id="Path_2842" data-name="Path 2842" d="M9.8,6a3.8,3.8,0,1,0,3.8,3.8A3.8,3.8,0,0,0,9.8,6Zm0,6.327A2.531,2.531,0,1,1,12.327,9.8,2.53,2.53,0,0,1,9.8,12.327Z" transform="translate(-2.64 -2.64)" fill="#363338"/>
+  <g id='Outline' transform='translate(0.437 0.437)'>
+    <g id='Group_212' data-name='Group 212'>
+      <path id='Path_2841' data-name='Path 2841' d='M12.908,5.752V2.784H9.941L7.846.69,5.752,2.784H2.784V5.752L.69,7.846,2.784,9.941v2.968H5.752L7.846,15l2.094-2.094h2.968V9.941L15,7.846ZM11.643,9.416v2.227H9.416L7.846,13.212,6.277,11.643H4.05V9.416L2.481,7.846,4.05,6.277V4.05H6.277L7.846,2.481,9.416,4.05h2.227V6.277l1.569,1.569Z' transform='translate(-0.69 -0.69)' fill='#363338'/>
+      <path id='Path_2842' data-name='Path 2842' d='M9.8,6a3.8,3.8,0,1,0,3.8,3.8A3.8,3.8,0,0,0,9.8,6Zm0,6.327A2.531,2.531,0,1,1,12.327,9.8,2.53,2.53,0,0,1,9.8,12.327Z' transform='translate(-2.64 -2.64)' fill='#363338'/>
     </g>
   </g>
 </svg>

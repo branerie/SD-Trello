@@ -16,7 +16,7 @@ const AttachmentsLink = ({ card, project, teamId }) => {
         <ButtonClean
             className={`${styles.attachments} ${styles.button}`}
             onClick={() => setIsVisible(true)}
-            title={<img src={attPic} alt="" width='14px' />}
+            title={<img src={attPic} alt='' width='14px' />}
         />
         { isVisible &&
             <Transparent hideForm={() => setIsVisible(false)} >

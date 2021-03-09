@@ -1,16 +1,16 @@
-import React, { useState, useContext, useEffect } from "react"
+import React, { useState, useContext, useEffect } from 'react'
 import styles from './index.module.css'
-import PageLayout from "../../components/PageLayout"
+import PageLayout from '../../components/PageLayout'
 import Project from '../../components/Project'
-import Transparent from "../../components/Transparent"
+import Transparent from '../../components/Transparent'
 import CreateProject from '../../components/CreateProject'
-import { useParams } from "react-router-dom"
-import EditTeam from "../../components/EditTeam"
-import TeamMembers from "../../components/TeamMembers"
+import { useParams } from 'react-router-dom'
+import EditTeam from '../../components/EditTeam'
+import TeamMembers from '../../components/TeamMembers'
 import pic1 from '../../images/team-page/pic1.svg'
-import UserContext from "../../contexts/UserContext"
-import ButtonGrey from "../../components/ButtonGrey"
-import useUpdateUserLastTeam from "../../utils/useUpdateUserLastTeam"
+import UserContext from '../../contexts/UserContext'
+import ButtonGrey from '../../components/ButtonGrey'
+import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
 
 const TeamPage = () => {
     const [isVisible, setIsVisible] = useState(false)
@@ -33,6 +33,7 @@ const TeamPage = () => {
             }
         })
     }, [userContext, params])
+
     
     useUpdateUserLastTeam(params.teamid)
 
@@ -52,7 +53,7 @@ const TeamPage = () => {
                     </Transparent>
                 }
                 <div className={styles.pic1}>
-                    <img className={styles.picture} src={pic1} alt="" />
+                    <img className={styles.picture} src={pic1} alt='' />
                 </div>
 
 

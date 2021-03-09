@@ -23,7 +23,7 @@ export default function TeamInvitationResponse({ message, setInboxHistory, optio
                     <div className={styles.bold}>{message.subject}:</div>
                     <span>{message.sendFrom.username}{message.accepted ? <span> accepted</span> : <span> declined</span>}</span>
                 </div>
-                <div>{new Date(message.createdAt).toLocaleDateString("en-US", options)}</div>
+                <div>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</div>
             </div>
             <div>
                 <div className={`${styles.bold} ${styles.inline}`}>Team name:</div>

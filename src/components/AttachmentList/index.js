@@ -11,7 +11,7 @@ import ConfirmDialog from '../ConfirmationDialog'
 export default function AttachmentList({ attachments, listRef, card, project, teamId, setCurrCard }) {
     const socket = useSocket()
     const history = useHistory()
-    const token = getCookie("x-auth-token")
+    const token = getCookie('x-auth-token')
     const [attachmentsArr, setAttachmentsArr] = useState([])
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [currElement, setCurrElement] = useState('')
@@ -26,14 +26,14 @@ export default function AttachmentList({ attachments, listRef, card, project, te
 
     async function deteleAttachment(att) {
         const response = await fetch(`/api/projects/lists/cards/attachments/${card._id}/${att._id}`, {
-            method: "DELETE",
+            method: 'DELETE',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             }
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
             const updatedCard = await response.json()
@@ -61,8 +61,8 @@ export default function AttachmentList({ attachments, listRef, card, project, te
                 <div key={index} className={styles.attachment}>
                     <div className={styles.name}>{att.name}.{att.format}</div>
                     <div>
-                        <ButtonClean title={<img className={styles.button} src={download} alt="Download" />} onClick={() => window.open(getFullDocumentUrl(att), "_blank")} />
-                        <ButtonClean title={<img className={styles.button} src={remove} alt="Remove" />}
+                        <ButtonClean title={<img className={styles.button} src={download} alt='Download' />} onClick={() => window.open(getFullDocumentUrl(att), '_blank')} />
+                        <ButtonClean title={<img className={styles.button} src={remove} alt='Remove' />}
                          onClick={() => {
                             setConfirmOpen(true)                            
                             setCurrElement(att)

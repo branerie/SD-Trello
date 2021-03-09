@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react'
 import ButtonClean from '../ButtonClean'
 import pen from '../../images/pen.svg'
-import styles from "./index.module.css"
+import styles from './index.module.css'
 import Transparent from '../Transparent'
 import EditCard from '../EditCard'
 import getCookie from '../../utils/cookie'
@@ -51,12 +51,12 @@ export default function MyTasksTask({ teamId, project, list, card }) {
             'date': today
         })
 
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/projects/lists/cards/${list._id}/${card._id}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({
                 progress: progress,
@@ -64,7 +64,7 @@ export default function MyTasksTask({ teamId, project, list, card }) {
             })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
             return
         } else {
             socket.emit('project-update', project)
@@ -97,7 +97,7 @@ export default function MyTasksTask({ teamId, project, list, card }) {
                     ref={inputRef}
                     type={'text'}
                     className={`${styles.input} ${!isInputOk && styles['bad-input']} ${!isInputActive && styles['no-border']}`}
-                    autoComplete="off"
+                    autoComplete='off'
                     value={progress}
                     onFocus={onFocus}
                     onBlur={onBlur}
@@ -117,7 +117,7 @@ export default function MyTasksTask({ teamId, project, list, card }) {
                 <ButtonClean
                     className={styles.button}
                     onClick={() => setShowEditCard(true)}
-                    title={<img src={pen} alt="" width="14" />}
+                    title={<img src={pen} alt='' width='14' />}
                 />
             </div>
             { showEditCard && <div className={styles.edit}>

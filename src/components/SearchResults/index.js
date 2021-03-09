@@ -1,8 +1,8 @@
 import React, { useContext } from 'react'
-import styles from "./index.module.css"
-import UserContext from "../../contexts/UserContext"
+import styles from './index.module.css'
+import UserContext from '../../contexts/UserContext'
 import { useHistory } from 'react-router-dom'
-import TeamContext from "../../contexts/TeamContext"
+import TeamContext from '../../contexts/TeamContext'
 
 
 export default function SearchResults(props) {

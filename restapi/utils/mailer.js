@@ -1,6 +1,6 @@
 const nodemailer = require('nodemailer')
 
-const from = '"Smart Manager" <info@smart-manager.com>'
+const from = 'Smart Manager <info@smart-manager.com>'
 
 function setup() {
     return nodemailer.createTransport({

@@ -1,10 +1,10 @@
-<svg xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink" width="809.936" height="656.067" viewBox="0 0 809.936 656.067">
+<svg xmlns='http://www.w3.org/2000/svg' xmlns:xlink='http://www.w3.org/1999/xlink' width='809.936' height='656.067' viewBox='0 0 809.936 656.067'>
   <defs>
-    <clipPath id="clip-path">
-      <rect y="59" width="809.936" height="656.067" fill="none"/>
+    <clipPath id='clip-path'>
+      <rect y='59' width='809.936' height='656.067' fill='none'/>
     </clipPath>
   </defs>
-  <g id="Scroll_Group_1" data-name="Scroll Group 1" transform="translate(0 -59)" clip-path="url(#clip-path)" style="isolation: isolate">
-    <path id="Path_67" data-name="Path 67" d="M6562-572s134,28,158,116-44,164,30,232c54,64,122,50,172,130s68-8,166,114c60,48,207.449,72.745,258,76,49.923,3.215,57.078-140.044,96-162,78-44,0-506,0-506l-854-46Z" transform="translate(-6561.228 618.516)" fill="#363338" stroke="#707070" stroke-width="1"/>
+  <g id='Scroll_Group_1' data-name='Scroll Group 1' transform='translate(0 -59)' clip-path='url(#clip-path)' style='isolation: isolate'>
+    <path id='Path_67' data-name='Path 67' d='M6562-572s134,28,158,116-44,164,30,232c54,64,122,50,172,130s68-8,166,114c60,48,207.449,72.745,258,76,49.923,3.215,57.078-140.044,96-162,78-44,0-506,0-506l-854-46Z' transform='translate(-6561.228 618.516)' fill='#363338' stroke='#707070' stroke-width='1'/>
   </g>
 </svg>

@@ -1,21 +1,21 @@
-import React, { useState, useContext } from "react"
+import React, { useState, useContext } from 'react'
 import GoogleLogin from 'react-google-login'
-import { useHistory } from "react-router-dom"
-import styles from "./index.module.css"
-import authenticate from "../../utils/authenticate"
-import UserContext from "../../contexts/UserContext"
-import responseGoogle from "../../utils/responseGoogle"
-import Transparent from "../Transparent"
-import AddPassword from "../FormAddPassword"
+import { useHistory } from 'react-router-dom'
+import styles from './index.module.css'
+import authenticate from '../../utils/authenticate'
+import UserContext from '../../contexts/UserContext'
+import responseGoogle from '../../utils/responseGoogle'
+import Transparent from '../Transparent'
+import AddPassword from '../FormAddPassword'
 import logo from '../../images/logo.svg'
 import google from '../../images/welcome-page/google.svg'
-import Alert from "../Alert"
+import Alert from '../Alert'
 
 
 
 const LoginForm = (props) => {
-    const [password, setPassword] = useState("")
-    const [email, setEmail] = useState("")
+    const [password, setPassword] = useState('')
+    const [email, setEmail] = useState('')
     const [showForm, setShowForm] = useState(false)
     const [userId, setUserId] = useState('')
     const context = useContext(UserContext)
@@ -39,12 +39,12 @@ const LoginForm = (props) => {
             return
         }
 
-        await authenticate("/api/user/login", 'POST', {
+        await authenticate('/api/user/login', 'POST', {
             email,
             password
         }, (user) => {
             context.logIn(user)
-            history.push("/")
+            history.push('/')
         }, (response) => {
             if (response.needPassword) {
                 setUserId(response.userId)
@@ -56,16 +56,16 @@ const LoginForm = (props) => {
             if (response.wrongUser) {
                 setWrongUserAllert(true)
             }
-            console.log("Error", response)
+            console.log('Error', response)
         })
     }
 
     const handleGoogle = (googleResponse) => {
         responseGoogle(googleResponse, (user) => {
             context.logIn(user)
-            history.push("/")
+            history.push('/')
         }, (response) => {
-            console.log("Error", response)
+            console.log('Error', response)
         })
     }
 
@@ -90,7 +90,7 @@ const LoginForm = (props) => {
                 <div className={styles['inner-container']}>
 
                     <div className={styles.logo}>
-                        <img src={logo} alt="logo" width='110' height='100' />
+                        <img src={logo} alt='logo' width='110' height='100' />
                     </div>
 
                     <div className={styles['right-side']}>
@@ -110,8 +110,8 @@ const LoginForm = (props) => {
                                 placeholder='John@example.com'
                                 value={email}
                                 onChange={e => setEmail(e.target.value)}
-                                label="Email"
-                                id="email"
+                                label='Email'
+                                id='email'
                             />
                         </div>
 
@@ -120,11 +120,11 @@ const LoginForm = (props) => {
                             <input
                                 className={styles['pass-input']}
                                 placeholder='********'
-                                type="password"
+                                type='password'
                                 value={password}
                                 onChange={e => setPassword(e.target.value)}
-                                label="Password"
-                                id="password"
+                                label='Password'
+                                id='password'
                             />
                         </div>
 
@@ -156,11 +156,11 @@ const LoginForm = (props) => {
                                     <button onClick={renderProps.onClick}
                                         className={styles['google-login-btn']}
                                     >
-                                        <img src={google} alt="logo" width='25' height='25' />
+                                        <img src={google} alt='logo' width='25' height='25' />
                                     Log In with Google</button>
                                 )}
                                 clientId='737157840044-8cdut4c3o2lrn6q2jn37uh65ate0g7pr.apps.googleusercontent.com'
-                                buttonText="Login"
+                                buttonText='Login'
                                 onSuccess={handleGoogle}
                                 // onFailure={errorGoogle}
                                 cookiePolicy={'single_host_origin'}

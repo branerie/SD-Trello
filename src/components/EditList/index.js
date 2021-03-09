@@ -1,9 +1,9 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
-import { useHistory, useParams } from "react-router-dom"
+import { useHistory, useParams } from 'react-router-dom'
 import Title from '../Title'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
-import "react-datepicker/dist/react-datepicker.css"
+import 'react-datepicker/dist/react-datepicker.css'
 import { useSocket } from '../../contexts/SocketProvider'
 import ButtonClean from '../ButtonClean'
 import { SketchPicker } from 'react-color'
@@ -36,17 +36,17 @@ export default function EditList(props) {
     }, [members, userContext.user.id])
 
     async function handleSubmit() {
-        const token = getCookie("x-auth-token")
+        const token = getCookie('x-auth-token')
         const response = await fetch(`/api/projects/lists/${projectId}/${listId}`, {
-            method: "PUT",
+            method: 'PUT',
             headers: {
-                "Content-Type": "application/json",
-                "Authorization": token
+                'Content-Type': 'application/json',
+                'Authorization': token
             },
             body: JSON.stringify({ name, color })
         })
         if (!response.ok) {
-            history.push("/error")
+            history.push('/error')
         } else {
             socket.emit('project-update', props.project)
             socket.emit('task-team-update', teamId)
@@ -75,7 +75,7 @@ export default function EditList(props) {
 
     return (
         <div className={styles.container} >
-            <Title title="Edit List" />
+            <Title title='Edit List' />
             <div className={styles['input-container']}>
                 <span className={styles.name}> Name</span>
                 <textarea
@@ -104,7 +104,7 @@ export default function EditList(props) {
             </div>}
             <div className={styles['edit-list-button']}>
                 {isAdmin &&
-                    <ButtonGrey onClick={handleSubmit} title="Edit List" />
+                    <ButtonGrey onClick={handleSubmit} title='Edit List' />
 
                 }
 

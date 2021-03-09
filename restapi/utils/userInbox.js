@@ -1,4 +1,4 @@
-const models = require("../models")
+const models = require('../models')
 
 async function userInbox(userId) {
     const user = await models.User.findOne({ _id: userId })
