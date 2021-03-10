@@ -6,7 +6,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import useCardsServices from '../../services/useCardsServices'
 
-export default function TaskProgress({ card, listId, project, teamId, taskHistory, setTaskHistory, setCurrCard }) {
+export default function TaskProgress({ card, listId, project, teamId, taskHistory, setTaskHistory }) {
     const socket = useSocket()
     const ref = useRef(null)
     const [progress, setProgress] = useState(null)
@@ -43,10 +43,8 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
         setTaskHistory(history)
 
         const editedFields = { progress, history }
-        const updatedCard = await editTask(listId, card._id, editedFields)
+        await editTask(listId, card._id, editedFields)
 
-        if (setCurrCard) setCurrCard(updatedCard)
-        
         socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
 
@@ -100,7 +98,7 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
                         max='100'
                         className={`${styles['progress-input']} ${!isInputOk && styles['bad-input']}`}
                         value={progress}
-                        onKeyDown={e => onEscPressed(e)}
+                        onKeyDown={onEscPressed}
                         onKeyUp={onKeyUp}
                         onChange={e => setProgress(e.target.value)}
                         onBlur={changeProgress}

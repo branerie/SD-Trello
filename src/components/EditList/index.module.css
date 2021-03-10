@@ -77,6 +77,7 @@
     margin-left: 2%;
     margin-top: 0.2rem;
     border: solid 1px #363338;
+    cursor: pointer;
 }
 
 .edit-list-button{

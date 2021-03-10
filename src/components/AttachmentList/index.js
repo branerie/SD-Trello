@@ -7,7 +7,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import ConfirmDialog from '../ConfirmationDialog'
 import useCardsServices from '../../services/useCardsServices'
 
-export default function AttachmentList({ attachments, listRef, card, project, teamId, setCurrCard }) {
+export default function AttachmentList({ attachments, listRef, card, project, teamId }) {
     const socket = useSocket()
     const [attachmentsArr, setAttachmentsArr] = useState([])
     const [confirmOpen, setConfirmOpen] = useState(false)
@@ -24,8 +24,6 @@ export default function AttachmentList({ attachments, listRef, card, project, te
 
     async function handleDeteleAttachment(att) {
         const updatedCard = await removeAttachment(card._id, att._id)
-
-        if (setCurrCard) setCurrCard(updatedCard)
 
         setAttachmentsArr(updatedCard.attachments)
         socket.emit('project-update', project)

@@ -2,7 +2,6 @@ import React, { useCallback, useContext, useEffect, useState, useRef } from 'rea
 import { useParams, useHistory } from 'react-router-dom'
 import List from '../../components/List'
 import PageLayout from '../../components/PageLayout'
-import Transparent from '../../components/Transparent'
 import { useSocket } from '../../contexts/SocketProvider'
 import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
@@ -12,29 +11,22 @@ import ProjectContext from '../../contexts/ProjectContext'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Loader from 'react-loader-spinner'
 import ButtonClean from '../../components/ButtonClean'
-import EditCard from '../../components/EditCard'
 import UserContext from '../../contexts/UserContext'
-import EditList from '../../components/EditList'
 import userObject from '../../utils/userObject'
 import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
 import useListsServices from '../../services/useListsServices'
-import { ProjectBoardProvider } from '../../contexts/ProjectBoardProvider'
-
 
 export default function ProjectBoard() {
     const params = useParams()
     const history = useHistory()
-    const [isVisibleEditList, setIsVisibleEditList] = useState(false)
     const [listName, setListName] = useState('')
     const listRef = useRef(null);
     const [isActive, setIsActive] = useDetectOutsideClick(listRef)
     const socket = useSocket()
     const projectContext = useContext(ProjectContext)
-    const [isVisible, setIsVisible] = useState(false)
-    const [currCard, setCurrCard] = useState('')
-    const [currList, setCurrList] = useState('')
     const [isAdmin, setIsAdmin] = useState(false)
     const [dndActive, setDndActive] = useState(false)
+    const [isDragListDisabled, setIsDragListDisabled] = useState(false)
     const context = useContext(UserContext)
     const teamId = params.teamid
     const token = getCookie('x-auth-token')
@@ -79,7 +71,6 @@ export default function ProjectBoard() {
 
     }, [projectContext.project, params.projectid, projectContext, context.user.id, dndActive])
 
-
     const updateUserRecentProjects = useCallback(async () => {
         const userId = context.user.id
         let updatedUser = { ...context.user }
@@ -120,7 +111,6 @@ export default function ProjectBoard() {
         }
     }, [params.projectid, projectContext.project, updateUserRecentProjects])
 
-
     if (!projectContext.project || projectContext.project._id !== params.projectid) {
         return (
             <PageLayout>
@@ -134,7 +124,6 @@ export default function ProjectBoard() {
             </PageLayout>
         )
     }
-
 
     async function handleOnDragEnd(result) {
         if (!result.destination) return
@@ -197,84 +186,65 @@ export default function ProjectBoard() {
         socket.emit('project-update', projectContext.project)
     }
 
-
-
     return (
         <PageLayout>
-            <ProjectBoardProvider>
-                <div style={{ position: 'absolute' }}>
-                    {isVisible &&
-                        <Transparent hideForm={() => setIsVisible(!isVisible)} >
-                            <EditCard
-                                hideForm={() => setIsVisible(!isVisible)}
-                                initialCard={currCard}
-                                listId={currList}
-                                project={projectContext.project}
-                                teamId={teamId}
-                                setCurrCard={setCurrCard}
-                            />
-                        </Transparent >
-                    }
-                    {isVisibleEditList &&
-                        <Transparent hideForm={() => setIsVisibleEditList(!isVisibleEditList)} >
-                            <EditList hideForm={() => setIsVisibleEditList(!isVisibleEditList)} list={currList} project={projectContext.project} />
-                        </Transparent >
-                    }
-                    <DragDropContext onDragEnd={handleOnDragEnd}>
-                        <Droppable droppableId='droppable' direction='horizontal' type='droppableItem'>
-                            {(provided) => (
-                                <div className={styles['container-droppable']} ref={provided.innerRef} >
-                                    {projectContext.lists
-                                        .filter(element => !(projectContext.hiddenLists.includes(element._id)))
-                                        .map((element, index) => {
-                                            return (
-                                                <Draggable key={element._id} draggableId={element._id} index={index}>
-                                                    {(provided) => (
-                                                        <div className={styles.droppable} {...provided.dragHandleProps} {...provided.draggableProps} ref={provided.innerRef} >
-                                                            <List
-                                                                list={element}
-                                                                project={projectContext.project}
-                                                                isAdmin={isAdmin}
-                                                                showEditList={() => {
-                                                                    setCurrList(element)
-                                                                    setIsVisibleEditList(!isVisibleEditList)
-                                                                }}
-                                                                showCurrentCard={() => {
-                                                                    setCurrList(element._id)
-                                                                    setIsVisible(!isVisible)
-                                                                }}
-                                                                setCurrCard={setCurrCard}
-                                                            />
-                                                        </div>
-                                                    )}
-                                                </Draggable>
-                                            )
-                                        })
-                                    }
-                                    {provided.placeholder}
-                                    {isAdmin &&
-                                        <div className={styles.list} >
-                                            {isActive ?
-                                                <form ref={listRef} className={styles.container} >
-                                                    <input
-                                                        autoFocus
-                                                        className={styles.input}
-                                                        type={'text'}
-                                                        value={listName}
-                                                        onChange={e => setListName(e.target.value)}
-                                                    />
-                                                    <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
-                                                </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
-                                            }
-                                        </div>
-                                    }
-                                </div>
-                            )}
-                        </Droppable>
-                    </DragDropContext>
-                    <img className={styles.pic} src={pic} alt='' width='340' />
-                </div>
-            </ProjectBoardProvider>
+            <div style={{ position: 'absolute' }}>
+                <DragDropContext onDragEnd={handleOnDragEnd}>
+                    <Droppable droppableId='droppable' direction='horizontal' type='droppableItem'>
+                        {(provided) => (
+                            <div className={styles['container-droppable']} ref={provided.innerRef} >
+                                {projectContext.lists
+                                    .filter(element => !(projectContext.hiddenLists.includes(element._id)))
+                                    .map((element, index) => {
+                                        return (
+                                            <Draggable
+                                                key={element._id}
+                                                draggableId={element._id}
+                                                index={index}
+                                                isDragDisabled={isDragListDisabled ? true : false}
+                                            >
+                                                {(provided) => (
+                                                    <div
+                                                        className={styles.droppable}
+                                                        {...provided.dragHandleProps}
+                                                        {...provided.draggableProps}
+                                                        ref={provided.innerRef}
+                                                    >
+                                                        <List
+                                                            list={element}
+                                                            project={projectContext.project}
+                                                            isAdmin={isAdmin}
+                                                            setIsDragListDisabled={setIsDragListDisabled}
+                                                        />
+                                                    </div>
+                                                )}
+                                            </Draggable>
+                                        )
+                                    })
+                                }
+                                {provided.placeholder}
+                                {isAdmin &&
+                                    <div className={styles.list} >
+                                        {isActive ?
+                                            <form ref={listRef} className={styles.container} >
+                                                <input
+                                                    autoFocus
+                                                    className={styles.input}
+                                                    type={'text'}
+                                                    value={listName}
+                                                    onChange={e => setListName(e.target.value)}
+                                                />
+                                                <ButtonClean type='submit' className={styles.addlist} onClick={addList} title='+ Add List' />
+                                            </form> : <ButtonClean className={styles.addlist} onClick={() => setIsActive(!isActive)} title='+ Add List' />
+                                        }
+                                    </div>
+                                }
+                            </div>
+                        )}
+                    </Droppable>
+                </DragDropContext>
+                <img className={styles.pic} src={pic} alt='' width='340' />
+            </div>
         </PageLayout>
     )
 }
