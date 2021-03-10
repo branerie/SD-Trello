@@ -82,7 +82,6 @@ export default function useUserServices() {
         }
 
         const response = await promise.json()
-        console.log('response', response);
         if (response.user.username) {
             const user = userObject(response)
             return user
@@ -172,22 +171,8 @@ export default function useUserServices() {
         if (response.user.username && authToken) {
             const user = userObject(response)
             return user
-        } else {
-            return response
         }
-
-
-        // if (!promise.ok) {
-        //     history.push('/error')
-        //     return
-        // }
-
-        // const response = await promise.json()
-        // if (response.user.username) {
-        //     const user = userObject(response)
-        //     console.log(user);
-        //     return user
-        // }
+        return response
     }
 
     const moveMessageToHistory = async (message) => {
@@ -218,6 +203,61 @@ export default function useUserServices() {
         return await response.json()
     }
 
+    const confirmToken = async (token) => {
+
+        const promise = await fetch(`${USER_URL}/confirmation`, {
+            method: 'POST',
+            body: JSON.stringify({
+                token
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        const authToken = promise.headers.get('Authorization')
+        const response = await promise.json()
+
+
+        console.log(response);
+        document.cookie = `x-auth-token=${authToken};path=/`
+
+        if (response.user.username && authToken) {
+            const user = userObject(response)
+            return user
+        }
+    }
+
+    const registerUser = async (email, username, password) => {
+
+        const promise = await fetch(`${USER_URL}/register`, {
+            method: 'POST',
+            body: JSON.stringify({
+                email,
+                username,
+                password
+            }),
+            headers: {
+                'Content-Type': 'application/json'
+            }
+        })
+
+        const authToken = promise.headers.get('Authorization')
+        const response = await promise.json()
+
+        if (response.exist) {
+            return response
+        }
+
+        document.cookie = `x-auth-token=${authToken};path=/`
+
+
+        if (response.user.username && authToken) {
+            const user = userObject(response)
+            return user
+        }
+        return response
+    }
 
 
 
@@ -230,7 +270,9 @@ export default function useUserServices() {
         addNewPassword,
         userLogin,
         moveMessageToHistory,
-        deleteUserMessage
+        deleteUserMessage,
+        confirmToken,
+        registerUser
     }
 
 }

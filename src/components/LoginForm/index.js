@@ -2,7 +2,6 @@ import React, { useState, useContext } from 'react'
 import GoogleLogin from 'react-google-login'
 import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
-import authenticate from '../../utils/authenticate'
 import UserContext from '../../contexts/UserContext'
 import responseGoogle from '../../utils/responseGoogle'
 import Transparent from '../Transparent'
@@ -41,14 +40,7 @@ const LoginForm = (props) => {
             return
         }
 
-        // await authenticate('/api/user/login', 'POST', {
-        //     email,
-        //     password
-        // }, (user) => {
-        //     context.logIn(user)
-        //     history.push('/')
-        // }, 
-        // (response) => {
+      
         const response = await userLogin(email, password)
         if (response.needPassword) {
             setUserId(response.userId)
@@ -90,7 +82,6 @@ const LoginForm = (props) => {
                 </Transparent>
             }
             <form className={styles.container} onSubmit={handleSubmit}>
-
 
                 <div className={styles['inner-container']}>
 

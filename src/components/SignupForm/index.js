@@ -1,13 +1,13 @@
 import React, { useContext, useState } from 'react'
 import GoogleLogin from 'react-google-login'
 import styles from './index.module.css'
-import authenticate from '../../utils/authenticate'
 import UserContext from '../../contexts/UserContext'
 import { useHistory } from 'react-router-dom'
 import Alert from '../Alert'
 import responseGoogle from '../../utils/responseGoogle'
 import logo from '../../images/logo.svg'
 import google from '../../images/welcome-page/google.svg'
+import useUserServices from '../../services/useUserServices'
 
 
 
@@ -20,8 +20,9 @@ const SignupForm = (props) => {
     const [fillAlert, setFillAlert] = useState(false)
     const [userExist, setUserExist] = useState(false)
     const [validEmailAlert, setValidEmailAlert] = useState(false)
-    const context = useContext(UserContext)
+    const { logIn } = useContext(UserContext)
     const history = useHistory()
+    const { registerUser } = useUserServices()
 
 
     function validateEmail(email) {
@@ -29,11 +30,8 @@ const SignupForm = (props) => {
         return re.test(email);
     }
 
-
     const handleSubmit = async (event) => {
         event.preventDefault()
-
-
 
         setValidEmailAlert(false)
         setAlert(false)
@@ -41,7 +39,7 @@ const SignupForm = (props) => {
         setUserExist(false)
 
         const valid = validateEmail(email)
-        
+
         if (!valid) {
             setValidEmailAlert(true)
             return
@@ -52,32 +50,28 @@ const SignupForm = (props) => {
             return
         }
 
-
         if (!username || !password || !rePassword || !email) {
             setFillAlert(true)
             return
         }
 
-        await authenticate('/api/user/register', 'POST', {
-            email,
-            username,
-            password
-        }, (user) => {
-            context.logIn(user);
-            history.push('/');
-        }, (response) => {
-            if (response.exist) {
-                setUserExist(true)
-            }
-        })
+        const response = await registerUser(email, username, password)
+
+        if (response.exist) {
+            setUserExist(true)
+            return
+        }
+
+        logIn(response)
+        history.push('/')
+        
     }
 
     const handleGoogle = (googleResponse) => {
         responseGoogle(googleResponse, (user) => {
-            context.logIn(user)
+            logIn(user)
             history.push('/')
         }, (response) => {
-
             console.log('Error', response)
         })
     }
