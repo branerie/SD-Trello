@@ -1,17 +1,15 @@
 import React, { useCallback, useRef, useState } from 'react'
-import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import commonStyles from '../index.module.css'
 import { useHistory, useParams } from 'react-router-dom'
-import { useSocket } from '../../contexts/SocketProvider'
-import pen from '../../images/pen.svg'
 import DatePicker from 'react-datepicker'
-import Transparent from '../Transparent'
-import EditCard from '../EditCard'
-
+import getCookie from '../../../utils/cookie'
+import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
+import { useSocket } from '../../../contexts/SocketProvider'
+import pen from '../../../images/pen.svg'
+import Transparent from '../../Transparent'
+import EditCard from '../../EditCard'
 
 export default function TaskDueDate(props) {
-
     const dropdownRef = useRef(null)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [cardDueDate, setCardDueDate] = useState(props.cardDueDate)
@@ -22,9 +20,7 @@ export default function TaskDueDate(props) {
     const params = useParams()
     const teamId = params.teamid
 
-
     const editCardDueDate = useCallback(async (date) => {
-
         let cardId = props.cardId
         let listId = props.listId
 
@@ -62,12 +58,12 @@ export default function TaskDueDate(props) {
     const value = props.value
 
     return (
-        <span className={styles.dueDateField}>
+        <span className={commonStyles.dueDateField}>
             <DatePicker
                 selected={value ? cardDueDate : today}
                 customInput={
                     value
-                    ?   <div className={styles.dueDateFieldInput}>
+                    ?   <div className={commonStyles.dueDateFieldInput}>
                             <span>{value}</span>
                         </div>
                     :   <span>Select date</span>
@@ -94,7 +90,7 @@ export default function TaskDueDate(props) {
                 :
                 <span>
                     <img 
-                        className={styles.pen} 
+                        className={commonStyles.pen} 
                         src={pen} 
                         alt='...' 
                         width='13' 

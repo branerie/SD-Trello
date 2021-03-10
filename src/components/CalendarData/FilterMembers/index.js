@@ -1,11 +1,12 @@
 import React, { useContext, useMemo, useRef } from 'react'
-import ProjectContext from '../../contexts/ProjectContext'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import ButtonClean from '../ButtonClean'
-import FilterWrapper from '../FilterWrapper'
 import styles from './index.module.css'
+import commonStyles from '../index.module.css'
+import ProjectContext from '../../../contexts/ProjectContext'
+import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
+import ButtonClean from '../../ButtonClean'
+import FilterWrapper from '../../FilterWrapper'
 
-const MembersFilter = ({ membersFilter, setMembersFilter, handleFilterClear, buttonStyle }) => {
+export default function MembersFilter({ membersFilter, setMembersFilter, handleFilterClear }) {
     const dropdownRef = useRef(null)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const { project } = useContext(ProjectContext)
@@ -16,6 +17,8 @@ const MembersFilter = ({ membersFilter, setMembersFilter, handleFilterClear, but
             displayValue: mr.memberId.username
         }))
     }, [project.membersRoles])
+
+    const buttonStyles = useMemo(() => `${commonStyles.filter} ${commonStyles['nav-buttons']}`, [])
 
     const handleOptionClick = (optionValue, optionDisplay) => {
         setMembersFilter(optionValue, optionDisplay)
@@ -28,7 +31,6 @@ const MembersFilter = ({ membersFilter, setMembersFilter, handleFilterClear, but
         setIsActive(false)
     }
 
-
     return (
         <FilterWrapper
             legendContent='Tasks assigned to:'
@@ -37,15 +39,17 @@ const MembersFilter = ({ membersFilter, setMembersFilter, handleFilterClear, but
             <div className={styles.container}>
                 <div className={styles['btn-container']}>
                     <ButtonClean
-                        className={isActive
-                            ? `${buttonStyle} ${membersFilter && styles['btn-partial']} ${styles['btn-clicked']}`
-                            : `${buttonStyle} ${membersFilter && styles['btn-partial']}`}
+                        className={
+                            `${buttonStyles} ${isActive && styles['btn-clicked']} ${membersFilter 
+                                                                                        ? styles['btn-partial']
+                                                                                        : styles['btn-whole']}`
+                        }
                         onClick={() => setIsActive(!isActive)}
                         title={(membersFilter && membersFilter.name) || 'Tasks Assigned To:'}
                     />
                     { membersFilter &&
                         <ButtonClean
-                            className={`${buttonStyle} ${styles['btn-clear']}`}
+                            className={`${buttonStyles} ${commonStyles['filter-clear']}`}
                             title='X'
                             onClick={handleClear}
                         />
@@ -77,5 +81,3 @@ const MembersFilter = ({ membersFilter, setMembersFilter, handleFilterClear, but
         </FilterWrapper>
     )
 }
-
-export default MembersFilter

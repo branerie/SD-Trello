@@ -1,14 +1,13 @@
 import React, { useCallback, useRef, useState } from 'react'
-import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import { useHistory, useParams } from 'react-router-dom'
-import { useSocket } from '../../contexts/SocketProvider'
-import AttachmentsLink from '../AttachmentsLink'
-import ResponsiveTextArea from '../ResponsiveTextarea'
+import commonStyles from '../index.module.css'
+import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
+import getCookie from '../../../utils/cookie'
+import { useSocket } from '../../../contexts/SocketProvider'
+import AttachmentsLink from '../../AttachmentsLink'
+import ResponsiveTextArea from '../../ResponsiveTextarea'
 
 export default function TaskName({ card, listId, project }) {
-
 	const inputRef = useRef(null)
 	const [isActive, setIsActive] = useDetectOutsideClick(inputRef)
 	const [cardName, setCardName] = useState(card.name)
@@ -49,18 +48,18 @@ export default function TaskName({ card, listId, project }) {
 	return (
 		<div>
 			{ isActive ?
-				< div ref={inputRef} className={styles.nameContainer}>
+				< div ref={inputRef} className={commonStyles.nameContainer}>
 					<ResponsiveTextArea
 						value={cardName}
 						setValue={setCardName}
-						className={styles.inputElementName}
+						className={commonStyles['input-name']}
 						onSubmit={editCardName}
 						toggleActive={() => setIsActive(!isActive)}
 					/>
 				</div>
 				:
 				<div> 
-					<span className={styles['attachments-container']}>
+					<span className={commonStyles['attachments-container']}>
 						{(card.attachments && card.attachments.length > 0 && !isActive) &&
 							<AttachmentsLink
 								card={card}
@@ -69,14 +68,12 @@ export default function TaskName({ card, listId, project }) {
 							/>
 						}
 					</span>
-					<div className={styles.tableText} onClick={() => setIsActive(!isActive)}>
+					<div className={commonStyles.tableText} onClick={() => setIsActive(!isActive)}>
 						{cardName}
 					</div>
 				</div>
 			}
 		</div>
 	)
-
-
 }
 

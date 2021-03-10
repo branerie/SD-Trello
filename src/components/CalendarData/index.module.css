@@ -1,264 +1,273 @@
 .columns {
-  width: 100%;
+	width: 100%;
 }
 
 .task {
-  background-color: blue;
+	background-color: blue;
 }
 
 .buttoDiv {
-  margin: 3%;
-  display: flex;
-  justify-content: space-between;
+	margin: 3%;
+	display: flex;
+	justify-content: space-between;
 }
 
 .listName {
-  background-color: rgb(201, 39, 39);
-  color: white;
+	background-color: rgb(201, 39, 39);
+	color: white;
 }
 
 .container {
-  height: 2em;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	height: 2em;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .nameContainer {
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .input {
-  border: 1px solid #000000;
-  background-color: #FFFFFF;
-  border-radius: 10px;
-  margin: 10px;
-  padding: 6px;
-  font-weight: normal;
-  flex-grow: 1;
+	border: 1px solid #000000;
+	background-color: #FFFFFF;
+	border-radius: 10px;
+	margin: 10px;
+	padding: 6px;
+	font-weight: normal;
+	flex-grow: 1;
 }
 
 .inputList {
-  border: 1px solid #000000;
-  background-color: #FFFFFF;
-  border-radius: 10px;
-  margin: 5px;
-  padding: 6px;
-  font-weight: normal;
-  flex-grow: 1;
+	border: 1px solid #000000;
+	background-color: #FFFFFF;
+	border-radius: 10px;
+	margin: 5px;
+	padding: 6px;
+	font-weight: normal;
+	flex-grow: 1;
 }
 
 .addlist {
-  font-size: 1rem;
-  margin: 10px;
-  border-radius: 5px;
-  color: white;
+	font-size: 1rem;
+	margin: 10px;
+	border-radius: 5px;
+	color: white;
 }
 
 .addlist:hover {
-  background-color: lemonchiffon;
+	background-color: lemonchiffon;
 }
 
 .dueDateField {
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
 }
 
 .dueDateFieldInput {
-  display: flex;
-  justify-content: space-between;
-  cursor: pointer;
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
 }
 
-.inputElementName {
-  border: 1px solid #000000;
-  background-color: #EDF5F9;
-  border-radius: 4px;
-  margin: 2px;
-  padding: 6px;
-  font-weight: normal;
-  font-family: 'Lato';
-  font-size: inherit;
-  min-height: 1rem;
-  flex-grow: 1;
+.input-name {
+	border: 1px solid #000000;
+	background-color: #EDF5F9;
+	border-radius: 4px;
+	margin: 2px;
+	padding: 6px;
+	font-weight: normal;
+	font-family: 'Lato';
+	font-size: inherit;
+	min-height: 1rem;
+	flex-grow: 1;
 }
 
-.inputElementName::-webkit-input-placeholder { /* Chrome/Opera/Safari */
-  font-family: 'Lato';
-  font-size: 0.8rem;
+.input-name::-webkit-input-placeholder {
+	/* Chrome/Opera/Safari */
+	font-family: 'Lato';
+	font-size: 0.8rem;
 }
-.inputElementName::-moz-placeholder { /* Firefox 19+ */
-  font-family: 'Lato';
-  font-size: 0.8rem;
+
+.input-name::-moz-placeholder {
+	/* Firefox 19+ */
+	font-family: 'Lato';
+	font-size: 0.8rem;
 }
-.inputElementName:-ms-input-placeholder { /* IE 10+ */
-  font-family: 'Lato';
-  font-size: 0.8rem;
+
+.input-name:-ms-input-placeholder {
+	/* IE 10+ */
+	font-family: 'Lato';
+	font-size: 0.8rem;
 }
-.inputElementName:-moz-placeholder { /* Firefox 18- */
-  font-family: 'Lato';
-  font-size: 0.8rem;
+
+.input-name:-moz-placeholder {
+	/* Firefox 18- */
+	font-family: 'Lato';
+	font-size: 0.8rem;
 }
 
 .clean {
-  font-size: 100%;
-  font-family: inherit;
-  border: 0;
-  background-color: inherit;
-  font-weight: inherit;
-  outline: none;
+	font-size: 100%;
+	font-family: inherit;
+	border: 0;
+	background-color: inherit;
+	font-weight: inherit;
+	outline: none;
 }
 
 .taskProgress {
-  display: flex;
-  align-items: flex-start;
-  justify-content: center;
+	display: flex;
+	align-items: flex-start;
+	justify-content: center;
 
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-  font-family: inherit;
-  border: none;
-  border-radius: 5px;
-  background-color: inherit;
-  font-weight: inherit;
-  outline: none;
+	cursor: pointer;
+	width: 100%;
+	height: 100%;
+	font-family: inherit;
+	border: none;
+	border-radius: 5px;
+	background-color: inherit;
+	font-weight: inherit;
+	outline: none;
 }
 
 .taskProgressButton {
-  cursor: pointer;
-  width: 100%;
-  height: 100%;
-  font-size: 1rem;
-  padding: 2px;
-  font-family: inherit;
-  border: none;
-  border-radius: 5px;
-  background-color: inherit;
-  font-weight: inherit;
-  outline: none;
+	cursor: pointer;
+	width: 100%;
+	height: 100%;
+	font-size: 1rem;
+	padding: 2px;
+	font-family: inherit;
+	border: none;
+	border-radius: 5px;
+	background-color: inherit;
+	font-weight: inherit;
+	outline: none;
 }
 
 .taskProgressButtonInput {
-  cursor: pointer;
-  width: 100%;
-  /* height: 100%; */
-  min-height: 2rem;
-  font-size: 0.8rem;
-  padding: 5px;
-  font-family: inherit;
-  border: solid black 1px;
-  border-radius: 5px;
-  background-color: inherit;
-  font-weight: inherit;
-  outline: none;
+	cursor: pointer;
+	width: 100%;
+	/* height: 100%; */
+	min-height: 2rem;
+	font-size: 0.8rem;
+	padding: 5px;
+	font-family: inherit;
+	border: solid black 1px;
+	border-radius: 5px;
+	background-color: inherit;
+	font-weight: inherit;
+	outline: none;
 }
 
 .tableText {
-  cursor: pointer;
-  margin: 2%;
+	cursor: pointer;
+	margin: 2%;
 }
 
 .select {
-  height: 100%;
-  padding: 2%;
-  margin: 4%;
+	height: 100%;
+	padding: 2%;
+	margin: 4%;
 }
 
 .pen {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .membersDiv {
-  margin: 3%;
-  display: flex;
+	margin: 3%;
+	display: flex;
 }
 
 .membersContainer {
-  height: auto;
-  width: 100%;
-  display: flex;
-  align-items: center;
-  justify-content: space-between;
+	height: auto;
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
 }
 
 .daylyProgress {
-  width: 100%;
-  min-height: 2rem;
-  display: flex;
-  justify-content: center;
+	width: 100%;
+	min-height: 2rem;
+	display: flex;
+	justify-content: center;
 }
 
 .header {
-  font-weight: bold;
+	font-weight: bold;
 }
 
 .cursorPointer {
-  cursor: pointer;
+	cursor: pointer;
 }
 
 .filter {
-  background: #DFE9EE;
-  color: black;
-  padding: 10px;
-  /* width: 9.5rem; */
-  min-height: 2.6em;
-  max-height: 2.6em;
-  border-radius: 10px;
-  display: block;
-  margin: 0 auto;
-  margin: 10px;
-  cursor: pointer;
-  border: 1px solid #707070;
-  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-  text-align: center;
-  font-family: 'Lato';
-  font-size: 1rem;
-}
-
-.filter:hover {
-  background-color: #363338;
-  color: white;
-  border: 1px solid #707070;
-}
-
-.filters {
-  display: flex;
-  position: absolute;
-  height: 24rem;
-  z-index: 2;
-  top: 4.5rem;
-  padding: 1.5rem 2.25rem;
-  flex-direction: column;
-  align-items: center;
-  justify-content: space-between;
-  background-color: #EDF5F9;
-  border: 1px solid #707070;
-  border-radius: 1.5rem;
+	min-height: 2.6em;
+	max-height: 2.6em;
 }
 
 .filters-container {
-  display: flex;
-}
-
-.filters-clicked {
-  background-color: #363338;
-  color: white;
+	display: flex;
 }
 
 .list {
-  display: flex;
-  align-items: center;
+	display: flex;
+	align-items: center;
 }
 
 .attachments-container {
-  float: right;
-  height: 1.5rem;
-  display: flex;
-  align-items: flex-end;
+	float: right;
+	height: 1.5rem;
+	display: flex;
+	align-items: flex-end;
+}
+
+.nav-buttons {
+    display: block;
+    background: #DFE9EE;
+    color: black;
+    padding: 10px 15px;
+    border-radius: 10px;
+    margin: 0 auto;
+    margin: 10px;
+    border: 1px solid #707070;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+    font-family: 'Lato';
+    font-size: 1rem;
+    text-align: center;
+    cursor: pointer;
+}
+
+.nav-buttons:hover {
+    background-color: #363338;
+    border: 1px solid #707070;
+    color: white;
+}
+
+.filter-clear {
+    cursor: pointer;
+    margin-left: 0;
+    width: 1.5rem;
+    background-color: #3633384f;
+    border-top-left-radius: 0;
+    border-bottom-left-radius: 0;
+    display: flex;
+    justify-content: center;
+    padding: 10px;
+}
+
+@media (max-width: 1366px) {
+	.nav-buttons {
+		font-size: 0.8rem;
+		min-height: unset;
+		max-height: unset;
+	}
 }

@@ -17,15 +17,9 @@
     width: 7.5rem;
 }
 
-.filter-clear {
-    cursor: pointer;
-    margin-left: 0;
-    width: 1.5rem;
-    font-family: cursive;
-    background-color: #3633384f;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    display: flex;
-    justify-content: center;
-    padding: 7px 10px;
+@media (max-width: 1366px) {
+    .filter-used {
+        min-height: unset;
+        max-height: unset;
+    }
 }

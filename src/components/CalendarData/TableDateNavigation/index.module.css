@@ -1,0 +1,28 @@
+.container {
+    display: flex;
+    align-items: center;
+}
+
+.pic-container {
+    position: relative;
+    text-align: center;
+    color: black;
+    font-size: 14px;
+    min-width: 120px;
+    cursor: pointer;
+}
+
+.text-centered {
+    position: absolute;
+    top: 45%;
+    left: 50%;
+    transform: translate(-50%, -50%);
+    min-width: 80px;
+}
+
+@media (max-width: 1366px) {
+    .text-centered {
+        font-size: 0.8rem;
+    }
+}
+

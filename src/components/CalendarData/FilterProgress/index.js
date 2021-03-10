@@ -1,10 +1,11 @@
 import React, { useRef } from 'react'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import ButtonClean from '../ButtonClean'
-import ToggleSwitch from '../ToggleSwitch'
 import styles from './index.module.css'
+import commonStyles from '../index.module.css'
+import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
+import ButtonClean from '../../ButtonClean'
+import ToggleSwitch from '../../ToggleSwitch'
 
-const ProgressFilters = ({ buttonStyle, filters, toggleFilter }) => {
+export default function ProgressFilters({ filters, toggleFilter }) {
     const dropdownRef = useRef(null)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
 
@@ -12,7 +13,7 @@ const ProgressFilters = ({ buttonStyle, filters, toggleFilter }) => {
         <div className={styles.container}>
             <ButtonClean 
                 title='Filter By Progress:' 
-                className={`${buttonStyle} ${styles['btn-progress']}`}
+                className={`${commonStyles.filter} ${commonStyles['nav-buttons']} ${styles['btn-progress']}`}
                 onClick={() => setIsActive(!isActive)}
             />
             { isActive &&
@@ -40,5 +41,3 @@ const ProgressFilters = ({ buttonStyle, filters, toggleFilter }) => {
         </div>
     )
 }
-
-export default ProgressFilters
