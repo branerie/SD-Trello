@@ -8,7 +8,6 @@ import tasks from '../../images/aside/tasks.svg'
 import inbox from '../../images/aside/inbox.svg'
 import bell from '../../images/aside/inbox-bell.svg'
 import projectInfo from '../../images/aside/project-info.svg'
-// import settings from '../../images/aside/settings.svg'
 import ProjectContext from '../../contexts/ProjectContext'
 import ButtonHideList from '../ButtonHideList'
 import ButtonClean from '../ButtonClean'
@@ -66,24 +65,18 @@ export default function Aside({ asideOn, setAsideOn }) {
                 />
                 <LinkComponent
                     href={`/inbox/${userContext.user.id}`}
-                    title={<img src={inbox} alt='inbox' width='33' height='34' />}
+                    title={<>
+                        <img src={inbox} alt='inbox' width='33' height='34' />
+                        {userContext.user.inbox.length !== 0 &&
+                            <img className={styles.bell} src={bell} alt='inbox' width='33' height='34' />
+                        }
+                    </>}
                 />
                 {editProjectButtonVisibility &&
                     <ButtonClean
                         className={styles.settings}
                         onClick={() => setEditProjectVisibility(!editProjectVisibility)}
                         title={<img className={styles.options} src={projectInfo} alt='' width='40' />}
-                    />
-                }
-                {/* <LinkComponent
-                    href={`/profile/${userContext.user.id}`}
-                    title={<img src={settings} alt='settings' width='25' height='25' />}
-                /> */}
-                {userContext.user.inbox.length !== 0 &&
-                    <LinkComponent
-                        href={`/inbox/${userContext.user.id}`}
-                        title={<img src={bell} alt='inbox' width='33' height='34' />}
-                        className={styles.bell}
                     />
                 }
             </aside>
@@ -115,11 +108,6 @@ export default function Aside({ asideOn, setAsideOn }) {
                                 title={'Settings'}
                             />
                         }
-                        {/* <LinkComponent
-                            href={`/profile/${userContext.user.id}`}
-                            title='Settings'
-                            className={styles.link}
-                        /> */}
                     </div>
                     {listVisibility && <div className={styles['bottom-right']}>
                         {
