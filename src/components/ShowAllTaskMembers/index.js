@@ -1,18 +1,16 @@
 import React, { useState } from 'react'
-import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
-import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
 import ConfirmDialog from '../ConfirmationDialog'
 import AvatarUser from '../AvatarUser'
+import useCardsServices from '../../services/useCardsServices'
 
 
 export default function ShowAllTaskMembers({ members, deleteMemberOption, deleteMemberObj }) {
-    const token = getCookie('x-auth-token')
-    const history = useHistory()
     const socket = useSocket()
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [currElement, setCurrElement] = useState('')
+    const { editTask } = useCardsServices()
 
     function onClick(m) {
         if (deleteMemberOption) {
@@ -21,47 +19,28 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
         }
     }
 
-
     const updateSocket = () => {
-        const project = deleteMemberObj.project
-        const teamId = deleteMemberObj.teamId
+        const { project, teamId } = deleteMemberObj
 
         socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
     }
 
     const deleteMember = async (member) => {
-        const cardMembers = deleteMemberObj.cardMembers
-        const setCardMembers = deleteMemberObj.setCardMembers
-        const cardId = deleteMemberObj.cardId
-        const listId = deleteMemberObj.listId
+        const { cardMembers, setCardMembers, cardId, listId } = deleteMemberObj
 
-        var index = cardMembers.indexOf(member)
-        let arr = [...cardMembers]
+        const index = cardMembers.indexOf(member)
+        const members = [...cardMembers]
 
         if (index !== -1) {
-            arr.splice(index, 1)
+            members.splice(index, 1)
         }
 
-        const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                members: arr
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            const updatedCard = await response.json()
-            deleteMemberObj.setCurrCard(updatedCard)
-            updateSocket()
-            setCardMembers(arr)
-        }
-
+        const editedFields = { members }
+        const updatedCard = await editTask(listId, cardId, editedFields)
+        deleteMemberObj.setCurrCard(updatedCard)
+        updateSocket()
+        setCardMembers(members)
     }
 
     return (
@@ -98,9 +77,3 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
         </div>
     )
 }
-
-
-
-
-
-

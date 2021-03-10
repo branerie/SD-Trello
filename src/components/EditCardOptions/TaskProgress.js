@@ -2,14 +2,11 @@ import React, { useRef, useState, useMemo, useEffect } from 'react'
 import styles from './index.module.css'
 import pic2 from '../../images/edit-card/pic2.svg'
 import ProgressBar from '../ProgressBar'
-import getCookie from '../../utils/cookie'
-import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import useCardsServices from '../../services/useCardsServices'
 
 export default function TaskProgress({ card, listId, project, teamId, taskHistory, setTaskHistory, setCurrCard }) {
-    const token = getCookie('x-auth-token')
-    const history = useHistory()
     const socket = useSocket()
     const ref = useRef(null)
     const [progress, setProgress] = useState(null)
@@ -18,6 +15,7 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
     const [isInputActive, setIsInputActive] = useDetectOutsideClick(ref)
     const [isInputVisible, setIsInputVisible] = useState(false)
     const today = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), [])
+    const { editTask } = useCardsServices()
 
     useEffect(() => {
         setIsInputVisible(card.progress !== null)
@@ -37,32 +35,20 @@ export default function TaskProgress({ card, listId, project, teamId, taskHistor
             return
         }
 
-        let arr = [...taskHistory]
-        arr.push({
+        const history = [...taskHistory]
+        history.push({
             'event': `Progress ${progress}%`,
             'date': today
         })
-        setTaskHistory(arr)
+        setTaskHistory(history)
 
-        const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                progress,
-                history: arr
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            const updatedCard = await response.json()
-            if (setCurrCard) setCurrCard(updatedCard)
-            socket.emit('project-update', project)
-            socket.emit('task-team-update', teamId)
-        }
+        const editedFields = { progress, history }
+        const updatedCard = await editTask(listId, card._id, editedFields)
+
+        if (setCurrCard) setCurrCard(updatedCard)
+        
+        socket.emit('project-update', project)
+        socket.emit('task-team-update', teamId)
 
     }
 

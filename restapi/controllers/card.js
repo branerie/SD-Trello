@@ -8,6 +8,8 @@ router.post('/:id', auth, createCard)
 
 router.put('/attachments/:idcard', auth, addCardAttachments)
 
+router.put('/:id/:idcard/add-member', auth, addTaskMember)
+
 router.put('/:id/:idcard', auth, updateCard)
 
 router.delete('/attachments/:idcard/:idattachment', auth, deleteAttachment)
@@ -48,23 +50,36 @@ async function createCard(req, res, next) {
 }
 
 async function updateCard(req, res, next) {
-    const userId = req.user._id
     const id = req.params.idcard
-    const card = { name, description, members, dueDate, progress, history } = req.body
-    const { newMember, teamId, projectId, cardId, listId } = req.body
-
-    const obj = {}
-    for (let key in card) {
-        if (card[key]) {
-            obj[key] = card[key]
-        }
-    }
-
-    const session = await mongoose.startSession();
-    session.startTransaction();
+    const editedFields = req.body
 
     try {
-        await models.Card.updateOne({ _id: id }, { ...obj }).session(session)
+        await models.Card.updateOne({ _id: id }, { ...editedFields })
+
+        const updatedCard = await models.Card.findOne({ _id: id })
+            .populate({
+                path: 'members',
+                select: '-password'
+            })
+
+        res.send(updatedCard)
+
+    } catch (err) {
+        console.log(err)
+        res.send(err)
+    }
+}
+
+async function addTaskMember(req, res, next) {
+    const userId = req.user._id
+    const id = req.params.idcard
+    const { members, newMember, teamId, projectId, cardId, listId } = req.body
+
+    const session = await mongoose.startSession()
+    session.startTransaction()
+
+    try {
+        await models.Card.updateOne({ _id: id }, { members }).session(session)
 
         if (newMember) {
             const team = await models.Team.findOne({ _id: teamId })
@@ -89,21 +104,23 @@ async function updateCard(req, res, next) {
                 path: 'members',
                 select: '-password'
             })
+
         res.send(updatedCard)
 
     } catch (err) {
-        await session.abortTransaction();
-        session.endSession();
-        console.log(err);
-        res.send(err);
+        await session.abortTransaction()
+        session.endSession()
+        console.log(err)
+        res.send(err)
     }
 }
 
 async function deleteCard(req, res, next) {
     const idCard = req.params.idcard
     const idList = req.params.id
-    const session = await mongoose.startSession();
-    session.startTransaction();
+
+    const session = await mongoose.startSession()
+    session.startTransaction()
 
     try {
         const removedCardResult = await models.Card.deleteOne({ _id: idCard }).session(session)
@@ -112,15 +129,15 @@ async function deleteCard(req, res, next) {
 
         await models.List.updateOne({ _id: idList }, { $pull: { cards: idCard } }).session(session)
 
-        await session.commitTransaction();
+        await session.commitTransaction()
 
-        session.endSession();
+        session.endSession()
 
         res.send(removedCard)
     } catch (error) {
-        await session.abortTransaction();
-        session.endSession();
-        res.send(error);
+        await session.abortTransaction()
+        session.endSession()
+        res.send(error)
     }
 
 }
@@ -155,4 +172,4 @@ async function addCardAttachments(req, res, next) {
     res.send(updatedCard)
 }
 
-module.exports = router;
+module.exports = router

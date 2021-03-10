@@ -1,8 +1,7 @@
 import React, { useCallback, useRef, useState } from 'react'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
-import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Card from '../Card'
 import styles from './index.module.css'
@@ -12,6 +11,7 @@ import ListColor from '../ListColor'
 import ButtonGrey from '../ButtonGrey'
 import ConfirmDialog from '../ConfirmationDialog'
 import useListsServices from '../../services/useListsServices'
+import useCardsServices from '../../services/useCardsServices'
 
 
 export default function List({ isAdmin, project, list, showEditList, showCurrentCard, setCurrCard }) {
@@ -21,49 +21,29 @@ export default function List({ isAdmin, project, list, showEditList, showCurrent
     const [isEditListActive, setIsEditListActive] = useDetectOutsideClick(dropdownRef)
     const [cardName, setCardName] = useState('')
     const [confirmOpen, setConfirmOpen] = useState(false)
-    const history = useHistory()
     const socket = useSocket()
     const params = useParams()
     const teamId = params.teamid
     const { deleteList } = useListsServices()
-    
+    const { createTask } = useCardsServices()
+
     async function handleDeleteList() {
         await deleteList(project._id, list._id)
         socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
     }
-    
+
     const addCard = useCallback(async (event) => {
         event.preventDefault()
-        if (cardName === '') {
-            return
-        }
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/projects/lists/cards/${list._id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                name: cardName,
-                description: '',
-                dueDate: '',
-                progress: '',
-                members: []
-                
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-            return
-        } else {
-            setIsVisible(!isVisible)
-            setCardName('')
-            socket.emit('project-update', project)
-        }
 
-    }, [history, cardName, list._id, isVisible, setIsVisible, project , socket])
+        if (cardName === '') return
+
+        await createTask(list._id, cardName)
+        setIsVisible(!isVisible)
+        setCardName('')
+        socket.emit('project-update', project)
+
+    }, [createTask, cardName, list._id, isVisible, setIsVisible, project, socket])
 
     function editList() {
         showEditList()

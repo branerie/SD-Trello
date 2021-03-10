@@ -1,49 +1,34 @@
 import React, { useCallback, useRef, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
 import commonStyles from '../index.module.css'
 import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
-import getCookie from '../../../utils/cookie'
+import { useParams } from 'react-router-dom'
 import { useSocket } from '../../../contexts/SocketProvider'
 import AttachmentsLink from '../../AttachmentsLink'
 import ResponsiveTextArea from '../../ResponsiveTextarea'
+import useCardsServices from '../../../services/useCardsServices'
 
 export default function TaskName({ card, listId, project }) {
 	const inputRef = useRef(null)
 	const [isActive, setIsActive] = useDetectOutsideClick(inputRef)
 	const [cardName, setCardName] = useState(card.name)
-	const history = useHistory()
 	const socket = useSocket()
 	const params = useParams()
 	const teamId = params.teamid
+	const { editTask } = useCardsServices()
 
 	const editCardName = useCallback(async () => {
-		const cardId = card._id
-
 		if (cardName === '') {
 			return
 		}
 
-		const token = getCookie('x-auth-token')
-		const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
-			method: 'PUT',
-			headers: {
-				'Content-Type': 'application/json',
-				'Authorization': token
-			},
-			body: JSON.stringify({
-				name: cardName
-			})
-		})
-		if (!response.ok) {
-			history.push('/error')
-			return
-		} else {
-			setIsActive(!isActive)
-			socket.emit('project-update', project)
-			socket.emit('task-team-update', teamId)
-		}
+		const editedFields = { name: cardName }
+		await editTask(listId, card._id, editedFields)
 
-	}, [history, cardName, isActive, setIsActive, card._id, listId, project, socket, teamId])
+		setIsActive(!isActive)
+		socket.emit('project-update', project)
+		socket.emit('task-team-update', teamId)
+
+	}, [editTask, cardName, isActive, setIsActive, card._id, listId, project, socket, teamId])
 
 	return (
 		<div>
