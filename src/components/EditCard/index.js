@@ -158,7 +158,6 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                             <button
                                 className={styles['small-buttons']}
                                 onClick={() => setConfirmOpen(true)}
-                                title='Delete Task'
                             >
                                 <img className={styles.pics} src={pic12} alt='pic12' />
                                 Delete Task

@@ -38,7 +38,9 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
 
         const editedFields = { members }
         const updatedCard = await editTask(listId, cardId, editedFields)
-        deleteMemberObj.setCurrCard(updatedCard)
+
+        if (deleteMemberObj.setCurrCard) deleteMemberObj.setCurrCard(updatedCard)
+
         updateSocket()
         setCardMembers(members)
     }

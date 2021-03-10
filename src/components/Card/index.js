@@ -1,18 +1,14 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import styles from './index.module.css'
 import pen from '../../images/pen.svg'
 import ButtonClean from '../ButtonClean'
 import MembersList from '../MembersList'
 import ProgressBar from '../ProgressBar'
-import Transparent from '../Transparent'
-import AttachmentList from '../AttachmentList'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+
 import { useParams } from 'react-router-dom'
 import AttachmentsLink from '../AttachmentsLink'
 
 export default function Card({ card, project, showCurrentCard, setCurrCard }) {
-    const listRef = useRef(null)
-    const [isListVisible, setIsListVisible] = useDetectOutsideClick(listRef)
     const params = useParams()
     const teamId = params.teamid
 
@@ -45,15 +41,6 @@ export default function Card({ card, project, showCurrentCard, setCurrCard }) {
                 }}
                 title={<img src={pen} alt='' width='11.5' height='11.5' />}
             />
-            {isListVisible && <Transparent hideForm={() => setIsListVisible(false)} >
-                <AttachmentList
-                    listRef={listRef}
-                    attachments={card.attachments}
-                    card={card}
-                    project={project}
-                    teamId={teamId}
-                />
-            </Transparent >}
         </div >
     )
 }

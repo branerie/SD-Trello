@@ -35,7 +35,7 @@ export default function AttachmentList({ attachments, listRef, card, project, te
 
 
     return (
-        <>
+        <div ref={listRef}>
             {confirmOpen &&
                 <ConfirmDialog
                     title='remove this attachment'
@@ -43,7 +43,7 @@ export default function AttachmentList({ attachments, listRef, card, project, te
                     onConfirm={() => handleDeteleAttachment(currElement)}
                 />
             }
-            <div ref={listRef} className={styles.container}>
+            <div className={styles.container}>
                 <div className={styles.title}>Task Attachments</div>
                 {attachmentsArr.map((att, index) => (
                     <div key={index} className={styles.attachment}>
@@ -60,6 +60,6 @@ export default function AttachmentList({ attachments, listRef, card, project, te
                     </div>
                 ))}
             </div>
-        </>
+        </div>
     )
 }
