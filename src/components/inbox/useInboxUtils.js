@@ -1,6 +1,7 @@
 import { useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
+import useUserServices from '../../services/useUserServices'
 import getCookie from '../../utils/cookie'
 
 export default function useInboxUtils() {
@@ -10,47 +11,24 @@ export default function useInboxUtils() {
     const params = useParams()
     const userId = params.userid
     const [isMoveActive, setIsMoveActive] = useState(false)  //If move message is invoked this state is set to true and doesn`t allow to move it again
+    const { moveMessageToHistory, deleteUserMessage } = useUserServices()
 
+    
     return {
 
         moveToHistory: async function (message) {
             if (isMoveActive) return
             setIsMoveActive(true)
 
-            const response = await fetch('/api/user/inbox', {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                },
-                body: JSON.stringify({
-                    message
-                })
-            })
-
-            if (!response.ok) {
-                history.push('/error')
-                return
-            }
+            await moveMessageToHistory(message)            
 
             socket.emit('message-sent', userId)
         },
 
         deleteMessage: async function (message, setInboxHistory) {
-            const response = await fetch(`/api/user/message/${message._id}`, {
-                method: 'DELETE',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                }
-            })
+            
+            const user = await deleteUserMessage(message)
 
-            if (!response.ok) {
-                history.push('/error')
-                return
-            }
-
-            const user = await response.json()
             setInboxHistory(user.inboxHistory)
         },
 

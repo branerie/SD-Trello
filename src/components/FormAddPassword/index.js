@@ -4,7 +4,7 @@ import logo from '../../images/logo.svg'
 import { useHistory } from 'react-router-dom'
 import Alert from '../Alert'
 import UserContext from '../../contexts/UserContext'
-import authenticateUpdate from '../../utils/authenticate-update'
+import useUserServices from '../../services/useUserServices'
 
 
 
@@ -13,13 +13,15 @@ export default function AddPassword(props) {
     const [rePassword, setRePassword] = useState('')
     const [alert, setAlert] = useState(false)
     const [fillAlert, setFillAlert] = useState(false)
+    const { addNewPassword } = useUserServices()
+
 
     const userContext = useContext(UserContext)
 
 
     const history = useHistory()
     const userId = props.userId
-   
+
 
 
     const handleSubmit = useCallback(async (event) => {
@@ -38,17 +40,13 @@ export default function AddPassword(props) {
             setAlert(true)
             return
         }
-       
 
-        await authenticateUpdate(`/api/user/addNewPassword/${userId}`, 'PUT', {        //     
-            password        
-        }, (response) => {
-            userContext.logIn(response.user)
-            console.log(userContext.user);
-            history.push('/')
-        })        
+        const response = await addNewPassword(userId, password)
+        userContext.logIn(response.user)
+        history.push('/')
+                
 
-    }, [history, userContext, password, rePassword, userId])
+    }, [history, userContext, password, rePassword, userId, addNewPassword])
 
 
 

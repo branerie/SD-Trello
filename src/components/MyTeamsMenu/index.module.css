@@ -1,0 +1,43 @@
+.teams-container{ 
+    /* width: auto; */
+    width: fit-content; 
+    min-width: 200px; 
+    height: auto;
+    max-height: 180px;
+    border: 1px solid #000000; 
+    background-color: #363338;
+    border: solid 1px #363338;
+    border-radius: 10px; 
+    padding: 4px;
+    font-weight: normal;
+    overflow-y: auto;  
+    -ms-overflow-style: none;
+    scrollbar-width: none; 
+  }
+  ::-webkit-scrollbar {
+    display: none;
+  }
+
+  .buttons-teams {
+    background: #F7F7F2;
+    color: black;
+    padding: 10px;
+    max-width: 150px;
+    min-height: 20px;
+    height: auto;
+    border-radius: 10px;
+    margin: 0 auto;
+    margin: 10px;
+    cursor: pointer;
+    border: 1px solid #707070;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+    outline: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
+  }
+  
+  .buttons-teams:hover{
+    cursor: pointer;
+    background: #DFE9EE;
+  }

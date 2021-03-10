@@ -8,6 +8,7 @@ import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
 import AvatarUser from '../AvatarUser'
 import ButtonGrey from '../ButtonGrey'
+import useUserServices from '../../services/useUserServices'
 
 
 export default function CreateTeam(props) {
@@ -21,25 +22,15 @@ export default function CreateTeam(props) {
     const teamContext = useContext(TeamContext)
     const userContext = useContext(UserContext)
     const socket = useSocket()
+    const { getAllUsers } = useUserServices()
+
 
     const inputMembers = async (event) => {
         setMember(event.target.value)
         setShowMembers(false)
 
         if (allUsers.length === 0) {
-            const token = getCookie('x-auth-token')
-            const response = await fetch('/api/user/get-all', {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                }
-            })
-
-            if (!response.ok) {
-                history.push('/error')
-            }
-            const users = await response.json()
+            const users = await getAllUsers()
             setAllUsers(users)
         }
 
@@ -199,7 +190,7 @@ export default function CreateTeam(props) {
                             <ButtonClean
                                 onClick={() => removeMember(m)}
                                 title={
-                                <AvatarUser user={m} size={40}/>
+                                    <AvatarUser user={m} size={40} />
                                 }
                             />
 
@@ -210,8 +201,8 @@ export default function CreateTeam(props) {
 
             <div className={styles['button-div']}>
                 {/* <button type='submit' className={styles['create-button']}>Create</button> */}
-                <ButtonGrey onClick={(e)=>handleSubmit(e)} title='Create' className={styles['create-button']}/>
-                
+                <ButtonGrey onClick={(e) => handleSubmit(e)} title='Create' className={styles['create-button']} />
+
             </div>
 
 

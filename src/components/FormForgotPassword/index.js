@@ -7,7 +7,7 @@ import responseGoogle from '../../utils/responseGoogle'
 import logo from '../../images/logo.svg'
 import google from '../../images/welcome-page/google.svg'
 import Alert from '../Alert'
-import authenticateUpdate from '../../utils/authenticate-update'
+import useUserServices from '../../services/useUserServices'
 
 
 
@@ -20,6 +20,8 @@ const ForgotPasswordForm = (props) => {
     const [fillAlert, setFillAlert] = useState(false)
     const [wrongPassAllert, setWrongPassAllert] = useState(false)
     const [wrongUserAllert, setWrongUserAllert] = useState(false)
+    const { userLogin, addNewPassword } = useUserServices()
+
 
 
 
@@ -38,20 +40,9 @@ const ForgotPasswordForm = (props) => {
         if (password !== rePassword) {
             setWrongPassAllert(true)
             return
-        }
+        }       
 
-        const promise = await fetch('/api/user/login', {
-            method: 'POST',
-            body: JSON.stringify({
-                email,
-                password
-            }),
-            headers: {
-                'Content-Type': 'application/json'
-            }
-        })
-
-        const response = await promise.json()
+        const response = await userLogin(email, password)
 
         if (response.wrongUser) {
             setWrongUserAllert(true)
@@ -59,18 +50,17 @@ const ForgotPasswordForm = (props) => {
         }
         let userId
         console.log('Error', response)
-        if (response.user) {
-            userId = response.user._id
-        } else if (response.userId) {
+        if (response.id) {
+            userId = response.id
+        } 
+        if (response.userId) {
             userId = response.userId
         }
 
-        authenticateUpdate(`/api/user/addNewPassword/${userId}`, 'PUT', {        //     
-            password
-        }, (response) => {
-            context.logIn(response.user)
-            history.push('/')
-        })
+        const changePassResponse = await addNewPassword(userId, password)
+        context.logIn(changePassResponse.user)
+        history.push('/')
+        
     }
 
     const handleGoogle = (googleResponse) => {
@@ -88,11 +78,6 @@ const ForgotPasswordForm = (props) => {
         <div>
             
             <form className={styles.container} onSubmit={handleSubmit}>
-                <div className={styles.alerts}>
-                    <Alert alert={fillAlert} message={'Please fill all fileds'} />
-                    <Alert alert={wrongPassAllert} message={'Passwords do not match'} />
-                    <Alert alert={wrongUserAllert} message={'Please fill valid email address'} />
-                </div>
 
                 <div className={styles['inner-container']}>
                     <div className={styles.logo}>
@@ -100,6 +85,11 @@ const ForgotPasswordForm = (props) => {
                     </div>
 
                     <div className={styles['right-side']}>
+                <div className={styles.alerts}>
+                    <Alert alert={fillAlert} message={'Please fill all fileds'} />
+                    <Alert alert={wrongPassAllert} message={'Passwords do not match'} />
+                    <Alert alert={wrongUserAllert} message={'Please fill valid email address'} />
+                </div>
 
                         <div className={styles.title} >Forgot Password Form</div>
 

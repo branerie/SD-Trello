@@ -1,14 +1,15 @@
 import React, { useContext, useState, useRef } from 'react'
 import { useHistory } from 'react-router-dom'
-import CreateTeam from '../../components/CreateTeam'
-import PageLayout from '../../components/PageLayout'
-import Title from '../../components/Title'
-import Transparent from '../../components/Transparent'
-import UserContext from '../../contexts/UserContext'
 import styles from './index.module.css'
-import pic1 from '../../images/home-page-pic.svg'
+import PageLayout from '../../components/PageLayout'
+import Transparent from '../../components/Transparent'
+import CreateTeam from '../../components/CreateTeam'
+import Title from '../../components/Title'
+import UserContext from '../../contexts/UserContext'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import ButtonGreyTitle from '../../components/ButtonGreyTitle'
+import pic1 from '../../images/home-page-pic.svg'
+import MyTeamsMenu from '../../components/MyTeamsMenu'
 
 
 const Home = () => {
@@ -20,118 +21,93 @@ const Home = () => {
   const userName = userContext.user.username
   const userTeams = userContext.user.teams
   const userId = userContext.user._id
-  const recentProjects = userContext.user.recentProjects
+  const userRecentProjects = userContext.user.recentProjects
 
 
   const goToTeamPage = (teamId) => {
     history.push(`/team/${teamId}`)
   }
 
-  const goToProject = (projectId) => {
-
-    userTeams.map(t => {
-      return (t.projects.forEach(element => {
-        if (element._id === projectId) {
-          history.push(`/project-board/${t._id}/${projectId}`)
-        }
-      }))
+  const goToProjectPage = (projectId) => {
+    userTeams.map(team => {
+      return (
+        team.projects.forEach(project => {
+          if (project._id === projectId) {
+            history.push(`/project-board/${team._id}/${projectId}`)
+          }
+        })
+      )
     })
 
   }
 
 
-
-
   return (
     <PageLayout>
-      <div>
+
+      <>
         {
-          showTeamForm ? (<Transparent hideForm={() => setShowTeamForm(false)}>
-            <CreateTeam hideForm={() => { setShowTeamForm(false) }} ></CreateTeam>
-          </Transparent>) : null
+          showTeamForm &&
+          <Transparent hideForm={() => setShowTeamForm(false)}>
+            <CreateTeam hideForm={() => { setShowTeamForm(false) }} />
+          </Transparent>
         }
-      </div>
+      </>
 
       <Title title='Home' />
+
       <div className={styles.container}>
 
-        <span className={styles['left-buttons']}>
+        <div className={styles['left-buttons']}>
+          <ButtonGreyTitle className={styles['navigate-buttons']} title={'My Tasks'}
+            onClick={() => history.push(`/my-tasks/${userId}`)} />
 
-          <div>
-            <ButtonGreyTitle className={styles['navigate-buttons']} title={'My Tasks'} onClick={() => history.push(`/my-tasks/${userId}`)} />
+          <ButtonGreyTitle className={styles['navigate-buttons']} title={'My Teams'}
+            onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
 
+          <div className={styles['select-team-container']} ref={dropdownRef}>
+            {
+              showTeamsVisibleForm &&
+              <MyTeamsMenu userTeams={userTeams} goToTeamPage={goToTeamPage} />
+            }
           </div>
 
-          <div>
-            {/* <div className={styles['my-teams-container']}> */}
-            <ButtonGreyTitle className={styles['navigate-buttons']} title={'My Teams'} onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
-
-
-            {/* </div> */}
-            <span>
-              <div className={styles['select-team-container']}>
-                {
-                  showTeamsVisibleForm ?
-                    <div className={styles['teams-home']} ref={dropdownRef}>
-                      {
-                        userTeams.length > 0
-                          ? userTeams.map((t, index) => {
-                            return (
-                              <span key={index}>
-                                <div
-                                  className={styles['navigate-buttons-teams']}
-                                  onClick={() => goToTeamPage(t._id)}
-                                  title={t.name}
-                                >
-                                  {t.name}</div>
-
-                              </span>
-                            )
-                          }
-                          )
-                          : 'You have not joined any teams yet'
-                      }
-                    </div>
-                    : null
-                }
-              </div>
-            </span>
-          </div>
-
-          <div>
-            <ButtonGreyTitle className={styles['navigate-buttons']} title={'Create New Team'} onClick={() => setShowTeamForm(true)} />
-
-          </div>
-
-        </span>
+          <ButtonGreyTitle className={styles['navigate-buttons']} title={'Create New Team'}
+            onClick={() => setShowTeamForm(true)} />
+        </div>
 
         <div className={styles['pic-container']}>
           <img className={styles.pic1} src={pic1} alt='' />
-          <div className={styles['welcome-user']}>{`Welcome ${userName}!`}</div>
-          <ButtonGreyTitle className={styles['navigate-buttons']} title={'Get Started'} onClick={() => history.push(`/get-started/`)} />
+
+          <div className={styles['welcome-user']}>
+            {`Welcome ${userName}!`}
+          </div>
+
+          <ButtonGreyTitle className={styles['navigate-buttons']} title={'Get Started'}
+            onClick={() => history.push(`/get-started/`)} />
         </div>
 
-        <span className={styles['right-buttons']}>
+        <div className={styles['right-buttons']}>
           {
-            (recentProjects) ?
-              <div>
-                <div >{`Recent projects:`}</div>
-                {
-                  recentProjects.slice(0).reverse().map((p, index) => {
-                    return (
-                      <div key={p._id}>
-                        <ButtonGreyTitle className={styles['navigate-buttons']} title={p.name} onClick={() => goToProject(p._id)} />
-                      </div>
-                    )
-                  })
-                }
-
-
-              </div>
-              : null
+            userRecentProjects &&
+            <>
+              <div >Recent projects:</div>
+              {
+                userRecentProjects.slice(0).reverse().map((project) => {
+                  return (
+                    <div key={project._id}>
+                      <ButtonGreyTitle className={styles['navigate-buttons']} title={project.name}
+                        onClick={() => goToProjectPage(project._id)} />
+                    </div>
+                  )
+                })
+              }
+            </>
           }
-        </span>
+        </div>
+
       </div>
+
     </PageLayout>
   )
 }

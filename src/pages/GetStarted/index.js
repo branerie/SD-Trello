@@ -12,7 +12,7 @@ import pic4 from '../../images/get-started/pic4.svg'
 
 
 
-export default function GetStarted() {
+const GetStarted = () => {
     const [showTeamForm, setShowTeamForm] = useState(false)
 
 
@@ -105,3 +105,4 @@ export default function GetStarted() {
     )
 }
 
+export default GetStarted

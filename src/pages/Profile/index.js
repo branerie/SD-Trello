@@ -1,33 +1,36 @@
 import React, { useState, useEffect, useCallback, useContext, useRef } from 'react'
-import Loader from 'react-loader-spinner'
 import { useParams, useHistory } from 'react-router-dom'
-import PageLayout from '../../components/PageLayout'
 import styles from './index.module.css'
-import pic1 from '../../images/profile-page-pic.svg'
-import pen from '../../images/pen.svg'
-import authenticateUpdate from '../../utils/authenticate-update';
+import PageLayout from '../../components/PageLayout'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import { Image, Transformation } from 'cloudinary-react'
+import Loader from 'react-loader-spinner'
 import Title from '../../components/Title'
 import UserContext from '../../contexts/UserContext'
 import Alert from '../../components/Alert'
 import ButtonGrey from '../../components/ButtonGrey'
 import ConfirmDialog from '../../components/ConfirmationDialog'
-import { Image, Transformation } from 'cloudinary-react';
+import MyTeamsMenu from '../../components/MyTeamsMenu'
+import useUserServices from '../../services/useUserServices'
+import pic1 from '../../images/profile-page-pic.svg'
+import pen from '../../images/pen.svg'
 
 
 const ProfilePage = () => {
   const dropdownRef = useRef(null)
   const userContext = useContext(UserContext)
   const [userEmail, setUserEmail] = useState(null)
-  const [passwordActive, setPaswordActive] = useState(false)
-  const [userNameActive, setUserNameActive] = useState(false)
-  const [username, setUsername] = useState(userContext.user.username);
+  const [isPasswordActive, setIsPaswordActive] = useState(false)
+  const [isUserNameActive, setIsUserNameActive] = useState(false)
+  const [username, setUsername] = useState(userContext.user.username)
   const [password, setPassword] = useState(null);
   const [rePassword, setRePassword] = useState(null);
   const [alert, setAlert] = useState(false)
   const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useDetectOutsideClick(dropdownRef)
-  const [isEditListActive, setIsEditListActive] = useDetectOutsideClick(dropdownRef)
+  const [isEditPictureActive, setIsEditPictureActive] = useDetectOutsideClick(dropdownRef)
   const [confirmOpen, setConfirmOpen] = useState(false)
+  const { getUser, updateUser, updateUserPassword, updateUserImage } = useUserServices()
+
 
 
   const params = useParams()
@@ -36,60 +39,86 @@ const ProfilePage = () => {
 
   const userName = userContext.user.username
   const userTeams = userContext.user.teams
-  const id = params.userid;
-
+  const userId = params.userid
+  const userImage = userContext.user.image
 
 
   const getData = useCallback(async () => {
+    const user = await getUser(userId)
+    setUserEmail(user.email)
+  }, [getUser, userId])
 
-    const response = await fetch(`/api/user/${id}`)
-    if (!response.ok) {
-      history.push('/error')
-    } else {
-      const user = await response.json()
-      setUserEmail(user.email)
+  useEffect(() => {
+    getData()
+  }, [getData])
 
-    }
-  }, [history, id])
-
-
-
-  const handleSubmit = async (event) => {
+  const handleUpdateUser = async (event) => {
     event.preventDefault()
 
     setAlert(false)
-    setPaswordActive(false)
-    setUserNameActive(false)
-
-
+    setIsPaswordActive(false)
+    setIsUserNameActive(false)
 
     if (!username && !password) {
       return
     }
-
     if (password !== rePassword) {
       setAlert(true)
       return
     }
 
-    // if(password && rePassword){
-    //   setChangePassAlert(true)
-    // }
-
-    await authenticateUpdate(`/api/user/${id}`, 'PUT', {
-      username,
-      password
-    }, (user) => {
+    if (username) {
+      const user = await updateUser(userId, username)
       userContext.logIn(user)
-    }, (e) => {
-      console.log('Error', e);
-    })
+    }
+
+    if (password) {
+      const user = await updateUserPassword(userId, password)
+      userContext.logIn(user)
+      return
+    }
+
     getData()
   }
 
-  useEffect(() => {
+  function changeProfilePicture() {
+    const widget = window.cloudinary.createUploadWidget({
+      cloudName: process.env.REACT_APP_CLOUD_NAME,
+      uploadPreset: process.env.REACT_APP_UPLOAD_PRESET
+    }, async (error, result) => {
+      if (result.event === 'success') {
+        const path = result.info.path
+        const publicId = result.info.public_id
+        const newImage = {
+          path,
+          publicId
+        }
+
+        const user = await updateUserImage(userId, newImage, userImage)
+        userContext.logIn(user)
+
+        getData()
+      }
+
+      if (error) {
+        history.push('/error')
+        return
+      }
+    })
+
+    widget.open()
+  }
+
+  const deletePic = async () => {
+    const newImage = null
+    const user = await updateUserImage(userId, newImage, userImage)
+    userContext.logIn(user)
     getData()
-  }, [getData])
+  }
+
+  const goToTeamPage = (teamId) => {
+    history.push(`/team/${teamId}`)
+  }
 
   if (!userName) {
     return (
@@ -105,63 +134,11 @@ const ProfilePage = () => {
     )
   }
 
-  const goToTeamPage = (teamId) => {
-    history.push(`/team/${teamId}`)
-  }
-
-
-  function changeProfilePicture() {
-    const widget = window.cloudinary.createUploadWidget({
-      cloudName: process.env.REACT_APP_CLOUD_NAME,
-      uploadPreset: process.env.REACT_APP_UPLOAD_PRESET
-    }, (error, result) => {
-      if (result.event === 'success') {
-        const path = result.info.path
-        const publicId = result.info.public_id
-        const newImage = {
-          path,
-          publicId
-        }
-        authenticateUpdate(`/api/user/image/${id}`, 'PUT', {
-          newImage,
-          oldImage: userContext.user.image
-        }, (user) => {
-          userContext.logIn(user)
-        }, (e) => {
-          console.log('Error', e);
-        })
-        getData()
-  
-      }
-  
-      if (error) {
-        //TODO: Handle errors
-  
-        return
-      }
-    })
-
-    widget.open()
-  }
-
-  const deletePic = async () => {
-
-    await authenticateUpdate(`/api/user/image/${id}`, 'PUT', {
-      oldImage: userContext.user.image
-    }, (user) => {
-      userContext.logIn(user)
-    }, (e) => {
-      console.log('Error', e);
-    })
-    getData()
-  }
-
-  
-
   return (
     <PageLayout>
 
-      {confirmOpen &&
+      {
+        confirmOpen &&
         <ConfirmDialog
           title={'delete this picture'}
           hideConfirm={() => setConfirmOpen(false)}
@@ -174,11 +151,11 @@ const ProfilePage = () => {
 
       <div className={styles.container}>
 
-        <div className={styles['left-container']}>
+        <div className={styles['inputs-container']}>
 
           <div className={styles['button-input-div']}>
             <ButtonGrey title={'Username:'} className={styles['navigate-buttons']}
-              onClick={() => { setUserNameActive(!userNameActive) }} />
+              onClick={() => { setIsUserNameActive(!isUserNameActive) }} />
             < input
               ref={function (input) {
                 if (input !== null) {
@@ -189,20 +166,18 @@ const ProfilePage = () => {
               onChange={e => setUsername(e.target.value)}
               className={styles['input-fields-profile']}
               placeholder={userName}
-              disabled={!userNameActive}
+              disabled={!isUserNameActive}
             />
-
-
           </div>
 
           <div className={styles['button-input-div']}>
             <ButtonGrey title={'Change Password'} className={styles['navigate-buttons']}
-              onClick={() => { setPaswordActive(!passwordActive) }} />
+              onClick={() => { setIsPaswordActive(!isPasswordActive) }} />
             < input
               onChange={e => setPassword(e.target.value)}
               className={styles['input-fields-profile']}
               placeholder={'********'}
-              disabled={!passwordActive}
+              disabled={!isPasswordActive}
               type='password'
             />
           </div>
@@ -212,82 +187,60 @@ const ProfilePage = () => {
             <Alert alert={alert} message={'Passwords do not match'} />
           </div>
 
-          {passwordActive ?
+          {
+            isPasswordActive &&
             <div className={styles['new-pass-alert']}>
               Important!!! You have to activate your new password by following the link sent to your email. You have to do this in the next hour in order for your new password to be activated
-            </div> : null
+            </div>
           }
 
           <div className={styles['button-input-div']}>
             <ButtonGrey title={'Confirm Password'} className={styles['navigate-buttons']}
-              onClick={() => { setPaswordActive(!passwordActive) }} />
-
+              onClick={() => { setIsPaswordActive(!isPasswordActive) }} />
             < input
               onChange={e => setRePassword(e.target.value)}
               className={styles['input-fields-profile']}
               placeholder={'********'}
-              disabled={!passwordActive}
+              disabled={!isPasswordActive}
               type='password'
             />
-
           </div>
 
           <div className={styles['button-input-div']}>
-
-            <ButtonGrey title={'Email:'} className={styles['navigate-buttons']}
-            />
-
+            <ButtonGrey title={'Email:'} className={styles['navigate-buttons']} />
             < input
               className={styles['input-fields-profile']}
               value={userEmail}
               disabled={true}
             />
-
           </div>
 
           <div className={styles['button-input-div-tasks']}>
             <ButtonGrey title={'My Tasks'} className={styles['navigate-buttons']}
-              onClick={() => history.push(`/my-tasks/${id}`)} />
-          < input
+              onClick={() => history.push(`/my-tasks/${userId}`)} />
+            < input
               className={styles['input-fields-tasks']}
               value={''}
               disabled={true}
             />
-          
+
           </div>
 
           <div className={styles['button-input-div']}>
             <div className={styles.myTeamsContainer}>
               <ButtonGrey title={'My Teams'} className={styles['navigate-buttons']}
                 onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
-              <div className={styles['select-team-container']}>
+              <div className={styles['select-team-container']} ref={dropdownRef}>
                 {
-                  showTeamsVisibleForm ?
-                    <div className={styles['teams-home']} ref={dropdownRef}>
-                      {userTeams.length > 0 ?
-                        userTeams.map((t, index) => {
-                          return (
-                            <span key={index}>
-                              <div
-                                className={styles['navigate-buttons-teams']}
-                                onClick={() => goToTeamPage(t._id)}
-                                title={t.name}
-                              >{t.name}</div>
-                            </span>
-                          )
-                        }
-                        )
-                        : 'You have not joined any teams yet'
-                      }
-                    </div>
-                    : null
+                  showTeamsVisibleForm &&
+                  <MyTeamsMenu userTeams={userTeams} goToTeamPage={goToTeamPage} />
                 }
               </div>
             </div>
+
             <div className={styles['button-div-save']}>
-            <ButtonGrey title={'SAVE'} className={styles['save-button']}
-               onClick={(e) => handleSubmit(e)}/>
-              {/* <button type='submit' className={styles['save-button']} onClick={(e) => handleSubmit(e)}>SAVE</button> */}
+              <ButtonGrey title={'SAVE'} className={styles['save-button']}
+                onClick={(e) => handleUpdateUser(e)} />
             </div>
           </div>
         </div>
@@ -297,46 +250,49 @@ const ProfilePage = () => {
           <div className={styles['profile-pic-container']}>
             <div className={styles['profile-pic']}
               onClick={() => {
-                userContext.user.image ?
-                  setIsEditListActive(!isEditListActive)
+                userImage ?
+                  setIsEditPictureActive(!isEditPictureActive)
                   : changeProfilePicture()
               }}
             >
-              {userContext.user.image ?
+              {
+                userImage ?
+                  <div className={styles['profile-picture']}>
 
-                <div className={styles['profile-picture']}>
-                 
-                  <Image publicId={userContext.user.image.publicId} className={styles['profile-picture-pic']} >
-                    <Transformation width='200' height='200' gravity='faces' crop='fill'
-                    />
-                  </Image>
+                    <Image publicId={userImage.publicId} className={styles['profile-picture-pic']} >
+                      <Transformation width='200' height='200' gravity='faces' crop='fill' />
+                    </Image>
 
-
-                  <div className={styles.relative}>
-                    {isEditListActive && <div ref={dropdownRef} className={`${styles.menu}`} >
-                      <ButtonGrey
-                        onClick={changeProfilePicture}
-                        title='Edit'
-                        className={styles.edit}
-                      />
-                      <ButtonGrey
-                        onClick={() => {
-                          setConfirmOpen(true)
-                        }}
-                        title='Delete'
-                        className={styles.delete}
-                      />
-                    </div>}
+                    <div className={styles.relative}>
+                      {
+                        isEditPictureActive &&
+                        <div ref={dropdownRef} className={`${styles.menu}`} >
+                          <ButtonGrey
+                            onClick={changeProfilePicture}
+                            title='Edit'
+                            className={styles.edit}
+                          />
+                          <ButtonGrey
+                            onClick={() => {
+                              setConfirmOpen(true)
+                            }}
+                            title='Delete'
+                            className={styles.delete}
+                          />
+                        </div>
+                      }
+                    </div>
                   </div>
-                </div>
-                :
-                <div>
-                  <p className={styles['load-pic-text']}>Load a profile picture</p>
-                  <img className={styles.pen}
-                    src={pen} alt='' />
-                </div>
-              }
+                  :
+                  <div className={styles['no-pic']}>
 
+                    <p className={styles['load-pic-text']}>
+                      Load a profile picture
+                    </p>
+
+                    <img className={styles.pen} src={pen} alt='' />
+                  </div>
+              }
             </div>
 
             <p>{userName}</p>

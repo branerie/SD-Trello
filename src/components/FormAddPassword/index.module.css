@@ -1,13 +1,20 @@
 .container {    
-    position: absolute;
+    /* position: absolute;
     left: 30%;
-    top: 15vh;
-    z-index: 30;
+    top: 15vh;   */
+    
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    -ms-transform: translate(-50%, -50%);
+    transform: translate(-50%, -50%);
+
+
     width: 45%;
-    min-width: 500px;
-    min-height: 70vh;
+    z-index: 30;
+    min-width: 300px;
+    min-height: 50vh;
     height: auto;
-    /* max-height: 90vh; */
     background-color:#EDF5F9;
     border: solid 2px #707070;
     border-radius: 27px;  
@@ -17,29 +24,30 @@
 
 .alerts{
     width: 100%;
-    /* margin-left: 20%; */
     height: 5%;    
 }
 
 .inner-container{
-    width: 100%;
+    width: auto;
     height: 95%;
     display: flex;
+    flex-wrap: wrap;
 }
 
 .logo{
-    margin: 5%;
-    margin-top: 5%;
+    margin: 1%;
+    margin-top: 0%;
     margin-right: 2%;
-    height: 100%;
-    width: 10%;
+    height: 90%;
+    /* width: 10%; */
 }
 .right-side{
-    width: 80%;
-   height: 100%;
-   /* margin-right: 25%; */
-   margin-top: 5%;  
-   align-items: center;
+    /* width: 80%; */
+   height: 90%;  
+   display: block;
+   align-items: center; 
+   justify-content: center; 
+   flex: auto;  
 }
 
 .title {
