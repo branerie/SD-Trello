@@ -1,12 +1,11 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
 import commonStyles from '../index.module.css'
-import getCookie from '../../../utils/cookie'
 import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
+import { useParams } from 'react-router-dom'
 import { useSocket } from '../../../contexts/SocketProvider'
+import useCardsServices from '../../../services/useCardsServices'
 
 export default function TaskProgress(props) {
-
     const today = useMemo(() => new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())), [])
     const card = props.card
     const [taskHistory, setTaskHistory] = useState(card.history)
@@ -18,25 +17,19 @@ export default function TaskProgress(props) {
         taskprogress = token[0]
     }
 
-    const dropdownRef = useRef(null);
+    const dropdownRef = useRef(null)
     const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
     const [cardProgress, setCardProgress] = useState(taskprogress)
-    const history = useHistory()
     const socket = useSocket()
     const params = useParams()
     const teamId = params.teamid
-
+    const { editTask } = useCardsServices()
 
     const editCardProgress = useCallback(async (event) => {
         event.preventDefault()
 
-        // let data = props.value.split('/')
-        // let cardId = data[1]
-        // let listId = data[2]
-
         const cardId = card._id
         const listId = props.listId
-
 
         if (!cardProgress || (cardProgress > 100) || (cardProgress < 0)) {
             return
@@ -44,6 +37,7 @@ export default function TaskProgress(props) {
 
         const cardProgressNum = Number(cardProgress)
         const newCardProgress = Math.max(Math.min(cardProgressNum, 100), 0)
+
         if (isNaN(cardProgressNum) || newCardProgress === Number(card.progress)) {
             return
         }
@@ -53,30 +47,17 @@ export default function TaskProgress(props) {
         const newTaskHistory = [...taskHistory, { event: `Progress ${cardProgress}%`, date: today }]
         setTaskHistory(newTaskHistory)
 
-
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/projects/lists/cards/${listId}/${cardId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                progress: cardProgress,
-                history: newTaskHistory
-            })
-        })
-
-        if (!response.ok) {
-            history.push('/error')
-            return
+        const editedFields = {
+            progress: cardProgress,
+            history: newTaskHistory
         }
+        await editTask(listId, cardId, editedFields)
 
         setIsActive(!isActive)
         socket.emit('project-update', props.project)
         socket.emit('task-team-update', teamId)
 
-    }, [history, cardProgress, isActive, setIsActive, taskHistory, today, card._id, props.listId, props.project, socket, teamId, card.progress])
+    }, [editTask, cardProgress, isActive, setIsActive, taskHistory, today, card._id, props.listId, props.project, socket, teamId, card.progress])
 
 
     function showTaskProgress(value) {
@@ -110,58 +91,40 @@ export default function TaskProgress(props) {
         let currColor = ''
         switch (true) {
             case (value === 100 || value === '100'):
-                currColor = '#0E8D27';
-                break;
+                currColor = '#0E8D27'
+                break
             case (value < 20):
                 currColor = '#EF2D2D'
-                break;
+                break
             case (value < 100):
                 currColor = '#5E9DDC'
-                break;
+                break
             default:
-                break;
+                break
         }
         return currColor
     }
 
-
-
     return (
         <>
+            { isActive ?
+                <div ref={dropdownRef} className={commonStyles.taskProgress} onBlur={editCardProgress}>
+                    <input
+                        className={commonStyles.taskProgressButtonInput}
+                        style={{ backgroundColor: getBackGroundColor(cardProgress) }}
+                        type={'number'}
+                        value={cardProgress}
+                        onChange={e => setCardProgress(e.target.value)}
+                        min='0' max='100'
+                        autoFocus
+                    />
+                </div >
+                :
+                <div className={commonStyles.taskProgress} onClick={() => setIsActive(!isActive)}>
 
-            {
-                isActive ?
-                    <div ref={dropdownRef} className={commonStyles.taskProgress} onBlur={editCardProgress}>
-                        <input
-                            className={commonStyles.taskProgressButtonInput}
-                            style={{ backgroundColor: getBackGroundColor(cardProgress) }}
-                            type={'number'}
-                            value={cardProgress}
-                            // placeholder={'%'}
-                            onChange={e => setCardProgress(e.target.value)}
-                            min='0' max='100'
-                            autoFocus
-                        />
-                    </div >
-                    :
-                    // <div>
-                    // { 
-                    //     (taskprogress!== null)?
-
-                    <div className={commonStyles.taskProgress} onClick={() => setIsActive(!isActive)}>
-                        {/* <button className={commonStyles.taskProgressButton}  */}
-                        {/* > */}
-                        {showTaskProgress(taskprogress)}
-                        {/* </button> */}
-                    </div >
-                // : <span>Add Progress</span>
-                // }
-                // </div>
+                    {showTaskProgress(taskprogress)}
+                </div >
             }
         </>
     )
-
-
 }
-
-

@@ -45,6 +45,7 @@ function sockets(socket) {
 
     socket.on('project-update', async (project) => {
         console.log(username, 'project-update')
+        console.log(project._id);
         const updatedProject = await projectUpdate(project._id)
         socket.to(project._id).emit('project-updated', updatedProject)
         socket.emit('project-updated', updatedProject)

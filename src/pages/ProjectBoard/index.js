@@ -17,6 +17,7 @@ import UserContext from '../../contexts/UserContext'
 import EditList from '../../components/EditList'
 import userObject from '../../utils/userObject'
 import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
+import useListsServices from '../../services/useListsServices'
 
 
 export default function ProjectBoard() {
@@ -36,16 +37,14 @@ export default function ProjectBoard() {
     const context = useContext(UserContext)
     const teamId = params.teamid
     const token = getCookie('x-auth-token')
+    const { createList, dragAndDropList, dragAndDropCard } = useListsServices()
 
     useUpdateUserLastTeam(params.teamid)
 
     const projectUpdate = useCallback((project) => {
-
         projectContext.setProject(project)
         projectContext.setLists(project.lists)
     }, [projectContext])
-
-
 
     useEffect(() => {
         const id = params.projectid
@@ -57,9 +56,6 @@ export default function ProjectBoard() {
         socket.emit('project-join', id)
         return () => socket.off('project-updated')
     }, [socket, projectUpdate, params.projectid])
-
-
-
 
     useEffect(() => {
         if (!projectContext.project || projectContext.project._id !== params.projectid) {
@@ -156,23 +152,8 @@ export default function ProjectBoard() {
             newListsArr.splice(result.destination.index, 0, reorderedList)
             projectContext.setLists(newListsArr)
 
-            const response = await fetch(`/api/projects/lists/${projectContext.project._id}/${result.draggableId}/dnd-update`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                },
-                body: JSON.stringify({
-                    position,
-                    element: 'list',
-                })
-            })
-            if (!response.ok) {
-                history.push('/error')
-            } else {
-                const updatedProject = await response.json()
-                projectContext.setProject(updatedProject)
-            }
+            const updatedProject = await dragAndDropList(projectContext.project._id, result.draggableId, position)
+            projectContext.setProject(updatedProject)
         }
 
         if (result.type === 'droppableSubItem') {
@@ -194,22 +175,7 @@ export default function ProjectBoard() {
             newListsArr[destinationPosition].cards.splice(position, 0, task)
             projectContext.setLists(newListsArr)
 
-            const response = await fetch(`/api/projects/lists/${projectContext.project._id}/${result.draggableId}/dnd-update`, {
-                method: 'PUT',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                },
-                body: JSON.stringify({
-                    position,
-                    element: 'card',
-                    source,
-                    destination
-                })
-            })
-            if (!response.ok) {
-                history.push('/error')
-            }
+            await dragAndDropCard(projectContext.project._id, result.draggableId, position, source, destination)
         }
 
         socket.emit('project-update', projectContext.project)
@@ -223,23 +189,11 @@ export default function ProjectBoard() {
         if (listName === '') {
             return
         }
-        const response = await fetch(`/api/projects/lists/${projectContext.project._id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({ name: listName })
-        })
-        if (!response.ok) {
-            history.push('/error')
-            return
-        } else {
-            setIsActive(!isActive)
-            setListName('')
-            socket.emit('project-update', projectContext.project)
-        }
 
+        await createList(projectContext.project._id, listName)
+        setIsActive(!isActive)
+        setListName('')
+        socket.emit('project-update', projectContext.project)
     }
 
 
@@ -320,7 +274,7 @@ export default function ProjectBoard() {
                         )}
                     </Droppable>
                 </DragDropContext>
-                <img className={styles.pic} src={pic} alt='' width='340'/>
+                <img className={styles.pic} src={pic} alt='' width='340' />
             </div>
         </PageLayout>
     )

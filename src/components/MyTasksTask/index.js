@@ -4,10 +4,9 @@ import pen from '../../images/pen.svg'
 import styles from './index.module.css'
 import Transparent from '../Transparent'
 import EditCard from '../EditCard'
-import getCookie from '../../utils/cookie'
-import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import AttachmentsLink from '../AttachmentsLink'
+import useCardsServices from '../../services/useCardsServices'
 
 export default function MyTasksTask({ teamId, project, list, card }) {
     const inputRef = useRef(null)
@@ -15,8 +14,8 @@ export default function MyTasksTask({ teamId, project, list, card }) {
     const [showEditCard, setShowEditCard] = useState(false)
     const [progress, setProgress] = useState('')
     const [isInputOk, setIsInputOk] = useState(true)
-    const history = useHistory()
     const socket = useSocket()
+    const { editTask } = useCardsServices()
     const days = Math.ceil((Date.parse(card.dueDate) - Date.now()) / 1000 / 3600 / 24)
 
     useEffect(() => {
@@ -44,32 +43,17 @@ export default function MyTasksTask({ teamId, project, list, card }) {
         }
 
         const today = new Date(Date.now())
-        let arr = [...card.history]
+        let history = [...card.history]
 
-        arr.push({
+        history.push({
             'event': `Progress ${progress}%`,
             'date': today
         })
 
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/projects/lists/cards/${list._id}/${card._id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                progress: progress,
-                history: arr
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-            return
-        } else {
-            socket.emit('project-update', project)
-            socket.emit('task-team-update', teamId)
-        }
+        const editedFields = { progress, history }
+        await editTask(list._id, card._id, editedFields)
+        socket.emit('project-update', project)
+        socket.emit('task-team-update', teamId)
     }
 
     function onKeyUp() {
@@ -106,14 +90,14 @@ export default function MyTasksTask({ teamId, project, list, card }) {
                 />
             </div>
             <div className={styles.days}>
-                { card.progress === 100 ? (<div>Done</div>) :
-                        Date.parse(card.dueDate) === 0 || card.dueDate === null ? (<div>No Deadline</div>) :
-                            days < 0 ? (<div className={styles.deadline}>Deadline Passed</div>) :
-                                <div>{days}</div>
+                {card.progress === 100 ? (<div>Done</div>) :
+                    Date.parse(card.dueDate) === 0 || card.dueDate === null ? (<div>No Deadline</div>) :
+                        days < 0 ? (<div className={styles.deadline}>Deadline Passed</div>) :
+                            <div>{days}</div>
                 }
             </div>
             <div className={styles['buttons-container']}>
-                { card.attachments.length > 0 && <AttachmentsLink card={card} project={project} teamId={teamId} /> }
+                {card.attachments.length > 0 && <AttachmentsLink card={card} project={project} teamId={teamId} />}
                 <ButtonClean
                     className={styles.button}
                     onClick={() => setShowEditCard(true)}

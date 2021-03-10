@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useSocket } from '../../contexts/SocketProvider'
 import AddProjectMember from '../AddProjectMember'
@@ -9,6 +8,7 @@ import UserContext from '../../contexts/UserContext'
 import isUserAdmin from '../../utils/isUserAdmin'
 import ButtonGrey from '../ButtonGrey'
 import ConfirmDialog from '../ConfirmationDialog'
+import useProjectsServices from '../../services/useProjectsServices'
 
 
 export default function EditProject(props) {
@@ -18,11 +18,11 @@ export default function EditProject(props) {
     const members = props.project.membersRoles
     const [isAdmin, setIsAdmin] = useState(false)
     const [confirmOpen, setConfirmOpen] = useState(false)
-
     const userContext = useContext(UserContext)
     const history = useHistory()
     const socket = useSocket()
     const params = useParams()
+    const { editProject, deleteProject } = useProjectsServices()
 
     const projectId = props.project._id
 
@@ -34,55 +34,24 @@ export default function EditProject(props) {
         setIsAdmin(isUserAdmin(userContext.user.id, members))
     }, [members, userContext.user.id, props])
 
-    
 
-    async function handleSubmit(e) {
-        e.preventDefault()
 
-       
-        console.log('handle', isFinished);
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/projects/${projectId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                name,
-                description,
-                isFinished
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            updateProjectSocket()
-            props.hideForm()
-            socket.emit('team-update', params.teamid)
-        }
+    async function handleSubmit() {
+        await editProject(projectId, name, description, isFinished)
+        updateProjectSocket()
+        props.hideForm()
+        socket.emit('team-update', params.teamid)
     }
 
-    async function deleteProject() {
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/projects/${props.project._id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            props.hideForm()
-            const obj = {
-                projectId: props.project._id,
-                teamId: params.teamid
-            }
-            socket.emit('project-deleted', obj)
-            history.push(`/team/${params.teamid}`)
+    async function handleDeleteProject() {
+        await deleteProject(projectId)
+        props.hideForm()
+        const deletedProject = {
+            projectId: props.project._id,
+            teamId: params.teamid
         }
+        socket.emit('project-deleted', deletedProject)
+        history.push(`/team/${params.teamid}`)
     }
 
     return (
@@ -91,7 +60,7 @@ export default function EditProject(props) {
                 <ConfirmDialog
                     title={'delete this project'}
                     hideConfirm={() => setConfirmOpen(false)}
-                    onConfirm={() => deleteProject()}
+                    onConfirm={() => handleDeleteProject()}
                 />
             }
 
@@ -127,11 +96,11 @@ export default function EditProject(props) {
             <div>
                 {isAdmin ?
                     <div className={styles['buttons-div']}>
-                        <ButtonGrey className={styles['navigate-buttons']} title={'Edit'} onClick={(e)=>handleSubmit(e)} />
+                        <ButtonGrey className={styles['navigate-buttons']} title={'Edit'} onClick={handleSubmit} />
                         <ButtonGrey className={styles['navigate-buttons']}
                             title={isFinished ?
                                 'Set Current' : 'Set Finished'}
-                            onClick={()=>setIsFinished(!isFinished)} />
+                            onClick={() => setIsFinished(!isFinished)} />
                         <ButtonGrey className={styles['navigate-buttons']} title={'Delete Project'}
                             onClick={() => {
                                 setConfirmOpen(true)

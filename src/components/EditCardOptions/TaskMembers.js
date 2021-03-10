@@ -6,6 +6,8 @@ import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import pic10 from '../../images/edit-card/pic10.svg'
 import MembersList from '../MembersList'
+import useProjectsServices from '../../services/useProjectsServices'
+import useCardsServices from '../../services/useCardsServices'
 
 
 export default function TaskMembers({ card, listId, project, teamId, setCurrCard }) {
@@ -16,6 +18,8 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
     const history = useHistory()
     const socket = useSocket()
     const token = getCookie('x-auth-token')
+    const { addProjectMember } = useProjectsServices()
+    const { addTaskMember } = useCardsServices()
 
     useEffect(() => {
         setCardMembers(card.members)
@@ -46,62 +50,29 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
     }
 
     const handleSelect = async (id) => {
-
         if (id === 'select') return
 
-        const selectedUser = users.filter(obj => obj._id === id)[0]
+        const selectedUser = users.filter(u => u._id === id)[0]
 
-        const result = project.membersRoles.filter(obj => obj.memberId._id === selectedUser._id)[0]
+        const result = project.membersRoles.filter(p => p.memberId._id === selectedUser._id)[0]
 
         if (!result) {
             if (!window.confirm(`Do you want to add ${selectedUser.username} to project?`)) return
 
-            const responseAdd = await fetch(`/api/projects/${project._id}/user`, {
-                method: 'POST',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                },
-                body: JSON.stringify({
-                    member: selectedUser,
-                    admin: false
-                })
-            })
-            if (!responseAdd.ok) {
-                history.push('/error')
-            }
+            await addProjectMember(project._id, selectedUser)
         }
 
-        let arr = [...cardMembers]
+        const members = [...cardMembers, selectedUser]
 
-        arr.push(selectedUser)
+        const updatedCard = await addTaskMember(listId, card._id, members, selectedUser, teamId, project._id)
 
-        const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                members: arr,
-                newMember: selectedUser,
-                teamId,
-                projectId: project._id,
-                cardId: card._id,
-                listId
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            const updatedCard = await response.json()
-            if (setCurrCard) setCurrCard(updatedCard)
-            setIsActive(!isActive)
-            setCardMembers(arr)
-            socket.emit('project-update', project)
-            socket.emit('task-team-update', teamId)
-            socket.emit('message-sent', selectedUser._id)
-        }
+        if (setCurrCard) setCurrCard(updatedCard)
+
+        setIsActive(!isActive)
+        setCardMembers(members)
+        socket.emit('project-update', project)
+        socket.emit('task-team-update', teamId)
+        socket.emit('message-sent', selectedUser._id)
     }
 
     return (

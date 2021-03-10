@@ -1,29 +1,16 @@
 import React, { useRef, useState, useMemo, useEffect } from 'react'
-import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useSocket } from '../../contexts/SocketProvider'
 import pic1 from '../../images/edit-card/pic1.svg'
-// import pic2 from '../../images/edit-card/pic2.svg'
-// import pic3 from '../../images/edit-card/pic3.svg'
-// import pic4 from '../../images/edit-card/pic4.svg'
-// import pic5 from '../../images/edit-card/pic5.svg'
-// import pic6 from '../../images/edit-card/pic6.svg'
-// import pic7 from '../../images/edit-card/pic7.svg'
-// import pic8 from '../../images/edit-card/pic8.svg'
-// import pic9 from '../../images/edit-card/pic9.svg'
-// import pic10 from '../../images/edit-card/pic10.svg'
-// import pic11 from '../../images/edit-card/pic11.svg'
 import pic12 from '../../images/edit-card/pic12.svg'
-// import pic13 from '../../images/edit-card/pic13.svg'
-// import pic14 from '../../images/edit-card/pic14.svg'
 import TaskMembers from '../EditCardOptions/TaskMembers'
 import TaskDueDate from '../EditCardOptions/TaskDueDate'
 import TaskHistory from '../EditCardOptions/TaskHistory'
 import TaskProgress from '../EditCardOptions/TaskProgress'
 import TaskAttach from '../EditCardOptions/TaskAttach'
 import ConfirmDialog from '../ConfirmationDialog'
+import useCardsServices from '../../services/useCardsServices'
 
 
 export default function EditCard({ listId, initialCard, project, teamId, hideForm, setCurrCard }) {
@@ -33,13 +20,12 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [taskHistory, setTaskHistory] = useState(null)
-    const history = useHistory()
     const socket = useSocket()
     const [nameHeight, setNameHeight] = useState(null)
     const [currInput, setCurrInput] = useState(null)
     const dueDate = useMemo(() => new Date(initialCard.dueDate), [initialCard.dueDate])
-    const token = getCookie('x-auth-token')
     const [confirmOpen, setConfirmOpen] = useState(false)
+    const { deleteTask, editTask } = useCardsServices()
 
     useEffect(() => {
         setCard(initialCard)
@@ -49,49 +35,18 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     }, [initialCard])
 
 
-    const deleteCard = async () => {
-
-        // if (!window.confirm('Are you sure you wish to delete this item?')) return
-
-        const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            socket.emit('project-update', project)
-            socket.emit('task-team-update', teamId)
-            hideForm()
-        }
+    const handleDeleteTask = async () => {
+        await deleteTask(listId, card._id)
+        socket.emit('project-update', project)
+        socket.emit('task-team-update', teamId)
+        hideForm()
     }
 
-
     const handleSubmit = async () => {
-
-        const response = await fetch(`/api/projects/lists/cards/${listId}/${card._id}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                name,
-                description,
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            // const updatedCard = await response.json()
-            // setCard(updatedCard)
-            socket.emit('project-update', project)
-            socket.emit('task-team-update', teamId)
-            // setProgressChanged(false)
-        }
+        const editedFields = { name, description }
+        await editTask(listId, card._id, editedFields)
+        socket.emit('project-update', project)
+        socket.emit('task-team-update', teamId)
     }
 
     useEffect(() => {
@@ -116,7 +71,7 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                 <ConfirmDialog
                     title={'delete this task'}
                     hideConfirm={() => setConfirmOpen(false)}
-                    onConfirm={() => deleteCard()}
+                    onConfirm={handleDeleteTask}
                 />
             }
 
@@ -200,58 +155,14 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                                 teamId={teamId}
                                 setCurrCard={setCurrCard}
                             />
-                            <button className={styles['small-buttons']} 
-                            // onClick={deleteCard} 
-                            onClick={() => {
-                                setConfirmOpen(true)                            
-                            }}
-                            title='Delete Task' >
+                            <button
+                                className={styles['small-buttons']}
+                                onClick={() => setConfirmOpen(true)}
+                                title='Delete Task'
+                            >
                                 <img className={styles.pics} src={pic12} alt='pic12' />
-                            Delete Task
-                        </button>
-
-
-                            {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic3} alt='pic3' />
-                            Join
-                        </div> */}
-                            {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic4} alt='pic4' />
-                            Stickers
-                        </div> */}
-                            {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic5} alt='pic5' />
-                            Due Date
-                        </div> */}
-                            {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic7} alt='pic7' />
-                            Reports
-                        </div> */}
-                            {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic10} alt='pic10' />
-                            Add Teammate
-                        </div> */}
-                            {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic11} alt='pic11' />
-                            Make Template
-                        </div> */}
-                            {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic13} alt='pic13' />
-                            Remove List
-                        </div> */}
-                            {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic8} alt='pic8' />
-                            Settings
-                        </div> */}
-                            {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic9} alt='pic9' />
-                            View
-                        </div> */}
-                            {/* <div className={styles['small-buttons']} >
-                            <img className={styles.pics} src={pic14} alt='pic14' />
-                            Archive
-                        </div> */}
-
+                                Delete Task
+                            </button>
                         </div>
                     </div>
                 </div>

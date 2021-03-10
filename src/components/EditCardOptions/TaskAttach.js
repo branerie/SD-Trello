@@ -1,22 +1,20 @@
 import React, { useState, useEffect } from 'react'
 import styles from './index.module.css'
 import pic6 from '../../images/edit-card/pic6.svg'
-import getCookie from '../../utils/cookie'
-import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import Attachment from '../Attachment'
+import useCardsServices from '../../services/useCardsServices'
 
 export default function TaskAttach({ card, project, teamId, setCurrCard }) {
-    const token = getCookie('x-auth-token')
-    const history = useHistory()
     const socket = useSocket()
     const [attachments, setAttachments] = useState(null)
+    const { addAttachment } = useCardsServices()
 
     useEffect(() => {
         setAttachments(card.attachments)
     }, [card.attachments])
 
-    function addAttachment() {
+    function handleAddAttachment() {
         const widget = window.cloudinary.createUploadWidget({
             cloudName: process.env.REACT_APP_CLOUD_NAME,
             uploadPreset: process.env.REACT_APP_UPLOAD_PRESET,
@@ -33,25 +31,10 @@ export default function TaskAttach({ card, project, teamId, setCurrCard }) {
                 const publicId = result.info.public_id
                 const attachment = { path, name, format, publicId }
 
-
-                const response = await fetch(`/api/projects/lists/cards/attachments/${card._id}`, {
-                    method: 'PUT',
-                    headers: {
-                        'Content-Type': 'application/json',
-                        'Authorization': token
-                    },
-                    body: JSON.stringify({
-                        attachment
-                    })
-                })
-                if (!response.ok) {
-                    history.push('/error')
-                } else {
-                    const updatedCard = await response.json()
-                    setAttachments(updatedCard.attachments)
-                    socket.emit('project-update', project)
-                    socket.emit('task-team-update', teamId)
-                }
+                const updatedCard = await addAttachment(card._id, attachment)
+                setAttachments(updatedCard.attachments)
+                socket.emit('project-update', project)
+                socket.emit('task-team-update', teamId)
             }
 
             if (error) {
@@ -66,7 +49,7 @@ export default function TaskAttach({ card, project, teamId, setCurrCard }) {
 
     return (
         <div>
-            <div className={styles['small-buttons']} onClick={addAttachment}>
+            <div className={styles['small-buttons']} onClick={handleAddAttachment}>
                 <img className={styles.pics} src={pic6} alt='pic6' />
                 Attach File
             </div>
@@ -74,14 +57,14 @@ export default function TaskAttach({ card, project, teamId, setCurrCard }) {
                 {attachments.length <= 4 ? attachments.map(att => (
                     <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} teamId={teamId} setCurrCard={setCurrCard} />
                 )) :
-                <>
-                {attachments.slice(0, 3).map(att => (
-                    <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} teamId={teamId} setCurrCard={setCurrCard} />
-                ))}
-                <div className={`${styles.remaining} ${styles.attachment}`}>
-                    +{attachments.length - 3}
-                </div>
-                </>
+                    <>
+                        {attachments.slice(0, 3).map(att => (
+                            <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} teamId={teamId} setCurrCard={setCurrCard} />
+                        ))}
+                        <div className={`${styles.remaining} ${styles.attachment}`}>
+                            +{attachments.length - 3}
+                        </div>
+                    </>
                 }
             </div>}
         </div>
