@@ -34,9 +34,11 @@ router.post('/inbox', auth, moveMessageToHistory)
 
 router.put('/:id', auth, updateUser)
 
-router.put('/image/:id', auth, updateUserImage)
+router.put('/password/:id', auth, updateUserPassword)
 
-router.put('/addNewPassword/:id', addNewPassword)
+router.put('/addNewPassword/:id', updateUserPassword)
+
+router.put('/image/:id', auth, updateUserImage)
 
 router.put('/recentProjects/:id', auth, updateUserRecentProjects)
 
@@ -243,8 +245,6 @@ async function confirmToken(req, res, next) {
 
 }
 
-
-
 async function updateUser(req, res, next) {
     const id = req.params.id
     let user = { username, password, email, lastTeamSelected } = req.body
@@ -256,7 +256,6 @@ async function updateUser(req, res, next) {
         }
     }
     if (password) {
-
         await bcrypt.genSalt(10, (err, salt) => {
             bcrypt.hash(password, salt, async (err, hash) => {
                 if (err) { next(err); return }
@@ -281,8 +280,6 @@ async function updateUser(req, res, next) {
 
                 res.send(response)
                 return
-
-
             })
         })
     } else {
@@ -295,6 +292,39 @@ async function updateUser(req, res, next) {
         }
         res.send(response)
     }
+}
+
+async function updateUserPassword(req, res, next) {
+    const id = req.params.id
+    const { password } = req.body
+
+    await bcrypt.genSalt(10, (err, salt) => {
+        bcrypt.hash(password, salt, async (err, hash) => {
+            if (err) { next(err); return }
+
+            const updatedUser = await models.User.findOneAndUpdate({ _id: id }, { newPassword: hash, newPasswordConfirmed: false }
+                , { new: true }
+            ).select('-password')
+
+
+            updatedUser.setConfirmationToken() // test
+            await updatedUser.save()
+
+
+            const teams = await getTeams(updatedUser._id)
+            const response = {
+                user: updatedUser,
+                teams
+            }
+
+            utils.sendConfirmationEmail(updatedUser, 'pass') //test
+
+
+            res.send(response)
+            return
+        })
+    })
+
 }
 
 async function updateUserImage(req, res, next) {
@@ -321,38 +351,6 @@ async function updateUserImage(req, res, next) {
     }
     res.send(response)
 
-}
-
-async function addNewPassword(req, res, next) {
-    const id = req.params.id
-
-    const { password } = req.body
-    await bcrypt.genSalt(10, (err, salt) => {
-        bcrypt.hash(password, salt, async (err, hash) => {
-            if (err) { next(err); return }
-
-            const updatedUser = await models.User.findOneAndUpdate({ _id: id }, { newPassword: hash, newPasswordConfirmed: false }
-                , { new: true }
-            ).select('-password')
-
-
-            updatedUser.setConfirmationToken() // test
-            await updatedUser.save()
-
-            const teams = await getTeams(updatedUser._id)
-            const response = {
-                user: updatedUser,
-                teams
-            }
-
-            utils.sendConfirmationEmail(updatedUser, 'pass') //test
-
-
-            res.send(response)
-            return
-
-        })
-    })
 }
 
 async function updateUserRecentProjects(req, res, next) {

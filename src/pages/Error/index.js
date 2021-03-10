@@ -5,7 +5,7 @@ import pic1 from '../../images/error-page.svg'
 
 
 
-export default function ErrorPage() {
+const ErrorPage = () => {
     return (
         <PageLayout>
             <div className={styles.title}>Error Page</div>
@@ -17,4 +17,4 @@ export default function ErrorPage() {
     )
 }
 
-
+export default ErrorPage

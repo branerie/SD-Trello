@@ -10,6 +10,7 @@ import AddPassword from '../FormAddPassword'
 import logo from '../../images/logo.svg'
 import google from '../../images/welcome-page/google.svg'
 import Alert from '../Alert'
+import useUserServices from '../../services/useUserServices'
 
 
 
@@ -23,6 +24,7 @@ const LoginForm = (props) => {
     const [fillAlert, setFillAlert] = useState(false)
     const [wrongPassAllert, setWrongPassAllert] = useState(false)
     const [wrongUserAllert, setWrongUserAllert] = useState(false)
+    const { userLogin } = useUserServices()
 
 
 
@@ -39,25 +41,30 @@ const LoginForm = (props) => {
             return
         }
 
-        await authenticate('/api/user/login', 'POST', {
-            email,
-            password
-        }, (user) => {
-            context.logIn(user)
-            history.push('/')
-        }, (response) => {
-            if (response.needPassword) {
-                setUserId(response.userId)
-                setShowForm(true)
-            }
-            if (response.wrongPassword) {
-                setWrongPassAllert(true)
-            }
-            if (response.wrongUser) {
-                setWrongUserAllert(true)
-            }
-            console.log('Error', response)
-        })
+        // await authenticate('/api/user/login', 'POST', {
+        //     email,
+        //     password
+        // }, (user) => {
+        //     context.logIn(user)
+        //     history.push('/')
+        // }, 
+        // (response) => {
+        const response = await userLogin(email, password)
+        if (response.needPassword) {
+            setUserId(response.userId)
+            setShowForm(true)
+            return
+        }
+        if (response.wrongPassword) {
+            setWrongPassAllert(true)
+            return
+        }
+        if (response.wrongUser) {
+            setWrongUserAllert(true)
+            return
+        }
+        context.logIn(response)
+        history.push('/')
     }
 
     const handleGoogle = (googleResponse) => {
@@ -77,12 +84,10 @@ const LoginForm = (props) => {
         <div>
 
             {
-                showForm ?
-                    <div>
-                        <Transparent hideForm={hideForm}>
-                            <AddPassword hideForm={hideForm} userId={userId} email={email} />
-                        </Transparent>
-                    </div> : null
+                showForm &&
+                <Transparent hideForm={hideForm}>
+                    <AddPassword hideForm={hideForm} userId={userId} email={email} />
+                </Transparent>
             }
             <form className={styles.container} onSubmit={handleSubmit}>
 

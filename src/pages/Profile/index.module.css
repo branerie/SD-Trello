@@ -16,7 +16,7 @@
    
   }
 
-  .left-container{
+  .inputs-container{
     height: auto;
     flex-wrap: wrap;
     min-width: 42%;
@@ -131,13 +131,16 @@
 
   .profile-pic{
     width: 200px;
-    /* height: 150px; */
     background-color:white;
     border-radius: 14px;
     border: 1px solid #707070;
     margin-bottom: 1%;
     overflow: hidden;
     cursor: pointer;
+  }
+
+  .no-pic{
+    height: 100px;
   }
 
   .load-pic-text{
@@ -227,6 +230,7 @@
   color: white;
   position: relative;
   left: -100px;
+  z-index: 2;
 }
 
 .teams-home{ 
@@ -314,6 +318,6 @@
   top: 8px;
   left: -100px;
   margin-right: 2px;
-  top: -153px;
+  top: -203px;
   z-index: 10;
 }
