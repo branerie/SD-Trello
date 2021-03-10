@@ -27,7 +27,7 @@ fieldset {
     border-radius: 10px;
     z-index: 3;
     overflow-y: auto;
-    left: 0.5rem;
+    /* left: 0.5rem; */
     top: 3.5rem;
 }
 
@@ -39,8 +39,11 @@ fieldset {
     align-items: center;
     height: 38px;
     padding: 0.3rem;
-    text-align: center;
     cursor: pointer;
+    text-align: center;
+    white-space: nowrap;
+    overflow: hidden;
+    text-overflow: ellipsis;
 }
 
 .option:first-of-type {
@@ -68,7 +71,7 @@ fieldset {
 }
 
 .btn-partial {
-    width: 8rem;
+    width: 9rem;
     min-height: 2.6rem;
     max-height: 2.6rem;
     border-top-right-radius: 0;
@@ -76,10 +79,17 @@ fieldset {
     margin-right: 0;
     border-right: 0;
     font-size: 0.8rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
 }
 
 .btn-partial:hover {
     border: 0;
+}
+
+.btn-whole {
+    width: 10.5rem;
 }
 
 .btn-clear {
@@ -96,4 +106,11 @@ fieldset {
 
 .btn-container {
     display: flex;
+}
+
+@media (max-width: 1366px) {
+    .btn-partial {
+        min-height: unset;
+        max-height: unset;
+    }
 }

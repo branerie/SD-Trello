@@ -1,10 +1,11 @@
 import React from 'react'
 import styles from './index.module.css'
+import commonStyles from '../index.module.css'
 import DatePicker from 'react-datepicker'
-import { formatDate } from '../../utils/date'
-import FilterWrapper from '../FilterWrapper'
+import { formatDate } from '../../../utils/date'
+import FilterWrapper from '../../FilterWrapper'
 
-const DueDateFilter = ({ dueBefore, buttonStyle, onChange, handleFilterClear }) => {
+export default function DueDateFilter({ dueBefore, onChange, handleFilterClear }) {
     return (
         <FilterWrapper
             legendContent='Tasks due before:'
@@ -13,9 +14,10 @@ const DueDateFilter = ({ dueBefore, buttonStyle, onChange, handleFilterClear }) 
             <DatePicker
                 selected={dueBefore}
                 customInput={
-                    <button className={dueBefore 
-                            ? `${buttonStyle} ${styles['filter-used']}`
-                            : `${buttonStyle} ${styles['filter-blank']}`}
+                    <button 
+                        className={`${commonStyles['nav-buttons']} ${commonStyles.filter} ${dueBefore 
+                                                                                    ? styles['filter-used'] 
+                                                                                    : styles['filter-blank']}`}
                     >
                         {dueBefore ? formatDate(dueBefore, '%d-%m-%Y') : 'Due Before:'}
                     </button>
@@ -25,7 +27,7 @@ const DueDateFilter = ({ dueBefore, buttonStyle, onChange, handleFilterClear }) 
             />
             { dueBefore &&
                 <button 
-                    className={`${buttonStyle} ${styles['filter-clear']}`}
+                    className={`${commonStyles['nav-buttons']} ${commonStyles.filter} ${commonStyles['filter-clear']}`}
                     onClick={handleFilterClear}
                 >
                     X
@@ -33,6 +35,4 @@ const DueDateFilter = ({ dueBefore, buttonStyle, onChange, handleFilterClear }) 
             }
         </FilterWrapper>
     )
-}
-
-export default DueDateFilter
+        }

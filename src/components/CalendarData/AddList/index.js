@@ -1,8 +1,8 @@
 import React, { useCallback, useState } from 'react'
 import { useHistory } from 'react-router-dom'
-import { useSocket } from '../../contexts/SocketProvider'
-import getCookie from '../../utils/cookie'
-import AddProjectElement from './AddProjectElement'
+import { useSocket } from '../../../contexts/SocketProvider'
+import getCookie from '../../../utils/cookie'
+import AddProjectElement from '../AddProjectElement'
 
 export default function AddList({ project, handleInputRemove }) {
     const [listName, setListName] = useState('')

@@ -1,8 +1,8 @@
 import React, { useState } from 'react'
-import getCookie from '../../utils/cookie'
-import { useSocket } from '../../contexts/SocketProvider'
+import getCookie from '../../../utils/cookie'
+import { useSocket } from '../../../contexts/SocketProvider'
 import { useHistory } from 'react-router-dom'
-import AddProjectElement from './AddProjectElement'
+import AddProjectElement from '../AddProjectElement'
 
 export default function AddTask({ listId, project, handleInputRemove }) {
     const [taskName, setTaskName] = useState('')

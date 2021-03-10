@@ -1,9 +1,9 @@
 import React, { useCallback, useMemo, useRef, useState } from 'react'
-import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick';
-import { useHistory, useParams } from 'react-router-dom';
-import { useSocket } from '../../contexts/SocketProvider';
+import { useHistory, useParams } from 'react-router-dom'
+import commonStyles from '../index.module.css'
+import getCookie from '../../../utils/cookie'
+import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
+import { useSocket } from '../../../contexts/SocketProvider'
 
 export default function TaskProgress(props) {
 
@@ -131,9 +131,9 @@ export default function TaskProgress(props) {
 
             {
                 isActive ?
-                    <div ref={dropdownRef} className={styles.taskProgress} onBlur={editCardProgress}>
+                    <div ref={dropdownRef} className={commonStyles.taskProgress} onBlur={editCardProgress}>
                         <input
-                            className={styles.taskProgressButtonInput}
+                            className={commonStyles.taskProgressButtonInput}
                             style={{ backgroundColor: getBackGroundColor(cardProgress) }}
                             type={'number'}
                             value={cardProgress}
@@ -148,8 +148,8 @@ export default function TaskProgress(props) {
                     // { 
                     //     (taskprogress!== null)?
 
-                    <div className={styles.taskProgress} onClick={() => setIsActive(!isActive)}>
-                        {/* <button className={styles.taskProgressButton}  */}
+                    <div className={commonStyles.taskProgress} onClick={() => setIsActive(!isActive)}>
+                        {/* <button className={commonStyles.taskProgressButton}  */}
                         {/* > */}
                         {showTaskProgress(taskprogress)}
                         {/* </button> */}
