@@ -1,5 +1,4 @@
 import React, { useState, useEffect, useCallback } from 'react'
-import { useHistory } from 'react-router-dom'
 import TeamInvitationInbox from '../../components/Inbox/TeamInvitationInbox'
 import TeamInvitationHistory from '../../components/Inbox/TeamInvitationHistory'
 import TeamInvitationResponse from '../../components/Inbox/TeamInvitationResponse'
@@ -7,37 +6,29 @@ import TaskAssignment from '../../components/Inbox/TaskAssignment'
 import PageLayout from '../../components/PageLayout'
 import Title from '../../components/Title'
 import { useSocket } from '../../contexts/SocketProvider'
-import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
 import TeamDeleted from '../../components/Inbox/TeamDeleted'
 import ProjectDeleted from '../../components/Inbox/ProjectDeleted'
 import TeamInvitationCanceled from '../../components/Inbox/TeamInvitationCanceled'
+import useUserServices from '../../services/useUserServices'
 
 const InboxPage = () => {
     const [inbox, setInbox] = useState([])
     const [inboxHistory, setInboxHistory] = useState([])
-    const history = useHistory()
     const socket = useSocket()
-    const token = getCookie('x-auth-token')
     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }
+    const { getUserInbox } = useUserServices()
+
 
     const getInbox = useCallback(async () => {
-        const response = await fetch('/api/user/inbox', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        })
-        if (!response.ok) {
-            history.push('/error')
-            return
-        } else {
-            const user = await response.json()
-            setInbox(user.inbox)
-            setInboxHistory(user.inboxHistory)
-        }
-    }, [history, token])
+        // if (inbox.length > 0 || inboxHistory.length > 0) {
+        //     return
+        // }
+        const user = await getUserInbox()
+        setInbox(user.inbox)
+        setInboxHistory(user.inboxHistory)
+        
+    }, [])
 
     useEffect(() => {
         getInbox()
