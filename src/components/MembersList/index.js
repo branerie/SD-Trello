@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import Avatar from 'react-avatar'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import AvatarUser from '../AvatarUser'
@@ -6,8 +6,7 @@ import ShowAllTaskMembers from '../ShowAllTaskMembers'
 import styles from './index.module.css'
 
 const MembersList = ({ members, maxLength, deleteMemberOption, deleteMemberObj }) => {
-    const ref = useRef(null)
-    const [isActive, setIsActive] = useDetectOutsideClick(ref)
+    const [isActive, setIsActive, ref] = useDetectOutsideClick()
 
     maxLength = Math.min(maxLength, members.length)
 

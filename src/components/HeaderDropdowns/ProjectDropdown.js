@@ -1,4 +1,4 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useContext, useEffect, useState } from 'react'
 import styles from './index.module.css'
 import TeamContext from '../../contexts/TeamContext'
 import ProjectContext from '../../contexts/ProjectContext'
@@ -14,10 +14,9 @@ export default function ProjectDropdown() {
     const teamContext = useContext(TeamContext)
     const projectContext = useContext(ProjectContext)
     const params = useParams()
-    const projectRef = useRef(null)
     const [showProjectForm, setShowProjectForm] = useState(false)
     const [showOldProjects, setShowOldProjects] = useState(false)
-    const [isProjectActive, setIsProjectActive] = useDetectOutsideClick(projectRef)
+    const [isProjectActive, setIsProjectActive, projectRef] = useDetectOutsideClick()
 
     useEffect(() => {
         if (projectContext.project.isFinished === true) {

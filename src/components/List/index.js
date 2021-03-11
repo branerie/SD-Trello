@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import { Draggable, Droppable } from 'react-beautiful-dnd'
 import { useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
@@ -15,12 +15,9 @@ import useCardsServices from '../../services/useCardsServices'
 import Transparent from '../Transparent'
 import EditList from '../EditList'
 
-
 export default function List({ isAdmin, project, list, setIsDragListDisabled }) {
-    const dropdownRef = useRef(null);
-    const cardRef = useRef(null);
-    const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
-    const [isEditListActive, setIsEditListActive] = useDetectOutsideClick(dropdownRef)
+    const [isVisible, setIsVisible, cardRef] = useDetectOutsideClick()
+    const [isEditListActive, setIsEditListActive, dropdownRef] = useDetectOutsideClick()
     const [isVisibleEditList, setIsVisibleEditList] = useState(false)
     const [isDragCardDisabled, setIsDragCardDisabled] = useState(false)
     const [cardName, setCardName] = useState('')

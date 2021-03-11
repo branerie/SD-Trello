@@ -1,6 +1,5 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import commonStyles from '../index.module.css'
-import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
 import { useParams } from 'react-router-dom'
 import { useSocket } from '../../../contexts/SocketProvider'
 import pen from '../../../images/pen.svg'
@@ -10,8 +9,7 @@ import EditCard from '../../EditCard'
 import useCardsServices from '../../../services/useCardsServices'
 
 export default function TaskDueDate(props) {
-    const dropdownRef = useRef(null)
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
+    const [isActive, setIsActive] = useState(false)
     const [cardDueDate, setCardDueDate] = useState(props.cardDueDate)
     const [isVisible, setIsVisible] = useState(false)
     const socket = useSocket()

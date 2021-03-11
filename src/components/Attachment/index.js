@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import styles from './index.module.css'
 import pic1 from '../../images/edit-card/pic1.svg'
 import AttachmentList from '../AttachmentList'
@@ -6,8 +6,7 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Transparent from '../Transparent'
 
 export default function Attachment({ att, attachments, card, project, teamId }) {
-    const listRef = useRef(null)
-    const [isListVisible, setIsListVisible] = useDetectOutsideClick(listRef)
+    const [isListVisible, setIsListVisible, listRef] = useDetectOutsideClick()
 
     return (
         <div>

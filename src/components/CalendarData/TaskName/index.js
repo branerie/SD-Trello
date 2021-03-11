@@ -1,4 +1,4 @@
-import React, { useCallback, useRef, useState } from 'react'
+import React, { useCallback, useState } from 'react'
 import commonStyles from '../index.module.css'
 import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
 import { useParams } from 'react-router-dom'
@@ -8,8 +8,7 @@ import ResponsiveTextArea from '../../ResponsiveTextarea'
 import useCardsServices from '../../../services/useCardsServices'
 
 export default function TaskName({ card, listId, project }) {
-	const inputRef = useRef(null)
-	const [isActive, setIsActive] = useDetectOutsideClick(inputRef)
+	const [isActive, setIsActive, inputRef] = useDetectOutsideClick()
 	const [cardName, setCardName] = useState(card.name)
 	const socket = useSocket()
 	const params = useParams()

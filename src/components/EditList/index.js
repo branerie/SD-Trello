@@ -19,8 +19,7 @@ export default function EditList(props) {
     const [currInput, setCurrInput] = useState(null)
     const [name, setName] = useState(props.list.name)
     const socket = useSocket()
-    const dropdownRef = useRef(null)
-    const [isColorActive, setIsColorActive] = useDetectOutsideClick(dropdownRef)
+    const [isColorActive, setIsColorActive, dropdownRef] = useDetectOutsideClick()
     const [color, setColor] = useState(props.list.color || '#A6A48E')
     const [isAdmin, setIsAdmin] = useState(false)
     const members = props.project.membersRoles

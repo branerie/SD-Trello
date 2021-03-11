@@ -1,4 +1,4 @@
-import React, { useRef, useState, useMemo, useEffect } from 'react'
+import React, { useState, useMemo, useEffect } from 'react'
 import styles from './index.module.css'
 import pic2 from '../../images/edit-card/pic2.svg'
 import ProgressBar from '../ProgressBar'
@@ -8,11 +8,10 @@ import useCardsServices from '../../services/useCardsServices'
 
 export default function TaskProgress({ card, listId, project, teamId, taskHistory, setTaskHistory }) {
     const socket = useSocket()
-    const ref = useRef(null)
     const [progress, setProgress] = useState(null)
     const [currInput, setCurrInput] = useState(null)
     const [isInputOk, setIsInputOk] = useState(true)
-    const [isInputActive, setIsInputActive] = useDetectOutsideClick(ref)
+    const [isInputActive, setIsInputActive, ref] = useDetectOutsideClick()
     const [isInputVisible, setIsInputVisible] = useState(false)
     const today = useMemo(() => new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()), [])
     const { editTask } = useCardsServices()

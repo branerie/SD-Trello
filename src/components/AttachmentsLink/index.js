@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import ButtonClean from '../ButtonClean'
 import styles from './index.module.css'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
@@ -6,9 +6,14 @@ import attPic from '../../images/edit-card/pic6.svg'
 import Transparent from '../Transparent'
 import AttachmentList from '../AttachmentList'
 
-const AttachmentsLink = ({ card, project, teamId, setIsDragCardDisabled, setIsDragListDisabled }) => {
-    const listRef = useRef(null)
-    const [isVisible, setIsVisible] = useDetectOutsideClick(listRef)
+const AttachmentsLink = ({
+    card,
+    project,
+    teamId,
+    setIsDragCardDisabled,
+    setIsDragListDisabled
+}) => {
+    const [isVisible, setIsVisible, listRef] = useDetectOutsideClick()
 
     const onClick = () => {
         setIsVisible(true)

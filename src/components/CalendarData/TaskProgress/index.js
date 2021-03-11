@@ -1,4 +1,4 @@
-import React, { useCallback, useMemo, useRef, useState } from 'react'
+import React, { useCallback, useMemo, useState } from 'react'
 import commonStyles from '../index.module.css'
 import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
 import { useParams } from 'react-router-dom'
@@ -17,8 +17,7 @@ export default function TaskProgress(props) {
         taskprogress = token[0]
     }
 
-    const dropdownRef = useRef(null)
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
+    const [isActive, setIsActive, dropdownRef] = useDetectOutsideClick()
     const [cardProgress, setCardProgress] = useState(taskprogress)
     const socket = useSocket()
     const params = useParams()

@@ -1,4 +1,4 @@
-import React, { useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import SearchResults from '../SearchResults'
 import styles from './index.module.css'
@@ -6,9 +6,8 @@ import searchImg from '../../images/search.svg'
 
 
 const SearchField = ({ asideOn }) => {
-    const dropdownRefSearch = useRef(null)
     const [searchInput, setSearchInput] = useState('')
-    const [showSearchForm, setShowSearchForm] = useDetectOutsideClick(dropdownRefSearch)
+    const [showSearchForm, setShowSearchForm, dropdownRefSearch] = useDetectOutsideClick()
     const [showSearchInput, setShowSearchInput] = useState(false)
 
     const onBlur = () => {

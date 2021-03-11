@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState } from 'react'
+import React, { useContext, useState } from 'react'
 import styles from './index.module.css'
 import LinkComponentTitle from '../LinkTitle'
 import ButtonClean from '../ButtonClean'
@@ -10,9 +10,8 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 export default function TeamDropdown() {
     const teamContext = useContext(TeamContext)
-    const teamRef = useRef(null)
     const [showTeamForm, setShowTeamForm] = useState(false)
-    const [isTeamActive, setIsTeamActive] = useDetectOutsideClick(teamRef)
+    const [isTeamActive, setIsTeamActive, teamRef] = useDetectOutsideClick()
 
     function selectTeam(teamId, teamName) {
         teamContext.getCurrentProjects(teamId)
