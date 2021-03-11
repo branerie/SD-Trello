@@ -293,6 +293,7 @@ export default function useUserServices() {
             history.push('/error')
             return
         }
+
         const user = await response.json()
         return user
 
@@ -309,8 +310,21 @@ export default function useUserServices() {
         const data = await response.json()
         return data
     }
+    
+    const updateRecentProjects = async (userId, recentProjects) => {
+        const response = await fetch(`${USER_URL}/recentProjects/${userId}`, {
+            method: 'PUT',
+            headers: getHeaders(),
+            body: JSON.stringify({ recentProjects })
+        })
 
+        if (!response.ok) {
+            history.push('/error')
+            return
+        }
 
+        return await response.json()
+    }
 
     return {
         getUser,
@@ -327,7 +341,8 @@ export default function useUserServices() {
         logoutUser,
         verifyLogin,
         getUserInbox,
-        getUserTasks
+        getUserTasks,
+        updateRecentProjects
     }
 
 }
