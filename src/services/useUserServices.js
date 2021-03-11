@@ -259,7 +259,20 @@ export default function useUserServices() {
         return response
     }
 
+    const updateRecentProjects = async (userId, recentProjects) => {
+        const response = await fetch(`${USER_URL}/recentProjects/${userId}`, {
+            method: 'PUT',
+            headers: getHeaders(),
+            body: JSON.stringify({ recentProjects })
+        })
 
+        if (!response.ok) {
+            history.push('/error')
+            return
+        }
+
+        return await response.json()
+    }
 
     return {
         getUser,
@@ -272,7 +285,8 @@ export default function useUserServices() {
         moveMessageToHistory,
         deleteUserMessage,
         confirmToken,
-        registerUser
+        registerUser,
+        updateRecentProjects
     }
 
 }
