@@ -1,27 +1,26 @@
-import React, { useCallback, useContext, useEffect, useState, useRef } from 'react'
+import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
-import List from '../../components/List'
-import PageLayout from '../../components/PageLayout'
-import { useSocket } from '../../contexts/SocketProvider'
-import getCookie from '../../utils/cookie'
-import styles from './index.module.css'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
-import pic from '../../images/pic.svg'
-import ProjectContext from '../../contexts/ProjectContext'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Loader from 'react-loader-spinner'
-import ButtonClean from '../../components/ButtonClean'
+import { useSocket } from '../../contexts/SocketProvider'
 import UserContext from '../../contexts/UserContext'
+import ProjectContext from '../../contexts/ProjectContext'
+import styles from './index.module.css'
+import PageLayout from '../../components/PageLayout'
+import List from '../../components/List'
+import ButtonClean from '../../components/ButtonClean'
+import pic from '../../images/pic.svg'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import userObject from '../../utils/userObject'
 import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
+import getCookie from '../../utils/cookie'
 import useListsServices from '../../services/useListsServices'
 
-export default function ProjectBoard() {
+const ProjectBoard = () => {
     const params = useParams()
     const history = useHistory()
     const [listName, setListName] = useState('')
-    const listRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(listRef)
+    const [isActive, setIsActive, listRef] = useDetectOutsideClick()
     const socket = useSocket()
     const projectContext = useContext(ProjectContext)
     const [isAdmin, setIsAdmin] = useState(false)
@@ -106,9 +105,9 @@ export default function ProjectBoard() {
     useEffect(() => {
         if (!projectContext.project || projectContext.project._id !== params.projectid) {
             return
-        } else {
-            updateUserRecentProjects()
         }
+
+        updateUserRecentProjects()
     }, [params.projectid, projectContext.project, updateUserRecentProjects])
 
     if (!projectContext.project || projectContext.project._id !== params.projectid) {
@@ -248,3 +247,5 @@ export default function ProjectBoard() {
         </PageLayout>
     )
 }
+
+export default ProjectBoard

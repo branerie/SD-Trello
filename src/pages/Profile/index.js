@@ -1,4 +1,4 @@
-import React, { useState, useEffect, useCallback, useContext, useRef } from 'react'
+import React, { useState, useEffect, useCallback, useContext } from 'react'
 import { useParams, useHistory } from 'react-router-dom'
 import styles from './index.module.css'
 import PageLayout from '../../components/PageLayout'
@@ -17,7 +17,6 @@ import pen from '../../images/pen.svg'
 
 
 const ProfilePage = () => {
-  const dropdownRef = useRef(null)
   const userContext = useContext(UserContext)
   const [userEmail, setUserEmail] = useState(null)
   const [isPasswordActive, setIsPaswordActive] = useState(false)
@@ -26,8 +25,8 @@ const ProfilePage = () => {
   const [password, setPassword] = useState(null);
   const [rePassword, setRePassword] = useState(null);
   const [alert, setAlert] = useState(false)
-  const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useDetectOutsideClick(dropdownRef)
-  const [isEditPictureActive, setIsEditPictureActive] = useDetectOutsideClick(dropdownRef)
+  const [showTeamsVisibleForm, setShowTeamsVisibleForm, teamRef] = useDetectOutsideClick()
+  const [isEditPictureActive, setIsEditPictureActive, dropdownRef] = useDetectOutsideClick()
   const [confirmOpen, setConfirmOpen] = useState(false)
   const { getUser, updateUser, updateUserPassword, updateUserImage } = useUserServices()
 
@@ -230,7 +229,7 @@ const ProfilePage = () => {
             <div className={styles.myTeamsContainer}>
               <ButtonGrey title={'My Teams'} className={styles['navigate-buttons']}
                 onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
-              <div className={styles['select-team-container']} ref={dropdownRef}>
+              <div className={styles['select-team-container']} ref={teamRef}>
                 {
                   showTeamsVisibleForm &&
                   <MyTeamsMenu userTeams={userTeams} goToTeamPage={goToTeamPage} />

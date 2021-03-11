@@ -1,4 +1,4 @@
-import React, { useContext, useRef, useState, useEffect } from 'react'
+import React, { useContext, useState, useEffect } from 'react'
 import styles from './index.module.css'
 import { useHistory, useParams } from 'react-router-dom'
 import ButtonClean from '../ButtonClean'
@@ -9,8 +9,7 @@ export default function ViewDropdown() {
     const history = useHistory()
     const params = useParams()
     const projectContext = useContext(ProjectContext)
-    const viewRef = useRef(null)
-    const [isViewActive, setIsViewActive] = useDetectOutsideClick(viewRef)
+    const [isViewActive, setIsViewActive, viewRef] = useDetectOutsideClick()
     const [viewState, setViewState] = useState(null)
 
     useEffect(() => {

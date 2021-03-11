@@ -1,4 +1,4 @@
-import React, { useContext, useMemo, useRef } from 'react'
+import React, { useContext, useMemo } from 'react'
 import styles from './index.module.css'
 import commonStyles from '../index.module.css'
 import ProjectContext from '../../../contexts/ProjectContext'
@@ -7,8 +7,7 @@ import ButtonClean from '../../ButtonClean'
 import FilterWrapper from '../../FilterWrapper'
 
 export default function MembersFilter({ membersFilter, setMembersFilter, handleFilterClear }) {
-    const dropdownRef = useRef(null)
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
+    const [isActive, setIsActive, dropdownRef] = useDetectOutsideClick()
     const { project } = useContext(ProjectContext)
 
     const options = useMemo(() => {

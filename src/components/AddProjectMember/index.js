@@ -1,10 +1,9 @@
-import React, { useCallback, useContext, useRef, useState } from 'react'
+import React, { useCallback, useContext, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useSocket } from '../../contexts/SocketProvider'
 import TeamContext from '../../contexts/TeamContext'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import UserContext from '../../contexts/UserContext'
 import { DragDropContext, Draggable, Droppable } from 'react-beautiful-dnd'
 import ConfirmDialog from '../ConfirmationDialog'
@@ -13,14 +12,13 @@ import ButtonClean from '../ButtonClean'
 import useProjectsServices from '../../services/useProjectsServices'
 
 
-export default function AddMember(props) {
+export default function AddProjectMember(props) {
 
     const socket = useSocket()
     const [users, setUsers] = useState([])
     const context = useContext(UserContext)
     const teamContext = useContext(TeamContext)
-    const dropdownRef = useRef(null);
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
+    const [isActive, setIsActive] = useState(false)
     const [showMembers, setShowMembers] = useState(false)
     const [member, setMember] = useState('')
     const [members, setMembers] = useState(props.project.membersRoles)

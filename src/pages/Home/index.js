@@ -1,4 +1,4 @@
-import React, { useContext, useState, useRef } from 'react'
+import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
 import PageLayout from '../../components/PageLayout'
@@ -13,11 +13,10 @@ import MyTeamsMenu from '../../components/MyTeamsMenu'
 
 
 const Home = () => {
-  const dropdownRef = useRef(null)
   const userContext = useContext(UserContext)
   const history = useHistory()
   const [showTeamForm, setShowTeamForm] = useState(false)
-  const [showTeamsVisibleForm, setShowTeamsVisibleForm] = useDetectOutsideClick(dropdownRef)
+  const [showTeamsVisibleForm, setShowTeamsVisibleForm, dropdownRef] = useDetectOutsideClick()
   const userName = userContext.user.username
   const userTeams = userContext.user.teams
   const userId = userContext.user._id

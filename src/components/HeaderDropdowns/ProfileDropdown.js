@@ -1,4 +1,4 @@
-import React, { useContext, useRef } from 'react'
+import React, { useContext } from 'react'
 import styles from './index.module.css'
 import ButtonClean from '../ButtonClean'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
@@ -7,10 +7,9 @@ import { useHistory } from 'react-router-dom'
 import UserContext from '../../contexts/UserContext'
 
 export default function ProfileDropdown() {
-    const profileRef = useRef(null)
     const history = useHistory()
     const context = useContext(UserContext)
-    const [isProfileActive, setIsProfileActive] = useDetectOutsideClick(profileRef)
+    const [isProfileActive, setIsProfileActive, profileRef] = useDetectOutsideClick()
 
     return (<div className={styles['dropdown-container']}>
         <ButtonClean

@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import styles from './index.module.css'
 import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
@@ -11,9 +11,8 @@ import useCardsServices from '../../services/useCardsServices'
 
 
 export default function TaskMembers({ card, listId, project, teamId }) {
-    const ref = useRef(null);
     const [cardMembers, setCardMembers] = useState(null)
-    const [isActive, setIsActive] = useDetectOutsideClick(ref)
+    const [isActive, setIsActive, ref] = useDetectOutsideClick()
     const [users, setUsers] = useState([])
     const history = useHistory()
     const socket = useSocket()

@@ -1,4 +1,4 @@
-import React, { useRef } from 'react'
+import React from 'react'
 import styles from './index.module.css'
 import commonStyles from '../index.module.css'
 import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
@@ -6,8 +6,7 @@ import ButtonClean from '../../ButtonClean'
 import ToggleSwitch from '../../ToggleSwitch'
 
 export default function ProgressFilters({ filters, toggleFilter }) {
-    const dropdownRef = useRef(null)
-    const [isActive, setIsActive] = useDetectOutsideClick(dropdownRef)
+    const [isActive, setIsActive, dropdownRef] = useDetectOutsideClick()
 
     return (
         <div className={styles.container}>
