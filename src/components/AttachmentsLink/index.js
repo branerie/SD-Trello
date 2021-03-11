@@ -42,6 +42,8 @@ const AttachmentsLink = ({ card, project, teamId, setIsDragCardDisabled, setIsDr
                     card={card}
                     project={project}
                     teamId={teamId}
+                    setIsDragCardDisabled={setIsDragCardDisabled}
+                    setIsDragListDisabled={setIsDragListDisabled}
                 />
             </Transparent >
         }

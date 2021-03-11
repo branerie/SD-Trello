@@ -7,7 +7,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import ConfirmDialog from '../ConfirmationDialog'
 import useCardsServices from '../../services/useCardsServices'
 
-export default function AttachmentList({ attachments, listRef, card, project, teamId }) {
+export default function AttachmentList({ attachments, listRef, card, project, teamId, setIsDragCardDisabled, setIsDragListDisabled }) {
     const socket = useSocket()
     const [attachmentsArr, setAttachmentsArr] = useState([])
     const [confirmOpen, setConfirmOpen] = useState(false)
@@ -30,17 +30,20 @@ export default function AttachmentList({ attachments, listRef, card, project, te
         socket.emit('task-team-update', teamId)
     }
 
-
+    const onConfirm = () => {
+        handleDeteleAttachment(currElement)
+        
+        if (setIsDragCardDisabled) setIsDragCardDisabled(false)
+        if (setIsDragListDisabled) setIsDragListDisabled(false)
+    }
+    
+    const onDecline = () => {
+        if (setIsDragCardDisabled) setIsDragCardDisabled(false)
+        if (setIsDragListDisabled) setIsDragListDisabled(false)
+    }
 
     return (
         <div ref={listRef}>
-            {confirmOpen &&
-                <ConfirmDialog
-                    title='remove this attachment'
-                    hideConfirm={() => setConfirmOpen(false)}
-                    onConfirm={() => handleDeteleAttachment(currElement)}
-                />
-            }
             <div className={styles.container}>
                 <div className={styles.title}>Task Attachments</div>
                 {attachmentsArr.map((att, index) => (
@@ -58,6 +61,14 @@ export default function AttachmentList({ attachments, listRef, card, project, te
                     </div>
                 ))}
             </div>
+            {confirmOpen &&
+                <ConfirmDialog
+                    title='remove this attachment'
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={onConfirm}
+                    onDecline={onDecline}
+                />
+            }
         </div>
     )
 }
