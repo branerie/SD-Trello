@@ -1,16 +1,15 @@
 .teams-container{ 
     /* width: auto; */
-    width: fit-content; 
-    min-width: 200px; 
+    width: 185px;
     height: auto;
     max-height: 180px;
-    border: 1px solid #000000; 
+    border: 1px solid #000000;
     background-color: #363338;
     border: solid 1px #363338;
-    border-radius: 10px; 
-    padding: 4px;
+    border-radius: 10px;
+    padding: 5px;
     font-weight: normal;
-    overflow-y: auto;  
+    overflow-y: auto; 
     -ms-overflow-style: none;
     scrollbar-width: none; 
   }

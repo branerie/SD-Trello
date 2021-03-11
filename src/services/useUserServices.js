@@ -15,7 +15,6 @@ export default function useUserServices() {
         }
     }
 
-
     const getUser = async (userId) => {
 
         const response = await fetch(`${USER_URL}/${userId}`, {
@@ -259,6 +258,58 @@ export default function useUserServices() {
         return response
     }
 
+    const logoutUser = async () => {
+
+        const response = await fetch(`${USER_URL}/logout`, {
+            method: 'POST',
+            headers: getHeaders()
+        })
+        if (!response.ok) {
+            history.push('/error')
+        } else {
+            document.cookie = 'x-auth-token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; path=/;'
+
+            return response
+        }
+    }
+
+    const verifyLogin = async () => {
+        const response = await fetch(`${USER_URL}/verify`, {
+            method: 'GET',
+            headers: getHeaders()
+        })
+        if (!response.ok) {
+            history.push('/error')
+        }
+        return await response.json()
+    }
+
+    const getUserInbox = async () => {
+        const response = await fetch(`${USER_URL}/inbox`, {
+            method: 'GET',
+            headers: getHeaders()
+        })
+        if (!response.ok) {
+            history.push('/error')
+            return
+        }
+        const user = await response.json()
+        return user
+
+    }
+
+    const getUserTasks = async (teamId) => {
+        const response = await fetch(`${USER_URL}/tasks/${teamId}`, {
+            method: 'GET',
+            headers: getHeaders()
+        })
+        if (!response.ok) {
+            history.push('/error')
+        }
+        const data = await response.json()
+        return data
+    }
+
 
 
     return {
@@ -272,7 +323,16 @@ export default function useUserServices() {
         moveMessageToHistory,
         deleteUserMessage,
         confirmToken,
-        registerUser
+        registerUser,
+        logoutUser,
+        verifyLogin,
+        getUserInbox,
+        getUserTasks
     }
 
 }
+
+
+
+
+

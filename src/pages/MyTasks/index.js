@@ -1,50 +1,62 @@
 import React, { useState, useContext, useEffect, useCallback } from 'react'
-import { Link, useHistory } from 'react-router-dom'
+import { Link } from 'react-router-dom'
 import PageLayout from '../../components/PageLayout'
 import Title from '../../components/Title'
 import UserContext from '../../contexts/UserContext'
-import getCookie from '../../utils/cookie'
 import styles from './index.module.css'
 import myTasks from '../../images/my-tasks/my-tasks.svg'
 import { useSocket } from '../../contexts/SocketProvider'
 import MyTasksTask from '../../components/MyTasksTask'
 import ButtonCleanTitle from '../../components/ButtonCleanTitle'
 import ButtonClean from '../../components/ButtonClean'
+import useUserServices from '../../services/useUserServices'
 
 const MyTasksPage = () => {
     const userContext = useContext(UserContext)
     const [projects, setProjects] = useState([])
     const [showOldProjects, setShowOldProjects] = useState(false)
+    const { getUserTasks } = useUserServices()
 
-    const history = useHistory()
+
     const socket = useSocket()
 
     const selectTeam = useCallback(async (teamId) => {
-
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/user/tasks/${teamId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            const data = await response.json()
-            if (data === 'Team not found') return
-            setProjects(data)
-            if (teamId !== userContext.user.lastTeamSelected) {
-                const user = { ...userContext.user }
-                user.lastTeamSelected = teamId
-                userContext.setUser({
-                    ...user,
-                    loggedIn: true
-                })
-            }
+       
+        const data = await getUserTasks(teamId)
+        if (data === 'Team not found') return
+        setProjects(data)
+        if (teamId !== userContext.user.lastTeamSelected) {
+            const user = { ...userContext.user }
+            user.lastTeamSelected = teamId
+            userContext.setUser({
+                ...user,
+                loggedIn: true
+            })
         }
-    }, [history, userContext])
+        // const token = getCookie('x-auth-token')
+        // const response = await fetch(`/api/user/tasks/${teamId}`, {
+        //     method: 'GET',
+        //     headers: {
+        //         'Content-Type': 'application/json',
+        //         'Authorization': token
+        //     }
+        // })
+        // if (!response.ok) {
+        //     history.push('/error')
+        // } else {
+        //     const data = await response.json()
+        //     if (data === 'Team not found') return
+        //     setProjects(data)
+        //     if (teamId !== userContext.user.lastTeamSelected) {
+        //         const user = { ...userContext.user }
+        //         user.lastTeamSelected = teamId
+        //         userContext.setUser({
+        //             ...user,
+        //             loggedIn: true
+        //         })
+        //     }
+        // }
+    }, [ userContext])
 
     useEffect(() => {
         if (!userContext.user.lastTeamSelected || socket == null) return
