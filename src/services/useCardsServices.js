@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useHistory } from 'react-router'
 import getCookie from '../utils/cookie'
 
@@ -13,7 +14,7 @@ export default function useCardsServices() {
         }
     }
 
-    const createTask = async (listId, taskName) => {
+    const createTask = useCallback(async (listId, taskName) => {
         const response = await fetch(`${CARDS_URL}/${listId}`, {
             method: 'POST',
             headers: getHeaders(),
@@ -29,9 +30,9 @@ export default function useCardsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const editTask = async (listId, cardId, editedFields) => {
+    const editTask = useCallback(async (listId, cardId, editedFields) => {
         const response = await fetch(`${CARDS_URL}/${listId}/${cardId}`, {
             method: 'PUT',
             headers: getHeaders(),
@@ -44,9 +45,9 @@ export default function useCardsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
     
-    const deleteTask = async (listId, cardId) => {
+    const deleteTask = useCallback(async (listId, cardId) => {
         const response = await fetch(`${CARDS_URL}/${listId}/${cardId}`, {
             method: 'DELETE',
             headers: getHeaders()
@@ -58,9 +59,9 @@ export default function useCardsServices() {
         }
         
         return await response.json()
-    }
+    }, [history])
 
-    const addTaskMember = async (listId, cardId, members, selectedUser, teamId, projectId) => {
+    const addTaskMember = useCallback(async (listId, cardId, members, selectedUser, teamId, projectId) => {
         const response = await fetch(`${CARDS_URL}/${listId}/${cardId}/add-member`, {
             method: 'PUT',
             headers: getHeaders(),
@@ -80,9 +81,9 @@ export default function useCardsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const addAttachment = async (cardId, attachment) => {
+    const addAttachment = useCallback(async (cardId, attachment) => {
         const response = await fetch(`${CARDS_URL}/attachments/${cardId}`, {
             method: 'PUT',
             headers: getHeaders(),
@@ -97,9 +98,9 @@ export default function useCardsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const removeAttachment = async (cardId, attachmentId) => {
+    const removeAttachment = useCallback(async (cardId, attachmentId) => {
         const response = await fetch(`${CARDS_URL}/attachments/${cardId}/${attachmentId}`, {
             method: 'DELETE',
             headers: getHeaders()
@@ -111,7 +112,7 @@ export default function useCardsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
     return {
         createTask,
