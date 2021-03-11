@@ -1,6 +1,6 @@
 import React, { useState, useEffect, useCallback } from 'react'
 import Loader from 'react-loader-spinner'
-import { useHistory } from 'react-router-dom'
+import useUserServices from '../services/useUserServices'
 import getCookie from '../utils/cookie'
 import userObject from '../utils/userObject'
 import UserContext from './UserContext'
@@ -8,7 +8,9 @@ import UserContext from './UserContext'
 const UserProvider = (props) => {
     const [user, setUser] = useState(null)
     const [loading, setLoading] = useState(true)
-    const history = useHistory()
+    const { logoutUser, verifyLogin } = useUserServices()
+    const token = getCookie('x-auth-token')
+
 
     const logIn = (user) => {
         setUser({
@@ -17,61 +19,39 @@ const UserProvider = (props) => {
         })
     }
 
-    const logOut = useCallback(() => {
-        const token = getCookie('x-auth-token')
-        fetch('/api/user/logout', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        }).then(response => {
-            if (!response.ok) {
-                history.push('/error')
-            } else {
-                document.cookie = 'x-auth-token= ; expires = Thu, 01 Jan 1970 00:00:00 GMT; path=/;'
-
-                setUser({
-                    loggedIn: false
-                })
-            }
-        })
-    }, [history])
-
-    const verifyLogin = useCallback(() => {
-        const token = getCookie('x-auth-token')
+    const logOut = useCallback(async () => {
         if (!token) {
+            return
+        }
+        await logoutUser()
+        setUser({
+            loggedIn: false
+        })
+    }, [logoutUser, token])
 
+    const handleVerifyLogin = useCallback(async () => {
+        if (!loading) {
+            return
+        }
+        if (!token) {
             setUser({
                 loggedIn: false
             })
-
             setLoading(false)
-            return;
+            return
         }
-
-        fetch('/api/user/verify', {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        }).then(promise => {
-            return promise.json()
-        }).then(response => {
-            if (response.status) {
-                logIn(userObject(response))
-            } else {
-                logOut()                
-            }
-
-            setLoading(false)
-        })
-    }, [logOut])
+        const response = await verifyLogin()
+        if (response.status) {
+            logIn(userObject(response))
+        } else {
+            logOut()
+        }
+        setLoading(false)
+    }, [verifyLogin, logOut, loading, token])
 
     useEffect(() => {
-        verifyLogin()
-    }, [verifyLogin])
+        handleVerifyLogin()
+    }, [handleVerifyLogin])
 
     if (loading) {
         return (
