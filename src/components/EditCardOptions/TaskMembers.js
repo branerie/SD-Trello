@@ -10,7 +10,7 @@ import useProjectsServices from '../../services/useProjectsServices'
 import useCardsServices from '../../services/useCardsServices'
 
 
-export default function TaskMembers({ card, listId, project, teamId, setCurrCard }) {
+export default function TaskMembers({ card, listId, project, teamId }) {
     const ref = useRef(null);
     const [cardMembers, setCardMembers] = useState(null)
     const [isActive, setIsActive] = useDetectOutsideClick(ref)
@@ -64,9 +64,7 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
 
         const members = [...cardMembers, selectedUser]
 
-        const updatedCard = await addTaskMember(listId, card._id, members, selectedUser, teamId, project._id)
-
-        if (setCurrCard) setCurrCard(updatedCard)
+        await addTaskMember(listId, card._id, members, selectedUser, teamId, project._id)
 
         setIsActive(!isActive)
         setCardMembers(members)
@@ -101,7 +99,6 @@ export default function TaskMembers({ card, listId, project, teamId, setCurrCard
                         listId,
                         project,
                         teamId,
-                        setCurrCard
                     }}
                 />
             </div>}

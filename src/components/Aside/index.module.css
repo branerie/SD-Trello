@@ -101,8 +101,8 @@
 }
 
 .bell {
-    position: relative;
-    bottom: 57px;
+    position: absolute;
+    right: 10px;
 }
 
 .hamburger {

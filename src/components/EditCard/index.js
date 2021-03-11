@@ -13,7 +13,7 @@ import ConfirmDialog from '../ConfirmationDialog'
 import useCardsServices from '../../services/useCardsServices'
 
 
-export default function EditCard({ listId, initialCard, project, teamId, hideForm, setCurrCard }) {
+export default function EditCard({ listId, initialCard, project, teamId, hideForm }) {
     const nameRef = useRef(null)
     const descriptionRef = useRef(null)
     const [card, setCard] = useState(null)
@@ -65,16 +65,7 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
     }
 
     return (
-        <div className={styles.menu}>
-
-            {confirmOpen &&
-                <ConfirmDialog
-                    title={'delete this task'}
-                    hideConfirm={() => setConfirmOpen(false)}
-                    onConfirm={handleDeleteTask}
-                />
-            }
-
+        <>
             <div className={styles.container}>
 
                 <div className={styles['task-name']}>
@@ -131,14 +122,12 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                                 listId={listId}
                                 project={project}
                                 teamId={teamId}
-                                setCurrCard={setCurrCard}
                             />
                             <TaskMembers
                                 card={initialCard}
                                 listId={listId}
                                 project={project}
                                 teamId={teamId}
-                                setCurrCard={setCurrCard}
                             />
                             <TaskProgress
                                 card={initialCard}
@@ -147,18 +136,15 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                                 teamId={teamId}
                                 taskHistory={taskHistory}
                                 setTaskHistory={setTaskHistory}
-                                setCurrCard={setCurrCard}
                             />
                             <TaskAttach
                                 card={initialCard}
                                 project={project}
                                 teamId={teamId}
-                                setCurrCard={setCurrCard}
                             />
                             <button
                                 className={styles['small-buttons']}
                                 onClick={() => setConfirmOpen(true)}
-                                title='Delete Task'
                             >
                                 <img className={styles.pics} src={pic12} alt='pic12' />
                                 Delete Task
@@ -167,6 +153,13 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                     </div>
                 </div>
             </div>
-        </div>
+            {confirmOpen &&
+                <ConfirmDialog
+                    title={'delete this task'}
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={handleDeleteTask}
+                />
+            }
+        </>
     )
 }

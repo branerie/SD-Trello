@@ -5,7 +5,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import Attachment from '../Attachment'
 import useCardsServices from '../../services/useCardsServices'
 
-export default function TaskAttach({ card, project, teamId, setCurrCard }) {
+export default function TaskAttach({ card, project, teamId }) {
     const socket = useSocket()
     const [attachments, setAttachments] = useState(null)
     const { addAttachment } = useCardsServices()
@@ -55,11 +55,25 @@ export default function TaskAttach({ card, project, teamId, setCurrCard }) {
             </div>
             { attachments && <div className={styles['att-container']}>
                 {attachments.length <= 4 ? attachments.map(att => (
-                    <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} teamId={teamId} setCurrCard={setCurrCard} />
+                    <Attachment
+                        key={att._id}
+                        att={att}
+                        attachments={attachments}
+                        card={card}
+                        project={project}
+                        teamId={teamId}
+                    />
                 )) :
                     <>
                         {attachments.slice(0, 3).map(att => (
-                            <Attachment key={att._id} att={att} attachments={attachments} card={card} project={project} teamId={teamId} setCurrCard={setCurrCard} />
+                            <Attachment
+                                key={att._id}
+                                att={att}
+                                attachments={attachments}
+                                card={card}
+                                project={project}
+                                teamId={teamId}
+                            />
                         ))}
                         <div className={`${styles.remaining} ${styles.attachment}`}>
                             +{attachments.length - 3}

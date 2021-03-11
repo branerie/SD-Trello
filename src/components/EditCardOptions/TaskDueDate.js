@@ -8,7 +8,7 @@ import useCardsServices from '../../services/useCardsServices'
 
 
 
-export default function TaskDueDate({ dueDate, card, listId, project, teamId, setCurrCard }) {
+export default function TaskDueDate({ dueDate, card, listId, project, teamId }) {
     const [cardDueDate, setCardDueDate] = useState(null)
     const [taskDueDate, setTaskDueDate] = useState(null)
     const [width, setWindowWidth] = useState(0)
@@ -56,9 +56,7 @@ export default function TaskDueDate({ dueDate, card, listId, project, teamId, se
 
         const editedFields = { dueDate: date }
 
-        const updatedCard = await editTask(listId, card._id, editedFields)
-
-        if (setCurrCard) setCurrCard(updatedCard)
+        await editTask(listId, card._id, editedFields)
 
         updateProjectSocket()
     }

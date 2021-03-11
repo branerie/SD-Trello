@@ -46,9 +46,9 @@
 }
 
 .menu > button {
-    border-top: 2px solid #363338;
-    border-left: 2px solid #363338;
-    border-right: 2px solid #363338;
+    border-top: 1.5px solid #707070;
+    border-left: 1.5px solid #707070;
+    border-right: 1.5px solid #707070;
     height: 38px;
 }
 
@@ -58,7 +58,7 @@
 }
 
 .delete {
-  border-bottom: 2px solid #363338;
+  border-bottom: 1.5px solid #707070;
   border-radius: 0 0 10px 10px;
   width: 100%;
 }

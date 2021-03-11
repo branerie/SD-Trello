@@ -7,7 +7,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import ConfirmDialog from '../ConfirmationDialog'
 import useCardsServices from '../../services/useCardsServices'
 
-export default function AttachmentList({ attachments, listRef, card, project, teamId, setCurrCard }) {
+export default function AttachmentList({ attachments, listRef, card, project, teamId, setIsDragCardDisabled, setIsDragListDisabled }) {
     const socket = useSocket()
     const [attachmentsArr, setAttachmentsArr] = useState([])
     const [confirmOpen, setConfirmOpen] = useState(false)
@@ -25,25 +25,26 @@ export default function AttachmentList({ attachments, listRef, card, project, te
     async function handleDeteleAttachment(att) {
         const updatedCard = await removeAttachment(card._id, att._id)
 
-        if (setCurrCard) setCurrCard(updatedCard)
-
         setAttachmentsArr(updatedCard.attachments)
         socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
     }
 
-
+    const onConfirm = () => {
+        handleDeteleAttachment(currElement)
+        
+        if (setIsDragCardDisabled) setIsDragCardDisabled(false)
+        if (setIsDragListDisabled) setIsDragListDisabled(false)
+    }
+    
+    const onDecline = () => {
+        if (setIsDragCardDisabled) setIsDragCardDisabled(false)
+        if (setIsDragListDisabled) setIsDragListDisabled(false)
+    }
 
     return (
-        <>
-            {confirmOpen &&
-                <ConfirmDialog
-                    title='remove this attachment'
-                    hideConfirm={() => setConfirmOpen(false)}
-                    onConfirm={() => handleDeteleAttachment(currElement)}
-                />
-            }
-            <div ref={listRef} className={styles.container}>
+        <div ref={listRef}>
+            <div className={styles.container}>
                 <div className={styles.title}>Task Attachments</div>
                 {attachmentsArr.map((att, index) => (
                     <div key={index} className={styles.attachment}>
@@ -60,6 +61,14 @@ export default function AttachmentList({ attachments, listRef, card, project, te
                     </div>
                 ))}
             </div>
-        </>
+            {confirmOpen &&
+                <ConfirmDialog
+                    title='remove this attachment'
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={onConfirm}
+                    onDecline={onDecline}
+                />
+            }
+        </div>
     )
 }

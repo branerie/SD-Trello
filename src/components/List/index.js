@@ -12,13 +12,17 @@ import ButtonGrey from '../ButtonGrey'
 import ConfirmDialog from '../ConfirmationDialog'
 import useListsServices from '../../services/useListsServices'
 import useCardsServices from '../../services/useCardsServices'
+import Transparent from '../Transparent'
+import EditList from '../EditList'
 
 
-export default function List({ isAdmin, project, list, showEditList, showCurrentCard, setCurrCard }) {
+export default function List({ isAdmin, project, list, setIsDragListDisabled }) {
     const dropdownRef = useRef(null);
     const cardRef = useRef(null);
     const [isVisible, setIsVisible] = useDetectOutsideClick(cardRef)
     const [isEditListActive, setIsEditListActive] = useDetectOutsideClick(dropdownRef)
+    const [isVisibleEditList, setIsVisibleEditList] = useState(false)
+    const [isDragCardDisabled, setIsDragCardDisabled] = useState(false)
     const [cardName, setCardName] = useState('')
     const [confirmOpen, setConfirmOpen] = useState(false)
     const socket = useSocket()
@@ -46,57 +50,59 @@ export default function List({ isAdmin, project, list, showEditList, showCurrent
     }, [createTask, cardName, list._id, isVisible, setIsVisible, project, socket])
 
     function editList() {
-        showEditList()
+        setIsVisibleEditList(true)
         setIsEditListActive(!isEditListActive)
+        setIsDragListDisabled(true)
+    }
+
+    const hideForm = () => {
+        setIsDragListDisabled(false)
+        setIsVisibleEditList(!isVisibleEditList)
     }
 
     return (
-
-        <div className={styles.list}>
-            {confirmOpen &&
-                <ConfirmDialog
-                    title={'you wish to delete this list'}
-                    hideConfirm={() => setConfirmOpen(false)}
-                    onConfirm={() => handleDeleteList()}
-                />
-            }
-            <div className={styles.row}>
-                <div>
-                    <div className={styles.name} title={list.name} >{list.name}</div>
-                    <ListColor color={list.color || '#A6A48E'} type={'list'} />
+        <>
+            <div className={styles.list}>
+                <div className={styles.row}>
+                    <div>
+                        <div className={styles.name} title={list.name} >{list.name}</div>
+                        <ListColor color={list.color || '#A6A48E'} type={'list'} />
+                    </div>
+                    {isAdmin &&
+                        <ButtonClean
+                            className={styles.button}
+                            onClick={() => setIsEditListActive(!isEditListActive)}
+                            title={<img className={styles.dots} src={dots} alt='...' width='20' height='6' />}
+                        />
+                    }
                 </div>
-                {
-                    isAdmin &&
-                    <ButtonClean
-                        className={styles.button}
-                        onClick={() => setIsEditListActive(!isEditListActive)}
-                        title={<img className={styles.dots} src={dots} alt='...' width='20' height='6' />}
-                    />
-                }
-            </div>
-            <div className={styles.relative}>
-                {isEditListActive && <div ref={dropdownRef} className={`${styles.menu}`} >
-                    <ButtonGrey
-                        onClick={editList}
-                        title='Edit'
-                        className={styles.edit}
-                    />
-                    <ButtonGrey
-
-                        onClick={() => setConfirmOpen(true)}
-                        title='Delete'
-                        className={styles.delete}
-                    />
-                </div>}
-            </div>
-            <Droppable droppableId={list._id} type='droppableSubItem'>
-                {(provided) => (
-                    <div className={styles.droppable} ref={provided.innerRef}>
-                        {
-                            list.cards.map((element, index) => {
+                <div className={styles.relative}>
+                    {isEditListActive && <div ref={dropdownRef} className={`${styles.menu}`} >
+                        <ButtonGrey
+                            onClick={editList}
+                            title='Edit'
+                            className={styles.edit}
+                        />
+                        <ButtonGrey
+                            onClick={() => {
+                                setConfirmOpen(true)
+                                setIsDragListDisabled(true)
+                            }}
+                            title='Delete'
+                            className={styles.delete}
+                        />
+                    </div>}
+                </div>
+                <Droppable droppableId={list._id} type='droppableSubItem'>
+                    {(provided) => (
+                        <div className={styles.droppable} ref={provided.innerRef}>
+                            {list.cards.map((element, index) => {
                                 return (
-                                    <Draggable key={element._id} draggableId={element._id}
+                                    <Draggable
+                                        key={element._id}
+                                        draggableId={element._id}
                                         index={index}
+                                        isDragDisabled={isDragCardDisabled ? true : false}
                                     >
                                         {(provided) => (
                                             <div>
@@ -104,8 +110,9 @@ export default function List({ isAdmin, project, list, showEditList, showCurrent
                                                     <Card
                                                         card={element}
                                                         project={project}
-                                                        showCurrentCard={showCurrentCard}
-                                                        setCurrCard={setCurrCard}
+                                                        listId={list._id}
+                                                        setIsDragCardDisabled={setIsDragCardDisabled}
+                                                        setIsDragListDisabled={setIsDragListDisabled}
                                                     />
                                                 </div>
                                                 {provided.placeholder}
@@ -114,14 +121,13 @@ export default function List({ isAdmin, project, list, showEditList, showCurrent
                                     </Draggable>
                                 )
                             })
-                        }
-                        {provided.placeholder}
-                    </div>
-                )}
-            </Droppable>
-            <div className={styles.flexend} >
-                {
-                    isVisible ?
+                            }
+                            {provided.placeholder}
+                        </div>
+                    )}
+                </Droppable>
+                <div className={styles.flexend} >
+                    {isVisible ?
                         <form ref={cardRef} className={styles.container} >
                             <input
                                 autoFocus
@@ -130,11 +136,39 @@ export default function List({ isAdmin, project, list, showEditList, showCurrent
                                 value={cardName}
                                 onChange={e => setCardName(e.target.value)}
                             />
-                            <ButtonClean type='submit' className={styles['add-task']} onClick={addCard} title='+ Add Task' project={project} />
-                        </form> : <ButtonClean className={styles['add-task']} onClick={() => setIsVisible(!isVisible)} title='+ Add Task' />
-
-                }
+                            <ButtonClean
+                                type='submit'
+                                className={styles['add-task']}
+                                onClick={addCard}
+                                title='+ Add Task'
+                                project={project}
+                            />
+                        </form>
+                        :
+                        <ButtonClean
+                            className={styles['add-task']}
+                            onClick={() => setIsVisible(!isVisible)}
+                            title='+ Add Task'
+                        />
+                    }
+                </div>
             </div>
-        </div>
+            {isVisibleEditList &&
+                <Transparent hideForm={hideForm} >
+                    <EditList hideForm={hideForm} list={list} project={project} />
+                </Transparent >
+            }
+            {confirmOpen &&
+                <ConfirmDialog
+                    title={'you wish to delete this list'}
+                    hideConfirm={() => setConfirmOpen(false)}
+                    onConfirm={() => {
+                        handleDeleteList()
+                        setIsDragListDisabled(false)
+                    }}
+                    onDecline={() => setIsDragListDisabled(false)}
+                />
+            }
+        </>
     )
 }
