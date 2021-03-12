@@ -1,38 +1,46 @@
 import React, { useState } from 'react'
 import { Link, useParams } from 'react-router-dom'
+import styles from './index.module.css'
 import ButtonGrey from '../ButtonGrey'
 import EditProject from '../EditProject'
 import Transparent from '../Transparent'
-import styles from './index.module.css'
 
-export default function Project(props) {
-    const [isVisible, setIsVisible] = useState(false)
+const Project = ({ project }) => {
     const params = useParams()
+    const [isEditTeamShown, setIsEditTeamShown] = useState(false)
+
 
     return (
         <div>
-            {isVisible ?
+            {
+                isEditTeamShown &&
                 < div >
-                    <Transparent hideForm={() => setIsVisible(!isVisible)} >
-                        <EditProject hideForm={() => setIsVisible(!isVisible)} project={props.project} />
+                    <Transparent hideForm={() => setIsEditTeamShown(!isEditTeamShown)} >
+                        <EditProject hideForm={() => setIsEditTeamShown(!isEditTeamShown)} project={project} />
                     </Transparent >
-                </div > : null
+                </div >
             }
             <div className={styles.container}>
                 <div className={styles['top-side']}>
-                    <Link to={`/project-board/${params.teamid}/${props.project._id}`} className={styles.key}>Name: <span className={styles.value}>{props.project.name}</span></Link>
-
+                    <Link to={`/project-board/${params.teamid}/${project._id}`} className={styles.key}>
+                        Name: <span className={styles.value}>{project.name}</span>
+                    </Link>
                 </div >
                 <div className={styles['lower-side']}>
                     <div className={styles['key-lower']}>
-                        Creator: <span className={styles.value}>{props.project.author.username}</span>
+                        Creator: <span className={styles.value}>{project.author.username}</span>
                     </div>
                     <div className={styles.info} >
-                        <ButtonGrey className={styles['info-btn']} title={'Info'} onClick={() => setIsVisible(!isVisible)} />
+                        <ButtonGrey
+                            className={styles['info-btn']}
+                            title={'Info'}
+                            onClick={() => setIsEditTeamShown(!isEditTeamShown)}
+                        />
                     </div>
                 </div>
-
             </div>
         </div>
     )
 }
+
+export default Project

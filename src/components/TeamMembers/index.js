@@ -4,10 +4,8 @@ import ButtonClean from '../ButtonClean'
 import AvatarUser from '../AvatarUser'
 
 
-export default function TeamMembers(props) {
+const TeamMembers = ({ members, invited }) => {
 
-    const members = props.members
-    const invited = props.invited
 
     return (
         <div>
@@ -34,16 +32,12 @@ export default function TeamMembers(props) {
                 <div className={styles['members-avatars']}>
                     <div>
                         Invited Members:
-                        </div>
+                    </div>
                     {
-                        invited.map((m, index) => {
+                        invited.map((member, index) => {
                             return (
                                 <span key={index}>
-                                <AvatarUser user={m}
-                                   
-                                    size={40}
-                                // onClick={() => { if (window.confirm('Are you sure you wish to delete this member?')) removeMember(m) }}
-                                />
+                                    <AvatarUser user={member} size={40} />
                                 </span>
                             )
                         })
@@ -53,3 +47,5 @@ export default function TeamMembers(props) {
         </div>
     )
 }
+
+export default TeamMembers

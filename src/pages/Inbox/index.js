@@ -1,12 +1,12 @@
 import React, { useState, useEffect, useCallback } from 'react'
+import styles from './index.module.css'
+import PageLayout from '../../components/PageLayout'
 import TeamInvitationInbox from '../../components/Inbox/TeamInvitationInbox'
 import TeamInvitationHistory from '../../components/Inbox/TeamInvitationHistory'
 import TeamInvitationResponse from '../../components/Inbox/TeamInvitationResponse'
 import TaskAssignment from '../../components/Inbox/TaskAssignment'
-import PageLayout from '../../components/PageLayout'
 import Title from '../../components/Title'
 import { useSocket } from '../../contexts/SocketProvider'
-import styles from './index.module.css'
 import TeamDeleted from '../../components/Inbox/TeamDeleted'
 import ProjectDeleted from '../../components/Inbox/ProjectDeleted'
 import TeamInvitationCanceled from '../../components/Inbox/TeamInvitationCanceled'
@@ -20,14 +20,10 @@ const InboxPage = () => {
     const { getUserInbox } = useUserServices()
 
 
-    const getInbox = useCallback(async () => {
-        // if (inbox.length > 0 || inboxHistory.length > 0) {
-        //     return
-        // }
+    const getInbox = useCallback(async () => {       
         const user = await getUserInbox()
         setInbox(user.inbox)
         setInboxHistory(user.inboxHistory)
-        
     }, [getUserInbox])
 
     useEffect(() => {

@@ -3,7 +3,6 @@ import GoogleLogin from 'react-google-login'
 import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
 import UserContext from '../../contexts/UserContext'
-import responseGoogle from '../../utils/responseGoogle'
 import logo from '../../images/logo.svg'
 import google from '../../images/welcome-page/google.svg'
 import Alert from '../Alert'
@@ -20,7 +19,7 @@ const ForgotPasswordForm = (props) => {
     const [fillAlert, setFillAlert] = useState(false)
     const [wrongPassAllert, setWrongPassAllert] = useState(false)
     const [wrongUserAllert, setWrongUserAllert] = useState(false)
-    const { userLogin, addNewPassword } = useUserServices()
+    const { userLogin, addNewPassword, googleLoginUser } = useUserServices()
 
 
 
@@ -40,7 +39,7 @@ const ForgotPasswordForm = (props) => {
         if (password !== rePassword) {
             setWrongPassAllert(true)
             return
-        }       
+        }
 
         const response = await userLogin(email, password)
 
@@ -52,7 +51,7 @@ const ForgotPasswordForm = (props) => {
         console.log('Error', response)
         if (response.id) {
             userId = response.id
-        } 
+        }
         if (response.userId) {
             userId = response.userId
         }
@@ -60,23 +59,21 @@ const ForgotPasswordForm = (props) => {
         const changePassResponse = await addNewPassword(userId, password)
         context.logIn(changePassResponse.user)
         history.push('/')
-        
+
     }
 
-    const handleGoogle = (googleResponse) => {
-        responseGoogle(googleResponse, (user) => {
-            context.logIn(user)
-            history.push('/')
-        }, (response) => {
-            console.log('Error', response)
-        })
+    const handleGoogle = async (googleResponse) => {
+        const tokenId = googleResponse.tokenId
+        const user = await googleLoginUser(tokenId)
+        context.logIn(user)
+        history.push('/')
     }
 
 
 
     return (
         <div>
-            
+
             <form className={styles.container} onSubmit={handleSubmit}>
 
                 <div className={styles['inner-container']}>
@@ -85,11 +82,11 @@ const ForgotPasswordForm = (props) => {
                     </div>
 
                     <div className={styles['right-side']}>
-                <div className={styles.alerts}>
-                    <Alert alert={fillAlert} message={'Please fill all fileds'} />
-                    <Alert alert={wrongPassAllert} message={'Passwords do not match'} />
-                    <Alert alert={wrongUserAllert} message={'Please fill valid email address'} />
-                </div>
+                        <div className={styles.alerts}>
+                            <Alert alert={fillAlert} message={'Please fill all fileds'} />
+                            <Alert alert={wrongPassAllert} message={'Passwords do not match'} />
+                            <Alert alert={wrongUserAllert} message={'Please fill valid email address'} />
+                        </div>
 
                         <div className={styles.title} >Forgot Password Form</div>
 

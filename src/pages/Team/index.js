@@ -1,115 +1,107 @@
 import React, { useState, useContext, useEffect } from 'react'
+import { useParams } from 'react-router-dom'
 import styles from './index.module.css'
 import PageLayout from '../../components/PageLayout'
 import Project from '../../components/Project'
 import Transparent from '../../components/Transparent'
 import CreateProject from '../../components/CreateProject'
-import { useParams } from 'react-router-dom'
 import EditTeam from '../../components/EditTeam'
 import TeamMembers from '../../components/TeamMembers'
-import pic1 from '../../images/team-page/pic1.svg'
 import UserContext from '../../contexts/UserContext'
 import ButtonGrey from '../../components/ButtonGrey'
 import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
+import teamPagePicture from '../../images/team-page/pic1.svg'
 
 const TeamPage = () => {
-    const [isVisible, setIsVisible] = useState(false)
-    const [showForm, setShowForm] = useState(false)
-    const [showOldProjects, setShowOldProjects] = useState(false)
+    const {teamid} = useParams()
+    const [isCreateProjectFormVisible, setIssCreateProjectFormVisible] = useState(false)
+    const [isEditTeamFormVisible, setIsEditTeamFormVisible] = useState(false)
+    const [areOldProjectsShown, setAreOldProjectsShown] = useState(false)
     const [currTeam, setCurrTeam] = useState({})
     const [projects, setProjects] = useState([])
     const [members, setMembers] = useState([])
     const [invited, setInvited] = useState([])
-    const params = useParams()
-    const userContext = useContext(UserContext)
+    const { user } = useContext(UserContext)
+
 
     useEffect(() => {
-        userContext.user.teams.forEach(t => {
-            if (t._id === params.teamid) {
-                setCurrTeam(t)
-                setProjects(t.projects)
-                setMembers(t.members)
-                setInvited(t.requests)
+        user.teams.forEach(team => {
+            if (team._id === teamid) {
+                setCurrTeam(team)
+                setProjects(team.projects)
+                setMembers(team.members)
+                setInvited(team.requests)
             }
         })
-    }, [userContext, params])
+    }, [user, teamid])
 
-    
-    useUpdateUserLastTeam(params.teamid)
+    useUpdateUserLastTeam(teamid)
 
     return (
         <PageLayout>
+            {
+                isCreateProjectFormVisible &&
+                <Transparent hideForm={() => setIssCreateProjectFormVisible(false)}>
+                    <CreateProject />
+                </Transparent>
+            }
+            {
+                isEditTeamFormVisible &&
+                <Transparent hideForm={() => setIsEditTeamFormVisible(false)}>
+                    <EditTeam currTeam={currTeam} hideForm={() => { setIsEditTeamFormVisible(false) }} />
+                </Transparent>
+            }
             <div className={styles.container}>
-                {
-                    isVisible &&
-                    <Transparent hideForm={() => setIsVisible(false)}>
-                        <CreateProject />
-                    </Transparent>
-                }
-                {
-                    showForm &&
-                    <Transparent hideForm={() => setShowForm(false)}>
-                        <EditTeam currTeam={currTeam} hideForm={() => { setShowForm(false) }} />
-                    </Transparent>
-                }
-                <div className={styles.pic1}>
-                    <img className={styles.picture} src={pic1} alt='' />
+                <div className={styles['team-page-picture']}>
+                    <img className={styles.picture} src={teamPagePicture} alt='' />
                 </div>
-
-
                 <div className={styles['left-side']}>
-                    { !showOldProjects?
                     <div>
                         <div className={styles.title}>
-                        Current Projects:
+                            {areOldProjectsShown ? 'Old Projects' : 'Current Projects:'}
                         </div>
-                        {projects.filter(p => (p.isFinished === false)||(p.isFinished === undefined))
-                        .reverse().map((project, index) => {
-                            return (
-                                <Project key={project._id} index={index} project={project} />
-                            )
-                        })}
+                        {
+                            projects.filter(areOldProjectsShown ?
+                                (p => (p.isFinished === true))
+                                :
+                                (p => ((p.isFinished === false) || (p.isFinished === undefined))))
+                                .reverse().map((project) => {
+                                    return (
+                                        <Project
+                                            key={project._id}
+                                            project={project}
+                                        />)
+                                })
+                        }
                     </div>
-                    :
-                    <div>
-                        <div className={styles.title}>
-                        Old Projects:
-                        </div>
-                        {projects.filter(p => p.isFinished === true)
-                        .reverse().map((project, index) => {
-                            return (
-                                <Project key={project._id} index={index} project={project} />
-                            )
-                        })}
-                    </div>
-                    }
-
                 </div>
 
                 <div className={styles['right-side']}>
                     <div className={styles['right-side-team']}>
                         <TeamMembers
-                            members={members} invited={invited}
+                            members={members}
+                            invited={invited}
                         />
                         <div className={styles['button-div']}>
-                        <ButtonGrey className={styles['new-project-button']} title={'View Team'} onClick={() => setShowForm(true)} />
-                        <ButtonGrey className={styles['new-project-button']} title={'New Project'} onClick={() => setIsVisible(true)} />
-                        <ButtonGrey className={styles['new-project-button']}
-                        title={!showOldProjects? 
-                            'Old Projects': 'Current Projects'} 
-                        onClick={() => setShowOldProjects(!showOldProjects)} />
+                            <ButtonGrey
+                                className={styles['team-page-button']}
+                                title={'View Team'}
+                                onClick={() => setIsEditTeamFormVisible(true)}
+                            />
+                            <ButtonGrey
+                                className={styles['team-page-button']}
+                                title={'New Project'}
+                                onClick={() => setIssCreateProjectFormVisible(true)}
+                            />
+                            <ButtonGrey
+                                className={styles['team-page-button']}
+                                title={!areOldProjectsShown ? 'Old Projects' : 'Current Projects'}
+                                onClick={() => setAreOldProjectsShown(!areOldProjectsShown)}
+                            />
                         </div>
-
-
                     </div>
-
-
-
                 </div>
-
-
             </div>
-
         </PageLayout>
     )
 }

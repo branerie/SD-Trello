@@ -1,51 +1,36 @@
 import React, { useEffect, useState } from 'react'
 import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import { useHistory } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
 import pic10 from '../../images/edit-card/pic10.svg'
 import MembersList from '../MembersList'
 import useProjectsServices from '../../services/useProjectsServices'
 import useCardsServices from '../../services/useCardsServices'
+import useTeamServices from '../../services/useTeamServices'
 
 
 export default function TaskMembers({ card, listId, project, teamId }) {
     const [cardMembers, setCardMembers] = useState(null)
     const [isActive, setIsActive, ref] = useDetectOutsideClick()
     const [users, setUsers] = useState([])
-    const history = useHistory()
     const socket = useSocket()
-    const token = getCookie('x-auth-token')
     const { addProjectMember } = useProjectsServices()
     const { addTaskMember } = useCardsServices()
+    const { getTeamUsers } = useTeamServices()
+
 
     useEffect(() => {
         setCardMembers(card.members)
     }, [card.members])
 
-    const getTeamUsers = async () => {
-
-        const response = await fetch(`/api/teams/get-users/${teamId}`, {
-            method: 'GET',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        })
-
-        if (!response.ok) {
-            history.push('/error')
-        }
-        const data = await response.json()
-
+    const handleGetTeamUsers = async () => {
+        const data = await getTeamUsers(teamId)
         let filtered = data.members
 
         for (let member in cardMembers) {
             filtered = filtered.filter((obj) => obj._id !== cardMembers[member]._id)
         }
         setUsers(filtered)
-
     }
 
     const handleSelect = async (id) => {
@@ -74,7 +59,7 @@ export default function TaskMembers({ card, listId, project, teamId }) {
 
     return (
         <div>
-            <div className={styles['small-buttons']} onClick={() => { getTeamUsers(); setIsActive(!isActive) }} >
+            <div className={styles['small-buttons']} onClick={() => { handleGetTeamUsers(); setIsActive(!isActive) }} >
                 <img className={styles.pics} src={pic10} alt='pic10' />
                 Add Teammate
             </div>

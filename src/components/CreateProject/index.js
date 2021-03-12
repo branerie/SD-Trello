@@ -1,90 +1,69 @@
 import React, { useState, useContext } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
-import 'react-datepicker/dist/react-datepicker.css'
 import ButtonClean from '../ButtonClean'
 import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
 import AvatarUser from '../AvatarUser'
 import ButtonGrey from '../ButtonGrey'
 import useProjectsServices from '../../services/useProjectsServices'
+import useTeamServices from '../../services/useTeamServices'
 
 export default function CreateProject({ hideForm }) {
+    const history = useHistory()
+    const params = useParams()
+    const socket = useSocket()
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [member, setMember] = useState('')
     const [members, setMembers] = useState([])
-    const [showMembers, setShowMembers] = useState(false)
-    const [allUsers, setAllUsers] = useState([])
-    const userContext = useContext(UserContext)
-    const history = useHistory()
-    const params = useParams()
-    const socket = useSocket()
+    const [areMembersShown, setAreMembersShown] = useState(false)
+    const [allTeamMembers, setAllTeamMembers] = useState([])
+    const { user } = useContext(UserContext)
     const { createProject } = useProjectsServices()
+    const { getTeamUsers } = useTeamServices()
+
 
     const handleSubmit = async (event) => {
         event.preventDefault()
-
         if (name === '') {
             return
         }
-
         const project = await createProject(name, description, params.teamid, members)
-                
         hideForm && hideForm()
         socket.emit('team-update', params.teamid)
         history.push(`/project-board/${params.teamid}/${project._id}`)
     }
 
     const onFocus = async () => {
-        setShowMembers(true)
-
+        setAreMembersShown(true)
         const teamId = params.teamid
-
-        if (allUsers.length === 0) {
-            const token = getCookie('x-auth-token')
-            const response = await fetch(`/api/teams/get-users/${teamId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                }
-            })
-
-            if (!response.ok) {
-                history.push('/error')
-            }
-            const users = await response.json()
-            setAllUsers(users.members)
+        if (allTeamMembers.length === 0) {
+            const users = await getTeamUsers(teamId)
+            setAllTeamMembers(users.members)
         }
     }
 
     const onBlur = () => {
-        setTimeout(() => setShowMembers(false), 120)
+        setTimeout(() => setAreMembersShown(false), 120)
     }
 
     const addMember = (input) => {
-        const arr = [...members]
-        arr.push(input)
-        setMembers(arr)
-        setShowMembers(false)
+        const membersArray = [...members]
+        membersArray.push(input)
+        setMembers(membersArray)
+        setAreMembersShown(false)
         setMember('')
     }
 
     const removeMember = (input) => {
-        const arr = members.filter(u => u._id !== input._id)
-        setMembers(arr)
+        const membersArray = members.filter(member => member._id !== input._id)
+        setMembers(membersArray)
     }
 
     return (
-        // <div className={styles.form}>
         <div className={styles.container} >
-
-
-
             <div className={styles.title} >Create New Project</div>
-
             <div className={styles['input-container']}>
                 <span> Name</span>
                 <input
@@ -113,7 +92,6 @@ export default function CreateProject({ hideForm }) {
 
             <div className={styles['input-container']}>
                 <span className={styles['text-invite']}>Add Members</span>
-
                 <div className={styles['invite-input']}>
                     <input
                         className={styles['members-input']}
@@ -129,10 +107,10 @@ export default function CreateProject({ hideForm }) {
 
                     <div className={styles['select-for-invite']}>
                         {
-                            showMembers &&
+                            areMembersShown &&
                             <div className={styles.members}>
                                 {
-                                    allUsers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(userContext.user.username))
+                                    allTeamMembers.filter(u => u.username.toLowerCase().includes(member.toLowerCase()) && !u.username.includes(user.username))
                                         .filter((e) => {
                                             const found = members.find(element => element.username === e.username)
                                             if (found) {
@@ -163,10 +141,10 @@ export default function CreateProject({ hideForm }) {
 
             <div className={styles['members-avatars']}>
                 {
-                    members.map((m, index) => {
+                    members.map((member, index) => {
                         return (
                             <span key={index}>
-                                <AvatarUser user={m} onClick={() => removeMember(m)} size={40} />
+                                <AvatarUser user={member} onClick={() => removeMember(member)} size={40} />
                             </span>
                         )
                     })
@@ -174,11 +152,13 @@ export default function CreateProject({ hideForm }) {
             </div>
 
             <div className={styles['button-div']}>
-                <ButtonGrey onClick={(e) => handleSubmit(e)} title='Create' className={styles['create-button']} />
-                {/* <button type='submit' className={styles['create-button']}>Create</button> */}
+                <ButtonGrey
+                    title='Create'
+                    className={styles['create-button']}
+                    onClick={(e) => handleSubmit(e)}
+                />
             </div>
 
         </div>
-        // </div>
     )
 }

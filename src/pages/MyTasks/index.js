@@ -12,56 +12,31 @@ import ButtonClean from '../../components/ButtonClean'
 import useUserServices from '../../services/useUserServices'
 
 const MyTasksPage = () => {
-    const userContext = useContext(UserContext)
+    const { user, setUser } = useContext(UserContext)
     const [projects, setProjects] = useState([])
     const [showOldProjects, setShowOldProjects] = useState(false)
     const { getUserTasks } = useUserServices()
-
-
     const socket = useSocket()
 
+
     const selectTeam = useCallback(async (teamId) => {
-       
         const data = await getUserTasks(teamId)
         if (data === 'Team not found') return
         setProjects(data)
-        if (teamId !== userContext.user.lastTeamSelected) {
-            const user = { ...userContext.user }
-            user.lastTeamSelected = teamId
-            userContext.setUser({
-                ...user,
+        if (teamId !== user.lastTeamSelected) {
+            const updatedUser = { ...user }
+            updatedUser.lastTeamSelected = teamId
+            setUser({
+                ...updatedUser,
                 loggedIn: true
             })
         }
-        // const token = getCookie('x-auth-token')
-        // const response = await fetch(`/api/user/tasks/${teamId}`, {
-        //     method: 'GET',
-        //     headers: {
-        //         'Content-Type': 'application/json',
-        //         'Authorization': token
-        //     }
-        // })
-        // if (!response.ok) {
-        //     history.push('/error')
-        // } else {
-        //     const data = await response.json()
-        //     if (data === 'Team not found') return
-        //     setProjects(data)
-        //     if (teamId !== userContext.user.lastTeamSelected) {
-        //         const user = { ...userContext.user }
-        //         user.lastTeamSelected = teamId
-        //         userContext.setUser({
-        //             ...user,
-        //             loggedIn: true
-        //         })
-        //     }
-        // }
-    }, [ userContext, getUserTasks])
+    }, [user, getUserTasks, setUser])
 
     useEffect(() => {
-        if (!userContext.user.lastTeamSelected || socket == null) return
+        if (!user.lastTeamSelected || socket == null) return
 
-        const id = userContext.user.lastTeamSelected
+        const id = user.lastTeamSelected
 
         socket.on('task-team-updated', taskTeamUpdate)
         socket.on('task-update-team', (teamId) => {
@@ -75,13 +50,13 @@ const MyTasksPage = () => {
             socket.off('task-team-updated')
             socket.off('task-update-team')
         }
-    }, [socket, selectTeam, userContext.user.lastTeamSelected])
+    }, [socket, selectTeam, user.lastTeamSelected])
 
     useEffect(() => {
-        if (userContext.user.lastTeamSelected) {
-            selectTeam(userContext.user.lastTeamSelected)
+        if (user.lastTeamSelected) {
+            selectTeam(user.lastTeamSelected)
         }
-    }, [selectTeam, userContext.user.lastTeamSelected])
+    }, [selectTeam, user.lastTeamSelected])
 
     function taskTeamUpdate(projects) {
         setProjects(projects)
@@ -93,27 +68,33 @@ const MyTasksPage = () => {
             <div className={styles['button-container']}>
                 <div className={styles['team-buttons']}>
                     <span className={styles.title}>Teams:</span>
-                    {userContext.user.teams.map(team => {
+                    {user.teams.map(team => {
                         return <ButtonCleanTitle
                             key={team._id}
                             title={team.name}
                             onClick={() => selectTeam(team._id)}
-                            className={`${styles.teams} ${userContext.user.lastTeamSelected === team._id && styles.selected}`}
+                            className={`${styles.teams} ${user.lastTeamSelected === team._id && styles.selected}`}
                         />
                     })}
                 </div>
-                <ButtonClean className={`${styles.teams} ${styles['projects-button']}`} title={showOldProjects ? 'Current Projects' : 'Old Projects'} onClick={() => setShowOldProjects(!showOldProjects)} />
+                <ButtonClean
+                    className={`${styles.teams} ${styles['projects-button']}`}
+                    title={showOldProjects ? 'Current Projects' : 'Old Projects'}
+                    onClick={() => setShowOldProjects(!showOldProjects)}
+                />
             </div>
-            {!userContext.user.lastTeamSelected ? <div className={styles.title}>Select a team</div> :
+            {!user.lastTeamSelected ? <div className={styles.title}>Select a team</div> :
                 <div className={styles.box}>
                     {projects.length === 0 ? <div className={styles.title}>There is no current tasks</div> :
-                        projects.filter(!showOldProjects ? (p => (p.isFinished === false) || (p.isFinished === undefined)) : (p => (p.isFinished === true)))
+                        projects.filter(!showOldProjects ? (p => (p.isFinished === false) || (p.isFinished === undefined))
+                            :
+                            (p => (p.isFinished === true)))
                             .reverse()
                             .map(project => {
                                 return (
                                     <div key={project._id} className={styles.project}>
                                         <div className={styles['project-name']}>
-                                            <Link to={`/project-board/${userContext.user.lastTeamSelected}/${project._id}`} className={styles.link}>
+                                            <Link to={`/project-board/${user.lastTeamSelected}/${project._id}`} className={styles.link}>
                                                 <span className={styles.bold}>Project:</span> {project.name}
                                             </Link>
                                         </div>
@@ -134,7 +115,7 @@ const MyTasksPage = () => {
                                                             return (
                                                                 <MyTasksTask
                                                                     key={card._id}
-                                                                    teamId={userContext.user.lastTeamSelected}
+                                                                    teamId={user.lastTeamSelected}
                                                                     project={project}
                                                                     list={list}
                                                                     card={card}
@@ -151,7 +132,7 @@ const MyTasksPage = () => {
                     }
                 </div>
             }
-            {(!userContext.user.lastTeamSelected || projects.length === 0) &&
+            {(!user.lastTeamSelected || projects.length === 0) &&
                 <div className={styles.pic}>
                     <img src={myTasks} alt='' />
                 </div>
