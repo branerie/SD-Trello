@@ -13,7 +13,7 @@ import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
 import teamPagePicture from '../../images/team-page/pic1.svg'
 
 const TeamPage = () => {
-    const params = useParams()
+    const {teamid} = useParams()
     const [isCreateProjectFormVisible, setIssCreateProjectFormVisible] = useState(false)
     const [isEditTeamFormVisible, setIsEditTeamFormVisible] = useState(false)
     const [areOldProjectsShown, setAreOldProjectsShown] = useState(false)
@@ -22,20 +22,20 @@ const TeamPage = () => {
     const [members, setMembers] = useState([])
     const [invited, setInvited] = useState([])
     const { user } = useContext(UserContext)
-    
+
 
     useEffect(() => {
         user.teams.forEach(team => {
-            if (team._id === params.teamid) {
+            if (team._id === teamid) {
                 setCurrTeam(team)
                 setProjects(team.projects)
                 setMembers(team.members)
                 setInvited(team.requests)
             }
         })
-    }, [user, params])
+    }, [user, teamid])
 
-    useUpdateUserLastTeam(params.teamid)
+    useUpdateUserLastTeam(teamid)
 
     return (
         <PageLayout>
@@ -58,7 +58,7 @@ const TeamPage = () => {
                 <div className={styles['left-side']}>
                     <div>
                         <div className={styles.title}>
-                            {!areOldProjectsShown ? 'Current Projects:' : 'Old Projects:'}
+                            {areOldProjectsShown ? 'Old Projects' : 'Current Projects:'}
                         </div>
                         {
                             projects.filter(areOldProjectsShown ?
@@ -95,15 +95,13 @@ const TeamPage = () => {
                             />
                             <ButtonGrey
                                 className={styles['team-page-button']}
-                                title={!areOldProjectsShown ?
-                                    'Old Projects' : 'Current Projects'}
+                                title={!areOldProjectsShown ? 'Old Projects' : 'Current Projects'}
                                 onClick={() => setAreOldProjectsShown(!areOldProjectsShown)}
                             />
                         </div>
                     </div>
                 </div>
             </div>
-
         </PageLayout>
     )
 }
