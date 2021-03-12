@@ -74,7 +74,8 @@ const ProjectBoard = () => {
 
         const newProjects = oldProjects.filter(p => p._id !== params.projectid)
         newProjects.push({ _id: params.projectid, name: projectContext.project.name })
-        /* REVIEW: Същото като с двойката по-нагоре. Не става ясно защо shift при length > 3 */
+        /* REVIEW: Същото като с двойката по-нагоре. Не става ясно защо shift при length > 3. Също, по-добре да не е на един 
+           ред този ifgit add */
         if (newProjects.length > 3) newProjects.shift()
 
         const data = await updateRecentProjects(userId, newProjects)
