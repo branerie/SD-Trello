@@ -28,7 +28,7 @@ const InboxPage = () => {
         setInbox(user.inbox)
         setInboxHistory(user.inboxHistory)
         
-    }, [])
+    }, [getUserInbox])
 
     useEffect(() => {
         getInbox()

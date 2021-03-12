@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useHistory } from 'react-router'
 import getCookie from '../utils/cookie'
 
@@ -13,7 +14,7 @@ export default function useProjectsServices() {
         }
     }
 
-    const getProjectInfo = async (projectId) => {
+    const getProjectInfo = useCallback(async (projectId) => {
         const response = await fetch(`${PROJECTS_URL}/info/${projectId}`, {
             method: 'GET',
             headers: getHeaders()
@@ -25,9 +26,9 @@ export default function useProjectsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const createProject = async (name, description, teamId, members) => {
+    const createProject = useCallback(async (name, description, teamId, members) => {
         const response = await fetch(`${PROJECTS_URL}`, {
             method: 'POST',
             headers: getHeaders(),
@@ -45,9 +46,9 @@ export default function useProjectsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const editProject = async (projectId, name, description, isFinished) => {
+    const editProject = useCallback(async (projectId, name, description, isFinished) => {
         const response = await fetch(`${PROJECTS_URL}/${projectId}`, {
             method: 'PUT',
             headers: getHeaders(),
@@ -64,9 +65,9 @@ export default function useProjectsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const deleteProject = async (projectId) => {
+    const deleteProject = useCallback(async (projectId) => {
         const response = await fetch(`${PROJECTS_URL}/${projectId}`, {
             method: 'DELETE',
             headers: getHeaders()
@@ -78,9 +79,9 @@ export default function useProjectsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const changeUserRole = async (projectId, memberRoleId, memberAdmin) => {
+    const changeUserRole = useCallback(async (projectId, memberRoleId, memberAdmin) => {
         const response = await fetch(`${PROJECTS_URL}/${projectId}/user-roles`, {
             method: 'PUT',
             headers: getHeaders(),
@@ -96,9 +97,9 @@ export default function useProjectsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
     
-    const addProjectMember = async (projectId, member) => {
+    const addProjectMember = useCallback(async (projectId, member) => {
         const response = await fetch(`${PROJECTS_URL}/${projectId}/user`, {
             method: 'POST',
             headers: getHeaders(),
@@ -114,9 +115,9 @@ export default function useProjectsServices() {
         }
         
         return await response.json()
-    }
+    }, [history])
 
-    const removeProjectMember = async (projectId, memberId) => {
+    const removeProjectMember = useCallback(async (projectId, memberId) => {
         const response = await fetch(`${PROJECTS_URL}/${projectId}/user-remove`, {
             method: 'POST',
             headers: getHeaders(),
@@ -131,7 +132,7 @@ export default function useProjectsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
     return {
         getProjectInfo,

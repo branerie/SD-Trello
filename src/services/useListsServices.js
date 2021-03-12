@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useHistory } from 'react-router'
 import getCookie from '../utils/cookie'
 
@@ -13,7 +14,7 @@ export default function useListsServices() {
         }
     }
 
-    const createList = async (projectId, listName) => {
+    const createList = useCallback(async (projectId, listName) => {
         const response = await fetch(`${LISTS_URL}/${projectId}`, {
             method: 'POST',
             headers: getHeaders(),
@@ -26,9 +27,9 @@ export default function useListsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const editList = async (projectId, listId, name, color) => {
+    const editList = useCallback(async (projectId, listId, name, color) => {
         const response = await fetch(`${LISTS_URL}/${projectId}/${listId}`, {
             method: 'PUT',
             headers: getHeaders(),
@@ -41,9 +42,9 @@ export default function useListsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const deleteList = async (projectId, listId) => {
+    const deleteList = useCallback(async (projectId, listId) => {
         const response = await fetch(`${LISTS_URL}/${projectId}/${listId}`, {
             method: 'DELETE',
             headers: getHeaders()
@@ -55,9 +56,9 @@ export default function useListsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const dragAndDropList = async (projectId, listId, position) => {
+    const dragAndDropList = useCallback(async (projectId, listId, position) => {
         const response = await fetch(`${LISTS_URL}/${projectId}/${listId}/dnd-list`, {
             method: 'PUT',
             headers: getHeaders(),
@@ -73,9 +74,9 @@ export default function useListsServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const dragAndDropCard = async (projectId, cardId, position, source, destination) => {
+    const dragAndDropCard = useCallback(async (projectId, cardId, position, source, destination) => {
         const response = await fetch(`${LISTS_URL}/${projectId}/${cardId}/dnd-card`, {
             method: 'PUT',
             headers: getHeaders(),
@@ -91,7 +92,7 @@ export default function useListsServices() {
             history.push('/error')
             return
         }
-    }
+    }, [history])
 
     return {
         createList,

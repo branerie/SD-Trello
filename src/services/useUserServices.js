@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useHistory } from 'react-router'
 import getCookie from "../utils/cookie"
 import userObject from '../utils/userObject'
@@ -15,7 +16,7 @@ export default function useUserServices() {
         }
     }
 
-    const getUser = async (userId) => {
+    const getUser = useCallback(async (userId) => {
 
         const response = await fetch(`${USER_URL}/${userId}`, {
             method: 'GET'
@@ -27,9 +28,9 @@ export default function useUserServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const getAllUsers = async () => {
+    const getAllUsers = useCallback(async () => {
         const response = await fetch(`${USER_URL}/get-all`, {
             method: 'GET',
             headers: getHeaders()
@@ -41,9 +42,9 @@ export default function useUserServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
-    const updateUser = async (userId, username) => {
+    const updateUser = useCallback(async (userId, username) => {
 
         const promise = await fetch(`${USER_URL}/${userId}`, {
             method: 'PUT',
@@ -63,9 +64,9 @@ export default function useUserServices() {
             const user = userObject(response)
             return user
         }
-    }
+    }, [history])
 
-    const updateUserPassword = async (userId, password) => {
+    const updateUserPassword = useCallback(async (userId, password) => {
 
         const promise = await fetch(`${USER_URL}/password/${userId}`, {
             method: 'PUT',
@@ -85,9 +86,9 @@ export default function useUserServices() {
             const user = userObject(response)
             return user
         }
-    }
+    }, [history])
 
-    const updateUserImage = async (userId, newImage, oldImage) => {
+    const updateUserImage = useCallback(async (userId, newImage, oldImage) => {
 
         const promise = await fetch(`${USER_URL}/image/${userId}`, {
             method: 'PUT',
@@ -108,9 +109,9 @@ export default function useUserServices() {
             const user = userObject(response)
             return user
         }
-    }
+    }, [history])
 
-    const addNewPassword = async (userId, password) => {
+    const addNewPassword = useCallback(async (userId, password) => {
 
         const promise = await fetch(`${USER_URL}/addNewPassword/${userId}`, {
             method: 'PUT',
@@ -133,9 +134,9 @@ export default function useUserServices() {
             console.log(user);
             return user
         }
-    }
+    }, [history])
 
-    const userLogin = async (email, password) => {
+    const userLogin = useCallback(async (email, password) => {
 
         const promise = await fetch(`${USER_URL}/login`, {
             method: 'POST',
@@ -172,9 +173,9 @@ export default function useUserServices() {
             return user
         }
         return response
-    }
+    }, [])
 
-    const moveMessageToHistory = async (message) => {
+    const moveMessageToHistory = useCallback(async (message) => {
         const response = await fetch('/api/user/inbox', {
             method: 'POST',
             headers: getHeaders(),
@@ -187,9 +188,9 @@ export default function useUserServices() {
             history.push('/error')
             return
         }
-    }
+    }, [history])
 
-    const deleteUserMessage = async (message) => {
+    const deleteUserMessage = useCallback(async (message) => {
         const response = await fetch(`/api/user/message/${message._id}`, {
             method: 'DELETE',
             headers: getHeaders(),
@@ -200,9 +201,9 @@ export default function useUserServices() {
             return
         }
         return await response.json()
-    }
+    }, [history])
 
-    const confirmToken = async (token) => {
+    const confirmToken = useCallback(async (token) => {
 
         const promise = await fetch(`${USER_URL}/confirmation`, {
             method: 'POST',
@@ -225,9 +226,9 @@ export default function useUserServices() {
             const user = userObject(response)
             return user
         }
-    }
+    }, [])
 
-    const registerUser = async (email, username, password) => {
+    const registerUser = useCallback(async (email, username, password) => {
 
         const promise = await fetch(`${USER_URL}/register`, {
             method: 'POST',
@@ -256,9 +257,9 @@ export default function useUserServices() {
             return user
         }
         return response
-    }
+    }, [])
 
-    const logoutUser = async () => {
+    const logoutUser = useCallback(async () => {
 
         const response = await fetch(`${USER_URL}/logout`, {
             method: 'POST',
@@ -271,9 +272,9 @@ export default function useUserServices() {
 
             return response
         }
-    }
+    }, [history])
 
-    const verifyLogin = async () => {
+    const verifyLogin = useCallback(async () => {
         const response = await fetch(`${USER_URL}/verify`, {
             method: 'GET',
             headers: getHeaders()
@@ -282,9 +283,9 @@ export default function useUserServices() {
             history.push('/error')
         }
         return await response.json()
-    }
+    }, [history])
 
-    const getUserInbox = async () => {
+    const getUserInbox = useCallback(async () => {
         const response = await fetch(`${USER_URL}/inbox`, {
             method: 'GET',
             headers: getHeaders()
@@ -297,9 +298,9 @@ export default function useUserServices() {
         const user = await response.json()
         return user
 
-    }
+    }, [history])
 
-    const getUserTasks = async (teamId) => {
+    const getUserTasks = useCallback(async (teamId) => {
         const response = await fetch(`${USER_URL}/tasks/${teamId}`, {
             method: 'GET',
             headers: getHeaders()
@@ -309,9 +310,9 @@ export default function useUserServices() {
         }
         const data = await response.json()
         return data
-    }
+    }, [history])
     
-    const updateRecentProjects = async (userId, recentProjects) => {
+    const updateRecentProjects = useCallback(async (userId, recentProjects) => {
         const response = await fetch(`${USER_URL}/recentProjects/${userId}`, {
             method: 'PUT',
             headers: getHeaders(),
@@ -324,7 +325,7 @@ export default function useUserServices() {
         }
 
         return await response.json()
-    }
+    }, [history])
 
     const googleLoginUser = async (tokenId) => {
 

@@ -56,7 +56,7 @@ const MyTasksPage = () => {
         //         })
         //     }
         // }
-    }, [ userContext])
+    }, [ userContext, getUserTasks])
 
     useEffect(() => {
         if (!userContext.user.lastTeamSelected || socket == null) return
