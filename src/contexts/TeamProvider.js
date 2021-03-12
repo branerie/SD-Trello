@@ -35,13 +35,13 @@ function TeamProvider({ children }) {
 
   const teamUpdate = useCallback(async () => {
     const response = await getUserTeams()
-    
+
     setTeams(response.teams)
 
-    const user =  userObject(response)
+    const user = userObject(response)
     userContext.logIn(user)
 
-  }, [userContext])
+  }, [userContext, getUserTeams])
 
   useEffect(() => {
     if (socket == null) return

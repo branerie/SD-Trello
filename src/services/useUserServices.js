@@ -327,7 +327,7 @@ export default function useUserServices() {
         return await response.json()
     }, [history])
 
-    const googleLoginUser = async (tokenId) => {
+    const googleLoginUser = useCallback(async (tokenId) => {
 
         const promise = await fetch(`${USER_URL}/google-login`, {
             method: 'POST',
@@ -347,7 +347,7 @@ export default function useUserServices() {
         }
         return response
     
-    }
+    }, [])
 
     return {
         getUser,

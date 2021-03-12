@@ -12,34 +12,31 @@ import ButtonGrey from '../../components/ButtonGrey'
 import ConfirmDialog from '../../components/ConfirmationDialog'
 import MyTeamsMenu from '../../components/MyTeamsMenu'
 import useUserServices from '../../services/useUserServices'
-import pic1 from '../../images/profile-page-pic.svg'
+import profilePagePic from '../../images/profile-page-pic.svg'
 import pen from '../../images/pen.svg'
 
 
 const ProfilePage = () => {
-  const userContext = useContext(UserContext)
+  const params = useParams()
+  const history = useHistory()
+  const { user, logIn } = useContext(UserContext)
   const [userEmail, setUserEmail] = useState(null)
   const [isPasswordActive, setIsPaswordActive] = useState(false)
   const [isUserNameActive, setIsUserNameActive] = useState(false)
-  const [username, setUsername] = useState(userContext.user.username)
-  const [password, setPassword] = useState(null);
-  const [rePassword, setRePassword] = useState(null);
-  const [alert, setAlert] = useState(false)
-  const [showTeamsVisibleForm, setShowTeamsVisibleForm, teamRef] = useDetectOutsideClick()
+  const [username, setUsername] = useState(user.username)
+  const [password, setPassword] = useState(null)
+  const [rePassword, setRePassword] = useState(null)
+  const [isAlertOn, setIsAlertOn] = useState(false)
+  const [areUserTeamsShown, setAreUserTeamsShown, teamRef] = useDetectOutsideClick()
   const [isEditPictureActive, setIsEditPictureActive, dropdownRef] = useDetectOutsideClick()
-  const [confirmOpen, setConfirmOpen] = useState(false)
+  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
   const { getUser, updateUser, updateUserPassword, updateUserImage } = useUserServices()
 
 
-
-  const params = useParams()
-  const history = useHistory()
-
-
-  const userName = userContext.user.username
-  const userTeams = userContext.user.teams
+  const userName = user.username
+  const userTeams = user.teams
   const userId = params.userid
-  const userImage = userContext.user.image
+  const userImage = user.image
 
 
   const getData = useCallback(async () => {
@@ -54,7 +51,7 @@ const ProfilePage = () => {
   const handleUpdateUser = async (event) => {
     event.preventDefault()
 
-    setAlert(false)
+    setIsAlertOn(false)
     setIsPaswordActive(false)
     setIsUserNameActive(false)
 
@@ -62,21 +59,18 @@ const ProfilePage = () => {
       return
     }
     if (password !== rePassword) {
-      setAlert(true)
+      setIsAlertOn(true)
       return
     }
-
     if (username) {
       const user = await updateUser(userId, username)
-      userContext.logIn(user)
+      logIn(user)
     }
-
     if (password) {
       const user = await updateUserPassword(userId, password)
-      userContext.logIn(user)
+      logIn(user)
       return
     }
-
     getData()
   }
 
@@ -92,26 +86,22 @@ const ProfilePage = () => {
           path,
           publicId
         }
-
         const user = await updateUserImage(userId, newImage, userImage)
-        userContext.logIn(user)
-
+        logIn(user)
         getData()
       }
-
       if (error) {
         history.push('/error')
         return
       }
     })
-
     widget.open()
   }
 
   const deletePic = async () => {
     const newImage = null
     const user = await updateUserImage(userId, newImage, userImage)
-    userContext.logIn(user)
+    logIn(user)
     getData()
   }
 
@@ -135,26 +125,23 @@ const ProfilePage = () => {
 
   return (
     <PageLayout>
-
       {
-        confirmOpen &&
+        isConfirmOpen &&
         <ConfirmDialog
           title={'delete this picture'}
-          hideConfirm={() => setConfirmOpen(false)}
+          hideConfirm={() => setIsConfirmOpen(false)}
           onConfirm={() => deletePic()}
         />
       }
-
-
       <Title title='Profile' />
-
       <div className={styles.container}>
-
         <div className={styles['inputs-container']}>
-
           <div className={styles['button-input-div']}>
-            <ButtonGrey title={'Username:'} className={styles['navigate-buttons']}
-              onClick={() => { setIsUserNameActive(!isUserNameActive) }} />
+            <ButtonGrey
+              title={'Username:'}
+              className={styles['navigate-buttons']}
+              onClick={() => { setIsUserNameActive(!isUserNameActive) }}
+            />
             < input
               ref={function (input) {
                 if (input !== null) {
@@ -170,8 +157,11 @@ const ProfilePage = () => {
           </div>
 
           <div className={styles['button-input-div']}>
-            <ButtonGrey title={'Change Password'} className={styles['navigate-buttons']}
-              onClick={() => { setIsPaswordActive(!isPasswordActive) }} />
+            <ButtonGrey
+              title={'Change Password'}
+              className={styles['navigate-buttons']}
+              onClick={() => { setIsPaswordActive(!isPasswordActive) }}
+            />
             < input
               onChange={e => setPassword(e.target.value)}
               className={styles['input-fields-profile']}
@@ -181,9 +171,8 @@ const ProfilePage = () => {
             />
           </div>
 
-
           <div className={styles.alerts}>
-            <Alert alert={alert} message={'Passwords do not match'} />
+            <Alert alert={isAlertOn} message={'Passwords do not match'} />
           </div>
 
           {
@@ -194,8 +183,11 @@ const ProfilePage = () => {
           }
 
           <div className={styles['button-input-div']}>
-            <ButtonGrey title={'Confirm Password'} className={styles['navigate-buttons']}
-              onClick={() => { setIsPaswordActive(!isPasswordActive) }} />
+            <ButtonGrey
+              title={'Confirm Password'}
+              className={styles['navigate-buttons']}
+              onClick={() => { setIsPaswordActive(!isPasswordActive) }}
+            />
             < input
               onChange={e => setRePassword(e.target.value)}
               className={styles['input-fields-profile']}
@@ -206,7 +198,10 @@ const ProfilePage = () => {
           </div>
 
           <div className={styles['button-input-div']}>
-            <ButtonGrey title={'Email:'} className={styles['navigate-buttons']} />
+            <ButtonGrey
+              title={'Email:'}
+              className={styles['navigate-buttons']}
+            />
             < input
               className={styles['input-fields-profile']}
               value={userEmail}
@@ -215,35 +210,42 @@ const ProfilePage = () => {
           </div>
 
           <div className={styles['button-input-div-tasks']}>
-            <ButtonGrey title={'My Tasks'} className={styles['navigate-buttons']}
-              onClick={() => history.push(`/my-tasks/${userId}`)} />
+            <ButtonGrey
+              title={'My Tasks'}
+              className={styles['navigate-buttons']}
+              onClick={() => history.push(`/my-tasks/${userId}`)}
+            />
             < input
               className={styles['input-fields-tasks']}
               value={''}
               disabled={true}
             />
-
           </div>
 
           <div className={styles['button-input-div']}>
             <div className={styles.myTeamsContainer}>
-              <ButtonGrey title={'My Teams'} className={styles['navigate-buttons']}
-                onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
+              <ButtonGrey
+                title={'My Teams'}
+                className={styles['navigate-buttons']}
+                onClick={() => setAreUserTeamsShown(!areUserTeamsShown)}
+              />
               <div className={styles['select-team-container']} ref={teamRef}>
                 {
-                  showTeamsVisibleForm &&
+                  areUserTeamsShown &&
                   <MyTeamsMenu userTeams={userTeams} goToTeamPage={goToTeamPage} />
                 }
               </div>
             </div>
 
             <div className={styles['button-div-save']}>
-              <ButtonGrey title={'SAVE'} className={styles['save-button']}
-                onClick={(e) => handleUpdateUser(e)} />
+              <ButtonGrey
+                title={'SAVE'}
+                className={styles['save-button']}
+                onClick={(e) => handleUpdateUser(e)}
+              />
             </div>
           </div>
         </div>
-
 
         <div className={styles['pic-container']}>
           <div className={styles['profile-pic-container']}>
@@ -257,11 +259,9 @@ const ProfilePage = () => {
               {
                 userImage ?
                   <div className={styles['profile-picture']}>
-
                     <Image publicId={userImage.publicId} className={styles['profile-picture-pic']} >
                       <Transformation width='200' height='200' gravity='faces' crop='fill' />
                     </Image>
-
                     <div className={styles.relative}>
                       {
                         isEditPictureActive &&
@@ -273,7 +273,7 @@ const ProfilePage = () => {
                           />
                           <ButtonGrey
                             onClick={() => {
-                              setConfirmOpen(true)
+                              setIsConfirmOpen(true)
                             }}
                             title='Delete'
                             className={styles.delete}
@@ -284,30 +284,18 @@ const ProfilePage = () => {
                   </div>
                   :
                   <div className={styles['no-pic']}>
-
                     <p className={styles['load-pic-text']}>
                       Load a profile picture
                     </p>
-
                     <img className={styles.pen} src={pen} alt='' />
                   </div>
               }
             </div>
-
             <p>{userName}</p>
           </div>
-
-
-
-          <img className={styles.pic1} src={pic1} alt=''
-          // width='80%' height='80%'
-          />
-
+          <img className={styles.pic1} src={profilePagePic} alt='' />
         </div>
-
       </div>
-
-
     </PageLayout>
   )
 }

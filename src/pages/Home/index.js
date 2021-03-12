@@ -8,19 +8,19 @@ import Title from '../../components/Title'
 import UserContext from '../../contexts/UserContext'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import ButtonGreyTitle from '../../components/ButtonGreyTitle'
-import pic1 from '../../images/home-page-pic.svg'
+import homePagePicture from '../../images/home-page-pic.svg'
 import MyTeamsMenu from '../../components/MyTeamsMenu'
 
 
 const Home = () => {
-  const userContext = useContext(UserContext)
   const history = useHistory()
-  const [showTeamForm, setShowTeamForm] = useState(false)
-  const [showTeamsVisibleForm, setShowTeamsVisibleForm, dropdownRef] = useDetectOutsideClick()
-  const userName = userContext.user.username
-  const userTeams = userContext.user.teams
-  const userId = userContext.user._id
-  const userRecentProjects = userContext.user.recentProjects
+  const { user } = useContext(UserContext)
+  const [isTeamFormShown, setIsTeamFormShown] = useState(false)
+  const [areUserTeamsShown, setAreUserTeamsShown, dropdownRef] = useDetectOutsideClick()
+  const userName = user.username
+  const userTeams = user.teams
+  const userId = user._id
+  const userRecentProjects = user.recentProjects
 
 
   const goToTeamPage = (teamId) => {
@@ -37,53 +37,60 @@ const Home = () => {
         })
       )
     })
-
   }
 
 
   return (
     <PageLayout>
-
       <>
         {
-          showTeamForm &&
-          <Transparent hideForm={() => setShowTeamForm(false)}>
-            <CreateTeam hideForm={() => { setShowTeamForm(false) }} />
+          isTeamFormShown &&
+          <Transparent hideForm={() => setIsTeamFormShown(false)}>
+            <CreateTeam hideForm={() => { setIsTeamFormShown(false) }} />
           </Transparent>
         }
       </>
-
       <Title title='Home' />
-
       <div className={styles.container}>
-
         <div className={styles['left-buttons']}>
-          <ButtonGreyTitle className={styles['navigate-buttons']} title={'My Tasks'}
-            onClick={() => history.push(`/my-tasks/${userId}`)} />
+          <ButtonGreyTitle
+            className={styles['navigate-buttons']}
+            title={'My Tasks'}
+            onClick={() => history.push(`/my-tasks/${userId}`)}
+          />
 
-          <ButtonGreyTitle className={styles['navigate-buttons']} title={'My Teams'}
-            onClick={() => setShowTeamsVisibleForm(!showTeamsVisibleForm)} />
+          <ButtonGreyTitle
+            className={styles['navigate-buttons']}
+            title={'My Teams'}
+            onClick={() => setAreUserTeamsShown(!areUserTeamsShown)}
+          />
 
           <div className={styles['select-team-container']} ref={dropdownRef}>
             {
-              showTeamsVisibleForm &&
+              areUserTeamsShown &&
               <MyTeamsMenu userTeams={userTeams} goToTeamPage={goToTeamPage} />
             }
           </div>
 
-          <ButtonGreyTitle className={styles['navigate-buttons']} title={'Create New Team'}
-            onClick={() => setShowTeamForm(true)} />
+          <ButtonGreyTitle
+            className={styles['navigate-buttons']}
+            title={'Create New Team'}
+            onClick={() => setIsTeamFormShown(true)}
+          />
         </div>
 
         <div className={styles['pic-container']}>
-          <img className={styles.pic1} src={pic1} alt='' />
+          <img className={styles.pic1} src={homePagePicture} alt='' />
 
           <div className={styles['welcome-user']}>
             {`Welcome ${userName}!`}
           </div>
 
-          <ButtonGreyTitle className={styles['navigate-buttons']} title={'Get Started'}
-            onClick={() => history.push(`/get-started/`)} />
+          <ButtonGreyTitle
+            className={styles['navigate-buttons']}
+            title={'Get Started'}
+            onClick={() => history.push(`/get-started/`)}
+          />
         </div>
 
         <div className={styles['right-buttons']}>
@@ -95,8 +102,11 @@ const Home = () => {
                 userRecentProjects.slice(0).reverse().map((project) => {
                   return (
                     <div key={project._id}>
-                      <ButtonGreyTitle className={styles['navigate-buttons']} title={project.name}
-                        onClick={() => goToProjectPage(project._id)} />
+                      <ButtonGreyTitle
+                        className={styles['navigate-buttons']}
+                        title={project.name}
+                        onClick={() => goToProjectPage(project._id)}
+                      />
                     </div>
                   )
                 })
@@ -104,9 +114,7 @@ const Home = () => {
             </>
           }
         </div>
-
       </div>
-
     </PageLayout>
   )
 }

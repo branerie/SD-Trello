@@ -1,3 +1,4 @@
+import { useCallback } from 'react'
 import { useHistory } from 'react-router'
 import getCookie from '../utils/cookie'
 
@@ -13,7 +14,7 @@ export default function useTeamServices() {
         }
     }
 
-    const getTeamUsers = async (currentTeamId) => {
+    const getTeamUsers = useCallback(async (currentTeamId) => {
         const response = await fetch(`${TEAMS_URL}/get-users/${currentTeamId}`, {
             method: 'GET',
             headers: getHeaders()
@@ -24,9 +25,9 @@ export default function useTeamServices() {
         }
         const data = await response.json()
         return data
-    }
+    },[history])
 
-    const createTeam = async (name, description, requests) => {
+    const createTeam = useCallback(async (name, description, requests) => {
         const response = await fetch(`${TEAMS_URL}`, {
             method: 'POST',
             headers: getHeaders(),
@@ -42,9 +43,9 @@ export default function useTeamServices() {
         }
         const team = await response.json()
         return team
-    }
+    },[history])
 
-    const updateTeam = async (teamId, name, description, members, requests) => {
+    const updateTeam = useCallback(async (teamId, name, description, members, requests) => {
 
         const response = await fetch(`${TEAMS_URL}/${teamId}`, {
             method: 'PUT',
@@ -62,9 +63,9 @@ export default function useTeamServices() {
         }
         const updatedTeam = await response.json()
         return updatedTeam
-    }
+    },[history])
 
-    const removeTeamInvitations = async (teamId, removeInvitation) => {
+    const removeTeamInvitations = useCallback(async (teamId, removeInvitation) => {
 
         const response = await fetch(`${TEAMS_URL}/removeInvitations/${teamId}`, {
             method: 'PUT',
@@ -76,9 +77,9 @@ export default function useTeamServices() {
             return
         }
         console.log('success');
-    }
+    },[history])
 
-    const deleteTeam = async (teamId) => {
+    const deleteTeam = useCallback(async (teamId) => {
         const response = await fetch(`${TEAMS_URL}/${teamId}`, {
             method: 'DELETE',
             headers: getHeaders()
@@ -88,9 +89,9 @@ export default function useTeamServices() {
         }
         const deletedTeam = await response.json()
         return deletedTeam
-    }
+    },[history])
 
-    const teamInvitations = async (teamId, message, accepted) => {
+    const teamInvitations = useCallback(async (teamId, message, accepted) => {
         const response = await fetch(`${TEAMS_URL}/invitations/${teamId}`, {
             method: 'POST',
             headers: getHeaders(),
@@ -105,9 +106,9 @@ export default function useTeamServices() {
         }
         const user = await response.json()
         return user
-    }
+    },[history])
 
-    const getTeamInvitationInfo = async (teamId) => {
+    const getTeamInvitationInfo = useCallback(async (teamId) => {
         const response = await fetch(`${TEAMS_URL}/${teamId}`, {
             method: 'GET',
             headers: getHeaders()
@@ -120,17 +121,20 @@ export default function useTeamServices() {
 
         const team = await response.json()
         return team
-    }
+    },[history])
 
-    const getUserTeams = async () => {
+    const getUserTeams = useCallback(async () => {
         const promise = await fetch(`${TEAMS_URL}`, {
             method: 'GET',
             headers: getHeaders()
         })
-
+        if (!promise.ok) {
+            history.push('/error')
+            return
+        }
         const response = await promise.json()
         return response
-    }
+    },[history])
 
 
 
