@@ -12,7 +12,6 @@ import ProjectContext from '../../contexts/ProjectContext'
 import ButtonHideList from '../ButtonHideList'
 import ButtonClean from '../ButtonClean'
 import UserContext from '../../contexts/UserContext'
-import userObject from '../../utils/userObject'
 import { useSocket } from '../../contexts/SocketProvider'
 import Transparent from '../Transparent'
 import EditProject from '../EditProject'
@@ -34,8 +33,7 @@ export default function Aside({ asideOn, setAsideOn }) {
     }, [])
 
     const updateUser = useCallback(async (response) => {
-        const user = userObject(response)
-        logIn(user)
+        logIn(response)
     }, [logIn])
 
     useEffect(() => {

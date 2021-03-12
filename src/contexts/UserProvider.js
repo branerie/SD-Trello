@@ -2,7 +2,6 @@ import React, { useState, useEffect, useCallback } from 'react'
 import Loader from 'react-loader-spinner'
 import useUserServices from '../services/useUserServices'
 import getCookie from '../utils/cookie'
-import userObject from '../utils/userObject'
 import UserContext from './UserContext'
 
 const UserProvider = (props) => {
@@ -12,7 +11,19 @@ const UserProvider = (props) => {
     const token = getCookie('x-auth-token')
 
 
-    const logIn = (user) => {
+    const logIn = (response) => {
+        const user = {
+            username: response.user.username,
+            id: response.user._id,
+            teams: response.teams,
+            inbox: response.user.inbox,
+            confirmed: response.user.confirmed,
+            newPasswordConfirmed: response.user.newPasswordConfirmed,
+            recentProjects: response.user.recentProjects,
+            image: response.user.image,
+            lastTeamSelected: response.user.lastTeamSelected
+        }
+
         setUser({
             ...user,
             loggedIn: true
@@ -42,7 +53,7 @@ const UserProvider = (props) => {
         }
         const response = await verifyLogin()
         if (response.status) {
-            logIn(userObject(response))
+            logIn(response)
         } else {
             logOut()
         }

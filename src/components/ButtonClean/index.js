@@ -6,8 +6,11 @@ const ButtonClean = ({ title, onClick, type, className, children, style }) => {
         <button
             type={type || 'button'}
             onClick={onClick}
-            className={`${styles.clean} ${className}`} style={style}
-        >{title}{children}</button>
+            className={`${styles.clean} ${className}`}
+            style={style}
+        >
+            {title}{children}
+        </button>
     )
 }
 

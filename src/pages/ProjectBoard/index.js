@@ -9,51 +9,31 @@ import styles from './index.module.css'
 import PageLayout from '../../components/PageLayout'
 import List from '../../components/List'
 import projectBoardPic from '../../images/project-board.svg'
-import userObject from '../../utils/userObject'
 import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
 import useListsServices from '../../services/useListsServices'
 import AddProjectBoardList from '../../components/AddProjectBoardList'
 import useUserServices from '../../services/useUserServices'
 
 const ProjectBoard = () => {
-    const params = useParams()
-    /* REVIEW: В общия случай практиката е променливи да се дефинират възможно най-близко в кода до първия ред, на който
-       се използват. 
-       Има изключения - константи глобални за файла, например, се пишат най-отгоре всичките. Хуковете на реакт се дефинират 
-       всичките най-отгоре (това е главно защото винаги трябва да се викат в един и същи ред - да не зависи реда им на 
-       извикване от някой if или някой цикъл, но и за да е по-подредено). Аз понякога групирам дефинирането на някои 
-       променливи заедно, макар че едната не се използва веднага, ако са логически свързани. В случая по-добре teamId да се 
-       дефинира точно преди хука useUpdateUserLastTerm и да се използва там, вместо пак params.teamid. Още по-добре, да се 
-       премести useParams точно над useUpdateUserLastTerm и да се извика така:
-            const { teamid: teamId, projectid: projectId } = useParams()
-        И надолу да се използват директно teamId и projectId. Направо самите params може да са кръстени с camelCase, за да
-        не се налага да се преименуват тук */
-    const teamId = params.teamid
     const socket = useSocket()
-    /* REVIEW: Отдолу за другия контекст написах обяснение защо е добре да се деструктурират.
-            const { user, logIn } = useContext(UserContext) */
-    const context = useContext(UserContext)
-    /* REVIEW: Според мен по-добре да се деструктурира каквото ти трябва от даден контекст. В случая:
-            const { project, lists, hiddenLists, setProject, setLists } = useContext(ProjectContext)
-        Едно че се съкращава използването им, второ че като dependency-та на useCallback/useEffect може да се слагат
-        конкретните методи/променливи, при които реално трябва да се ъпдейтне. Ако целия projectContext е вкаран като
-        зависимост, всяка промяна на контекста ще предизвиква промянва в callback/effect-a, дори да няма нищо общо с него. */
-    const projectContext = useContext(ProjectContext)
+    const { user, logIn } = useContext(UserContext)
+    const { project, lists, hiddenLists, setProject, setLists } = useContext(ProjectContext)
     const [isAdmin, setIsAdmin] = useState(false)
     const [isDndActive, setIsDndActive] = useState(false)
     const [isDragListDisabled, setIsDragListDisabled] = useState(false)
     const { dragAndDropList, dragAndDropCard } = useListsServices()
     const { updateRecentProjects } = useUserServices()
 
-    useUpdateUserLastTeam(params.teamid)
+    const { teamid: teamId, projectid: projectId } = useParams()
+    useUpdateUserLastTeam(teamId)
 
     const projectUpdate = useCallback((project) => {
-        projectContext.setProject(project)
-        projectContext.setLists(project.lists)
-    }, [projectContext])
+        setProject(project)
+        setLists(project.lists)
+    }, [setProject, setLists])
 
     useEffect(() => {
-        const id = params.projectid
+        const id = projectId
 
         if (socket == null) return
 
@@ -61,87 +41,87 @@ const ProjectBoard = () => {
 
         socket.emit('project-join', id)
         return () => socket.off('project-updated')
-    }, [socket, projectUpdate, params.projectid])
+    }, [socket, projectUpdate, projectId])
 
     const updateUserRecentProjects = useCallback(async () => {
-        const userId = context.user.id
-        let updatedUser = { ...context.user }
-        let oldProjects = [...updatedUser.recentProjects]
-        /* REVIEW: Не става ведната ясно защо return-ва функцията при length > 2 и защо сравняваш индекс 2 с params.projectid. 
-           Двата варианта са да се напише коментар, който обяснява този if, или двойката да се изведе като константа с име от
-           което се разбира защо точно 2 използваме */
-        if (oldProjects.length > 2 && oldProjects[2]._id === params.projectid) return
+        const updatedUser = { ...user }
+        const recentProjects = [...updatedUser.recentProjects]
 
-        const newProjects = oldProjects.filter(p => p._id !== params.projectid)
-        newProjects.push({ _id: params.projectid, name: projectContext.project.name })
-        /* REVIEW: Същото като с двойката по-нагоре. Не става ясно защо shift при length > 3. Също, по-добре да не е на един 
-           ред този ifgit add */
-        if (newProjects.length > 3) newProjects.shift()
+        // Returns if the last project id from recent projects array is equal to current projectId
+        if (recentProjects.length > 0 && recentProjects[recentProjects.length - 1]._id === projectId) return
 
-        const data = await updateRecentProjects(userId, newProjects)
-        /* REVIEW: userObject не е добро име за функция. Най-малкото може да е getUserObject, но ако се сетиш за нещо
-           по-описателно за какво точно от user-a връща тази функция, по-добре */
-        const user = userObject(data)
-        context.logIn(user)
-    }, [context, params.projectid, projectContext.project, updateRecentProjects])
+        const newRecentProjects = recentProjects.filter(p => p._id !== projectId)
+        newRecentProjects.push({ _id: projectId, name: project.name })
+
+        // Removing the oldest project if recent projects are more than 3
+        if (newRecentProjects.length > 3) {
+            newRecentProjects.shift()
+        }
+
+        const data = await updateRecentProjects(user.id, newRecentProjects)
+        logIn(data)
+    }, [projectId, project, updateRecentProjects, logIn, user])
 
     useEffect(() => {
-        if (!projectContext.project || projectContext.project._id !== params.projectid) return
+        if (!project || project._id !== projectId) return
 
         updateUserRecentProjects()
 
         if (isDndActive) return
 
         const memberArr = []
-        projectContext.project.membersRoles.map(element => {
+        project.membersRoles.map(element => {
             return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
         })
 
-        projectContext.setLists(projectContext.project.lists)
-        const member = memberArr.find(m => m.id === context.user.id)
+        setLists(project.lists)
+        const member = memberArr.find(m => m.id === user.id)
 
         if (member) setIsAdmin(member.admin)
 
-    }, [updateUserRecentProjects, projectContext.project, params.projectid, projectContext, context.user.id, isDndActive])
-    /* Не се разбира какво точно прави тази функция от името - дали връща някакъв лист, дали го съставя просто, дали го трие...
-       Ако трябва някой да променя компонента, трябва да отдели време да и разглежда кода */
-    const dndList = async (result) => {
+    }, [updateUserRecentProjects, project, projectId, user.id, isDndActive, setLists])
+
+    const handleDragAndDropList = async (result) => {
         let position = result.destination.index
 
-        const filteredList = projectContext.lists.filter(element => !(projectContext.hiddenLists.includes(element._id)))
+        const filteredList = lists.filter(element => !(hiddenLists.includes(element._id)))
         const previousId = filteredList[position - 1]
-        position = projectContext.lists.indexOf(previousId) + 1
+        position = lists.indexOf(previousId) + 1
 
-        const newListsArr = [...projectContext.lists]
+        const newListsArr = [...lists]
         const [reorderedList] = newListsArr.splice(result.source.index, 1)
         newListsArr.splice(result.destination.index, 0, reorderedList)
-        projectContext.setLists(newListsArr)
+        setLists(newListsArr)
 
-        const updatedProject = await dragAndDropList(projectContext.project._id, result.draggableId, position)
-        projectContext.setProject(updatedProject)
+        const updatedProject = await dragAndDropList(project._id, result.draggableId, position)
+        setProject(updatedProject)
     }
-    /* REVIEW: Същото като с dndList */
-    const dndCard = async (result) => {
+
+    const handleDragAndDropCard = async (result) => {
         const position = result.destination.index
         const oldPosition = result.source.index
         const source = result.source.droppableId
         const destination = result.destination.droppableId
 
-        const newListsArr = [...projectContext.lists]
+        const newListsArr = [...lists]
         let sourcePosition = ''
         let destinationPosition = ''
 
         for (let list of newListsArr) {
-            /* REVIEW: Използвайте if на един ред само ако не връща нищо или връща null. Повече от това се чете трудно */
-            if (list._id === source) sourcePosition = newListsArr.indexOf(list)
-            if (list._id === destination) destinationPosition = newListsArr.indexOf(list)
+            if (list._id === source) {
+                sourcePosition = newListsArr.indexOf(list)
+            }
+
+            if (list._id === destination) {
+                destinationPosition = newListsArr.indexOf(list)
+            }
         }
 
         const [task] = newListsArr[sourcePosition].cards.splice(oldPosition, 1)
         newListsArr[destinationPosition].cards.splice(position, 0, task)
-        projectContext.setLists(newListsArr)
+        setLists(newListsArr)
 
-        await dragAndDropCard(projectContext.project._id, result.draggableId, position, source, destination)
+        await dragAndDropCard(project._id, result.draggableId, position, source, destination)
     }
 
     const handleOnDragEnd = async (result) => {
@@ -150,19 +130,19 @@ const ProjectBoard = () => {
         setIsDndActive(true)
 
         if (result.type === 'droppableItem') {
-            await dndList(result)
+            await handleDragAndDropList(result)
         }
 
         if (result.type === 'droppableSubItem') {
-            await dndCard(result)
+            await handleDragAndDropCard(result)
         }
 
-        socket.emit('project-update', projectContext.project)
+        socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
         setIsDndActive(false)
     }
 
-    if (!projectContext.project || projectContext.project._id !== params.projectid) {
+    if (!project || project._id !== projectId) {
         return (
             /* REVIEW: Реакт работи така, че като пререндеросва страницата, започва да сравнява компонент/таг по 
                компонент/таг и реално пререндеросва само там, където има разлики. В случая, тъй като и в двата случая
@@ -183,22 +163,21 @@ const ProjectBoard = () => {
 
     return (
         <PageLayout>
+            
             <div className={styles.container}>
                 <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId='droppable' direction='horizontal' type='droppableItem'>
                         {(provided) => (
                             <div className={styles['container-droppable']} ref={provided.innerRef} >
-                                { projectContext.lists
-                                    .filter(element => !(projectContext.hiddenLists.includes(element._id)))
+                                { lists
+                                    .filter(element => !(hiddenLists.includes(element._id)))
                                     .map((element, index) => {
                                         return (
                                             <Draggable
                                                 key={element._id}
                                                 draggableId={element._id}
                                                 index={index}
-                                                /* REVIEW: Самата isDragListDisabled е булева променлива. Може да се
-                                                   подаде директно тя, няма нужда от ternary operator */
-                                                isDragDisabled={isDragListDisabled ? true : false}
+                                                isDragDisabled={isDragListDisabled}
                                             >
                                                 {(provided) => (
                                                     <div
@@ -209,7 +188,7 @@ const ProjectBoard = () => {
                                                     >
                                                         <List
                                                             list={element}
-                                                            project={projectContext.project}
+                                                            project={project}
                                                             isAdmin={isAdmin}
                                                             setIsDragListDisabled={setIsDragListDisabled}
                                                         />
