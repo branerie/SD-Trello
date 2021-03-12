@@ -19,6 +19,7 @@ export default function ListColor({ color, type }) {
             </svg>
         )
     }
+
     if (type === 'list') {
         return (
             <svg className={`${styles[type]}`} xmlns='http://www.w3.org/2000/svg' width='267.316' height='26.931' viewBox='0 0 267.316 26.931'>
@@ -29,7 +30,6 @@ export default function ListColor({ color, type }) {
                     transform='translate(0.002 0.014)'
                     fill={color} />
             </svg>
-
         )
     }
 }

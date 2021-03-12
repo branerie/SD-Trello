@@ -1,7 +1,6 @@
 import { useCallback } from 'react'
 import { useHistory } from 'react-router'
 import getCookie from "../utils/cookie"
-import userObject from '../utils/userObject'
 
 const USER_URL = '/api/user'
 
@@ -46,7 +45,7 @@ export default function useUserServices() {
 
     const updateUser = useCallback(async (userId, username) => {
 
-        const promise = await fetch(`${USER_URL}/${userId}`, {
+        const response = await fetch(`${USER_URL}/${userId}`, {
             method: 'PUT',
             headers: getHeaders(),
             body: JSON.stringify({
@@ -54,21 +53,18 @@ export default function useUserServices() {
             })
         })
 
-        if (!promise.ok) {
+        if (!response.ok) {
             history.push('/error')
             return
         }
 
-        const response = await promise.json()
-        if (response.user.username) {
-            const user = userObject(response)
-            return user
-        }
+        return await response.json()
+
     }, [history])
 
     const updateUserPassword = useCallback(async (userId, password) => {
 
-        const promise = await fetch(`${USER_URL}/password/${userId}`, {
+        const response = await fetch(`${USER_URL}/password/${userId}`, {
             method: 'PUT',
             headers: getHeaders(),
             body: JSON.stringify({
@@ -76,21 +72,18 @@ export default function useUserServices() {
             })
         })
 
-        if (!promise.ok) {
+        if (!response.ok) {
             history.push('/error')
             return
         }
 
-        const response = await promise.json()
-        if (response.user.username) {
-            const user = userObject(response)
-            return user
-        }
+        return await response.json()
+
     }, [history])
 
     const updateUserImage = useCallback(async (userId, newImage, oldImage) => {
 
-        const promise = await fetch(`${USER_URL}/image/${userId}`, {
+        const response = await fetch(`${USER_URL}/image/${userId}`, {
             method: 'PUT',
             headers: getHeaders(),
             body: JSON.stringify({
@@ -99,21 +92,18 @@ export default function useUserServices() {
             })
         })
 
-        if (!promise.ok) {
+        if (!response.ok) {
             history.push('/error')
             return
         }
 
-        const response = await promise.json()
-        if (response.user.username) {
-            const user = userObject(response)
-            return user
-        }
+        return await response.json()
+
     }, [history])
 
     const addNewPassword = useCallback(async (userId, password) => {
 
-        const promise = await fetch(`${USER_URL}/addNewPassword/${userId}`, {
+        const response = await fetch(`${USER_URL}/addNewPassword/${userId}`, {
             method: 'PUT',
             headers: getHeaders(),
             body: JSON.stringify({
@@ -123,17 +113,13 @@ export default function useUserServices() {
 
 
 
-        if (!promise.ok) {
+        if (!response.ok) {
             history.push('/error')
             return
         }
 
-        const response = await promise.json()
-        if (response.user.username) {
-            const user = userObject(response)
-            console.log(user);
-            return user
-        }
+        return await response.json()
+
     }, [history])
 
     const userLogin = useCallback(async (email, password) => {
@@ -152,26 +138,10 @@ export default function useUserServices() {
         const authToken = promise.headers.get('Authorization')
         const response = await promise.json()
 
-        if (response.needPassword) {
-            return response
-        }
-        if (response.wrongPassword) {
-            return response
-        }
-        if (response.wrongUser) {
-            return response
-        }
-        if (response.exist) {
-            return response
+        if (response.user && response.user.username && authToken) {
+            document.cookie = `x-auth-token=${authToken};path=/`
         }
 
-        document.cookie = `x-auth-token=${authToken};path=/`
-
-
-        if (response.user.username && authToken) {
-            const user = userObject(response)
-            return user
-        }
         return response
     }, [])
 
@@ -217,14 +187,10 @@ export default function useUserServices() {
 
         const authToken = promise.headers.get('Authorization')
         const response = await promise.json()
-
-
-        console.log(response);
-        document.cookie = `x-auth-token=${authToken};path=/`
-
-        if (response.user.username && authToken) {
-            const user = userObject(response)
-            return user
+        
+        if (response.user && response.user.username && authToken) {
+            document.cookie = `x-auth-token=${authToken};path=/`
+            return response
         }
     }, [])
 
@@ -245,17 +211,10 @@ export default function useUserServices() {
         const authToken = promise.headers.get('Authorization')
         const response = await promise.json()
 
-        if (response.exist) {
-            return response
+        if (response.user && response.user.username && authToken) {
+            document.cookie = `x-auth-token=${authToken};path=/`
         }
 
-        document.cookie = `x-auth-token=${authToken};path=/`
-
-
-        if (response.user.username && authToken) {
-            const user = userObject(response)
-            return user
-        }
         return response
     }, [])
 
@@ -336,17 +295,15 @@ export default function useUserServices() {
                 "Content-Type": "application/json"
             }
         })
+
         const authToken = promise.headers.get("Authorization")
-        document.cookie = `x-auth-token=${authToken};path=/`
-    
         const response = await promise.json()
-    
-        if (response.user.username && authToken) {
-            const user = userObject(response)
-            return user
+        
+        if (response.user && response.user.username && authToken) {
+            document.cookie = `x-auth-token=${authToken};path=/`
         }
+
         return response
-    
     }, [])
 
     return {

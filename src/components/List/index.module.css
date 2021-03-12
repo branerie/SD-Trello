@@ -11,7 +11,7 @@
     flex-wrap: wrap;
 }
 
-.row {
+.header {
     display: flex;
     margin: 10px;
     margin-left: 30px;
@@ -19,82 +19,6 @@
     justify-content: space-between;
     width: 100%;
     height: 15px;
-}
-
-.button {
-    width: 30px;
-    height: 30px;
-    border-radius: 5px;
-}
-
-.button:hover {
-    background-color: #C1CBCF;
-}
-
-.dots {
-    margin: auto;
-}
-
-.menu {
-    background: #DFE9EE;
-    position: absolute;
-    border-radius: 10px;
-    top: 8px;
-    left: 230px;
-    width: 100px;
-    z-index: 5;
-}
-
-.menu > button {
-    border-top: 1.5px solid #707070;
-    border-left: 1.5px solid #707070;
-    border-right: 1.5px solid #707070;
-    height: 38px;
-}
-
-.edit {
-  border-radius: 10px 10px 0 0;
-  width: 100%;
-}
-
-.delete {
-  border-bottom: 1.5px solid #707070;
-  border-radius: 0 0 10px 10px;
-  width: 100%;
-}
-
-.relative {
-    position: relative;
-}
-
-.add-task {
-    font-size: 1rem;
-    height: 1.9rem;
-    margin: 5px;
-    margin-top: 8px;
-    padding: 5px;
-    border-radius: 5px;
-    cursor: pointer;
-}
-
-.add-task:hover {
-    background-color: #C1CBCF;
-}
-
-.draggable {
-    width: 100%;
-}
-
-.droppable {
-    width: 100%;
-    flex-grow: 1;
-}
-
-.flexend {
-    display: flex;
-    margin-right: 10px;
-    justify-content: flex-end;
-    flex-grow: 1;
 }
 
 .name {
@@ -107,31 +31,20 @@
     white-space: nowrap;
 }
 
-.container {
-    width: 100%;
-    height: auto;
+.button {
+    width: 30px;
+    height: 30px;
+    border-radius: 5px;
     display: flex;
-    flex-wrap: wrap;
+    justify-content: center;
+    align-items: center;
 }
 
-.input {
-    border: 1px solid #000000; 
-    background-color: #FFFFFF;
-    border-radius: 10px;
-    margin: 10px;   
-    padding: 13px;
-    font-weight: normal;
-    flex-grow: 1;
+.button:hover {
+    background-color: #C1CBCF;
 }
 
-.task-input {
-    border: 1px solid #000000; 
-    background-color: #FFFFFF;
-    border-radius: 10px;
-    margin: 10px; 
-    margin-top: 6px;
-    margin-bottom: 15px;  
-    padding: 9px;
-    font-weight: normal;
+.droppable {
+    width: 100%;
     flex-grow: 1;
 }

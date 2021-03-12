@@ -3,6 +3,7 @@ import ProjectContext from '../../contexts/ProjectContext'
 import { useSocket } from '../../contexts/SocketProvider'
 import styles from './index.module.css'
 import ButtonClean from '../ButtonClean'
+import ProjectBoardInput from '../Inputs/ProjectBoardInput'
 import useListsServices from '../../services/useListsServices'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
@@ -15,10 +16,13 @@ const AddProjectBoardList = () => {
     const { createList } = useListsServices()
 
     const addList = async () => {
-        if (listName === '') return
+        if (listName === '') {
+            setIsAddListActive(false)
+            return
+        }
 
         await createList(projectContext.project._id, listName)
-        setIsAddListActive(!isAddListActive)
+        setIsAddListActive(false)
         setListName('')
         socket.emit('project-update', projectContext.project)
     }
@@ -27,12 +31,11 @@ const AddProjectBoardList = () => {
         <div className={styles.list} >
             { isAddListActive ?
                 <div ref={listRef} className={styles.container} >
-                    <input
-                        autoFocus
-                        className={styles.input}
-                        type={'text'}
+                    <ProjectBoardInput
                         value={listName}
-                        onChange={e => setListName(e.target.value)}
+                        setValue={setListName}
+                        onEnter={addList}
+                        onEscape={() => setIsAddListActive(false)}
                     />
                     <ButtonClean
                         className={styles.button}
@@ -43,7 +46,7 @@ const AddProjectBoardList = () => {
                 :
                 <ButtonClean
                     className={styles.button}
-                    onClick={() => setIsAddListActive(!isAddListActive)}
+                    onClick={() => setIsAddListActive(true)}
                     title='+ Add List'
                 />
             }

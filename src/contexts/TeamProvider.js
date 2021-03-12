@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useContext, useCallback } from 'react'
 import useTeamServices from '../services/useTeamServices'
-import userObject from '../utils/userObject'
 import { useSocket } from './SocketProvider'
 import TeamContext from './TeamContext'
 import UserContext from './UserContext'
@@ -38,8 +37,7 @@ function TeamProvider({ children }) {
 
     setTeams(response.teams)
 
-    const user = userObject(response)
-    userContext.logIn(user)
+    userContext.logIn(response)
 
   }, [userContext, getUserTeams])
 
