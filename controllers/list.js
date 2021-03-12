@@ -8,7 +8,9 @@ router.post('/:id', auth, isAdmin, createList)
 
 router.put('/:id/:idlist', auth, isAdmin, updateList)
 
-router.put('/:id/:idelement/dnd-update', auth, updateListDnD)
+router.put('/:id/:idlist/dnd-list', auth, updateListDnD)
+
+router.put('/:id/:idcard/dnd-card', auth, updateCardDnD)
 
 router.delete('/:id/:idlist', auth, isAdmin, deleteList)
 
@@ -45,67 +47,67 @@ async function updateList(req, res, next) {
 
 async function updateListDnD(req, res, next) {
     const projectId = req.params.id
-    const elementId = req.params.idelement
-    const { position, element, source, destination } = req.body
+    const listId = req.params.idlist
+    const { position } = req.body
 
-    if (element === 'list') {
-        const session = await mongoose.startSession()
-        session.startTransaction()
+    const session = await mongoose.startSession()
+    session.startTransaction()
 
-        try {
-            await models.Project.updateOne({ _id: projectId }, { $pull: { lists: elementId } }).session(session)
-            await models.Project.updateOne({ _id: projectId }, { $push: { lists: { $each: [elementId], $position: position } } }).session(session)
+    try {
+        await models.Project.updateOne({ _id: projectId }, { $pull: { lists: listId } }).session(session)
+        await models.Project.updateOne({ _id: projectId }, { $push: { lists: { $each: [listId], $position: position } } }).session(session)
 
-            await session.commitTransaction()
-            session.endSession()
+        await session.commitTransaction()
+        session.endSession()
 
-            const project = await models.Project.findOne({ _id: projectId })
-                .populate({
-                    path: 'lists',
+        const project = await models.Project.findOne({ _id: projectId })
+            .populate({
+                path: 'lists',
+                populate: {
+                    path: 'cards',
                     populate: {
-                        path: 'cards',
-                        populate: {
-                            path: 'members',
-                            select: '-password'
-                        }
-                    }
-                })
-                .populate({
-                    path: 'membersRoles',
-                    populate: {
-                        path: 'memberId',
+                        path: 'members',
                         select: '-password'
                     }
-                })
+                }
+            })
+            .populate({
+                path: 'membersRoles',
+                populate: {
+                    path: 'memberId',
+                    select: '-password'
+                }
+            })
 
-            res.send(project)
-        } catch (error) {
-            await session.abortTransaction()
-            session.endSession()
-            res.send(error)
-        }
+        res.send(project)
+    } catch (error) {
+        await session.abortTransaction()
+        session.endSession()
+        res.send(error)
     }
+}
 
-    if (element === 'card') {
-        const session = await mongoose.startSession()
-        session.startTransaction()
+async function updateCardDnD(req, res, next) {
+    const cardId = req.params.idcard
+    const { position, source, destination } = req.body
 
-        try {
-            await models.List.updateOne({ _id: source }, { $pull: { cards: elementId } }).session(session)
-            await models.List.updateOne({ _id: destination }, { $push: { cards: { $each: [elementId], $position: position } } }).session(session)
+    const session = await mongoose.startSession()
+    session.startTransaction()
 
-            await session.commitTransaction()
+    try {
+        await models.List.updateOne({ _id: source }, { $pull: { cards: cardId } }).session(session)
+        await models.List.updateOne({ _id: destination }, { $push: { cards: { $each: [cardId], $position: position } } }).session(session)
 
-            session.endSession()
+        await session.commitTransaction()
 
-            res.send('Success')
-        } catch (error) {
-            await session.abortTransaction()
-            session.endSession()
-            res.send(error)
-        }
+        session.endSession()
+
+        res.send('Success')
+    } catch (error) {
+        await session.abortTransaction()
+        session.endSession()
+        res.send(error)
     }
-
 }
 
 async function deleteList(req, res, next) {
