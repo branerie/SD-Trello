@@ -7,6 +7,7 @@ import useListsServices from '../../services/useListsServices'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 const AddProjectBoardList = () => {
+    /* REVIEW: Бих детруктурирал и да взема директно { project }, ама в случая на този компонент не е голяма разликата */
     const projectContext = useContext(ProjectContext)
     const socket = useSocket()
     const [listName, setListName] = useState('')
