@@ -1,7 +1,6 @@
 import React, { useContext, useState } from 'react'
 import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
 import TeamContext from '../../contexts/TeamContext'
 import ButtonClean from '../ButtonClean'
 import UserContext from '../../contexts/UserContext'
@@ -9,6 +8,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import AvatarUser from '../AvatarUser'
 import ButtonGrey from '../ButtonGrey'
 import useUserServices from '../../services/useUserServices'
+import useTeamServices from '../../services/useTeamServices'
 
 
 export default function CreateTeam(props) {
@@ -23,6 +23,8 @@ export default function CreateTeam(props) {
     const userContext = useContext(UserContext)
     const socket = useSocket()
     const { getAllUsers } = useUserServices()
+    const { createTeam } = useTeamServices()
+
 
 
     const inputMembers = async (event) => {
@@ -58,38 +60,16 @@ export default function CreateTeam(props) {
 
         if (name === '') {
             return
-        }
-
-        const token = getCookie('x-auth-token')
-        const response = await fetch('/api/teams', {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                name,
-                description,
-                requests: members
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-            return
-        } else {
-            const team = await response.json()
-            const arr = [...teamContext.teams]
-            arr.push(team)
-            // const userTeams = [...userContext.user.teams]
-            // userTeams.push(team)
-            teamContext.setTeams(arr)
-            teamContext.setSelectedTeam(team.name)
-            props.hideForm()
-            socket.emit('team-update', team._id)
-            socket.emit('multiple-messages-sent', members)
-            history.push(`/team/${team._id}`)
-        }
-
+        }    
+        const team = await createTeam(name, description, members)
+        const arr = [...teamContext.teams]
+        arr.push(team)        
+        teamContext.setTeams(arr)
+        teamContext.setSelectedTeam(team.name)
+        props.hideForm()
+        socket.emit('team-update', team._id)
+        socket.emit('multiple-messages-sent', members)
+        history.push(`/team/${team._id}`)
     }
 
     const onBlur = () => {
@@ -97,8 +77,6 @@ export default function CreateTeam(props) {
     }
 
     return (
-        // <div className={styles.form}>
-
         <div className={styles.container}>
 
 
@@ -200,13 +178,10 @@ export default function CreateTeam(props) {
             </div>
 
             <div className={styles['button-div']}>
-                {/* <button type='submit' className={styles['create-button']}>Create</button> */}
                 <ButtonGrey onClick={(e) => handleSubmit(e)} title='Create' className={styles['create-button']} />
-
             </div>
 
 
         </div>
-        // </div>
     )
 }

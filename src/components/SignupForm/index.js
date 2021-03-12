@@ -4,7 +4,6 @@ import styles from './index.module.css'
 import UserContext from '../../contexts/UserContext'
 import { useHistory } from 'react-router-dom'
 import Alert from '../Alert'
-import responseGoogle from '../../utils/responseGoogle'
 import logo from '../../images/logo.svg'
 import google from '../../images/welcome-page/google.svg'
 import useUserServices from '../../services/useUserServices'
@@ -22,7 +21,7 @@ const SignupForm = (props) => {
     const [validEmailAlert, setValidEmailAlert] = useState(false)
     const { logIn } = useContext(UserContext)
     const history = useHistory()
-    const { registerUser } = useUserServices()
+    const { registerUser, googleLoginUser } = useUserServices()
 
 
     function validateEmail(email) {
@@ -64,16 +63,14 @@ const SignupForm = (props) => {
 
         logIn(response)
         history.push('/')
-        
+
     }
 
-    const handleGoogle = (googleResponse) => {
-        responseGoogle(googleResponse, (user) => {
-            logIn(user)
-            history.push('/')
-        }, (response) => {
-            console.log('Error', response)
-        })
+    const handleGoogle = async (googleResponse) => {
+        const tokenId = googleResponse.tokenId
+        const user = await googleLoginUser(tokenId)
+        logIn(user)
+        history.push('/')        
     }
 
     return (

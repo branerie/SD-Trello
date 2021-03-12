@@ -3,7 +3,6 @@ import GoogleLogin from 'react-google-login'
 import { useHistory } from 'react-router-dom'
 import styles from './index.module.css'
 import UserContext from '../../contexts/UserContext'
-import responseGoogle from '../../utils/responseGoogle'
 import Transparent from '../Transparent'
 import AddPassword from '../FormAddPassword'
 import logo from '../../images/logo.svg'
@@ -23,7 +22,7 @@ const LoginForm = (props) => {
     const [fillAlert, setFillAlert] = useState(false)
     const [wrongPassAllert, setWrongPassAllert] = useState(false)
     const [wrongUserAllert, setWrongUserAllert] = useState(false)
-    const { userLogin } = useUserServices()
+    const { userLogin, googleLoginUser } = useUserServices()
 
 
 
@@ -40,7 +39,7 @@ const LoginForm = (props) => {
             return
         }
 
-      
+
         const response = await userLogin(email, password)
         if (response.needPassword) {
             setUserId(response.userId)
@@ -59,13 +58,11 @@ const LoginForm = (props) => {
         history.push('/')
     }
 
-    const handleGoogle = (googleResponse) => {
-        responseGoogle(googleResponse, (user) => {
-            context.logIn(user)
-            history.push('/')
-        }, (response) => {
-            console.log('Error', response)
-        })
+    const handleGoogle = async (googleResponse) => {
+        const tokenId = googleResponse.tokenId
+        const user = await googleLoginUser(tokenId)
+        context.logIn(user)
+        history.push('/')
     }
 
     const hideForm = () => {
@@ -170,3 +167,5 @@ const LoginForm = (props) => {
 }
 
 export default LoginForm;
+
+

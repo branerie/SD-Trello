@@ -1,7 +1,6 @@
 import React, { useState, useContext } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
 import 'react-datepicker/dist/react-datepicker.css'
 import ButtonClean from '../ButtonClean'
 import UserContext from '../../contexts/UserContext'
@@ -9,6 +8,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import AvatarUser from '../AvatarUser'
 import ButtonGrey from '../ButtonGrey'
 import useProjectsServices from '../../services/useProjectsServices'
+import useTeamServices from '../../services/useTeamServices'
 
 export default function CreateProject({ hideForm }) {
     const [name, setName] = useState('')
@@ -22,6 +22,8 @@ export default function CreateProject({ hideForm }) {
     const params = useParams()
     const socket = useSocket()
     const { createProject } = useProjectsServices()
+    const { getTeamUsers } = useTeamServices()
+
 
     const handleSubmit = async (event) => {
         event.preventDefault()
@@ -31,7 +33,7 @@ export default function CreateProject({ hideForm }) {
         }
 
         const project = await createProject(name, description, params.teamid, members)
-                
+
         hideForm && hideForm()
         socket.emit('team-update', params.teamid)
         history.push(`/project-board/${params.teamid}/${project._id}`)
@@ -43,19 +45,7 @@ export default function CreateProject({ hideForm }) {
         const teamId = params.teamid
 
         if (allUsers.length === 0) {
-            const token = getCookie('x-auth-token')
-            const response = await fetch(`/api/teams/get-users/${teamId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                }
-            })
-
-            if (!response.ok) {
-                history.push('/error')
-            }
-            const users = await response.json()
+            const users = await getTeamUsers(teamId)
             setAllUsers(users.members)
         }
     }

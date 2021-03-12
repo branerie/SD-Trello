@@ -1,7 +1,7 @@
 import React, { useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import { useSocket } from '../../contexts/SocketProvider'
-import getCookie from '../../utils/cookie'
+import useTeamServices from '../../services/useTeamServices'
 import ButtonGrey from '../ButtonGrey'
 import EditTeam from '../EditTeam'
 import Transparent from '../Transparent'
@@ -11,40 +11,23 @@ import useInboxUtils from './useInboxUtils'
 export default function TeamInvitationInbox({ message, setInbox, setInboxHistory, options }) {
     const [showEditTeamForm, setShowEditTeamForm] = useState(false)
     const [currTeam, setCurrTeam] = useState({})
-    const history = useHistory()
-    const token = getCookie('x-auth-token')
     const socket = useSocket()
     const params = useParams()
     const userId = params.userid
     const utils = useInboxUtils()
+    const { teamInvitations } = useTeamServices()
 
     async function acceptInvitation(message, accepted) {
-        const response = await fetch(`/api/teams/invitations/${message.team.id}`, {
-            method: 'POST',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                message,
-                accepted
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-            return
-        } else {
-            const user = await response.json()
-            socket.emit('team-update', message.team.id)
-            setInbox(user.inbox)
-            setInboxHistory(user.inboxHistory)
-            socket.emit('message-sent', userId)
-            socket.emit('message-sent', message.sendFrom._id)
-        }
+        const user = await teamInvitations(message.team.id, message, accepted)
+        socket.emit('team-update', message.team.id)
+        setInbox(user.inbox)
+        setInboxHistory(user.inboxHistory)
+        socket.emit('message-sent', userId)
+        socket.emit('message-sent', message.sendFrom._id)
     }
 
     return (
-        
+
         <div className={styles.message}>
             <div className={styles.container}>
                 <div className={styles.bold}>{message.subject}</div>
@@ -94,6 +77,6 @@ export default function TeamInvitationInbox({ message, setInbox, setInboxHistory
                 </Transparent>
             }
         </div>
-        
+
     )
 }

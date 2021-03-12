@@ -326,6 +326,28 @@ export default function useUserServices() {
         return await response.json()
     }
 
+    const googleLoginUser = async (tokenId) => {
+
+        const promise = await fetch(`${USER_URL}/google-login`, {
+            method: 'POST',
+            body: JSON.stringify({ tokenId }),
+            headers: {
+                "Content-Type": "application/json"
+            }
+        })
+        const authToken = promise.headers.get("Authorization")
+        document.cookie = `x-auth-token=${authToken};path=/`
+    
+        const response = await promise.json()
+    
+        if (response.user.username && authToken) {
+            const user = userObject(response)
+            return user
+        }
+        return response
+    
+    }
+
     return {
         getUser,
         getAllUsers,
@@ -342,12 +364,8 @@ export default function useUserServices() {
         verifyLogin,
         getUserInbox,
         getUserTasks,
-        updateRecentProjects
+        updateRecentProjects,
+        googleLoginUser
     }
 
 }
-
-
-
-
-

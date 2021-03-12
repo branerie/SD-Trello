@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useState } from 'react'
-import { useHistory, useParams } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
 import { useSocket } from '../../contexts/SocketProvider'
 import TeamContext from '../../contexts/TeamContext'
 import UserContext from '../../contexts/UserContext'
@@ -10,6 +9,7 @@ import ConfirmDialog from '../ConfirmationDialog'
 import AvatarUser from '../AvatarUser'
 import ButtonClean from '../ButtonClean'
 import useProjectsServices from '../../services/useProjectsServices'
+import useTeamServices from '../../services/useTeamServices'
 
 
 export default function AddProjectMember(props) {
@@ -23,13 +23,13 @@ export default function AddProjectMember(props) {
     const [member, setMember] = useState('')
     const [members, setMembers] = useState(props.project.membersRoles)
     const isAdmin = props.admin
-    const history = useHistory()
     const projectId = props.project._id
     const params = useParams()
     const [confirmOpen, setConfirmOpen] = useState(false)
     const [confirmTitle, setConfirmTitle] = useState('')
     const [currElement, setCurrElement] = useState('')
     const { changeUserRole, addProjectMember, removeProjectMember } = useProjectsServices()
+    const { getTeamUsers } = useTeamServices()
 
 
     const updateProjectSocket = useCallback(() => {
@@ -122,19 +122,7 @@ export default function AddProjectMember(props) {
                 )
             })
 
-            const token = getCookie('x-auth-token')
-            const response = await fetch(`/api/teams/get-users/${currentTeamId}`, {
-                method: 'GET',
-                headers: {
-                    'Content-Type': 'application/json',
-                    'Authorization': token
-                }
-            })
-
-            if (!response.ok) {
-                history.push('/error')
-            }
-            const data = await response.json()
+            const data = await getTeamUsers(currentTeamId)
 
             let teamUsers = data.members
 

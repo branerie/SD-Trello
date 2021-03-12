@@ -1,7 +1,6 @@
 import React, { useCallback, useContext, useEffect, useState } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
 import styles from './index.module.css'
-import getCookie from '../../utils/cookie'
 import TeamContext from '../../contexts/TeamContext'
 import ButtonClean from '../ButtonClean'
 import UserContext from '../../contexts/UserContext'
@@ -10,6 +9,7 @@ import TeamMembers from '../TeamMembers'
 import ButtonGrey from '../ButtonGrey'
 import ConfirmDialog from '../ConfirmationDialog'
 import AvatarUser from '../AvatarUser'
+import useTeamServices from '../../services/useTeamServices'
 import useUserServices from '../../services/useUserServices'
 
 
@@ -28,6 +28,7 @@ export default function EditTeam(props) {
     const [confirmTitle, setConfirmTitle] = useState('')
     const [currElement, setCurrElement] = useState('')
     const { getAllUsers } = useUserServices()
+    const { updateTeam, removeTeamInvitations, deleteTeam } = useTeamServices()
 
 
     const history = useHistory()
@@ -84,56 +85,28 @@ export default function EditTeam(props) {
         setMember('')
     }
 
-    const removeMember = async (input) => {
+    const removeMember = async (member) => {
 
-        const arr = await members.filter(u => u._id !== input._id)
-            .filter(u => u._id !== input.id)
+        const updatedMembers = members.filter(m => m._id !== member._id)
 
+        await updateTeam(teamId, name, description, updatedMembers)
 
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/teams/${teamId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                name,
-                description,
-                members: arr
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-            return
-        } else {
-            socket.emit('team-update', teamId)
-            if (input.id === userContext.user.id) {
-                history.push('/')
-            }
+        socket.emit('team-update', teamId)
+        if (member.id === userContext.user.id) {
+            history.push('/')
         }
+
     }
 
     const removeInvited = async (input) => {
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/teams/${teamId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                removeInvitation: input
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-            return
-        } else {
-            getData()
-            socket.emit('team-update', teamId)
-            socket.emit('message-sent', input._id)
-        }
+        const removeInvitation = input
+
+        await removeTeamInvitations(teamId, removeInvitation)
+
+        getData()
+        socket.emit('team-update', teamId)
+        socket.emit('message-sent', input._id)
+
     }
 
     const removeForInvite = (input) => {
@@ -142,58 +115,25 @@ export default function EditTeam(props) {
     }
 
     const handleSubmit = async () => {
-        // event.preventDefault()
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/teams/${teamId}`, {
-            method: 'PUT',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            },
-            body: JSON.stringify({
-                name,
-                description,
-                members,
-                requests: forInvite
-            })
-        })
-        if (!response.ok) {
-            history.push('/error')
-            return
-        } else {
-            teamContext.setSelectedTeam(name)
-            getData()
-            socket.emit('team-update', teamId)
-            socket.emit('multiple-messages-sent', forInvite)
-            props.hideForm()
-        }
+        await updateTeam(teamId, name, description, members, forInvite)
 
+        teamContext.setSelectedTeam(name)
+        getData()
+        socket.emit('team-update', teamId)
+        socket.emit('multiple-messages-sent', forInvite)
+        props.hideForm()
     }
 
-    async function deleteTeam() {
+    async function handleDeleteTeam() {
 
         if (!window.confirm('You will lost all team information - projects, lists and tasks')) {
             return
         }
-
-
-        const token = getCookie('x-auth-token')
-        const response = await fetch(`/api/teams/${teamId}`, {
-            method: 'DELETE',
-            headers: {
-                'Content-Type': 'application/json',
-                'Authorization': token
-            }
-        })
-        if (!response.ok) {
-            history.push('/error')
-        } else {
-            const deletedTeam = await response.json()
-            const recievers = [...deletedTeam.members, ...deletedTeam.requests]
-            socket.emit('team-deleted', { id: teamId, recievers })
-            history.push('/')
-            props.hideForm()
-        }
+        const deletedTeam = await deleteTeam(teamId)        
+        const recievers = [...deletedTeam.members, ...deletedTeam.requests]
+        socket.emit('team-deleted', { id: teamId, recievers })
+        history.push('/')
+        props.hideForm()
     }
 
     const onBlur = () => {
@@ -205,7 +145,7 @@ export default function EditTeam(props) {
         'leave this team': removeMember,
         'delete this member from team': removeMember,
         'delete this member from invited': removeInvited,
-        'delete this team': deleteTeam
+        'delete this team': handleDeleteTeam
     }
 
     return (
