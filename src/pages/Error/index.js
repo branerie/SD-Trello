@@ -8,9 +8,7 @@ const ErrorPage = () => {
     return (
         <PageLayout>
             <div className={styles.title}>Error Page</div>
-
-            <img className={styles.errorPic} src={errorPic} alt='' /> 
-
+            <img className={styles.errorPic} src={errorPic} alt='' />
             <div className={styles.text}>Something went wrong.</div>
         </PageLayout>
     )

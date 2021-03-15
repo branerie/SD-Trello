@@ -1,323 +1,64 @@
-
-
-
-.container{
+.container {
     display: flex;
     justify-content: space-between;
     margin-top: 5%;
     height: auto;
     flex-wrap: wrap;
-  }
+}
 
-  @media (max-width: 1120px) {
+@media (max-width: 1120px) {
     .container {
-      display: block;
+        display: block;
     }
-   
-  }
+}
 
-  .inputs-container{
+.inputs-container {
     height: auto;
     flex-wrap: wrap;
     min-width: 42%;
     flex-grow: 1;
     max-width: 700px;
-  } 
-    
+}
 
-  .pic-container{
-    width: auto; 
+.pic-container {
+    width: auto;
     min-width: 200px;
     max-width: 500px;
-    /* margin-left: 10%;  */
     flex-grow: 1;
     display: flex;
     flex-flow: wrap;
     justify-content: center;
-  }
-  
-  .pic1{
+}
+
+.pic1 {
     margin-top: 8%;
     width: 90%;
     min-width: 300px;
     height: auto;
-  }
-    
-  
-  .teams{  
-    width: auto;
-    height: auto;
-    max-height: 25em;
-    border: 1px solid #000000; 
-    background-color: #E6E6E6;
-    border: solid 1px #363338;
-    border-radius: 10px;
-    padding: 15px;
-    font-weight: normal;
-    overflow-y: auto;  
-    -ms-overflow-style: none;
-    scrollbar-width: none; 
-  }
-  ::-webkit-scrollbar {
-    display: none;
-  }
-  
-
-  
-  .navigate-buttons {
-    padding: 10px;
-    min-width: 170px;
-    min-height: 50px;
-    display: block;
-    margin: 15px;
-    margin-top: 0;
-    margin-bottom: 20px;
-    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-    text-align: left;
-    outline: none;
-  }
-
-  .button-input-div{
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-  }
-
-  .button-input-div-tasks{
-    display: flex;
-    justify-content: space-around;
-    flex-wrap: wrap;
-  }
-
-  .input-fields-tasks{
-    padding: 3px;
-    text-align: left;
-    min-width: 51%;
-    min-height: 30px;
-    border: hidden;
-    border-radius: 14px;
-    margin-bottom: 28px;
-    margin-top: 5px;
-    background-color:#EDF5F9;
-    outline: none;
-  }
-
-  .input-fields-profile{
-    padding: 3px;
-    text-align: left;
-    min-width: 50%;
-    min-height: 30px;
-    border-radius: 14px;
-    margin-bottom: 28px;
-    margin-top: 5px;
-    background-color:white;
-    outline: none;
-  }
-  ::-webkit-input-placeholder {
-    text-align: left;
- }
- 
- :-moz-placeholder { /* Firefox 18- */
-    text-align: left;  
- }
- 
- ::-moz-placeholder {  /* Firefox 19+ */
-    text-align: left;  
- }
- 
- :-ms-input-placeholder {  
-    text-align: left; 
- }
-
-  .profile-pic{
-    width: 200px;
-    background-color:white;
-    border-radius: 14px;
-    border: 1px solid #707070;
-    margin-bottom: 1%;
-    overflow: hidden;
-    cursor: pointer;
-  }
-
-  .no-pic{
-    height: 100px;
-  }
-
-  .load-pic-text{
-    margin-top: 30%;
-  }
-
-  .pen{
-    width: 12px;
-    height: auto;
-    margin-top: 5%;  
-  }
-
-  .profile-pic-container{
-    width: 200px;
-    text-align: center;
-  }
-
-  .profile-picture{
-    width: 200px;
-    height: 200px;
-  }
-
-  .save-button{
-    color: #363338;
-    background-color: #F3981F;
-    box-shadow: 0px 8px 8px rgb(0 0 0 / 10%);
-    border-radius: 14px;
-    /* margin-left: 25%; */
-    height: 50px;
-    border: 1px solid #707070; 
-    z-index: 1;
-    font-size: 1.2rem;
-    font-weight: 600;
-    cursor: pointer;
-    outline: none;
-
-
-    padding: 10px;
-    min-width: 170px;
-    min-height: 50px;
-    display: block;
-    margin: 0 auto;
-    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-    outline: none;
-  }
-
-  .save-button:hover{
-    color: #363338;
-    background-color: #F3981F;
-  }
-
-
-  .button-div-save{   
-    text-align: left;
-    min-width: 51%;
-    min-height: 30px;
-    border-radius: 14px;
-    display:  flex;
-    justify-content: center;
-    /* margin-left: 10px; */
-    margin-bottom: 28px;
-    /* background-color: white; */
-    outline: none;
 }
 
-.alerts{
-  width: 300px;
-  height: auto;  
-}
-
-.new-pass-alert{
-  background-color: rgb(219, 88, 88); 
-  border-radius: 10px; 
-  max-width: 300px;
-  height: auto; 
-  padding: 15px;
-  margin: 0 auto;
-  margin-bottom: 20px; 
-}
-
-
-
-.select-team-container{
-  width: 0;
-  margin: 0 auto;
-  height: 0;
-  color: white;
-  position: relative;
-  left: -100px;
-  z-index: 2;
-}
-
-.teams-home{ 
-  position: relative;
-  width: fit-content; 
-  min-width: 170px; 
-  height: auto;
-  max-height: 180px;
-  border: 1px solid #000000; 
-  background-color: #363338;
-  border: solid 1px #363338;
-  border-radius: 10px; 
-  padding: 4px;
-  font-weight: normal;
-  overflow-y: auto;  
-  -ms-overflow-style: none;
-  scrollbar-width: none;
-  z-index: 5; 
-}
 ::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
-.navigate-buttons-teams {
-  background: #F7F7F2;
-  color: black;
-  padding: 10px;
-  max-width: 150px;
-  min-height: 20px;
-  height: auto;
-  border-radius: 10px;
-  display:flex;
-  justify-content: center;
-  flex-wrap: wrap;
-  text-align: center;
-  margin: 0 auto;
-  margin: 15px;
-  cursor: pointer;
-  border: 1px solid #707070;
-  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);  
-}
-.navigate-buttons-teams {
-  background: #F7F7F2;
-  color: black;
-  padding: 10px;
-  max-width: 150px;
-  min-height: 20px;
-  height: auto;
-  border-radius: 10px;
-  margin: 0 auto;
-  margin: 10px;
-  cursor: pointer;
-  border: 1px solid #707070;
-  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-  outline: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+::-webkit-input-placeholder {
+    text-align: left;
 }
 
-.navigate-buttons-teams:hover{
-  cursor: pointer;
-  background: #DFE9EE;
+:-moz-placeholder {
+    /* Firefox 18- */
+    text-align: left;
 }
 
-.edit {
-  border-radius: 10px 10px 0 0;
-  width: 100%;
+::-moz-placeholder {
+    /* Firefox 19+ */
+    text-align: left;
 }
 
-.delete {
-  border-bottom: 1px solid #707070;
-  border-radius: 0 0 10px 10px;
-  width: 100%;
+:-ms-input-placeholder {
+    text-align: left;
 }
 
-.relative {
-    position: absolute;
-}
-
-.menu {
-  background: #DFE9EE;
-  position: absolute;
-  border-radius: 10px;
-  top: 8px;
-  left: -100px;
-  margin-right: 2px;
-  top: -203px;
-  z-index: 10;
+::-webkit-scrollbar {
+    display: none;
 }

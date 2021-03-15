@@ -1,9 +1,9 @@
 import React, { useState, useContext } from 'react'
 import { useHistory, useParams } from 'react-router-dom'
-import styles from './index.module.css'
-import ButtonClean from '../ButtonClean'
 import UserContext from '../../contexts/UserContext'
 import { useSocket } from '../../contexts/SocketProvider'
+import styles from './index.module.css'
+import ButtonClean from '../ButtonClean'
 import AvatarUser from '../AvatarUser'
 import ButtonGrey from '../ButtonGrey'
 import useProjectsServices from '../../services/useProjectsServices'
@@ -11,8 +11,8 @@ import useTeamServices from '../../services/useTeamServices'
 
 export default function CreateProject({ hideForm }) {
     const history = useHistory()
-    const params = useParams()
     const socket = useSocket()
+    const { teamId } = useParams()
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [member, setMember] = useState('')
@@ -24,20 +24,19 @@ export default function CreateProject({ hideForm }) {
     const { getTeamUsers } = useTeamServices()
 
 
-    const handleSubmit = async (event) => {
+    const handleCreateProject = async (event) => {
         event.preventDefault()
         if (name === '') {
             return
         }
-        const project = await createProject(name, description, params.teamid, members)
+        const project = await createProject(name, description, teamId, members)
         hideForm && hideForm()
-        socket.emit('team-update', params.teamid)
-        history.push(`/project-board/${params.teamid}/${project._id}`)
+        socket.emit('team-update', teamId)
+        history.push(`/project-board/${teamId}/${project._id}`)
     }
 
     const onFocus = async () => {
         setAreMembersShown(true)
-        const teamId = params.teamid
         if (allTeamMembers.length === 0) {
             const users = await getTeamUsers(teamId)
             setAllTeamMembers(users.members)
@@ -155,7 +154,7 @@ export default function CreateProject({ hideForm }) {
                 <ButtonGrey
                     title='Create'
                     className={styles['create-button']}
-                    onClick={(e) => handleSubmit(e)}
+                    onClick={(e) => handleCreateProject(e)}
                 />
             </div>
 

@@ -91,7 +91,7 @@ export default function CreateTeam(props) {
                     label='Name'
                     id='name'
                     placeholder='Team Name'
-                    autocomplete='off'
+                    autoComplete='off'
                 />
             </div>
 
