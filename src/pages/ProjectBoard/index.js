@@ -13,6 +13,7 @@ import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
 import useListsServices from '../../services/useListsServices'
 import AddProjectBoardList from '../../components/AddProjectBoardList'
 import useUserServices from '../../services/useUserServices'
+import isUserAdmin from '../../utils/isUserAdmin'
 
 const ProjectBoard = () => {
     const socket = useSocket()
@@ -69,15 +70,9 @@ const ProjectBoard = () => {
 
         if (isDndActive) return
 
-        const memberArr = []
-        project.membersRoles.map(element => {
-            return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
-        })
-
         setLists(project.lists)
-        const member = memberArr.find(m => m.id === user.id)
 
-        if (member) setIsAdmin(member.admin)
+        setIsAdmin(isUserAdmin(user.id, project.membersRoles))
 
     }, [updateUserRecentProjects, project, projectId, user.id, isDndActive, setLists])
 

@@ -1,51 +1,50 @@
 import React, { useContext, useEffect, useRef, useState } from 'react'
 import { useParams } from 'react-router-dom'
-import Title from '../Title'
-import styles from './index.module.css'
 import 'react-datepicker/dist/react-datepicker.css'
-import { useSocket } from '../../contexts/SocketProvider'
-import ButtonClean from '../ButtonClean'
 import { SketchPicker } from 'react-color'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import UserContext from '../../contexts/UserContext'
-import isUserAdmin from '../../utils/isUserAdmin'
+import { useSocket } from '../../contexts/SocketProvider'
+import styles from './index.module.css'
+import Title from '../Title'
+import ButtonClean from '../ButtonClean'
 import ButtonGrey from '../ButtonGrey'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import isUserAdmin from '../../utils/isUserAdmin'
 import useListsServices from '../../services/useListsServices'
 
-
-export default function EditList(props) {
+const EditList = ({ list, project, hideForm }) => {
+    const socket = useSocket()
     const nameRef = useRef(null)
+    const { user } = useContext(UserContext)
+    const [name, setName] = useState(list.name)
     const [nameHeight, setNameHeight] = useState(null)
     const [currInput, setCurrInput] = useState(null)
-    const [name, setName] = useState(props.list.name)
-    const socket = useSocket()
+    const [color, setColor] = useState(list.color || '#A6A48E')
     const [isColorActive, setIsColorActive, dropdownRef] = useDetectOutsideClick()
-    const [color, setColor] = useState(props.list.color || '#A6A48E')
     const [isAdmin, setIsAdmin] = useState(false)
-    const members = props.project.membersRoles
-    const userContext = useContext(UserContext)
-    const params = useParams()
-    const teamId = params.teamid
     const { editList } = useListsServices()
-    
+    const members = project.membersRoles
+
     useEffect(() => {
-        setIsAdmin(isUserAdmin(userContext.user.id, members))
-    }, [members, userContext.user.id])
-    
-    async function handleSubmit() {
-        await editList(props.project._id, props.list._id, name, color)
-        socket.emit('project-update', props.project)
+        setIsAdmin(isUserAdmin(user.id, members))
+    }, [members, user.id])
+
+    const { teamid: teamId } = useParams()
+
+    const handleSubmit = async () => {
+        await editList(project._id, list._id, name, color)
+        socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
-        props.hideForm()
+        hideForm()
     }
 
     useEffect(() => {
-        setTimeout(() => {
+        if (nameRef.current) {
             setNameHeight(nameRef.current.scrollHeight + 2)
-        }, 1);
+        }
     }, [])
 
-    function onEscPressed(event, setElement, ref) {
+    const onEscPressed = (event, setElement, ref) => {
         if (event.keyCode === 27) {
             setElement(currInput)
             setTimeout(() => {
@@ -96,3 +95,5 @@ export default function EditList(props) {
         </div>
     )
 }
+
+export default EditList
