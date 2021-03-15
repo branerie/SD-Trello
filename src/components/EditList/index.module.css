@@ -21,7 +21,7 @@
     transform: translate(-50%, -50%);
 }
 
-.input-container{
+.input-container {
     margin-bottom: 2%;
     display: flex;
 }
@@ -54,11 +54,11 @@
     display: none;
 }
 
-.change-color{
+.change-color {
     display: flex;
 }
 
-.color-title{
+.color-title {
     width: 50px;
     text-align: left;
     font-size: 1.2rem;
@@ -80,14 +80,14 @@
     cursor: pointer;
 }
 
-.edit-list-button{
+.edit-list-button {
     margin: 0 auto;
     margin-top: 5%;
 }
 
 .text {
     font-family: 'Lato', sans-serif;
-    font-size: 1.03rem;
+    font-size: 1rem;
 }
 
 @media (max-height: 800px) {
