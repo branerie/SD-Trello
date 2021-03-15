@@ -1,9 +1,9 @@
 import React from 'react'
 import Avatar from 'react-avatar'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import styles from './index.module.css'
 import AvatarUser from '../AvatarUser'
 import ShowAllTaskMembers from '../ShowAllTaskMembers'
-import styles from './index.module.css'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 const MembersList = ({ members, maxLength, deleteMemberOption, deleteMemberObj }) => {
     const [isActive, setIsActive, ref] = useDetectOutsideClick()

@@ -1,10 +1,10 @@
 import React from 'react'
 import ButtonClean from '../ButtonClean'
 import styles from './index.module.css'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import attPic from '../../images/edit-card/pic6.svg'
 import Transparent from '../Transparent'
 import AttachmentList from '../AttachmentList'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
+import attPic from '../../images/edit-card/pic6.svg'
 
 const AttachmentsLink = ({
     card,

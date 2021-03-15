@@ -40,6 +40,7 @@ export default function TaskName({ card, listId, project }) {
 						onSubmit={editCardName}
 						toggleActive={() => setIsActive(!isActive)}
 						onBlur={editCardName}
+						autoFocus={true}
 					/>
 				</div>
 				:

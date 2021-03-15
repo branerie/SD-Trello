@@ -1,6 +1,6 @@
 import React from 'react'
 import styles from './index.module.css'
-import pic1 from '../../images/edit-card/pic1.svg'
+import pic1 from '../../images/edit-card/task-name.svg'
 import AttachmentList from '../AttachmentList'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Transparent from '../Transparent'

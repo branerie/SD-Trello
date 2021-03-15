@@ -1,67 +1,36 @@
-import React, { useRef, useState, useMemo, useEffect } from 'react'
-import styles from './index.module.css'
+import React, { useState, useMemo, useEffect } from 'react'
 import 'react-datepicker/dist/react-datepicker.css'
 import { useSocket } from '../../contexts/SocketProvider'
-import pic1 from '../../images/edit-card/pic1.svg'
-import pic12 from '../../images/edit-card/pic12.svg'
+import styles from './index.module.css'
 import TaskMembers from '../EditCardOptions/TaskMembers'
 import TaskDueDate from '../EditCardOptions/TaskDueDate'
 import TaskHistory from '../EditCardOptions/TaskHistory'
 import TaskProgress from '../EditCardOptions/TaskProgress'
 import TaskAttach from '../EditCardOptions/TaskAttach'
-import ConfirmDialog from '../ConfirmationDialog'
+import ResponsiveTextArea from '../Inputs/ResponsiveTextarea'
+import TaskDelete from '../EditCardOptions/TaskDelete'
+import taskNamePic from '../../images/edit-card/task-name.svg'
 import useCardsServices from '../../services/useCardsServices'
 
-
-export default function EditCard({ listId, initialCard, project, teamId, hideForm }) {
-    const nameRef = useRef(null)
-    const descriptionRef = useRef(null)
-    const [card, setCard] = useState(null)
+const EditCard = ({ listId, initialCard, project, teamId, hideForm }) => {
+    const socket = useSocket()
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [taskHistory, setTaskHistory] = useState(null)
-    const socket = useSocket()
-    const [nameHeight, setNameHeight] = useState(null)
-    const [currInput, setCurrInput] = useState(null)
     const dueDate = useMemo(() => new Date(initialCard.dueDate), [initialCard.dueDate])
-    const [confirmOpen, setConfirmOpen] = useState(false)
-    const { deleteTask, editTask } = useCardsServices()
+    const { editTask } = useCardsServices()
 
     useEffect(() => {
-        setCard(initialCard)
         setName(initialCard.name)
         setDescription(initialCard.description)
         setTaskHistory(initialCard.history)
     }, [initialCard])
 
-
-    const handleDeleteTask = async () => {
-        await deleteTask(listId, card._id)
-        socket.emit('project-update', project)
-        socket.emit('task-team-update', teamId)
-        hideForm()
-    }
-
     const handleSubmit = async () => {
         const editedFields = { name, description }
-        await editTask(listId, card._id, editedFields)
+        await editTask(listId, initialCard._id, editedFields)
         socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
-    }
-
-    useEffect(() => {
-        setTimeout(() => {
-            setNameHeight(nameRef.current.scrollHeight + 2)
-        }, 1);
-    }, [])
-
-    function onEscPressed(event, setElement, ref) {
-        if (event.keyCode === 27) {
-            setElement(currInput)
-            setTimeout(() => {
-                ref.current.blur()
-            }, 1);
-        }
     }
 
     return (
@@ -70,40 +39,29 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
 
                 <div className={styles['task-name']}>
                     <span>
-                        <img src={pic1} alt='pic1' />
+                        <img src={taskNamePic} alt='taskNamePic' />
                     </span>
-                    <textarea
-                        ref={nameRef}
-                        className={`${styles['name-input']} ${styles.text}`}
-                        style={{ 'height': nameHeight }}
+                    <ResponsiveTextArea
                         value={name}
-                        onFocus={() => setCurrInput(name)}
-                        onKeyDown={e => onEscPressed(e, setName, nameRef)}
-                        onChange={e => {
-                            setName(e.target.value)
-                            setNameHeight(nameRef.current.scrollHeight + 2)
-                        }}
-                        onBlur={() => {
-                            if (currInput === name) return
-                            handleSubmit()
-                        }}
+                        setValue={setName}
+                        className={`${styles['name-input']} ${styles.text}`}
+                        autoFocus={false}
+                        onSubmit={handleSubmit}
+                        onBlur={handleSubmit}
                     />
                 </div>
-                <div className={styles['task-body']} >
 
+                <div className={styles['task-body']} >
                     <div className={styles['left-side']}>
                         <div>
                             <div className={styles.text}>Description</div>
-                            <textarea className={styles['description-input']}
-                                ref={descriptionRef}
+                            <ResponsiveTextArea
                                 value={description}
-                                onFocus={() => setCurrInput(description)}
-                                onKeyDown={e => onEscPressed(e, setDescription, descriptionRef)}
-                                onChange={e => setDescription(e.target.value)}
-                                onBlur={() => {
-                                    if (currInput === description) return
-                                    handleSubmit()
-                                }}
+                                setValue={setDescription}
+                                className={styles['description-input']}
+                                autoFocus={false}
+                                onSubmit={handleSubmit}
+                                onBlur={handleSubmit}
                             />
                         </div>
                         <div className={styles['task-component']}>
@@ -113,7 +71,6 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                     </div>
 
                     <div className={styles['right-side']}>
-
                         <div className={styles['task-component']}>
                             <div className={styles.text}>Manage</div>
                             <TaskDueDate
@@ -142,24 +99,19 @@ export default function EditCard({ listId, initialCard, project, teamId, hideFor
                                 project={project}
                                 teamId={teamId}
                             />
-                            <button
-                                className={styles['small-buttons']}
-                                onClick={() => setConfirmOpen(true)}
-                            >
-                                <img className={styles.pics} src={pic12} alt='pic12' />
-                                Delete Task
-                            </button>
+                            <TaskDelete
+                                cardId={initialCard._id}
+                                listId={listId}
+                                project={project}
+                                teamId={teamId}
+                                hideForm={hideForm}
+                            />
                         </div>
                     </div>
                 </div>
             </div>
-            {confirmOpen &&
-                <ConfirmDialog
-                    title={'delete this task'}
-                    hideConfirm={() => setConfirmOpen(false)}
-                    onConfirm={handleDeleteTask}
-                />
-            }
         </>
     )
 }
+
+export default EditCard
