@@ -1,128 +1,119 @@
-.container{
-  display: flex;
-  justify-content: space-evenly;
-  flex-wrap: wrap;
-
+.container {
+    display: flex;
+    justify-content: space-evenly;
+    flex-wrap: wrap;
 }
 
 @media (max-width: 1150px) {
-  .container {
+    .container {
+        flex-flow: column;
+        align-items: center;
+    }
+}
+
+.pic-container {
+    display: flex;
     flex-flow: column;
     align-items: center;
-  }
- 
+    width: auto;
+    justify-content: center;
+    height: auto;
+    margin: 20px;
 }
 
-
-
-.pic-container{
-  display: flex;
-  flex-flow: column;
-  align-items: center;
-  width: auto;
-  justify-content: center;
-  height: auto;
-  margin: 20px;
+.pic1 {
+    width: 100%;
+    margin: 0, auto;
+    position: relative;
+    /* z-index: -1; */
 }
 
-.pic1{
-  width: 100%;
-  margin: 0, auto;
-  position: relative;
-  /* z-index: -1; */
+.welcome-user {
+    width: 100%;
+    text-align: center;
+    margin-top: 2em;
+    font-size: 2em;
 }
 
-
-.welcome-user{
-  width: 100%;
-  text-align: center;
-  margin-top: 2em;
-  font-size: 2em;
+.left-buttons {
+    width: auto;
+    margin-left: 2%;
+    margin-top: 18px;
+    text-align: center;
+    display: flex;
+    flex-direction: column;
 }
 
-.left-buttons{
-  width: auto;
-  margin-left: 2%;
-  margin-top: 18px;
-  text-align: center;
-  display: flex;
-  flex-direction: column;
+.right-buttons {
+    width: auto;
+    text-align: center;
 }
 
-.right-buttons{
-  width: auto;
-  text-align: center;
+.my-teams-container {
+    display: flex;
 }
 
-.my-teams-container{
-  display: flex;
+.teams-home {
+    width: auto;
+    height: auto;
+    max-height: 180px;
+    border: 1px solid #000000;
+    background-color: #363338;
+    border: solid 1px #363338;
+    border-radius: 10px;
+    padding: 4px;
+    font-weight: normal;
+    overflow-y: auto;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
 }
 
-.teams-home{ 
-  width: auto;
-  height: auto;
-  max-height: 180px;
-  border: 1px solid #000000; 
-  background-color: #363338;
-  border: solid 1px #363338;
-  border-radius: 10px; 
-  padding: 4px;
-  font-weight: normal;
-  overflow-y: auto;  
-  -ms-overflow-style: none;
-  scrollbar-width: none; 
-}
 ::-webkit-scrollbar {
-  display: none;
+    display: none;
 }
 
-.select-team-container{
-  margin: 0 auto;
-  width: 200px;
-  color: white;
-  height: 0;
-  z-index: 2;
+.select-team-container {
+    margin: 0 auto;
+    width: 200px;
+    color: white;
+    height: 0;
+    z-index: 2;
 }
-
-
 
 .navigate-buttons {
-  padding: 10px;
-  width: 175px;
-  border-radius: 10px;
-  margin: 10px;
-  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-  height: 40px;
-  overflow-y: scroll;
-  overflow-wrap: break-word;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    padding: 10px;
+    width: 175px;
+    border-radius: 10px;
+    margin: 10px;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+    height: 40px;
+    overflow-y: scroll;
+    overflow-wrap: break-word;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
 .navigate-buttons-teams {
-  background: #F7F7F2;
-  color: black;
-  padding: 10px;
-  max-width: 150px;
-  min-height: 20px;
-  height: auto;
-  border-radius: 14px;
-  margin: 0 auto;
-  margin: 10px;
-  cursor: pointer;
-  border: 1px solid #707070;
-  box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
-  outline: none;
-  overflow: hidden;
-  text-overflow: ellipsis;
-  white-space: nowrap;
+    background: #F7F7F2;
+    color: black;
+    padding: 10px;
+    max-width: 150px;
+    min-height: 20px;
+    height: auto;
+    border-radius: 14px;
+    margin: 0 auto;
+    margin: 10px;
+    cursor: pointer;
+    border: 1px solid #707070;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+    outline: none;
+    overflow: hidden;
+    text-overflow: ellipsis;
+    white-space: nowrap;
 }
 
-.navigate-buttons-teams:hover{
-  cursor: pointer;
-  background: #DFE9EE;
+.navigate-buttons-teams:hover {
+    cursor: pointer;
+    background: #DFE9EE;
 }
-
-
-

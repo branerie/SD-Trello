@@ -1,302 +1,61 @@
 import React, { useState, useEffect, useCallback, useContext } from 'react'
-import { useParams, useHistory } from 'react-router-dom'
+import { useParams } from 'react-router-dom'
 import styles from './index.module.css'
 import PageLayout from '../../components/PageLayout'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import { Image, Transformation } from 'cloudinary-react'
 import Loader from 'react-loader-spinner'
 import Title from '../../components/Title'
 import UserContext from '../../contexts/UserContext'
-import Alert from '../../components/Alert'
-import ButtonGrey from '../../components/ButtonGrey'
-import ConfirmDialog from '../../components/ConfirmationDialog'
-import MyTeamsMenu from '../../components/MyTeamsMenu'
 import useUserServices from '../../services/useUserServices'
 import profilePagePic from '../../images/profile-page-pic.svg'
-import pen from '../../images/pen.svg'
+import UpdateUserData from '../../components/UpdateUserData'
+import UpdateUserImage from '../../components/UpdateUserImage'
 
 
 const ProfilePage = () => {
-  const {userid} = useParams()
-  const history = useHistory()
-  const { user, logIn } = useContext(UserContext)
-  const [userEmail, setUserEmail] = useState(null)
-  const [isPasswordActive, setIsPaswordActive] = useState(false)
-  const [isUserNameActive, setIsUserNameActive] = useState(false)
-  const [username, setUsername] = useState(user.username)
-  const [password, setPassword] = useState(null)
-  const [rePassword, setRePassword] = useState(null)
-  const [isAlertOn, setIsAlertOn] = useState(false)
-  const [areUserTeamsShown, setAreUserTeamsShown, teamRef] = useDetectOutsideClick()
-  const [isEditPictureActive, setIsEditPictureActive, dropdownRef] = useDetectOutsideClick()
-  const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-  const { getUser, updateUser, updateUserPassword, updateUserImage } = useUserServices()
+    const { userid } = useParams()
+    const { user } = useContext(UserContext)
+    const [userEmail, setUserEmail] = useState(null)
+    const { getUser } = useUserServices()
+    const username = user.username
 
 
-  const userName = user.username
-  const userTeams = user.teams
-  const userImage = user.image
+    const getData = useCallback(async () => {
+        const user = await getUser(userid)
+        setUserEmail(user.email)
+    }, [getUser, userid])
 
-
-  const getData = useCallback(async () => {
-    const user = await getUser(userid)
-    setUserEmail(user.email)
-  }, [getUser, userid])
-
-  useEffect(() => {
-    getData()
-  }, [getData])
-
-  const handleUpdateUser = async (event) => {
-    event.preventDefault()
-
-    setIsAlertOn(false)
-    setIsPaswordActive(false)
-    setIsUserNameActive(false)
-
-    if (!username && !password) {
-      return
-    }
-    if (password !== rePassword) {
-      setIsAlertOn(true)
-      return
-    }
-    if (username) {
-      const user = await updateUser(userid, username)
-      logIn(user)
-    }
-    if (password) {
-      const user = await updateUserPassword(userid, password)
-      logIn(user)
-      return
-    }
-    getData()
-  }
-
-  function changeProfilePicture() {
-    const widget = window.cloudinary.createUploadWidget({
-      cloudName: process.env.REACT_APP_CLOUD_NAME,
-      uploadPreset: process.env.REACT_APP_UPLOAD_PRESET
-    }, async (error, result) => {
-      if (result.event === 'success') {
-        const path = result.info.path
-        const publicId = result.info.public_id
-        const newImage = {
-          path,
-          publicId
-        }
-        const user = await updateUserImage(userid, newImage, userImage)
-        logIn(user)
+    useEffect(() => {
         getData()
-      }
-      if (error) {
-        history.push('/error')
-        return
-      }
-    })
-    widget.open()
-  }
+    }, [getData])   
 
-  const deletePic = async () => {
-    const newImage = null
-    const user = await updateUserImage(userid, newImage, userImage)
-    logIn(user)
-    getData()
-  }
-
-  const goToTeamPage = (teamId) => {
-    history.push(`/team/${teamId}`)
-  }
-
-  if (!userName) {
     return (
-      <PageLayout>
-        <Loader
-          type='TailSpin'
-          color='#363338'
-          height={100}
-          width={100}
-          timeout={3000} //3 secs
-        />
-      </PageLayout>
-    )
-  }
-
-  return (
-    <PageLayout>
-      {
-        isConfirmOpen &&
-        <ConfirmDialog
-          title={'delete this picture'}
-          hideConfirm={() => setIsConfirmOpen(false)}
-          onConfirm={() => deletePic()}
-        />
-      }
-      <Title title='Profile' />
-      <div className={styles.container}>
-        <div className={styles['inputs-container']}>
-          <div className={styles['button-input-div']}>
-            <ButtonGrey
-              title={'Username:'}
-              className={styles['navigate-buttons']}
-              onClick={() => { setIsUserNameActive(!isUserNameActive) }}
-            />
-            < input
-              ref={function (input) {
-                if (input !== null) {
-                  input.focus();
-                }
-              }}
-              value={username}
-              onChange={e => setUsername(e.target.value)}
-              className={styles['input-fields-profile']}
-              placeholder={userName}
-              disabled={!isUserNameActive}
-            />
-          </div>
-
-          <div className={styles['button-input-div']}>
-            <ButtonGrey
-              title={'Change Password'}
-              className={styles['navigate-buttons']}
-              onClick={() => { setIsPaswordActive(!isPasswordActive) }}
-            />
-            < input
-              onChange={e => setPassword(e.target.value)}
-              className={styles['input-fields-profile']}
-              placeholder={'********'}
-              disabled={!isPasswordActive}
-              type='password'
-            />
-          </div>
-
-          <div className={styles.alerts}>
-            <Alert alert={isAlertOn} message={'Passwords do not match'} />
-          </div>
-
-          {
-            isPasswordActive &&
-            <div className={styles['new-pass-alert']}>
-              Important!!! You have to activate your new password by following the link sent to your email. You have to do this in the next hour in order for your new password to be activated
-            </div>
-          }
-
-          <div className={styles['button-input-div']}>
-            <ButtonGrey
-              title={'Confirm Password'}
-              className={styles['navigate-buttons']}
-              onClick={() => { setIsPaswordActive(!isPasswordActive) }}
-            />
-            < input
-              onChange={e => setRePassword(e.target.value)}
-              className={styles['input-fields-profile']}
-              placeholder={'********'}
-              disabled={!isPasswordActive}
-              type='password'
-            />
-          </div>
-
-          <div className={styles['button-input-div']}>
-            <ButtonGrey
-              title={'Email:'}
-              className={styles['navigate-buttons']}
-            />
-            < input
-              className={styles['input-fields-profile']}
-              value={userEmail}
-              disabled={true}
-            />
-          </div>
-
-          <div className={styles['button-input-div-tasks']}>
-            <ButtonGrey
-              title={'My Tasks'}
-              className={styles['navigate-buttons']}
-              onClick={() => history.push(`/my-tasks/${userid}`)}
-            />
-            < input
-              className={styles['input-fields-tasks']}
-              value={''}
-              disabled={true}
-            />
-          </div>
-
-          <div className={styles['button-input-div']}>
-            <div className={styles.myTeamsContainer}>
-              <ButtonGrey
-                title={'My Teams'}
-                className={styles['navigate-buttons']}
-                onClick={() => setAreUserTeamsShown(!areUserTeamsShown)}
-              />
-              <div className={styles['select-team-container']} ref={teamRef}>
-                {
-                  areUserTeamsShown &&
-                  <MyTeamsMenu userTeams={userTeams} goToTeamPage={goToTeamPage} />
-                }
-              </div>
-            </div>
-
-            <div className={styles['button-div-save']}>
-              <ButtonGrey
-                title={'SAVE'}
-                className={styles['save-button']}
-                onClick={(e) => handleUpdateUser(e)}
-              />
-            </div>
-          </div>
-        </div>
-
-        <div className={styles['pic-container']}>
-          <div className={styles['profile-pic-container']}>
-            <div className={styles['profile-pic']}
-              onClick={() => {
-                userImage ?
-                  setIsEditPictureActive(!isEditPictureActive)
-                  : changeProfilePicture()
-              }}
-            >
-              {
-                userImage ?
-                  <div className={styles['profile-picture']}>
-                    <Image publicId={userImage.publicId} className={styles['profile-picture-pic']} >
-                      <Transformation width='200' height='200' gravity='faces' crop='fill' />
-                    </Image>
-                    <div className={styles.relative}>
-                      {
-                        isEditPictureActive &&
-                        <div ref={dropdownRef} className={`${styles.menu}`} >
-                          <ButtonGrey
-                            onClick={changeProfilePicture}
-                            title='Edit'
-                            className={styles.edit}
-                          />
-                          <ButtonGrey
-                            onClick={() => {
-                              setIsConfirmOpen(true)
-                            }}
-                            title='Delete'
-                            className={styles.delete}
-                          />
+        <PageLayout>
+            {!username ?
+                <Loader
+                    type='TailSpin'
+                    color='#363338'
+                    height={100}
+                    width={100}
+                    timeout={3000} //3 secs
+                />
+                :
+                <>
+                    <Title title='Profile' />
+                    <div className={styles.container}>
+                        <div className={styles['inputs-container']}>
+                            <UpdateUserData user={user} userEmail={userEmail} getData={getData} />
                         </div>
-                      }
+
+                        <div className={styles['pic-container']}>
+                            <UpdateUserImage user={user} getData={getData} />
+
+                            <img className={styles.pic1} src={profilePagePic} alt='' />
+                        </div>
                     </div>
-                  </div>
-                  :
-                  <div className={styles['no-pic']}>
-                    <p className={styles['load-pic-text']}>
-                      Load a profile picture
-                    </p>
-                    <img className={styles.pen} src={pen} alt='' />
-                  </div>
-              }
-            </div>
-            <p>{userName}</p>
-          </div>
-          <img className={styles.pic1} src={profilePagePic} alt='' />
-        </div>
-      </div>
-    </PageLayout>
-  )
+                </>
+            }
+        </PageLayout>
+    )
 }
 
 export default ProfilePage;
