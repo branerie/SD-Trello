@@ -17,7 +17,7 @@ import pen from '../../images/pen.svg'
 
 
 const ProfilePage = () => {
-  const params = useParams()
+  const {userid} = useParams()
   const history = useHistory()
   const { user, logIn } = useContext(UserContext)
   const [userEmail, setUserEmail] = useState(null)
@@ -35,14 +35,13 @@ const ProfilePage = () => {
 
   const userName = user.username
   const userTeams = user.teams
-  const userId = params.userid
   const userImage = user.image
 
 
   const getData = useCallback(async () => {
-    const user = await getUser(userId)
+    const user = await getUser(userid)
     setUserEmail(user.email)
-  }, [getUser, userId])
+  }, [getUser, userid])
 
   useEffect(() => {
     getData()
@@ -63,11 +62,11 @@ const ProfilePage = () => {
       return
     }
     if (username) {
-      const user = await updateUser(userId, username)
+      const user = await updateUser(userid, username)
       logIn(user)
     }
     if (password) {
-      const user = await updateUserPassword(userId, password)
+      const user = await updateUserPassword(userid, password)
       logIn(user)
       return
     }
@@ -86,7 +85,7 @@ const ProfilePage = () => {
           path,
           publicId
         }
-        const user = await updateUserImage(userId, newImage, userImage)
+        const user = await updateUserImage(userid, newImage, userImage)
         logIn(user)
         getData()
       }
@@ -100,7 +99,7 @@ const ProfilePage = () => {
 
   const deletePic = async () => {
     const newImage = null
-    const user = await updateUserImage(userId, newImage, userImage)
+    const user = await updateUserImage(userid, newImage, userImage)
     logIn(user)
     getData()
   }
@@ -213,7 +212,7 @@ const ProfilePage = () => {
             <ButtonGrey
               title={'My Tasks'}
               className={styles['navigate-buttons']}
-              onClick={() => history.push(`/my-tasks/${userId}`)}
+              onClick={() => history.push(`/my-tasks/${userid}`)}
             />
             < input
               className={styles['input-fields-tasks']}

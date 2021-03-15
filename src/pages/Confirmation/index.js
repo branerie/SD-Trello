@@ -8,14 +8,13 @@ import useUserServices from '../../services/useUserServices'
 
 
 const ConfirmationPage = () => {
-    const params = useParams()
+    const { token } = useParams()
     const history = useHistory()
     const [isLoading, setIsLoading] = useState(true)
     const { user, logIn } = useContext(UserContext)
     const { confirmToken } = useUserServices()
 
     const isFirstRegistration = user.newPasswordConfirmed
-    const token = params.token
 
     const handleConfirmToken = useCallback(async () => {
         if (token === 'not-confirmed') {
@@ -37,8 +36,8 @@ const ConfirmationPage = () => {
         handleConfirmToken()
     }, [handleConfirmToken])
 
-    
-    if (params.token === 'not-confirmed') {
+
+    if (token === 'not-confirmed') {
         return (
             <div>
                 {
