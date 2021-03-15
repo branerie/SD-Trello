@@ -5,7 +5,7 @@ import 'react-datepicker/dist/react-datepicker.css'
 import { useSocket } from '../../contexts/SocketProvider'
 import AddProjectMember from '../AddProjectMember'
 import UserContext from '../../contexts/UserContext'
-import isUserAdmin from '../../utils/isUserAdmin'
+import checkIsUserAdmin from '../../utils/checkIsUserAdmin'
 import ButtonGrey from '../ButtonGrey'
 import ConfirmDialog from '../ConfirmationDialog'
 import useProjectsServices from '../../services/useProjectsServices'
@@ -31,7 +31,7 @@ export default function EditProject(props) {
     }, [socket, props])
 
     useEffect(() => {
-        setIsAdmin(isUserAdmin(userContext.user.id, members))
+        setIsAdmin(checkIsUserAdmin(userContext.user.id, members))
     }, [members, userContext.user.id, props])
 
 

@@ -13,7 +13,7 @@ import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
 import useListsServices from '../../services/useListsServices'
 import AddProjectBoardList from '../../components/AddProjectBoardList'
 import useUserServices from '../../services/useUserServices'
-import isUserAdmin from '../../utils/isUserAdmin'
+import checkIsUserAdmin from '../../utils/checkIsUserAdmin'
 
 const ProjectBoard = () => {
     const socket = useSocket()
@@ -72,7 +72,7 @@ const ProjectBoard = () => {
 
         setLists(project.lists)
 
-        setIsAdmin(isUserAdmin(user.id, project.membersRoles))
+        setIsAdmin(checkIsUserAdmin(user.id, project.membersRoles))
 
     }, [updateUserRecentProjects, project, projectId, user.id, isDndActive, setLists])
 
@@ -102,15 +102,8 @@ const ProjectBoard = () => {
         let sourcePosition = ''
         let destinationPosition = ''
 
-        for (let list of newListsArr) {
-            if (list._id === source) {
-                sourcePosition = newListsArr.indexOf(list)
-            }
-
-            if (list._id === destination) {
-                destinationPosition = newListsArr.indexOf(list)
-            }
-        }
+        const sourcePosition = newListsArr.findIndex(list => list._id === source)
+        const destinationPosition = newListsArr.findIndex(list => list._id === destination)
 
         const [task] = newListsArr[sourcePosition].cards.splice(oldPosition, 1)
         newListsArr[destinationPosition].cards.splice(position, 0, task)
