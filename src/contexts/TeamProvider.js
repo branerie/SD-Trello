@@ -48,7 +48,15 @@ function TeamProvider({ children }) {
   }, [socket, teamUpdate])
 
   return (
-    <TeamContext.Provider value={{ teams, setTeams, selectedTeam, setSelectedTeam, currentProjects, setCurrentProjects, getCurrentProjects, updateSelectedTeam }}>
+    <TeamContext.Provider value={{
+      teams,
+      setTeams,
+      selectedTeam,
+      setSelectedTeam,
+      currentProjects,
+      setCurrentProjects,
+      getCurrentProjects,
+      updateSelectedTeam }}>
       {children}
     </TeamContext.Provider>
   )

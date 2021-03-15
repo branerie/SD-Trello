@@ -1,12 +1,12 @@
 import React from 'react'
 import styles from './index.module.css'
 
-const Transparent = (props) => {
+const Transparent = ({ children, hideForm }) => {
     return (
-    <>
-    <div onClick={props.hideForm} className={styles.transparent}></div>
-    {props.children}
-    </>
+        <>
+            <div onClick={hideForm} className={styles.transparent}></div>
+                {children}
+        </>
     )
 }
 

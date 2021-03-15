@@ -1,9 +1,9 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
-import styles from './index.module.css'
-import TeamContext from '../../contexts/TeamContext'
-import ProjectContext from '../../contexts/ProjectContext'
 import { useHistory, useParams } from 'react-router-dom'
+import ProjectContext from '../../contexts/ProjectContext'
+import TeamContext from '../../contexts/TeamContext'
 import { useSocket } from '../../contexts/SocketProvider'
+import styles from './index.module.css'
 import SearchField from '../SearchField'
 import TeamDropdown from '../HeaderDropdowns/TeamDropdown'
 import ProjectDropdown from '../HeaderDropdowns/ProjectDropdown'
@@ -11,11 +11,11 @@ import ViewDropdown from '../HeaderDropdowns/ViewDropdown'
 import ProfileDropdown from '../HeaderDropdowns/ProfileDropdown'
 import useProjectsServices from '../../services/useProjectsServices'
 
-const Header = ({ asideOn }) => {
+const Header = ({ isAsideOn }) => {
     const [isProjectVisibble, setIsProjectVisibble] = useState(false)
     const [isViewVisibble, setIsViewVisibble] = useState(false)
-    const projectContext = useContext(ProjectContext)
-    const teamContext = useContext(TeamContext)
+    const { project, setProject } = useContext(ProjectContext)
+    const { selectedTeam, setSelectedTeam, updateSelectedTeam, getCurrentProjects } = useContext(TeamContext)
     const params = useParams()
     const history = useHistory()
     const socket = useSocket()
@@ -23,8 +23,8 @@ const Header = ({ asideOn }) => {
 
     const getData = useCallback(async () => {
         const data = await getProjectInfo(params.projectid)
-        projectContext.setProject(data)
-    }, [getProjectInfo, params, projectContext])
+        setProject(data)
+    }, [getProjectInfo, params, setProject])
 
     const goToHomePage = useCallback((deletedTeamId) => {
         if (deletedTeamId !== params.teamid) return
@@ -38,25 +38,25 @@ const Header = ({ asideOn }) => {
 
     useEffect(() => {
         if (!(window.location.href.includes('team') || window.location.href.includes('project'))) {
-            teamContext.setSelectedTeam('Select')
+            setSelectedTeam('Select')
             return
         }
 
-        if (teamContext.selectedTeam === 'Select') {
+        if (selectedTeam === 'Select') {
             const teamId = params.teamid
-            teamContext.updateSelectedTeam(teamId)
+            updateSelectedTeam(teamId)
         }
 
         if (window.location.href.includes('project')) {
             setIsViewVisibble(true)
             setIsProjectVisibble(true)
-            teamContext.getCurrentProjects(params.teamid)
+            getCurrentProjects(params.teamid)
 
-            if (projectContext.project === null || projectContext.project._id !== params.projectid) {
+            if (project === null || project._id !== params.projectid) {
                 getData()
             }
         }
-    }, [getData, params, params.teamid, projectContext.project, teamContext,])
+    }, [getData, params, params.teamid, project, selectedTeam, setSelectedTeam, updateSelectedTeam, getCurrentProjects])
 
     useEffect(() => {
         if (!(window.location.href.includes('team') || window.location.href.includes('project'))) return
@@ -76,12 +76,12 @@ const Header = ({ asideOn }) => {
         return () => socket.off('project-deleted')
     }, [goToTeamPage, socket])
 
-    if (window.location.href.includes('project') && !projectContext.project) {
+    if (window.location.href.includes('project') && !project) {
         return null
     }
 
     return (
-        <header className={`${styles.navigation} ${asideOn ? styles.small : ''}`} >
+        <header className={`${styles.navigation} ${isAsideOn ? styles.small : ''}`} >
             <div className={styles.container}>
                 <div className={styles.links}>
                     <TeamDropdown />
@@ -90,7 +90,7 @@ const Header = ({ asideOn }) => {
                 </div>
 
                 <div className={`${styles.links} ${styles.font}`}>
-                    <SearchField asideOn={asideOn} />
+                    <SearchField isAsideOn={isAsideOn} />
                     <ProfileDropdown />
                 </div>
             </div>

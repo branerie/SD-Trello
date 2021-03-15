@@ -78,18 +78,6 @@
     border-radius: 0 0 10px 10px;
 }
 
-/* ProfileDropdown */
-.avatar {
-    margin-right: 20px;
-    cursor: pointer;
-}
-
-.profile {
-    width: 6rem;
-    right: 15px;
-}
-
-
 @media (max-width: 1140px) {
     .container {
         flex-direction: column;

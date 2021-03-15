@@ -16,7 +16,7 @@ import { useSocket } from '../../contexts/SocketProvider'
 import Transparent from '../Transparent'
 import EditProject from '../EditProject'
 
-export default function Aside({ asideOn, setAsideOn }) {
+export default function Aside({ isAsideOn, setIsAsideOn }) {
     const [listVisibility, setListVisibility] = useState(false)
     const [editProjectVisibility, setEditProjectVisibility] = useState(false)
     const [editProjectButtonVisibility, setEditProjectButtonVisibility] = useState(false)
@@ -49,7 +49,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                 <div className={styles['top-left']}>
                     <ButtonClean
                         className={styles.hamburger}
-                        onClick={() => setAsideOn(!asideOn)}
+                        onClick={() => setIsAsideOn(!isAsideOn)}
                         title={<img className={styles.options} src={menu} alt='menu' width='32' height='24' />}
                     />
                 </div>
@@ -78,7 +78,7 @@ export default function Aside({ asideOn, setAsideOn }) {
                     />
                 }
             </aside>
-            {asideOn &&
+            {isAsideOn &&
                 <div className={styles.menu}>
                     <div className={styles['top-right']}>
                         <div className={styles.logo}>
