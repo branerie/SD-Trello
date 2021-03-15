@@ -13,7 +13,6 @@ import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
 import teamPagePicture from '../../images/team-page/pic1.svg'
 
 const TeamPage = () => {
-    const {teamid} = useParams()
     const [isCreateProjectFormVisible, setIssCreateProjectFormVisible] = useState(false)
     const [isEditTeamFormVisible, setIsEditTeamFormVisible] = useState(false)
     const [areOldProjectsShown, setAreOldProjectsShown] = useState(false)
@@ -22,6 +21,7 @@ const TeamPage = () => {
     const [members, setMembers] = useState([])
     const [invited, setInvited] = useState([])
     const { user } = useContext(UserContext)
+    const { teamid } = useParams()
 
 
     useEffect(() => {
