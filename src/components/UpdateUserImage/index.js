@@ -15,9 +15,9 @@ const UpdateUserImage = ({ user, getData }) => {
     const history = useHistory()
     const { userid } = useParams()
     const { logIn } = useContext(UserContext)
-    const { updateUserImage } = useUserServices()
     const [isEditPictureActive, setIsEditPictureActive, dropdownRef] = useDetectOutsideClick()
     const [isConfirmOpen, setIsConfirmOpen] = useState(false)
+    const { updateUserImage } = useUserServices()
 
     const userName = user.username
     const userImage = user.image
@@ -34,6 +34,7 @@ const UpdateUserImage = ({ user, getData }) => {
             cloudName: process.env.REACT_APP_CLOUD_NAME,
             uploadPreset: process.env.REACT_APP_UPLOAD_PRESET
         }, async (error, result) => {
+
             if (result.event === 'success') {
                 const path = result.info.path
                 const publicId = result.info.public_id
@@ -45,6 +46,7 @@ const UpdateUserImage = ({ user, getData }) => {
                 logIn(user)
                 getData()
             }
+
             if (error) {
                 history.push('/error')
                 return

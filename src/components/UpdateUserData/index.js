@@ -15,7 +15,6 @@ const UpdateUserData = ({ user, userEmail, getData }) => {
     const history = useHistory()
     const [isPasswordActive, setIsPaswordActive] = useState(false)
     const [isUserNameActive, setIsUserNameActive] = useState(false)
-    const userId = user.id
     const [username, setUsername] = useState(user.username)
     const [password, setPassword] = useState(null)
     const [rePassword, setRePassword] = useState(null)
@@ -23,6 +22,7 @@ const UpdateUserData = ({ user, userEmail, getData }) => {
     const [areUserTeamsShown, setAreUserTeamsShown, teamRef] = useDetectOutsideClick()
     const { updateUser, updateUserPassword } = useUserServices()
     const userTeams = user.teams
+    const userId = user.id
 
 
     const goToTeamPage = (teamId) => {
@@ -110,7 +110,7 @@ const UpdateUserData = ({ user, userEmail, getData }) => {
                 value={''}
                 disabled={true}
             />
-            
+
             <div className={styles['button-input-div']}>
                 <div className={styles.myTeamsContainer}>
                     <ButtonGrey
