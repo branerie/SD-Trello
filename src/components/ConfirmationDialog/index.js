@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './index.module.css'
-import logo from '../../images/logo.svg'
 import ButtonGrey from '../ButtonGrey'
+import logo from '../../images/logo.svg'
 
 const ConfirmDialog = ({ title, hideConfirm, onConfirm, onDecline }) => {
     const accept = () => {

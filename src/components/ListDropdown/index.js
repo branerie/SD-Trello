@@ -17,11 +17,11 @@ const ListDropdown = ({
     setIsDragListDisabled
 }) => {
     const socket = useSocket()
-    const params = useParams()
-    const teamId = params.teamid
     const [isVisibleEditList, setIsVisibleEditList] = useState(false)
     const [isConfirmOpen, setIsConfirmOpen] = useState(false)
     const { deleteList } = useListsServices()
+    
+    const { teamid: teamId } = useParams()
 
     const handleDeleteList = async () => {
         await deleteList(project._id, list._id)
