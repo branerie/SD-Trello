@@ -14,14 +14,11 @@ const TeamMembers = ({ members, invited }) => {
                     Team Members:
                 </div>
                 {
-                    members.map((m, index) => {
+                    members.map((member, index) => {
                         return (
                             <ButtonClean
                                 key={index}
-                                title={
-                                    <AvatarUser user={m}
-                                        size={40}
-                                    />}
+                                title={<AvatarUser user={member} size={40} />}
                             />
                         )
                     })

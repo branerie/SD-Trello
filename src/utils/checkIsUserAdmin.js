@@ -1,4 +1,4 @@
-const isUserAdmin = (id, members) => {
+const checkIsUserAdmin = (id, members) => {
     const member = members.find(m => m.memberId._id === id)
 
     if (!member) {
@@ -8,4 +8,4 @@ const isUserAdmin = (id, members) => {
     return member.admin
 }
 
-export default isUserAdmin
+export default checkIsUserAdmin

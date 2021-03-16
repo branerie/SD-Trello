@@ -7,8 +7,11 @@ const TeamContext = React.createContext({
   setSelectedTeam: () => {},
   getCurrentTeam: () => {},
   currentTeam: '',
+  currentProjects: [],
   setCurrentTeam: () => {},
-  getTeams: () => {}
+  getTeams: () => {},
+  updateSelectedTeam: () => {},
+  getCurrentProjects: () => {}
 })
 
 export default TeamContext

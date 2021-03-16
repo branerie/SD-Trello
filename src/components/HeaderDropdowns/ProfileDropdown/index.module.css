@@ -1,0 +1,9 @@
+.avatar {
+    margin-right: 20px;
+    cursor: pointer;
+}
+
+.profile {
+    width: 6rem;
+    right: 15px;
+}

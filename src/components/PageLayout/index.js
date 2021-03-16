@@ -4,14 +4,14 @@ import Header from '../Header'
 import styles from './index.module.css'
 
 const PageLayout = ({ children, contentClassName }) => {
-  const [asideOn, setAsideOn] = useState(false)
+  const [isAsideOn, setIsAsideOn] = useState(false)
 
   return (
     <div className={styles.app}>
-      <Aside asideOn={asideOn} setAsideOn={setAsideOn} />
-      <Header asideOn={asideOn} />
+      <Aside isAsideOn={isAsideOn} setIsAsideOn={setIsAsideOn} />
+      <Header isAsideOn={isAsideOn} />
       <div 
-        className={contentClassName ? contentClassName : `${styles.content} ${asideOn ? styles.small : ''}`}
+        className={contentClassName ? contentClassName : `${styles.content} ${isAsideOn ? styles.small : ''}`}
       >
         {children}
       </div>

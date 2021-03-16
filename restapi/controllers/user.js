@@ -340,7 +340,7 @@ async function updateUserImage(req, res, next) {
     }
 
     if (oldImage) {
-        cloudinary.api.delete_resources([oldImage.publicId], (error, result) => { console.log(result, error) })
+        cloudinary.api.delete_resources([oldImage.publicId], (error, result) => { console.log(error) })
     }
 
     const updatedUser = await models.User.findOne({ _id: id }).select('-password')

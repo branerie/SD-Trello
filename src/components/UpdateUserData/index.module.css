@@ -1,0 +1,130 @@
+.inputs-container {
+    height: auto;
+    flex-wrap: wrap;
+    min-width: 42%;
+    flex-grow: 1;
+    max-width: 700px;
+}
+
+.button-input-div {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.navigate-buttons {
+    padding: 10px;
+    min-width: 170px;
+    min-height: 50px;
+    display: block;
+    margin: 15px;
+    margin-top: 0;
+    margin-bottom: 20px;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+    text-align: left;
+    outline: none;
+}
+
+.input-fields-profile {
+    padding: 3px;
+    text-align: left;
+    min-width: 50%;
+    min-height: 30px;
+    border-radius: 14px;
+    margin-bottom: 28px;
+    margin-top: 5px;
+    background-color: white;
+    outline: none;
+}
+
+::-webkit-input-placeholder {
+    text-align: left;
+}
+
+.button-input-div {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.button-input-div-tasks {
+    display: flex;
+    justify-content: space-around;
+    flex-wrap: wrap;
+}
+
+.alerts {
+    width: 300px;
+    height: auto;
+}
+
+.new-pass-alert {
+    background-color: rgb(219, 88, 88);
+    border-radius: 10px;
+    max-width: 300px;
+    height: auto;
+    padding: 15px;
+    margin: 0 auto;
+    margin-bottom: 20px;
+}
+
+.select-team-container {
+    width: 0;
+    margin: 0 auto;
+    height: 0;
+    color: white;
+    position: relative;
+    left: -100px;
+    z-index: 2;
+}
+
+.button-div-save {
+    text-align: left;
+    min-width: 51%;
+    min-height: 30px;
+    border-radius: 14px;
+    display: flex;
+    justify-content: center;
+    margin-bottom: 28px;
+    outline: none;
+}
+
+.save-button {
+    color: #363338;
+    background-color: #F3981F;
+    box-shadow: 0px 8px 8px rgb(0 0 0 / 10%);
+    border-radius: 14px;
+    /* margin-left: 25%; */
+    height: 50px;
+    border: 1px solid #707070;
+    z-index: 1;
+    font-size: 1.2rem;
+    font-weight: 600;
+    cursor: pointer;
+    outline: none;
+    padding: 10px;
+    min-width: 170px;
+    min-height: 50px;
+    display: block;
+    margin: 0 auto;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+    outline: none;
+}
+
+.save-button:hover {
+    color: #363338;
+    background-color: #F3981F;
+}
+
+.input-fields-tasks {
+    padding: 3px;
+    text-align: left;
+    min-width: 51%;
+    min-height: 30px;
+    border: hidden;
+    border-radius: 14px;
+    margin-bottom: 28px;
+    margin-top: 5px;
+    background-color: #EDF5F9;
+    outline: none;
+}

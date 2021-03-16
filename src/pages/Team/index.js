@@ -1,5 +1,6 @@
 import React, { useState, useContext, useEffect } from 'react'
 import { useParams } from 'react-router-dom'
+import UserContext from '../../contexts/UserContext'
 import styles from './index.module.css'
 import PageLayout from '../../components/PageLayout'
 import Project from '../../components/Project'
@@ -7,13 +8,11 @@ import Transparent from '../../components/Transparent'
 import CreateProject from '../../components/CreateProject'
 import EditTeam from '../../components/EditTeam'
 import TeamMembers from '../../components/TeamMembers'
-import UserContext from '../../contexts/UserContext'
 import ButtonGrey from '../../components/ButtonGrey'
 import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
 import teamPagePicture from '../../images/team-page/pic1.svg'
 
 const TeamPage = () => {
-    const {teamid} = useParams()
     const [isCreateProjectFormVisible, setIssCreateProjectFormVisible] = useState(false)
     const [isEditTeamFormVisible, setIsEditTeamFormVisible] = useState(false)
     const [areOldProjectsShown, setAreOldProjectsShown] = useState(false)
@@ -22,6 +21,7 @@ const TeamPage = () => {
     const [members, setMembers] = useState([])
     const [invited, setInvited] = useState([])
     const { user } = useContext(UserContext)
+    const { teamid } = useParams()
 
 
     useEffect(() => {

@@ -18,15 +18,12 @@ const GetStarted = () => {
 
     return (
         <PageLayout>
-            <>
-                {
-                    isTeamFormShown &&
-                    <Transparent hideForm={() => setIsTeamFormShown(false)}>
-                        <CreateTeam hideForm={() => { setIsTeamFormShown(false) }} />
-                    </Transparent>
-                }
-            </>
-
+            {
+                isTeamFormShown &&
+                <Transparent hideForm={() => setIsTeamFormShown(false)}>
+                    <CreateTeam hideForm={() => { setIsTeamFormShown(false) }} />
+                </Transparent>
+            }
             <div className={styles.container}>
                 <div className={styles['logo-div']}>
                     <img className={styles.logo} src={logo} alt='' />
@@ -72,15 +69,15 @@ const GetStarted = () => {
                 <div className={styles.paragraph}>
                     5. - Great! You are all set. Start your Smart experience and continue exploring countless opportunities by creating your first team.
                     <div>
-                        <ButtonGreyTitle className={styles['navigate-buttons']} title={'Create New Team'} 
-                        onClick={() => setIsTeamFormShown(true)} />
+                        <ButtonGreyTitle className={styles['navigate-buttons']} title={'Create New Team'}
+                            onClick={() => setIsTeamFormShown(true)} />
                     </div>
                 </div>
 
                 <div className={styles.greeting}>
-                    Enjoy!                
+                    Enjoy!
                     <div >
-                    Smart Manager Team
+                        Smart Manager Team
                     </div>
                 </div>
             </div>
