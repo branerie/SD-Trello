@@ -12,7 +12,7 @@ const SearchField = ({ isAsideOn }) => {
 
     const onBlur = () => {
         setTimeout(() => (setShowSearchForm(false)), 120)
-        setTimeout(() => (setIsShownSearchInput(!isShownSearchInput)),120)
+        setTimeout(() => (setIsShownSearchInput(!isShownSearchInput)),120) //REVIEW: един спейс след запетая се слага винаги
     }
 
     const hideSearchResult = () => {
@@ -26,6 +26,9 @@ const SearchField = ({ isAsideOn }) => {
                 <img className={styles['search-icon']} src={searchImg} alt='search' />
             </div>
             <div className={isShownSearchInput ? 
+            {/* REVIEW: Вместо второто тернари, може да се напише така:
+                `${styles['new-line']} ${styles['search-fields']} ${isAsideOn && styles['small']}`
+             */}
                 ( isAsideOn
                     ? (`${styles['new-line']} ${styles['search-fields']} ${styles['small']}`)
                     : (`${styles['new-line']} ${styles['search-fields']}`)
@@ -42,10 +45,10 @@ const SearchField = ({ isAsideOn }) => {
                     onBlur={onBlur}
                 />
                 {( searchInput.length > 0 && showSearchForm)
-                        ?   <div ref={dropdownRefSearch}>
-                                <SearchResults searchInput={searchInput} hideForm={hideSearchResult} />
-                            </div>
-                        : null
+                    ?   <div ref={dropdownRefSearch}>
+                            <SearchResults searchInput={searchInput} hideForm={hideSearchResult} />
+                        </div>
+                    : null
                 }
             </div>
         </>
