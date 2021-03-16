@@ -14,6 +14,9 @@ const List = ({ isAdmin, project, list, setIsDragListDisabled }) => {
     const [isDropdownActive, setIsDropdownActive, dropdownRef] = useDetectOutsideClick()
 
     return (
+        /* REVIEW: Тук има div, който е контейнер за всичко вътре в компонента. Празния таг е излишен и всичко може да мине
+        един таб назад 
+        */
         <>
             <div className={styles.list}>
                 <div className={styles.header}>
@@ -46,6 +49,14 @@ const List = ({ isAdmin, project, list, setIsDragListDisabled }) => {
                                         key={element._id}
                                         draggableId={element._id}
                                         index={index}
+                                        /* REVIEW: Ако е сигурно, че isDragCardDisabled винаги е булева стойност, може
+                                        дасе подаде направо тя:
+                                          isDragDisabled={isDragCardDisabled}  
+                                        Ако не е сигурно (например има шанс да е undefined), спокойно може да се подаде така:
+                                          isDragDisabled={!!(isDragCardDisabled)}
+                                        Този оператор !!(...) обръща променливата която му се подаде в булева стойност. Тоест,
+                                        ще обърне false, undefined, null, 0 и празен стринг '' във false, всичко друго в true
+                                        */
                                         isDragDisabled={isDragCardDisabled ? true : false}
                                     >
                                         {(provided) => (<>

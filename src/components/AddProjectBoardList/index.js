@@ -14,7 +14,10 @@ const AddProjectBoardList = () => {
     const [listName, setListName] = useState('')
     const [isAddListActive, setIsAddListActive, listRef] = useDetectOutsideClick()
     const { createList } = useListsServices()
-
+    /* REVIEW: Да отбележа само, подобно на AddProjectBoardTask, че в повечето случаи би било идейно да се направи addList
+    на useCallback, понеже се подава на компоненти по-надолу, обаче в случая няма смисъл, щото той ползва всичките 
+    dependency-та на компонента, които биха го накарали да се презареди
+    */
     const addList = async () => {
         if (listName === '') {
             setIsAddListActive(false)
