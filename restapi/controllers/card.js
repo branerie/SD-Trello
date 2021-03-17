@@ -22,9 +22,10 @@ async function createCard(req, res, next) {
     const listId = req.params.id
     const { name, description, members, dueDate, progress } = req.body
 
-    const today = new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate()))
+    const today = new Date()
+    today.setUTCHours(0, 0, 0, 0)
 
-    const history = [{ 'event': 'Created', 'date': today }]
+    const history = [{ event: 'Created', date: today }]
 
     const session = await mongoose.startSession()
     session.startTransaction()

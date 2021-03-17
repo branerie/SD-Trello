@@ -112,7 +112,7 @@ const MyTasksTask = ({ teamId, project, list, card }) => {
                 <Transparent hideForm={() => setIsEditCardActive(!isEditCardActive)} >
                     <EditCard
                         hideForm={() => setIsEditCardActive(!isEditCardActive)}
-                        initialCard={card}
+                        card={card}
                         listId={list._id}
                         project={project}
                         teamId={teamId}

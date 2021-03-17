@@ -6,15 +6,15 @@ import AvatarUser from '../AvatarUser'
 import useCardsServices from '../../services/useCardsServices'
 
 
-export default function ShowAllTaskMembers({ members, deleteMemberOption, deleteMemberObj }) {
+const ShowAllTaskMembers = ({ members, deleteMemberOption, deleteMemberObj }) => {
     const socket = useSocket()
-    const [confirmOpen, setConfirmOpen] = useState(false)
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false)
     const [currElement, setCurrElement] = useState('')
     const { editTask } = useCardsServices()
 
     function onClick(m) {
         if (deleteMemberOption) {
-            setConfirmOpen(true)
+            setIsConfirmOpen(true)
             setCurrElement(m)
         }
     }
@@ -45,10 +45,10 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
 
     return (
         <div>
-            {confirmOpen &&
+            {isConfirmOpen &&
                 <ConfirmDialog
                     title={'delete this member'}
-                    hideConfirm={() => setConfirmOpen(false)}
+                    hideConfirm={() => setIsConfirmOpen(false)}
                     onConfirm={() => deleteMember(currElement)}
                 />
             }
@@ -65,10 +65,9 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
                                 </span>
                                 <span className={styles.username}>{m.username}</span>
                             </div>
-                            {
-                                deleteMemberOption ?
-                                    <span className={styles['delete-icon']}>x</span>
-                                    : null
+                            { deleteMemberOption ?
+                                <span className={styles['delete-icon']}>x</span>
+                                : null
                             }
                         </div>
                     )
@@ -77,3 +76,5 @@ export default function ShowAllTaskMembers({ members, deleteMemberOption, delete
         </div>
     )
 }
+
+export default ShowAllTaskMembers

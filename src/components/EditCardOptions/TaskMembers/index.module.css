@@ -1,0 +1,14 @@
+.select {
+    width: 10rem;
+    height: 2rem;
+    background-color: #E6E6E6;
+    border: solid 1px #363338;
+    border-radius: 10px;
+    margin-top: 0.5rem;
+}
+
+.members {
+    margin: 0.5rem;
+    margin-bottom: 0;
+    height: 2rem;
+}

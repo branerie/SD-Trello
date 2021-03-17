@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './index.module.css'
 
-export default function ProgressBar({ progress }) {
+const ProgressBar = ({ progress }) => {
 
     const progressColor = (input) => {
         if (Number(input) <= 20) {
@@ -29,3 +29,5 @@ export default function ProgressBar({ progress }) {
             /></div>
     )
 }
+
+export default ProgressBar

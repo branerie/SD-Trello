@@ -31,11 +31,12 @@ const EditList = ({ list, project, hideForm }) => {
         <div className={styles.container} >
             <Title title='Edit List' />
             <div className={styles['input-container']}>
-                <span className={styles.name}> Name</span>
+                <span className={styles.name}>Name</span>
                 <ResponsiveTextArea
                     value={name}
                     setValue={setName}
                     className={`${styles['name-input']} ${styles.text}`}
+                    autoFocus={true}
                 />
             </div>
             <div className={styles['change-color']}>

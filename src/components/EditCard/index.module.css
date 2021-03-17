@@ -109,26 +109,6 @@
     display: none;
 }
 
-.small-buttons {
-    display: flex;
-    align-items: center;
-    margin-top: 0.5rem;
-    cursor: pointer;
-    width: 10rem;
-    height: 2rem;
-    font-size: 0.8rem;
-    border-radius: 8px;
-    background-color: #E6E6E6;
-    border: none;
-    outline: none;
-}
-
-.pics {   
-    margin-left: 5%;
-    margin-right: 5%;
-    height: 15px;
-}
-
 @media (max-width: 750px) {
     .container {
         width: 350px;
