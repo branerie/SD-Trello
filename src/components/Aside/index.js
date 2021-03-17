@@ -1,6 +1,13 @@
 import React, { useContext, useState, useEffect, useCallback } from 'react'
 import LinkComponent from '../Link'
+import UserContext from '../../contexts/UserContext'
+import { useSocket } from '../../contexts/SocketProvider'
+import ProjectContext from '../../contexts/ProjectContext'
 import styles from './index.module.css'
+import ButtonHideList from '../ButtonHideList'
+import ButtonClean from '../ButtonClean'
+import Transparent from '../Transparent'
+import EditProject from '../EditProject'
 import logo from '../../images/logo.svg'
 import menu from '../../images/aside/menu.svg'
 import home from '../../images/aside/home.svg'
@@ -8,31 +15,23 @@ import tasks from '../../images/aside/tasks.svg'
 import inbox from '../../images/aside/inbox.svg'
 import bell from '../../images/aside/inbox-bell.svg'
 import projectInfo from '../../images/aside/project-info.svg'
-import ProjectContext from '../../contexts/ProjectContext'
-import ButtonHideList from '../ButtonHideList'
-import ButtonClean from '../ButtonClean'
-import UserContext from '../../contexts/UserContext'
-import { useSocket } from '../../contexts/SocketProvider'
-import Transparent from '../Transparent'
-import EditProject from '../EditProject'
 
-export default function Aside({ isAsideOn, setIsAsideOn }) {
-    const [listVisibility, setListVisibility] = useState(false)
-    const [editProjectVisibility, setEditProjectVisibility] = useState(false)
-    const [editProjectButtonVisibility, setEditProjectButtonVisibility] = useState(false)
-    const projectContext = useContext(ProjectContext)
-    const userContext = useContext(UserContext)
+const Aside = ({ isAsideOn, setIsAsideOn }) => {
+    const [isListShown, setIsListShown] = useState(false)
+    const [isEditProjectShown, setIsEditProjectShown] = useState(false)
+    const [isEditButtonProjectShown, setIsEditButtonProjectShown] = useState(false)
+    const { lists, project } = useContext(ProjectContext)
+    const { user, logIn } = useContext(UserContext)
     const socket = useSocket()
-    const logIn = userContext.logIn
 
     useEffect(() => {
         if (window.location.href.includes('project')) {
-            setListVisibility(true)
-            setEditProjectButtonVisibility(true)
+            setIsListShown(true)
+            setIsEditButtonProjectShown(true)
         }
     }, [])
 
-    const updateUser = useCallback(async (response) => {
+    const updateUser = useCallback(async(response) => {
         logIn(response)
     }, [logIn])
 
@@ -58,22 +57,22 @@ export default function Aside({ isAsideOn, setIsAsideOn }) {
                     title={<img src={home} alt='home' width='34' height='32' />}
                 />
                 <LinkComponent
-                    href={`/my-tasks/${userContext.user.id}`}
+                    href={`/my-tasks/${user.id}`}
                     title={<img src={tasks} alt='my-tasks' width='30' height='25' />}
                 />
                 <LinkComponent
-                    href={`/inbox/${userContext.user.id}`}
+                    href={`/inbox/${user.id}`}
                     title={<>
                         <img src={inbox} alt='inbox' width='33' height='34' />
-                        {userContext.user.inbox.length !== 0 &&
+                        {user.inbox.length !== 0 &&
                             <img className={styles.bell} src={bell} alt='inbox' width='33' height='34' />
                         }
                     </>}
                 />
-                {editProjectButtonVisibility &&
+                {isEditButtonProjectShown &&
                     <ButtonClean
                         className={styles.settings}
-                        onClick={() => setEditProjectVisibility(!editProjectVisibility)}
+                        onClick={() => setIsEditProjectShown(!isEditProjectShown)}
                         title={<img className={styles.options} src={projectInfo} alt='' width='40' />}
                     />
                 }
@@ -90,26 +89,26 @@ export default function Aside({ isAsideOn, setIsAsideOn }) {
                             className={styles.link}
                         />
                         <LinkComponent
-                            href={`/my-tasks/${userContext.user.id}`}
+                            href={`/my-tasks/${user.id}`}
                             title='My Tasks'
                             className={styles.link}
                         />
                         <LinkComponent
-                            href={`/inbox/${userContext.user.id}`}
+                            href={`/inbox/${user.id}`}
                             title='Inbox'
                             className={styles.link}
                         />
-                        {editProjectButtonVisibility &&
+                        {isEditButtonProjectShown &&
                             <ButtonClean
                                 className={styles.link}
-                                onClick={() => setEditProjectVisibility(!editProjectVisibility)}
+                                onClick={() => setIsEditProjectShown(!isEditProjectShown)}
                                 title={'Settings'}
                             />
                         }
                     </div>
-                    {listVisibility && <div className={styles['bottom-right']}>
+                    {isListShown && <div className={styles['bottom-right']}>
                         {
-                            projectContext.lists.map((element) => {
+                            lists.map((element) => {
                                 return (
                                     <ButtonHideList key={element._id} list={element} type={'aside'} />
                                 )
@@ -118,15 +117,15 @@ export default function Aside({ isAsideOn, setIsAsideOn }) {
                     </div>}
                 </div>
             }
-
-            {editProjectVisibility &&
+            {isEditProjectShown &&
                 < div >
-                    <Transparent hideForm={() => setEditProjectVisibility(!editProjectVisibility)} >
-                        <EditProject hideForm={() => setEditProjectVisibility(!editProjectVisibility)} project={projectContext.project} />
+                    <Transparent hideForm={() => setIsEditProjectShown(!isEditProjectShown)} >
+                        <EditProject hideForm={() => setIsEditProjectShown(!isEditProjectShown)} project={project} />
                     </Transparent >
                 </div >
             }
-
         </div>
     )
 }
+
+export default Aside

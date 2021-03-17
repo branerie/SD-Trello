@@ -1,7 +1,7 @@
 import React from 'react'
 import styles from './index.module.css'
 
-export default function ListColor({ color, type }) {
+const ListColor = ({ color, type }) => {
     if (type === 'aside') {
         return (
             <svg className={`${styles[type]}`} xmlns='http://www.w3.org/2000/svg' width='110' height='26.931' viewBox='0 0 110 26.931'>
@@ -33,3 +33,5 @@ export default function ListColor({ color, type }) {
         )
     }
 }
+
+export default ListColor

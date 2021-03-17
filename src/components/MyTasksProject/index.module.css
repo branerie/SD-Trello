@@ -1,0 +1,70 @@
+.project {
+    width: 100%;
+    min-width: 1100px;
+    margin-bottom: 20px;
+    background-color: #F7F7F2;
+    border-radius: 19px;
+    border: solid 1px #707070;
+    box-shadow: 0px 8px 8px rgba(0, 0, 0, 0.1);
+    padding-bottom: 10px;
+}
+
+.project-name {
+    font-size: 1.7rem;
+    color: #363338;
+    margin: 15px;
+    margin-left: 20px;
+    font-weight: normal;
+}
+
+.link {
+    text-decoration: none;
+    color: #363338;
+}
+
+.bold {
+    font-weight: bold;
+}
+
+.header {
+    font-weight: bold;
+    text-decoration: underline;
+    font-size: 1.1rem;
+}
+
+.raw {
+    display: flex;
+    width: 100%;
+}
+
+.list {
+    overflow-wrap: break-word;
+    width: 30%;
+    min-width: 30%;
+    padding-left: 20px;
+}
+
+.container {
+    display: flex;
+    height: 35px;
+    width: 70%;
+}
+
+.task {
+    width: 50%;
+    padding: 0 10px;
+}
+
+.progress {
+    width: 20%;
+    text-align: center;
+}
+
+.days {
+    width: 20%;
+    text-align: center;
+}
+
+.task-container {
+    width: 70%;
+}
