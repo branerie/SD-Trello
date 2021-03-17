@@ -19,11 +19,13 @@ const ProjectDropdown = () => {
     const params = useParams()
 
     useEffect(() => {
+        
         if (project.isFinished === true) {
-            setIsShownOldProjects(true)
-        } else {
-            setIsShownOldProjects(false)
+           return setIsShownOldProjects(true)
         }
+
+        setIsShownOldProjects(false)
+        
     }, [project.isFinished])
 
 
@@ -38,16 +40,14 @@ const ProjectDropdown = () => {
                 />
                 {isProjectActive && <div ref={projectRef} className={commonStyles.dropdown} >
                     <div className={commonStyles['options-container']} >
-                        {currentProjects.filter(!isShownOldProjects
-                                                                    ? (p => (p.isFinished === false) || (p.isFinished === undefined))
-                                                                    : (p => (p.isFinished === true)))
+                        {currentProjects.filter(p => isShownOldProjects === !!(p.isFinished))
                             .reverse()
                             .map(p => (
                                 <LinkComponentTitle
                                     href={`/project-board/${params.teamid}/${p._id}`}
                                     key={p._id}
                                     title={p.name}
-                                    onClick={() => { setIsProjectActive(false) }}
+                                    onClick={() => setIsProjectActive(false)}
                                     className={commonStyles.options}
                                 />
                             ))

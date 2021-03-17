@@ -10,7 +10,7 @@ import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
 
 const TeamDropdown = () => {
     const { selectedTeam, teams, getCurrentProjects, setSelectedTeam } = useContext(TeamContext)
-    const [isShownTemForm, setIsShownTemForm] = useState(false)
+    const [isShownTeamForm, setIsShownTeamForm] = useState(false)
     const [isTeamActive, setIsTeamActive, teamRef] = useDetectOutsideClick()
 
     const selectTeam = (teamId, teamName) => {
@@ -41,14 +41,14 @@ const TeamDropdown = () => {
                         ))}
                     </div>
                     <ButtonClean
-                        onClick={() => setIsShownTemForm(true)}
+                        onClick={() => setIsShownTeamForm(true)}
                         title='Create Team'
                         className={`${commonStyles.options} ${commonStyles['last-option']}`}
                     />
                 </div>}
             </div>
-            {isShownTemForm &&  <Transparent hideForm={() => setIsShownTemForm(false)}>
-                                    <CreateTeam hideForm={() => { setIsShownTemForm(false) }} ></CreateTeam>
+            {isShownTeamForm &&  <Transparent hideForm={() => setIsShownTeamForm(false)}>
+                                    <CreateTeam hideForm={() => { setIsShownTeamForm(false) }} />
                                 </Transparent>}
         </div>
     )

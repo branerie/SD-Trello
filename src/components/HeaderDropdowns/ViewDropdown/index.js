@@ -15,7 +15,8 @@ const ViewDropdown = () => {
     useEffect(() => {
         if (window.location.href.includes('board')) {
             setViewState('Board')
-        }
+        } 
+        
         if (window.location.href.includes('list')) {
             setViewState('List')
         }
