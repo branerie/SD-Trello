@@ -48,9 +48,7 @@ const TeamDropdown = () => {
                 </div>}
             </div>
             {isShownTeamForm &&  <Transparent hideForm={() => setIsShownTeamForm(false)}>
-                {/* REVIEW: CreateTeam няма нужда да се ползва със затварящ таг. Може да е със самозатварящ се 
-                (<CreateTeam hideForm={() => { setIsShownTeamForm(false) } />) */}
-                                    <CreateTeam hideForm={() => { setIsShownTeamForm(false) }} ></CreateTeam>
+                                    <CreateTeam hideForm={() => { setIsShownTeamForm(false) }} />
                                 </Transparent>}
         </div>
     )
