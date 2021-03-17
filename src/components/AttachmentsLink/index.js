@@ -4,7 +4,7 @@ import styles from './index.module.css'
 import Transparent from '../Transparent'
 import AttachmentList from '../AttachmentList'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import attPic from '../../images/edit-card/pic6.svg'
+import attPic from '../../images/edit-card/attachments.svg'
 
 const AttachmentsLink = ({
     card,

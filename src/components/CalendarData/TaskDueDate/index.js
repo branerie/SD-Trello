@@ -13,7 +13,8 @@ export default function TaskDueDate(props) {
     const [cardDueDate, setCardDueDate] = useState(props.cardDueDate)
     const [isVisible, setIsVisible] = useState(false)
     const socket = useSocket()
-    const today = new Date(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())
+    const today = new Date()
+    today.setUTCHours(0, 0, 0, 0)
     const params = useParams()
     const teamId = params.teamid
     const { editTask } = useCardsServices()
@@ -66,7 +67,7 @@ export default function TaskDueDate(props) {
                     <Transparent hideForm={() => setIsVisible(!isVisible)} >
                         <EditCard
                             hideForm={() => setIsVisible(!isVisible)}
-                            initialCard={props.card}
+                            card={props.card}
                             listId={props.listId}
                             project={props.project}
                             teamId={teamId}

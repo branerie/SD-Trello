@@ -7,7 +7,7 @@ import useCardsServices from '../../../services/useCardsServices'
 
 const TaskDelete = ({ cardId, listId, project, teamId, hideForm }) => {
     const socket = useSocket()
-    const [confirmOpen, setConfirmOpen] = useState(false)
+    const [isConfirmOpen, setIsConfirmOpen] = useState(false)
     const { deleteTask } = useCardsServices()
 
     const handleDeleteTask = async () => {
@@ -21,15 +21,15 @@ const TaskDelete = ({ cardId, listId, project, teamId, hideForm }) => {
         <div>
             <button
                 className={commonStyles['small-buttons']}
-                onClick={() => setConfirmOpen(true)}
+                onClick={() => setIsConfirmOpen(true)}
             >
                 <img className={commonStyles.pics} src={deletePic} alt='deletePic' />
                 Delete Task
             </button>
-            {confirmOpen &&
+            {isConfirmOpen &&
                 <ConfirmDialog
                     title={'delete this task'}
-                    hideConfirm={() => setConfirmOpen(false)}
+                    hideConfirm={() => setIsConfirmOpen(false)}
                     onConfirm={handleDeleteTask}
                 />
             }

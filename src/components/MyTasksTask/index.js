@@ -108,7 +108,7 @@ export default function MyTasksTask({ teamId, project, list, card }) {
                 <Transparent hideForm={() => setShowEditCard(!showEditCard)} >
                     <EditCard
                         hideForm={() => setShowEditCard(!showEditCard)}
-                        initialCard={card}
+                        card={card}
                         listId={list._id}
                         project={project}
                         teamId={teamId}

@@ -6,7 +6,11 @@ import { useSocket } from '../../../contexts/SocketProvider'
 import useCardsServices from '../../../services/useCardsServices'
 
 export default function TaskProgress(props) {
-    const today = useMemo(() => new Date(Date.UTC(new Date().getFullYear(), new Date().getMonth(), new Date().getDate())), [])
+    const today = useMemo(() => {
+        const date = new Date()
+        date.setUTCHours(0, 0, 0, 0)
+        return date
+    }, [])
     const card = props.card
     const [taskHistory, setTaskHistory] = useState(card.history)
     const value = props.value

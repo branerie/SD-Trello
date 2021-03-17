@@ -12,23 +12,23 @@ import TaskDelete from '../EditCardOptions/TaskDelete'
 import taskNamePic from '../../images/edit-card/task-name.svg'
 import useCardsServices from '../../services/useCardsServices'
 
-const EditCard = ({ listId, initialCard, project, teamId, hideForm }) => {
+const EditCard = ({ listId, card, project, teamId, hideForm }) => {
     const socket = useSocket()
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [taskHistory, setTaskHistory] = useState(null)
-    const dueDate = useMemo(() => new Date(initialCard.dueDate), [initialCard.dueDate])
+    const dueDate = useMemo(() => new Date(card.dueDate), [card.dueDate])
     const { editTask } = useCardsServices()
 
     useEffect(() => {
-        setName(initialCard.name)
-        setDescription(initialCard.description)
-        setTaskHistory(initialCard.history)
-    }, [initialCard])
+        setName(card.name)
+        setDescription(card.description)
+        setTaskHistory(card.history)
+    }, [card])
 
     const handleSubmit = async () => {
         const editedFields = { name, description }
-        await editTask(listId, initialCard._id, editedFields)
+        await editTask(listId, card._id, editedFields)
         socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
     }
@@ -75,19 +75,19 @@ const EditCard = ({ listId, initialCard, project, teamId, hideForm }) => {
                             <div className={styles.text}>Manage</div>
                             <TaskDueDate
                                 dueDate={dueDate}
-                                card={initialCard}
+                                card={card}
                                 listId={listId}
                                 project={project}
                                 teamId={teamId}
                             />
                             <TaskMembers
-                                card={initialCard}
+                                card={card}
                                 listId={listId}
                                 project={project}
                                 teamId={teamId}
                             />
                             <TaskProgress
-                                card={initialCard}
+                                card={card}
                                 listId={listId}
                                 project={project}
                                 teamId={teamId}
@@ -95,12 +95,12 @@ const EditCard = ({ listId, initialCard, project, teamId, hideForm }) => {
                                 setTaskHistory={setTaskHistory}
                             />
                             <TaskAttach
-                                card={initialCard}
+                                card={card}
                                 project={project}
                                 teamId={teamId}
                             />
                             <TaskDelete
-                                cardId={initialCard._id}
+                                cardId={card._id}
                                 listId={listId}
                                 project={project}
                                 teamId={teamId}

@@ -10,7 +10,7 @@ import EditCard from '../EditCard'
 import pen from '../../images/pen.svg'
 
 const Card = ({ card, listId, project, setIsDragCardDisabled, setIsDragListDisabled }) => {
-    const { teamId } = useParams()
+    const { teamid: teamId } = useParams()
     const [isVisible, setIsVisible] = useState(false)
 
     const hideForm = () => {
@@ -63,7 +63,7 @@ const Card = ({ card, listId, project, setIsDragCardDisabled, setIsDragListDisab
                 <Transparent hideForm={hideForm} >
                     <EditCard
                         hideForm={hideForm}
-                        initialCard={card}
+                        card={card}
                         listId={listId}
                         project={project}
                         teamId={teamId}
