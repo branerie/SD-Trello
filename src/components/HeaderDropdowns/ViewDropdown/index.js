@@ -15,7 +15,7 @@ const ViewDropdown = () => {
     useEffect(() => {
         if (window.location.href.includes('board')) {
             setViewState('Board')
-        }
+        } // REVIEW: Винаги се оставя един празен ред след if (освен ако не е точно накрая на функцията, като втория тук)
         if (window.location.href.includes('list')) {
             setViewState('List')
         }

@@ -26,6 +26,9 @@ const SearchField = ({ isAsideOn }) => {
                 <img className={styles['search-icon']} src={searchImg} alt='search' />
             </div>
             <div className={isShownSearchInput ? 
+            {/* REVIEW: Вместо второто тернари, може да се напише така:
+                `${styles['new-line']} ${styles['search-fields']} ${isAsideOn && styles['small']}`
+             */}
                 ( isAsideOn
                     ? (`${styles['new-line']} ${styles['search-fields']} ${isAsideOn && styles['small']}`)
                     : (`${styles['new-line']} ${styles['search-fields']}`)
