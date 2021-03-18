@@ -112,7 +112,9 @@ const TableDndApp = ({ project }) => {
                             <TaskProgress
                                 value={card.progress + '/' + card._id + '/' + list._id}
                                 listId={list._id}
-                                project={project} card={card} />
+                                project={project}
+                                card={card}
+                            />
                         ),
                     assigned:
                         (

@@ -4,22 +4,18 @@ import styles from './index.module.css'
 import useCardsServices from '../../../services/useCardsServices'
 import { ESCAPE_KEY_CODE, ENTER_KEY_CODE } from '../../../utils/constats'
 
-const EditCardProgressInput = ({
+const ProgressInput = ({
     card,
     listId,
     project,
     teamId,
-    setIsInputVisible,
-    taskHistory,
-    setTaskHistory,
     inputClassName,
-    placeholderClassName,
-    isInputActive,
-    setIsInputActive
+    placeholderClassName
 }) => {
     const socket = useSocket()
     const [progress, setProgress] = useState(null)
     const [currInput, setCurrInput] = useState(null)
+    const [isInputActive, setIsInputActive] = useState(false)
     const [isInputOk, setIsInputOk] = useState(true)
     const { editTask } = useCardsServices()
     const today = new Date()
@@ -31,7 +27,6 @@ const EditCardProgressInput = ({
 
     const changeProgress = async () => {
         if (progress === null) {
-            setIsInputVisible(false)
             setIsInputActive(false)
             return
         }
@@ -43,12 +38,11 @@ const EditCardProgressInput = ({
             return
         }
 
-        const history = [...taskHistory]
+        const history = [...card.history]
         history.push({
             event: `Progress ${progress}%`,
             date: today
         })
-        setTaskHistory(history)
 
         const editedFields = { progress, history }
         await editTask(listId, card._id, editedFields)
@@ -65,10 +59,6 @@ const EditCardProgressInput = ({
             setIsInputActive(false)
             setIsInputOk(true)
 
-            if (currInput === null) {
-                setIsInputVisible(false)
-            }
-            
             return
         }
 
@@ -87,7 +77,7 @@ const EditCardProgressInput = ({
     }
 
     return (
-        <div>
+        <>
             {isInputActive
                 ? <input
                     autoFocus
@@ -102,9 +92,12 @@ const EditCardProgressInput = ({
                     onBlur={changeProgress}
                     onFocus={() => setCurrInput(progress)}
                 />
-                : <div className={placeholderClassName} onClick={() => setIsInputActive(true)}>{card.progress}%</div>}
-        </div>
+                : card.progress
+                        ? <div className={placeholderClassName} onClick={() => setIsInputActive(true)} >{card.progress}%</div>
+                        : <div className={placeholderClassName} onClick={() => setIsInputActive(true)} >+Add</div>
+            }
+        </>
     )
 }
 
-export default EditCardProgressInput
+export default ProgressInput
