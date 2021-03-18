@@ -25,6 +25,9 @@ const MyTasksPage = () => {
         setProjects(data)
 
         if (teamId !== user.lastTeamSelected) {
+            /* REVIEW: следващите два реда могат да се съберат в един:
+            const updatedUser = { ...user, lastTeamSelected: teamId }
+            */
             const updatedUser = { ...user }
             updatedUser.lastTeamSelected = teamId
             setUser(updatedUser)
@@ -32,9 +35,14 @@ const MyTasksPage = () => {
     }, [user, getUserTasks, setUser])
 
     useEffect(() => {
-
+        /* REVIEW: socket == null не е грешно, ще работи (ще връща true ако socket е null или undefined), просто
+        по-честия синтаксис е !socket, да се избегне двойното равно ==, защото лесно може да се обърка с тройното равно
+        */
         if (!user.lastTeamSelected || socket == null) return
-
+        /* REVIEW: По принцип не виждам смисъл от тази променлива, даже за мен user.lastTeamSelected е по-разбираемо от id.
+        Ако се кръсти const lastTeamSelectedId = user.lastTeamSelected ще има някакъв смисъл, защото от lastTeamSelected не се
+        разбира, че е просто едно id (но пък само id като име - трябва да го търсиш нагоре да видиш какво id точно е) 
+        */
         const id = user.lastTeamSelected
 
         socket.on('task-team-updated', taskTeamUpdate)
@@ -88,7 +96,7 @@ const MyTasksPage = () => {
             {user.lastTeamSelected 
                 ? <div className={styles.box}>
                     {projects.length === 0 
-                        ? <div className={styles.title}>There is no current tasks</div> 
+                        ? <div className={styles.title}>There are no current tasks</div> 
                         : projects.filter(p => isShownOldProjects === !!(p.isFinished))
                             .reverse()
                             .map(project => {
