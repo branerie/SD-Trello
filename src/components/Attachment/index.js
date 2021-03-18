@@ -1,11 +1,11 @@
 import React from 'react'
 import styles from './index.module.css'
-import pic1 from '../../images/edit-card/task-name.svg'
 import AttachmentList from '../AttachmentList'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import Transparent from '../Transparent'
+import pic1 from '../../images/edit-card/task-name.svg'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
-export default function Attachment({ att, attachments, card, project, teamId }) {
+const Attachment = ({ att, attachments, card, project, teamId }) => {
     const [isListVisible, setIsListVisible, listRef] = useDetectOutsideClick()
 
     return (
@@ -30,3 +30,5 @@ export default function Attachment({ att, attachments, card, project, teamId }) 
         </div>
     )
 }
+
+export default Attachment
