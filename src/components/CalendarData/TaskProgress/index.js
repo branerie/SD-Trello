@@ -5,15 +5,13 @@ import { useParams } from 'react-router-dom'
 import { useSocket } from '../../../contexts/SocketProvider'
 import useCardsServices from '../../../services/useCardsServices'
 
-export default function TaskProgress(props) {
+export default function TaskProgress({ card, value, listId, project }) {
     const today = useMemo(() => {
         const date = new Date()
         date.setUTCHours(0, 0, 0, 0)
         return date
     }, [])
-    const card = props.card
     const [taskHistory, setTaskHistory] = useState(card.history)
-    const value = props.value
     let taskprogress = ''
     let token = value.split('/')
 
@@ -32,7 +30,6 @@ export default function TaskProgress(props) {
         event.preventDefault()
 
         const cardId = card._id
-        const listId = props.listId
 
         if (!cardProgress || (cardProgress > 100) || (cardProgress < 0)) {
             return
@@ -57,10 +54,10 @@ export default function TaskProgress(props) {
         await editTask(listId, cardId, editedFields)
 
         setIsActive(!isActive)
-        socket.emit('project-update', props.project)
+        socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
 
-    }, [editTask, cardProgress, isActive, setIsActive, taskHistory, today, card._id, props.listId, props.project, socket, teamId, card.progress])
+    }, [editTask, cardProgress, isActive, setIsActive, taskHistory, today, card._id, listId, project, socket, teamId, card.progress])
 
 
     function showTaskProgress(value) {

@@ -108,10 +108,15 @@ const compareDates = (firstDate, secondDate) => {
     return 0
 }
 
+const getDaysLeft = (dueDate) => {
+    return Math.ceil((Date.parse(dueDate) - Date.now()) / MILLISECONDS_IN_DAY)
+}
+
 export {
     formatDate,
     checkDateEquality,
     compareDates,
     getDateWithOffset,
-    getMonday
+    getMonday,
+    getDaysLeft
 }

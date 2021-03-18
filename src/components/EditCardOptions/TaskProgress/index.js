@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react'
 import commonStyles from '../index.module.css'
 import styles from './index.module.css'
 import ProgressBar from '../../ProgressBar'
-import ProgressInput from '../../Inputs/EditCardProgressInput'
+import EditCardProgressInput from '../../Inputs/EditCardProgressInput'
 import progressPic from '../../../images/edit-card/progress.svg'
 
 const TaskProgress = ({ card, listId, project, teamId, taskHistory, setTaskHistory }) => {
@@ -30,7 +30,7 @@ const TaskProgress = ({ card, listId, project, teamId, taskHistory, setTaskHisto
                 </div>
             }
             {isInputVisible && <div className={styles['progress-input-container']}>
-                <ProgressInput
+                <EditCardProgressInput
                     card={card}
                     listId={listId}
                     project={project}
