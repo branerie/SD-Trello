@@ -1,7 +1,8 @@
 import React, { useEffect, useState } from 'react'
 import { useSocket } from '../../../contexts/SocketProvider'
+import styles from './index.module.css'
 import useCardsServices from '../../../services/useCardsServices'
-import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
+import { ESCAPE_KEY_CODE, ENTER_KEY_CODE } from '../../../utils/constats'
 
 const ProgressInput = ({
     card,
@@ -13,23 +14,16 @@ const ProgressInput = ({
     setTaskHistory,
     inputClassName,
     placeholderClassName,
-    isInitialActive,
     isInputActive,
-    setIsInputActive,
-    ref
+    setIsInputActive
 }) => {
     const socket = useSocket()
     const [progress, setProgress] = useState(null)
     const [currInput, setCurrInput] = useState(null)
     const [isInputOk, setIsInputOk] = useState(true)
+    const { editTask } = useCardsServices()
     const today = new Date()
     today.setUTCHours(0, 0, 0, 0)
-    const { editTask } = useCardsServices()
-
-    if (isInitialActive) {
-        setIsInputActive(true)
-        isInitialActive = false
-    }
 
     useEffect(() => {
         setProgress(card.progress)
@@ -45,6 +39,7 @@ const ProgressInput = ({
         if (currInput === progress || !isInputOk) {
             setProgress(currInput)
             setIsInputOk(true)
+            setIsInputActive(false)
             return
         }
 
@@ -58,26 +53,37 @@ const ProgressInput = ({
         const editedFields = { progress, history }
         await editTask(listId, card._id, editedFields)
 
+        setIsInputActive(false)
         socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
 
     }
 
-    const onEscPressed = (event) => {
-        if (event.keyCode === 27) {
+    const onKeyDown = (event) => {
+        if (event.keyCode === ESCAPE_KEY_CODE) {
             setProgress(currInput)
             setIsInputActive(false)
             setIsInputOk(true)
-            if (progress === null) setIsInputVisible(false)
+
+            if (currInput === null) {
+                setIsInputVisible(false)
+            }
+            
+            return
+        }
+
+        if (event.keyCode === ENTER_KEY_CODE) {
+            changeProgress()
         }
     }
 
     const onKeyUp = () => {
         if (!progress || Number(progress) < 0 || Number(progress) > 100) {
             setIsInputOk(false)
-        } else {
-            setIsInputOk(true)
+            return
         }
+
+        setIsInputOk(true)
     }
 
     const onClick = () => {
@@ -87,27 +93,19 @@ const ProgressInput = ({
     return (
         <div>
             {isInputActive
-                ? <span ref={ref}>
-                    <input
-                        // ref={function (input) {
-                        //     if (input != null) {
-                        //         input.focus();
-                        //     }
-                        // }}
-                        autoFocus
-                        // id='progress'
-                        type='number'
-                        min='0'
-                        max='100'
-                        className={inputClassName}
-                        value={progress}
-                        onKeyDown={onEscPressed}
-                        onKeyUp={onKeyUp}
-                        onChange={e => setProgress(e.target.value)}
-                        onBlur={changeProgress}
-                        onFocus={() => setCurrInput(progress)}
-                    />
-                </span>
+                ? <input
+                    autoFocus
+                    type='number'
+                    min='0'
+                    max='100'
+                    className={`${inputClassName} ${!isInputOk && styles['bad-input']}`}
+                    value={progress}
+                    onKeyDown={onKeyDown}
+                    onKeyUp={onKeyUp}
+                    onChange={e => setProgress(e.target.value)}
+                    onBlur={changeProgress}
+                    onFocus={() => setCurrInput(progress)}
+                />
                 : <div className={placeholderClassName} onClick={onClick}>{card.progress}%</div>}
         </div>
     )

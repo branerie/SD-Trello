@@ -18,18 +18,26 @@ const AttachmentsLink = ({
     const onClick = () => {
         setIsVisible(true)
 
-        if (setIsDragCardDisabled) setIsDragCardDisabled(true)
+        if (setIsDragCardDisabled) {
+            setIsDragCardDisabled(true)
+        }
 
-        if (setIsDragListDisabled) setIsDragListDisabled(true)
+        if (setIsDragListDisabled) {
+            setIsDragListDisabled(true)
+        }
 
     }
 
     const hideForm = () => {
         setIsVisible(false)
 
-        if (setIsDragCardDisabled) setIsDragCardDisabled(false)
+        if (setIsDragCardDisabled) {
+            setIsDragCardDisabled(false)
+        }
 
-        if (setIsDragListDisabled) setIsDragListDisabled(false)
+        if (setIsDragListDisabled) {
+            setIsDragListDisabled(false)
+        }
     }
 
     return (
