@@ -44,7 +44,7 @@ const ShowAllTaskMembers = ({ members, deleteMemberOption, deleteMemberObj }) =>
     }
 
     return (
-        <div>
+        <>
             {isConfirmOpen &&
                 <ConfirmDialog
                     title={'delete this member'}
@@ -73,7 +73,7 @@ const ShowAllTaskMembers = ({ members, deleteMemberOption, deleteMemberObj }) =>
                     )
                 })}
             </div>
-        </div>
+        </>
     )
 }
 

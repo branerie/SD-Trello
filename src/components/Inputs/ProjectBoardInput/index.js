@@ -1,8 +1,6 @@
 import React from 'react'
 import styles from './index.module.css'
-
-const ESCAPE_KEY_CODE = 27
-const ENTER_KEY_CODE = 13
+import { ESCAPE_KEY_CODE, ENTER_KEY_CODE } from '../../../utils/constats'
 
 const ProjectBoardInput = ({ value, setValue, onEnter, onEscape, className }) => {
 

@@ -1,7 +1,5 @@
 import React, { useEffect, useRef, useState } from 'react'
-
-const ESCAPE_KEY_CODE = 27
-const ENTER_KEY_CODE = 13
+import { ESCAPE_KEY_CODE, ENTER_KEY_CODE } from '../../../utils/constats'
 
 const ResponsiveTextArea = ({
     value,

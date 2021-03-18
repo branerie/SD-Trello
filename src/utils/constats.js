@@ -1,0 +1,7 @@
+const ESCAPE_KEY_CODE = 27
+const ENTER_KEY_CODE = 13
+
+export {
+    ESCAPE_KEY_CODE,
+    ENTER_KEY_CODE
+}

@@ -1,8 +1,6 @@
 import React, { useRef, useState } from 'react'
 import commonStyles from '../index.module.css'
-
-const ENTER_KEY_CODE = 13
-const ESCAPE_KEY_CODE = 27
+import { ESCAPE_KEY_CODE, ENTER_KEY_CODE } from '../../../utils/constats'
 
 export default function AddProjectElement({ 
     handleSubmit, 

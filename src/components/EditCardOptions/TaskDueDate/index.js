@@ -43,10 +43,10 @@ const TaskDueDate = ({ dueDate, card, listId, project, teamId }) => {
         }
     }, [dueDate, taskDueDate])
 
-    const updateProjectSocket = useCallback(() => {
+    const updateProjectSocket = () => {
         socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
-    }, [socket, project, teamId])
+    }
 
     const editCardDueDate = async (date) => {
         if (taskDueDate === '' && date === '') {
