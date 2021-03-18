@@ -8,26 +8,22 @@ import useListsServices from '../../services/useListsServices'
 import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 const AddProjectBoardList = () => {
-    /* REVIEW: Бих детруктурирал и да взема директно { project }, ама в случая на този компонент не е голяма разликата */
-    const projectContext = useContext(ProjectContext)
+    const { project } = useContext(ProjectContext)
     const socket = useSocket()
     const [listName, setListName] = useState('')
     const [isAddListActive, setIsAddListActive, listRef] = useDetectOutsideClick()
     const { createList } = useListsServices()
-    /* REVIEW: Да отбележа само, подобно на AddProjectBoardTask, че в повечето случаи би било идейно да се направи addList
-    на useCallback, понеже се подава на компоненти по-надолу, обаче в случая няма смисъл, щото той ползва всичките 
-    dependency-та на компонента, които биха го накарали да се презареди
-    */
+
     const addList = async () => {
         if (listName === '') {
             setIsAddListActive(false)
             return
         }
 
-        await createList(projectContext.project._id, listName)
+        await createList(project._id, listName)
         setIsAddListActive(false)
         setListName('')
-        socket.emit('project-update', projectContext.project)
+        socket.emit('project-update', project)
     }
 
     return (
