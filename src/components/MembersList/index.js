@@ -21,16 +21,19 @@ const MembersList = ({ members, maxLength, deleteMemberOption, deleteMemberObj }
                     members={members}
                     deleteMemberOption={deleteMemberOption}
                     deleteMemberObj={deleteMemberObj}
-                    setCurrCard
+                    setCurrCard // REVIEW: Това не разбирам какво е. Може би е останало след някоя промяна?
                 />
             }
+            {/* REVIEW: Тук ако members.length не е > maxLength, то members.length === maxLength (няма как да е по-малко).
+                И при двата варианта members.slice(0, maxLength - 1).map(...) би трябвало да върне правилният резултат. 
+                Съответно, проверката members.length > maxLength може да се премести надолу и да влияе само на това дали
+                span-a с Avatar color={'grey'}... се изкарва
+            */}
             {(members.length > maxLength) ?
                 <>
                     {members.slice(0, maxLength - 1).map(member => {
                         return (
-                            <span 
-                            className={styles.avatar} 
-                            key={member._id}>
+                            <span className={styles.avatar} key={member._id}>
                                 <AvatarUser user={member}
                                     size={30}
                                     className={styles.avatar}

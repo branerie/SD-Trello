@@ -1,5 +1,5 @@
 import React, { useState, useMemo, useEffect } from 'react'
-import 'react-datepicker/dist/react-datepicker.css'
+import 'react-datepicker/dist/react-datepicker.css' // REVIEW: този import прави ли нещо?
 import { useSocket } from '../../contexts/SocketProvider'
 import styles from './index.module.css'
 import TaskMembers from '../EditCardOptions/TaskMembers'
@@ -34,7 +34,7 @@ const EditCard = ({ listId, card, project, teamId, hideForm }) => {
     }
 
     return (
-        <>
+        <> {/* REVIEW: Няма нужда от празния таг и всичко може да мине един таб назад */}
             <div className={styles.container}>
 
                 <div className={styles['task-name']}>
