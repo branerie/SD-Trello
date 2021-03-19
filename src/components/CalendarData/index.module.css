@@ -1,80 +1,3 @@
-.columns {
-	width: 100%;
-}
-
-.task {
-	background-color: blue;
-}
-
-.buttoDiv {
-	margin: 3%;
-	display: flex;
-	justify-content: space-between;
-}
-
-.listName {
-	background-color: rgb(201, 39, 39);
-	color: white;
-}
-
-.container {
-	height: 2em;
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.nameContainer {
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.input {
-	border: 1px solid #000000;
-	background-color: #FFFFFF;
-	border-radius: 10px;
-	margin: 10px;
-	padding: 6px;
-	font-weight: normal;
-	flex-grow: 1;
-}
-
-.inputList {
-	border: 1px solid #000000;
-	background-color: #FFFFFF;
-	border-radius: 10px;
-	margin: 5px;
-	padding: 6px;
-	font-weight: normal;
-	flex-grow: 1;
-}
-
-.addlist {
-	font-size: 1rem;
-	margin: 10px;
-	border-radius: 5px;
-	color: white;
-}
-
-.addlist:hover {
-	background-color: lemonchiffon;
-}
-
-.dueDateField {
-	display: flex;
-	justify-content: space-between;
-	cursor: pointer;
-}
-
-.dueDateFieldInput {
-	display: flex;
-	justify-content: space-between;
-	cursor: pointer;
-}
-
 .input-name {
 	border: 1px solid #000000;
 	background-color: #EDF5F9;
@@ -112,88 +35,7 @@
 	font-size: 0.8rem;
 }
 
-.clean {
-	font-size: 100%;
-	font-family: inherit;
-	border: 0;
-	background-color: inherit;
-	font-weight: inherit;
-	outline: none;
-}
-
-.taskProgress {
-	display: flex;
-	align-items: flex-start;
-	justify-content: center;
-
-	cursor: pointer;
-	width: 100%;
-	height: 100%;
-	font-family: inherit;
-	border: none;
-	border-radius: 5px;
-	background-color: inherit;
-	font-weight: inherit;
-	outline: none;
-}
-
-.taskProgressButton {
-	cursor: pointer;
-	width: 100%;
-	height: 100%;
-	font-size: 1rem;
-	padding: 2px;
-	font-family: inherit;
-	border: none;
-	border-radius: 5px;
-	background-color: inherit;
-	font-weight: inherit;
-	outline: none;
-}
-
-.taskProgressButtonInput {
-	cursor: pointer;
-	width: 100%;
-	min-height: 2rem;
-	font-size: 1rem;
-	padding: 5px;
-	font-family: inherit;
-	border: solid black 1px;
-	border-radius: 5px;
-	background-color: inherit;
-	font-weight: inherit;
-	outline: none;
-}
-
-.tableText {
-	cursor: pointer;
-	margin: 2%;
-}
-
-.select {
-	height: 100%;
-	padding: 2%;
-	margin: 4%;
-}
-
-.pen {
-	cursor: pointer;
-}
-
-.membersDiv {
-	margin: 3%;
-	display: flex;
-}
-
-.membersContainer {
-	height: auto;
-	width: 100%;
-	display: flex;
-	align-items: center;
-	justify-content: space-between;
-}
-
-.daylyProgress {
+.dayly-progress {
 	width: 100%;
 	min-height: 2rem;
 	display: flex;
@@ -204,29 +46,9 @@
 	font-weight: bold;
 }
 
-.cursorPointer {
-	cursor: pointer;
-}
-
 .filter {
 	min-height: 2.6em;
 	max-height: 2.6em;
-}
-
-.filters-container {
-	display: flex;
-}
-
-.list {
-	display: flex;
-	align-items: center;
-}
-
-.attachments-container {
-	float: right;
-	height: 1.5rem;
-	display: flex;
-	align-items: flex-end;
 }
 
 .nav-buttons {

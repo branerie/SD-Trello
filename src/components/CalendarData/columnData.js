@@ -21,7 +21,6 @@ const assembleColumnData = (startDate) => {
             color: messageColor,
             width: '100%',
             padding: '5px', 
-            // fontSize: '14px',
             border: '1px solid #363338',
             borderRadius: '5px',
             display: 'flex',
@@ -30,7 +29,7 @@ const assembleColumnData = (startDate) => {
         }
 
         return (
-            <div className={styles.daylyProgress}>
+            <div className={styles['dayly-progress']}>
                 <div style={progressStyle}>
                     {message}
                 </div>

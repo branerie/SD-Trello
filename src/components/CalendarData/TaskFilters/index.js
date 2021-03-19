@@ -1,5 +1,5 @@
 import React from 'react'
-import commonStyles from '../index.module.css'
+import styles from './index.module.css'
 import MembersFilter from '../FilterMembers'
 import DueDateFilter from '../FilterDueDate'
 import ProgressFilters from '../FilterProgress'
@@ -12,7 +12,7 @@ const TaskFilters = ({ filter, setFilter }) => {
     }
 
     return (
-        <div className={commonStyles['filters-container']}>
+        <div className={styles['filters-container']}>
             <ProgressFilters 
                 filters={filter.progress} 
                 toggleFilter={toggleProgressFilter} 

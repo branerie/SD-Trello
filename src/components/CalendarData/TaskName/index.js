@@ -2,6 +2,7 @@ import React, { useCallback, useState } from 'react'
 import { useParams } from 'react-router-dom'
 import { useSocket } from '../../../contexts/SocketProvider'
 import commonStyles from '../index.module.css'
+import styles from './index.module.css'
 import AttachmentsLink from '../../AttachmentsLink'
 import ResponsiveTextArea from '../../Inputs/ResponsiveTextarea'
 import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
@@ -31,7 +32,7 @@ const TaskName = ({ card, listId, project }) => {
 	return (
 		<div>
 			{ isActive ?
-				< div ref={inputRef} className={commonStyles.nameContainer}>
+				< div ref={inputRef} className={styles['name-container']}>
 					<ResponsiveTextArea
 						value={cardName}
 						setValue={setCardName}
@@ -44,7 +45,7 @@ const TaskName = ({ card, listId, project }) => {
 				</div>
 				:
 				<div> 
-					<span className={commonStyles['attachments-container']}>
+					<span className={styles['attachments-container']}>
 						{(card.attachments && card.attachments.length > 0 && !isActive) &&
 							<AttachmentsLink
 								card={card}
@@ -53,7 +54,7 @@ const TaskName = ({ card, listId, project }) => {
 							/>
 						}
 					</span>
-					<div className={commonStyles.tableText} onClick={() => setIsActive(!isActive)}>
+					<div className={styles.text} onClick={() => setIsActive(!isActive)}>
 						{cardName}
 					</div>
 				</div>
