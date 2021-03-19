@@ -65,10 +65,7 @@ const ShowAllTaskMembers = ({ members, deleteMemberOption, deleteMemberObj }) =>
                                 </span>
                                 <span className={styles.username}>{m.username}</span>
                             </div>
-                            { deleteMemberOption ?
-                                <span className={styles['delete-icon']}>x</span>
-                                : null
-                            }
+                            { deleteMemberOption && <span className={styles['delete-icon']}>x</span>}
                         </div>
                     )
                 })}

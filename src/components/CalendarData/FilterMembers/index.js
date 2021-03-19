@@ -1,12 +1,12 @@
 import React, { useContext, useMemo } from 'react'
+import ProjectContext from '../../../contexts/ProjectContext'
 import styles from './index.module.css'
 import commonStyles from '../index.module.css'
-import ProjectContext from '../../../contexts/ProjectContext'
-import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
 import ButtonClean from '../../ButtonClean'
 import FilterWrapper from '../../FilterWrapper'
+import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
 
-export default function MembersFilter({ membersFilter, setMembersFilter, handleFilterClear }) {
+const MembersFilter = ({ membersFilter, setMembersFilter, handleFilterClear }) => {
     const [isActive, setIsActive, dropdownRef] = useDetectOutsideClick()
     const { project } = useContext(ProjectContext)
 
@@ -56,13 +56,6 @@ export default function MembersFilter({ membersFilter, setMembersFilter, handleF
                 </div>
                 {isActive &&
                     <div className={styles.options} ref={dropdownRef}>
-                        {/* <div
-                            key='clear options'
-                            className={`${styles.option} ${styles['option-blank']}`}
-                            onClick={handleOptionClear}
-                        >
-                            Leave blank
-                        </div> */}
                         {options.map(option => {
                             return (
                                 <div
@@ -80,3 +73,5 @@ export default function MembersFilter({ membersFilter, setMembersFilter, handleF
         </FilterWrapper>
     )
 }
+
+export default MembersFilter

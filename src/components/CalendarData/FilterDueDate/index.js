@@ -1,11 +1,11 @@
 import React from 'react'
+import DatePicker from 'react-datepicker'
 import styles from './index.module.css'
 import commonStyles from '../index.module.css'
-import DatePicker from 'react-datepicker'
-import { formatDate } from '../../../utils/date'
 import FilterWrapper from '../../FilterWrapper'
+import { formatDate } from '../../../utils/date'
 
-export default function DueDateFilter({ dueBefore, onChange, handleFilterClear }) {
+const DueDateFilter = ({ dueBefore, onChange, handleFilterClear }) => {
     return (
         <FilterWrapper
             legendContent='Tasks due before:'
@@ -35,4 +35,6 @@ export default function DueDateFilter({ dueBefore, onChange, handleFilterClear }
             }
         </FilterWrapper>
     )
-        }
+}
+
+export default DueDateFilter

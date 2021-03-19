@@ -1,30 +1,31 @@
 import React, { useCallback, useEffect, useState, useContext } from 'react'
-import styles from './index.module.css'
 import ReactTable from 'react-table'
+import { useParams } from 'react-router-dom'
 import 'react-table/react-table.css'
 import 'react-datepicker/dist/react-datepicker.css'
-import { useParams } from 'react-router-dom'
+import ProjectContext from '../../contexts/ProjectContext'
+import UserContext from '../../contexts/UserContext'
+import styles from './index.module.css'
 import TaskName from '../CalendarData/TaskName'
-import TaskProgress from '../CalendarData/TaskProgress'
 import TaskDueDate from '../CalendarData/TaskDueDate'
 import AddTask from '../CalendarData/AddTask'
 import AddList from '../CalendarData/AddList'
-import ProjectContext from '../../contexts/ProjectContext'
 import assembleColumnData from '../CalendarData/columnData'
 import Transparent from '../Transparent'
 import EditList from '../EditList'
-import UserContext from '../../contexts/UserContext'
 import TaskFilters from '../CalendarData/TaskFilters'
 import MembersList from '../MembersList'
 import TableDateNavigation from '../CalendarData/TableDateNavigation'
 import ButtonClean from '../ButtonClean'
+import ProgressInput from '../Inputs/ProgressInput'
 import { formatDate, getDateWithOffset, getMonday } from '../../utils/date'
 import { createTableEntry, parseCardHistory, applyCardFilters, getCardsSortMethod } from './utils'
+import checkIsUserAdmin from '../../utils/checkIsUserAdmin'
 
-const TableDndApp = ({ project }) => {
-    const projectContext = useContext(ProjectContext)
-    const userContext = useContext(UserContext)
-    const params = useParams()
+const CalendarTable = () => {
+    const { project, setLists, hiddenLists } = useContext(ProjectContext)
+    const { user } = useContext(UserContext)
+    const { teamid: teamId } = useParams()
     const [startDate, setStartDate] = useState(getMonday())
     const [tableData, setTableData] = useState([])
     const [currList, setCurrList] = useState('')
@@ -38,61 +39,59 @@ const TableDndApp = ({ project }) => {
     })
 
     const onListClick = useCallback((list) => {
-        const member = projectContext.project.membersRoles.find(m => 
-                            m.memberId._id === userContext.user.id)                    
+        const isUserAdmin = checkIsUserAdmin(user.id, project.membersRoles)
 
-        if (member && member.admin) {
+        if (isUserAdmin) {
             setCurrList(list)
         }
-
-        projectContext.setLists(projectContext.project.lists)
-    }, [projectContext, userContext.user.id])
+    }, [project, user.id])
 
     const updateTableData = useCallback(() => {
         const data = []
         const lists = project.lists
-        projectContext.setLists(lists)
+        setLists(lists)
         const cardsSortMethod = getCardsSortMethod(sortCriteria.columnName, sortCriteria.isDescending)
 
         lists.forEach((list, histIndex) => {
-            if (projectContext.hiddenLists.includes(list._id)) {
+            if (hiddenLists.includes(list._id)) {
                 return
             }
 
             data.push(createTableEntry({
                 task: (
-                    <div 
-                        key={histIndex} 
-                        className={styles.listNameContainer} 
+                    <div
+                        key={histIndex}
+                        className={styles['list-name-container']}
                         style={{ background: list.color || '#A6A48E' }}
                         onClick={() => onListClick(list)}
                     >
-                        <span className={styles.listNameText} >
+                        <span className={styles['list-name-text']} >
                             {list.name}
                         </span>
                     </div>
                 ),
                 dueDate: (
-                    <div onClick={() => setNewEntries({ newTask: list._id })} className={styles.addTask}>
-                        {/* <AddTask listId={list._id} project={project} /> */}
+                    <div
+                        className={styles['add-task']}
+                        onClick={() => setNewEntries({ newTask: list._id })}
+                    >
                         + Add Task
                     </div>
                 )
             }))
 
             let listCards = list.cards.filter(card => applyCardFilters(card, filter))
+
             if (sortCriteria.columnName) {
                 listCards = listCards.sort(cardsSortMethod)
             }
 
             listCards.forEach(card => {
                 const cardDueDate = card.dueDate ? new Date(card.dueDate) : ''
-                // const historyArr2 = parseCardHistory(card.history)
                 const historyByDate = parseCardHistory(card.history)
 
                 const cellData = {
                     date: cardDueDate,
-                    // history: historyArr2,
                     history: historyByDate,
                     progress: card.progress
                 }
@@ -103,17 +102,21 @@ const TableDndApp = ({ project }) => {
                     task:
                         (
                             <TaskName
-                                // value={card.name + '/' + card._id + '/' + list._id}
-                                card={card} listId={list._id}
-                                project={project} />
+                                card={card}
+                                listId={list._id}
+                                project={project}
+                            />
                         ),
                     progress:
                         (
-                            <TaskProgress
-                                value={card.progress + '/' + card._id + '/' + list._id}
+                            <ProgressInput
+                                card={card}
                                 listId={list._id}
                                 project={project}
-                                card={card}
+                                teamId={teamId}
+                                inputClassName={styles['progress-input']}
+                                placeholderClassName={styles['progress-placeholder']}
+                                isBackgroundStyled={true}
                             />
                         ),
                     assigned:
@@ -132,13 +135,12 @@ const TableDndApp = ({ project }) => {
                     sunday: weekdayData,
                     dueDate: (
                         <TaskDueDate
-                            value={cardDueDate ? formatDate(cardDueDate, '%d-%m-%Y') : ''}
-                            cardDueDate={cardDueDate}
-                            cardId={card._id}
+                            formatedDueDate={cardDueDate ? formatDate(cardDueDate, '%d-%m-%Y') : ''}
+                            dueDate={cardDueDate}
                             listId={list._id}
                             project={project}
                             card={card}
-                            teamId={params.teamid}
+                            teamId={teamId}
                         />
                     )
                 }))
@@ -174,11 +176,11 @@ const TableDndApp = ({ project }) => {
         and make each list a subtable. Then the sort should act per-subcomponent 
         */
         setTableData(sortCriteria.isDescending ? data.reverse() : data)
-    }, [filter, onListClick, params.teamid, projectContext, project, newEntries, sortCriteria.columnName, sortCriteria.isDescending])
+    }, [filter, onListClick, teamId, hiddenLists, setLists, project, newEntries, sortCriteria.columnName, sortCriteria.isDescending])
 
     useEffect(() => {
         updateTableData()
-    }, [filter, project, projectContext.hiddenLists, sortCriteria, updateTableData])
+    }, [filter, project, hiddenLists, sortCriteria, updateTableData])
 
     const changeStartDate = (dayDiff) => {
         const newStartDate = getDateWithOffset(startDate, dayDiff)
@@ -186,63 +188,50 @@ const TableDndApp = ({ project }) => {
     }
 
     return (
-        <div className={styles.pageContainer}>
+        <div className={styles['page-container']}>
             { currList &&
-                    < div >
-                        <Transparent hideForm={() => setCurrList('')} >
-                            <EditList 
-                                hideForm={() => setCurrList('')} 
-                                list={currList}
-                                 project={project} 
-                            />
-                        </Transparent >
-                    </div >
+                < div >
+                    <Transparent hideForm={() => setCurrList('')} >
+                        <EditList
+                            hideForm={() => setCurrList('')}
+                            list={currList}
+                            project={project}
+                        />
+                    </Transparent >
+                </div >
             }
-            <div className={styles.buttoDiv}>
+            <div className={styles['button-div']}>
                 <TaskFilters filter={filter} setFilter={setFilter} />
-                <TableDateNavigation 
+                <TableDateNavigation
                     startDate={startDate}
                     setStartDate={setStartDate}
                     changeStartDate={changeStartDate}
                 />
-                {/* <AddList project={project} /> */}
-                <ButtonClean   
-                    className={styles.addListButton} 
-                    onClick={() => setNewEntries({ newList: true })} 
+                <ButtonClean
+                    className={styles['add-list-button']}
+                    onClick={() => setNewEntries({ newList: true })}
                     title='+ Add List'
                 />
             </div>
             <div>
-                {/* <DragDropContext onDragEnd={handleDragEnd} > */}
                 <ReactTable
-                    // TrComponent={DragTrComponent}
-                    // TbodyComponent={DropTbodyComponent}
-                    // getTrProps={getTrProps}
                     data={tableData}
-                    columns={
-                        assembleColumnData(startDate)
-                    }
+                    columns={assembleColumnData(startDate)}
                     defaultPageSize={10}
                     pageSize={tableData.length}
                     showPagination={false}
-                    background={
-                        'white'
-                    }
-                    className={`${styles.reactTable} -highlight`}
-                    getTbodyProps={() => ({ className: styles.reactTableBody })}
-                    getTrGroupProps={() => ({ className: styles.reactTableTrGroup })}
+                    background={'white'}
+                    className={`${styles['react-table']} -highlight`}
+                    getTbodyProps={() => ({ className: styles['react-table-body'] })}
+                    getTrGroupProps={() => ({ className: styles['react-table-tr-group'] })}
                     onSortedChange={(sortInfo) => {
                         const { id: columnName, desc: isDescending } = sortInfo[0]
                         setSortCriteria({ columnName, isDescending })
                     }}
                 />
-
-                {/* </DragDropContext> */}
             </div>
         </div>
     )
 }
 
-export default TableDndApp
-
-
+export default CalendarTable

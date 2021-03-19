@@ -3,6 +3,7 @@ import { useSocket } from '../../../contexts/SocketProvider'
 import styles from './index.module.css'
 import useCardsServices from '../../../services/useCardsServices'
 import { ESCAPE_KEY_CODE, ENTER_KEY_CODE } from '../../../utils/constats'
+import getProgressBackgroundColor from '../../../utils/getProgressBackgroundColor'
 
 const ProgressInput = ({
     card,
@@ -10,7 +11,8 @@ const ProgressInput = ({
     project,
     teamId,
     inputClassName,
-    placeholderClassName
+    placeholderClassName,
+    isBackgroundStyled
 }) => {
     const socket = useSocket()
     const [progress, setProgress] = useState(null)
@@ -93,7 +95,11 @@ const ProgressInput = ({
                     onFocus={() => setCurrInput(progress)}
                 />
                 : card.progress
-                        ? <div className={placeholderClassName} onClick={() => setIsInputActive(true)} >{card.progress}%</div>
+                        ? <div
+                            className={placeholderClassName}
+                            onClick={() => setIsInputActive(true)}
+                            style={isBackgroundStyled && {backgroundColor: getProgressBackgroundColor(progress)}}
+                        >{card.progress}%</div>
                         : <div className={placeholderClassName} onClick={() => setIsInputActive(true)} >+Add</div>
             }
         </>

@@ -66,6 +66,7 @@
     border: 1px solid #363338;
     border-radius: 5px;
     text-align: center;
+    padding: 3px;
 }
 
 .progress-div {

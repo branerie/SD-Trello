@@ -77,6 +77,7 @@ const parseCardHistory = (taskHistory) => {
     
     const lastHistoryEvent = taskHistory[taskHistory.length - 1]
     historyByDate.lastEventDate = lastHistoryEvent && lastHistoryEvent.date
+    
     if (lastHistoryEvent && lastHistoryEvent.event === 'Progress 100%') {
         historyByDate.finishedDate = lastHistoryEvent.date
     }

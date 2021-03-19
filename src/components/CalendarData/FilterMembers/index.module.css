@@ -13,8 +13,35 @@ fieldset {
     position: relative;
 }
 
-.filter:hover {
-    background-color: #fff;
+.btn-container {
+    display: flex;
+}
+
+.btn-clicked {
+    background-color: #363338;
+    color: white;
+}
+
+.btn-partial {
+    width: 9rem;
+    min-height: 2.6rem;
+    max-height: 2.6rem;
+    border-top-right-radius: 0;
+    border-bottom-right-radius: 0;
+    margin-right: 0;
+    border-right: 0;
+    font-size: 0.8rem;
+    overflow: hidden;
+    white-space: nowrap;
+    text-overflow: ellipsis;
+}
+
+.btn-partial:hover {
+    border: 0;
+}
+
+.btn-whole {
+    width: 10.5rem;
 }
 
 .options {
@@ -27,7 +54,6 @@ fieldset {
     border-radius: 10px;
     z-index: 3;
     overflow-y: auto;
-    /* left: 0.5rem; */
     top: 3.5rem;
 }
 
@@ -59,53 +85,6 @@ fieldset {
 
 .option:hover {
     background-color: #C1CBCF;
-}
-
-.option-blank {
-    font-weight: bolder;
-}
-
-.btn-clicked {
-    background-color: #363338;
-    color: white;
-}
-
-.btn-partial {
-    width: 9rem;
-    min-height: 2.6rem;
-    max-height: 2.6rem;
-    border-top-right-radius: 0;
-    border-bottom-right-radius: 0;
-    margin-right: 0;
-    border-right: 0;
-    font-size: 0.8rem;
-    overflow: hidden;
-    white-space: nowrap;
-    text-overflow: ellipsis;
-}
-
-.btn-partial:hover {
-    border: 0;
-}
-
-.btn-whole {
-    width: 10.5rem;
-}
-
-.btn-clear {
-    background-color: #3633384f;
-    border-top-left-radius: 0;
-    border-bottom-left-radius: 0;
-    margin-left: 0;
-    width: 1.5rem;
-    font-family: cursive;
-    display: flex;
-    justify-content: center;
-    align-items: center;
-}
-
-.btn-container {
-    display: flex;
 }
 
 @media (max-width: 1366px) {
