@@ -12,7 +12,7 @@ import useTeamServices from '../../services/useTeamServices'
 export default function CreateProject({ hideForm }) {
     const history = useHistory()
     const socket = useSocket()
-    const { teamId } = useParams()
+    const { teamid: teamId } = useParams()
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [member, setMember] = useState('')
