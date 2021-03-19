@@ -31,8 +31,12 @@ const Card = ({ card, listId, project, setIsDragCardDisabled, setIsDragListDisab
                 <div>
                     {((card.progress && card.progress !== 0) || card.members.length > 0 || card.attachments.length > 0) &&
                         <div className={styles.container}>
-                            {/* REVIEW: Не се чете много това тернари. Може да се раздроби на няколко реда */}
-                            {card.progress ? <div className={styles.progress}><ProgressBar progress={card.progress} /></div> : <div></div>}
+                            { card.progress
+                                ? <div className={styles.progress}>
+                                    <ProgressBar progress={card.progress} />
+                                </div>
+                                : <div></div>
+                            }
                             <div className={styles.container}>
                                 {card.attachments.length > 0 &&
                                     <AttachmentsLink
