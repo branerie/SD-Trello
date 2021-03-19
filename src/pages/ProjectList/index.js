@@ -1,25 +1,24 @@
 import React, { useCallback, useEffect, useContext } from 'react'
 import { useParams } from 'react-router-dom'
-import PageLayout from '../../components/PageLayout'
-import { useSocket } from '../../contexts/SocketProvider'
-import styles from './index.module.css'
-import TableDndApp from '../../components/CalendarTable'
 import Loader from 'react-loader-spinner'
+import { useSocket } from '../../contexts/SocketProvider'
 import ProjectContext from '../../contexts/ProjectContext'
+import styles from './index.module.css'
+import PageLayout from '../../components/PageLayout'
+import CalendarTable from '../../components/CalendarTable'
 
 
-export default function ProjectList() {
-    const params = useParams()
-
+const ProjectList = () => {
     const socket = useSocket()
-    const projectContext = useContext(ProjectContext)
+    const { projectid: projectId } = useParams()
+    const { project, setProject } = useContext(ProjectContext)
 
     const projectUpdate = useCallback((project) => {
-        projectContext.setProject(project)
-    }, [projectContext])
+        setProject(project)
+    }, [setProject])
 
     useEffect(() => {
-        const id = params.projectid
+        const id = projectId
 
         if (socket == null) return
 
@@ -27,32 +26,26 @@ export default function ProjectList() {
 
         socket.emit('project-join', id)
         return () => socket.off('project-updated')
-    }, [socket, projectUpdate, params.projectid])
+    }, [socket, projectUpdate, projectId])
 
-    if (!projectContext.project || projectContext.project._id !== params.projectid) {
-        return (
-            <PageLayout>
-                <Loader
+    return (
+        <PageLayout contentClassName={styles['layout-container']}>
+            { !project || project._id !== projectId
+                ? <Loader
                     type='TailSpin'
                     color='#363338'
                     height={100}
                     width={100}
                     timeout={3000} //3 secs
                 />
-            </PageLayout>
-        )
-    }
-
-    return (
-        <PageLayout contentClassName={styles['layout-container']}>
-            <div className={styles.calendarPageContainer}>
-                <div>
+                : <div className={styles.calendarPageContainer}>
                     <div className={styles['calendar-container']}>
-                        <TableDndApp project={projectContext.project} />
-                        {/* <TableDndApp2 filter={filter} /> */}
+                        <CalendarTable/>
                     </div>
                 </div>
-            </div>
+            }
         </PageLayout>
     )
 }
+
+export default ProjectList
