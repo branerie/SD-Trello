@@ -11,6 +11,7 @@ const ConfirmDialog = ({ title, hideConfirm, onConfirm, onDecline }) => {
 
     const decline = () => {
         hideConfirm()
+        
         if (onDecline) onDecline()
     }
 
