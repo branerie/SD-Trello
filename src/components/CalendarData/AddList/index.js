@@ -1,9 +1,9 @@
 import React, { useCallback, useState } from 'react'
 import { useSocket } from '../../../contexts/SocketProvider'
-import useListsServices from '../../../services/useListsServices'
 import AddProjectElement from '../AddProjectElement'
+import useListsServices from '../../../services/useListsServices'
 
-export default function AddList({ project, handleInputRemove }) {
+const AddList = ({ project, handleInputRemove }) => {
     const [listName, setListName] = useState('')
     const socket = useSocket()
     const { createList } = useListsServices()
@@ -30,3 +30,5 @@ export default function AddList({ project, handleInputRemove }) {
         />
     )
 }
+
+export default AddList

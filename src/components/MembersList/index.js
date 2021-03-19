@@ -1,4 +1,4 @@
-import React from 'react'
+import React, { useMemo } from 'react'
 import Avatar from 'react-avatar'
 import styles from './index.module.css'
 import AvatarUser from '../AvatarUser'
@@ -7,8 +7,7 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 
 const MembersList = ({ members, maxLength, deleteMemberOption, deleteMemberObj }) => {
     const [isActive, setIsActive, ref] = useDetectOutsideClick()
-
-    maxLength = Math.min(maxLength, members.length)
+    const shownMembers = useMemo(() => (members.length > maxLength) ? members.slice(0, maxLength - 1) : members, [members, maxLength])
 
     return (
         <div
@@ -21,50 +20,33 @@ const MembersList = ({ members, maxLength, deleteMemberOption, deleteMemberObj }
                     members={members}
                     deleteMemberOption={deleteMemberOption}
                     deleteMemberObj={deleteMemberObj}
-                    setCurrCard
                 />
             }
-            {(members.length > maxLength) ?
-                <>
-                    {members.slice(0, maxLength - 1).map(member => {
-                        return (
-                            <span 
-                            className={styles.avatar} 
-                            key={member._id}>
-                                <AvatarUser user={member}
-                                    size={30}
-                                    className={styles.avatar}
-                                />
-                            </span>
-                        )
-                    })}
-                    <span className={styles.avatar}>
-                        <Avatar
-                            color={'grey'}
-                            // split number of remaining members (and + sign) with spaces in b/n
-                            // so that they are correctly displayed by the Avatar component
-                            name={['+', ...(`${members.length - maxLength + 1}`.split(''))].join(' ')}
+            {shownMembers.map(member => {
+                return (
+                    <span className={styles.avatar} key={member._id}>
+                        <AvatarUser user={member}
                             size={30}
-                            round={true}
-                            maxInitials={3}
                             className={styles.avatar}
                         />
                     </span>
-                </>
-                :
-                <>
-                    {members.map(element => {
-                        return (
-                            <span className={styles.avatar} key={element._id}>
-                                <AvatarUser
-                                user={element}
-                                    size={30}                                  
-                                />
-                            </span>
-                        )
-                    })}
-                </>
+                )
+            })}
+            {(members.length > maxLength) &&
+                <span className={styles.avatar}>
+                    <Avatar
+                        color={'grey'}
+                        // split number of remaining members (and + sign) with spaces in b/n
+                        // so that they are correctly displayed by the Avatar component
+                        name={['+', ...(`${members.length - maxLength + 1}`.split(''))].join(' ')}
+                        size={30}
+                        round={true}
+                        maxInitials={3}
+                        className={styles.avatar}
+                    />
+                </span>
             }
+
         </div>
     )
 }

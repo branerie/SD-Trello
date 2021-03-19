@@ -66,23 +66,25 @@
     border: 1px solid #363338;
     border-radius: 5px;
     text-align: center;
-    cursor: pointer;
+    padding: 3px;
 }
 
-.input:hover {
-    background-color: #C1CBCF;
-}
-
-.input:focus {
+.progress-div {
+    font-family: 'Lato';
+    font-size: 1rem;
+    font-weight: normal;
+    height: 25px;
+    width: 55px;
     background-color: #F7F7F2;
-}
-
-.bad-input {
-    background-color: rgb(245, 156, 156);
-}
-
-.no-border {
     border: 1px solid #F7F7F2;
+    border-radius: 5px;
+    text-align: center;
+    cursor: pointer;
+    display: inline-block;
+}
+
+.progress-div:hover {
+    background-color: #C1CBCF;
 }
 
 .edit {

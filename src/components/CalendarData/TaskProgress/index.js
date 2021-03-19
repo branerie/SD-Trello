@@ -1,133 +1,101 @@
-import React, { useCallback, useMemo, useState } from 'react'
-import commonStyles from '../index.module.css'
-import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
-import { useParams } from 'react-router-dom'
-import { useSocket } from '../../../contexts/SocketProvider'
-import useCardsServices from '../../../services/useCardsServices'
+// import React from 'react'
+// import { useParams } from 'react-router-dom'
+// import styles from './index.module.css'
+// import ProgressInput from '../../Inputs/ProgressInput'
 
-export default function TaskProgress(props) {
-    const today = useMemo(() => {
-        const date = new Date()
-        date.setUTCHours(0, 0, 0, 0)
-        return date
-    }, [])
-    const card = props.card
-    const [taskHistory, setTaskHistory] = useState(card.history)
-    const value = props.value
-    let taskprogress = ''
-    let token = value.split('/')
+// const TaskProgress = ({ card, listId, project }) => {
+//     const { teamid: teamId } = useParams()
 
-    if (token.length > 1) {
-        taskprogress = token[0]
-    }
+    // const editCardProgress = useCallback(async (event) => {
+    //     event.preventDefault()
 
-    const [isActive, setIsActive, dropdownRef] = useDetectOutsideClick()
-    const [cardProgress, setCardProgress] = useState(taskprogress)
-    const socket = useSocket()
-    const params = useParams()
-    const teamId = params.teamid
-    const { editTask } = useCardsServices()
+    //     const cardId = card._id
 
-    const editCardProgress = useCallback(async (event) => {
-        event.preventDefault()
+    //     if (!cardProgress || (cardProgress > 100) || (cardProgress < 0)) {
+    //         return
+    //     }
 
-        const cardId = card._id
-        const listId = props.listId
+    //     const cardProgressNum = Number(cardProgress)
+    //     const newCardProgress = Math.max(Math.min(cardProgressNum, 100), 0)
 
-        if (!cardProgress || (cardProgress > 100) || (cardProgress < 0)) {
-            return
-        }
+    //     if (isNaN(cardProgressNum) || newCardProgress === Number(card.progress)) {
+    //         return
+    //     }
 
-        const cardProgressNum = Number(cardProgress)
-        const newCardProgress = Math.max(Math.min(cardProgressNum, 100), 0)
+    //     setCardProgress(newCardProgress)
 
-        if (isNaN(cardProgressNum) || newCardProgress === Number(card.progress)) {
-            return
-        }
+    //     const newTaskHistory = [...taskHistory, { event: `Progress ${cardProgress}%`, date: today }]
+    //     setTaskHistory(newTaskHistory)
 
-        setCardProgress(newCardProgress)
+    //     const editedFields = {
+    //         progress: cardProgress,
+    //         history: newTaskHistory
+    //     }
+    //     await editTask(listId, cardId, editedFields)
 
-        const newTaskHistory = [...taskHistory, { event: `Progress ${cardProgress}%`, date: today }]
-        setTaskHistory(newTaskHistory)
+    //     setIsActive(!isActive)
+    //     socket.emit('project-update', project)
+    //     socket.emit('task-team-update', teamId)
 
-        const editedFields = {
-            progress: cardProgress,
-            history: newTaskHistory
-        }
-        await editTask(listId, cardId, editedFields)
-
-        setIsActive(!isActive)
-        socket.emit('project-update', props.project)
-        socket.emit('task-team-update', teamId)
-
-    }, [editTask, cardProgress, isActive, setIsActive, taskHistory, today, card._id, props.listId, props.project, socket, teamId, card.progress])
+    // }, [editTask, cardProgress, isActive, setIsActive, taskHistory, today, card._id, listId, project, socket, teamId, card.progress])
 
 
-    function showTaskProgress(value) {
+    // function showTaskProgress(value) {
 
-        if (value && value !== 'null') {
-            return (
-                <div style={{
-                    backgroundColor: getBackGroundColor(value),
-                    padding: '5px',
-                    border: 'solid black 1px',
-                    borderRadius: '5px',
-                    minHeight: '2rem',
-                    width: '100%',
-                    textAlign: 'center',
-                    display: 'flex',
-                    alignItems: 'center',
-                    justifyContent: 'center'
-                }} > {value} %</div>
-            )
+    //     if (value && value !== 'null') {
+    //         return (
+    //             <div style={{
+                    // backgroundColor: getBackGroundColor(value),
+                    // padding: '5px',
+                    // border: 'solid black 1px',
+                    // borderRadius: '5px',
+                    // minHeight: '2rem',
+                    // width: '100%',
+                    // textAlign: 'center',
+                    // display: 'flex',
+                    // alignItems: 'center',
+                    // justifyContent: 'center'
+    //             }} > {value} %</div>
+    //         )
 
-        }
-        return (
-            <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
-                + Add
-            </div>
-        )
-    }
+    //     }
+    //     return (
+    //         <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', height: '100%' }}>
+    //             + Add
+    //         </div>
+    //     )
+    // }
 
 
-    function getBackGroundColor(value) {
-        let currColor = ''
-        switch (true) {
-            case (value === 100 || value === '100'):
-                currColor = '#0E8D27'
-                break
-            case (value < 20):
-                currColor = '#EF2D2D'
-                break
-            case (value < 100):
-                currColor = '#5E9DDC'
-                break
-            default:
-                break
-        }
-        return currColor
-    }
+    // function getBackGroundColor(value) {
+    //     let currColor = ''
+    //     switch (true) {
+    //         case (value === 100 || value === '100'):
+    //             currColor = '#0E8D27'
+    //             break
+    //         case (value < 20):
+    //             currColor = '#EF2D2D'
+    //             break
+    //         case (value < 100):
+    //             currColor = '#5E9DDC'
+    //             break
+    //         default:
+    //             break
+    //     }
+    //     return currColor
+    // }
 
-    return (
-        <>
-            { isActive ?
-                <div ref={dropdownRef} className={commonStyles.taskProgress} onBlur={editCardProgress}>
-                    <input
-                        className={commonStyles.taskProgressButtonInput}
-                        style={{ backgroundColor: getBackGroundColor(cardProgress) }}
-                        type={'number'}
-                        value={cardProgress}
-                        onChange={e => setCardProgress(e.target.value)}
-                        min='0' max='100'
-                        autoFocus
-                    />
-                </div >
-                :
-                <div className={commonStyles.taskProgress} onClick={() => setIsActive(!isActive)}>
+//     return (
+//         <ProgressInput
+//             card={card}
+//             listId={listId}
+//             project={project}
+//             teamId={teamId}
+//             inputClassName={styles.input}
+//             placeholderClassName={styles.placeholder}
+//             isBackgroundStyled={true}
+//         />
+//     )
+// }
 
-                    {showTaskProgress(taskprogress)}
-                </div >
-            }
-        </>
-    )
-}
+// export default TaskProgress

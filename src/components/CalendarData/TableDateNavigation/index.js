@@ -6,7 +6,7 @@ import { getMonday } from '../../../utils/date'
 import previous from '../../../images/project-list/previous-day.svg'
 import next from '../../../images/project-list/next-day.svg'
 
-export default function TableDateNavigation({ startDate, changeStartDate, setStartDate }) {
+const TableDateNavigation = ({ startDate, changeStartDate, setStartDate }) => {
     return (
         <div className={styles.container}>
             <DatePicker
@@ -39,3 +39,5 @@ export default function TableDateNavigation({ startDate, changeStartDate, setSta
         </div>
     )
 }
+
+export default TableDateNavigation

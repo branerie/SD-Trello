@@ -3,21 +3,23 @@ import { useSocket } from '../../../contexts/SocketProvider'
 import styles from './index.module.css'
 import useCardsServices from '../../../services/useCardsServices'
 import { ESCAPE_KEY_CODE, ENTER_KEY_CODE } from '../../../utils/constats'
-import getProgressBackgroundColor from '../../../utils/getProgressBackgroundColor'
 
-const ProgressInput = ({
+const EditCardProgressInput = ({
     card,
     listId,
     project,
     teamId,
+    setIsInputVisible,
+    taskHistory,
+    setTaskHistory,
     inputClassName,
     placeholderClassName,
-    isBackgroundStyled
+    isInputActive,
+    setIsInputActive
 }) => {
     const socket = useSocket()
     const [progress, setProgress] = useState(null)
     const [currInput, setCurrInput] = useState(null)
-    const [isInputActive, setIsInputActive] = useState(false)
     const [isInputOk, setIsInputOk] = useState(true)
     const { editTask } = useCardsServices()
     const today = new Date()
@@ -29,6 +31,7 @@ const ProgressInput = ({
 
     const changeProgress = async () => {
         if (progress === null) {
+            setIsInputVisible(false)
             setIsInputActive(false)
             return
         }
@@ -40,11 +43,12 @@ const ProgressInput = ({
             return
         }
 
-        const history = [...card.history]
+        const history = [...taskHistory]
         history.push({
             event: `Progress ${progress}%`,
             date: today
         })
+        setTaskHistory(history)
 
         const editedFields = { progress, history }
         await editTask(listId, card._id, editedFields)
@@ -61,6 +65,10 @@ const ProgressInput = ({
             setIsInputActive(false)
             setIsInputOk(true)
 
+            if (currInput === null) {
+                setIsInputVisible(false)
+            }
+            
             return
         }
 
@@ -79,7 +87,7 @@ const ProgressInput = ({
     }
 
     return (
-        <>
+        <div>
             {isInputActive
                 ? <input
                     autoFocus
@@ -94,16 +102,9 @@ const ProgressInput = ({
                     onBlur={changeProgress}
                     onFocus={() => setCurrInput(progress)}
                 />
-                : card.progress
-                        ? <div
-                            className={placeholderClassName}
-                            onClick={() => setIsInputActive(true)}
-                            style={isBackgroundStyled && {backgroundColor: getProgressBackgroundColor(progress)}}
-                        >{card.progress}%</div>
-                        : <div className={placeholderClassName} onClick={() => setIsInputActive(true)} >+Add</div>
-            }
-        </>
+                : <div className={placeholderClassName} onClick={() => setIsInputActive(true)}>{card.progress}%</div>}
+        </div>
     )
 }
 
-export default ProgressInput
+export default EditCardProgressInput

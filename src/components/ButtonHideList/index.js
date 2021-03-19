@@ -8,7 +8,18 @@ const ButtonHideList = ({ list, type }) => {
 
     const onClick = () => {
         const newHiddenLists = [...hiddenLists]
-        
+        /* REVIEW: Метода .indexOf() връща -1 ако не намери дадения елемент в масива. В момента се изцикля newHiddenLists
+        два пъти - веднъж заради .includes(), намира се дали го има или няма този елемент, и после пак се изцикля масива,
+        за да се намери индекса му. Ако се случи да е най-накрая на масива, се изцикля целия масив два пъти, а може да се
+        мине с един път. Като знаем, че indexOf връща -1 ако не намери елемента, може да се направи такава проверка:
+
+        const listIndex = newHiddenLists.indexOf(list._id)
+        if (listIndex >= 0) {
+            newHiddenLists.splice(listIndex, 1)
+        } else {
+            newHiddenLists.push(list._id)
+        }
+        */
         if (newHiddenLists.includes(list._id)) {
             const index = newHiddenLists.indexOf(list._id)
             newHiddenLists.splice(index, 1)

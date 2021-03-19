@@ -11,10 +11,7 @@ const AddProjectBoardTask = ({ project, listId }) => {
     const [taskName, setTaskName] = useState('')
     const [isAddTaskVisible, setIsAddTaskVisible, cardRef] = useDetectOutsideClick()
     const { createTask } = useCardsServices()
-    /* REVIEW: Нищо не трябва да се променя. Само да отбележа, че в повечето случаи би било добра идея addTask да се направи
-    на useCallback, понеже се подава на други компоненти по-надолу :D Причината тук да няма смисъл е, защото така или иначе 
-    като dependency-та ще трябва да се вкара всичко, което може да презареди компонента. Играят роля props-овете, стейта, 
-    хуковете...всичко. Ако за това не е useCallback - супер :D */
+
     const addTask = async () => {
         if (taskName === '') {
             setIsAddTaskVisible(false)

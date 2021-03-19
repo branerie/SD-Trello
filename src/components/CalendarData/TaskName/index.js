@@ -1,18 +1,17 @@
 import React, { useCallback, useState } from 'react'
-import commonStyles from '../index.module.css'
-import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
 import { useParams } from 'react-router-dom'
 import { useSocket } from '../../../contexts/SocketProvider'
+import commonStyles from '../index.module.css'
 import AttachmentsLink from '../../AttachmentsLink'
 import ResponsiveTextArea from '../../Inputs/ResponsiveTextarea'
+import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
 import useCardsServices from '../../../services/useCardsServices'
 
-export default function TaskName({ card, listId, project }) {
+const TaskName = ({ card, listId, project }) => {
 	const [isActive, setIsActive, inputRef] = useDetectOutsideClick()
 	const [cardName, setCardName] = useState(card.name)
 	const socket = useSocket()
-	const params = useParams()
-	const teamId = params.teamid
+	const { teamid: teamId } = useParams()
 	const { editTask } = useCardsServices()
 
 	const editCardName = useCallback(async () => {
@@ -63,3 +62,4 @@ export default function TaskName({ card, listId, project }) {
 	)
 }
 
+export default TaskName

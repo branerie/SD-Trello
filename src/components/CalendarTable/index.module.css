@@ -1,69 +1,16 @@
-.pageContainer {
-    width: 100%;
-    display: flex;
-    flex-direction: column;
-    height: auto;
-}
-
-.columns {
-    width: 100%;
-}
-
-.task {
-    background-color: blue;
-}
-
-.buttoDiv {
+.button-div {
     display: flex;
     justify-content: space-between;
 }
 
-.addTaskField {
-    background-color: rgb(201, 39, 39);
-    color: white;
-    display: flex;
-    justify-content: flex-end;
-}
-
-.input {
-    border: 1px solid #000000;
-    background-color: #FFFFFF;
-    border-radius: 10px;
-    margin: 10px;
-    padding: 6px;
-    font-weight: normal;
-    flex-grow: 1;
-}
-
-.addlist {
-    font-size: 1rem;
-    margin: 10px;
-    padding: 5px;
-    border-radius: 5px;    
-}
-
-.addlist:hover {
-    background-color: lemonchiffon;
-}
-
-.addTask {
+.add-task {
     cursor: pointer;
     height: 100%;
     display: flex;
     align-items: center;
 }
 
-.daylyProgress {
-    width: 100%;
-    display: flex;
-    justify-content: center;
-}
-
-.header {
-    font-weight: bold;
-}
-
-.listNameContainer {
+.list-name-container {
     display: flex;
     flex-wrap: wrap;
     font-size: 100%;
@@ -78,20 +25,11 @@
     justify-content: space-between;
 }
 
-.listNameColor {
-    position: absolute;
-    left: 0;
-    z-index: -1;
-    text-align: center;
-    margin-top: 0.5em;
-    margin-bottom: 0.5em;
-}
-
-.listNameText {
+.list-name-text {
     margin-bottom: 2%;
 }
 
-.reactTable {
+.react-table {
     background: #DFE9EE;
     border-radius: 10px;
     border: 1px solid #707070;
@@ -103,12 +41,12 @@
 }
 
 @media(min-width: 1600px) {
-    .reactTable {
+    .react-table {
         font-size: 1rem;
     }
 }
 
-.reactTableBody {
+.react-table-body {
     -ms-overflow-style: none;
     /* Hide scrollbar for IE and Edge */
     scrollbar-width: none;
@@ -116,23 +54,42 @@
 }
 
 /* Hide scrollbar for Chrome, Safari and Opera */
-.reactTableBody::-webkit-scrollbar {
+.react-table-body::-webkit-scrollbar {
     display: none;
 }
 
-.reactTableTrGroup {
+.react-table-tr-group {
     flex: unset !important;
 }
 
-.addListButton {
-    font-size: 1rem;
-    /* font-weight: bold; */
-    /* margin: 10px;
+.progress-input {
+	cursor: pointer;
+	width: 100%;
+	min-height: 2rem;
+	font-size: 1rem;
+	padding: 5px;
+	font-family: inherit;
+	border: solid black 1px;
+	border-radius: 5px;
+	background-color: inherit;
+	font-weight: inherit;
+	outline: none;
+}
+
+.progress-placeholder {
+    padding: 5px;
+    border: solid black 1px;
     border-radius: 5px;
-    color: black;
-    cursor: pointer; */
+    min-height: 2rem;
+    width: 100%;
+    text-align: center;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
 
-
+.add-list-button {
+    font-size: 1rem;
     background: #DFE9EE;
     color: black;
     padding: 10px 15px;
@@ -146,15 +103,14 @@
     text-align: center;
   }
 
-
-  .addListButton:hover {
+  .add-list-button:hover {
     background-color: #363338;
     border: 1px solid #707070;
     color: white;
 }
 
 @media (max-width: 1366px) {
-    .addListButton {
+    .add-list-button {
         font-size: 0.8rem
     }
 }
