@@ -15,12 +15,19 @@ const InboxPage = () => {
     const [inbox, setInbox] = useState([])
     const [inboxHistory, setInboxHistory] = useState([])
     const socket = useSocket()
+    /* REVIEW: При положение, че този обект не зависи нито от пропс, нито от стейт или каквото и да било друго свързано 
+    директно с компонента, по-добре да се изкара създаването му извън компонента (отгоре), защото в момента всеки път, 
+    когато се презарежда този компонент, обекта се пресъздава излишно. 
+    */
     const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }
     const { getUserInbox } = useUserServices()
 
-
-    const getInbox = useCallback(async () => {       
+    const getInbox = useCallback(async () => {
         const user = await getUserInbox()
+        /* REVIEW: Гледам, че всеки път в проекта, в който се взимат user.inbox или user.inboxHistory от
+        базата, се прави после .reverse() (предполагам за да излязат последните съобщения най-отгоре).
+        Щом винаги се прави това, по-добре да се направи още на бекенда, като се прави заявката към
+        mongodb. Ако не си сигурен как, може да се чуем да го помислим. */
         setInbox(user.inbox.reverse())
         setInboxHistory(user.inboxHistory.reverse())
     }, [getUserInbox])
@@ -43,146 +50,147 @@ const InboxPage = () => {
 
     return (
         <PageLayout>
-                <Title title='Inbox' />
-                {
-                    inbox.length === 0 && <div className={styles.title}>Inbox is empty</div>
-                }
-                {
-                    inbox.map(m => {
-                        switch (m.subject) {
-                            case 'Team invitation':
-                                return <TeamInvitationInbox
-                                    key={m._id}
-                                    message={m}
-                                    setInbox={setInbox}
-                                    setInboxHistory={setInboxHistory}
-                                    options={options}
-                                />
+            <Title title='Inbox' />
+            {
+                inbox.length === 0 && <div className={styles.title}>Inbox is empty</div>
+            }
+            {
+                inbox.map(m => {
+                    switch (m.subject) {
+                        case 'Team invitation':
+                            return <TeamInvitationInbox
+                                key={m._id}
+                                message={m}
+                                setInbox={setInbox}
+                                setInboxHistory={setInboxHistory}
+                                options={options}
+                            />
 
-                            case 'Team invitation response':
-                                return <TeamInvitationResponse
-                                    key={m._id}
-                                    message={m}
-                                    setInboxHistory={setInboxHistory}
-                                    options={options}
-                                    isInbox={true}
-                                />
+                        case 'Team invitation response':
+                            return <TeamInvitationResponse
+                                key={m._id}
+                                message={m}
+                                setInboxHistory={setInboxHistory}
+                                options={options}
+                                isInbox={true}
+                            />
 
-                            case 'Team invitation canceled':
-                                return <TeamInvitationCanceled
-                                    key={m._id}
-                                    message={m}
-                                    setInboxHistory={setInboxHistory}
-                                    options={options}
-                                    isInbox={true}
-                                />
+                        case 'Team invitation canceled':
+                            return <TeamInvitationCanceled
+                                key={m._id}
+                                message={m}
+                                setInboxHistory={setInboxHistory}
+                                options={options}
+                                isInbox={true}
+                            />
 
-                            case 'Task assignment':
-                                return <TaskAssignment
-                                    key={m._id}
-                                    message={m}
-                                    setInboxHistory={setInboxHistory}
-                                    options={options}
-                                    isInbox={true}
-                                />
+                        case 'Task assignment':
+                            return <TaskAssignment
+                                key={m._id}
+                                message={m}
+                                setInboxHistory={setInboxHistory}
+                                options={options}
+                                isInbox={true}
+                            />
 
-                            case 'Team deleted':
-                                return <ElementDeleted
-                                    key={m._id}
-                                    message={m}
-                                    setInboxHistory={setInboxHistory}
-                                    options={options}
-                                    isInbox={true}
-                                    deletedElement={'Team'}
-                                />
+                        case 'Team deleted':
+                            return <ElementDeleted
+                                key={m._id}
+                                message={m}
+                                setInboxHistory={setInboxHistory}
+                                options={options}
+                                isInbox={true}
+                                deletedElement={'Team'}
+                            />
 
-                            case 'Project deleted':
-                                return <ElementDeleted
-                                    key={m._id}
-                                    message={m}
-                                    setInboxHistory={setInboxHistory}
-                                    options={options}
-                                    isInbox={true}
-                                    deletedElement={'Project'}
-                                />
+                        case 'Project deleted':
+                            return <ElementDeleted
+                                key={m._id}
+                                message={m}
+                                setInboxHistory={setInboxHistory}
+                                options={options}
+                                isInbox={true}
+                                deletedElement={'Project'}
+                            />
 
-                            default:
-                                break
-                        }
-                        return ''
-                    })
-                }
-                
-                {
+                        default:
+                            break
+                    }
+
+                    return ''
+                })
+            }
+            {
                 inboxHistory.length !== 0 &&
-                    <>
+                <>
                     <Title title='History' />
-                        {
-                            inboxHistory.map(m => {
-                                switch (m.subject) {
-                                    case 'Team invitation':
-                                        return <TeamInvitationHistory
-                                            key={m._id}
-                                            message={m}
-                                            setInboxHistory={setInboxHistory}
-                                            options={options}
-                                        />
+                    {
+                        inboxHistory.map(m => {
+                            switch (m.subject) {
+                                case 'Team invitation':
+                                    return <TeamInvitationHistory
+                                        key={m._id}
+                                        message={m}
+                                        setInboxHistory={setInboxHistory}
+                                        options={options}
+                                    />
 
-                                    case 'Team invitation response':
-                                        return <TeamInvitationResponse
-                                            key={m._id}
-                                            message={m}
-                                            setInboxHistory={setInboxHistory}
-                                            options={options}
-                                            isInbox={false}
-                                        />
+                                case 'Team invitation response':
+                                    return <TeamInvitationResponse
+                                        key={m._id}
+                                        message={m}
+                                        setInboxHistory={setInboxHistory}
+                                        options={options}
+                                        isInbox={false}
+                                    />
 
-                                    case 'Team invitation canceled':
-                                        return <TeamInvitationCanceled
-                                            key={m._id}
-                                            message={m}
-                                            setInboxHistory={setInboxHistory}
-                                            options={options}
-                                            isInbox={false}
-                                        />
+                                case 'Team invitation canceled':
+                                    return <TeamInvitationCanceled
+                                        key={m._id}
+                                        message={m}
+                                        setInboxHistory={setInboxHistory}
+                                        options={options}
+                                        isInbox={false}
+                                    />
 
-                                    case 'Task assignment':
-                                        return <TaskAssignment
-                                            key={m._id}
-                                            message={m}
-                                            setInboxHistory={setInboxHistory}
-                                            options={options}
-                                            isInbox={false}
-                                        />
+                                case 'Task assignment':
+                                    return <TaskAssignment
+                                        key={m._id}
+                                        message={m}
+                                        setInboxHistory={setInboxHistory}
+                                        options={options}
+                                        isInbox={false}
+                                    />
 
-                                    case 'Team deleted':
-                                        return <ElementDeleted
-                                            key={m._id}
-                                            message={m}
-                                            setInboxHistory={setInboxHistory}
-                                            options={options}
-                                            isInbox={false}
-                                            deletedElement={'Team'}
-                                        />
+                                case 'Team deleted':
+                                    return <ElementDeleted
+                                        key={m._id}
+                                        message={m}
+                                        setInboxHistory={setInboxHistory}
+                                        options={options}
+                                        isInbox={false}
+                                        deletedElement={'Team'}
+                                    />
 
-                                    case 'Project deleted':
-                                        return <ElementDeleted
-                                            key={m._id}
-                                            message={m}
-                                            setInboxHistory={setInboxHistory}
-                                            options={options}
-                                            isInbox={false}
-                                            deletedElement={'Project'}
-                                        />
+                                case 'Project deleted':
+                                    return <ElementDeleted
+                                        key={m._id}
+                                        message={m}
+                                        setInboxHistory={setInboxHistory}
+                                        options={options}
+                                        isInbox={false}
+                                        deletedElement={'Project'}
+                                    />
 
-                                    default:
-                                        break
-                                }
-                                return ''
-                            })
-                        }
-                    </>
-                }
+                                default:
+                                    break
+                            }
+
+                            return ''
+                        })
+                    }
+                </>
+            }
         </PageLayout>
     )
 }

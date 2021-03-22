@@ -20,6 +20,11 @@ const ElementDeleted = ({ message, setInboxHistory, options, isInbox, deletedEle
             <div className={commonStyles.message}>
                 <div className={commonStyles.container}>
                     <div className={commonStyles.container}>
+                        {/* REVIEW: Тук тернари-то може да обхваща само едната променлива, защото другото е еднакво:
+                        <div className={commonStyles.bold}>
+                            {deletedElement} {deletedElement === 'Team' ? message.team.name : message.project.name} deleted
+                        </div>
+                        */}
                         { deletedElement === 'Team'
                             ? <div className={commonStyles.bold}>{deletedElement} {message.team.name} deleted</div>
                             : <div className={commonStyles.bold}>{deletedElement} {message.project.name} deleted</div>
