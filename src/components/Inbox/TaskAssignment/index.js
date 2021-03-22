@@ -7,7 +7,7 @@ import useInboxUtils from '../useInboxUtils'
 
 const TaskAssignment = ({ message, setInboxHistory, options, isInbox }) => {
     const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-    const { deleteMessage, moveToHistory }= useInboxUtils()
+    const { deleteMessage, moveToHistory } = useInboxUtils()
     const history = useHistory()
 
     return (
@@ -27,15 +27,15 @@ const TaskAssignment = ({ message, setInboxHistory, options, isInbox }) => {
                 <div>
                     <div className={`${commonStyles.inline} ${commonStyles.margin}`}>
                         <span className={commonStyles.bold}>Project:</span>
-                            {message.project.name}
+                        {message.project.name}
                     </div>
                     <div className={`${commonStyles.inline} ${commonStyles.margin}`}>
                         <span className={commonStyles.bold}>List:</span>
-                            {message.list.name}
+                        {message.list.name}
                     </div>
                     <div className={`${commonStyles.inline} ${commonStyles.margin}`}>
                         <span className={commonStyles.bold}>Task:</span>
-                            {message.card.name}
+                        {message.card.name}
                     </div>
                 </div>
                 <div>

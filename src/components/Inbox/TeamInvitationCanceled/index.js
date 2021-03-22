@@ -10,7 +10,7 @@ const TeamInvitationCanceled = ({ message, setInboxHistory, options, isInbox }) 
     const [isShownTeamForm, setIsShownTeamForm] = useState(false)
     const [currTeam, setCurrTeam] = useState({})
     const [isConfirmOpen, setIsConfirmOpen] = useState(false)
-    const { deleteMessage, viewTeam, moveToHistory}= useInboxUtils()
+    const { deleteMessage, viewTeam, moveToHistory } = useInboxUtils()
 
     return (
         <>
@@ -34,6 +34,7 @@ const TeamInvitationCanceled = ({ message, setInboxHistory, options, isInbox }) 
                     <div className={`${commonStyles.bold} ${commonStyles.inline}`}>Invited by:</div>
                     <div className={commonStyles.inline}>{message.sendFrom.username}</div>
                 </div>
+                {/* REVIEW: Следващите две може да станат на тернари, вместо да се прави двойна проверка */}
                 { message.team.isDeleted &&
                     <div className={commonStyles.bold}>Team deleted</div>
                 }

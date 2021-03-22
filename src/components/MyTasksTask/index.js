@@ -1,3 +1,4 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react'
 import styles from './index.module.css'
 import ButtonClean from '../ButtonClean'
@@ -8,6 +9,7 @@ import ProgressInput from '../Inputs/ProgressInput'
 import pen from '../../images/pen.svg'
 import { getDaysLeft } from '../../utils/date'
 
+// eslint-disable-next-line react/prop-types
 const MyTasksTask = ({ teamId, project, list, card }) => {
     const [isEditCardActive, setIsEditCardActive] = useState(false)
     const daysLeft = getDaysLeft(card.dueDate)
