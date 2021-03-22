@@ -1,63 +1,54 @@
 import React, { useCallback, useState } from 'react'
-import commonStyles from '../index.module.css'
-import { useParams } from 'react-router-dom'
-import { useSocket } from '../../../contexts/SocketProvider'
-import pen from '../../../images/pen.svg'
 import DatePicker from 'react-datepicker'
+import { useSocket } from '../../../contexts/SocketProvider'
+import commonStyles from '../index.module.css'
 import Transparent from '../../Transparent'
 import EditCard from '../../EditCard'
+import pen from '../../../images/pen.svg'
 import useCardsServices from '../../../services/useCardsServices'
 
-export default function TaskDueDate(props) {
+const TaskDueDate = ({ dueDate, formatedDueDate, card, listId, project, teamId }) => {
     const [isActive, setIsActive] = useState(false)
-    const [cardDueDate, setCardDueDate] = useState(props.cardDueDate)
+    const [cardDueDate, setCardDueDate] = useState(dueDate)
     const [isVisible, setIsVisible] = useState(false)
     const socket = useSocket()
     const today = new Date()
     today.setUTCHours(0, 0, 0, 0)
-    const params = useParams()
-    const teamId = params.teamid
     const { editTask } = useCardsServices()
 
     const editCardDueDate = useCallback(async (date) => {
-        let cardId = props.cardId
-        let listId = props.listId
-
         if (cardDueDate === '' && date === '') {
-            console.log('return');
             return
         }
 
         const editedFields = { dueDate: date }
-        await editTask(listId, cardId, editedFields)
+        await editTask(listId, card._id, editedFields)
 
         setIsActive(!isActive)
-        socket.emit('project-update', props.project)
-        socket.emit('task-team-update', props.teamId)
+        socket.emit('project-update', project)
+        socket.emit('task-team-update', teamId)
 
-    }, [editTask, cardDueDate, setIsActive, isActive, props.cardId, props.listId, props.project, socket, props.teamId])
+    }, [editTask, cardDueDate, setIsActive, isActive, card._id, listId, project, socket, teamId])
 
     const changeCardDueDate = (date) => {
         setCardDueDate(date)
         editCardDueDate(date)
     }
 
-    const value = props.value
-
     return (
         <span className={commonStyles.dueDateField}>
             <DatePicker
-                selected={value ? cardDueDate : today}
+                selected={formatedDueDate ? cardDueDate : today}
                 customInput={
-                    value
-                    ?   <div className={commonStyles.dueDateFieldInput}>
-                            <span>{value}</span>
+                    formatedDueDate
+                        ? <div className={commonStyles.dueDateFieldInput}>
+                            <span>{formatedDueDate}</span>
                         </div>
                         : <span>Select date</span>
                 }
                 onChange={changeCardDueDate}
                 label='Go to date'
-                onBlur={value ? () => setIsActive(!isActive) : null}
+                onBlur={formatedDueDate ? () => setIsActive(!isActive) : null}
                 popperPlacement='bottom-end'
                 closeOnScroll={e => e.target === document.getElementsByClassName('rt-tbody')[0]}
             />
@@ -67,22 +58,21 @@ export default function TaskDueDate(props) {
                     <Transparent hideForm={() => setIsVisible(!isVisible)} >
                         <EditCard
                             hideForm={() => setIsVisible(!isVisible)}
-                            card={props.card}
-                            listId={props.listId}
-                            project={props.project}
+                            card={card}
+                            listId={listId}
+                            project={project}
                             teamId={teamId}
                         />
                     </Transparent >
                 </span >
                 :
                 <span>
-                    <img 
-                        className={commonStyles.pen} 
-                        src={pen} 
-                        alt='...' 
-                        width='13' 
-                        height='13' 
-                        onClick={() => setIsVisible(true)} 
+                    <img
+                        className={commonStyles.pen}
+                        src={pen}
+                        alt=''
+                        width='13'
+                        onClick={() => setIsVisible(true)}
                     />
                 </span>
             }
@@ -91,4 +81,4 @@ export default function TaskDueDate(props) {
 
 }
 
-
+export default TaskDueDate

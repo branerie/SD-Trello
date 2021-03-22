@@ -30,13 +30,7 @@ const MyTasksTask = ({ teamId, project, list, card }) => {
             <div className={styles.days}>
                 {card.progress === 100
                     ? <div>Done</div>
-                /* REVIEW: Ако няма грешки някъде, първото от трите условия отдолу би трябвало да е излишно. Date.parse(...)
-					ще върне 0 само ако му подадеш датата 01.01.1970, което няма логика някога да става, освен ако другаде има
-					грешка. Ама може да се защитим от тая грешка за всеки случай. Поне другите две условия могат да се съберат
-					в едно и да стане Date.parse(card.dueDate) === 0 || !card.dueDate
-					Иначе готино тройно тернари, но в интерес на истината не се чете трудно :D
-					*/
-                    : Date.parse(card.dueDate) === 0 || card.dueDate === null || card.dueDate === undefined
+                    : Date.parse(card.dueDate) === 0 || !card.dueDate
                         ? <div>No Deadline</div>
                         : daysLeft < 0
                             ? <div className={styles.deadline}>Deadline Passed</div>
@@ -51,20 +45,19 @@ const MyTasksTask = ({ teamId, project, list, card }) => {
                     title={<img src={pen} alt='' width='14' />}
                 />
             </div>
-            {/* REVIEW: Сякаш по-добре когато компонента/тага не се събира на един ред (или става мн дълго просто) и се вика 
-            с <променлива> && ... да се слага отварящия таг на долния ред.
-            */}
-            { isEditCardActive && <div className={styles.edit}>
-                <Transparent hideForm={() => setIsEditCardActive(!isEditCardActive)} >
-                    <EditCard
-                        hideForm={() => setIsEditCardActive(!isEditCardActive)}
-                        card={card}
-                        listId={list._id}
-                        project={project}
-                        teamId={teamId}
-                    />
-                </Transparent>
-            </div>}
+            { isEditCardActive &&
+                <div className={styles.edit}>
+                    <Transparent hideForm={() => setIsEditCardActive(!isEditCardActive)} >
+                        <EditCard
+                            hideForm={() => setIsEditCardActive(!isEditCardActive)}
+                            card={card}
+                            listId={list._id}
+                            project={project}
+                            teamId={teamId}
+                        />
+                    </Transparent>
+                </div>
+            }
         </div>
     )
 }

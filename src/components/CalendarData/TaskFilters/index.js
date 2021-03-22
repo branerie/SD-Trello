@@ -4,7 +4,7 @@ import MembersFilter from '../FilterMembers'
 import DueDateFilter from '../FilterDueDate'
 import ProgressFilters from '../FilterProgress'
 
-export default function TaskFilters ({ filter, setFilter }) {
+const TaskFilters = ({ filter, setFilter }) => {
     const toggleProgressFilter = (filterName) => {
         const currentFilterValue = filter.progress[[filterName]]
 
@@ -30,3 +30,5 @@ export default function TaskFilters ({ filter, setFilter }) {
         </div>
     )
 }
+
+export default TaskFilters

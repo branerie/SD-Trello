@@ -1,9 +1,9 @@
 import React, { useState } from 'react'
 import { useSocket } from '../../../contexts/SocketProvider'
-import useCardsServices from '../../../services/useCardsServices'
 import AddProjectElement from '../AddProjectElement'
+import useCardsServices from '../../../services/useCardsServices'
 
-export default function AddTask({ listId, project, handleInputRemove }) {
+const AddTask = ({ listId, project, handleInputRemove }) => {
     const [taskName, setTaskName] = useState('')
     const socket = useSocket()
     const { createTask } = useCardsServices()
@@ -30,3 +30,5 @@ export default function AddTask({ listId, project, handleInputRemove }) {
         />
     )
 }
+
+export default AddTask

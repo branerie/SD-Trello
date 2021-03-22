@@ -59,6 +59,10 @@
     font-size: 1rem;
 }
 
+.input-disable {
+    pointer-events: none;
+}
+
 .text-invite{
     font-weight: normal;
     width: 38%;
