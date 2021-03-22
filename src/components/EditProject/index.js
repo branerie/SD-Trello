@@ -70,7 +70,7 @@ export default function EditProject(props) {
                 <div className={styles['input-container']}>
                     <span> Name</span>
                     <input
-                        className={styles['input-pr-name']}
+                        className={`${styles['input-pr-name']} ${isAdmin ? '' : styles['input-disable']}`}
                         value={name}
                         onChange={e => setName(e.target.value)}
                         label='Name'
@@ -80,7 +80,7 @@ export default function EditProject(props) {
                 <div className={styles['input-container-descr']}>
                     <span> Description</span>
                     <textarea
-                        className={styles['text-area-descr']}
+                        className={`${styles['text-area-descr']} ${isAdmin ? '' : styles['input-disable']}`}
                         value={description}
                         onChange={e => setDescription(e.target.value)}
                         label='Description'

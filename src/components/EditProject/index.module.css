@@ -20,6 +20,10 @@
     font-size: 1.3rem;
 }
 
+.input-disable {
+    pointer-events: none;
+}
+
 @media (max-width: 550px) {
     .form {
         left: 10%;
