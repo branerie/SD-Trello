@@ -154,7 +154,7 @@ export default function EditTeam(props) {
                             id='name'
                         />
                     </div>
-
+                
                     <div className={styles['input-container-descr']}>
                         <span> Description</span>
                         <textarea

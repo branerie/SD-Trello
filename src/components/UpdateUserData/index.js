@@ -9,7 +9,6 @@ import ButtonGrey from '../ButtonGrey'
 import MyTeamsMenu from '../MyTeamsMenu'
 import ProfilePageInputs from '../Inputs/ProfilePageInputs'
 
-
 const UpdateUserData = ({ user, userEmail, getData }) => {
     const { logIn } = useContext(UserContext)
     const history = useHistory()

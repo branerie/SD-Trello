@@ -4,7 +4,6 @@ const list = require('./list')
 const card = require('./card')
 const team = require('./team')
 
-
 module.exports = {
     user,
     project,

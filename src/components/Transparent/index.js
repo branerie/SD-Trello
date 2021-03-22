@@ -5,7 +5,7 @@ const Transparent = ({ children, hideForm }) => {
     return (
         <>
             <div onClick={hideForm} className={styles.transparent}></div>
-                {children}
+            {children}
         </>
     )
 }

@@ -60,8 +60,8 @@ const MembersList = ({ members, maxLength, deleteMemberOption, deleteMemberObj }
                         return (
                             <span className={styles.avatar} key={element._id}>
                                 <AvatarUser
-                                user={element}
-                                    size={30}                                  
+                                    user={element}
+                                    size={30}
                                 />
                             </span>
                         )

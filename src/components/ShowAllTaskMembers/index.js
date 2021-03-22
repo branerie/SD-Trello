@@ -1,10 +1,10 @@
+/* eslint-disable react/prop-types */
 import React, { useState } from 'react'
 import { useSocket } from '../../contexts/SocketProvider'
 import styles from './index.module.css'
 import ConfirmDialog from '../ConfirmationDialog'
 import AvatarUser from '../AvatarUser'
 import useCardsServices from '../../services/useCardsServices'
-
 
 const ShowAllTaskMembers = ({ members, deleteMemberOption, deleteMemberObj }) => {
     const socket = useSocket()
@@ -45,7 +45,7 @@ const ShowAllTaskMembers = ({ members, deleteMemberOption, deleteMemberObj }) =>
 
     return (
         <>
-            {isConfirmOpen &&
+            { isConfirmOpen &&
                 <ConfirmDialog
                     title={'delete this member'}
                     hideConfirm={() => setIsConfirmOpen(false)}

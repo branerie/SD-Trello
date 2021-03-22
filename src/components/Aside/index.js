@@ -31,7 +31,7 @@ const Aside = ({ isAsideOn, setIsAsideOn }) => {
         }
     }, [])
 
-    const updateUser = useCallback(async(response) => {
+    const updateUser = useCallback(async (response) => {
         logIn(response)
     }, [logIn])
 

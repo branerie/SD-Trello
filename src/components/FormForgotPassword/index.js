@@ -36,6 +36,7 @@ const ForgotPasswordForm = (props) => {
             setFillAlert(true)
             return
         }
+        
         if (password !== rePassword) {
             setWrongPassAllert(true)
             return

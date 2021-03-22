@@ -38,8 +38,7 @@ const TableDndApp = ({ project }) => {
     })
 
     const onListClick = useCallback((list) => {
-        const member = projectContext.project.membersRoles.find(m => 
-                            m.memberId._id === userContext.user.id)                    
+        const member = projectContext.project.membersRoles.find(m => m.memberId._id === userContext.user.id)                    
 
         if (member && member.admin) {
             setCurrList(list)
@@ -193,7 +192,7 @@ const TableDndApp = ({ project }) => {
                             <EditList 
                                 hideForm={() => setCurrList('')} 
                                 list={currList}
-                                 project={project} 
+                                project={project} 
                             />
                         </Transparent >
                     </div >
