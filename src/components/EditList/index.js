@@ -1,57 +1,30 @@
-import React, { useContext, useEffect, useRef, useState } from 'react'
+import React, { useState } from 'react'
 import { useParams } from 'react-router-dom'
-import Title from '../Title'
-import styles from './index.module.css'
 import 'react-datepicker/dist/react-datepicker.css'
-import { useSocket } from '../../contexts/SocketProvider'
-import ButtonClean from '../ButtonClean'
 import { SketchPicker } from 'react-color'
-import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
-import UserContext from '../../contexts/UserContext'
-import isUserAdmin from '../../utils/isUserAdmin'
+import { useSocket } from '../../contexts/SocketProvider'
+import styles from './index.module.css'
+import Title from '../Title'
+import ButtonClean from '../ButtonClean'
 import ButtonGrey from '../ButtonGrey'
+import ResponsiveTextArea from '../Inputs/ResponsiveTextarea'
+import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import useListsServices from '../../services/useListsServices'
 
-
-export default function EditList(props) {
-    const nameRef = useRef(null)
-    const [nameHeight, setNameHeight] = useState(null)
-    const [currInput, setCurrInput] = useState(null)
-    const [name, setName] = useState(props.list.name)
+const EditList = ({ list, project, hideForm }) => {
     const socket = useSocket()
+    const [name, setName] = useState(list.name)
+    const [color, setColor] = useState(list.color || '#A6A48E')
     const [isColorActive, setIsColorActive, dropdownRef] = useDetectOutsideClick()
-    const [color, setColor] = useState(props.list.color || '#A6A48E')
-    const [isAdmin, setIsAdmin] = useState(false)
-    const members = props.project.membersRoles
-    const userContext = useContext(UserContext)
-    const params = useParams()
-    const teamId = params.teamid
     const { editList } = useListsServices()
-    
-    useEffect(() => {
-        setIsAdmin(isUserAdmin(userContext.user.id, members))
-    }, [members, userContext.user.id])
-    
-    async function handleSubmit() {
-        await editList(props.project._id, props.list._id, name, color)
-        socket.emit('project-update', props.project)
+
+    const { teamid: teamId } = useParams()
+
+    const handleSubmit = async () => {
+        await editList(project._id, list._id, name, color)
+        socket.emit('project-update', project)
         socket.emit('task-team-update', teamId)
-        props.hideForm()
-    }
-
-    useEffect(() => {
-        setTimeout(() => {
-            setNameHeight(nameRef.current.scrollHeight + 2)
-        }, 1);
-    }, [])
-
-    function onEscPressed(event, setElement, ref) {
-        if (event.keyCode === 27) {
-            setElement(currInput)
-            setTimeout(() => {
-                ref.current.blur()
-            }, 1);
-        }
+        hideForm()
     }
 
     return (
@@ -59,17 +32,10 @@ export default function EditList(props) {
             <Title title='Edit List' />
             <div className={styles['input-container']}>
                 <span className={styles.name}> Name</span>
-                <textarea
-                    ref={nameRef}
-                    className={`${styles['name-input']} ${styles.text}`}
-                    style={{ 'height': nameHeight }}
+                <ResponsiveTextArea
                     value={name}
-                    onFocus={() => setCurrInput(name)}
-                    onKeyDown={e => onEscPressed(e, setName, nameRef)}
-                    onChange={e => {
-                        setName(e.target.value)
-                        setNameHeight(nameRef.current.scrollHeight + 2)
-                    }}
+                    setValue={setName}
+                    className={`${styles['name-input']} ${styles.text}`}
                 />
             </div>
             <div className={styles['change-color']}>
@@ -87,12 +53,10 @@ export default function EditList(props) {
                 />
             </div>}
             <div className={styles['edit-list-button']}>
-                {isAdmin &&
-                    <ButtonGrey onClick={handleSubmit} title='Edit List' />
-
-                }
-
+                <ButtonGrey onClick={handleSubmit} title='Edit List' />
             </div>
         </div>
     )
 }
+
+export default EditList

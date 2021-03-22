@@ -11,21 +11,17 @@ const UserProvider = (props) => {
     const token = getCookie('x-auth-token')
 
 
-    const logIn = (response) => {
-        const user = {
-            username: response.user.username,
-            id: response.user._id,
-            teams: response.teams,
-            inbox: response.user.inbox,
-            confirmed: response.user.confirmed,
-            newPasswordConfirmed: response.user.newPasswordConfirmed,
-            recentProjects: response.user.recentProjects,
-            image: response.user.image,
-            lastTeamSelected: response.user.lastTeamSelected
-        }
-
+    const logIn = (data) => {
         setUser({
-            ...user,
+            username: data.user.username,
+            id: data.user._id,
+            teams: data.teams,
+            inbox: data.user.inbox,
+            confirmed: data.user.confirmed,
+            newPasswordConfirmed: data.user.newPasswordConfirmed,
+            recentProjects: data.user.recentProjects,
+            image: data.user.image,
+            lastTeamSelected: data.user.lastTeamSelected,
             loggedIn: true
         })
     }

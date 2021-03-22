@@ -12,21 +12,20 @@ const ResponsiveTextArea = ({ value, setValue, onBlur, onKeyDown, onSubmit, clas
         if (inputRef.current) {
             setAreaHeight(inputRef.current.scrollHeight + 2)
         }
-        if(inputRef) {
+        
+        if (inputRef) {
             inputRef.current.focus()
+            const length = value.length
+            inputRef.current.setSelectionRange(length, length)
         }
-    }, [])
+    }, [value.length])
 
-    const handleBlur = (event) => {
-        if (onBlur) {
-            return onBlur(event)
-        }
-
-        if (value === currValue) {
+    const handleBlur = () => {
+        if (!onBlur || value === currValue) {
             return
         }
 
-        onSubmit(event)
+        onBlur()
     }
 
     const handleKeyDown = (event) => {
@@ -34,9 +33,18 @@ const ResponsiveTextArea = ({ value, setValue, onBlur, onKeyDown, onSubmit, clas
             return onKeyDown(event)
         }
 
-        if (event.keyCode === ESCAPE_KEY_CODE && toggleActive) {
+        if (event.keyCode === ESCAPE_KEY_CODE) {
             setValue(currValue)
-            return toggleActive()
+
+            if (toggleActive) {
+                return toggleActive()
+            }
+
+            if (inputRef.current) {
+                inputRef.current.blur()
+            }
+
+            return
         }
 
         if (event.keyCode === ENTER_KEY_CODE) {

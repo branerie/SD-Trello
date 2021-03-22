@@ -13,6 +13,7 @@ import useUpdateUserLastTeam from '../../utils/useUpdateUserLastTeam'
 import useListsServices from '../../services/useListsServices'
 import AddProjectBoardList from '../../components/AddProjectBoardList'
 import useUserServices from '../../services/useUserServices'
+import checkIsUserAdmin from '../../utils/checkIsUserAdmin'
 
 const ProjectBoard = () => {
     const socket = useSocket()
@@ -69,15 +70,9 @@ const ProjectBoard = () => {
 
         if (isDndActive) return
 
-        const memberArr = []
-        project.membersRoles.map(element => {
-            return memberArr.push({ admin: element.admin, username: element.memberId.username, id: element.memberId._id })
-        })
-
         setLists(project.lists)
-        const member = memberArr.find(m => m.id === user.id)
 
-        if (member) setIsAdmin(member.admin)
+        setIsAdmin(checkIsUserAdmin(user.id, project.membersRoles))
 
     }, [updateUserRecentProjects, project, projectId, user.id, isDndActive, setLists])
 
@@ -107,15 +102,8 @@ const ProjectBoard = () => {
         let sourcePosition = ''
         let destinationPosition = ''
 
-        for (let list of newListsArr) {
-            if (list._id === source) {
-                sourcePosition = newListsArr.indexOf(list)
-            }
-
-            if (list._id === destination) {
-                destinationPosition = newListsArr.indexOf(list)
-            }
-        }
+        const sourcePosition = newListsArr.findIndex(list => list._id === source)
+        const destinationPosition = newListsArr.findIndex(list => list._id === destination)
 
         const [task] = newListsArr[sourcePosition].cards.splice(oldPosition, 1)
         newListsArr[destinationPosition].cards.splice(position, 0, task)
@@ -142,38 +130,26 @@ const ProjectBoard = () => {
         setIsDndActive(false)
     }
 
-    if (!project || project._id !== projectId) {
-        return (
-            /* REVIEW: Реакт работи така, че като пререндеросва страницата, започва да сравнява компонент/таг по 
-               компонент/таг и реално пререндеросва само там, където има разлики. В случая, тъй като и в двата случая
-               (ако се изпълни този if и ако не) се използва PageLayout, е по-добре това условие да се проверява вътре 
-               в него. Така няма да се пререндеросва самия PageLayout. Може да се помисли и ако може да се сложи if
-               проверката още по-навътре в структурата, още по-добре. Да се спести прендеросването на повече компоненти. */
-            <PageLayout>
-                <Loader
-                    type='TailSpin'
-                    color='#363338'
-                    height={100}
-                    width={100}
-                    timeout={3000} //3 secs
-                />
-            </PageLayout>
-        )
-    }
-
     return (
         <PageLayout>
-            
             <div className={styles.container}>
                 <DragDropContext onDragEnd={handleOnDragEnd}>
                     <Droppable droppableId='droppable' direction='horizontal' type='droppableItem'>
                         {(provided) => (
                             <div className={styles['container-droppable']} ref={provided.innerRef} >
-                                { lists
-                                    .filter(element => !(hiddenLists.includes(element._id)))
-                                    .map((element, index) => {
-                                        return (
-                                            <Draggable
+                                { !project || project._id !== projectId ?
+                                    <Loader
+                                        type='TailSpin'
+                                        color='#363338'
+                                        height={100}
+                                        width={100}
+                                        timeout={3000} //3 secs
+                                    />
+                                    :
+                                    <>{lists
+                                        .filter(element => !(hiddenLists.includes(element._id)))
+                                        .map((element, index) => {
+                                            return (<Draggable
                                                 key={element._id}
                                                 draggableId={element._id}
                                                 index={index}
@@ -194,9 +170,9 @@ const ProjectBoard = () => {
                                                         />
                                                     </div>
                                                 )}
-                                            </Draggable>
-                                        )
-                                    })
+                                            </Draggable>)
+                                        })
+                                    }</>
                                 }
                                 {provided.placeholder}
                                 { isAdmin && <AddProjectBoardList />}

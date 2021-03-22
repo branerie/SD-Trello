@@ -4,7 +4,7 @@ import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
 import { useParams } from 'react-router-dom'
 import { useSocket } from '../../../contexts/SocketProvider'
 import AttachmentsLink from '../../AttachmentsLink'
-import ResponsiveTextArea from '../../ResponsiveTextarea'
+import ResponsiveTextArea from '../../Inputs/ResponsiveTextarea'
 import useCardsServices from '../../../services/useCardsServices'
 
 export default function TaskName({ card, listId, project }) {
@@ -39,6 +39,7 @@ export default function TaskName({ card, listId, project }) {
 						className={commonStyles['input-name']}
 						onSubmit={editCardName}
 						toggleActive={() => setIsActive(!isActive)}
+						onBlur={editCardName}
 					/>
 				</div>
 				:
