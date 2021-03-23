@@ -54,11 +54,11 @@
         "space-before-function-paren": ["error", { "anonymous": "never", "named": "never", "asyncArrow": "always" }],
         "arrow-spacing": ["error", { "before": true, "after": true }],
         "object-curly-spacing": ["error", "always"],
-        "no-empty": "error",
+        "import/newline-after-import": "error",
+        "no-empty": "warn",
         "prefer-const": "warn",
-        "prefer-destructuring": "warn",
+        "prefer-destructuring": ["warn", { "array": false, "object": true }],
         "prefer-arrow-callback": "warn",
-        "no-unused-vars": "warn",
-        "import/newline-after-import": "error"
+        "no-unused-vars": "warn"
     }
 }
