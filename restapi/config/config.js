@@ -5,6 +5,6 @@ const config = {
         authCookieName: 'x-auth-token'
     },
     production: {}
-};
+}
 
-module.exports = config[env];
+module.exports = config[env]
