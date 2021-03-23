@@ -4,8 +4,8 @@ const userInbox = require('../utils/userInbox')
 
 function sockets(socket) {
 
-    const username = socket.handshake.query.username
-    const userId = socket.handshake.query.userId
+    const { username } = socket.handshake.query
+    const { userId } = socket.handshake.query
     socket.join(userId)
     console.log(username, 'connected')
     const teams = JSON.parse(socket.handshake.query.teamsStr)
@@ -33,6 +33,7 @@ function sockets(socket) {
             if (r === userId) {
                 socket.emit('message-sent', response)
             }
+
             socket.to(`${r}`).emit('message-sent', response)
         })
 
@@ -45,7 +46,7 @@ function sockets(socket) {
 
     socket.on('project-update', async (project) => {
         console.log(username, 'project-update')
-        console.log(project._id);
+        console.log(project._id)
         const updatedProject = await projectUpdate(project._id)
         socket.to(project._id).emit('project-updated', updatedProject)
         socket.emit('project-updated', updatedProject)
@@ -67,6 +68,7 @@ function sockets(socket) {
             if (user.id === userId) {
                 socket.emit('message-sent', response)
             }
+
             socket.to(`${m}`).emit('message-sent', response)
         })
 
@@ -144,7 +146,7 @@ async function teamUpdate(id) {
         return team
 
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
 }
 
@@ -190,7 +192,7 @@ async function taskTeamUpdate(teamId, userId) {
             }]
         })
 
-    let projects = team.projects
+    let { projects } = team
 
     projects.forEach(p => p.lists.forEach(l => l.cards = l.cards.filter(c => {
         const isMembers = c.members.some(m => m._id.toString() == userId.toString())

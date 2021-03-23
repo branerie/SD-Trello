@@ -21,16 +21,14 @@ router.post('/:id/user', auth, isAdmin, addMember)
 
 router.post('/:id/user-remove', auth, isAdmin, removeMember)
 
-
-
-async function getUserProjects(req, res, next) {
+async function getUserProjects(req, res) {
     const { _id } = req.user
     const projects = await models.ProjectUserRole.find({ memberId: _id })
         .populate('projectId')
     res.send(projects)
 }
 
-async function getAllProjects(req, res, next) {
+async function getAllProjects(req, res) {
 
     const projects = await models.Project.find({})
         .populate({
@@ -47,7 +45,7 @@ async function getAllProjects(req, res, next) {
     res.send(projects)
 }
 
-async function getProjectInfo(req, res, next) {
+async function getProjectInfo(req, res) {
     const projectId = req.params.id
     const project = await models.Project.findOne({ _id: projectId })
         .populate({
@@ -70,14 +68,17 @@ async function getProjectInfo(req, res, next) {
     res.send(project)
 }
 
-async function createProject(req, res, next) {
+async function createProject(req, res) {
     const { name, description, teamId, members } = req.body
     const { _id } = req.user
     const session = await mongoose.startSession()
     session.startTransaction()
 
     try {
-        const projectCreationResult = await models.Project.create([{ name, description, isFinished: false, author: _id }], { session })
+        const projectCreationResult = await models.Project.create(
+            [{ name, description, isFinished: false, author: _id }],
+            { session })
+        // eslint-disable-next-line prefer-destructuring
         const createdProject = projectCreationResult[0]
 
 
@@ -85,16 +86,23 @@ async function createProject(req, res, next) {
 
         const membersArr = []
 
-        for (let member of members) {
-            const projectUserRoleCreation = await models.ProjectUserRole.create([{ admin: false, projectId: createdProject._id, memberId: member._id }], { session })
+        for (const member of members) {
+            const projectUserRoleCreation = await models.ProjectUserRole.create(
+                [{ admin: false, projectId: createdProject._id, memberId: member._id }],
+                { session })
+            // eslint-disable-next-line prefer-destructuring
             const currProjectUserRole = projectUserRoleCreation[0]
             membersArr.push(currProjectUserRole)
             await models.User.updateOne({ _id: member._id }, { $push: { projects: currProjectUserRole } }, { session })
         }
 
-        const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id }).session(session)
+        const projectUserRole = await models.ProjectUserRole.findOne({ projectId: createdProject, memberId: _id })
+            .session(session)
         membersArr.push(projectUserRole)
-        const updatedProject = await models.Project.findByIdAndUpdate({ _id: projectUserRole.projectId }, { $push: { membersRoles: membersArr } }, { new: true })
+        const updatedProject = await models.Project.findByIdAndUpdate(
+            { _id: projectUserRole.projectId },
+            { $push: { membersRoles: membersArr } },
+            { new: true })
             .populate({
                 path: 'lists',
                 populate: {
@@ -114,8 +122,6 @@ async function createProject(req, res, next) {
             }).session(session)
         await models.User.updateOne({ _id }, { $push: { projects: projectUserRole } }, { session })
 
-
-
         await models.Team.updateOne({ _id: teamId }, { $push: { projects: createdProject } }, { session })
 
         await session.commitTransaction()
@@ -124,16 +130,16 @@ async function createProject(req, res, next) {
 
         res.send(updatedProject)
     } catch (error) {
-        console.log(error);
+        console.log(error)
         await session.abortTransaction()
         session.endSession()
         res.send(error)
     }
 }
 
-async function updateProject(req, res, next) {
-    const projectId = req.params.id;
-    const project = req.body;
+async function updateProject(req, res) {
+    const projectId = req.params.id
+    const project = req.body
 
     try {
         const updatedProject = await models.Project.updateOne({ _id: projectId }, { ...project })
@@ -145,13 +151,12 @@ async function updateProject(req, res, next) {
 
 }
 
-async function updateUserRoles(req, res, next) {
+async function updateUserRoles(req, res) {
 
-    const { userRole, isAdmin } = req.body;
+    const { userRole, isAdmin } = req.body
 
     try {
         const updatedUserRole = await models.ProjectUserRole.updateOne({ _id: userRole }, { admin: isAdmin })
-
         res.send(updatedUserRole)
     } catch (error) {
         res.send(error)
@@ -159,7 +164,7 @@ async function updateUserRoles(req, res, next) {
 
 }
 
-async function deleteProject(req, res, next) {
+async function deleteProject(req, res) {
     const userId = req.user._id
     const idProject = req.params.id
     const session = await mongoose.startSession()
@@ -173,7 +178,7 @@ async function deleteProject(req, res, next) {
 
         await models.Card.deleteMany({ _id: { $in: cardsArray } }).session(session)
 
-        let listsArray = []
+        const listsArray = []
         projectForDelete.lists.map(a => listsArray.push(a._id))
 
         await models.List.deleteMany({ _id: { $in: listsArray } }).session(session)
@@ -184,23 +189,25 @@ async function deleteProject(req, res, next) {
 
         const membersArr = []
 
-        for (let element of members) {
+        for (const element of members) {
             await models.User.updateOne({ _id: element.memberId }, { $pull: { projects: element._id } }).session(session)
             await models.ProjectUserRole.deleteOne({ _id: element._id }).session(session)
             membersArr.push(element.memberId)
         }
-
 
         await models.Team.updateOne({ projects: idProject }, { $pull: { projects: idProject } }).session(session)
 
         const projectObj = { name: projectForDelete.name, id: idProject, isDeleted: true }
         const messages = await models.Message.find({ 'project.id': idProject })
 
-        for (let m of messages) {
+        for (const m of messages) {
             await models.Message.updateOne({ _id: m._id }, { project: projectObj }).session(session)
         }
 
-        const messageCreationResult = await models.Message.create([{ subject: 'Project deleted', project: projectObj, sendFrom: userId, recievers: membersArr }], { session })
+        const messageCreationResult = await models.Message.create(
+            [{ subject: 'Project deleted', project: projectObj, sendFrom: userId, recievers: membersArr }],
+            { session })
+        // eslint-disable-next-line prefer-destructuring
         const createdMessage = messageCreationResult[0]
 
         await models.User.updateMany({ _id: { $in: membersArr } }, { $push: { inbox: createdMessage } }, { session })
@@ -217,10 +224,9 @@ async function deleteProject(req, res, next) {
         session.endSession()
         res.send(error)
     }
-
 }
 
-async function addMember(req, res, next) {
+async function addMember(req, res) {
     const { member, admin } = req.body
     const projectId = req.params.id
 
@@ -229,7 +235,10 @@ async function addMember(req, res, next) {
 
     try {
 
-        const projectUserRoleCreation = await models.ProjectUserRole.create([{ admin, projectId, memberId: member._id }], { session })
+        const projectUserRoleCreation = await models.ProjectUserRole.create(
+            [{ admin, projectId, memberId: member._id }],
+            { session })
+        // eslint-disable-next-line prefer-destructuring
         const projectUserRole = projectUserRoleCreation[0]
 
         await models.Project.updateOne({ _id: projectUserRole.projectId }, { $push: { membersRoles: projectUserRole } })
@@ -250,7 +259,7 @@ async function addMember(req, res, next) {
     }
 }
 
-async function removeMember(req, res, next) {
+async function removeMember(req, res) {
     const { memberId } = req.body
     const projectId = req.params.id
 
@@ -263,8 +272,10 @@ async function removeMember(req, res, next) {
 
         await models.User.updateOne({ _id: member._id }, { $pull: { projects: projectUserRoleForRemove._id } }).session(session)
 
-        await models.Project.updateOne({ _id: projectId }, { $pull: { membersRoles: projectUserRoleForRemove._id } }).session(session)
-        const deletedProjectUserRole = await models.ProjectUserRole.deleteOne({ _id: projectUserRoleForRemove._id }).session(session)
+        await models.Project.updateOne({ _id: projectId }, { $pull: { membersRoles: projectUserRoleForRemove._id } })
+            .session(session)
+        const deletedProjectUserRole = await models.ProjectUserRole.deleteOne({ _id: projectUserRoleForRemove._id })
+            .session(session)
 
         await session.commitTransaction()
 

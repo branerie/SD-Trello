@@ -21,10 +21,6 @@ const InboxPage = () => {
 
     const getInbox = useCallback(async () => {
         const user = await getUserInbox()
-        /* REVIEW: Гледам, че всеки път в проекта, в който се взимат user.inbox или user.inboxHistory от
-        базата, се прави после .reverse() (предполагам за да излязат последните съобщения най-отгоре).
-        Щом винаги се прави това, по-добре да се направи още на бекенда, като се прави заявката към
-        mongodb. Ако не си сигурен как, може да се чуем да го помислим. */
         setInbox(user.inbox.reverse())
         setInboxHistory(user.inboxHistory.reverse())
     }, [getUserInbox])
