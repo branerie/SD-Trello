@@ -3,35 +3,36 @@ const cookieParser = require('cookie-parser')
 const cors = require('cors')
 const router = require('./routes')
 const path = require('path')
+
 const secret = process.env.COOKIE_SECRET
 
 module.exports = (app) => {
-  app.use(cors({
-    exposedHeaders: 'Authorization'
-  }));
+    app.use(cors({
+        exposedHeaders: 'Authorization'
+    }))
 
-  app.use(express.json())
-  app.use(express.urlencoded({
-    extended: true
-  }));
+    app.use(express.json())
+    app.use(express.urlencoded({
+        extended: true
+    }))
 
-  app.use(cookieParser(secret))
-  
-  app.use('/api', router)
+    app.use(cookieParser(secret))
 
-  app.use(express.static(path.join(__dirname, '../build')))
+    app.use('/api', router)
 
-  app.get('*', (req, res) => {
-      res.sendFile(path.join(__dirname, '../build', 'index.html'))
-  })
+    app.use(express.static(path.join(__dirname, '../build')))
 
-  app.use(function (err, req, res, next) {
-    if (err.name === 'ValidationError' || err.name === 'MongoError') {
-      res.status(403)
-    } else {
-      res.status(500)
-    }
+    app.get('*', (req, res) => {
+        res.sendFile(path.join(__dirname, '../build', 'index.html'))
+    })
 
-    res.send(err.message)
-  });
-};
+    app.use((err, req, res) => {
+        if (err.name === 'ValidationError' || err.name === 'MongoError') {
+            res.status(403)
+        } else {
+            res.status(500)
+        }
+
+        res.send(err.message)
+    })
+}

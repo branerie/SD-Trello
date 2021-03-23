@@ -1,8 +1,8 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+
+const { Schema } = mongoose
 const Model = mongoose.model
 const { String, ObjectId } = Schema.Types
-
 
 const cardSchema = new Schema({
 

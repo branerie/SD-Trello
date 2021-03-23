@@ -43,13 +43,14 @@ export default function useUserServices() {
         return await response.json()
     }, [history])
 
-    const updateUser = useCallback(async (userId, username) => {
+    const updateUser = useCallback(async (userId, username, teamId) => {
 
         const response = await fetch(`${USER_URL}/${userId}`, {
             method: 'PUT',
             headers: getHeaders(),
             body: JSON.stringify({
                 username: username,
+                lastTeamSelected: teamId
             })
         })
 
