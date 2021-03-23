@@ -102,6 +102,18 @@
     padding: 10px;
 }
 
+.date-container {
+	color: black;
+}
+
+.date-container div:first-child {
+	font-weight: 600;
+}
+
+.date-container div:last-child {
+	font-size: 0.8em;
+}
+
 @media (max-width: 1366px) {
 	.nav-buttons {
 		font-size: 0.8rem;
