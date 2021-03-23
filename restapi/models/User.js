@@ -49,15 +49,15 @@ const userSchema = new Schema({
 
 })
 
-userSchema.methods.matchPassword = (password) => {
+userSchema.methods.matchPassword = function(password) {
     return bcrypt.compare(password, this.password)
 }
 
-userSchema.methods.setConfirmationToken = () => {
+userSchema.methods.setConfirmationToken = function() {
     this.confirmationToken = jwt.sign({ data: this._id }, process.env.JWT_SECRET, { expiresIn: 60 * 60 })
 }
 
-userSchema.methods.generateConfirmationUrl = () => {
+userSchema.methods.generateConfirmationUrl = function() {
     return `${process.env.HOST}confirmation/${this.confirmationToken}`
 }
 
