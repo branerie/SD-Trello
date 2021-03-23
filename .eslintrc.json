@@ -55,7 +55,7 @@
         "arrow-spacing": ["error", { "before": true, "after": true }],
         "object-curly-spacing": ["error", "always"],
         "import/newline-after-import": "error",
-        "no-empty": "warn",
+        "no-empty": "error",
         "prefer-const": "warn",
         "prefer-destructuring": ["warn", { "array": false, "object": true }],
         "prefer-arrow-callback": "warn",
