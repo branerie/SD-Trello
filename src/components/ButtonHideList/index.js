@@ -1,7 +1,7 @@
-import React, { useContext } from 'react';
-import ProjectContext from '../../contexts/ProjectContext';
+import React, { useContext } from 'react'
+import ProjectContext from '../../contexts/ProjectContext'
 import ListColor from '../ListColor'
-import styles from './index.module.css';
+import styles from './index.module.css'
 
 const ButtonHideList = ({ list, type }) => {
     const { hiddenLists, setHiddenLists } = useContext(ProjectContext)
@@ -23,7 +23,7 @@ const ButtonHideList = ({ list, type }) => {
             <ListColor color={list.color || '#A6A48E'} type={type} />
             <div className={styles.name} title={list.name} >{list.name}</div>
         </button>
-        )
+    )
 }
 
 export default ButtonHideList

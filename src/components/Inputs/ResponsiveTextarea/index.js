@@ -81,7 +81,7 @@ const ResponsiveTextArea = ({
 
     const onFocus = () => {
         setCurrValue(value)
-        const length = value.length
+        const { length } = value
         inputRef.current.setSelectionRange(length, length)
     }
 

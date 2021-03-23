@@ -95,12 +95,12 @@ const ProgressInput = ({
                     onFocus={() => setCurrInput(progress)}
                 />
                 : card.progress
-                        ? <div
-                            className={placeholderClassName}
-                            onClick={() => setIsInputActive(true)}
-                            style={isBackgroundStyled && {backgroundColor: getProgressBackgroundColor(progress)}}
-                        >{card.progress}%</div>
-                        : <div className={placeholderClassName} onClick={() => setIsInputActive(true)} >+Add</div>
+                    ? <div
+                        className={placeholderClassName}
+                        onClick={() => setIsInputActive(true)}
+                        style={isBackgroundStyled && { backgroundColor: getProgressBackgroundColor(progress) }}
+                    >{card.progress}%</div>
+                    : <div className={placeholderClassName} onClick={() => setIsInputActive(true)} >+Add</div>
             }
         </>
     )

@@ -23,9 +23,10 @@ export default function useTeamServices() {
         if (!response.ok) {
             history.push('/error')
         }
+
         const data = await response.json()
         return data
-    },[history])
+    }, [history])
 
     const createTeam = useCallback(async (name, description, requests) => {
         const response = await fetch(`${TEAMS_URL}`, {
@@ -41,9 +42,10 @@ export default function useTeamServices() {
             history.push('/error')
             return
         }
+
         const team = await response.json()
         return team
-    },[history])
+    }, [history])
 
     const updateTeam = useCallback(async (teamId, name, description, members, requests) => {
 
@@ -61,9 +63,10 @@ export default function useTeamServices() {
             history.push('/error')
             return
         }
+
         const updatedTeam = await response.json()
         return updatedTeam
-    },[history])
+    }, [history])
 
     const removeTeamInvitations = useCallback(async (teamId, removeInvitation) => {
 
@@ -76,8 +79,9 @@ export default function useTeamServices() {
             history.push('/error')
             return
         }
-        console.log('success');
-    },[history])
+
+        console.log('success')
+    }, [history])
 
     const deleteTeam = useCallback(async (teamId) => {
         const response = await fetch(`${TEAMS_URL}/${teamId}`, {
@@ -87,9 +91,10 @@ export default function useTeamServices() {
         if (!response.ok) {
             history.push('/error')
         }
+
         const deletedTeam = await response.json()
         return deletedTeam
-    },[history])
+    }, [history])
 
     const teamInvitations = useCallback(async (teamId, message, accepted) => {
         const response = await fetch(`${TEAMS_URL}/invitations/${teamId}`, {
@@ -104,9 +109,10 @@ export default function useTeamServices() {
             history.push('/error')
             return
         }
+
         const user = await response.json()
         return user
-    },[history])
+    }, [history])
 
     const getTeamInvitationInfo = useCallback(async (teamId) => {
         const response = await fetch(`${TEAMS_URL}/${teamId}`, {
@@ -121,7 +127,7 @@ export default function useTeamServices() {
 
         const team = await response.json()
         return team
-    },[history])
+    }, [history])
 
     const getUserTeams = useCallback(async () => {
         const promise = await fetch(`${TEAMS_URL}`, {
@@ -132,11 +138,10 @@ export default function useTeamServices() {
             history.push('/error')
             return
         }
+
         const response = await promise.json()
         return response
-    },[history])
-
-
+    }, [history])
 
     return {
         getTeamUsers,

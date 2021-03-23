@@ -66,7 +66,7 @@ const parseCardHistory = (taskHistory) => {
     }
 
     const historyByDate = { events: {}, hasEventsInWeek: {} }
-    for (let element of taskHistory) {
+    for (const element of taskHistory) {
         const elementDate = new Date(element.date)
 
         historyByDate.events[formatDate(elementDate, '%d/%m/%y')] = element
@@ -101,12 +101,12 @@ const applyCardFilters = (card, filters) => {
     }
 
     const isUserFilterPassed = filters.member 
-                    ? card.members.some(m => m._id === filters.member.id) 
-                    : true
+        ? card.members.some(m => m._id === filters.member.id) 
+        : true
 
     const isDueDateFilterPassed = filters.dueBefore
-                    ? card.dueDate && compareDates(new Date(card.dueDate), filters.dueBefore) <= 0
-                    : true
+        ? card.dueDate && compareDates(new Date(card.dueDate), filters.dueBefore) <= 0
+        : true
 
     return isCardFilterPassed && isUserFilterPassed && isDueDateFilterPassed
 }

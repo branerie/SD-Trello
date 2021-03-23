@@ -34,8 +34,6 @@ export default function EditProject(props) {
         setIsAdmin(checkIsUserAdmin(userContext.user.id, members))
     }, [members, userContext.user.id, props])
 
-
-
     async function handleSubmit() {
         await editProject(projectId, name, description, isFinished)
         updateProjectSocket()

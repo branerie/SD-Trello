@@ -17,7 +17,7 @@ const MyTasksPage = () => {
     const { getUserTasks } = useUserServices()
     const socket = useSocket()
 
-    const selectTeam = useCallback(async(teamId) => {
+    const selectTeam = useCallback(async (teamId) => {
         const data = await getUserTasks(teamId)
 
         if (data === 'Team not found') return
@@ -89,11 +89,11 @@ const MyTasksPage = () => {
                             .reverse()
                             .map(project => {
                                 return (
-                                    <MyTasksProject project={project} teamId={user.lastTeamSelected} />
+                                    <MyTasksProject key={project._id} project={project} teamId={user.lastTeamSelected} />
                                 )
                             })
                     }
-                 </div>
+                </div>
                 : <div className={styles.title}>Select a team</div>
             }
             {(!user.lastTeamSelected || projects.length === 0) &&

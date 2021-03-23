@@ -21,12 +21,12 @@ import ProjectProvider from './contexts/ProjectProvider'
 import TeamProvider from './contexts/TeamProvider'
 import TeamPage from './pages/Team'
 import ConfirmationPage from './pages/Confirmation'
-import {CloudinaryContext} from 'cloudinary-react'
+import { CloudinaryContext } from 'cloudinary-react'
 
 const Navigation = () => {
 
     const context = useContext(UserContext)
-    const loggedIn = context.user.loggedIn
+    const { loggedIn } = context.user
 
     return (
         <BrowserRouter>

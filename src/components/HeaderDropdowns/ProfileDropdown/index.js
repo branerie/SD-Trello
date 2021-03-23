@@ -8,7 +8,7 @@ import { useDetectOutsideClick } from '../../../utils/useDetectOutsideClick'
 import AvatarUser from '../../AvatarUser'
 
 const ProfileDropdown = () => {
-    const { user, logOut }= useContext(UserContext)
+    const { user, logOut } = useContext(UserContext)
     const [isProfileActive, setIsProfileActive, profileRef] = useDetectOutsideClick()
     const history = useHistory()
 

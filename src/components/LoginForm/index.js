@@ -10,8 +10,6 @@ import google from '../../images/welcome-page/google.svg'
 import Alert from '../Alert'
 import useUserServices from '../../services/useUserServices'
 
-
-
 const LoginForm = (props) => {
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
@@ -24,11 +22,8 @@ const LoginForm = (props) => {
     const [wrongUserAllert, setWrongUserAllert] = useState(false)
     const { userLogin, googleLoginUser } = useUserServices()
 
-
-
-
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
         setFillAlert(false)
         setWrongPassAllert(false)
@@ -46,20 +41,23 @@ const LoginForm = (props) => {
             setShowForm(true)
             return
         }
+
         if (response.wrongPassword) {
             setWrongPassAllert(true)
             return
         }
+
         if (response.wrongUser) {
             setWrongUserAllert(true)
             return
         }
+
         context.logIn(response)
         history.push('/')
     }
 
     const handleGoogle = async (googleResponse) => {
-        const tokenId = googleResponse.tokenId
+        const { tokenId } = googleResponse
         const user = await googleLoginUser(tokenId)
         context.logIn(user)
         history.push('/')
@@ -130,16 +128,16 @@ const LoginForm = (props) => {
                             <p className={styles['forgot-pass']}
                                 onClick={() => { props.goToForgotPassword(); props.hideForm() }}>
                                 Forgot Password?
-                        </p>
+                            </p>
                             <p className={styles['new-to-sm']}>
                                 New to Smart Manager?
-                        <button className={styles['sign-up-btn']}
+                                <button className={styles['sign-up-btn']}
                                     onClick={() => { props.goToSignUp(); props.hideForm() }}
                                 >Sign Up</button>
                             </p>
                             <h3>
                                 or
-                        </h3>
+                            </h3>
                         </div>
 
 
@@ -166,6 +164,4 @@ const LoginForm = (props) => {
     )
 }
 
-export default LoginForm;
-
-
+export default LoginForm

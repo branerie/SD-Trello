@@ -6,7 +6,6 @@ import AvatarUser from '../AvatarUser'
 
 const TeamMembers = ({ members, invited }) => {
 
-
     return (
         <div>
             <div className={styles['members-avatars']}>

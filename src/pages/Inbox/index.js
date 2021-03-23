@@ -11,15 +11,12 @@ import ElementDeleted from '../../components/Inbox/ElementDeleted'
 import TeamInvitationCanceled from '../../components/Inbox/TeamInvitationCanceled'
 import useUserServices from '../../services/useUserServices'
 
+const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }
+
 const InboxPage = () => {
     const [inbox, setInbox] = useState([])
     const [inboxHistory, setInboxHistory] = useState([])
     const socket = useSocket()
-    /* REVIEW: При положение, че този обект не зависи нито от пропс, нито от стейт или каквото и да било друго свързано 
-    директно с компонента, по-добре да се изкара създаването му извън компонента (отгоре), защото в момента всеки път, 
-    когато се презарежда този компонент, обекта се пресъздава излишно. 
-    */
-    const options = { weekday: 'short', year: 'numeric', month: 'short', day: 'numeric' }
     const { getUserInbox } = useUserServices()
 
     const getInbox = useCallback(async () => {
