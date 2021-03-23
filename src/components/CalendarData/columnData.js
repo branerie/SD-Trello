@@ -152,9 +152,9 @@ const assembleColumnData = (startDate) => {
         const displayedDayOfWeek = formatDate(headerDate, '%A')
 
         return (
-            <div style={{ backgroundColor: color, color: 'black' }}>
-                <div style={{ fontWeight: '600' }}>{displayedDayOfWeek}</div>
-                <div style={{ fontSize: '80%' }}>{displayedDate}</div>
+            <div className={styles['date-container']} style={{ backgroundColor: color }}>
+                <div>{displayedDayOfWeek}</div>
+                <div>{displayedDate}</div>
             </div>
         )
     }
