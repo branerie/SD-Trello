@@ -8,8 +8,6 @@ import google from '../../images/welcome-page/google.svg'
 import Alert from '../Alert'
 import useUserServices from '../../services/useUserServices'
 
-
-
 const ForgotPasswordForm = (props) => {
     const [password, setPassword] = useState('')
     const [email, setEmail] = useState('')
@@ -21,12 +19,8 @@ const ForgotPasswordForm = (props) => {
     const [wrongUserAllert, setWrongUserAllert] = useState(false)
     const { userLogin, addNewPassword, googleLoginUser } = useUserServices()
 
-
-
-
-
     const handleSubmit = async (event) => {
-        event.preventDefault();
+        event.preventDefault()
 
         setFillAlert(false)
         setWrongPassAllert(false)
@@ -48,12 +42,15 @@ const ForgotPasswordForm = (props) => {
             setWrongUserAllert(true)
             return
         }
+
         let userId
-        console.log('Error', response)
+
         if (response.id) {
             userId = response.id
         }
+
         if (response.userId) {
+            // eslint-disable-next-line prefer-destructuring
             userId = response.userId
         }
 
@@ -64,13 +61,11 @@ const ForgotPasswordForm = (props) => {
     }
 
     const handleGoogle = async (googleResponse) => {
-        const tokenId = googleResponse.tokenId
+        const { tokenId } = googleResponse
         const user = await googleLoginUser(tokenId)
         context.logIn(user)
         history.push('/')
     }
-
-
 
     return (
         <div>
@@ -139,13 +134,13 @@ const ForgotPasswordForm = (props) => {
 
                             <p className={styles.newToSmM}>
                                 New to Smart Manager?
-                        <button className={styles.signUpBtn}
+                                <button className={styles.signUpBtn}
                                     onClick={() => { props.goToSignUp(); props.hideForm() }}
                                 >Sign Up</button>
                             </p>
                             <h3>
                                 or
-                        </h3>
+                            </h3>
                         </div>
 
 
@@ -171,4 +166,4 @@ const ForgotPasswordForm = (props) => {
     )
 }
 
-export default ForgotPasswordForm;
+export default ForgotPasswordForm

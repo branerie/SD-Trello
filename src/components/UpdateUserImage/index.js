@@ -34,7 +34,7 @@ const UpdateUserImage = ({ user, getData }) => {
         }, async (error, result) => {
 
             if (result.event === 'success') {
-                const path = result.info.path
+                const { path } = result.info
                 const publicId = result.info.public_id
                 const newImage = {
                     path,

@@ -40,7 +40,7 @@ export default function AddProjectMember(props) {
     async function handleOnDragEnd(result) {
 
         if (!result.destination) {
-            console.log('no destination');
+            console.log('no destination')
             return
         }
 
@@ -49,7 +49,7 @@ export default function AddProjectMember(props) {
         const member = members.filter(a => a._id === memberRoleId)[0]['memberId']
 
         if (member._id === context.user.id) {
-            console.log('can`t move self');
+            console.log('can`t move self')
             return
         }
 
@@ -63,9 +63,10 @@ export default function AddProjectMember(props) {
             return
         }
 
-        let arr = [...members]
-        let newArr = arr.filter(m => m._id !== memberRoleId)
-        let updatedUser = members.filter(a => a._id === memberRoleId)[0]
+        const arr = [...members]
+        const newArr = arr.filter(m => m._id !== memberRoleId)
+        // eslint-disable-next-line prefer-destructuring
+        const updatedUser = members.filter(a => a._id === memberRoleId)[0]
         updatedUser.admin = !memberAdmin
         newArr.push(updatedUser)
         setMembers(newArr)
@@ -84,8 +85,8 @@ export default function AddProjectMember(props) {
         await removeProjectMember(projectId, member._id)
 
         updateProjectSocket()
-        let arr = [...members]
-        let newArr = arr.filter(m => m.memberId._id !== member._id)
+        const arr = [...members]
+        const newArr = arr.filter(m => m.memberId._id !== member._id)
         setMembers(newArr)
     }
 
@@ -100,7 +101,7 @@ export default function AddProjectMember(props) {
         updateProjectSocket()
         memberRole.memberId = member
         setIsActive(!isActive)
-        let arr = [...members]
+        const arr = [...members]
         arr.push(memberRole)
         setMembers(arr)
         setUsers([])
@@ -117,6 +118,7 @@ export default function AddProjectMember(props) {
                         if (p._id === projectId) {
                             currentTeamId = t._id
                         }
+
                         return currentTeamId
                     })
                 )
@@ -124,7 +126,7 @@ export default function AddProjectMember(props) {
 
             const data = await getTeamUsers(currentTeamId)
 
-            let teamUsers = data.members
+            const teamUsers = data.members
 
             const filtered = teamUsers.filter((e) => {
                 const found = members.find(element => element.memberId.username === e.username)
@@ -148,7 +150,7 @@ export default function AddProjectMember(props) {
     }
 
 
-    let confirmationObjectFunctions = {
+    const confirmationObjectFunctions = {
         'delete this member': deleteMember
     }
 

@@ -21,7 +21,7 @@ router.put('/removeInvitations/:id', auth, removeTeamInvitations)
 router.delete('/:id', auth, deleteTeam)
 
 
-async function teamInvitations(req, res, next) {
+async function teamInvitations(req, res) {
     const userId = req.user._id
     const teamId = req.params.id
     const { message, accepted } = req.body
@@ -39,16 +39,29 @@ async function teamInvitations(req, res, next) {
 
         const team = await models.Team.findOne({ _id: teamId })
         const teamObj = { name: team.name, id: team._id }
-        const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamObj, sendFrom: message.sendFrom, recievers: [userId], accepted }], { session })
+        const messageCreationResult = await models.Message.create(
+            [{ subject: 'Team invitation', team: teamObj, sendFrom: message.sendFrom, recievers: [userId], accepted }],
+            { session })
+        // eslint-disable-next-line prefer-destructuring
         const createdMessage = messageCreationResult[0]
-        await models.User.updateOne({ _id: userId }, { $pull: { inbox: message._id }, $push: { inboxHistory: createdMessage } }).session(session)
+        await models.User.updateOne({ _id: userId }, { $pull: { inbox: message._id }, $push: { inboxHistory: createdMessage } })
+            .session(session)
 
-        const responseMessageCreationResult = await models.Message.create([{ subject: 'Team invitation response', team: teamObj, sendFrom: userId, recievers: [message.sendFrom._id], accepted }], { session })
+        const responseMessageCreationResult = await models.Message.create(
+            [{ subject: 'Team invitation response',
+                team: teamObj,
+                sendFrom: userId,
+                recievers: [message.sendFrom._id], accepted
+            }],
+            { session })
+        // eslint-disable-next-line prefer-destructuring
         const createdResponseMessage = responseMessageCreationResult[0]
-        await models.User.updateOne({ _id: message.sendFrom._id }, { $push: { inbox: createdResponseMessage } }).session(session)
+        await models.User.updateOne({ _id: message.sendFrom._id }, { $push: { inbox: createdResponseMessage } })
+            .session(session)
 
         if (accepted) {
-            await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userId }, $push: { members: userId } }).session(session)
+            await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userId }, $push: { members: userId } })
+                .session(session)
         } else {
             await models.Team.updateOne({ _id: teamId }, { $pull: { requests: userId } }).session(session)
         }
@@ -66,7 +79,7 @@ async function teamInvitations(req, res, next) {
     }
 }
 
-async function createTeam(req, res, next) {
+async function createTeam(req, res) {
     const userId = req.user._id
     const { name, description, requests } = req.body
     const members = [userId]
@@ -77,12 +90,18 @@ async function createTeam(req, res, next) {
 
     try {
 
-        const teamCreationResult = await models.Team.create([{ name, description, author: userId, members, requests }], { session })
+        const teamCreationResult = await models.Team.create(
+            [{ name, description, author: userId, members, requests }],
+            { session })
+        // eslint-disable-next-line prefer-destructuring
         const createdTeam = teamCreationResult[0]
         const teamObj = { name: createdTeam.name, id: createdTeam._id }
 
         if (requestsId) {
-            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamObj, sendFrom: userId, recievers: requestsId }], { session })
+            const messageCreationResult = await models.Message.create(
+                [{ subject: 'Team invitation', team: teamObj, sendFrom: userId, recievers: requestsId }],
+                { session })
+            // eslint-disable-next-line prefer-destructuring
             const createdMessage = messageCreationResult[0]
 
             await models.User.updateMany({ _id: { $in: requestsId } }, { $push: { inbox: createdMessage } }, { session })
@@ -99,7 +118,7 @@ async function createTeam(req, res, next) {
     }
 }
 
-async function getUserTeams(req, res, next) {
+async function getUserTeams(req, res) {
     const { _id } = req.user
 
     try {
@@ -117,7 +136,7 @@ async function getUserTeams(req, res, next) {
     }
 }
 
-async function getTeamInvitationInfo(req, res, next) {
+async function getTeamInvitationInfo(req, res) {
     const teamId = req.params.teamid
 
     try {
@@ -136,7 +155,7 @@ async function getTeamInvitationInfo(req, res, next) {
     }
 }
 
-async function getTeamUsers(req, res, next) {
+async function getTeamUsers(req, res) {
     const teamId = req.params.id
 
     try {
@@ -152,18 +171,18 @@ async function getTeamUsers(req, res, next) {
         res.send(team)
 
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
 }
 
-async function updateTeam(req, res, next) {
+async function updateTeam(req, res) {
 
     const teamId = req.params.id
     const { name, description, members, requests } = req.body
     
     const team = { name, description, members }
     const obj = {}
-    for (let key in team) {
+    for (const key in team) {
         if (team[key]) {
             obj[key] = team[key]
         }
@@ -177,10 +196,17 @@ async function updateTeam(req, res, next) {
 
         try {
 
-            const teamEditResult = await models.Team.findOneAndUpdate({ _id: teamId }, { ...obj, $push: { requests: { $each: requestsId } } }, { new: true }).session(session)
+            const teamEditResult = await models.Team.findOneAndUpdate(
+                { _id: teamId },
+                { ...obj, $push: { requests: { $each: requestsId } } },
+                { new: true })
+                .session(session)
             const teamObj = { name: teamEditResult.name, id: teamId }
 
-            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation', team: teamObj, sendFrom: req.user._id, recievers: requestsId }], { session })
+            const messageCreationResult = await models.Message.create(
+                [{ subject: 'Team invitation', team: teamObj, sendFrom: req.user._id, recievers: requestsId }],
+                { session })
+            // eslint-disable-next-line prefer-destructuring
             const createdMessage = messageCreationResult[0]
 
             await models.User.updateMany({ _id: { $in: requestsId } }, { $push: { inbox: createdMessage } }, { session })
@@ -203,7 +229,7 @@ async function updateTeam(req, res, next) {
 
 }
 
-async function removeTeamInvitations(req, res, next) {
+async function removeTeamInvitations(req, res) {
 
     const teamId = req.params.id
     const { removeInvitation } = req.body
@@ -215,12 +241,21 @@ async function removeTeamInvitations(req, res, next) {
 
         const userForRemove = removeInvitation._id
 
-        const updatedTeam = await models.Team.findOneAndUpdate({ _id: teamId }, { $pull: { requests: userForRemove } }, { new: true }).session(session)
+        const updatedTeam = await models.Team.findOneAndUpdate(
+            { _id: teamId }, { $pull: { requests: userForRemove } }, { new: true })
+            .session(session)
         const teamObj = { name: updatedTeam.name, id: teamId }
 
-        const oldMessage = await models.Message.findOneAndUpdate({ 'team.id': teamId, recievers: { '$in': [userForRemove] } }, { $pull: { recievers: userForRemove } }, { new: true }).session(session)
+        const oldMessage = await models.Message.findOneAndUpdate(
+            { 'team.id': teamId, recievers: { '$in': [userForRemove] } },
+            { $pull: { recievers: userForRemove } },
+            { new: true })
+            .session(session)
 
-        const messageCreationResult = await models.Message.create([{ subject: 'Team invitation canceled', team: teamObj, sendFrom: req.user._id, recievers: [userForRemove] }], { session })
+        const messageCreationResult = await models.Message.create(
+            [{ subject: 'Team invitation canceled', team: teamObj, sendFrom: req.user._id, recievers: [userForRemove] }],
+            { session })
+        // eslint-disable-next-line prefer-destructuring
         const createdMessage = messageCreationResult[0]
 
         await models.User.updateOne({ _id: userForRemove }, { $pull: { inbox: oldMessage.id } }).session(session)
@@ -239,7 +274,7 @@ async function removeTeamInvitations(req, res, next) {
     } 
 }
 
-async function deleteTeam(req, res, next) {
+async function deleteTeam(req, res) {
     const userId = req.user._id
     const idTeam = req.params.id
     const session = await mongoose.startSession()
@@ -249,7 +284,7 @@ async function deleteTeam(req, res, next) {
 
     try {
 
-        for (let project of teamForDelete.projects) {
+        for (const project of teamForDelete.projects) {
             const idProject = project._id
     
             const searchedLists = await models.Project.findOne({ _id: idProject }).select('lists -_id').populate('lists')
@@ -259,7 +294,7 @@ async function deleteTeam(req, res, next) {
     
             await models.Card.deleteMany({ _id: { $in: cardsArray } }).session(session)
     
-            let listsArray = []
+            const listsArray = []
             searchedLists.lists.map(a => listsArray.push(a._id))
     
     
@@ -269,7 +304,7 @@ async function deleteTeam(req, res, next) {
     
             const membersArr = await models.ProjectUserRole.find({ _id: { $in: projectUserRoles.membersRoles } }).select('memberId')
     
-            for (let element of membersArr) {
+            for (const element of membersArr) {
                 await models.User.updateOne({ _id: element.memberId }, { $pull: { projects: element._id } }).session(session)
                 await models.ProjectUserRole.deleteOne({ _id: element._id }).session(session)
             }
@@ -280,18 +315,21 @@ async function deleteTeam(req, res, next) {
         const teamObj = { name: teamForDelete.name, id: idTeam, isDeleted: true }
         const messages = await models.Message.find({ 'team.id': idTeam })
 
-        for (let m of messages) {
+        for (const m of messages) {
             await models.Message.updateOne({ _id: m._id }, { team: teamObj }).session(session)
         }
 
-        const messageCreationResult = await models.Message.create([{ subject: 'Team deleted', team: teamObj, sendFrom: userId, recievers: members }], { session })
+        const messageCreationResult = await models.Message.create(
+            [{ subject: 'Team deleted', team: teamObj, sendFrom: userId, recievers: members }],
+            { session })
+        // eslint-disable-next-line prefer-destructuring
         const createdMessage = messageCreationResult[0]
 
         await models.User.updateMany({ _id: { $in: members } }, { $push: { inbox: createdMessage } }, { session })
 
         await models.Team.deleteOne({ _id: idTeam }).session(session)
 
-        const test = await models.User.updateMany({ lastTeamSelected: idTeam }, { lastTeamSelected: '' }).session(session)
+        // const test = await models.User.updateMany({ lastTeamSelected: idTeam }, { lastTeamSelected: '' }).session(session)
 
         await session.commitTransaction()
 
@@ -306,4 +344,4 @@ async function deleteTeam(req, res, next) {
 
 }
 
-module.exports = router;
+module.exports = router

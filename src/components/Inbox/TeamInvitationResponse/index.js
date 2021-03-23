@@ -21,13 +21,12 @@ const TeamInvitationResponse = ({ message, setInboxHistory, options, isInbox }) 
                 <div className={commonStyles.container}>
                     <div className={commonStyles.container}>
                         <div className={commonStyles.bold}>{message.subject}:</div>
-                        {/* REVIEW: Този спан не е добре подреден. Като има две отделни променливи, които се викат в 
-                        къдрави скоби в един и същ таг, по-добре всяка да е на отделен ред. За втората - много навътре е 
-                        тернари-то. Затварящият таг на външния span трябва да е на отделен ред
-                        */}
-                        <span>{message.sendFrom.username}{message.accepted
-                                                                            ? <span> accepted</span>
-                                                                            : <span> declined</span>}</span>
+                        <span>
+                            {message.sendFrom.username}
+                            {message.accepted
+                                ? <span> accepted</span>
+                                : <span> declined</span>}
+                        </span>
                     </div>
                     <div>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</div>
                 </div>

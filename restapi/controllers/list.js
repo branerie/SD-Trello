@@ -14,7 +14,7 @@ router.put('/:id/:idcard/dnd-card', auth, updateCardDnD)
 
 router.delete('/:id/:idlist', auth, isAdmin, deleteList)
 
-async function createList(req, res, next) {
+async function createList(req, res) {
     const userId = req.user._id
     const projectId = req.params.id
     const listName = req.body.name
@@ -23,6 +23,7 @@ async function createList(req, res, next) {
 
     try {
         const listCreationResult = await models.List.create([{ name: listName, author: userId }], { session })
+        // eslint-disable-next-line prefer-destructuring
         const createdList = listCreationResult[0]
         await models.Project.updateOne({ _id: projectId }, { $push: { lists: createdList } }, { session })
 
@@ -38,14 +39,14 @@ async function createList(req, res, next) {
     }
 }
 
-async function updateList(req, res, next) {
+async function updateList(req, res) {
     const id = req.params.idlist
     const { name, color } = req.body
     const updatedList = await models.List.updateOne({ _id: id }, { name, color })
     res.send(updatedList)
 }
 
-async function updateListDnD(req, res, next) {
+async function updateListDnD(req, res) {
     const projectId = req.params.id
     const listId = req.params.idlist
     const { position } = req.body
@@ -55,7 +56,10 @@ async function updateListDnD(req, res, next) {
 
     try {
         await models.Project.updateOne({ _id: projectId }, { $pull: { lists: listId } }).session(session)
-        await models.Project.updateOne({ _id: projectId }, { $push: { lists: { $each: [listId], $position: position } } }).session(session)
+        await models.Project.updateOne(
+            { _id: projectId },
+            { $push: { lists: { $each: [listId], $position: position } } })
+            .session(session)
 
         await session.commitTransaction()
         session.endSession()
@@ -87,7 +91,7 @@ async function updateListDnD(req, res, next) {
     }
 }
 
-async function updateCardDnD(req, res, next) {
+async function updateCardDnD(req, res) {
     const cardId = req.params.idcard
     const { position, source, destination } = req.body
 
@@ -110,7 +114,7 @@ async function updateCardDnD(req, res, next) {
     }
 }
 
-async function deleteList(req, res, next) {
+async function deleteList(req, res) {
     const idList = req.params.idlist
     const idProject = req.params.id
     const session = await mongoose.startSession()
@@ -123,7 +127,7 @@ async function deleteList(req, res, next) {
 
         const removedListResult = await models.List.deleteOne({ _id: idList }).session(session)
 
-        removedList = removedListResult
+        const removedList = removedListResult
 
         await models.Project.updateOne({ _id: idProject }, { $pull: { lists: idList } }).session(session)
 
@@ -137,8 +141,6 @@ async function deleteList(req, res, next) {
         session.endSession()
         res.send(error)
     }
-
 }
-
 
 module.exports = router

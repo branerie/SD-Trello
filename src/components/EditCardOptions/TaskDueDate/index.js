@@ -50,7 +50,7 @@ const TaskDueDate = ({ dueDate, card, listId, project, teamId }) => {
 
     const editCardDueDate = async (date) => {
         if (taskDueDate === '' && date === '') {
-            console.log('return');
+            console.log('return')
             return
         }
 

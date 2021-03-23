@@ -44,8 +44,9 @@ module.exports = function sendConfirmationEmail(user, type) {
         ${user.generateConfirmationUrl()}
         `
         }
-    } 
-    if(type === 'pass'){
+    }
+
+    if (type === 'pass') {
         email = {
             from,
             to: user.email,

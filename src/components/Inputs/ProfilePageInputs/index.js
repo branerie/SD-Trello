@@ -15,8 +15,6 @@ const ProfilePageInputs = ({
     value
 }) => {
 
-
-
     return (
         <div className={styles['button-input-div']} classNameDiv={classNameDiv}>
             <ButtonGrey

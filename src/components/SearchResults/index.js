@@ -1,4 +1,4 @@
-import React, { useContext,useMemo } from 'react'
+import React, { useContext, useMemo } from 'react'
 import { useHistory } from 'react-router-dom'
 import UserContext from '../../contexts/UserContext'
 import TeamContext from '../../contexts/TeamContext'
@@ -30,7 +30,7 @@ const SearchResults = ({ searchInput, hideSearchResult }) => {
         }
 
         return searchResultsArray
-    },[teams, searchInput])
+    }, [teams, searchInput])
 
     const goToPage = (element) => {
 
@@ -48,18 +48,17 @@ const SearchResults = ({ searchInput, hideSearchResult }) => {
 
     return (
         <div className={styles['search-container']}>
-            {
-                searchResults.map((element, index) => {
-                        return (
-                            <div
-                                key={index}
-                                className={styles.result}
-                                onClick={() => goToPage(element)}
-                            >
-                                {element.name}
-                            </div>
-                        )
-                    })
+            { searchResults.map((element, index) => {
+                return (
+                    <div
+                        key={index}
+                        className={styles.result}
+                        onClick={() => goToPage(element)}
+                    >
+                        {element.name}
+                    </div>
+                )
+            })
             }
         </div>
     )

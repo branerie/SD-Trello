@@ -1,7 +1,7 @@
 import React, { useCallback, useState } from 'react'
 import DatePicker from 'react-datepicker'
 import { useSocket } from '../../../contexts/SocketProvider'
-import commonStyles from '../index.module.css'
+import styles from './index.module.css'
 import Transparent from '../../Transparent'
 import EditCard from '../../EditCard'
 import pen from '../../../images/pen.svg'
@@ -36,12 +36,12 @@ const TaskDueDate = ({ dueDate, formatedDueDate, card, listId, project, teamId }
     }
 
     return (
-        <span className={commonStyles.dueDateField}>
+        <span className={styles.container}>
             <DatePicker
                 selected={formatedDueDate ? cardDueDate : today}
                 customInput={
                     formatedDueDate
-                        ? <div className={commonStyles.dueDateFieldInput}>
+                        ? <div className={styles['formated-date']}>
                             <span>{formatedDueDate}</span>
                         </div>
                         : <span>Select date</span>
@@ -68,7 +68,7 @@ const TaskDueDate = ({ dueDate, formatedDueDate, card, listId, project, teamId }
                 :
                 <span>
                     <img
-                        className={commonStyles.pen}
+                        className={styles.pen}
                         src={pen}
                         alt=''
                         width='13'

@@ -10,11 +10,8 @@ import getStartedPagePic2 from '../../images/get-started/pic2.svg'
 import getStartedPagePic3 from '../../images/get-started/pic3.svg'
 import getStartedPagePic4 from '../../images/get-started/pic4.svg'
 
-
-
 const GetStarted = () => {
     const [isTeamFormShown, setIsTeamFormShown] = useState(false)
-
 
     return (
         <PageLayout>

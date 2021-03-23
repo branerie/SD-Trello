@@ -18,20 +18,12 @@ const assembleColumnData = (startDate) => {
     const getWeekdayCellHtml = (message, color, messageColor = 'black') => {
         const progressStyle = { 
             background: color, 
-            color: messageColor,
-            width: '100%',
-            padding: '5px', 
-            // fontSize: '14px',
-            border: '1px solid #363338',
-            borderRadius: '5px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
+            color: messageColor
         }
 
         return (
-            <div className={styles.daylyProgress}>
-                <div style={progressStyle}>
+            <div className={styles['dayly-progress']}>
+                <div style={progressStyle} className={styles['week-day-cell']}>
                     {message}
                 </div>
             </div>
@@ -62,7 +54,8 @@ const assembleColumnData = (startDate) => {
         const dueDate = date ? new Date(date) : null
         const isAfterDueDate = dueDate && compareDates(cellDate, dueDate) > 0
         const isBeforeToday = compareDates(cellDate, currentDate) < 0
-
+        let { finishedDate } = history
+        finishedDate = finishedDate && new Date(finishedDate)
 
         if (eventInCell) {
             const [eventType, eventValue] = eventInCell.event.split(' ')
@@ -121,15 +114,11 @@ const assembleColumnData = (startDate) => {
                 return ''
             }
 
-            let { finishedDate } = history
-            finishedDate = finishedDate && new Date(finishedDate)
-
             if (finishedDate && compareDates(cellDate, finishedDate) > 0) {
                 // task has finished in the past and cell date is later than date of finish
                 return ''
             }
 
-            
             // task is neither Finished, nor Delayed, but has a Due Date
             // therefore, it's In Progress
             const cellText = isMonday ? 'In Progress' : ''
@@ -137,6 +126,21 @@ const assembleColumnData = (startDate) => {
             return getWeekdayCellHtml(cellText, cellColor)
         }
 
+        if (finishedDate && compareDates(cellDate, finishedDate) > 0) {
+            // task has finished in the past and cell date is later than date of finish
+            return ''
+        }
+
+        if (isBeforeToday) {
+            const cellColor = CELL_COLORS.PROGRESS_OLD
+            return getWeekdayCellHtml('', cellColor)
+        }
+
+        if (compareDates(cellDate, currentDate) === 0 && progress !== 100) {
+            const cellColor = CELL_COLORS.PROGRESS
+            return getWeekdayCellHtml('', cellColor)
+        }
+        
         return ''
     }
         
@@ -148,21 +152,16 @@ const assembleColumnData = (startDate) => {
         const displayedDayOfWeek = formatDate(headerDate, '%A')
 
         return (
-            <div style={{ backgroundColor: color, color: 'black' }}>
-                <div style={{ fontWeight: '600' }}>{displayedDayOfWeek}</div>
-                <div style={{ fontSize: '80%' }}>{displayedDate}</div>
+            <div className={styles['date-container']} style={{ backgroundColor: color }}>
+                <div>{displayedDayOfWeek}</div>
+                <div>{displayedDate}</div>
             </div>
         )
     }
 
     const wrapCellData = (cellData) => {
         return (
-            <div style={{ 
-                whiteSpace: 'normal', 
-                overflowWrap: 'anywhere', 
-                textAlign: 'left',
-                height: '100%'}}
-            >
+            <div className={styles['cell-data']}>
                 {cellData}
             </div>
         )
@@ -171,6 +170,7 @@ const assembleColumnData = (startDate) => {
     return (
         [
             {
+                // eslint-disable-next-line react/display-name
                 Header: () => {
                     return <div className={styles.header}>Task</div>
                 },
@@ -181,6 +181,7 @@ const assembleColumnData = (startDate) => {
                 resizable: false,
             },
             {
+                // eslint-disable-next-line react/display-name
                 Header: () => {
                     return <div className={styles.header}>Progress</div>
                 },
@@ -193,6 +194,7 @@ const assembleColumnData = (startDate) => {
                 sortMethod: () => {}  // needed to override default sorting
             },
             {
+                // eslint-disable-next-line react/display-name
                 Header: () => {
                     return <div className={styles.header}>Team</div>
                 },
@@ -200,7 +202,7 @@ const assembleColumnData = (startDate) => {
                 minWidth: 75,
                 maxWidth: 80,
                 Cell: ({ value }) => wrapCellData(value),
-                getProps: (state, rowInfo, column) => ({ style: { overflow: 'visible' } }),
+                getProps: () => ({ style: { overflow: 'visible' } }),
                 sortable: false,
                 resizable: false
             },
@@ -268,6 +270,7 @@ const assembleColumnData = (startDate) => {
                 resizable: false
             },
             {
+                // eslint-disable-next-line react/display-name
                 Header: () => {
                     return <div className={styles.header}>Due Date</div>
                 },

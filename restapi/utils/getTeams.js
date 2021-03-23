@@ -31,7 +31,7 @@ async function getTeams(id) {
         return teams
 
     } catch (error) {
-        console.log(error);
+        console.log(error)
     }
 }
 

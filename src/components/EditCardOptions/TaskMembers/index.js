@@ -32,6 +32,7 @@ const TaskMembers = ({ card, listId, project, teamId }) => {
         for (const member in cardMembers) {
             teamUsers = teamUsers.filter((obj) => obj._id !== cardMembers[member]._id)
         }
+        
         setUsers(teamUsers)
     }
 
@@ -41,6 +42,7 @@ const TaskMembers = ({ card, listId, project, teamId }) => {
         const user = users.find(u => u._id === id)
         setSelectedUser(user)
 
+        // eslint-disable-next-line prefer-destructuring
         const result = project.membersRoles.filter(p => p.memberId._id === user._id)[0]
 
         if (!result) {

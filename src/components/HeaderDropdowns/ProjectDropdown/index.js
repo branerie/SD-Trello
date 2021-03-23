@@ -21,7 +21,7 @@ const ProjectDropdown = () => {
     useEffect(() => {
         
         if (project.isFinished === true) {
-           return setIsShownOldProjects(true)
+            return setIsShownOldProjects(true)
         }
 
         setIsShownOldProjects(false)
@@ -60,9 +60,10 @@ const ProjectDropdown = () => {
                     />
                 </div>}
             </div>
-            {isShownProjectForm &&  <Transparent hideForm={() => setIsShownProjectForm(false)}>
-                                        <CreateProject hideForm={() => setIsShownProjectForm(false)} />
-                                    </Transparent>}
+            {isShownProjectForm &&
+                <Transparent hideForm={() => setIsShownProjectForm(false)}>
+                    <CreateProject hideForm={() => setIsShownProjectForm(false)} />
+                </Transparent>}
         </div>
     )
 }

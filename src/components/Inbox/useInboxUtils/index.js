@@ -6,13 +6,11 @@ import useUserServices from '../../../services/useUserServices'
 
 const useInboxUtils = () => {
     const socket = useSocket()
-    const { userid : userId  } = useParams()
+    const { userid: userId  } = useParams()
     // If move message is invoked this state is set to true and doesn`t allow to move it again
     const [isMoveActive, setIsMoveActive] = useState(false)  
     const { moveMessageToHistory, deleteUserMessage } = useUserServices()
     const { getTeamInvitationInfo, teamInvitations } = useTeamServices()
-
-
 
     return {
 

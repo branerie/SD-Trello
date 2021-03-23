@@ -1,8 +1,8 @@
-const mongoose = require('mongoose');
+const mongoose = require('mongoose')
 
-const Schema = mongoose.Schema;
-const Model = mongoose.model;
-const { ObjectId, Boolean } = Schema.Types;
+const { Schema } = mongoose
+const Model = mongoose.model
+const { ObjectId, Boolean } = Schema.Types
 
 const projectUserRoleSchema = new Schema({
     admin: {
@@ -21,7 +21,6 @@ const projectUserRoleSchema = new Schema({
     }
 })
 
-projectUserRoleSchema.index({ projectId: 1, memberId: 1 }, { unique: true });
+projectUserRoleSchema.index({ projectId: 1, memberId: 1 }, { unique: true })
 
-module.exports = new Model('ProjectUserRole', projectUserRoleSchema);
-
+module.exports = new Model('ProjectUserRole', projectUserRoleSchema)

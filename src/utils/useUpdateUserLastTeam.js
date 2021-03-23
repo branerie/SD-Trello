@@ -8,9 +8,9 @@ async function useUpdateUserLastTeam(teamId) {
 
     if (teamId === userContext.user.lastTeamSelected) return
 
-    await updateUser(userContext.user.id,userContext.user.username, teamId)    
+    await updateUser(userContext.user.id, userContext.user.username, teamId)    
 
-    const user = {...userContext.user}
+    const user = { ...userContext.user }
     user.lastTeamSelected = teamId
     userContext.setUser({
         ...user

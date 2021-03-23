@@ -48,7 +48,7 @@ const CalendarTable = () => {
 
     const updateTableData = useCallback(() => {
         const data = []
-        const lists = project.lists
+        const { lists } = project
         setLists(lists)
         const cardsSortMethod = getCardsSortMethod(sortCriteria.columnName, sortCriteria.isDescending)
 
@@ -225,6 +225,7 @@ const CalendarTable = () => {
                     getTbodyProps={() => ({ className: styles['react-table-body'] })}
                     getTrGroupProps={() => ({ className: styles['react-table-tr-group'] })}
                     onSortedChange={(sortInfo) => {
+                        // eslint-disable-next-line prefer-destructuring
                         const { id: columnName, desc: isDescending } = sortInfo[0]
                         setSortCriteria({ columnName, isDescending })
                     }}

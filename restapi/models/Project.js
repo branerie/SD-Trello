@@ -1,5 +1,6 @@
 const mongoose = require('mongoose')
-const Schema = mongoose.Schema
+
+const { Schema } = mongoose
 const Model = mongoose.model
 const { String, ObjectId, Boolean } = Schema.Types
 
@@ -7,7 +8,6 @@ const projectSchema = new Schema({
 
     name: {
         type: String,
-        // unique: true,
         required: true
     },
 

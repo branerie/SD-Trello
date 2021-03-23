@@ -43,7 +43,7 @@ export default function EditTeam(props) {
                 setCurrTeam(team)
             }
         })
-        let teamAuthor = currTeam.author
+        const teamAuthor = currTeam.author
         setMembers(currTeam.members)
         setInvited(currTeam.requests)
         setDescription(currTeam.description)
@@ -64,6 +64,7 @@ export default function EditTeam(props) {
             const users = await getAllUsers()
             setAllUsers(users)
         }
+
         if (member.length >= 2) {
             setAreMembersShown(true)
         }
@@ -108,10 +109,11 @@ export default function EditTeam(props) {
         props.hideForm()
     }
 
-    const handleDeleteTeam = async() => {
+    const handleDeleteTeam = async () => {
         if (!window.confirm('You will lost all team information - projects, lists and tasks')) {
             return
         }
+
         const deletedTeam = await deleteTeam(teamId)
         const recievers = [...deletedTeam.members, ...deletedTeam.requests]
         socket.emit('team-deleted', { id: teamId, recievers })
@@ -283,7 +285,7 @@ export default function EditTeam(props) {
                                         <div className={styles.membersAvatars}>
                                             <div>
                                                 Invited Members:
-                                                </div>
+                                            </div>
                                             {
                                                 invited.map((m, index) => {
                                                     return (
