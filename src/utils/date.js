@@ -65,6 +65,7 @@ Examples:
  */
 const formatDate = (date, formatString) => {
     return formatString.replace(FORMAT_REGEX, (substr) => {
+        // eslint-disable-next-line prefer-destructuring
         const formatType = substr[1]
         const result = FORMAT_OPTIONS[formatType](date)
         return result

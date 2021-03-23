@@ -1,0 +1,18 @@
+.name-container {
+	width: 100%;
+	display: flex;
+	align-items: center;
+	justify-content: space-between;
+}
+
+.text {
+	cursor: pointer;
+	margin: 2%;
+}
+
+.attachments-container {
+	float: right;
+	height: 1.5rem;
+	display: flex;
+	align-items: flex-end;
+}

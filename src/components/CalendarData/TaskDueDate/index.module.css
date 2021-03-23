@@ -1,0 +1,15 @@
+.container {
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
+}
+
+.formated-date {
+	display: flex;
+	justify-content: space-between;
+	cursor: pointer;
+}
+
+.pen {
+	cursor: pointer;
+}

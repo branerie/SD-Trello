@@ -43,7 +43,7 @@ export default function EditTeam(props) {
                 setCurrTeam(team)
             }
         })
-        let teamAuthor = currTeam.author
+        const teamAuthor = currTeam.author
         setMembers(currTeam.members)
         setInvited(currTeam.requests)
         setDescription(currTeam.description)

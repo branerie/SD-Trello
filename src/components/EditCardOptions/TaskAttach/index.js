@@ -23,12 +23,13 @@ const TaskAttach = ({ card, project, teamId }) => {
 
         }, async (error, result) => {
             if (result.event === 'success') {
-                const path = result.info.path
+                const { path } = result.info
                 const name = result.info.original_filename
-                let format = result.info.format
+                let { format } = result.info
 
                 // Gets the format from path if cloudinary doesn`t recognize it (path example: v1615887046/vov2gj7vmvqi6h8dzfxf.png)
                 if (!format) {
+                    // eslint-disable-next-line prefer-destructuring
                     format = path.split('.')[1]
                 }
 
