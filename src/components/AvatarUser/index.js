@@ -1,3 +1,4 @@
+import React from 'react'
 import Avatar from 'react-avatar'
 import Image from 'cloudinary-react/lib/components/Image'
 import Transformation from 'cloudinary-react/lib/components/Transformation'

@@ -42,9 +42,9 @@ const SearchField = ({ isAsideOn }) => {
                     onBlur={onBlur}
                 />
                 {( searchInput.length > 0 && showSearchForm)
-                    ?   <div ref={dropdownRefSearch}>
-                            <SearchResults searchInput={searchInput} hideSearchResult={hideSearchResult} />
-                        </div>
+                    ? <div ref={dropdownRefSearch}>
+                        <SearchResults searchInput={searchInput} hideSearchResult={hideSearchResult} />
+                    </div>
                     : null
                 }
             </div>

@@ -39,14 +39,14 @@ const MembersFilter = ({ membersFilter, setMembersFilter, handleFilterClear }) =
                 <div className={styles['btn-container']}>
                     <ButtonClean
                         className={
-                            `${buttonStyles} ${isActive && styles['btn-clicked']} ${membersFilter 
-                                                                                        ? styles['btn-partial']
-                                                                                        : styles['btn-whole']}`
+                            `${buttonStyles} ${isActive && styles['btn-clicked']} ${membersFilter
+                                ? styles['btn-partial']
+                                : styles['btn-whole']}`
                         }
                         onClick={() => setIsActive(!isActive)}
                         title={(membersFilter && membersFilter.name) || 'Tasks Assigned To:'}
                     />
-                    { membersFilter &&
+                    {membersFilter &&
                         <ButtonClean
                             className={`${buttonStyles} ${commonStyles['filter-clear']}`}
                             title='X'

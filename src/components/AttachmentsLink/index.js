@@ -21,7 +21,7 @@ const AttachmentsLink = ({
         if (setIsDragCardDisabled) {
             setIsDragCardDisabled(true)
         }
-
+        
         if (setIsDragListDisabled) {
             setIsDragListDisabled(true)
         }
@@ -42,12 +42,12 @@ const AttachmentsLink = ({
 
     return (
         <>
-        <ButtonClean
-            className={`${styles.attachments} ${styles.button}`}
-            onClick={onClick}
-            title={<img src={attPic} alt='' width='14px' />}
-        />
-        { isVisible &&
+            <ButtonClean
+                className={`${styles.attachments} ${styles.button}`}
+                onClick={onClick}
+                title={<img src={attPic} alt='' width='14px' />}
+            />
+            { isVisible &&
             <Transparent hideForm={hideForm} >
                 <AttachmentList
                     listRef={listRef}
@@ -59,7 +59,7 @@ const AttachmentsLink = ({
                     setIsDragListDisabled={setIsDragListDisabled}
                 />
             </Transparent >
-        }
+            }
         </>
     )
 }

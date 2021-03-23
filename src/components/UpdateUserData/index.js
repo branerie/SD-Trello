@@ -9,7 +9,6 @@ import ButtonGrey from '../ButtonGrey'
 import MyTeamsMenu from '../MyTeamsMenu'
 import ProfilePageInputs from '../Inputs/ProfilePageInputs'
 
-
 const UpdateUserData = ({ user, userEmail, getData }) => {
     const { logIn } = useContext(UserContext)
     const history = useHistory()
@@ -39,19 +38,23 @@ const UpdateUserData = ({ user, userEmail, getData }) => {
         if (!username && !password) {
             return
         }
+
         if (password !== rePassword) {
             setIsAlertOn(true)
             return
         }
+
         if (username) {
             const user = await updateUser(userId, username)
             logIn(user)
         }
+
         if (password) {
             const user = await updateUserPassword(userId, password)
             logIn(user)
             return
         }
+        
         getData()
     }
 

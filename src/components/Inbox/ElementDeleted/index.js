@@ -20,10 +20,9 @@ const ElementDeleted = ({ message, setInboxHistory, options, isInbox, deletedEle
             <div className={commonStyles.message}>
                 <div className={commonStyles.container}>
                     <div className={commonStyles.container}>
-                        { deletedElement === 'Team'
-                            ? <div className={commonStyles.bold}>{deletedElement} {message.team.name} deleted</div>
-                            : <div className={commonStyles.bold}>{deletedElement} {message.project.name} deleted</div>
-                        }
+                        {<div className={commonStyles.bold}>
+                            {deletedElement} {deletedElement === 'Team' ? message.team.name : message.project.name} deleted
+                        </div>}
                     </div>
                     <div>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</div>
                 </div>

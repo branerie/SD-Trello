@@ -9,8 +9,6 @@ import ButtonGrey from '../ButtonGrey'
 import ConfirmDialog from '../../components/ConfirmationDialog'
 import pen from '../../images/pen.svg'
 
-
-
 const UpdateUserImage = ({ user, getData }) => {
     const history = useHistory()
     const { userid } = useParams()
@@ -36,7 +34,7 @@ const UpdateUserImage = ({ user, getData }) => {
         }, async (error, result) => {
 
             if (result.event === 'success') {
-                const path = result.info.path
+                const { path } = result.info
                 const publicId = result.info.public_id
                 const newImage = {
                     path,
@@ -103,7 +101,7 @@ const UpdateUserImage = ({ user, getData }) => {
                             <div className={styles['load-pic-text']}>
                                 Load a profile picture
                             </div>
-                            
+
                             <img className={styles.pen} src={pen} alt='' />
                         </div>
                 }

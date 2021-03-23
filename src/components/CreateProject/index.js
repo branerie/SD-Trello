@@ -29,6 +29,7 @@ export default function CreateProject({ hideForm }) {
         if (name === '') {
             return
         }
+        
         const project = await createProject(name, description, teamId, members)
         hideForm && hideForm()
         socket.emit('team-update', teamId)

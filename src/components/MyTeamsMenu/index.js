@@ -4,10 +4,6 @@ import styles from './index.module.css'
 
 const MyTeamsMenu = ({ userTeams, goToTeamPage }) => {
 
-
-
-
-
     return (
         <div className={styles['teams-container']}>
             {

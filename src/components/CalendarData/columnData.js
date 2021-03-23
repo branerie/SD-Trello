@@ -160,7 +160,7 @@ const assembleColumnData = (startDate) => {
                 whiteSpace: 'normal', 
                 overflowWrap: 'anywhere', 
                 textAlign: 'left',
-                height: '100%'}}
+                height: '100%' }}
             >
                 {cellData}
             </div>
@@ -170,6 +170,7 @@ const assembleColumnData = (startDate) => {
     return (
         [
             {
+                // eslint-disable-next-line react/display-name
                 Header: () => {
                     return <div className={styles.header}>Task</div>
                 },
@@ -180,6 +181,7 @@ const assembleColumnData = (startDate) => {
                 resizable: false,
             },
             {
+                // eslint-disable-next-line react/display-name
                 Header: () => {
                     return <div className={styles.header}>Progress</div>
                 },
@@ -192,6 +194,7 @@ const assembleColumnData = (startDate) => {
                 sortMethod: () => {}  // needed to override default sorting
             },
             {
+                // eslint-disable-next-line react/display-name
                 Header: () => {
                     return <div className={styles.header}>Team</div>
                 },
@@ -199,7 +202,7 @@ const assembleColumnData = (startDate) => {
                 minWidth: 75,
                 maxWidth: 80,
                 Cell: ({ value }) => wrapCellData(value),
-                getProps: (state, rowInfo, column) => ({ style: { overflow: 'visible' } }),
+                getProps: () => ({ style: { overflow: 'visible' } }),
                 sortable: false,
                 resizable: false
             },
@@ -267,6 +270,7 @@ const assembleColumnData = (startDate) => {
                 resizable: false
             },
             {
+                // eslint-disable-next-line react/display-name
                 Header: () => {
                     return <div className={styles.header}>Due Date</div>
                 },

@@ -1,6 +1,6 @@
 import { useCallback } from 'react'
 import { useHistory } from 'react-router'
-import getCookie from "../utils/cookie"
+import getCookie from '../utils/cookie'
 
 const USER_URL = '/api/user'
 
@@ -111,8 +111,6 @@ export default function useUserServices() {
             })
         })
 
-
-
         if (!response.ok) {
             history.push('/error')
             return
@@ -170,6 +168,7 @@ export default function useUserServices() {
             history.push('/error')
             return
         }
+
         return await response.json()
     }, [history])
 
@@ -241,6 +240,7 @@ export default function useUserServices() {
         if (!response.ok) {
             history.push('/error')
         }
+        
         return await response.json()
     }, [history])
 
@@ -267,6 +267,7 @@ export default function useUserServices() {
         if (!response.ok) {
             history.push('/error')
         }
+
         const data = await response.json()
         return data
     }, [history])
@@ -292,11 +293,11 @@ export default function useUserServices() {
             method: 'POST',
             body: JSON.stringify({ tokenId }),
             headers: {
-                "Content-Type": "application/json"
+                'Content-Type': 'application/json'
             }
         })
 
-        const authToken = promise.headers.get("Authorization")
+        const authToken = promise.headers.get('Authorization')
         const response = await promise.json()
         
         if (response.user && response.user.username && authToken) {

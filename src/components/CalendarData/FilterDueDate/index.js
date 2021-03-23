@@ -14,10 +14,11 @@ const DueDateFilter = ({ dueBefore, onChange, handleFilterClear }) => {
             <DatePicker
                 selected={dueBefore}
                 customInput={
-                    <button 
-                        className={`${commonStyles['nav-buttons']} ${commonStyles.filter} ${dueBefore 
-                                                                                    ? styles['filter-used'] 
-                                                                                    : styles['filter-blank']}`}
+                    <button
+                        className={
+                            `${commonStyles['nav-buttons']} ${commonStyles.filter} ${ dueBefore
+                                ? styles['filter-used']
+                                : styles['filter-blank']}`}
                     >
                         {dueBefore ? formatDate(dueBefore, '%d-%m-%Y') : 'Due Before:'}
                     </button>
@@ -26,7 +27,7 @@ const DueDateFilter = ({ dueBefore, onChange, handleFilterClear }) => {
                 onChange={onChange}
             />
             { dueBefore &&
-                <button 
+                <button
                     className={`${commonStyles['nav-buttons']} ${commonStyles.filter} ${commonStyles['filter-clear']}`}
                     onClick={handleFilterClear}
                 >

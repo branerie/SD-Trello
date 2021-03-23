@@ -8,8 +8,6 @@ import logo from '../../images/logo.svg'
 import google from '../../images/welcome-page/google.svg'
 import useUserServices from '../../services/useUserServices'
 
-
-
 const SignupForm = (props) => {
     const [username, setUsername] = useState('')
     const [password, setPassword] = useState('')
@@ -26,7 +24,7 @@ const SignupForm = (props) => {
 
     function validateEmail(email) {
         var re = /^\w+([.-]?\w+)*@\w+([.-]?\w+)*(\.\w{2,3})+$/
-        return re.test(email);
+        return re.test(email)
     }
 
     const handleSubmit = async (event) => {
@@ -67,19 +65,14 @@ const SignupForm = (props) => {
     }
 
     const handleGoogle = async (googleResponse) => {
-        const tokenId = googleResponse.tokenId
+        const { tokenId } = googleResponse
         const user = await googleLoginUser(tokenId)
         logIn(user)
         history.push('/')        
     }
 
     return (
-
-
         <form className={styles.container} onSubmit={handleSubmit}>
-
-
-
             <div className={styles['inner-container']}>
                 <div className={styles.logo}>
                     <img src={logo} alt='logo' width='110' height='100' />
@@ -179,7 +172,7 @@ const SignupForm = (props) => {
                     <div className={styles['text-div']}>
                         <p className={styles['already-sign-up']}>
                             Already Sign Up?
-                        <button className={styles['sign-up-btn']} onClick={() => { props.goToLogin(); props.hideForm() }}>Log In</button>
+                            <button className={styles['sign-up-btn']} onClick={() => { props.goToLogin(); props.hideForm() }}>Log In</button>
                         </p>
 
                     </div>
@@ -191,4 +184,4 @@ const SignupForm = (props) => {
 
 }
 
-export default SignupForm;
+export default SignupForm

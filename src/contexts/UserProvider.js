@@ -30,6 +30,7 @@ const UserProvider = (props) => {
         if (!token) {
             return
         }
+
         await logoutUser()
         setUser({
             loggedIn: false
@@ -40,6 +41,7 @@ const UserProvider = (props) => {
         if (!loading) {
             return
         }
+
         if (!token) {
             setUser({
                 loggedIn: false
@@ -47,12 +49,14 @@ const UserProvider = (props) => {
             setLoading(false)
             return
         }
+
         const response = await verifyLogin()
         if (response.status) {
             logIn(response)
         } else {
             logOut()
         }
+        
         setLoading(false)
     }, [verifyLogin, logOut, loading, token])
 

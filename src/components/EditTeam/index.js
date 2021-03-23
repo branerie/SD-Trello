@@ -64,6 +64,7 @@ export default function EditTeam(props) {
             const users = await getAllUsers()
             setAllUsers(users)
         }
+
         if (member.length >= 2) {
             setAreMembersShown(true)
         }
@@ -108,10 +109,11 @@ export default function EditTeam(props) {
         props.hideForm()
     }
 
-    const handleDeleteTeam = async() => {
+    const handleDeleteTeam = async () => {
         if (!window.confirm('You will lost all team information - projects, lists and tasks')) {
             return
         }
+
         const deletedTeam = await deleteTeam(teamId)
         const recievers = [...deletedTeam.members, ...deletedTeam.requests]
         socket.emit('team-deleted', { id: teamId, recievers })
@@ -147,18 +149,18 @@ export default function EditTeam(props) {
                     <div className={styles['input-container']}>
                         <span> Name</span>
                         <input
-                            className={styles['input-name']}
+                            className={`${styles['input-name']} ${isAdmin ? '' : styles['input-disable']}`}
                             value={name}
                             onChange={e => setName(e.target.value)}
                             label='Name'
                             id='name'
                         />
                     </div>
-
+                
                     <div className={styles['input-container-descr']}>
                         <span> Description</span>
                         <textarea
-                            className={styles['text-area-descr']}
+                            className={`${styles['text-area-descr']} ${isAdmin ? '' : styles['input-disable']}`}
                             value={description}
                             onChange={e => setDescription(e.target.value)}
                             label='Description'
@@ -283,7 +285,7 @@ export default function EditTeam(props) {
                                         <div className={styles.membersAvatars}>
                                             <div>
                                                 Invited Members:
-                                                </div>
+                                            </div>
                                             {
                                                 invited.map((m, index) => {
                                                     return (

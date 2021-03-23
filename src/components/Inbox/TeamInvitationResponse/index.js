@@ -21,9 +21,12 @@ const TeamInvitationResponse = ({ message, setInboxHistory, options, isInbox }) 
                 <div className={commonStyles.container}>
                     <div className={commonStyles.container}>
                         <div className={commonStyles.bold}>{message.subject}:</div>
-                        <span>{message.sendFrom.username}{message.accepted
-                                                                            ? <span> accepted</span>
-                                                                            : <span> declined</span>}</span>
+                        <span>
+                            {message.sendFrom.username}
+                            {message.accepted
+                                ? <span> accepted</span>
+                                : <span> declined</span>}
+                        </span>
                     </div>
                     <div>{new Date(message.createdAt).toLocaleDateString('en-US', options)}</div>
                 </div>

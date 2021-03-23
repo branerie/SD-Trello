@@ -6,9 +6,7 @@ import Alert from '../Alert'
 import UserContext from '../../contexts/UserContext'
 import useUserServices from '../../services/useUserServices'
 
-
-
-export default function AddPassword(props) {
+export default function AddPassword({ userId }) {
     const [password, setPassword] = useState('')
     const [rePassword, setRePassword] = useState('')
     const [alert, setAlert] = useState(false)
@@ -20,9 +18,6 @@ export default function AddPassword(props) {
 
 
     const history = useHistory()
-    const userId = props.userId
-
-
 
     const handleSubmit = useCallback(async (event) => {
         event.preventDefault()
@@ -47,8 +42,6 @@ export default function AddPassword(props) {
                 
 
     }, [history, userContext, password, rePassword, userId, addNewPassword])
-
-
 
     return (
 
@@ -80,8 +73,6 @@ export default function AddPassword(props) {
                             id='password'
                         />
 
-
-
                         <div className={styles['pass-instructions']}>
                             <p>Use 8 or more characters with a mix </p>
                             <p>of letters, numbers & symbols. </p>
@@ -104,7 +95,7 @@ export default function AddPassword(props) {
 
                     <div className={styles['new-pass-alert']}>
                         Important!!! You have to activate your new password by following the link sent to your email. You have to do this in the next hour in order for your new password to be activated
-                        </div>
+                    </div>
 
                     <div className={styles['button-div-login']}>
                         <button type='submit' className={styles['login-button']} onClick={handleSubmit}>Submit</button>

@@ -17,7 +17,7 @@ const MyTasksPage = () => {
     const { getUserTasks } = useUserServices()
     const socket = useSocket()
 
-    const selectTeam = useCallback(async(teamId) => {
+    const selectTeam = useCallback(async (teamId) => {
         const data = await getUserTasks(teamId)
 
         if (data === 'Team not found') return
@@ -25,35 +25,23 @@ const MyTasksPage = () => {
         setProjects(data)
 
         if (teamId !== user.lastTeamSelected) {
-            /* REVIEW: следващите два реда могат да се съберат в един:
             const updatedUser = { ...user, lastTeamSelected: teamId }
-            */
-            const updatedUser = { ...user }
-            updatedUser.lastTeamSelected = teamId
             setUser(updatedUser)
         }
     }, [user, getUserTasks, setUser])
 
     useEffect(() => {
-        /* REVIEW: socket == null не е грешно, ще работи (ще връща true ако socket е null или undefined), просто
-        по-честия синтаксис е !socket, да се избегне двойното равно ==, защото лесно може да се обърка с тройното равно
-        */
-        if (!user.lastTeamSelected || socket == null) return
-        /* REVIEW: По принцип не виждам смисъл от тази променлива, даже за мен user.lastTeamSelected е по-разбираемо от id.
-        Ако се кръсти const lastTeamSelectedId = user.lastTeamSelected ще има някакъв смисъл, защото от lastTeamSelected не се
-        разбира, че е просто едно id (но пък само id като име - трябва да го търсиш нагоре да видиш какво id точно е) 
-        */
-        const id = user.lastTeamSelected
-
+        if (!user.lastTeamSelected || !socket) return
+        
         socket.on('task-team-updated', taskTeamUpdate)
         socket.on('task-update-team', (teamId) => {
 
-            if (teamId === id) {
+            if (teamId === user.lastTeamSelected) {
                 selectTeam(teamId)
             }
         })
 
-        socket.emit('task-team-join', id)
+        socket.emit('task-team-join', user.lastTeamSelected)
 
         return () => {
             socket.off('task-team-updated')
@@ -101,11 +89,11 @@ const MyTasksPage = () => {
                             .reverse()
                             .map(project => {
                                 return (
-                                    <MyTasksProject project={project} teamId={user.lastTeamSelected} />
+                                    <MyTasksProject key={project._id} project={project} teamId={user.lastTeamSelected} />
                                 )
                             })
                     }
-                 </div>
+                </div>
                 : <div className={styles.title}>Select a team</div>
             }
             {(!user.lastTeamSelected || projects.length === 0) &&

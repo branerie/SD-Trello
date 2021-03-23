@@ -16,8 +16,7 @@ const ProfilePage = () => {
     const { user } = useContext(UserContext)
     const [userEmail, setUserEmail] = useState(null)
     const { getUser } = useUserServices()
-    const username = user.username
-
+    const { username } = user
 
     const getData = useCallback(async () => {
         const user = await getUser(userid)
@@ -58,4 +57,4 @@ const ProfilePage = () => {
     )
 }
 
-export default ProfilePage;
+export default ProfilePage

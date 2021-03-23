@@ -130,7 +130,7 @@ async function getTeamInvitationInfo(req, res, next) {
                 path: 'requests'
             })
 
-            res.send(team)
+        res.send(team)
     } catch (error) {
         console.log(error)
     }
@@ -208,35 +208,35 @@ async function removeTeamInvitations(req, res, next) {
     const teamId = req.params.id
     const { removeInvitation } = req.body
     
-        const session = await mongoose.startSession()
-        session.startTransaction()
+    const session = await mongoose.startSession()
+    session.startTransaction()
 
-        try {
+    try {
 
-            const userForRemove = removeInvitation._id
+        const userForRemove = removeInvitation._id
 
-            const updatedTeam = await models.Team.findOneAndUpdate({ _id: teamId }, { $pull: { requests: userForRemove } }, { new: true }).session(session)
-            const teamObj = { name: updatedTeam.name, id: teamId }
+        const updatedTeam = await models.Team.findOneAndUpdate({ _id: teamId }, { $pull: { requests: userForRemove } }, { new: true }).session(session)
+        const teamObj = { name: updatedTeam.name, id: teamId }
 
-            const oldMessage = await models.Message.findOneAndUpdate({ 'team.id': teamId, recievers: { '$in': [userForRemove] } }, { $pull: { recievers: userForRemove } }, { new: true }).session(session)
+        const oldMessage = await models.Message.findOneAndUpdate({ 'team.id': teamId, recievers: { '$in': [userForRemove] } }, { $pull: { recievers: userForRemove } }, { new: true }).session(session)
 
-            const messageCreationResult = await models.Message.create([{ subject: 'Team invitation canceled', team: teamObj, sendFrom: req.user._id, recievers: [userForRemove] }], { session })
-            const createdMessage = messageCreationResult[0]
+        const messageCreationResult = await models.Message.create([{ subject: 'Team invitation canceled', team: teamObj, sendFrom: req.user._id, recievers: [userForRemove] }], { session })
+        const createdMessage = messageCreationResult[0]
 
-            await models.User.updateOne({ _id: userForRemove }, { $pull: { inbox: oldMessage.id } }).session(session)
-            await models.User.updateOne({ _id: userForRemove }, { $push: { inbox: createdMessage } }).session(session)
+        await models.User.updateOne({ _id: userForRemove }, { $pull: { inbox: oldMessage.id } }).session(session)
+        await models.User.updateOne({ _id: userForRemove }, { $push: { inbox: createdMessage } }).session(session)
 
-            await session.commitTransaction()
+        await session.commitTransaction()
 
-            session.endSession()
-            res.send('Success')
-            return
-        } catch (error) {
-            await session.abortTransaction()
-            session.endSession()
-            res.send(error)
-            return
-        } 
+        session.endSession()
+        res.send('Success')
+        return
+    } catch (error) {
+        await session.abortTransaction()
+        session.endSession()
+        res.send(error)
+        return
+    } 
 }
 
 async function deleteTeam(req, res, next) {

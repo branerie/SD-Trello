@@ -32,6 +32,7 @@ const TaskMembers = ({ card, listId, project, teamId }) => {
         for (const member in cardMembers) {
             teamUsers = teamUsers.filter((obj) => obj._id !== cardMembers[member]._id)
         }
+        
         setUsers(teamUsers)
     }
 

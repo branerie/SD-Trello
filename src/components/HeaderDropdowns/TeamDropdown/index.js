@@ -47,9 +47,10 @@ const TeamDropdown = () => {
                     />
                 </div>}
             </div>
-            {isShownTeamForm &&  <Transparent hideForm={() => setIsShownTeamForm(false)}>
-                                    <CreateTeam hideForm={() => { setIsShownTeamForm(false) }} />
-                                </Transparent>}
+            {isShownTeamForm &&
+                <Transparent hideForm={() => setIsShownTeamForm(false)}>
+                    <CreateTeam hideForm={() => { setIsShownTeamForm(false) }} />
+                </Transparent>}
         </div>
     )
 }
