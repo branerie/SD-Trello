@@ -65,7 +65,8 @@ export default function AddProjectMember(props) {
 
         const arr = [...members]
         const newArr = arr.filter(m => m._id !== memberRoleId)
-        let updatedUser = members.filter(a => a._id === memberRoleId)[0]
+        // eslint-disable-next-line prefer-destructuring
+        const updatedUser = members.filter(a => a._id === memberRoleId)[0]
         updatedUser.admin = !memberAdmin
         newArr.push(updatedUser)
         setMembers(newArr)
@@ -100,7 +101,7 @@ export default function AddProjectMember(props) {
         updateProjectSocket()
         memberRole.memberId = member
         setIsActive(!isActive)
-        let arr = [...members]
+        const arr = [...members]
         arr.push(memberRole)
         setMembers(arr)
         setUsers([])
@@ -117,7 +118,7 @@ export default function AddProjectMember(props) {
                         if (p._id === projectId) {
                             currentTeamId = t._id
                         }
-                        
+
                         return currentTeamId
                     })
                 )
@@ -149,7 +150,7 @@ export default function AddProjectMember(props) {
     }
 
 
-    let confirmationObjectFunctions = {
+    const confirmationObjectFunctions = {
         'delete this member': deleteMember
     }
 

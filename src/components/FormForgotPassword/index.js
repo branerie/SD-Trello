@@ -44,12 +44,13 @@ const ForgotPasswordForm = (props) => {
         }
 
         let userId
-        console.log('Error', response)
+
         if (response.id) {
             userId = response.id
         }
 
         if (response.userId) {
+            // eslint-disable-next-line prefer-destructuring
             userId = response.userId
         }
 

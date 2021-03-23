@@ -33,7 +33,7 @@ const ProgressInput = ({
             return
         }
 
-        if (currInput === progress || !isInputOk) {
+        if (Number(currInput) === Number(progress) || !isInputOk) {
             setProgress(currInput)
             setIsInputOk(true)
             setIsInputActive(false)
@@ -98,9 +98,15 @@ const ProgressInput = ({
                     ? <div
                         className={placeholderClassName}
                         onClick={() => setIsInputActive(true)}
-                        style={isBackgroundStyled && { backgroundColor: getProgressBackgroundColor(progress) }}
+                        style={isBackgroundStyled && {
+                            backgroundColor: getProgressBackgroundColor(progress),
+                            border: 'solid black 1px'
+                        }}
                     >{card.progress}%</div>
-                    : <div className={placeholderClassName} onClick={() => setIsInputActive(true)} >+Add</div>
+                    : <div
+                        className={`${placeholderClassName} ${styles.add}`}
+                        onClick={() => setIsInputActive(true)}
+                    >+Add</div>
             }
         </>
     )

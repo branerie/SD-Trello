@@ -25,6 +25,8 @@ export default function CreateTeam(props) {
     const { getAllUsers } = useUserServices()
     const { createTeam } = useTeamServices()
 
+    console.log(members)
+
     const inputMembers = async (event) => {
         setMember(event.target.value)
         setShowMembers(false)
@@ -165,7 +167,7 @@ export default function CreateTeam(props) {
                     members.map(m => {
                         return (
                             <ButtonClean
-                                key={members.id}
+                                key={m._id}
                                 onClick={() => removeMember(m)}
                                 title={
                                     <AvatarUser user={m} size={40} />

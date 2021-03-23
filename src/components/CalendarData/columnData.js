@@ -18,19 +18,12 @@ const assembleColumnData = (startDate) => {
     const getWeekdayCellHtml = (message, color, messageColor = 'black') => {
         const progressStyle = { 
             background: color, 
-            color: messageColor,
-            width: '100%',
-            padding: '5px', 
-            border: '1px solid #363338',
-            borderRadius: '5px',
-            display: 'flex',
-            alignItems: 'center',
-            justifyContent: 'center'
+            color: messageColor
         }
 
         return (
             <div className={styles['dayly-progress']}>
-                <div style={progressStyle}>
+                <div style={progressStyle} className={styles['week-day-cell']}>
                     {message}
                 </div>
             </div>
@@ -61,7 +54,8 @@ const assembleColumnData = (startDate) => {
         const dueDate = date ? new Date(date) : null
         const isAfterDueDate = dueDate && compareDates(cellDate, dueDate) > 0
         const isBeforeToday = compareDates(cellDate, currentDate) < 0
-
+        let { finishedDate } = history
+        finishedDate = finishedDate && new Date(finishedDate)
 
         if (eventInCell) {
             const [eventType, eventValue] = eventInCell.event.split(' ')
@@ -120,15 +114,11 @@ const assembleColumnData = (startDate) => {
                 return ''
             }
 
-            let { finishedDate } = history
-            finishedDate = finishedDate && new Date(finishedDate)
-
             if (finishedDate && compareDates(cellDate, finishedDate) > 0) {
                 // task has finished in the past and cell date is later than date of finish
                 return ''
             }
 
-            
             // task is neither Finished, nor Delayed, but has a Due Date
             // therefore, it's In Progress
             const cellText = isMonday ? 'In Progress' : ''
@@ -136,6 +126,21 @@ const assembleColumnData = (startDate) => {
             return getWeekdayCellHtml(cellText, cellColor)
         }
 
+        if (finishedDate && compareDates(cellDate, finishedDate) > 0) {
+            // task has finished in the past and cell date is later than date of finish
+            return ''
+        }
+
+        if (isBeforeToday) {
+            const cellColor = CELL_COLORS.PROGRESS_OLD
+            return getWeekdayCellHtml('', cellColor)
+        }
+
+        if (compareDates(cellDate, currentDate) === 0 && progress !== 100) {
+            const cellColor = CELL_COLORS.PROGRESS
+            return getWeekdayCellHtml('', cellColor)
+        }
+        
         return ''
     }
         
@@ -156,12 +161,7 @@ const assembleColumnData = (startDate) => {
 
     const wrapCellData = (cellData) => {
         return (
-            <div style={{ 
-                whiteSpace: 'normal', 
-                overflowWrap: 'anywhere', 
-                textAlign: 'left',
-                height: '100%' }}
-            >
+            <div className={styles['cell-data']}>
                 {cellData}
             </div>
         )

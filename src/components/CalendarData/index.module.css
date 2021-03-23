@@ -42,6 +42,23 @@
 	justify-content: center;
 }
 
+.week-day-cell {
+	width: 100%;
+	padding: 5px;
+	border: 1px solid #363338;
+	border-radius: 5px;
+	display: flex;
+	align-items: center;
+	justify-content: center;
+}
+
+.cell-data { 
+	white-space: normal; 
+	overflow-wrap: anywhere; 
+	text-align: left;
+	height: 100%;
+}
+
 .header {
 	font-weight: bold;
 }
