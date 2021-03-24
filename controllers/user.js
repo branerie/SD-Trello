@@ -4,17 +4,17 @@ const config = require('../config/config')
 const utils = require('../utils')
 const router = require('express').Router()
 const bcrypt = require('bcrypt')
-const { auth, isAdmin, userInbox, googleAuth } = require('../utils')
+const { auth, userInbox, googleAuth } = require('../utils')
 const { decode } = require('jsonwebtoken')
 const getTeams = require('../utils/getTeams')
 const cloudinary = require('../utils/cloudinary')
 
 
-router.get('/verify', verifyLogin);
+router.get('/verify', verifyLogin)
 
-router.get('/get-all', auth, getAllUsers);
+router.get('/get-all', auth, getAllUsers)
 
-router.get('/inbox', auth, getUserInbox);
+router.get('/inbox', auth, getUserInbox)
 
 router.get('/:id', getUser)
 
@@ -47,19 +47,17 @@ router.delete('/message/:messageid', auth, deleteUserMessage)
 router.delete('/:id', deleteUser)
 
 
-
-
-async function getUser(req, res, next) {
+async function getUser(req, res) {
     const user = await models.User.findById(req.params.id)
     res.send(user)
 }
 
-async function getAllUsers(req, res, next) {
+async function getAllUsers(req, res) {
     const users = await models.User.find({}).select('-password')
     res.send(users)
 }
 
-async function registerUser(req, res, next) {
+async function registerUser(req, res) {
     const { email, username, password } = req.body
     if (!password) {
         res.send('Missing password')
@@ -67,9 +65,9 @@ async function registerUser(req, res, next) {
     }
 
 
-    models.User.findOne({ email }, async function (err, user) {
+    models.User.findOne({ email }, async (err, user) => {
         if (user !== null) {
-            let userExist = {}
+            const userExist = {}
             userExist.error = true
             userExist.exist = true
             res.send(userExist)
@@ -102,9 +100,9 @@ async function registerUser(req, res, next) {
     })
 }
 
-function verifyLogin(req, res, next) {
+function verifyLogin(req, res) {
 
-    const token = req.headers.authorization || '';
+    const token = req.headers.authorization || ''
 
     Promise.all([
         utils.jwt.verifyToken(token),
@@ -112,7 +110,10 @@ function verifyLogin(req, res, next) {
     ])
         .then(([data, blacklistToken]) => {
 
-            if (blacklistToken) { return Promise.reject(new Error('blacklisted token')) }
+            if (blacklistToken) {
+                return Promise.reject(new Error('blacklisted token'))
+            }
+
             models.User.findById(data.id).select('-password')
                 .then(async (user) => {
                     const teams = await getTeams(user._id)
@@ -126,7 +127,7 @@ function verifyLogin(req, res, next) {
         .catch(err => {
             if (['token expired', 'blacklisted token', 'jwt must be provided'].includes(err.message)) {
                 res.status(401).send('UNAUTHORIZED!')
-                return;
+                return
             }
 
             res.send({
@@ -135,7 +136,7 @@ function verifyLogin(req, res, next) {
         })
 }
 
-async function loginUser(req, res, next) {
+async function loginUser(req, res) {
     const { email, password } = req.body
 
     try {
@@ -143,7 +144,7 @@ async function loginUser(req, res, next) {
 
 
         if (!foundUser) {
-            let response = {}
+            const response = {}
             response.wrongUser = true
             res.send(response)
             return
@@ -152,17 +153,18 @@ async function loginUser(req, res, next) {
         const token = utils.jwt.createToken({ id: foundUser._id })
 
         if (!foundUser.password) {
-            let response = {}
+            const response = {}
             response.needPassword = true
             response.userId = foundUser._id
             res.header('Authorization', token).send(response)
 
             return
         }
+
         const match = await foundUser.matchPassword(password)
 
         if (!match) {
-            let response = {}
+            const response = {}
             response.wrongPassword = true
             response.userId = foundUser._id
             res.header('Authorization', token).send(response)
@@ -183,7 +185,7 @@ async function loginUser(req, res, next) {
     }
 }
 
-async function googleLoginUser(req, res, next) {
+async function googleLoginUser(req, res) {
     const { tokenId } = req.body
     const { email, username, image, email_verified } = await googleAuth(tokenId)
     if (!email_verified) {
@@ -212,25 +214,34 @@ async function googleLoginUser(req, res, next) {
     }
 }
 
-async function logoutUser(req, res, next) {
+async function logoutUser(req, res) {
     const token = req.headers.authorization
     const { exp } = decode(token)
     await models.TokenBlacklist.create({ token, expirationDate: exp * 1000 })
     res.clearCookie(config.authCookieName).send('Logout successfully!')
 }
 
-async function confirmToken(req, res, next) {
+async function confirmToken(req, res) {
     const { token } = req.body
+
     try {
         const foundUser = await models.User.findOne({ confirmationToken: token })
         let user
+
         if (foundUser.confirmed) {
-            user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', password: foundUser.newPassword, newPassword: '', newPasswordConfirmed: true }, { new: true }).select('-password')
+            user = await models.User.findOneAndUpdate(
+                { confirmationToken: token },
+                { confirmationToken: '', password: foundUser.newPassword, newPassword: '', newPasswordConfirmed: true },
+                { new: true }
+            ).select('-password')
         } else {
-            user = await models.User.findOneAndUpdate({ confirmationToken: token }, { confirmationToken: '', confirmed: true }
-                , { new: true }
+            user = await models.User.findOneAndUpdate(
+                { confirmationToken: token },
+                { confirmationToken: '', confirmed: true },
+                { new: true }
             ).select('-password')
         }
+
         const newToken = utils.jwt.createToken({ id: user._id })
         const teams = await getTeams(user._id)
         const response = {
@@ -245,71 +256,39 @@ async function confirmToken(req, res, next) {
 
 }
 
-async function updateUser(req, res, next) {
-    const id = req.params.id
-    let user = { username, password, email, lastTeamSelected } = req.body
-    const obj = {}
+async function updateUser(req, res) {
+    const { id } = req.params
+    const user = req.body
 
-    for (let key in user) {
-        if (user[key] && key !== 'password') {
-            obj[key] = user[key]
-        }
+    await models.User.updateOne({ _id: id }, user)
+    const updatedUser = await models.User.findOne({ _id: id }).select('-password')
+    const teams = await getTeams(updatedUser._id)
+    const response = {
+        user: updatedUser,
+        teams
     }
-    if (password) {
-        await bcrypt.genSalt(10, (err, salt) => {
-            bcrypt.hash(password, salt, async (err, hash) => {
-                if (err) { next(err); return }
-
-                const updatedUser = await models.User.findOneAndUpdate({ _id: id }, { ...obj, newPassword: hash, newPasswordConfirmed: false }
-                    , { new: true }
-                ).select('-password')
-
-
-                updatedUser.setConfirmationToken() // test
-                await updatedUser.save()
-
-
-                const teams = await getTeams(updatedUser._id)
-                const response = {
-                    user: updatedUser,
-                    teams
-                }
-
-                utils.sendConfirmationEmail(updatedUser, 'pass') //test
-
-
-                res.send(response)
-                return
-            })
-        })
-    } else {
-        await models.User.updateOne({ _id: id }, obj)
-        const updatedUser = await models.User.findOne({ _id: id }).select('-password')
-        const teams = await getTeams(updatedUser._id)
-        const response = {
-            user: updatedUser,
-            teams
-        }
-        res.send(response)
-    }
+    res.send(response)
 }
 
 async function updateUserPassword(req, res, next) {
-    const id = req.params.id
+    const { id } = req.params
     const { password } = req.body
 
     await bcrypt.genSalt(10, (err, salt) => {
         bcrypt.hash(password, salt, async (err, hash) => {
-            if (err) { next(err); return }
+            if (err) {
+                next(err)
+                return
+            }
 
-            const updatedUser = await models.User.findOneAndUpdate({ _id: id }, { newPassword: hash, newPasswordConfirmed: false }
-                , { new: true }
+            const updatedUser = await models.User.findOneAndUpdate(
+                { _id: id },
+                { newPassword: hash, newPasswordConfirmed: false },
+                { new: true }
             ).select('-password')
 
-
-            updatedUser.setConfirmationToken() // test
+            updatedUser.setConfirmationToken()
             await updatedUser.save()
-
 
             const teams = await getTeams(updatedUser._id)
             const response = {
@@ -317,8 +296,7 @@ async function updateUserPassword(req, res, next) {
                 teams
             }
 
-            utils.sendConfirmationEmail(updatedUser, 'pass') //test
-
+            utils.sendConfirmationEmail(updatedUser, 'pass')
 
             res.send(response)
             return
@@ -327,20 +305,19 @@ async function updateUserPassword(req, res, next) {
 
 }
 
-async function updateUserImage(req, res, next) {
-    const id = req.params.id
-    let user = { newImage, oldImage } = req.body
+async function updateUserImage(req, res) {
+    const { id } = req.params.id
+    const { newImage, oldImage } = req.body
 
 
     if (newImage) {
         await models.User.updateOne({ _id: id }, { image: newImage })
-
     } else {
         await models.User.updateOne({ _id: id }, { image: undefined })
     }
 
     if (oldImage) {
-        cloudinary.api.delete_resources([oldImage.publicId], (error, result) => { console.log(result, error) })
+        cloudinary.api.delete_resources([oldImage.publicId], (error) => console.log(error))
     }
 
     const updatedUser = await models.User.findOne({ _id: id }).select('-password')
@@ -350,13 +327,11 @@ async function updateUserImage(req, res, next) {
         teams
     }
     res.send(response)
-
 }
 
-async function updateUserRecentProjects(req, res, next) {
-    const id = req.params.id
+async function updateUserRecentProjects(req, res) {
+    const { id } = req.params
     const { recentProjects } = req.body
-
 
     await models.User.updateOne({ _id: id }, { recentProjects })
     const updatedUser = await models.User.findOne({ _id: id }).select('-password')
@@ -369,16 +344,19 @@ async function updateUserRecentProjects(req, res, next) {
 
 }
 
-async function deleteUser(req, res, next) {
-    const id = req.params.id;
+async function deleteUser(req, res) {
+    const { id } = req.params
 
     const session = await mongoose.startSession()
     session.startTransaction()
 
     try {
         const removedUser = await models.User.deleteOne({ _id: id }).session(session)
-        const userProjectsRoles = await models.ProjectUserRole.find({ memberId: id }).session(session)
-        await models.Project.updateMany({ _id: { $in: userProjectsRoles.projectId } }, { $pull: { membersRoles: userProjectsRoles._id } }).session(session)
+        const userProjectsRoles = await models.ProjectUserRole.find({ memberId: id })
+        await models.Project.updateMany(
+            { _id: { $in: userProjectsRoles.projectId } },
+            { $pull: { membersRoles: userProjectsRoles._id } }
+        ).session(session)
         await models.Project.deleteMany({ author: id }).session(session)
         await models.ProjectUserRole.deleteMany({ memberId: id }).session(session)
 
@@ -395,7 +373,7 @@ async function deleteUser(req, res, next) {
 
 }
 
-async function getUserTasks(req, res, next) {
+async function getUserTasks(req, res) {
     const userId = req.user._id
     const teamId = req.params.teamid
     const team = await models.Team.findById(teamId)
@@ -423,8 +401,9 @@ async function getUserTasks(req, res, next) {
         res.send('Team not found')
         return
     }
+
     await models.User.updateOne({ _id: userId }, { lastTeamSelected: teamId })
-    let projects = team.projects
+    let { projects } = team
 
     projects.forEach(p => p.lists.forEach(l => l.cards = l.cards.filter(c => {
         const isMembers = c.members.some(m => m._id.toString() === userId.toString())
@@ -435,18 +414,18 @@ async function getUserTasks(req, res, next) {
     res.send(projects)
 }
 
-async function getUserInbox(req, res, next) {
+async function getUserInbox(req, res) {
     try {
-        userId = req.user._id
+        const userId = req.user._id
         const user = await userInbox(userId)
         res.send(user)
     } catch (err) {
         console.log(err)
-        res.send(error)
+        res.send(err)
     }
 }
 
-async function deleteUserMessage(req, res, next) {
+async function deleteUserMessage(req, res) {
     const userId = req.user._id
     const messageId = req.params.messageid
     const session = await mongoose.startSession()
@@ -471,11 +450,11 @@ async function deleteUserMessage(req, res, next) {
         await session.abortTransaction()
         session.endSession()
         console.log(err)
-        res.send(error)
+        res.send(err)
     }
 }
 
-async function moveMessageToHistory(req, res, next) {
+async function moveMessageToHistory(req, res) {
     const userId = req.user._id
     const { message } = req.body
 
@@ -487,7 +466,7 @@ async function moveMessageToHistory(req, res, next) {
         res.send(user)
     } catch (err) {
         console.log(err)
-        res.send(error)
+        res.send(err)
     }
 }
 

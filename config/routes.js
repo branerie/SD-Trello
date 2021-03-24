@@ -1,4 +1,4 @@
-const controllers = require('../controllers/');
+const controllers = require('../controllers/')
 const router = require('express').Router()
 
 
@@ -12,7 +12,6 @@ router.use('/projects/lists/cards', controllers.card)
 
 router.use('/teams', controllers.team)
 
-router.use('*', (req, res, next) => res.send('<h1> Something went wrong. Try again. :thumbsup: </h1>'))
+router.use('*', (req, res, ) => res.send('<h1> Something went wrong. Try again. :thumbsup: </h1>'))
 
 module.exports = router
-

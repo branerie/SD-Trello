@@ -1,6 +1,7 @@
 const nodemailer = require('nodemailer')
 const { google } = require('googleapis')
-const OAuth2 = google.auth.OAuth2
+
+const { OAuth2 } = google.auth
 const oauth2Client = new OAuth2(
     process.env.EMAIL_CLIENT_ID,
     process.env.EMAIL_CLIENT_SECRET,
@@ -43,8 +44,9 @@ module.exports = function sendConfirmationEmail(user, type) {
         ${user.generateConfirmationUrl()}
         `
         }
-    } 
-    if(type === 'pass'){
+    }
+
+    if (type === 'pass') {
         email = {
             from,
             to: user.email,
