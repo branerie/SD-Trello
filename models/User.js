@@ -61,7 +61,7 @@ userSchema.methods.generateConfirmationUrl = function() {
     return `${process.env.HOST}confirmation/${this.confirmationToken}`
 }
 
-userSchema.pre('save', (next) => {
+userSchema.pre('save', function(next) {
     if (this.isModified('password') && this.password) {
         bcrypt.genSalt(saltRounds, (err, salt) => {
             bcrypt.hash(this.password, salt, (err, hash) => {
