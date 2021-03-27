@@ -306,7 +306,7 @@ async function updateUserPassword(req, res, next) {
 }
 
 async function updateUserImage(req, res) {
-    const { id } = req.params.id
+    const { id } = req.params
     const { newImage, oldImage } = req.body
 
 

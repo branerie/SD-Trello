@@ -47,7 +47,6 @@ const ProfilePage = () => {
 
                         <div className={styles['pic-container']}>
                             <UpdateUserImage user={user} getData={getData} />
-
                             <img className={styles.pic1} src={profilePagePic} alt='' />
                         </div>
                     </div>
