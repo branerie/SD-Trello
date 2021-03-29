@@ -46,16 +46,20 @@ const ForgotPasswordForm = (props) => {
         let userId
 
         if (response.id) {
+            // eslint-disable-next-line prefer-destructuring
             userId = response.id
-        }
-
-        if (response.userId) {
+        } else if (response.userId) {
             // eslint-disable-next-line prefer-destructuring
             userId = response.userId
+        } else if (response.user._id) {
+            // eslint-disable-next-line prefer-destructuring
+            userId = response.user._id
+        } else {
+            return history.push('/error')
         }
 
         const changePassResponse = await addNewPassword(userId, password)
-        context.logIn(changePassResponse.user)
+        context.logIn(changePassResponse)
         history.push('/')
 
     }
