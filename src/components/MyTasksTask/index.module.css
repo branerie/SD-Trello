@@ -19,7 +19,8 @@
 
 .progress {
     width: 20%;
-    text-align: center;
+    display: flex;
+    justify-content: center;
 }
 
 .days {
@@ -78,9 +79,10 @@
     background-color: #F7F7F2;
     border: 1px solid #F7F7F2;
     border-radius: 5px;
-    text-align: center;
     cursor: pointer;
-    display: inline-block;
+    display: flex;
+    justify-content: center;
+    align-items: center;
 }
 
 .progress-div:hover {
