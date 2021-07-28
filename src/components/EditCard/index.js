@@ -16,8 +16,17 @@ const EditCard = ({ listId, card, project, teamId, hideForm }) => {
     const [name, setName] = useState('')
     const [description, setDescription] = useState('')
     const [taskHistory, setTaskHistory] = useState(null)
-    const dueDate = useMemo(() => new Date(card.dueDate), [card.dueDate])
     const { editTask } = useCardsServices()
+
+    const dueDate = useMemo(() => {
+        let date = new Date(card.dueDate)
+
+        if (!card.dueDate) {
+            date = null
+        }
+        
+        return date
+    }, [card.dueDate])
 
     useEffect(() => {
         setName(card.name)
