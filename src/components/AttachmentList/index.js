@@ -6,6 +6,7 @@ import ConfirmDialog from '../ConfirmationDialog'
 import download from '../../images/edit-card/download.svg'
 import remove from '../../images/edit-card/remove.svg'
 import useCardsServices from '../../services/useCardsServices'
+import { REACT_APP_CLOUD_NAME } from '../../utils/constats'
 
 const AttachmentList = ({
     attachments,
@@ -27,7 +28,7 @@ const AttachmentList = ({
     }, [attachments])
 
     const getFullDocumentUrl = (att) => {
-        return `https://res.cloudinary.com/${process.env.REACT_APP_CLOUD_NAME}/raw/upload/fl_attachment/${att.path}`
+        return `https://res.cloudinary.com/${REACT_APP_CLOUD_NAME}/raw/upload/fl_attachment/${att.path}`
     }
 
     const handleDeteleAttachment = async (att) => {

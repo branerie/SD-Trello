@@ -88,7 +88,7 @@ async function registerUser(req, res) {
                 user: createdUser,
                 teams
             }
-            utils.sendConfirmationEmail(newUser, 'account')
+            await utils.sendConfirmationEmail(newUser, 'account')
             res.header('Authorization', token).send(response)
             return
         }
@@ -296,7 +296,7 @@ async function updateUserPassword(req, res, next) {
                 teams
             }
 
-            utils.sendConfirmationEmail(updatedUser, 'pass')
+            await utils.sendConfirmationEmail(updatedUser, 'pass')
 
             res.send(response)
             return

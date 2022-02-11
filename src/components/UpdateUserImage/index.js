@@ -8,6 +8,7 @@ import { useDetectOutsideClick } from '../../utils/useDetectOutsideClick'
 import ButtonGrey from '../ButtonGrey'
 import ConfirmDialog from '../../components/ConfirmationDialog'
 import pen from '../../images/pen.svg'
+import { REACT_APP_CLOUD_NAME, REACT_APP_UPLOAD_PRESET } from '../../utils/constats'
 
 const UpdateUserImage = ({ user, getData }) => {
     const history = useHistory()
@@ -29,8 +30,8 @@ const UpdateUserImage = ({ user, getData }) => {
 
     const changeProfilePicture = () => {
         const widget = window.cloudinary.createUploadWidget({
-            cloudName: process.env.REACT_APP_CLOUD_NAME,
-            uploadPreset: process.env.REACT_APP_UPLOAD_PRESET
+            cloudName: REACT_APP_CLOUD_NAME,
+            uploadPreset: REACT_APP_UPLOAD_PRESET
         }, async (error, result) => {
 
             if (result.event === 'success') {

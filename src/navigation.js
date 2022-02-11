@@ -22,6 +22,7 @@ import TeamProvider from './contexts/TeamProvider'
 import TeamPage from './pages/Team'
 import ConfirmationPage from './pages/Confirmation'
 import { CloudinaryContext } from 'cloudinary-react'
+import { REACT_APP_CLOUD_NAME } from './utils/constats'
 
 const Navigation = () => {
 
@@ -33,7 +34,7 @@ const Navigation = () => {
             <SocketProvider user={context.user}>
                 <ProjectProvider>
                     <TeamProvider>
-                        <CloudinaryContext cloudName={process.env.REACT_APP_CLOUD_NAME}>
+                        <CloudinaryContext cloudName={REACT_APP_CLOUD_NAME}>
                             <Switch>
                                 <Route path='/confirmation/:token'><ConfirmationPage /></Route>
                                 {((loggedIn && !context.user.confirmed)

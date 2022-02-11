@@ -5,6 +5,7 @@ import styles from './index.module.css'
 import Attachment from '../../Attachment'
 import attachmentPic from '../../../images/edit-card/attachments.svg'
 import useCardsServices from '../../../services/useCardsServices'
+import { REACT_APP_CLOUD_NAME, REACT_APP_UPLOAD_PRESET } from '../../../utils/constats'
 
 const TaskAttach = ({ card, project, teamId }) => {
     const socket = useSocket()
@@ -17,8 +18,8 @@ const TaskAttach = ({ card, project, teamId }) => {
 
     const handleAddAttachment = () => {
         const widget = window.cloudinary.createUploadWidget({
-            cloudName: process.env.REACT_APP_CLOUD_NAME,
-            uploadPreset: process.env.REACT_APP_UPLOAD_PRESET,
+            cloudName: REACT_APP_CLOUD_NAME,
+            uploadPreset: REACT_APP_UPLOAD_PRESET,
             resourceType: 'raw'
 
         }, async (error, result) => {
